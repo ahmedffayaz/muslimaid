@@ -17,9 +17,7 @@ class CreateNetworksTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->text('description');
-            $table->string('ref');
-            $table->boolean('status')->default(1);
-            $table->string('image')->nullable();
+            $table->string('click_ref');
             $table->timestamps();
         });
     }

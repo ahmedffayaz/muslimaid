@@ -9,6 +9,6 @@ class Network extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'ref', 'status', 'image'];
+    protected $fillable = ['name', 'description', 'click_ref'];
 
 }

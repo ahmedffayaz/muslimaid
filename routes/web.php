@@ -24,5 +24,16 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 
 //Admin routes
-Route::resource('dashboard/networks', App\Http\Controllers\Admin\NetworkController::class);
+Route::namespace('App\Http\Controllers\Admin')
+    ->middleware(['auth'])
+    ->as('admin.')
+    ->prefix('admin')
+    ->group(function () {
+
+    Route::resource('networks', NetworkController::class);
+    Route::resource('stores', StoreController::class);
+
+
+
+});
 

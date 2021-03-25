@@ -4,6 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Models\Network;
+use Exception;
+
 
 class NetworkController extends Controller
 {
@@ -12,9 +15,17 @@ class NetworkController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+
     public function index()
     {
-        //
+        $networks = Network::all();
+        return view('admin-dashboard.networks.index', compact('networks'));
     }
 
     /**
@@ -24,7 +35,8 @@ class NetworkController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin-dashboard.networks.create');
+
     }
 
     /**
@@ -35,7 +47,21 @@ class NetworkController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        try {
+            $network = Network::create([
+                'name'=>$request->input('network_name'),
+                'click_ref'=>$request->input('click_ref'),
+                'description'=>$request->input('network_name'),
+            ]);
+            return redirect()->route('admin.networks.index');
+           
+            
+        } catch (Exception $exception) {
+            return redirect()->route('admin.networks.index');
+
+            
+        }
     }
 
     /**
