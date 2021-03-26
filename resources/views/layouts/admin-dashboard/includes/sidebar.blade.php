@@ -27,13 +27,19 @@
                         </a>
                     </li><!-- .nk-menu-item -->
                     <li class="nk-menu-item">
+                        <a href="{{route('admin.categories.index')}}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-grid-alt-fill"></em></span>
+                            <span class="nk-menu-text">Categories</span>
+                        </a>
+                    </li><!-- .nk-menu-item -->
+                    <li class="nk-menu-item">
                         <a href="{{route('admin.stores.index')}}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
                             <span class="nk-menu-text">Stores</span>
                         </a>
                     </li><!-- .nk-menu-item -->
                     <li class="nk-menu-item">
-                        <a href="#" class="nk-menu-link">
+                        <a href="{{route('admin.storecashbacks.index')}}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-growth-fill"></em></span>
                             <span class="nk-menu-text">Store Cashbacks</span>
                         </a>
@@ -46,7 +52,7 @@
                         </a>
                         <ul class="nk-menu-sub">
                             <li class="nk-menu-item">
-                                <a href="#" class="nk-menu-link"><span class="nk-menu-text">Users</span></a>
+                                <a href="{{route('admin.users.index')}}" class="nk-menu-link"><span class="nk-menu-text">Users</span></a>
                             </li>
                             <li class="nk-menu-item">
                                 <a href="#" class="nk-menu-link"><span class="nk-menu-text">Cashbacks</span></a>

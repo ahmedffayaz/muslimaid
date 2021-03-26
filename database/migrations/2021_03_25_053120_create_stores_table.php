@@ -16,6 +16,7 @@ class CreateStoresTable extends Migration
         Schema::create('stores', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('network_id');
+            $table->unsignedBigInteger('advertiser_id')->nullable();
             $table->string('name');
             $table->longText('tracking_url');
             $table->string('store_url')->nullable();

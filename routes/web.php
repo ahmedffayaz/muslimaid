@@ -32,6 +32,10 @@ Route::namespace('App\Http\Controllers\Admin')
 
     Route::resource('networks', NetworkController::class);
     Route::resource('stores', StoreController::class);
+    Route::resource('storecashbacks', StoreCashbackController::class);
+    Route::resource('categories', CategoryController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('importer', ImporterController::class);
 
 
 

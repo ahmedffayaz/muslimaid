@@ -9,12 +9,12 @@
                 <div class="nk-block-head nk-block-head-sm">
                     <div class="nk-block-between">
                         <div class="nk-block-head-content">
-                            <h3 class="nk-block-title page-title">Stores</h3>
+                            <h3 class="nk-block-title page-title">Store Cashbacks</h3>
                             <div class="nk-block-des text-soft">
                                 {{-- <p>You have total 95 projects.</p> --}}
                             </div>
                         </div><!-- .nk-block-head-content -->
-                        <div class="nk-block-head-content">
+                        {{-- <div class="nk-block-head-content">
                             <div class="toggle-wrap nk-block-tools-toggle">
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
@@ -24,7 +24,7 @@
                                     </ul>
                                 </div>
                             </div><!-- .toggle-wrap -->
-                        </div><!-- .nk-block-head-content -->
+                        </div><!-- .nk-block-head-content --> --}}
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
                 <div class="nk-block">
@@ -44,18 +44,19 @@
                         </thead>
                         <tbody>
 
-                            @foreach ($stores as $store)
+                            @foreach ($cashbacks as $cashback)
                                 
                             
                             <tr class="nk-tb-item">
                                
-                                <td class="nk-tb-col"> <h6>{{$store->name}}</h6></td>
-                                <td class="nk-tb-col"> <p>{{$store->network->name}}</p></td>
-                                <td class="nk-tb-col"> <p>@foreach ($store->categories as $category)
+                                <td class="nk-tb-col"> <h6>{{$cashback->store->name}}</h6></td>
+                                <td class="nk-tb-col"> <p>{{$cashback->store->network->name}}</p></td>
+                                <td class="nk-tb-col"> <p>@foreach ($cashback->store->categories as $category)
                                     {{$category->name}},
                                 @endforeach</p></td>
-                                <td class="nk-tb-col"> <p>{{$store->tracking_url}}</p></td>
-                                <td class="nk-tb-col"> <span class="tb-status text-success">{{ $store->status ? 'active' : 'inactive'}}</span></td>
+                                <td class="nk-tb-col"> <p>{{$cashback->click_url}}</p></td>
+                                <td class="nk-tb-col"> <p>{{$cashback->sale_commission}}</p></td>
+                                {{-- <td class="nk-tb-col"> <span class="tb-status text-success">{{ $store->status ? 'active' : 'inactive'}}</span></td> --}}
                                 <td class="nk-tb-col nk-tb-col-tools">
                                     <ul class="nk-tb-actions gx-1">
                                         <li>
@@ -63,7 +64,7 @@
                                                 <a href="#" class="dropdown-toggle btn btn-sm btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
                                                     <ul class="link-list-opt no-bdr">
-                                                        <li><a href="{{route('admin.stores.edit', $store)}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li>
+                                                        {{-- <li><a href="{{route('admin.stores.edit', $store)}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li> --}}
                                                     </ul>
                                                 </div>
                                             </div>
@@ -79,6 +80,7 @@
                         <div class="card-inner">
                             <div class="nk-block-between-md g-3">
                                 <div class="g">
+                                    
                                     <ul class="pagination justify-content-center justify-content-md-start">
                                         <li class="page-item"><a class="page-link" href="#">Prev</a></li>
                                         <li class="page-item"><a class="page-link" href="#">1</a></li>

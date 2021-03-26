@@ -16,8 +16,11 @@ class CreateStoreCashbacksTable extends Migration
         Schema::create('store_cashbacks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('store_id');
-            $table->string('type');
-            $table->float('value');
+            $table->string('type')->nullable();
+            $table->string('image')->nullable();
+            $table->text('click_url')->nullable();
+            $table->text('sale_commission')->nullable();
+            $table->float('value')->nullable();
             $table->timestamps();
         });
     }
