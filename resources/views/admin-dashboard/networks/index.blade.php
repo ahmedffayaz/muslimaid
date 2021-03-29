@@ -33,12 +33,14 @@
                     </div> --}}
                 </div><!-- .nk-block-head -->
                 <div class="nk-block">
-                    <table class="nk-tb-list is-separate nk-tb-ulist">
+                    <table class="nk-tb-list is-separate nk-tb-ulist datatable-init table">
                         <thead>
                             <tr class="nk-tb-item nk-tb-head">
                                
                                 <th class="nk-tb-col"><span class="sub-text">Network Name</span></th>
+                                <th class="nk-tb-col"><span class="sub-text">Total Stores</span></th>
                                 <th class="nk-tb-col"><span class="sub-text">Click ref</span></th>
+                                <th class="nk-tb-col"><span class="sub-text">Importer</span></th>
                                 <th class="nk-tb-col nk-tb-col-tools text-right">
                                     <span class="sub-text">Action</span>
                                 </th>
@@ -52,10 +54,17 @@
                             <tr class="nk-tb-item">
                                
                                 <td class="nk-tb-col">
-                                    <h6>{{$network->name}}</h6>
+                                    <span class="tb-product"> <span class="title">{{$network->name}}</span></span> <h6></h6>
                                 </td>
                                 <td class="nk-tb-col">
-                                    <h6>{{$network->click_ref}}</h6>
+                                    <span>{{count($network->stores)}}</span>
+                                </td>
+                                <td class="nk-tb-col">
+                                    <span>{{$network->click_ref}}</span>
+                                </td>
+                                <td class="nk-tb-col">
+                                    <button type="button" class="btn btn-success btn-round btn-sm"  data-toggle="modal" data-target="#modalAlert"><em class="icon ni ni-download"></em><span>Run Importer</span> </button>
+                                    
                                 </td>
                                 <td class="nk-tb-col nk-tb-col-tools">
                                     <ul class="nk-tb-actions gx-1">
@@ -76,7 +85,7 @@
                           
                         </tbody>
                     </table><!-- .nk-tb-list -->
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-inner">
                             <div class="nk-block-between-md g-3">
                                 <div class="g">
@@ -90,8 +99,35 @@
                                 
                             </div><!-- .nk-block-between -->
                         </div><!-- .card-inner -->
-                    </div><!-- .card -->
+                    </div><!-- .card --> --}}
                 </div><!-- .nk-block -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Alert -->
+<div class="modal fade" tabindex="-1" id="modalAlert">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross"></em></a>
+            <div class="modal-body modal-body-lg text-center">
+                <div class="nk-modal">
+                    <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-download bg-success"></em>
+                    <h4 class="nk-modal-title">Run Importer</h4>
+                    {{-- <div class="nk-modal-text">
+                        <div class="caption-text">You’ve successfully bought <strong>0.5968</strong> BTC for <strong>200.00</strong> USD</div>
+                        <span class="sub-text-sm">Learn when you reciveve bitcoin in your wallet. <a href="#"> Click here</a></span>
+                    </div> --}}
+                    <div class="nk-modal-action">
+                        <a href="{{route('admin.importer.import')}}" class="btn btn-lg btn-mw btn-primary">Run</a>
+                    </div>
+                </div>
+            </div><!-- .modal-body -->
+            <div class="modal-footer bg-lighter">
+                <div class="text-center w-100">
+                    <p>Import Stores, categories and cashbacks</p>
+                </div>
             </div>
         </div>
     </div>

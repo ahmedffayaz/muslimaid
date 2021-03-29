@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Network;
 use App\Models\Category;
+use App\Models\Store;
 
 class Store extends Model
 {
@@ -20,6 +21,11 @@ class Store extends Model
     public function categories()
     {
         return $this->belongsToMany(Category::class);
+    }
+    public function cashback(){
+
+        return $this->hasOne(Store::class);
+
     }
 
 }

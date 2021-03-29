@@ -17,6 +17,7 @@ class CreateStoreCashbacksTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('store_id');
             $table->string('type')->nullable();
+            $table->string('cashback_name')->nullable();
             $table->string('image')->nullable();
             $table->text('click_url')->nullable();
             $table->text('sale_commission')->nullable();

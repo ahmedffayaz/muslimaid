@@ -11,7 +11,7 @@
                         <div class="nk-block-head-content">
                             <h3 class="nk-block-title page-title">Stores</h3>
                             <div class="nk-block-des text-soft">
-                                {{-- <p>You have total 95 projects.</p> --}}
+                                <p>You have total {{count($stores)}} stores.</p>
                             </div>
                         </div><!-- .nk-block-head-content -->
                         <div class="nk-block-head-content">
@@ -28,14 +28,14 @@
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
                 <div class="nk-block">
-                    <table class="nk-tb-list is-separate nk-tb-ulist">
+                    <table class="nk-tb-list is-separate nk-tb-ulist datatable-init table">
                         <thead>
                             <tr class="nk-tb-item nk-tb-head">
                                
                                 <th class="nk-tb-col"><span class="sub-text">Store Name</span></th>
                                 <th class="nk-tb-col"><span class="sub-text">Network</span></th>
                                 <th class="nk-tb-col"><span class="sub-text">Category</span></th>
-                                <th class="nk-tb-col"><span class="sub-text">Tracking Url</span></th>
+                                <th class="nk-tb-col"><span class="sub-text">Store Url</span></th>
                                 <th class="nk-tb-col"><span class="sub-text">Status</span></th>
                                 <th class="nk-tb-col nk-tb-col-tools text-right">
                                     <span class="sub-text">Action</span>
@@ -49,12 +49,12 @@
                             
                             <tr class="nk-tb-item">
                                
-                                <td class="nk-tb-col"> <h6>{{$store->name}}</h6></td>
+                                <td class="nk-tb-col"><span class="tb-product"> <span class="title">{{$store->name}}</span></span></td>
                                 <td class="nk-tb-col"> <p>{{$store->network->name}}</p></td>
                                 <td class="nk-tb-col"> <p>@foreach ($store->categories as $category)
                                     {{$category->name}},
                                 @endforeach</p></td>
-                                <td class="nk-tb-col"> <p>{{$store->tracking_url}}</p></td>
+                                <td class="nk-tb-col"> <p>{{$store->store_url}}</p></td>
                                 <td class="nk-tb-col"> <span class="tb-status text-success">{{ $store->status ? 'active' : 'inactive'}}</span></td>
                                 <td class="nk-tb-col nk-tb-col-tools">
                                     <ul class="nk-tb-actions gx-1">
@@ -75,7 +75,7 @@
                           
                         </tbody>
                     </table><!-- .nk-tb-list -->
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-inner">
                             <div class="nk-block-between-md g-3">
                                 <div class="g">
@@ -89,7 +89,7 @@
                                 
                             </div><!-- .nk-block-between -->
                         </div><!-- .card-inner -->
-                    </div><!-- .card -->
+                    </div><!-- .card --> --}}
                 </div><!-- .nk-block -->
             </div>
         </div>

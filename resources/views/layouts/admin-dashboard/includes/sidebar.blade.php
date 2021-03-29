@@ -66,6 +66,12 @@
                             <span class="nk-menu-text">Cashouts</span>
                         </a>
                     </li><!-- .nk-menu-item -->
+                    <li class="nk-menu-item">
+                        <a href="{{route('admin.importer.index')}}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-download"></em></span>
+                            <span class="nk-menu-text">Importer</span>
+                        </a>
+                    </li><!-- .nk-menu-item -->
                    
                    
                     <li class="nk-menu-heading">

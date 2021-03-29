@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Models\StoreCashback;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +15,10 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    $cashbacks = StoreCashback::latest()->get();
+
+    return view('welcome', ['cashbacks' => $cashbacks]);
+  
 });
 
 Auth::routes();
@@ -35,6 +39,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('storecashbacks', StoreCashbackController::class);
     Route::resource('categories', CategoryController::class);
     Route::resource('users', UserController::class);
+    Route::get('importer/import', [App\Http\Controllers\Admin\ImporterController::class,'import'])->name('importer.import');
     Route::resource('importer', ImporterController::class);
 
 

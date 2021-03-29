@@ -11,7 +11,7 @@
                         <div class="nk-block-head-content">
                             <h3 class="nk-block-title page-title">Categories</h3>
                             <div class="nk-block-des text-soft">
-                                {{-- <p>You have total 95 projects.</p> --}}
+                                <p>You have total {{count($categories)}} categories.</p>
                             </div>
                         </div><!-- .nk-block-head-content -->
                         <div class="nk-block-head-content">
@@ -28,7 +28,7 @@
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
                 <div class="nk-block">
-                    <table class="nk-tb-list is-separate nk-tb-ulist">
+                    <table class="nk-tb-list is-separate nk-tb-ulist datatable-init table">
                         <thead>
                             <tr class="nk-tb-item nk-tb-head">
                                
@@ -47,7 +47,7 @@
                             
                             <tr class="nk-tb-item">
                                
-                                <td class="nk-tb-col"> <h6>{{$category->name}}</h6></td>
+                                <td class="nk-tb-col"><span class="tb-product"> <span class="title">{{$category->name}}</span></span></td>
                                 <td class="nk-tb-col"> <span>{{count($category->stores)}}</span></td>
                                 
                                 <td class="nk-tb-col"> <span class="tb-status text-success">{{ $category->status ? 'active' : 'inactive'}}</span></td>
@@ -70,7 +70,7 @@
                           
                         </tbody>
                     </table><!-- .nk-tb-list -->
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-inner">
                             <div class="nk-block-between-md g-3">
                                 <div class="g">
@@ -84,7 +84,7 @@
                                 
                             </div><!-- .nk-block-between -->
                         </div><!-- .card-inner -->
-                    </div><!-- .card -->
+                    </div><!-- .card --> --}}
                 </div><!-- .nk-block -->
             </div>
         </div>

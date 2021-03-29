@@ -11,7 +11,7 @@
                         <div class="nk-block-head-content">
                             <h3 class="nk-block-title page-title">Users</h3>
                             <div class="nk-block-des text-soft">
-                                {{-- <p>You have total 95 projects.</p> --}}
+                                <p>You have total {{count($users)}} users.</p>
                             </div>
                         </div><!-- .nk-block-head-content -->
                         {{-- <div class="nk-block-head-content">
@@ -28,12 +28,12 @@
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
                 <div class="nk-block">
-                    <table class="nk-tb-list is-separate nk-tb-ulist">
+                    <table class="nk-tb-list is-separate nk-tb-ulist datatable-init table">
                         <thead>
                             <tr class="nk-tb-item nk-tb-head">
                                
-                                <th class="nk-tb-col"><span class="sub-text">Name</span></th>
-                                <th class="nk-tb-col"><span class="sub-text">Email</span></th>
+                                <th class="nk-tb-col"><span class="sub-text">User</span></th>
+                                {{-- <th class="nk-tb-col"><span class="sub-text">Email</span></th> --}}
                                 <th class="nk-tb-col"><span class="sub-text">Reg Type</span></th>
                                 <th class="nk-tb-col"><span class="sub-text">Status</span></th>
                                 <th class="nk-tb-col nk-tb-col-tools text-right">
@@ -48,8 +48,34 @@
                             
                             <tr class="nk-tb-item">
                                
-                                <td class="nk-tb-col"> <h6>{{$user->first_name}} {{$user->last_name}}</h6></td>
-                                <td class="nk-tb-col"> <p>{{$user->email}}</p></td>
+                                <td class="nk-tb-col"> 
+                                    <a href="html/user-details-regular.html">
+                                        <div class="user-card">
+                                            <div class="user-avatar
+                                            <?php
+                                           
+                                            $color = rand(1,5);
+                                            if($color==1){echo 'bg-info';}
+                                            elseif($color==2){echo 'bg-primary';}
+                                            elseif($color==3){echo 'bg-danger';}
+                                            elseif($color==4){echo 'bg-success';}
+                                            elseif($color==5){echo 'bg-warning';}
+                                            else{}
+                                            ?>
+                                            
+                                            ">
+                                                <span>{{$user->first_name[0]}}{{$user->last_name[0]}}</span>
+                                            </div>
+                                            <div class="user-info">
+                                                <span class="tb-lead">{{$user->first_name}} {{$user->last_name}}<span class="dot dot-success d-md-none ml-1"></span></span>
+                                                <span>{{$user->email}}</span>
+                                            </div>
+                                        </div>
+                                    </a>
+                                    
+                                    
+                                   </td>
+                              
                                
                                 <td class="nk-tb-col"> <p>{{$user->registration_type}}</p></td>
                                 <td class="nk-tb-col"> <span class="tb-status text-success">{{ $user->status ? 'active' : 'inactive'}}</span></td>
@@ -72,7 +98,7 @@
                           
                         </tbody>
                     </table><!-- .nk-tb-list -->
-                    <div class="card">
+                    {{-- <div class="card">
                         <div class="card-inner">
                             <div class="nk-block-between-md g-3">
                                 <div class="g">
@@ -86,7 +112,7 @@
                                 
                             </div><!-- .nk-block-between -->
                         </div><!-- .card-inner -->
-                    </div><!-- .card -->
+                    </div><!-- .card --> --}}
                 </div><!-- .nk-block -->
             </div>
         </div>
