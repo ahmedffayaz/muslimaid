@@ -7,9 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Store;
 use App\Models\Category;
 use App\Models\StoreCashback;
+use App\Models\UserCashback;
 use Illuminate\Support\Facades\DB;
-
-
 
 class ImporterController extends Controller
 {
@@ -55,10 +54,6 @@ class ImporterController extends Controller
 
         $data = simplexml_load_string($result);
         $array = json_decode(json_encode($data), TRUE);
-
-        
-
-        // dd($array);
 
         $adverts = $array['advertisers']['advertiser'];
 
@@ -134,7 +129,6 @@ class ImporterController extends Controller
             $link_data = simplexml_load_string($link_result);
             $link_array = json_decode(json_encode($link_data), TRUE);
 
-            // dd($link_array);
 
             //saving cashbacks fof current advertiser/store/merchent
            
@@ -152,9 +146,7 @@ class ImporterController extends Controller
                 if(array_key_exists(0,$link_array['links']['link'])){
                     $link = $link_array['links']['link'][0];
                     
-                
                         if(array_key_exists('link-code-html',$link)){
-
             
                             $html = $link['link-code-html'];
             
@@ -221,6 +213,67 @@ class ImporterController extends Controller
 
     }
 
+
+    public function import_commissions(){
+        
+        $total_callback = 0;
+        $beforePostingDate = date('Y-m-d\TH:i:s\z');
+        $sincePostingDate = date('Y-m-d\TH:i:s\z', strtotime('-31 days'));
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+        CURLOPT_URL => 'https://commissions.api.cj.com/query',
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_ENCODING => '',
+        CURLOPT_MAXREDIRS => 10,
+        CURLOPT_TIMEOUT => 0,
+        CURLOPT_FOLLOWLOCATION => true,
+        CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+        CURLOPT_CUSTOMREQUEST => 'POST',
+        CURLOPT_POSTFIELDS =>'{ publisherCommissions(forPublishers: ["5499477"], sincePostingDate:"'.$sincePostingDate.'",beforePostingDate:"'.$beforePostingDate.'"){count payloadComplete records {actionTrackerName websiteName advertiserName advertiserId pubCommissionAmountPubCurrency postingDate pubCommissionAmountUsd saleAmountPubCurrency actionStatus validationStatus clickDate eventDate shopperId   items { quantity perItemSaleAmountPubCurrency totalCommissionPubCurrency  }}}}',
+        CURLOPT_HTTPHEADER => array(
+            'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588',
+            'Content-Type: application/json'
+          ),
+        ));
+
+        $result = curl_exec($curl);
+        if (curl_errno($curl)) {
+            echo 'Error:' . curl_error($curl);
+        }
+        curl_close($curl);
+        $result_array = json_decode($result, TRUE);
+
+        if(array_key_exists('data',$result_array) 
+        && array_key_exists('publisherCommissions',$result_array['data']) 
+        && array_key_exists('records',$result_array['data']['publisherCommissions'])){
+
+            foreach($result_array['data']['publisherCommissions']['records'] as $cashback){
+
+                $store = Store::where('advertiser_id',$cashback['advertiserId'])->first();
+    
+                $commission = UserCashback::create([
+                    'store_id'=>$store->id,
+                    'user_id'=>1,
+                    'exit_click_id'=>$cashback['shopperId'],
+                    'amount'=>$cashback['pubCommissionAmountPubCurrency'],
+                    'status'=>$cashback['actionStatus'],
+                    'event_date'=> \Carbon\Carbon::parse($cashback['eventDate'])->toDateTimeString(),
+                    'click_date'=> \Carbon\Carbon::parse($cashback['clickDate'])->toDateTimeString(),
+                    
+                ]);  
+    
+            }
+
+        }
+
+      
+        return redirect()->route('admin.commissions.index');
+
+
+
+
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -248,22 +301,22 @@ class ImporterController extends Controller
 
         $data = simplexml_load_string($result);
         $array = json_decode(json_encode($data), TRUE);
-        // foreach ($array['advertisers']['advertiser'] as $advertiser) {
+        foreach ($array['advertisers']['advertiser'] as $advertiser) {
 
-        //     echo '<pre>';
-        //    print_r($advertiser['primary-category']['parent']);
-        //    echo '<br>';
-        //    print_r($advertiser['primary-category']['child']);
+            echo '<pre>';
+           print_r($advertiser['primary-category']['parent']);
+           echo '<br>';
+           print_r($advertiser['primary-category']['child']);
 
 
-        // }
-        // $store = Store::create([
-        //     'name'         => $array['advertisers']['advertiser']['advertiser-name'],
-        //     'advertiser_id'=> $array['advertisers']['advertiser']['advertiser-id'],
-        //     'network_id'   => 1,
-        //     'tracking_url' => $array['advertisers']['advertiser']['program-url'],
-        //     'store_url'    => $array['advertisers']['advertiser']['program-url'],
-        // ]);
+        }
+        $store = Store::create([
+            'name'         => $array['advertisers']['advertiser']['advertiser-name'],
+            'advertiser_id'=> $array['advertisers']['advertiser']['advertiser-id'],
+            'network_id'   => 1,
+            'tracking_url' => $array['advertisers']['advertiser']['program-url'],
+            'store_url'    => $array['advertisers']['advertiser']['program-url'],
+        ]);
 
         dd($array);
         $ch = curl_init();
@@ -283,15 +336,13 @@ class ImporterController extends Controller
         }
         curl_close($ch);
 
-        // dd($link_result);
+        dd($link_result);
 
         $link_data = simplexml_load_string($link_result);
         $link_array = json_decode(json_encode($link_data), TRUE);
 
         dd($link_array);
-
-
-
+       
         
     }
 

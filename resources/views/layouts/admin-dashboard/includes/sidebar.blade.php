@@ -1,7 +1,7 @@
 <div class="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
     <div class="nk-sidebar-element nk-sidebar-head">
         <div class="nk-sidebar-brand">
-            <a href="html/index.html" class="logo-link nk-sidebar-logo">
+            <a href="{{route('admin.home')}}" class="logo-link nk-sidebar-logo">
                 <img class="logo-light logo-img" src="{{ asset('admin-dashboard/images/logo.png')}}" srcset="{{ asset('admin-dashboard/images/logo2x.png')}} 2x" alt="logo">
                 <img class="logo-dark logo-img" src="{{ asset('admin-dashboard/images/logo-dark.png')}}" srcset="{{ asset('admin-dashboard/images/logo-dark2x.png')}} 2x" alt="logo-dark">
                 <img class="logo-small logo-img logo-img-small" src="{{ asset('admin-dashboard/images/logo-small.png')}}" srcset="{{ asset('admin-dashboard/images/logo-small2x.png')}} 2x" alt="logo-small">
@@ -44,21 +44,24 @@
                             <span class="nk-menu-text">Store Cashbacks</span>
                         </a>
                     </li><!-- .nk-menu-item -->
-               
-                    <li class="nk-menu-item has-sub">
-                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                    <li class="nk-menu-item">
+                        <a href="{{route('admin.users.index')}}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
                             <span class="nk-menu-text">Users</span>
                         </a>
-                        <ul class="nk-menu-sub">
-                            <li class="nk-menu-item">
-                                <a href="{{route('admin.users.index')}}" class="nk-menu-link"><span class="nk-menu-text">Users</span></a>
-                            </li>
-                            <li class="nk-menu-item">
-                                <a href="#" class="nk-menu-link"><span class="nk-menu-text">Cashbacks</span></a>
-                            </li>
-                           
-                        </ul><!-- .nk-menu-sub -->
+                    </li><!-- .nk-menu-item -->
+
+                    <li class="nk-menu-item">
+                        <a href="{{route('admin.clicks.index')}}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-arrow-up-right"></em></span>
+                            <span class="nk-menu-text">Exit Clicks</span>
+                        </a>
+                    </li><!-- .nk-menu-item -->
+                    <li class="nk-menu-item">
+                        <a href="{{route('admin.commissions.index')}}" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-sign-gbp"></em></span>
+                            <span class="nk-menu-text">Commissions</span>
+                        </a>
                     </li><!-- .nk-menu-item -->
                     <li class="nk-menu-item">
                         <a href="#" class="nk-menu-link">
@@ -66,12 +69,12 @@
                             <span class="nk-menu-text">Cashouts</span>
                         </a>
                     </li><!-- .nk-menu-item -->
-                    <li class="nk-menu-item">
+                    {{-- <li class="nk-menu-item">
                         <a href="{{route('admin.importer.index')}}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-download"></em></span>
                             <span class="nk-menu-text">Importer</span>
                         </a>
-                    </li><!-- .nk-menu-item -->
+                    </li><!-- .nk-menu-item --> --}}
                    
                    
                     <li class="nk-menu-heading">

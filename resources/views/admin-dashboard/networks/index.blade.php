@@ -73,7 +73,7 @@
                                                 <a href="#" class="dropdown-toggle btn btn-sm btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
                                                     <ul class="link-list-opt no-bdr">
-                                                        <li><a href="#"><em class="icon ni ni-edit"></em><span>Edit Network</span></a></li>
+                                                        <li><a href="{{route('admin.networks.edit',$network)}}"><em class="icon ni ni-edit"></em><span>Edit Network</span></a></li>
                                                     </ul>
                                                 </div>
                                             </div>

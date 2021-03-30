@@ -81,9 +81,10 @@ class NetworkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Network $network)
     {
-        //
+    
+        return view('admin-dashboard.networks.edit', compact('network'));
     }
 
     /**
@@ -93,9 +94,22 @@ class NetworkController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Network $network)
     {
-        //
+        try {
+            $network->update([
+                'name'=>$request->input('network_name'),
+                'click_ref'=>$request->input('click_ref'),
+                'description'=>$request->input('network_name'),
+            ]);
+            return redirect()->route('admin.networks.index');
+           
+            
+        } catch (Exception $exception) {
+            return redirect()->route('admin.networks.index');
+
+            
+        }
     }
 
     /**

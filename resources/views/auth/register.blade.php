@@ -19,7 +19,7 @@
                     <div class="nk-block-head-content">
                         <h5 class="nk-block-title">Register</h5>
                         <div class="nk-block-des">
-                            <p>Create New Dashlite Account</p>
+                            <p>Create New Cashback Reborn Account</p>
                         </div>
                     </div>
                 </div><!-- .nk-block-head -->

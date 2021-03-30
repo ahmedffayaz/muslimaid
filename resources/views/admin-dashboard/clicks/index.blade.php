@@ -9,9 +9,9 @@
                 <div class="nk-block-head nk-block-head-sm">
                     <div class="nk-block-between">
                         <div class="nk-block-head-content">
-                            <h3 class="nk-block-title page-title">Users</h3>
+                            <h3 class="nk-block-title page-title">Exit Clicks</h3>
                             <div class="nk-block-des text-soft">
-                                <p>You have total {{count($users)}} users.</p>
+                                <p>Total {{count($clicks)}} exit clicks.</p>
                             </div>
                         </div><!-- .nk-block-head-content -->
                         {{-- <div class="nk-block-head-content">
@@ -34,7 +34,9 @@
                                
                                 <th class="nk-tb-col"><span class="sub-text">User</span></th>
                                 {{-- <th class="nk-tb-col"><span class="sub-text">Email</span></th> --}}
-                                <th class="nk-tb-col"><span class="sub-text">Reg Type</span></th>
+                                <th class="nk-tb-col"><span class="sub-text">Store</span></th>
+                                <th class="nk-tb-col"><span class="sub-text">Exit Url</span></th>
+                                <th class="nk-tb-col"><span class="sub-text">Time</span></th>
                                 <th class="nk-tb-col"><span class="sub-text">Status</span></th>
                                 <th class="nk-tb-col nk-tb-col-tools text-right">
                                     <span class="sub-text">Action</span>
@@ -43,13 +45,13 @@
                         </thead>
                         <tbody>
 
-                            @foreach ($users as $user)
+                            @foreach ($clicks as $click)
                                 
                             
                             <tr class="nk-tb-item">
                                
                                 <td class="nk-tb-col"> 
-                                    <a href="">
+                                    <a href="#">
                                         <div class="user-card">
                                             <div class="user-avatar
                                             <?php
@@ -64,11 +66,11 @@
                                             ?>
                                             
                                             ">
-                                                <span>{{$user->first_name[0]}}{{$user->last_name[0]}}</span>
+                                                <span>{{$click->user->first_name[0]}}{{$click->user->last_name[0]}}</span>
                                             </div>
                                             <div class="user-info">
-                                                <span class="tb-lead">{{$user->first_name}} {{$user->last_name}}<span class="dot dot-success d-md-none ml-1"></span></span>
-                                                <span>{{$user->email}}</span>
+                                                <span class="tb-lead">{{$click->user->first_name}} {{$click->user->last_name}}<span class="dot dot-success d-md-none ml-1"></span></span>
+                                                <span>{{$click->user->email}}</span>
                                             </div>
                                         </div>
                                     </a>
@@ -77,8 +79,10 @@
                                    </td>
                               
                                
-                                <td class="nk-tb-col"> <p>{{$user->registration_type}}</p></td>
-                                <td class="nk-tb-col"> <span class="tb-status text-success">{{ $user->status ? 'active' : 'inactive'}}</span></td>
+                                <td class="nk-tb-col"> <p>{{$click->store->name}}</p></td>
+                                <td class="nk-tb-col"> <p>{{$click->exit_url}}</p></td>
+                                <td class="nk-tb-col"> <p>{{$click->created_at}}</p></td>
+                                <td class="nk-tb-col"> <span class="tb-status text-warning">{{ $click->status}}</span></td>
                                 <td class="nk-tb-col nk-tb-col-tools">
                                     <ul class="nk-tb-actions gx-1">
                                         <li>

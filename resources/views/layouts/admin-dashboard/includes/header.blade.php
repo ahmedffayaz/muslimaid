@@ -11,8 +11,8 @@
                 </a>
             </div><!-- .nk-header-brand -->
             <div class="nk-header-search ml-3 ml-xl-0">
-                <em class="icon ni ni-search"></em>
-                <input type="text" class="form-control border-transparent form-focus-none" placeholder="Search anything">
+                {{-- <em class="icon ni ni-search"></em>
+                <input type="text" class="form-control border-transparent form-focus-none" placeholder="Search anything"> --}}
             </div><!-- .nk-header-news -->
             <div class="nk-header-tools">
                 <ul class="nk-quick-nav">
@@ -229,8 +229,8 @@
                                     <em class="icon ni ni-user-alt"></em>
                                 </div>
                                 <div class="user-info d-none d-xl-block">
-                                    <div class="user-status user-status-unverified">Unverified</div>
-                                    <div class="user-name dropdown-indicator">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
+                                    {{-- <div class="user-status user-status-unverified">Unverified</div> --}}
+                                    <div class="user-name dropdown-indicator">{{ Auth::user()->first_name }}</div>
                                 </div>
                             </div>
                         </a>
@@ -248,9 +248,9 @@
                             </div>
                             <div class="dropdown-inner">
                                 <ul class="link-list">
-                                    <li><a href="html/user-profile-regular.html"><em class="icon ni ni-user-alt"></em><span>View Profile</span></a></li>
-                                    <li><a href="html/user-profile-setting.html"><em class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
-                                    <li><a href="html/user-profile-activity.html"><em class="icon ni ni-activity-alt"></em><span>Login Activity</span></a></li>
+                                    <li><a href="#"><em class="icon ni ni-user-alt"></em><span>View Profile</span></a></li>
+                                    <li><a href="#"><em class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
+                                    {{-- <li><a href="html/user-profile-activity.html"><em class="icon ni ni-activity-alt"></em><span>Login Activity</span></a></li> --}}
                                     <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Dark Mode</span></a></li>
                                 </ul>
                             </div>
