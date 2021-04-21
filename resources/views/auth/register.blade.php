@@ -1,7 +1,5 @@
 @extends('layouts.auth.app')
-
 @section('content')
-
 <div class="nk-content ">
     <div class="nk-split nk-split-page nk-split-md">
         <div class="nk-split-content nk-block-area nk-block-area-column nk-auth-container bg-white w-lg-45">
@@ -67,7 +65,7 @@
                         <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
                     </div>
                 </form><!-- form -->
-                <div class="form-note-s2 pt-4"> Already have an account ? <a href="html/pages/auths/auth-login.html"><strong>Sign in instead</strong></a>
+                <div class="form-note-s2 pt-4"> Already have an account ? <a href="{{route('login')}}"><strong>Sign in instead</strong></a>
                 </div>
                 <div class="text-center pt-4 pb-3">
                     <h6 class="overline-title overline-title-sap"><span>OR</span></h6>

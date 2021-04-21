@@ -12,5 +12,10 @@ class Cashout extends Model
 
     protected $fillable = ['user_id', 'amount','cashout_type', 'status'];
 
+    public function user(){
+
+        return $this->belongsTo(User::class);
+    }
+
 }
 

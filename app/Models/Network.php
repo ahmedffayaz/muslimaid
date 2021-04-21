@@ -18,4 +18,10 @@ class Network extends Model
         return $this->hasMany(Store::class);
     }
 
+    public function importerSetting()
+    {
+        return $this->hasOne(ImporterSetting::class);
+
+    }
+
 }

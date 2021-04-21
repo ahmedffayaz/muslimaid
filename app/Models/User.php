@@ -23,6 +23,9 @@ class User extends Authenticatable
         'email',
         'password',
         'registration_type',
+        'phone',
+        'address',
+        'intro',
         'status',
     ];
 
@@ -44,4 +47,11 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+
+    public function paymentInfo(){
+        return $this->hasOne(PaymentInfo::class);
+    }
+
+    
 }

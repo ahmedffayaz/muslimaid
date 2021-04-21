@@ -12,7 +12,7 @@ class Store extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['network_id', 'name', 'advertiser_id', 'tracking_url','store_url', 'status'];
+    protected $fillable = ['network_id', 'name','slug', 'advertiser_id', 'tracking_url','store_url', 'description','terms_conditions','extra_info', 'status'];
 
     public function network(){
 
@@ -24,8 +24,30 @@ class Store extends Model
     }
     public function cashback(){
 
-        return $this->hasOne(Store::class);
+        return $this->hasOne(StoreCashback::class);
 
+    }
+    public function images(){
+
+        return $this->hasMany(StoreImage::class);
+
+    }
+    public function logo(){
+
+        return $this->images()->where('title','logo');
+
+    }
+    public function vouchers(){
+
+        return $this->hasMany(Voucher::class);
+    }
+    public function reviews(){
+        
+        return $this->hasMany(StoreReview::class);
+    }
+    public function commissions(){
+        
+        return $this->hasMany(UserCashback::class);
     }
 
 }

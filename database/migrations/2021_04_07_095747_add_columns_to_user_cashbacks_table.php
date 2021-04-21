@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddApicolumnsToUserCashbacksTable extends Migration
+class AddColumnsToUserCashbacksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,9 +14,9 @@ class AddApicolumnsToUserCashbacksTable extends Migration
     public function up()
     {
         Schema::table('user_cashbacks', function (Blueprint $table) {
-            $table->unsignedBigInteger('exit_click_id')->nullable()->after('user_id');
-            $table->dateTime('click_date')->nullable()->after('status');
-            $table->dateTime('event_date')->nullable()->after('status');
+            $table->longText('details')->after('exit_click_id')->nullable();
+            $table->float('network_commission')->after('event_date')->nullable();
+            $table->float('order_value')->after('event_date')->nullable();
 
         });
     }
@@ -29,10 +29,9 @@ class AddApicolumnsToUserCashbacksTable extends Migration
     public function down()
     {
         Schema::table('user_cashbacks', function (Blueprint $table) {
-            $table->dropColumn('exit_click_id');
-            $table->dropColumn('click_date');
-            $table->dropColumn('event_date');
-
+            $table->dropColumn('details');
+            $table->dropColumn('network_commission');
+            $table->dropColumn('order_value');
         });
     }
 }

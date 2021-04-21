@@ -56,6 +56,8 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
+    'cashback_percent'=>'50',
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

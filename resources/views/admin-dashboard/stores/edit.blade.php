@@ -1,7 +1,5 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
-    
-
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
@@ -21,9 +19,25 @@
                                 <div class="card-head">
                                     <h5 class="card-title">Store Info</h5>
                                 </div>
-                                <form action="{{route('admin.stores.update', $store)}}" class="gy-3 form-validate is-alter" method="POST">
+                                <form action="{{route('admin.stores.update', $store)}}" id="store_form" class="gy-3 form-validate is-alter" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     @method('PUT')
+                                    <div class="row gy-4">
+                                        <div class="col-lg-4 mx-auto">
+                                            <div class="form-group">
+                                                <div class="text-center mb-4 logo">
+                                                    <label for="logo-input">
+                                                    <img id="blah" src="{{$logoUrl}}" alt="store logo" class="rounded-circle" width="150px"/>
+                                                    <input id="logo-input"  name="image" class="d-none" type='file' onchange="readURL(this);" />
+                                                    <div class="edit"><em class="icon ni ni-edit"></em> Change logo</div>
+                                                   
+                                                    </label><br>
+                                                    <label class="form-label" >Store logo</label>
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row g-4">
                                         <div class="col-lg-6">
                                             <div class="form-group">
@@ -68,9 +82,28 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
+                                                <label class="form-label" for="pay-amount-1">Cashback</label>
+                                                <div class="form-control-wrap">
+                                                    <input type="text" class="form-control" id="pay-amount-1" value="{{$store->cashback->sale_commission}}" name="store_cashback" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <input name="description" type="hidden">
+                                                <label class="form-label" for="phone-no-1">Description</label>
+                                                <!-- Create the editor container -->
+                                                <div  id="editor-container">
+                                                   {!!$store->description!!}
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
                                                 <label class="form-label" for="phone-no-1">Tracking url</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="phone-no-1" value="{{$store->tracking_url}}" name="tracking_url" required>
+                                                    <input type="text" class="form-control" id="phone-no-1" value="{{$store->cashback->click_url}}" name="tracking_url" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -79,6 +112,40 @@
                                                 <label class="form-label" for="pay-amount-1">Store url</label>
                                                 <div class="form-control-wrap">
                                                     <input type="text" class="form-control" id="pay-amount-1" value="{{$store->store_url}}" name="store_url" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                       
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="pay-amount-1">Terms & Conditions</label>
+                                                <div class="form-control-wrap">
+                                                    <input type="text" class="form-control" id="pay-amount-1" value="{{$store->terms_conditions}}" name="terms_conditions">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="pay-amount-1">Extra Info</label>
+                                                <div class="form-control-wrap">
+                                                    <input type="text" class="form-control" id="pay-amount-1" value="{{$store->extra_info}}" name="extra_info">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="default-06">Status</label>
+                                                <div class="form-control-wrap ">
+                                                    <div class="form-control-select">
+                                                        <select class="form-control" id="default-06" name="status" required>
+                                                            
+                                                            <option @if($store->status == 1) selected @endif value="1">Active</option>
+                                                            <option @if($store->status == 0) selected @endif value="0">In-active</option>
+                                                                
+                                                           
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -104,3 +171,45 @@
 </div>
 
 @endsection
+@push('scripts')
+<link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0')}}">
+    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0')}}"></script>
+    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0')}}"></script>
+    <script>
+    var quill = new Quill('#editor-container', {
+        modules: {
+          toolbar: [
+            ['bold', 'italic'],
+            ['link', 'blockquote', 'code-block', 'image'],
+            [{ list: 'ordered' }, { list: 'bullet' }]
+          ]
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow'
+      });
+      
+    //   var form = document.querySelector('form');
+      $("#store_form").submit(function(e) {
+          
+        // Populate hidden form on submit
+        var desc = document.querySelector('input[name=description]');
+        desc.value = quill.root.innerHTML;
+       
+        
+      });</script>
+      <script>
+          function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#blah')
+                    .attr('src', e.target.result)
+                    .width(150);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+      </script>
+@endpush

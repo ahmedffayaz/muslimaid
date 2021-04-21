@@ -9,9 +9,9 @@
                 <div class="nk-block-head nk-block-head-sm">
                     <div class="nk-block-between">
                         <div class="nk-block-head-content">
-                            <h3 class="nk-block-title page-title">Commissions: &#163;{{$coms->sum('amount')}}</h3>
+                            <h3 class="nk-block-title page-title">Cashbacks</h3>
                             <div class="nk-block-des text-soft">
-                                <p>Total {{count($coms)}} commissions.</p>
+                                <p>Total {{$coms->total()}} cashbacks.</p>
                             </div>
                         </div><!-- .nk-block-head-content -->
                         <div class="nk-block-head-content">
@@ -19,105 +19,115 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                       
-                                        <li class="nk-block-tools-opt"><a href="#"  class="btn btn-primary" data-toggle="modal" data-target="#modalAlert"><em class="icon ni ni-download"></em><span>Import</span></a></li>
+                                        <li class="nk-block-tools-opt"><a href="{{route('admin.commissions.create')}}" class="btn btn-primary btn-sm"><em class="icon ni ni-plus"></em><span>Add Cashback</span></a></li>
+                                        {{-- <li class="nk-block-tools-opt"><a href="#"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAlert"><em class="icon ni ni-download"></em><span>Import Cashbacks</span></a></li> --}}
+                                        <li><a href="{{route('admin.commissions.export')}}" data-toggle="tooltip" data-placement="top" title="Export cashbacks to CSV" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
+                                     
                                     </ul>
                                 </div>
                             </div><!-- .toggle-wrap -->
                         </div><!-- .nk-block-head-content -->
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
-                <div class="nk-block">
-                    <table class="nk-tb-list is-separate nk-tb-ulist datatable-init table">
-                        <thead>
-                            <tr class="nk-tb-item nk-tb-head">
-                               
-                                <th class="nk-tb-col"><span class="sub-text">User</span></th>
-                                <th class="nk-tb-col"><span class="sub-text">Store</span></th>
-                                <th class="nk-tb-col"><span class="sub-text">Amount (&#163;)</span></th>
-                                <th class="nk-tb-col"><span class="sub-text">Exit Click Id</span></th>
-                                <th class="nk-tb-col"><span class="sub-text">Event Time</span></th>
-                                <th class="nk-tb-col"><span class="sub-text">Status</span></th>
-                                <th class="nk-tb-col nk-tb-col-tools text-right">
-                                    <span class="sub-text">Action</span>
-                                </th>
-                            </tr><!-- .nk-tb-item -->
-                        </thead>
-                        <tbody>
-
-                            @foreach ($coms as $com)
-                                
-                            
-                            <tr class="nk-tb-item">
-                               
-                                <td class="nk-tb-col"> 
-                                    <a href="#">
-                                        <div class="user-card">
-                                            <div class="user-avatar
-                                            <?php
-                                           
-                                            $color = rand(1,5);
-                                            if($color==1){echo 'bg-info';}
-                                            elseif($color==2){echo 'bg-primary';}
-                                            elseif($color==3){echo 'bg-danger';}
-                                            elseif($color==4){echo 'bg-success';}
-                                            elseif($color==5){echo 'bg-warning';}
-                                            else{}
-                                            ?>
-                                            
-                                            ">
-                                                {{-- <span>{{$click->user->first_name[0]}}{{$click->user->last_name[0]}}</span> --}}
-                                            </div>
-                                            <div class="user-info">
-                                                {{-- <span class="tb-lead">{{$click->user->first_name}} {{$click->user->last_name}}<span class="dot dot-success d-md-none ml-1"></span></span>
-                                                <span>{{$click->user->email}}</span> --}}
-                                            </div>
-                                        </div>
-                                    </a>
-                                    
-                                    
-                                   </td>
-                              
-                               
-                                <td class="nk-tb-col"> <p>{{$com->store->name}}</p></td>
-                                <td class="nk-tb-col"> <p>&#163;{{$com->amount}}</p></td>
-                                <td class="nk-tb-col"> <p>{{$com->exit_click_id}}</p></td>
-                                <td class="nk-tb-col"> <p>{{$com->event_date}}</p></td>
-                                <td class="nk-tb-col"> <span class="tb-status text-info">{{ $com->status}}</span></td>
-                                <td class="nk-tb-col nk-tb-col-tools">
-                                    <ul class="nk-tb-actions gx-1">
-                                        <li>
-                                            <div class="drodown">
-                                                <a href="#" class="dropdown-toggle btn btn-sm btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <ul class="link-list-opt no-bdr">
-                                                        {{-- <li><a href="#"><em class="icon ni ni-edit"></em><span>Edit User</span></a></li> --}}
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr><!-- .nk-tb-item -->
-                            @endforeach
-                          
-                        </tbody>
-                    </table><!-- .nk-tb-list -->
-                    {{-- <div class="card">
-                        <div class="card-inner">
-                            <div class="nk-block-between-md g-3">
-                                <div class="g">
-                                    <ul class="pagination justify-content-center justify-content-md-start">
-                                        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                       
-                                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                    </ul><!-- .pagination -->
+                <div><form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form card p-4 mb-4" method="POST">
+                    @csrf
+                    <div class="row g-4">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label" for="user_id">User</label>
+                                <div class="form-control-wrap ">
+                                    <select class="form-select form-control" data-search="on" id="user_id" name="user_id">
+                                        <option value="0">All</option>
+                                        @foreach ($users as $user)
+                                        <option value="{{$user->id}}">{{$user->first_name}} {{$user->last_name}}</option>
+                                        @endforeach
+                                    </select> 
                                 </div>
-                                
-                            </div><!-- .nk-block-between -->
-                        </div><!-- .card-inner -->
-                    </div><!-- .card --> --}}
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label" for="network_id">Network</label>
+                                <div class="form-control-wrap ">
+                                    <select class="form-select form-control" data-search="on" id="network_id" name="network_id">
+                                        <option value="0">All</option>
+                                        @foreach ($networks as $network)
+                                        <option value="{{$network->id}}">{{$network->name}}</option>
+                                        @endforeach
+                                    </select>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                       
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label" for="store_id">Store</label>
+                                <div class="form-control-wrap ">
+                                    <select class="form-select form-control" data-search="on" id="store_id" name="store_id">
+                                        <option value="0">All</option>
+                                        @foreach ($stores as $store)
+                                        <option value="{{$store->id}}">{{$store->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div> 
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label" for="click_id">Exit Click</label>
+                                <div class="form-control-wrap ">
+                                    <select class="form-select form-control" data-search="on" id="click_id" name="click_id">
+                                        <option value="0">All</option>
+                                        @foreach ($clicks as $click)
+                                        <option value="{{$click->id}}">{{$click->id}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>      
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label" for="status">Status</label>
+                                <div class="form-control-wrap ">
+                                    
+                                    <select class="form-control form-select" name="status_id" required>
+                                        <option value="-1">Any</option>
+                                        @foreach ($statuses as $status)
+                                        <option value="{{$status->id}}">{{$status->status}}</option>
+                                            
+                                        @endforeach
+                                        
+                                            
+                                       
+                                    </select>
+                                   
+                                </div>
+                            </div>
+                        </div>                  
+                        <div class="col-3 align-self-end">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success btn-block">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form></div>
+                
+                @include('flash::message')
+                <div class="nk-block">
+                    <div class="card card-stretch">
+                        <div class="card-inner-group">
+                            
+                            <div class="card-inner px-0">
+                                <div class="nk-tb-list nk-tb-ulist" id="table-data">
+                                    
+                                    @include('admin-dashboard.commissions.index_data')                                   
+                                    
+                                </div><!-- .nk-tb-list -->
+                            </div><!-- .card-inner -->
+                           
+                        </div><!-- .card-inner-group -->
+                    </div><!-- .card -->
                 </div><!-- .nk-block -->
             </div>
         </div>
@@ -134,10 +144,6 @@
                 <div class="nk-modal">
                     <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-download bg-success"></em>
                     <h4 class="nk-modal-title">Run Importer</h4>
-                    {{-- <div class="nk-modal-text">
-                        <div class="caption-text">You’ve successfully bought <strong>0.5968</strong> BTC for <strong>200.00</strong> USD</div>
-                        <span class="sub-text-sm">Learn when you reciveve bitcoin in your wallet. <a href="#"> Click here</a></span>
-                    </div> --}}
                     <div class="nk-modal-action">
                         <a href="{{route('admin.importer.commissions')}}" class="btn btn-lg btn-mw btn-primary">Run</a>
                     </div>
@@ -154,3 +160,82 @@
 
  
 @endsection
+@push('scripts')
+    <script>
+    $(document).ready(function(){
+     $(document).on('click', '.pagination a', function(event){
+        event.preventDefault(); 
+        var route = $('.pagination').attr('route');
+        var page = $(this).attr('href').split('page=')[1];
+        
+         if(route=='index'){
+            
+             pageurl = "{{route('admin.commissions.fetch')}}?page="
+             var _token = $("input[name=_token]").val();
+            $.ajax({
+
+                url:pageurl+page,
+                method:"POST",
+                data:{_token:_token, page:page},
+                success:function(data)
+                {
+                    $('#table-data').html(data);
+                    $('html, body').animate({ scrollTop: 0 }, 'slow');
+                }
+                });
+         } 
+
+         if(route=='search'){
+              
+              
+            var _token = $("input[name=_token]").val();
+            var name = $("input[name=name]").val();
+            var network_id = $("select[name=network_id]").val();
+            var store_id = $("select[name=store_id]").val();
+            var click_id = $("select[name=click_id]").val();
+            var status_id = $("select[name=status_id]").val();
+            var user_id = $("select[name=user_id]").val();
+            $.ajax({
+              url:'{{route("admin.commissions.search_commissions")}}?page='+page,
+              method:"POST",
+              data:{_token:_token,name:name,network_id:network_id,store_id:store_id,click_id:click_id,status_id:status_id,user_id:user_id},
+              success:function(data)
+              {
+               $('#table-data').html(data);
+               $('html, body').animate({ scrollTop: 0 }, 'slow');
+              }
+            });
+         }       
+     });
+    });
+    </script> 
+    <script>
+        $(document).ready(function(){
+        
+         $(document).on('submit', '.search_form', function(event){
+            event.preventDefault(); 
+              
+            var _token = $("input[name=_token]").val();
+            var name = $("input[name=name]").val();
+            var network_id = $("select[name=network_id]").val();
+            var store_id = $("select[name=store_id]").val();
+            var click_id = $("select[name=click_id]").val();
+            var status_id = $("select[name=status_id]").val();
+            var user_id = $("select[name=user_id]").val();
+            $.ajax({
+              url:'{{route("admin.commissions.search_commissions")}}',
+              method:"POST",
+              data:{_token:_token,name:name,network_id:network_id,store_id:store_id,click_id:click_id,status_id:status_id,user_id:user_id},
+              success:function(data)
+              {
+               $('#table-data').html(data);
+               $('html, body').animate({ scrollTop: 0 }, 'slow');
+              }
+            });
+            
+         });
+        
+        });
+        
+        </script>  
+@endpush

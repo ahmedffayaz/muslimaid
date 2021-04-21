@@ -5,10 +5,15 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Store;
-use App\Models\Category;
+use App\Models\ImportedCategory;
 use App\Models\StoreCashback;
 use App\Models\UserCashback;
+use App\Models\Voucher;
+use App\Models\Network;
+use App\Models\ExitClick;
+use App\Models\ImporterSetting;
 use Illuminate\Support\Facades\DB;
+use App\Jobs\Importer;
 
 class ImporterController extends Controller
 {
@@ -22,200 +27,29 @@ class ImporterController extends Controller
         return view('admin-dashboard.importer.index');
 
     }
-    public function import()
+    public function import(Request $request)
     {
-        ini_set('max_execution_time', 3000); // 5 minutes
-
-        //importing advertisers/stores/merchents
-
-        $total_records= 1;
-        $fetched_records= 0;
-        $page = 1;
-
-        while($fetched_records < $total_records){
-
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, 'https://advertiser-lookup.api.cj.com/v2/advertiser-lookup?requestor-cid=5499477&advertiser-ids=joined&records-per-page=50&page-number='.$page);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-
-
-        $headers = array();
-        $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-        $result = curl_exec($ch);
-        if (curl_errno($ch)) {
-         echo 'Error:' . curl_error($ch);
-        }
-        curl_close($ch);      
-
-
-        $data = simplexml_load_string($result);
-        $array = json_decode(json_encode($data), TRUE);
-
-        $adverts = $array['advertisers']['advertiser'];
-
-        foreach ($adverts as $advertiser) {
-
-            try{
-            $store = Store::create([
-                'name'         => $advertiser['advertiser-name'],
-                'advertiser_id'=> $advertiser['advertiser-id'],
-                'network_id'   => 1,
-                'tracking_url' => $advertiser['program-url'],
-                'store_url'    => $advertiser['program-url'],
-            ]);
-
-         
-            if(!empty($advertiser['primary-category']['parent'])){
-
-                $category_parent = Category::where('name',$advertiser['primary-category']['parent'])->first();
-
-                if(!$category_parent){
-                    $category_parent = new Category();
-                $category_parent->name = $advertiser['primary-category']['parent'];
-                $category_parent->save();
-
-                }
-
-                DB::table('category_store')->insert([
-                    'store_id'=>$store->id,
-                    'category_id'=> $category_parent->id
-                ]);
-
-            }
-            if(!empty($advertiser['primary-category']['child'])){
-                
-                $category_child = Category::where('name',$advertiser['primary-category']['child'])->first();
-
-                if(!$category_child){
-
-                $category_child = new Category();
-                $category_child->name = $advertiser['primary-category']['child'];
-                $category_child->parent_id = $category_parent->id ?? 0;
-                $category_child->save();
-
-                }
-
-                DB::table('category_store')->insert([
-                    'store_id'=>$store->id,
-                    'category_id'=> $category_child->id
-                ]);
-            }
-
-        
-
-            //importing cashbacks for current advertiser/store/merchent
-
-            $ch = curl_init();
-
-            curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&advertiser-ids='.$advertiser['advertiser-id']);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-            
-            
-            $headers = array();
-            $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
-            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-            
-            $link_result = curl_exec($ch);
-            if (curl_errno($ch)) {
-                echo 'Error:' . curl_error($ch);
-            }
-            curl_close($ch);
-
-            $link_data = simplexml_load_string($link_result);
-            $link_array = json_decode(json_encode($link_data), TRUE);
-
-
-            //saving cashbacks fof current advertiser/store/merchent
-           
-
-            if(array_key_exists('links',$link_array) && array_key_exists('link',$link_array['links'])){
-
-                if(array_key_exists(0,$advertiser['actions']['action'])){
-                $commission = $advertiser['actions']['action'][0]['commission']['default'];
-                $cashback_name = $advertiser['actions']['action'][0]['name'];
-                }else{
-                $commission = $advertiser['actions']['action']['commission']['default'];
-                $cashback_name = $advertiser['actions']['action']['name'];
-                }
-
-                if(array_key_exists(0,$link_array['links']['link'])){
-                    $link = $link_array['links']['link'][0];
-                    
-                        if(array_key_exists('link-code-html',$link)){
-            
-                            $html = $link['link-code-html'];
-            
-                            $doc = new \DOMDocument();
-                            @$doc->loadHTML($html);
-                            $xpath = new \DOMXPath($doc);
-                            $img_src = $xpath->evaluate("string(//img/@src)");
-            
-                        }
-            
-                            $cashback = StoreCashback::create([
-                            'image'           => $img_src,
-                            'click_url'       => $link['clickUrl'] ?? '#',
-                            'sale_commission' => $commission,
-                            'cashback_name' => $cashback_name,
-                            'store_id' => $store->id,
-                        
-                        ]);
-                    
-                    
-                }else{
-                
-                        $link = $link_array['links']['link'];
-                
-                        if(array_key_exists('link-code-html',$link)){
-            
-                            $html = $link['link-code-html'];
-            
-                            $doc = new \DOMDocument();
-                            @$doc->loadHTML($html);
-                            $xpath = new \DOMXPath($doc);
-                            $img_src = $xpath->evaluate("string(//img/@src)");
-            
-                        }
-            
-                            $cashback = StoreCashback::create([
-                            'image'           => $img_src,
-                            'click_url'       => $link['clickUrl'] ?? '#',
-                            'sale_commission' => $commission,
-                            'name' => $cashback_name,
-                            'store_id' => $store->id,
-                        
-                        ]);
-                    
-                }  
-                
-            }  
-            }
-            catch(\Execption $e)
-            {
-                // continue;
-            }          
-
-        }
-
-        $total_records = $array['advertisers']['@attributes']['total-matched'];
-        $fetched_records= $fetched_records + $array['advertisers']['@attributes']['records-returned'];
-        $page++;
-    
-
-    }
-
-    return redirect()->route('admin.stores.index');
+        $settings = ImporterSetting::updateOrCreate([
+            'network_id'   => $request->network_id,
+        ],[
+            'import_stores'     => $request->has('stores') ? 1 : 0,
+            'import_vouchers'   => $request->has('vouchers') ? 1 : 0,
+            'import_cashbacks'   => $request->has('cashback') ? 1 : 0,
+            'last_import_at'   => \Carbon\Carbon::now()->toDateTimeString()
+          
+        ]);
+       
+        $importer = new Importer();
+        dispatch($importer);
+        // flash()->success('Importer running in background');
+        // return redirect()->route('admin.stores.index');
 
     }
 
 
     public function import_commissions(){
-        
+
+        $cashback_percent = \Config::get('app.cashback_percent');
         $total_callback = 0;
         $beforePostingDate = date('Y-m-d\TH:i:s\z');
         $sincePostingDate = date('Y-m-d\TH:i:s\z', strtotime('-31 days'));
@@ -243,6 +77,8 @@ class ImporterController extends Controller
         curl_close($curl);
         $result_array = json_decode($result, TRUE);
 
+        // dd($result_array);
+
         if(array_key_exists('data',$result_array) 
         && array_key_exists('publisherCommissions',$result_array['data']) 
         && array_key_exists('records',$result_array['data']['publisherCommissions'])){
@@ -250,29 +86,258 @@ class ImporterController extends Controller
             foreach($result_array['data']['publisherCommissions']['records'] as $cashback){
 
                 $store = Store::where('advertiser_id',$cashback['advertiserId'])->first();
-    
-                $commission = UserCashback::create([
-                    'store_id'=>$store->id,
-                    'user_id'=>1,
-                    'exit_click_id'=>$cashback['shopperId'],
-                    'amount'=>$cashback['pubCommissionAmountPubCurrency'],
-                    'status'=>$cashback['actionStatus'],
-                    'event_date'=> \Carbon\Carbon::parse($cashback['eventDate'])->toDateTimeString(),
-                    'click_date'=> \Carbon\Carbon::parse($cashback['clickDate'])->toDateTimeString(),
+                $click = ExitClick::where('id',$cashback['shopperId'])->first();
+
+                $cashback_amount_for_user = ($cashback['pubCommissionAmountPubCurrency']/100) * $cashback_percent;
+
+                $commission_exist = UserCashback::where('exit_click_id',$cashback['shopperId'])->first();
+
+                $status = '';
+
+                if($cashback['actionStatus'] == 'new' || $cashback['actionStatus'] == 'extended' || $cashback['actionStatus'] == 'locked'){
+                    $status = 1;
+                }else if($cashback['actionStatus'] == 'closed' && $cashback['ValidationStatus'] == 'ACCEPTED'){
+                    $status = 3;
+                }else if($cashback['actionStatus'] == 'closed' && $cashback['ValidationStatus'] == 'DECLINED'){
+                    $status = 2;
+                }
+                if(!$commission_exist){
+                   
+                    $commission = UserCashback::create([
+                        'store_id'=>$store->id,
+                        'user_id'=> $click->user_id ?? 0,
+                        'exit_click_id'=>$cashback['shopperId'],
+                        'amount'=>round($cashback_amount_for_user,3),
+                        'network_commission'=>$cashback['pubCommissionAmountPubCurrency'],
+                        'order_value'=>$cashback['saleAmountPubCurrency'],
+                        'status'=>$status,
+                        'event_date'=> \Carbon\Carbon::parse($cashback['eventDate'])->toDateTimeString(),
+                        'click_date'=> \Carbon\Carbon::parse($cashback['clickDate'])->toDateTimeString(),
+                    ]);  
+
                     
-                ]);  
+
+                }else{
+                    $commission_exist->update([
+                        'store_id'=>$store->id,
+                        'user_id'=> $click->user_id ?? 0,
+                        'exit_click_id'=>$cashback['shopperId'],
+                        'amount'=>round($cashback_amount_for_user,3),
+                        'network_commission'=>$cashback['pubCommissionAmountPubCurrency'],
+                        'order_value'=>$cashback['saleAmountPubCurrency'],
+                        'status'=>$status,
+                        'event_date'=> \Carbon\Carbon::parse($cashback['eventDate'])->toDateTimeString(),
+                        'click_date'=> \Carbon\Carbon::parse($cashback['clickDate'])->toDateTimeString(),
+                    ]); 
+
+                    if($commission_exist->status!= $status){
+                        $change_status = CashbackStatusChange::create([
+                            'user_cashback_id'=>$commission_exist-->id,
+                            'cashback_status_id'=>$status
+        
+                        ]);
+                    }
+
+                }
     
             }
 
         }
-
-      
+        flash()->success('cashbacks imported successfully');
         return redirect()->route('admin.commissions.index');
 
-
-
-
     }
+
+    public function import_coupons(){
+
+        ini_set('max_execution_time', 3000); // 5 minutes
+
+        //importing coupons
+
+        $total_records= 1;
+        $fetched_records= 0;
+        $page = 1;
+
+        while($fetched_records < $total_records){ 
+        
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&promotion-type=coupon&advertiser-ids=joined&records-per-page=100&page-number='.$page);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+            $headers = array();
+            $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            
+            $link_result = curl_exec($ch);
+            if (curl_errno($ch)) {
+                echo 'Error:' . curl_error($ch);
+            }
+            curl_close($ch);
+            $link_data = simplexml_load_string($link_result);
+            $link_array = json_decode(json_encode($link_data), TRUE);
+            if(array_key_exists('links',$link_array) && array_key_exists('link',$link_array['links'])){
+                if(array_key_exists(0,$link_array['links']['link'])){
+                    $links = $link_array['links']['link'];
+                    foreach ($links as $link) {
+
+                        $store = Store::where('advertiser_id',$link['advertiser-id'])->first();
+                        if(array_key_exists('link-code-html',$link)){
+                            $html = $link['link-code-html'];
+                            $doc = new \DOMDocument();
+                            @$doc->loadHTML($html);
+                            $xpath = new \DOMXPath($doc);
+                            $img_src = $xpath->evaluate("string(//img/@src)");
+            
+                        }
+                            $voucher = Voucher::create([
+                                'image'           => $img_src,
+                                'click_url'       => empty($link['clickUrl']) ? '#' : $link['clickUrl'],
+                                'sale_commission' => empty($link['sale-commission']) ? NULL: $link['sale-commission'],
+                                'store_id' => $store->id,
+                                "description" => empty($link['description']) ? NULL : $link['description'],
+                                "destination" => empty($link['destination']) ? NULL : $link['destination'],
+                                "link_id" => empty($link['link-id']) ? NULL : $link['link-id'],
+                                "link_name" => empty($link['link-name']) ? NULL : $link['link-name'],
+                                "link_type" => empty($link['link-type']) ? NULL : $link['link-type'],
+                                "promotion_end_date" => empty($link['promotion-end-date']) ? NULL : $link['promotion-end-date'],
+                                "promotion_start_date" => empty($link['promotion-start-date']) ? NULL : $link['promotion-start-date'],
+                                "promotion_type" => empty($link['promotion-type']) ? NULL: $link['promotion-type'],
+                                "coupon_code" => empty($link['coupon-code']) ? NULL : $link['coupon-code'],           
+                        
+                        ]);
+                       
+                    }
+                    
+                }else{
+                
+                        $link = $link_array['links']['link'];
+                        $store = Store::where('advertiser_id',$link['advertiser-id'])->first();                
+                        if(array_key_exists('link-code-html',$link)){
+                            $html = $link['link-code-html'];
+                            $doc = new \DOMDocument();
+                            @$doc->loadHTML($html);
+                            $xpath = new \DOMXPath($doc);
+                            $img_src = $xpath->evaluate("string(//img/@src)");
+            
+                        }
+                        $voucher = Voucher::create([
+
+                                'image'           => $img_src,
+                                'click_url'       => empty($link['clickUrl']) ? '#' : $link['clickUrl'],
+                                'sale_commission' => empty($link['sale-commission']) ? NULL: $link['sale-commission'],
+                                'store_id' => $store->id,
+                                "description" => empty($link['description']) ? NULL : $link['description'],
+                                "destination" => empty($link['destination']) ? NULL : $link['destination'],
+                                "link_id" => empty($link['link-id']) ? NULL : $link['link-id'],
+                                "link_name" => empty($link['link-name']) ? NULL : $link['link-name'],
+                                "link_type" => empty($link['link-type']) ? NULL : $link['link-type'],
+                                "promotion_end_date" => empty($link['promotion-end-date']) ? NULL : $link['promotion-end-date'],
+                                "promotion_start_date" => empty($link['promotion-start-date']) ? NULL : $link['promotion-start-date'],
+                                "promotion_type" => empty($link['promotion-type']) ? NULL: $link['promotion-type'],
+                                "coupon_code" => empty($link['coupon-code']) ? NULL : $link['coupon-code'],  
+                    ]); 
+                }     
+            }
+            $total_records = $link_array['links']['@attributes']['total-matched'];
+            $fetched_records= $fetched_records + $link_array['links']['@attributes']['records-returned'];
+            $page++;
+        }
+
+        //importing deals
+        $total_records= 1;
+        $fetched_records= 0;
+        $page = 1;
+
+        while($fetched_records < $total_records){ 
+
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&promotion-type=sale/discount&advertiser-ids=joined&records-per-page=100&page-number='.$page);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+            $headers = array();
+            $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+            
+            $link_result = curl_exec($ch);
+            if (curl_errno($ch)) {
+                echo 'Error:' . curl_error($ch);
+            }
+            curl_close($ch);
+
+            $link_data = simplexml_load_string($link_result);
+            $link_array = json_decode(json_encode($link_data), TRUE);  
+            
+            // dd($link_array);
+
+            if(array_key_exists('links',$link_array) && array_key_exists('link',$link_array['links'])){
+                if(array_key_exists(0,$link_array['links']['link'])){
+                    $links = $link_array['links']['link'];
+                    foreach ($links as $link) {
+
+                        $store = Store::where('advertiser_id',$link['advertiser-id'])->first();
+                        
+                        if(array_key_exists('link-code-html',$link)){
+                            $html = $link['link-code-html'];
+                            $doc = new \DOMDocument();
+                            @$doc->loadHTML($html);
+                            $xpath = new \DOMXPath($doc);
+                            $img_src = $xpath->evaluate("string(//img/@src)");
+                        }
+                            $voucher = Voucher::create([
+                                'image'           => $img_src,
+                                'click_url'       => empty($link['clickUrl']) ? '#' : $link['clickUrl'],
+                                'sale_commission' => empty($link['sale-commission']) ? NULL: $link['sale-commission'],
+                                'store_id' => $store->id ?? 0,
+                                "description" => empty($link['description']) ? NULL : $link['description'],
+                                "destination" => empty($link['destination']) ? NULL : $link['destination'],
+                                "link_id" => empty($link['link-id']) ? NULL : $link['link-id'],
+                                "link_name" => empty($link['link-name']) ? NULL : $link['link-name'],
+                                "link_type" => empty($link['link-type']) ? NULL : $link['link-type'],
+                                "promotion_end_date" => empty($link['promotion-end-date']) ? NULL : $link['promotion-end-date'],
+                                "promotion_start_date" => empty($link['promotion-start-date']) ? NULL : $link['promotion-start-date'],
+                                "promotion_type" => empty($link['promotion-type']) ? NULL: $link['promotion-type'],
+                                "coupon_code" => empty($link['coupon-code']) ? NULL : $link['coupon-code'],           
+                        ]);
+                    }
+                    
+                }else{
+                
+                        $link = $link_array['links']['link'];
+                        $store = Store::where('advertiser_id',$link['advertiser-id'])->first();                
+                        if(array_key_exists('link-code-html',$link)){
+                            $html = $link['link-code-html'];
+                            $doc = new \DOMDocument();
+                            @$doc->loadHTML($html);
+                            $xpath = new \DOMXPath($doc);
+                            $img_src = $xpath->evaluate("string(//img/@src)");
+                        }
+                        $voucher = Voucher::create([
+                                'image'           => $img_src,
+                                'click_url'       => empty($link['clickUrl']) ? '#' : $link['clickUrl'],
+                                'sale_commission' => empty($link['sale-commission']) ? NULL: $link['sale-commission'],
+                                'store_id' => $store->id ?? 0,
+                                "description" => empty($link['description']) ? NULL : $link['description'],
+                                "destination" => empty($link['destination']) ? NULL : $link['destination'],
+                                "link_id" => empty($link['link-id']) ? NULL : $link['link-id'],
+                                "link_name" => empty($link['link-name']) ? NULL : $link['link-name'],
+                                "link_type" => empty($link['link-type']) ? NULL : $link['link-type'],
+                                "promotion_end_date" => empty($link['promotion-end-date']) ? NULL : $link['promotion-end-date'],
+                                "promotion_start_date" => empty($link['promotion-start-date']) ? NULL : $link['promotion-start-date'],
+                                "promotion_type" => empty($link['promotion-type']) ? NULL: $link['promotion-type'],
+                                "coupon_code" => empty($link['coupon-code']) ? NULL : $link['coupon-code'],
+                    ]);
+                }  
+            }
+            $total_records = $link_array['links']['@attributes']['total-matched'];
+            $fetched_records= $fetched_records + $link_array['links']['@attributes']['records-returned'];
+            $page++;
+        }
+            flash()->success('vouchers imported successfully');
+            return redirect()->route('admin.vouchers.index');
+    }
+
+
+
 
     /**
      * Show the form for creating a new resource.
@@ -281,9 +346,13 @@ class ImporterController extends Controller
      */
     public function create()
     {
+
+        ini_set('max_execution_time', 3000); // 5 minutes
+
+        //this code is used for testing APIs
         $ch = curl_init();
 
-        curl_setopt($ch, CURLOPT_URL, 'https://advertiser-lookup.api.cj.com/v2/advertiser-lookup?requestor-cid=5499477&advertiser-ids=4441431&records-per-page=10');
+        curl_setopt($ch, CURLOPT_URL, 'https://advertiser-lookup.api.cj.com/v2/advertiser-lookup?requestor-cid=5499477&advertiser-ids=joined&records-per-page=5');
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 
@@ -301,22 +370,8 @@ class ImporterController extends Controller
 
         $data = simplexml_load_string($result);
         $array = json_decode(json_encode($data), TRUE);
-        foreach ($array['advertisers']['advertiser'] as $advertiser) {
-
-            echo '<pre>';
-           print_r($advertiser['primary-category']['parent']);
-           echo '<br>';
-           print_r($advertiser['primary-category']['child']);
-
-
-        }
-        $store = Store::create([
-            'name'         => $array['advertisers']['advertiser']['advertiser-name'],
-            'advertiser_id'=> $array['advertisers']['advertiser']['advertiser-id'],
-            'network_id'   => 1,
-            'tracking_url' => $array['advertisers']['advertiser']['program-url'],
-            'store_url'    => $array['advertisers']['advertiser']['program-url'],
-        ]);
+     
+      
 
         dd($array);
         $ch = curl_init();
@@ -365,8 +420,8 @@ class ImporterController extends Controller
      */
     public function show($id)
     {
-        $store = Store::where('id',94)->first();
-        dd($store->id);
+        $importer = new Importer();
+        dispatch($importer);
     }
 
     /**
@@ -402,184 +457,23 @@ class ImporterController extends Controller
     {
         //
     }
-    public function index_backup()
+
+    public function saveSettings(Request $request)
     {
-        ini_set('max_execution_time', 3000); // 5 minutes
-
-        //importing advertisers/stores/merchents
-
-        $total_records= 1;
-        $fetched_records= 0;
-        $page = 1;
-
-        while($fetched_records < $total_records){
-
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, 'https://advertiser-lookup.api.cj.com/v2/advertiser-lookup?requestor-cid=5499477&advertiser-ids=joined&records-per-page=50&page-number='.$page);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-
-
-        $headers = array();
-        $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-
-        $result = curl_exec($ch);
-        if (curl_errno($ch)) {
-         echo 'Error:' . curl_error($ch);
-        }
-        curl_close($ch);      
-
-
-        $data = simplexml_load_string($result);
-        $array = json_decode(json_encode($data), TRUE);
-
-        
-
-        // dd($array);
-
-        foreach ($array['advertisers']['advertiser'] as $advertiser) {
-
+      
+        $settings = ImporterSetting::updateOrCreate([
+            'network_id'   => $request->network_id,
+        ],[
+            'import_stores'    => $request->has('stores') ? 1 : 0,
+            'import_vouchers'  => $request->has('vouchers') ? 1 : 0,
+            'import_cashbacks' => $request->has('cashback') ? 1 : 0,
             
-            $store = Store::create([
-                'name'         => $advertiser['advertiser-name'],
-                'advertiser_id'=> $advertiser['advertiser-id'],
-                'network_id'   => 1,
-                'tracking_url' => $advertiser['program-url'],
-                'store_url'    => $advertiser['program-url'],
-            ]);
+          
+        ]);
 
-         
-        if(!empty($advertiser['primary-category']['parent'])){
+        return 'Settings saved';
 
-            $category_parent = Category::where('name',$advertiser['primary-category']['parent'])->first();
-
-            if(!$category_parent){
-                $category_parent = new Category();
-            $category_parent->name = $advertiser['primary-category']['parent'];
-            $category_parent->save();
-
-            }
-
-            DB::table('category_store')->insert([
-                'store_id'=>$store->id,
-                'category_id'=> $category_parent->id
-            ]);
-
-        }
-        if(!empty($advertiser['primary-category']['child'])){
-            
-            $category_child = Category::where('name',$advertiser['primary-category']['child'])->first();
-
-            if(!$category_child){
-
-            $category_child = new Category();
-            $category_child->name = $advertiser['primary-category']['child'];
-            $category_child->parent_id = $category_parent->id ?? 0;
-            $category_child->save();
-
-            }
-
-            DB::table('category_store')->insert([
-                'store_id'=>$store->id,
-                'category_id'=> $category_child->id
-            ]);
-        }
-
-        
-
-        //importing cashbacks for current advertiser/store/merchent
-
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&advertiser-ids='.$advertiser['advertiser-id']);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-        
-        
-        $headers = array();
-        $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        
-        $link_result = curl_exec($ch);
-        if (curl_errno($ch)) {
-            echo 'Error:' . curl_error($ch);
-        }
-        curl_close($ch);
-
-        $link_data = simplexml_load_string($link_result);
-        $link_array = json_decode(json_encode($link_data), TRUE);
-
-        // dd($link_array);
-
-        //saving cashbacks fof current advertiser/store/merchent
-
-        if(array_key_exists('link',$link_array['links'])){
-
-            if(array_key_exists(0,$link_array['links']['link'])){
-                foreach ($link_array['links']['link'] as $link) {
-            
-                    if(array_key_exists('link-code-html',$link)){
-
-
-                        if(empty($link['sale-commission']) ){
-                            $commission = 0;
-                        }else{
-                            $commission = $link['sale-commission'];
-                        }
-        
-                        $html = $link['link-code-html'];
-        
-                        $doc = new \DOMDocument();
-                        @$doc->loadHTML($html);
-                        $xpath = new \DOMXPath($doc);
-                        $img_src = $xpath->evaluate("string(//img/@src)");
-        
-                    }
-        
-                        $cashback = StoreCashback::create([
-                        'image'           => $img_src,
-                        'click_url'       => $link['clickUrl'] ?? '#',
-                        'sale_commission' => $commission,
-                        'store_id' => $store->id,
-                       
-                    ]);
-                }
-                
-            }else{
-               
-                    $link = $link_array['links']['link'];
-            
-                    if(array_key_exists('link-code-html',$link)){
-        
-                        $html = $link['link-code-html'];
-        
-                        $doc = new \DOMDocument();
-                        @$doc->loadHTML($html);
-                        $xpath = new \DOMXPath($doc);
-                        $img_src = $xpath->evaluate("string(//img/@src)");
-        
-                    }
-        
-                        $cashback = StoreCashback::create([
-                        'image'           => $img_src,
-                        'click_url'       => $link['clickUrl'] ?? '#',
-                        'sale_commission' => $commission,
-                        'store_id' => $store->id,
-                       
-                    ]);
-                
-            }  
-            
-        }            
-
-        }
-
-        $total_records = $array['advertisers']['@attributes']['total-matched'];
-        $fetched_records= $fetched_records + $array['advertisers']['@attributes']['records-returned'];
-        $page++;
 
     }
-    }
+   
 }

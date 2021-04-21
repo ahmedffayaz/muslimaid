@@ -17,6 +17,7 @@ class CategoryStore extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('category_id');
+            $table->unsignedBigInteger('network_category_id')->default(0);
             $table->timestamps();
         });
     }

@@ -1,7 +1,5 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
-   
-
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
@@ -11,7 +9,7 @@
                         <div class="nk-block-head-content">
                             <h3 class="nk-block-title page-title">Stores</h3>
                             <div class="nk-block-des text-soft">
-                                <p>You have total {{count($stores)}} stores.</p>
+                                <p>You have total {{$stores->total()}} stores.</p>
                             </div>
                         </div><!-- .nk-block-head-content -->
                         <div class="nk-block-head-content">
@@ -19,82 +17,161 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                       
-                                        <li class="nk-block-tools-opt"><a href="{{route('admin.stores.create')}}" class="btn btn-primary"><em class="icon ni ni-plus"></em><span>Add Store</span></a></li>
+                                        <li class="nk-block-tools-opt"><a href="{{route('admin.stores.create')}}" class="btn btn-primary btn-sm"><em class="icon ni ni-plus"></em><span>Add Store</span></a></li>
+                                    
+                                        <li><a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
+                                      
                                     </ul>
                                 </div>
                             </div><!-- .toggle-wrap -->
                         </div><!-- .nk-block-head-content -->
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
-                <div class="nk-block">
-                    <table class="nk-tb-list is-separate nk-tb-ulist datatable-init table">
-                        <thead>
-                            <tr class="nk-tb-item nk-tb-head">
-                               
-                                <th class="nk-tb-col"><span class="sub-text">Store Name</span></th>
-                                <th class="nk-tb-col"><span class="sub-text">Network</span></th>
-                                <th class="nk-tb-col"><span class="sub-text">Category</span></th>
-                                <th class="nk-tb-col"><span class="sub-text">Store Url</span></th>
-                                <th class="nk-tb-col"><span class="sub-text">Status</span></th>
-                                <th class="nk-tb-col nk-tb-col-tools text-right">
-                                    <span class="sub-text">Action</span>
-                                </th>
-                            </tr><!-- .nk-tb-item -->
-                        </thead>
-                        <tbody>
-
-                            @foreach ($stores as $store)
-                                
-                            
-                            <tr class="nk-tb-item">
-                               
-                                <td class="nk-tb-col"><span class="tb-product"> <span class="title">{{$store->name}}</span></span></td>
-                                <td class="nk-tb-col"> <p>{{$store->network->name}}</p></td>
-                                <td class="nk-tb-col"> <p>@foreach ($store->categories as $category)
-                                    {{$category->name}},
-                                @endforeach</p></td>
-                                <td class="nk-tb-col"> <p>{{$store->store_url}}</p></td>
-                                <td class="nk-tb-col"> <span class="tb-status text-success">{{ $store->status ? 'active' : 'inactive'}}</span></td>
-                                <td class="nk-tb-col nk-tb-col-tools">
-                                    <ul class="nk-tb-actions gx-1">
-                                        <li>
-                                            <div class="drodown">
-                                                <a href="#" class="dropdown-toggle btn btn-sm btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <ul class="link-list-opt no-bdr">
-                                                        <li><a href="{{route('admin.stores.edit', $store)}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr><!-- .nk-tb-item -->
-                            @endforeach
-                          
-                        </tbody>
-                    </table><!-- .nk-tb-list -->
-                    {{-- <div class="card">
-                        <div class="card-inner">
-                            <div class="nk-block-between-md g-3">
-                                <div class="g">
-                                    <ul class="pagination justify-content-center justify-content-md-start">
-                                        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                       
-                                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                    </ul><!-- .pagination -->
+                <div><form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form card p-4 mb-4" method="POST">
+                    @csrf
+                    <div class="row g-4">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label" for="pay-amount-1">Store name</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="pay-amount-1" value="" name="store_name">
                                 </div>
-                                
-                            </div><!-- .nk-block-between -->
-                        </div><!-- .card-inner -->
-                    </div><!-- .card --> --}}
+                            </div>
+                        </div>
+                       
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label" for="network_id">Network</label>
+                                <div class="form-control-wrap ">
+                                    
+                                        <select class="form-select form-control" data-search="on" id="network_id" name="network_id">
+                                            <option value="0">All</option>
+                                            
+                                            @foreach ($networks as $network)
+                                            <option value="{{$network->id}}">{{$network->name}}</option>
+                                            @endforeach
+                                        </select>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label" for="status">Status</label>
+                                <div class="form-control-wrap ">
+                                    
+                                        <select class="form-select form-control" data-search="on" id="status" name="status">
+                                            <option value="-1">Any</option>
+                                            
+                                            
+                                            <option value="1">Active</option>
+                                            <option value="0">In-active</option>
+                                            
+                                        </select>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                       
+                        
+                        
+                                               
+                        <div class="col-3 align-self-end">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success btn-block">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form></div>
+                @include('flash::message')
+                <div class="nk-block">
+                    <div class="card card-stretch">
+                        <div class="card-inner-group">
+                           
+                            <div class="card-inner px-0">
+                                <div class="nk-tb-list nk-tb-ulist" id="table-data">
+                                    
+                                    @include('admin-dashboard.stores.index_data')                                   
+                                    
+                                </div><!-- .nk-tb-list -->
+                            </div><!-- .card-inner -->
+                           
+                        </div><!-- .card-inner-group -->
+                    </div><!-- .card -->
                 </div><!-- .nk-block -->
             </div>
         </div>
     </div>
 </div>
-
- 
 @endsection
+@push('scripts')
+    <script>
+    $(document).ready(function(){
+     $(document).on('click', '.pagination a', function(event){
+        event.preventDefault(); 
+        var route = $('.pagination').attr('route');
+        var page = $(this).attr('href').split('page=')[1];
+        
+         if(route=='index'){
+            
+             pageurl = "{{route('admin.stores.fetch')}}?page="
+             var _token = $("input[name=_token]").val();
+            $.ajax({
+
+                url:pageurl+page,
+                method:"POST",
+                data:{_token:_token, page:page},
+                success:function(data)
+                {
+                    $('#table-data').html(data);
+                    $('html, body').animate({ scrollTop: 0 }, 'slow');
+                }
+                });
+         } 
+
+         if(route=='search'){
+            var _token = $("input[name=_token]").val();
+            var network_id = $("select[name=network_id]").val();
+            var status = $("select[name=status").val();
+            var store_name = $("input[name=store_name]").val();
+            $.ajax({
+              url:'{{route("admin.stores.search_stores")}}?page='+page,
+              method:"POST",
+              data:{_token:_token,network_id:network_id,store_name:store_name,status:status,page:page},
+              success:function(data)
+              {
+               $('#table-data').html(data);
+               $('html, body').animate({ scrollTop: 0 }, 'slow');
+              }
+            });
+         }       
+     });
+    });
+    </script> 
+    <script>
+        $(document).ready(function(){
+        
+         $(document).on('submit', '.search_form', function(event){
+            event.preventDefault(); 
+              
+            var _token = $("input[name=_token]").val();
+            var network_id = $("select[name=network_id]").val();
+            var status = $("select[name=status").val();
+            var store_name = $("input[name=store_name]").val();
+            $.ajax({
+              url:'{{route("admin.stores.search_stores")}}',
+              method:"POST",
+              data:{_token:_token,network_id:network_id,store_name:store_name,status:status},
+              success:function(data)
+              {
+               $('#table-data').html(data);
+               $('html, body').animate({ scrollTop: 0 }, 'slow');
+              }
+            });
+            
+         });
+        
+        });
+        
+        </script>  
+@endpush

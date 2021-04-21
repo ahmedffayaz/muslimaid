@@ -32,7 +32,26 @@
                                                 </div>
                                             </div>
                                         </div>
-                                       
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="default-06">Parent Category</label>
+                                                <div class="form-control-wrap ">
+                                                    <div class="form-control-select">
+                                                        <select class="form-control" id="default-06" name="parent_id" required>
+                                                            
+                                                            
+                                                            <option value="0">None</option>
+                                                            @foreach ($categories as $parent)
+                                                            <option value="{{$parent->id}}">{{$parent->name}}</option>
+                                                                
+                                                            @endforeach
+                                                                
+                                                           
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <button type="submit" class="btn btn-lg btn-primary">Save</button>

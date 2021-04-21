@@ -1,5 +1,10 @@
 @extends('layouts.admin-dashboard.app')
-
+<style>
+    .analytics-icon{
+        font-size:70px;
+    }
+        
+    </style>
 @section('content')
 
 <div class="nk-content ">
@@ -14,7 +19,7 @@
                         <div class="nk-block-head-content">
                             <div class="toggle-wrap nk-block-tools-toggle">
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
-                                <div class="toggle-expand-content" data-content="pageMenu">
+                                {{-- <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
                                         <li>
                                             <div class="drodown">
@@ -30,12 +35,85 @@
                                         </li>
                                         <li class="nk-block-tools-opt"><a href="#" class="btn btn-primary"><em class="icon ni ni-reports"></em><span>Reports</span></a></li>
                                     </ul>
-                                </div>
+                                </div> --}}
                             </div>
                         </div><!-- .nk-block-head-content -->
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
+                
                 <div class="nk-block">
+                    <div class="row mb-4">
+                        <div class="col-md-6 col-xl-3">
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <div class="media p-3">
+                                        <div class="media-body">
+                                            <span class="text-muted text-uppercase font-size-12 font-weight-bold">Total
+                                                Revenue</span>
+                                            <h3 class="mb-0 mt-2">{{$total_revenue}}</h3>
+                                           
+                                        </div>
+                                        <div class="align-self-center text-center analytics-icon" style="    display: contents;">
+                                            <em class="icon ni ni-coins text-info"></em>
+                                        </div>
+                                        
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="col-md-6 col-xl-3">
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <div class="media p-3">
+                                        <div class="media-body">
+                                            <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pending Revenue</span>
+                                            <h3 class="mb-0 mt-2">{{$pending_total_revenue}}</h3>
+                                        </div>
+                                        <div class="align-self-center text-center analytics-icon" style="    display: contents;">
+                                            <em class="icon ni ni-coins text-info"></em>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="col-md-6 col-xl-3">
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <div class="media p-3">
+                                        <div class="media-body">
+                                            <span class="text-muted text-uppercase font-size-12 font-weight-bold">Cashbacks</span>
+                                            <h3 class="mb-0 mt-2">{{count($coms)}}</h3>
+                                        </div>
+                                        <div class="align-self-center text-center analytics-icon" style="    display: contents;">
+                                            <em class="icon ni ni-growth-fill text-info"></em>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+    
+                        <div class="col-md-6 col-xl-3">
+                            <div class="card">
+                                <div class="card-body p-0">
+                                    <div class="media p-3">
+                                        <div class="media-body">
+                                            <span class="text-muted text-uppercase font-size-12 font-weight-bold">Conversion Rate</span>
+                                            <h3 class="mb-0 mt-2">@if(count($clicks)){{round((count($coms)*100)/count($clicks),0)}}% @else 0% @endif</h3>
+                                        </div>
+                                        <div class="align-self-center text-center analytics-icon" style="    display: contents;">
+                                            <em class="icon ni ni-reload text-info"></em>
+                                        </div>
+                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row g-gs">
                         <div class="col-xxl-3 col-sm-6">
                             <div class="card">
@@ -125,7 +203,7 @@
                                 </div><!-- .nk-ecwg -->
                             </div><!-- .card -->
                         </div><!-- .col -->
-                        <div class="col-xxl-6">
+                        {{-- <div class="col-xxl-6">
                             <div class="card card-full">
                                 <div class="nk-ecwg nk-ecwg8 h-100">
                                     <div class="card-inner">
@@ -170,8 +248,8 @@
                                     </div><!-- .card-inner -->
                                 </div>
                             </div><!-- .card -->
-                        </div><!-- .col -->
-                        <div class="col-xxl-3 col-md-6">
+                        </div><!-- .col --> --}}
+                        {{-- <div class="col-xxl-3 col-md-6">
                             <div class="card card-full overflow-hidden">
                                 <div class="nk-ecwg nk-ecwg7 h-100">
                                     <div class="card-inner flex-grow-1">
@@ -206,8 +284,8 @@
                                     </div><!-- .card-inner -->
                                 </div>
                             </div><!-- .card -->
-                        </div><!-- .col -->
-                        <div class="col-xxl-3 col-md-6">
+                        </div><!-- .col --> --}}
+                        {{-- <div class="col-xxl-3 col-md-6">
                             <div class="card h-100">
                                 <div class="card-inner">
                                     <div class="card-title-group mb-2">
@@ -247,8 +325,8 @@
                                     </ul>
                                 </div><!-- .card-inner -->
                             </div><!-- .card -->
-                        </div><!-- .col -->
-                        <div class="col-xxl-8">
+                        </div><!-- .col --> --}}
+                        {{-- <div class="col-xxl-8">
                             <div class="card card-full">
                                 <div class="card-inner">
                                     <div class="card-title-group">
@@ -477,7 +555,7 @@
                                     </ul>
                                 </div><!-- .card-inner -->
                             </div><!-- .card -->
-                        </div><!-- .col -->
+                        </div><!-- .col --> --}}
                     </div><!-- .row -->
                 </div><!-- .nk-block -->
             </div>

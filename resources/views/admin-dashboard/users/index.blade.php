@@ -1,7 +1,5 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
-   
-
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
@@ -9,115 +7,172 @@
                 <div class="nk-block-head nk-block-head-sm">
                     <div class="nk-block-between">
                         <div class="nk-block-head-content">
-                            <h3 class="nk-block-title page-title">Users</h3>
+                            <h3 class="nk-block-title page-title">Users Lists</h3>
                             <div class="nk-block-des text-soft">
-                                <p>You have total {{count($users)}} users.</p>
+                                <p>You have total {{$users->total()}} users.</p>
                             </div>
                         </div><!-- .nk-block-head-content -->
-                        {{-- <div class="nk-block-head-content">
+                        <div class="nk-block-head-content">
                             <div class="toggle-wrap nk-block-tools-toggle">
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                       
-                                        <li class="nk-block-tools-opt"><a href="{{route('admin.users.create')}}" class="btn btn-primary"><em class="icon ni ni-plus"></em><span>Add Users</span></a></li>
+                                        <li><a href="{{route('admin.users.create')}}" class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-plus"></em><span>Add user</span></a></li>
+                                       <li><a href="{{route('admin.users.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
                                     </ul>
                                 </div>
                             </div><!-- .toggle-wrap -->
-                        </div><!-- .nk-block-head-content --> --}}
+                        </div><!-- .nk-block-head-content -->
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
-                <div class="nk-block">
-                    <table class="nk-tb-list is-separate nk-tb-ulist datatable-init table">
-                        <thead>
-                            <tr class="nk-tb-item nk-tb-head">
-                               
-                                <th class="nk-tb-col"><span class="sub-text">User</span></th>
-                                {{-- <th class="nk-tb-col"><span class="sub-text">Email</span></th> --}}
-                                <th class="nk-tb-col"><span class="sub-text">Reg Type</span></th>
-                                <th class="nk-tb-col"><span class="sub-text">Status</span></th>
-                                <th class="nk-tb-col nk-tb-col-tools text-right">
-                                    <span class="sub-text">Action</span>
-                                </th>
-                            </tr><!-- .nk-tb-item -->
-                        </thead>
-                        <tbody>
-
-                            @foreach ($users as $user)
-                                
-                            
-                            <tr class="nk-tb-item">
-                               
-                                <td class="nk-tb-col"> 
-                                    <a href="">
-                                        <div class="user-card">
-                                            <div class="user-avatar
-                                            <?php
-                                           
-                                            $color = rand(1,5);
-                                            if($color==1){echo 'bg-info';}
-                                            elseif($color==2){echo 'bg-primary';}
-                                            elseif($color==3){echo 'bg-danger';}
-                                            elseif($color==4){echo 'bg-success';}
-                                            elseif($color==5){echo 'bg-warning';}
-                                            else{}
-                                            ?>
-                                            
-                                            ">
-                                                <span>{{$user->first_name[0]}}{{$user->last_name[0]}}</span>
-                                            </div>
-                                            <div class="user-info">
-                                                <span class="tb-lead">{{$user->first_name}} {{$user->last_name}}<span class="dot dot-success d-md-none ml-1"></span></span>
-                                                <span>{{$user->email}}</span>
-                                            </div>
-                                        </div>
-                                    </a>
-                                    
-                                    
-                                   </td>
-                              
-                               
-                                <td class="nk-tb-col"> <p>{{$user->registration_type}}</p></td>
-                                <td class="nk-tb-col"> <span class="tb-status text-success">{{ $user->status ? 'active' : 'inactive'}}</span></td>
-                                <td class="nk-tb-col nk-tb-col-tools">
-                                    <ul class="nk-tb-actions gx-1">
-                                        <li>
-                                            <div class="drodown">
-                                                <a href="#" class="dropdown-toggle btn btn-sm btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <ul class="link-list-opt no-bdr">
-                                                        <li><a href="#"><em class="icon ni ni-edit"></em><span>Edit User</span></a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </td>
-                            </tr><!-- .nk-tb-item -->
-                            @endforeach
-                          
-                        </tbody>
-                    </table><!-- .nk-tb-list -->
-                    {{-- <div class="card">
-                        <div class="card-inner">
-                            <div class="nk-block-between-md g-3">
-                                <div class="g">
-                                    <ul class="pagination justify-content-center justify-content-md-start">
-                                        <li class="page-item"><a class="page-link" href="#">Prev</a></li>
-                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                       
-                                        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-                                    </ul><!-- .pagination -->
+                @include('flash::message')
+                <div><form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form card p-4 mb-4" method="POST">
+                    @csrf
+                    <div class="row g-4">
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label" for="pay-amount-1">Name</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="pay-amount-1" value="" name="name">
                                 </div>
-                                
-                            </div><!-- .nk-block-between -->
-                        </div><!-- .card-inner -->
-                    </div><!-- .card --> --}}
+                            </div>
+                        </div>
+                       
+                      
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label" for="type">Regestration Type</label>
+                                <div class="form-control-wrap ">
+                                    
+                                        <select class="form-select form-control" id="type" name="type">
+                                            <option value="-1">Any</option>
+                                            
+                                            
+                                            <option value="sign up">Sign up</option>
+                                            <option value="social">Social</option>
+                                            
+                                        </select>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <div class="form-group">
+                                <label class="form-label" for="status">Status</label>
+                                <div class="form-control-wrap ">
+                                    
+                                        <select class="form-select form-control" id="status" name="status">
+                                            <option value="-1">Any</option>
+                                            
+                                            
+                                            <option value="1">Active</option>
+                                            <option value="0">In-active</option>
+                                            
+                                        </select>
+                                   
+                                </div>
+                            </div>
+                        </div>
+                       
+                        
+                        
+                                               
+                        <div class="col-3 align-self-end">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success btn-block">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </form></div>
+                <div class="nk-block">
+                    <div class="card card-stretch">
+                        <div class="card-inner-group">
+                            
+                            <div class="card-inner px-0">
+                                <div class="nk-tb-list nk-tb-ulist" id="table-data">
+                                    
+                                    @include('admin-dashboard.users.index_data')                                   
+                                    
+                                </div><!-- .nk-tb-list -->
+                            </div><!-- .card-inner -->
+                           
+                        </div><!-- .card-inner-group -->
+                    </div><!-- .card -->
                 </div><!-- .nk-block -->
             </div>
         </div>
     </div>
 </div>
-
- 
 @endsection
+@push('scripts')
+    <script>
+    $(document).ready(function(){
+     $(document).on('click', '.pagination a', function(event){
+        event.preventDefault(); 
+        var route = $('.pagination').attr('route');
+        var page = $(this).attr('href').split('page=')[1];
+        
+         if(route=='index'){
+            
+             pageurl = "{{route('admin.users.fetch')}}?page="
+             var _token = $("input[name=_token]").val();
+            $.ajax({
+
+                url:pageurl+page,
+                method:"POST",
+                data:{_token:_token, page:page},
+                success:function(data)
+                {
+                    $('#table-data').html(data);
+                    $('html, body').animate({ scrollTop: 0 }, 'slow');
+                }
+                });
+         } 
+
+         if(route=='search'){
+            var _token = $("input[name=_token]").val();
+            var type = $("select[name=type]").val();
+            var status = $("select[name=status").val();
+            var name = $("input[name=name]").val();
+            $.ajax({
+              url:'{{route("admin.users.search_users")}}?page='+page,
+              method:"POST",
+              data:{_token:_token,type:type,name:name,status:status},
+              success:function(data)
+              {
+               $('#table-data').html(data);
+               $('html, body').animate({ scrollTop: 0 }, 'slow');
+              }
+            });
+           
+         }       
+     });
+    });
+    </script> 
+    <script>
+        $(document).ready(function(){
+        
+         $(document).on('submit', '.search_form', function(event){
+            event.preventDefault(); 
+              
+            var _token = $("input[name=_token]").val();
+            var type = $("select[name=type]").val();
+            var status = $("select[name=status").val();
+            var name = $("input[name=name]").val();
+            $.ajax({
+              url:'{{route("admin.users.search_users")}}',
+              method:"POST",
+              data:{_token:_token,type:type,name:name,status:status},
+              success:function(data)
+              {
+               $('#table-data').html(data);
+               $('html, body').animate({ scrollTop: 0 }, 'slow');
+              }
+            });
+            
+         });
+        
+        });
+        
+        </script>  
+@endpush

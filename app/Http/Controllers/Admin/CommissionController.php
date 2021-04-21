@@ -5,6 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\UserCashback;
+use App\Models\User;
+use App\Models\ExitClick;
+use App\Models\CashbackStatusChange;
+use App\Models\Store;
+use App\Models\Network;
 
 class CommissionController extends Controller
 {
@@ -15,8 +20,16 @@ class CommissionController extends Controller
      */
     public function index()
     {
-        $coms = UserCashback::latest()->get();
-        return view('admin-dashboard.commissions.index', compact('coms'));
+        $route = 'index';
+        $stores = Store::latest()->get();
+        $networks = Network::latest()->get();
+        $clicks = ExitClick::latest()->get();
+        $statuses = \DB::table('cashback_statuses')->latest()->get();
+        $users = User::role('user')->latest()->get();
+        $earning = UserCashback::all()->sum('amount');
+        $coms = UserCashback::latest()->paginate(20);
+        
+        return view('admin-dashboard.commissions.index', compact('coms','earning','stores','networks','clicks','statuses','users','route'));
     }
 
     /**
@@ -26,7 +39,10 @@ class CommissionController extends Controller
      */
     public function create()
     {
-        //
+        $clicks = ExitClick::latest()->get();
+        $statuses = \DB::table('cashback_statuses')->latest()->get();
+        return view('admin-dashboard.commissions.create', compact('clicks','statuses'));
+
     }
 
     /**
@@ -37,7 +53,31 @@ class CommissionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        try {
+
+            $click = ExitClick::findOrFail($request->exit_click_id);
+            $commission = UserCashback::create([
+                'store_id' => $click->store_id,
+                'user_id'  => $click->user_id ?? 0,
+                'exit_click_id' => $click->id,
+                'amount' => round($request->amount,3),
+                'network_commission' => round($request->network_commission,3),
+                'order_value' => round($request->order_value,3),
+                'status' => $request->status,
+                'event_date'=> $click->created_at,
+                'click_date'=> $click->created_at,
+                
+            ]); 
+            
+            flash()->success('New Cashback Added');
+            return redirect()->route('admin.commissions.index');
+
+        } catch (\Throwable $th) {
+
+            flash()->error('Error While saving new cashback');
+            return redirect()->route('admin.commissions.index');
+        }
+       
     }
 
     /**
@@ -57,9 +97,11 @@ class CommissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(UserCashback $commission)
     {
-        //
+        $clicks = ExitClick::latest()->get();
+        $statuses = \DB::table('cashback_statuses')->latest()->get();
+        return view('admin-dashboard.commissions.edit', compact('commission','clicks','statuses'));
     }
 
     /**
@@ -69,9 +111,41 @@ class CommissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, UserCashback $commission)
     {
-        //
+        try {
+            $click = ExitClick::findOrFail($request->exit_click_id);
+            
+            //track status change of the cashback
+            if($commission->status!=$request->status){
+                $change_status = CashbackStatusChange::create([
+                    'user_cashback_id'=>$commission->id,
+                    'cashback_status_id'=>$request->status
+
+                ]);
+            }
+
+            $commission->update([
+                'store_id' => $click->store_id,
+                'user_id'  => $click->user_id ?? 0,
+                'exit_click_id' => $click->id,
+                'amount' => round($request->amount,3),
+                'network_commission' => round($request->network_commission,3),
+                'order_value' => round($request->order_value,3),
+                'status' => $request->status,
+                'event_date'=> $click->created_at,
+                'click_date'=> $click->created_at,
+                
+            ]); 
+            flash()->success('Cashback updated');
+            return redirect()->route('admin.commissions.index');
+
+        } catch (\Throwable $th) {
+            flash()->error('Error while updating the cashback');
+            return redirect()->route('admin.commissions.index');
+
+        }
+       
     }
 
     /**
@@ -83,5 +157,117 @@ class CommissionController extends Controller
     public function destroy($id)
     {
         //
+    }
+    function fetch(Request $request)
+    {
+     if($request->ajax())
+     {
+         $route = 'index';
+        $coms = UserCashback::latest()->paginate(20);
+         return view('admin-dashboard.commissions.index_data', compact('coms','route'))->render();
+     }
+    }
+    public function exportCsv(Request $request)
+    {
+        try {
+            
+            $table = UserCashback::latest()->get();
+            $filename = "cashbacks.csv";
+            $handle = fopen($filename, 'w+');
+            fputcsv($handle, array('User', 'User email', 'Store','Amount', 'Exit Click Id', 'Event Time', 'Status'));
+
+            foreach($table as $row) {
+
+                $fname = $row->user->first_name ?? '';
+                $lname = $row->user->last_name ?? '';
+                fputcsv($handle, array($fname.' '.$lname, $row->user->email ?? '', $row->amount, $row->store->name,
+                                        $row->exit_click_id,  $row->event_date, $row->status  ));
+            }
+
+            fclose($handle);
+
+            $headers = array(
+                'Content-Type' => 'text/csv',
+            );
+
+            return \Response::download($filename, 'cashbacks.csv', $headers);
+        }catch (\Throwable $th) {
+            flash()->error('Error while exporting cashbacks');
+            return redirect()->route('admin.commissions.index');
+        }
+
+    }
+    public function createMultiple()
+    {
+        $clicks = ExitClick::latest()->get();
+        $statuses = \DB::table('cashback_statuses')->latest()->get();
+        return view('admin-dashboard.commissions.create_multiple', compact('clicks','statuses'));
+
+    }
+
+    public function storeMultiple(Request $request)
+    {
+        
+        try {
+            foreach ($request->exit_click_id as $key => $value) {
+                $click = ExitClick::findOrFail($value);
+            $commission = UserCashback::create([
+                'store_id' => $click->store_id,
+                'user_id'  => $click->user_id ?? 0,
+                'exit_click_id' => $click->id,
+                'amount' => round($request->amount[$key],3),
+                'network_commission' => round($request->network_commission[$key],3),
+                'order_value' => round($request->order_value[$key],3),
+                'status' => $request->status[$key],
+                'event_date'=> \Carbon\Carbon::parse($request->event_date[$key])->format('Y-m-d H:i:s'),
+                'click_date'=> $click->created_at,
+                
+            ]); 
+            }
+            
+            flash()->success('New Cashback Added');
+            return redirect()->route('admin.commissions.index');
+
+        } catch (\Throwable $th) {
+
+            flash()->error('Error While saving new cashbacks');
+            return redirect()->route('admin.commissions.index');
+        }
+       
+    }
+    public function searchCommissions(Request $request, UserCashback $coms)
+    {
+        // dd($request->all());
+        $coms = $coms->newQuery();
+
+        // Search by network.
+        // if ($request->input('network_id')) {
+        //     $coms->where('network_id', $request->input('network_id'));
+        // }
+
+        // Search by store.
+        if ($request->input('store_id')) {
+            $coms->where('store_id',$request->input('store_id'));
+           
+        }
+        // Search by user.
+        if ($request->input('user_id')) {
+            $coms->where('user_id',$request->input('user_id'));
+           
+        }
+        // Search by cick.
+        if ($request->input('click_id')) {
+            $coms->where('exit_click_id',$request->input('click_id'));
+           
+        }
+
+        // Search by status.
+        if ($request->input('status_id')!=-1) {
+            $coms->where('status', $request->input('status_id'));
+        }
+        
+        $coms = $coms->latest()->paginate(20);
+        $route='search';
+        return view('admin-dashboard.commissions.index_data', compact('coms','route'))->render();
     }
 }

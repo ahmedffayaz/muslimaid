@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Store;
 use App\Models\ExitClick;
+use App\Models\CashbackStatus;
 
 class UserCashback extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['store_id', 'user_id', 'amount','status', 'exit_click_id','click_date','event_date'];
+    protected $fillable = ['store_id', 'user_id', 'amount','status', 'detalis','network_commission','order_value', 'exit_click_id','click_date','event_date'];
 
     public function store(){
 
@@ -20,6 +21,14 @@ class UserCashback extends Model
     public function exitClick(){
 
         return $this->belongsTo(ExitClick::class,'exit_click_id');
+    }
+    public function user(){
+
+        return $this->belongsTo(User::class);
+    }
+    public function statusMap(){
+
+        return $this->belongsTo(CashbackStatus::class, 'status');
     }
 
 }

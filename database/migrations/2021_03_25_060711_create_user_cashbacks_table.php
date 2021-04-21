@@ -17,6 +17,9 @@ class CreateUserCashbacksTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('exit_click_id')->nullable();
+            $table->dateTime('click_date')->nullable();
+            $table->dateTime('event_date')->nullable();
             $table->string('amount');
             $table->string('status');
             $table->timestamps();
