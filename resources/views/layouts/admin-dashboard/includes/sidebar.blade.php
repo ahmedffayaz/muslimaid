@@ -143,6 +143,18 @@
                                     <span class="nk-menu-text">Site Settings</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="{{route('admin.languages.index')}}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-text2"></em></span>
+                                    <span class="nk-menu-text">Languages</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="{{route('admin.translations.index')}}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-file-docs"></em></span>
+                                    <span class="nk-menu-text">Translations</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
                             
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->

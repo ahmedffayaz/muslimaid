@@ -6,6 +6,8 @@
     <div class="row justify-content-center text-center">
         <div class="col-md-12">
             <h1  class="max-w-6xl mx-auto sm:px-6 lg:px-8">Cashback Reborn</h1>
+            <h2  class="max-w-6xl mx-auto sm:px-6 lg:px-8 my-4" >{{ trans('headings.products', [], app()->getLocale()) }}</h2>
+
         </div>
       @isset($cashbacks)
           

@@ -94,7 +94,7 @@
 
 @endforeach   
 <div class="nk-block-between-md g-3 card-inner">
-    <div class="pagination g" route="importedcategory">
+    <div class="pagination g" route="{{$route}}">
         {!! $settings->links()!!}                             
                          
         </div> 

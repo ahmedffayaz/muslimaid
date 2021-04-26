@@ -43,4 +43,12 @@ class HomeController extends Controller
         return view('admin-dashboard.home',compact('coms','networks','statuses','stores','total_revenue','pending_total_revenue','clicks'));
         return view('admin-dashboard.home');
     }
+    public function setLocale($locale)
+    {
+        session()->put('locale', $locale );
+        return response()->json([
+            'status' => true,
+            'message' => 'Language changed!'
+        ]);
+    }
 }

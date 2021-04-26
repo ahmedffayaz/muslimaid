@@ -15,8 +15,9 @@ class SettingsController extends Controller
      */
     public function index()
     {
-        $settings = SiteSetting::latest()->paginate(10);
-        return view('admin-dashboard.settings.index',compact('settings'));
+        $route='index';
+        $settings = SiteSetting::latest()->paginate(20);
+        return view('admin-dashboard.settings.index',compact('settings','route'));
     }
 
     /**
@@ -97,5 +98,39 @@ class SettingsController extends Controller
 
         flash()->success('setting deleted successfully');
         return redirect()->route('admin.settings.index');
+    }
+    function fetch(Request $request)
+    {
+     if($request->ajax())
+     {
+         $route='index';
+       
+        $settings = SiteSetting::latest()->paginate(20);
+         return view('admin-dashboard.settings.index_data', compact('settings','route'))->render();
+     }
+    }
+    public function searchSettings(Request $request, SiteSetting $settings)
+    {
+        // dd($request->all());
+        $settings = $settings->newQuery();
+
+       
+
+        // Search by titlee.
+        if ($request->input('title')) {
+            $settings->where('title','like', '%'.$request->input('title').'%');
+           
+        }
+         // Search by key.
+         if ($request->input('key')) {
+            $settings->where('type','like', '%'.$request->input('key').'%');
+           
+        }
+
+       
+        
+        $settings = $settings->latest()->paginate(20);
+        $route='search';
+        return view('admin-dashboard.settings.index_data', compact('settings','route'))->render();
     }
 }

@@ -7,9 +7,9 @@
                 <div class="nk-block-head nk-block-head-sm">
                     <div class="nk-block-between">
                         <div class="nk-block-head-content">
-                            <h3 class="nk-block-title page-title">Settings</h3>
+                            <h3 class="nk-block-title page-title">Languages</h3>
                             <div class="nk-block-des text-soft">
-                                <p>You have total {{$settings->total()}} settings.</p>
+                                <p>You have total {{$languages->total()}} languages.</p>
                             </div>
                         </div><!-- .nk-block-head-content -->
                         <div class="nk-block-head-content">
@@ -17,8 +17,8 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li><a href="{{route('admin.settings.create')}}" class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-plus"></em><span>Add Setting</span></a></li>
-                                        <li><a href="{{route('admin.settings.export', $settings)}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
+                                        <li><a href=""  class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light" data-toggle="modal" data-target="#modalForm"><em class="icon ni ni-plus"></em><span>Add Language</span></a></li>
+                                        {{-- <li><a href="{{route('admin.settings.export', $settings)}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
 
                                     </ul>
                                 </div>
@@ -32,9 +32,9 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <div class="form-control-wrap ">
-                                    <label class="form-label" for="title">Title</label>
+                                    <label class="form-label" for="name">Country Name</label>
                                     <div class="form-control-wrap">
-                                        <input type="text" class="form-control" id="title" value="" name="title">
+                                        <input type="text" class="form-control" id="name" value="" name="name">
                                     </div>
                                         
                                 </div>
@@ -43,9 +43,9 @@
                         <div class="col-lg-4">
                             <div class="form-group">
                                 <div class="form-control-wrap ">
-                                    <label class="form-label" for="rekey">Key Identifier</label>
+                                    <label class="form-label" for="code">Code</label>
                                     <div class="form-control-wrap">
-                                        <input type="text" class="form-control" id="key" value="" name="key">
+                                        <input type="text" class="form-control" id="code" value="" name="code">
                                     </div>
                                         
                                 </div>
@@ -68,7 +68,7 @@
                             <div class="card-inner px-0">
                                 <div class="nk-tb-list nk-tb-ulist" id="table-data">
                                     
-                                    @include('admin-dashboard.settings.index_data')                                   
+                                    @include('admin-dashboard.languages.index_data')                                   
                                     
                                 </div><!-- .nk-tb-list -->
                             </div><!-- .card-inner -->
@@ -80,6 +80,42 @@
         </div>
     </div>
 </div> 
+<!-- Modal Form -->
+<div class="modal fade" tabindex="-1" id="modalForm">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add new Language</h5>
+                <a href="#" class="close" data-dismiss="modal" aria-label="Close">
+                    <em class="icon ni ni-cross"></em>
+                </a>
+            </div>
+            <form action="{{route('admin.languages.store')}}" class="form-validate is-alter" method="POST">
+                @csrf
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="form-label" for="language_id">Language</label>
+                        <div class="form-control-wrap ">
+                            <select class="form-select form-control" data-search="on" id="langugae" name="name">
+                                <option disabled selected>Select Language</option>
+                                
+                                @foreach ($all_languages as $language)
+                                <option value="{{$language['name']}}">{{$language['name']}}</option>
+                                @endforeach
+                            </select>
+                        
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" id='add-btn'>Add</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 @endsection
 @push('scripts')
     <script>
@@ -91,7 +127,7 @@
         
          if(route=='index'){
             
-             pageurl = "{{route('admin.settings.fetch')}}?page="
+             pageurl = "{{route('admin.languages.fetch')}}?page="
              var _token = $("input[name=_token]").val();
             $.ajax({
 
@@ -110,14 +146,13 @@
               
               
             var _token = $("input[name=_token]").val();
-            var title = $("input[name=title]").val();
-            var key = $("select[name=key]").val();
+            var name = $("input[name=name]").val();
+            var code = $("input[name=code]").val();
            
-            var status = $("select[name=status]").val();
             $.ajax({
-              url:'{{route("admin.settings.search_settings")}}?page='+page,
+              url:'{{route("admin.languages.search_languages")}}?page='+page,
               method:"POST",
-              data:{_token:_token,title:title,key:key},
+              data:{_token:_token,name:name,code:code},
               success:function(data)
               {
                $('#table-data').html(data);
@@ -135,14 +170,13 @@
             event.preventDefault(); 
               
             var _token = $("input[name=_token]").val();
-            var title = $("input[name=title]").val();
-            var key = $("input[name=key]").val();
+            var name = $("input[name=name]").val();
+            var code = $("input[name=code]").val();
            
-            var status = $("select[name=status]").val();
             $.ajax({
-              url:'{{route("admin.settings.search_settings")}}',
+              url:'{{route("admin.languages.search_languages")}}',
               method:"POST",
-              data:{_token:_token,title:title,key:key},
+              data:{_token:_token,name:name,code:code},
               success:function(data)
               {
                $('#table-data').html(data);
@@ -155,4 +189,5 @@
         });
         
         </script>  
+      
 @endpush
