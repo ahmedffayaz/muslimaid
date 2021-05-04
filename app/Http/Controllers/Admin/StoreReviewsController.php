@@ -1,0 +1,182 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Models\StoreReview;
+use App\Models\Store;
+
+class StoreReviewsController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        $route='index';
+        $stores = Store::latest()->get();
+        $reviews = StoreReview::latest()->paginate(20);
+        return view('admin-dashboard.store_reviews.index',compact('reviews','stores','route'));
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        $stores = Store::latest()->get();
+        return view('admin-dashboard.store_reviews.create', compact('stores'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        try{
+            $review = StoreReview::create($request->all());
+            flash()->success('Review added successfully');
+            return redirect()->route('admin.reviews.index');
+            
+        }catch (\Throwable $th) {
+            flash()->error('something went wrong! unable to add the Review');
+            return redirect()->route('admin.reviews.index');
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show($id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function edit(StoreReview $review)
+    {  
+
+        $stores = Store::latest()->get();
+        return view('admin-dashboard.store_reviews.edit', compact('stores','review'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, StoreReview $review)
+    {
+        // dd($request->all());
+        try{
+            $review->update($request->all());
+            if(!$request->ajax())
+            {flash()->success('Review updated successfully');
+                return redirect()->back(); }else{
+                    return true;
+                }
+    
+            
+            // return redirect()->route('admin.reviews.index');
+        
+        } catch (\Throwable $th) {
+            flash()->error('something went wrong! unable to update the review');
+            return redirect()->route('admin.reviews.index');
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
+    function fetch(Request $request)
+    {
+     if($request->ajax())
+     {
+        $route = 'index';
+        $reviews = StoreReview::latest()->paginate(20);
+
+         return view('admin-dashboard.store_reviews.index_data', compact('reviews','route'))->render();
+     }
+    }
+    public function exportCsv(Request $request)
+    {
+        try {
+
+            $table = Category::latest()->get();
+            $filename = "categories.csv";
+            $handle = fopen($filename, 'w+');
+            fputcsv($handle, array('Name', 'Parent Category','No of Stores', 'Status'));
+
+            foreach($table as $row) {
+                fputcsv($handle, array($row->name, $row->parent->name ?? '', count($row->stores), $row->status ? 'active' : 'in-active'));
+            }
+
+            fclose($handle);
+
+            $headers = array(
+                'Content-Type' => 'text/csv',
+            );
+
+            return \Response::download($filename, 'categories.csv', $headers);
+        } catch (\Throwable $th) {
+            
+            flash()->error('Error while exporting categories');
+            return redirect()->route('admin.categories.index');
+
+        }
+
+    }
+    public function searchReviews(Request $request, StoreReview $reviews)
+    {
+        // dd($request->all());
+        $reviews = $reviews->newQuery();
+
+        // Search by store.
+        if ($request->input('store_id')) {
+            $reviews->where('store_id', $request->input('store_id'));
+        }
+
+        // Search by name.
+        if ($request->input('reviewer')) {
+            $reviews->where('reviewer','like', '%'.$request->input('reviewer').'%');
+           
+        }
+
+        // Search by store.
+        if ($request->input('status')!=-1) {
+            $reviews->where('status', $request->input('status'));
+        }
+        
+        $reviews = $reviews->latest()->paginate(20);
+        $route='search';
+        return view('admin-dashboard.store_reviews.index_data', compact('reviews','route'))->render();
+        
+
+    }
+}
