@@ -11,7 +11,7 @@ class Category extends Model
 {
     use HasFactory;
 
-    protected $fillable = [ 'name', 'status','parent_id','mapped_to', 'network_id'];
+    protected $fillable = [ 'name','description','sort','logo_type','logo_upload','logo_link','banner_type','banner_upload','banner_link', 'status','parent_id','mapped_to', 'network_id'];
 
 
     public function stores(){

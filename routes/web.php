@@ -72,7 +72,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('categories', CategoryController::class);
     
     //IMported Network Categories 
-    Route::post('importedcategories/fetch',[App\Http\Controllers\Admin\ ImportedCategoryController::class,'fetch'])->name('importedcategories.fetch');
+    Route::post('importedcategories/fetch',[App\Http\Controllers\Admin\ImportedCategoryController::class,'fetch'])->name('importedcategories.fetch');
     Route::post('importedcategories/search_importedcategories',  [App\Http\Controllers\Admin\ImportedCategoryController::class,'searcImportedCategories'])->name('importedcategories.search_importedcategories');
     Route::resource('importedcategories', ImportedCategoryController::class);
     

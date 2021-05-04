@@ -20,8 +20,8 @@ class AddColumnsToCategoriesTable extends Migration
             $table->string('logo_upload')->after('logo_type')->nullable();
             $table->string('logo_link')->after('logo_upload')->nullable();
             $table->string('banner_type')->after('logo_link')->nullable();
-            $table->string('baneer_upload')->after('banner_type')->nullable();
-            $table->string('banner_link')->after('baneer_upload')->nullable();
+            $table->string('banner_upload')->after('banner_type')->nullable();
+            $table->string('banner_link')->after('banner_upload')->nullable();
         });
     }
 
@@ -38,9 +38,10 @@ class AddColumnsToCategoriesTable extends Migration
             $table->dropColumn('logo_type');
             $table->dropColumn('logo_upload');
             $table->dropColumn('logo_link');
-            $table->dropColumn('logo_type');
-            $table->dropColumn('logo_type');
-            $table->dropColumn('logo_type');
+            $table->dropColumn('banner_type');
+            $table->dropColumn('banner_upload');
+            $table->dropColumn('banner_link');
+            
         });
     }
 }
