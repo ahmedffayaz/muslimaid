@@ -35,25 +35,25 @@
                     <div class="nk-tb-col">
                         <span class="tb-sub"><span>{{$com->store->network->name}}</span></span>
                     </div>
-                    <div class="nk-tb-col tb-col-md">
+                    <div class="nk-tb-col ">
                         <span>{{$com->exit_click_id}}</span>
                     </div>
                     
                 
-                    <div class="nk-tb-col tb-col-md">
+                    <div class="nk-tb-col ">
                         <span><span class="currency">&#163;</span>{{$com->network_commission}}</span>
                     </div>
-                    <div class="nk-tb-col tb-col-md">
+                    <div class="nk-tb-col ">
                         <span><span class="currency">&#163;</span>{{$com->amount}}</span>
                     </div>
-                    <div class="nk-tb-col tb-col-md">
+                    <div class="nk-tb-col ">
                         <span><span class="currency">&#163;</span>{{$com->network_commission - $com->amount}}</span>
                     </div>
-                    <div class="nk-tb-col tb-col-md">
+                    <div class="nk-tb-col ">
                         <span>{{$com->event_date}}</span>
                     </div>
                     
-                    <div class="nk-tb-col tb-col-md text-right">
+                    <div class="nk-tb-col  text-right">
                         <span class="tb-status text-info"> {{ $com->statusMap->status ?? $com->status}}</span>
                     </div>
                 </div><!-- .nk-tb-item -->

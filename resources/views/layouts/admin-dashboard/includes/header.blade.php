@@ -5,9 +5,9 @@
                 <a href="#" class="nk-nav-toggle nk-quick-nav-icon" data-target="sidebarMenu"><em class="icon ni ni-menu"></em></a>
             </div>
             <div class="nk-header-brand d-xl-none">
-                <a href="html/index.html" class="logo-link">
-                    <img class="logo-light logo-img" src="./images/logo.png" srcset="./images/logo2x.png 2x" alt="logo">
-                    <img class="logo-dark logo-img" src="./images/logo-dark.png" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
+                <a href="{{route('admin.home.index')}}" class="logo-link">
+                    <img class="logo-light logo-img" src="{{ asset('admin-dashboard/images/logo.png')}}" srcset="{{ asset('admin-dashboard/images/logo2x.png')}} 2x" alt="logo">
+                    <img class="logo-dark logo-img" src="{{ asset('admin-dashboard/images/logo-dark.png')}}" srcset="{{ asset('admin-dashboard/images/logo-dark2x.png')}} 2x" alt="logo-dark">
                 </a>
             </div><!-- .nk-header-brand -->
             <div class="nk-header-search ml-3 ml-xl-0">
@@ -70,7 +70,7 @@
                                     <li class="chat-item">
                                         <a class="chat-link" href="html/apps-chats.html">
                                             <div class="chat-media user-avatar">
-                                                <img src="./images/avatar/b-sm.jpg" alt="">
+                                                <img src="" alt="">
                                             </div>
                                             <div class="chat-info">
                                                 <div class="chat-from">
@@ -87,7 +87,7 @@
                                         <a class="chat-link" href="html/apps-chats.html">
                                             <div class="chat-media user-avatar user-avatar-multiple">
                                                 <div class="user-avatar">
-                                                    <img src="./images/avatar/c-sm.jpg" alt="">
+                                                    <img src="" alt="">
                                                 </div>
                                                 <div class="user-avatar">
                                                     <span>AB</span>
@@ -110,7 +110,7 @@
                                     <li class="chat-item">
                                         <a class="chat-link" href="html/apps-chats.html">
                                             <div class="chat-media user-avatar">
-                                                <img src="./images/avatar/a-sm.jpg" alt="">
+                                                <img src="" alt="">
                                                 <span class="status dot dot-lg dot-success"></span>
                                             </div>
                                             <div class="chat-info">

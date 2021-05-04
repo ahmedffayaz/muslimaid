@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Network;
 use App\Models\Category;
-use App\Models\Store;
 
 class Store extends Model
 {
@@ -27,6 +26,12 @@ class Store extends Model
         return $this->hasOne(StoreCashback::class);
 
     }
+
+    public function cashbacks(){
+
+        return $this->hasMany(StoreCashback::class);
+
+    }
     public function images(){
 
         return $this->hasMany(StoreImage::class);
@@ -43,7 +48,7 @@ class Store extends Model
     }
     public function reviews(){
         
-        return $this->hasMany(StoreReview::class);
+        return $this->hasMany(StoreReview::class)->orderBy('id', 'DESC');
     }
     public function commissions(){
         

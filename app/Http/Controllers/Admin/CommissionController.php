@@ -10,6 +10,7 @@ use App\Models\ExitClick;
 use App\Models\CashbackStatusChange;
 use App\Models\Store;
 use App\Models\Network;
+use App\Models\SiteSetting;
 
 class CommissionController extends Controller
 {
@@ -53,6 +54,9 @@ class CommissionController extends Controller
      */
     public function store(Request $request)
     {
+
+        $cashback_percent = SiteSetting::where('type','cashback_percentage')->first()->value;
+        
         try {
 
             $click = ExitClick::findOrFail($request->exit_click_id);
@@ -60,7 +64,7 @@ class CommissionController extends Controller
                 'store_id' => $click->store_id,
                 'user_id'  => $click->user_id ?? 0,
                 'exit_click_id' => $click->id,
-                'amount' => round($request->amount,3),
+                'amount' => round(($request->network_commission/100) * $cashback_percent,3),
                 'network_commission' => round($request->network_commission,3),
                 'order_value' => round($request->order_value,3),
                 'status' => $request->status,

@@ -19,9 +19,9 @@ class CategoryController extends Controller
     public function index()
     {
         $route = 'index';
-        $categories = Category::latest()->paginate(20);
-        $store_categories = Category::latest()->get();
-        return view('admin-dashboard.categories.index', compact('categories','store_categories','route'));
+        $categories = Category::latest()->where('parent_id', '=', 0)->get();
+        $allCategories = Category::latest()->get();
+        return view('admin-dashboard.categories.categories', compact('categories','allCategories','route'));
     }
 
     /**
@@ -78,7 +78,10 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        //
+        $route = 'index';
+        $categories = Category::latest()->paginate(20);
+        $store_categories = Category::latest()->get();
+        return view('admin-dashboard.categories.index', compact('categories','store_categories','route'));
     }
 
     /**

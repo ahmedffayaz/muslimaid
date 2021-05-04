@@ -16,6 +16,7 @@ use App\Models\UserCashback;
 use App\Models\Voucher;
 use App\Models\ExitClick;
 use App\Models\ImporterSetting;
+use App\Models\SiteSetting;
 use Illuminate\Support\Facades\DB;
 
 class Importer implements ShouldQueue
@@ -58,7 +59,6 @@ class Importer implements ShouldQueue
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 
-
                 $headers = array();
                 $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
@@ -69,37 +69,137 @@ class Importer implements ShouldQueue
                 }
                 curl_close($ch);      
 
-
                 $data = simplexml_load_string($result);
                 $array = json_decode(json_encode($data), TRUE);
 
-                $adverts = $array['advertisers']['advertiser'];
+                $adverts = $data->advertisers->advertiser;
 
                 foreach ($adverts as $advertiser) {
 
                     try{
 
-                    $store = Store::where('advertiser_id',$advertiser['advertiser-id'])->first();
-
+                    $store = Store::where('advertiser_id',$advertiser->{'advertiser-id'})->first();
                     if(!$store){
 
                         $store = Store::create([
-                            'name'         => $advertiser['advertiser-name'],
-                            'advertiser_id'=> $advertiser['advertiser-id'],
+                            'name'         => $advertiser->{'advertiser-name'},
+                            'slug'         => \Str::slug($advertiser->{'advertiser-name'}),
+                            'advertiser_id'=> $advertiser->{'advertiser-id'},
                             'network_id'   => 1,
-                            'tracking_url' => $advertiser['program-url'],
-                            'store_url'    => $advertiser['program-url'],
+                            'tracking_url' => $advertiser->{'program-url'},
+                            'store_url'    => $advertiser->{'program-url'},
                         ]);
-                        if(!empty($advertiser['primary-category']['parent'])){
+                        
+                        $ch = curl_init();
 
-                            $category_parent = ImportedCategory::where('name',$advertiser['primary-category']['parent'])->first();
+                        curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&link-type=banner&advertiser-ids='.$advertiser->{'advertiser-id'});
+                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+
+
+                        $headers = array();
+                        $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
+                        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+                        $link_result = curl_exec($ch);
+                        if (curl_errno($ch)) {
+                            echo 'Error:' . curl_error($ch);
+                        }
+                        curl_close($ch);
+
+                        $link_data = simplexml_load_string($link_result);
+                        $link_array = json_decode(json_encode($link_data), TRUE);
+                       
+                        $destination_url = $advertiser->{'program-url'};
+
+                        $link_found =0;
+                        $link_url ='#';
+                        if($link_data->links->link){
+                        foreach ($link_data->links->link as $link) {
+                           
+                            if(!strcmp($link->destination , $destination_url)){
+                                $link_found =1;
+                                $link_url = $link->clickUrl;
+                            }
+
+                        }
+
+                        if($link_found){
+                            $store->tracking_url = $link_url;
+                        }else{
+                            $store->tracking_url = $link_data->links->link[0]->clickUrl;
+                        }
+
+                        // $store->tracking_url = $link_url;
+                        $store->update();
+                    }
+                        foreach ($advertiser->actions->action as $action) {
+
+
+                            if($action->commission->default){
+                            $c_type = \Str::contains($action->commission->default, '%') ? 'percentage' : 'fixed';
+
+
+                                $cb = StoreCashback::where('store_id',$store->id)->where('type',$c_type)->where('sale_commission',$action->commission->default)->first();
+                                if($cb){
+                                    $cb->update([
+                                        'detail' => $cb->detail.', '.$action->name.' default',
+                                        'network_detail' => $cb->network_detail.', '.$action->name.' default',
+                                    ]);
+                                }else{
+                                    $cashback = StoreCashback::create([
+                                        'type' => $c_type,
+                                        'image'           => '#',
+                                        'click_url'       =>  '#',
+                                        'sale_commission' => $action->commission->default,
+                                        'cashback_name' => $action->name,
+                                        'detail' => $action->name.' default',
+                                        'network_detail' => $action->name.' default',
+                                        'store_id' => $store->id,
+                                    ]);
+                                }
+                                
+                            }
+                            if($action->commission->itemlist){
+                                foreach($action->commission->itemlist as $item){
+                            $c_type= \Str::contains($item, '%') ? 'percentage' : 'fixed';
+
+
+                                    $cb = StoreCashback::where('store_id',$store->id)->where('type',$c_type)->where('sale_commission',$item)->first();
+                                    if($cb){
+                                        $cb->update([
+                                           
+                                            'detail' => $cb->detail.', '.$action->name.' '.$item->attributes()->name,
+                                            'network_detail' => $cb->network_detail.', '.$action->name.' '.$item->attributes()->name,
+                                        ]);
+                                    }else{
+                                   
+                                    $cashback = StoreCashback::create([
+                                        'type' => $c_type,
+                                        'image'           => '#',
+                                        'click_url'       =>  '#',
+                                        'sale_commission' => $item,
+                                        'cashback_name' => $action->name,
+                                        'detail' => $action->name.' '.$item->attributes()->name,
+                                        'network_detail' => $action->name.' '.$item->attributes()->name,
+                                        'store_id' => $store->id,
+                                    ]);
+                                }
+        
+                                }
+                            }
+                           
+                        }
+                                                        
+                        if(!empty($advertiser->{'primary-category'}->{'parent'})){
+
+                            $category_parent = ImportedCategory::where('name',$advertiser->{'primary-category'}->{'parent'})->first();
         
                             if(!$category_parent){
                                 $category_parent = new ImportedCategory();
-                                $category_parent->name = $advertiser['primary-category']['parent'];
+                                $category_parent->name = $advertiser->{'primary-category'}->{'parent'};
                                 $category_parent->network_id = 1;
                                 $category_parent->save();
-        
                             }
         
                             DB::table('category_store')->insert([
@@ -111,14 +211,14 @@ class Importer implements ShouldQueue
         
                         }
                             
-                        if(!empty($advertiser['primary-category']['child'])){
+                        if(!empty($advertiser->{'primary-category'}->{'child'})){
                             
-                            $category_child = ImportedCategory::where('name',$advertiser['primary-category']['child'])->first();
+                            $category_child = ImportedCategory::where('name',$advertiser->{'primary-category'}->{'child'})->first();
 
                             if(!$category_child){
 
                                 $category_child = new ImportedCategory();
-                                $category_child->name = $advertiser['primary-category']['child'];
+                                $category_child->name = $advertiser->{'primary-category'}->{'child'};
                                 $category_child->parent_id = $category_parent->id ?? 0;
                                 $category_child->network_id = 1;
                                 $category_child->save();
@@ -130,80 +230,7 @@ class Importer implements ShouldQueue
                                 'network_category_id'=> $category_child->id,
                             ]);
                         }
-                        //importing cashbacks for current advertiser/store/merchent
-
-                        $ch = curl_init();
-
-                        curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&advertiser-ids='.$advertiser['advertiser-id']);
-                        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-                        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-                        
-                        
-                        $headers = array();
-                        $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
-                        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-                        
-                        $link_result = curl_exec($ch);
-                        if (curl_errno($ch)) {
-                            echo 'Error:' . curl_error($ch);
-                        }
-                        curl_close($ch);
-
-                        $link_data = simplexml_load_string($link_result);
-                        $link_array = json_decode(json_encode($link_data), TRUE);
-
-
-                        //saving cashbacks fof current advertiser/store/merchent
-                        if(array_key_exists('links',$link_array) && array_key_exists('link',$link_array['links'])){
-
-                            if(array_key_exists(0,$advertiser['actions']['action'])){
-                                $commission = $advertiser['actions']['action'][0]['commission']['default'];
-                                $cashback_name = $advertiser['actions']['action'][0]['name'];
-                            }else{
-                                $commission = $advertiser['actions']['action']['commission']['default'];
-                                $cashback_name = $advertiser['actions']['action']['name'];
-                            }
-        
-                            if(array_key_exists(0,$link_array['links']['link'])){
-                                $link = $link_array['links']['link'][0];
-                                
-                                    if(array_key_exists('link-code-html',$link)){
-                        
-                                        $html = $link['link-code-html'];
-                        
-                                        $doc = new \DOMDocument();
-                                        @$doc->loadHTML($html);
-                                        $xpath = new \DOMXPath($doc);
-                                        $img_src = $xpath->evaluate("string(//img/@src)");
-                        
-                                    }
-                                        $cashback = StoreCashback::create([
-                                        'image'           => $img_src,
-                                        'click_url'       => $link['clickUrl'] ?? '#',
-                                        'sale_commission' => $commission,
-                                        'cashback_name' => $cashback_name,
-                                        'store_id' => $store->id,
-                                    ]);
-                                
-                            }else{
-                                    $link = $link_array['links']['link'];
-                                    if(array_key_exists('link-code-html',$link)){
-                                        $html = $link['link-code-html'];
-                                        $doc = new \DOMDocument();
-                                        @$doc->loadHTML($html);
-                                        $xpath = new \DOMXPath($doc);
-                                        $img_src = $xpath->evaluate("string(//img/@src)");
-                                    }
-                                        $cashback = StoreCashback::create([
-                                        'image'           => $img_src,
-                                        'click_url'       => $link['clickUrl'] ?? '#',
-                                        'sale_commission' => $commission,
-                                        'name' => $cashback_name,
-                                        'store_id' => $store->id,
-                                    ]);
-                            }  
-                        }
-
+                    
                     }
                 
                     }
@@ -215,8 +242,8 @@ class Importer implements ShouldQueue
 
                 }
 
-                $total_records = $array['advertisers']['@attributes']['total-matched'];
-                $fetched_records= $fetched_records + $array['advertisers']['@attributes']['records-returned'];
+                $total_records = $data->{'advertisers'}->attributes()->{'total-matched'};
+                $fetched_records= $fetched_records + $data->{'advertisers'}->attributes()->{'records-returned'};
                 $page++;
             }
         }
@@ -224,7 +251,8 @@ class Importer implements ShouldQueue
         if($setting->import_cashbacks == 1){
 
             //importing cashbacks
-            $cashback_percent = \Config::get('app.cashback_percent');
+
+            $cashback_percent = SiteSetting::where('type','cashback_percentage')->first()->value;
             $total_callback = 0;
             $beforePostingDate = date('Y-m-d\TH:i:s\z');
             $sincePostingDate = date('Y-m-d\TH:i:s\z', strtotime('-31 days'));
@@ -276,7 +304,7 @@ class Importer implements ShouldQueue
                             'store_id'=>$store->id,
                             'user_id'=> $click->user_id ?? 0,
                             'exit_click_id'=>$cashback['shopperId'],
-                            'amount'=>round($cashback_amount_for_user,3),
+                            'amount'=>round($cashback_amount_for_user,2),
                             'network_commission'=>$cashback['pubCommissionAmountPubCurrency'],
                             'order_value'=>$cashback['saleAmountPubCurrency'],
                             'status'=>$status,

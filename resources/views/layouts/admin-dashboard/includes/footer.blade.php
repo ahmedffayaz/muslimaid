@@ -1,7 +1,7 @@
  <div class="nk-footer">
     <div class="container-fluid">
         <div class="nk-footer-wrap">
-            <div class="nk-footer-copyright"> &copy; 2021 Cashback Reborn.
+            <div class="nk-footer-copyright"> {{\App\Models\SiteSetting::where('type','footer_text')->first()->value ?? '2021 Cashback Reborn.'}}  
             </div>
             <div class="nk-footer-links">
                 <ul class="nav nav-sm">

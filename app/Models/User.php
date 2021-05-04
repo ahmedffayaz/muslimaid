@@ -53,5 +53,13 @@ class User extends Authenticatable
         return $this->hasOne(PaymentInfo::class);
     }
 
+
+    public function cashbacks(){
+        return $this->hasMany(UserCashback::class);
+    } 
+    public function clicks(){
+        return $this->hasMany(ExitClick::class);
+    } 
+
     
 }

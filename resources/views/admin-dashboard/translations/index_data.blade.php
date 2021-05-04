@@ -30,11 +30,11 @@
    
   
     
-    <div class="nk-tb-col tb-col-md text-center">
+    <div class="nk-tb-col  text-center">
         <span>{{$translation->key?? ''}}</span>
     </div>
 
-    <div class="nk-tb-col tb-col-md text-center">
+    <div class="nk-tb-col  text-center">
         <span>{{$translation->text['en'] ?? ''}}</span>
     </div>
     

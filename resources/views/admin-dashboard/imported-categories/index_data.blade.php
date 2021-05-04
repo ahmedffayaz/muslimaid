@@ -8,7 +8,7 @@
     <div class="nk-tb-col"><span class="sub-text">Category</span></div>
     <div class="nk-tb-col text-center"><span class="sub-text">Parent Category</span></div>
     <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Mapped to</span></div>
-    <div class="nk-tb-col tb-col-md text-center"><span class="sub-text">Status</span></div>
+    <div class="nk-tb-col  text-center"><span class="sub-text">Status</span></div>
     <div class="nk-tb-col nk-tb-col-tools text-right">
         <span class="sub-text">Action</span>
        
@@ -43,15 +43,15 @@
    
   
     
-    <div class="nk-tb-col tb-col-md text-center">
+    <div class="nk-tb-col  text-center">
         <span>{{$imported_category->parent->name ?? ''}}</span>
     </div>
-    <div class="nk-tb-col tb-col-md text-center">
+    <div class="nk-tb-col  text-center">
         <span>{{$imported_category->mappedTo->name ?? 'unmapped'}}</span>
     </div>
    
    
-    <div class="nk-tb-col tb-col-md text-center">
+    <div class="nk-tb-col  text-center">
         <span class="tb-status text-success">{{ $imported_category->status ? 'active' : 'inactive'}}</span>
     </div>
     <div class="nk-tb-col nk-tb-col-tools">

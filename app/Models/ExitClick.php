@@ -23,6 +23,9 @@ class ExitClick extends Model
         return $this->belongsTo(User::class);
     }
 
-    
+    public function cashback(){
+        
+        return $this->hasOne(UserCashback::class);
+    }
 
 }

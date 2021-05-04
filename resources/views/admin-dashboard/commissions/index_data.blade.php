@@ -1,19 +1,18 @@
 <style>
-    .nk-tb-list{
-        table-layout: fixed;
-    }
+   
 </style>
 <div class="nk-tb-item nk-tb-head">
     
     
     <div class="nk-tb-col "><span class="sub-text">User</span></div>
-    <div class="nk-tb-col text-right"><span class="sub-text">Store</span></div>
+    <div class="nk-tb-col"><span class="sub-text">Store</span></div>
     {{-- <div class="nk-tb-col text-center"><span class="sub-text">Order Value (&#163;)</span></div> --}}
     {{-- <div class="nk-tb-col text-center"><span class="sub-text">Network Commission (&#163;)</span></div> --}}
+    <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Network Commission (&#163;)</span></div>
     <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Cashback (&#163;)</span></div>
-    <div class="nk-tb-col tb-col-md text-center"><span class="sub-text">Exit Click Id</span></div>
-    <div class="nk-tb-col tb-col-md text-center"><span class="sub-text">Event Time</span></div>
-    <div class="nk-tb-col tb-col-md text-right"><span class="sub-text">Status</span></div>
+    <div class="nk-tb-col  text-center"><span class="sub-text">Exit Click Id</span></div>
+    <div class="nk-tb-col  text-center"><span class="sub-text">Event Time</span></div>
+    <div class="nk-tb-col  text-right"><span class="sub-text">Status</span></div>
     <div class="nk-tb-col nk-tb-col-tools text-right">
         <span class="sub-text">Action</span>
        
@@ -25,54 +24,49 @@
     
    
   
-    <div class="nk-tb-col tb-col-md">
-        <a href="#">
-            <div class="user-card">
-                <div class="user-avatar
-                <?php
-               
-                $color = rand(1,5);
-                if($color==1){echo 'bg-info';}
-                elseif($color==2){echo 'bg-primary';}
-                elseif($color==3){echo 'bg-danger';}
-                elseif($color==4){echo 'bg-success';}
-                elseif($color==5){echo 'bg-warning';}
-                else{}
-                ?>
-                
-                ">
-                    <span>{{$commission->user->first_name[0] ?? 'N'}}{{$commission->user->last_name[0] ?? 'A'}}</span>
-                </div>
-                <div class="user-info">
-                    <span class="tb-lead">{{$commission->user->first_name ?? ''}} {{$commission->user->last_name ?? ''}}<span class="dot dot-success d-md-none ml-1"></span></span>
-                    <span>{{$commission->user->email ?? ''}}</span>
-                </div>
-            </div>
-        </a>
+    <div class="nk-tb-col ">
        
+        <div class="user-card">
+            <div class="user-avatar
+            <?php
+            
+            $color = rand(1,5);
+            if($color==1){echo 'bg-info';}
+            elseif($color==2){echo 'bg-primary';}
+            elseif($color==3){echo 'bg-danger';}
+            elseif($color==4){echo 'bg-success';}
+            elseif($color==5){echo 'bg-warning';}
+            else{}
+            ?>
+            
+            ">
+                <span>{{$commission->user->first_name[0] ?? 'N'}}{{$commission->user->last_name[0] ?? 'A'}}</span>
+            </div>
+            <div class="user-info">
+                <span class="tb-lead">{{$commission->user->first_name ?? ''}} {{$commission->user->last_name ?? ''}}<span class="dot dot-success d-md-none ml-1"></span></span>
+                <span>{{$commission->user->email ?? ''}}</span>
+            </div>
+        </div>
         
     </div>
-    <div class="nk-tb-col tb-col-md text-right">
-        <span><b>{{$commission->store->name}}</b></span>
+    <div class="nk-tb-col">
+        <span><b>{{$commission->store->name ?? ''}}</b></span>
         
     </div>
     
-    {{-- <div class="nk-tb-col tb-col-md text-center">
-        <span>{{$commission->order_value}}</span>
-    </div> --}}
-    {{-- <div class="nk-tb-col tb-col-md text-center">
-        <span>{{$commission->network_commission}}</span>
-    </div> --}}
-    <div class="nk-tb-col tb-col-md text-center">
+    <div class="nk-tb-col  text-center">
+        <span><span class="currency">&#163;</span>{{$commission->network_commission}}</span>
+    </div>
+    <div class="nk-tb-col  text-center">
         <span><span class="currency">&#163;</span>{{$commission->amount}}</span>
     </div>
-    <div class="nk-tb-col tb-col-md text-center">
+    <div class="nk-tb-col  text-center">
         <span>{{$commission->exit_click_id}}</span>
     </div>
-    <div class="nk-tb-col tb-col-md text-right">
+    <div class="nk-tb-col  text-right">
         <span>{{$commission->event_date}}</span>
     </div>
-    <div class="nk-tb-col tb-col-md text-right">
+    <div class="nk-tb-col  text-right">
         <span class="tb-status text-info"> {{ $commission->statusMap->status ?? $commission->status}}</span>
     </div>
     
@@ -80,21 +74,7 @@
   
     <div class="nk-tb-col nk-tb-col-tools">
         <ul class="nk-tb-actions gx-1">
-            {{-- <li class="nk-tb-action-hidden">
-                <a href="#" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Wallet">
-                    <em class="icon ni ni-wallet-fill"></em>
-                </a>
-            </li>
-            <li class="nk-tb-action-hidden">
-                <a href="#" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Send Email">
-                    <em class="icon ni ni-mail-fill"></em>
-                </a>
-            </li>
-            <li class="nk-tb-action-hidden">
-                <a href="#" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="Suspend">
-                    <em class="icon ni ni-user-cross-fill"></em>
-                </a>
-            </li> --}}
+           
             <li>
                 <div class="drodown">
                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>

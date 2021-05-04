@@ -349,55 +349,224 @@ class ImporterController extends Controller
 
         ini_set('max_execution_time', 3000); // 5 minutes
 
-        //this code is used for testing APIs
-        $ch = curl_init();
+        $setting = ImporterSetting::where('network_id',1)->first();
 
-        curl_setopt($ch, CURLOPT_URL, 'https://advertiser-lookup.api.cj.com/v2/advertiser-lookup?requestor-cid=5499477&advertiser-ids=joined&records-per-page=5');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+        //importing advertisers/stores/merchents
+
+        if(true){
+            $total_records= 1;
+            $fetched_records= 0;
+            $page = 1;
+
+            while($fetched_records < $total_records){
+
+                $ch = curl_init();
+
+                curl_setopt($ch, CURLOPT_URL, 'https://advertiser-lookup.api.cj.com/v2/advertiser-lookup?requestor-cid=5499477&advertiser-ids=2746196&records-per-page=50&page-number='.$page);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+
+                $headers = array();
+                $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+                $result = curl_exec($ch);
+                if (curl_errno($ch)) {
+                echo 'Error:' . curl_error($ch);
+                }
+                curl_close($ch);      
+
+                $data = simplexml_load_string($result);
+                $array = json_decode(json_encode($data), TRUE);
+
+                // dd($data->advertisers->advertiser->actions); 
+
+                $adverts = $data->advertisers->advertiser;
+
+                foreach ($adverts as $advertiser) {
+
+                    try{
+
+                    $store = Store::where('advertiser_id',$advertiser->{'advertiser-id'})->first();
+                    if(true){
+
+                        // $store = Store::create([
+                        //     'name'         => $advertiser->{'advertiser-name'},
+                        //     'advertiser_id'=> $advertiser->{'advertiser-id'},
+                        //     'network_id'   => 1,
+                        //     'tracking_url' => $advertiser->{'program-url'},
+                        //     'store_url'    => $advertiser->{'program-url'},
+                        // ]);
 
 
-        $headers = array();
-        $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
-        $result = curl_exec($ch);
-        if (curl_errno($ch)) {
-         echo 'Error:' . curl_error($ch);
+                            //importing cashbacks for current advertiser/store/merchent
+
+                            $ch = curl_init();
+
+                            curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&link-type=banner&advertiser-ids='.$advertiser->{'advertiser-id'});
+                            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+                            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
+
+
+                            $headers = array();
+                            $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
+                            curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+
+                            $link_result = curl_exec($ch);
+                            if (curl_errno($ch)) {
+                                echo 'Error:' . curl_error($ch);
+                            }
+                            curl_close($ch);
+
+                            $link_data = simplexml_load_string($link_result);
+                            $link_array = json_decode(json_encode($link_data), TRUE);
+                           
+                            // dd($link_data);
+                            $destination_url = $advertiser->{'program-url'};
+
+                            $link_found =0;
+                            $link_url ='#';
+
+                            if($link_data->links->link){
+                                foreach ($link_data->links->link as $link) {
+                               
+                                    if(!strcmp($link->destination , $destination_url)){
+                                        $link_found =1;
+                                        $link_url = $link->clickUrl;
+                                    }
+    
+                                }
+    
+                                if($link_found){
+                                    $store->tracking_url = $link_url;
+                                }else{
+                                    $store->tracking_url = $link_data->links->link[0]->clickUrl;
+                                }
+    
+                                // $store->tracking_url = $link_url;
+                                $store->update();
+                            
+
+                            }
+                          
+                           
+
+                        foreach ($advertiser->actions->action as $action) {
+
+
+                            if($action->commission->default){
+                            $c_type = \Str::contains($action->commission->default, '%') ? 'percentage' : 'fixed';
+
+
+                                $cb = StoreCashback::where('store_id',$store->id)->where('type',$c_type)->where('sale_commission',$action->commission->default)->first();
+                                if($cb){
+                                    $cb->update([
+                                        'detail' => $cb->detail.', '.$action->name.' default',
+                                        'network_detail' => $cb->network_detail.', '.$action->name.' default',
+                                    ]);
+                                }else{
+                                    $cashback = StoreCashback::create([
+                                        'type' => $c_type,
+                                        'image'           => '#',
+                                        'click_url'       =>  '#',
+                                        'sale_commission' => $action->commission->default,
+                                        'cashback_name' => $action->name,
+                                        'detail' => $action->name.' default',
+                                        'network_detail' => $action->name.' default',
+                                        'store_id' => $store->id,
+                                    ]);
+                                }
+                                
+                            }
+                            if($action->commission->itemlist){
+                                foreach($action->commission->itemlist as $item){
+                            $c_type= \Str::contains($item, '%') ? 'percentage' : 'fixed';
+
+
+                                    $cb = StoreCashback::where('store_id',$store->id)->where('type',$c_type)->where('sale_commission',$item)->first();
+                                    if($cb){
+                                        $cb->update([
+                                           
+                                            'detail' => $cb->detail.', '.$action->name.' '.$item->attributes()->name,
+                                            'network_detail' => $cb->network_detail.', '.$action->name.' '.$item->attributes()->name,
+                                        ]);
+                                    }else{
+                                   
+                                    $cashback = StoreCashback::create([
+                                        'type' => $c_type,
+                                        'image'           => '#',
+                                        'click_url'       =>  '#',
+                                        'sale_commission' => $item,
+                                        'cashback_name' => $action->name,
+                                        'detail' => $action->name.' '.$item->attributes()->name,
+                                        'network_detail' => $action->name.' '.$item->attributes()->name,
+                                        'store_id' => $store->id,
+                                    ]);
+                                }
+        
+                                }
+                            }
+                           
+                        }
+                                                        
+                        if(!empty($advertiser->{'primary-category'}->{'parent'})){
+
+                            $category_parent = ImportedCategory::where('name',$advertiser->{'primary-category'}->{'parent'})->first();
+        
+                            if(!$category_parent){
+                                $category_parent = new ImportedCategory();
+                                $category_parent->name = $advertiser->{'primary-category'}->{'parent'};
+                                $category_parent->network_id = 1;
+                                $category_parent->save();
+                            }
+        
+                            DB::table('category_store')->insert([
+                                'store_id'=>$store->id,
+                                'category_id'=> $category_parent->mapped_to ?? 0,
+                                'network_category_id'=> $category_parent->id,
+        
+                            ]);
+        
+                        }
+                            
+                        if(!empty($advertiser->{'primary-category'}->{'child'})){
+                            
+                            $category_child = ImportedCategory::where('name',$advertiser->{'primary-category'}->{'child'})->first();
+
+                            if(!$category_child){
+
+                                $category_child = new ImportedCategory();
+                                $category_child->name = $advertiser->{'primary-category'}->{'child'};
+                                $category_child->parent_id = $category_parent->id ?? 0;
+                                $category_child->network_id = 1;
+                                $category_child->save();
+
+                            }
+                            DB::table('category_store')->insert([
+                                'store_id'=>$store->id,
+                                'category_id'=> $category_child->mapped_to ?? 0,
+                                'network_category_id'=> $category_child->id,
+                            ]);
+                        }
+                    
+
+                    }
+                
+                    }
+                    catch(\Execption $e)
+                    {
+                        flash()->error('Error while running importer');
+                        return redirect()->route('admin.stores.index');
+                    }          
+
+                }
+
+                $total_records = $data->{'advertisers'}->attributes()->{'total-matched'};
+                $fetched_records= $fetched_records + $data->{'advertisers'}->attributes()->{'records-returned'};
+                $page++;
+            }
         }
-        curl_close($ch);      
-
-
-        $data = simplexml_load_string($result);
-        $array = json_decode(json_encode($data), TRUE);
-     
-      
-
-        dd($array);
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&advertiser-ids=4441431');
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-        
-        
-        $headers = array();
-        $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        
-        $link_result = curl_exec($ch);
-        if (curl_errno($ch)) {
-            echo 'Error:' . curl_error($ch);
-        }
-        curl_close($ch);
-
-        dd($link_result);
-
-        $link_data = simplexml_load_string($link_result);
-        $link_array = json_decode(json_encode($link_data), TRUE);
-
-        dd($link_array);
-       
         
     }
 

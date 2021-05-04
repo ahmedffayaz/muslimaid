@@ -339,7 +339,7 @@
                                     <div class="nk-tb-item nk-tb-head">
                                         <div class="nk-tb-col"><span>Order No.</span></div>
                                         <div class="nk-tb-col tb-col-sm"><span>Customer</span></div>
-                                        <div class="nk-tb-col tb-col-md"><span>Date</span></div>
+                                        <div class="nk-tb-col "><span>Date</span></div>
                                         <div class="nk-tb-col"><span>Amount</span></div>
                                         <div class="nk-tb-col"><span class="d-none d-sm-inline">Status</span></div>
                                     </div>
@@ -357,7 +357,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="nk-tb-col tb-col-md">
+                                        <div class="nk-tb-col ">
                                             <span class="tb-sub">02/11/2020</span>
                                         </div>
                                         <div class="nk-tb-col">
@@ -381,7 +381,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="nk-tb-col tb-col-md">
+                                        <div class="nk-tb-col ">
                                             <span class="tb-sub">02/02/2020</span>
                                         </div>
                                         <div class="nk-tb-col">
@@ -405,7 +405,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="nk-tb-col tb-col-md">
+                                        <div class="nk-tb-col ">
                                             <span class="tb-sub">02/01/2020</span>
                                         </div>
                                         <div class="nk-tb-col">
@@ -429,7 +429,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="nk-tb-col tb-col-md">
+                                        <div class="nk-tb-col ">
                                             <span class="tb-sub">01/29/2020</span>
                                         </div>
                                         <div class="nk-tb-col">
@@ -453,7 +453,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="nk-tb-col tb-col-md">
+                                        <div class="nk-tb-col ">
                                             <span class="tb-sub">01/29/2020</span>
                                         </div>
                                         <div class="nk-tb-col">

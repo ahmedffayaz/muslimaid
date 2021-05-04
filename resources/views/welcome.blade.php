@@ -20,7 +20,7 @@
             @else
             <form action="{{route('site.exit_click.store')}}" method="POST" id="form_{{$cashback->id}}">
                 @csrf
-                <input type="hidden" name="url" id="url" value="{{$cashback->click_url}}">
+                <input type="hidden" name="url" id="url" value="{{$cashback->store->tracking_url}}">
                 <input type="hidden" name="store_id" id="store_id" value="{{$cashback->store->id}}">
                 <input type="hidden" name="user_id" id="user_id" value="{{\Auth::id()}}">
 

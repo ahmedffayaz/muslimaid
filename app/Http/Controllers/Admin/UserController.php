@@ -67,9 +67,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(User $user)
     {
-        echo 'show';
+        return view('admin-dashboard.users.show', compact('user'));
+
     }
 
     /**
@@ -102,8 +103,13 @@ class UserController extends Controller
             'intro' => $request->intro,
             'status' => $request->status,
         ]);
-        flash()->success('User updated successfully');
-        return redirect()->route('admin.users.index');
+
+        if(!$request->ajax()){
+            flash()->success('User updated successfully');
+            return redirect()->route('admin.users.index');
+        }else{
+            return true;
+        }
     }
 
     /**
@@ -176,10 +182,22 @@ class UserController extends Controller
 
     public function paymentSave(Request $request){
 
-        $payment = PaymentInfo::create($request->all());
+        $payment = PaymentInfo::updateOrCreate([
+            'user_id'   => $request->user_id,
+        ],$request->all());
+
+        // $payment = PaymentInfo::create($request->all());
+
+        if(!$request->ajax())
+        {
+            flash()->success('Payment method added successfully');
+            return redirect()->route('admin.users.index');
+        }else{
+            return array('message'=>'payment method saved',
+                        'updated'=>'success');
+        }
         
-        flash()->success('Payment method added successfully');
-        return redirect()->route('admin.users.index');
+        
 
     }
     public function changePassword(User $user)
@@ -193,16 +211,30 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            flash()->error($validator->errors()->first());
-            return redirect()->back();
+           
+
+            if(!$request->ajax())
+            {
+                flash()->error($validator->errors()->first());
+                return redirect()->back();
+            }else{
+                return array('message' => $validator->errors()->first(),
+                                'updated'=>'error');
+            }
 
         }
         $user->update([
             'password' => Hash::make($request->password),
 
         ]);
+        if(!$request->ajax())
+        {
         flash()->success('Password changed successfully');
         return redirect()->route('admin.users.index');
+        }else{
+            return array('message' => 'Password updated successfully',
+                                'updated'=>'success');
+        }
 
     }
     public function searchUsers(Request $request, User $users)
@@ -230,5 +262,24 @@ class UserController extends Controller
         $users = $users->role('user')->latest()->paginate(30);
         $route='search';
         return view('admin-dashboard.users.index_data', compact('users','route'))->render();
+    }
+
+    function fetchCashbacks(Request $request)
+    {
+        if($request->ajax())
+        {
+           $user =User::where('id',$request->user)->first();
+
+            return view('admin-dashboard.users.cashbacks', compact('user'))->render();
+        }
+    }
+    function fetchClicks(Request $request)
+    {
+        if($request->ajax())
+        {
+           $user =User::where('id',$request->user)->first();
+
+            return view('admin-dashboard.users.clicks', compact('user'))->render();
+        }
     }
 }

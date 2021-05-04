@@ -4,7 +4,7 @@
     <div class="nk-tb-col tb-col-mb"><span class="sub-text">Balance</span></div>
     <div class="nk-tb-col tb-col-mb"><span class="sub-text">Reg Type</span></div>
     <div class="nk-tb-col tb-col-lg"><span class="sub-text">Reg date</span></div>
-    <div class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></div>
+    <div class="nk-tb-col "><span class="sub-text">Status</span></div>
     <div class="nk-tb-col nk-tb-col-tools text-right">
         <span class="sub-text">Action</span>
        
@@ -14,7 +14,7 @@
 <div class="nk-tb-item">
     
     <div class="nk-tb-col">
-       
+       <a href='{{route('admin.users.show',$user)}}'>
             <div class="user-card">
                 <div class="user-avatar 
                 <?php
@@ -34,21 +34,22 @@
                     <span>{{$user->email}}</span>
                 </div>
             </div>
+        </a>
        
     </div>
     <div class="nk-tb-col tb-col-mb">
-        <span class="tb-amount"><span class="currency">&#163;</span>0 </span>
+        <span class="tb-amount"><span class="currency">&#163;</span>{{$user->cashbacks->sum('amount')}}</span>
     </div>
     <div class="nk-tb-col tb-col-mb">
         <span>{{$user->registration_type}}</span>
     </div>
     
-    <div class="nk-tb-col tb-col-md">
+    <div class="nk-tb-col ">
         <span>{{$user->created_at}}</span>
     </div>
    
    
-    <div class="nk-tb-col tb-col-md">
+    <div class="nk-tb-col ">
        {!! $user->status ? '<span class="tb-status text-success">active</span>' : '<span class="tb-status text-danger">in-active</span>'!!}
  
     </div>

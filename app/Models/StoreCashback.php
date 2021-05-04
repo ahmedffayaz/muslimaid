@@ -10,7 +10,7 @@ class StoreCashback extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['store_id', 'cashback_name','type', 'value', 'image','click_url','sale_commission'];
+    protected $fillable = ['store_id', 'cashback_name','type', 'value', 'image','click_url','sale_commission','detail','network_detail'];
 
     public function store(){
 

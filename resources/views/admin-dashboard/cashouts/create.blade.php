@@ -12,7 +12,7 @@
                             <div class="nk-block-head-content">
                                 <h4 class="title nk-block-title">Add Store</h4>
                                 <div class="nk-block-des">
-                                    <p>You can make style out your....</p>
+                                    {{-- <p>You can make style out your....</p> --}}
                                 </div>
                             </div>
                         </div>

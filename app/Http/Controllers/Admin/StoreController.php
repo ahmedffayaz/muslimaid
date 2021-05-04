@@ -9,6 +9,7 @@ use App\Models\StoreCashback;
 use App\Models\StoreImage;
 use App\Models\Network;
 use App\Models\Category;
+use App\Models\StoreReview;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -24,7 +25,7 @@ class StoreController extends Controller
     {
         $route='index';
         $networks = Network::all();
-        $stores = Store::latest()->paginate(30);
+        $stores = Store::orderBy('id', 'DESC')->paginate(30);
         return view('admin-dashboard.stores.index', compact('stores','route','networks'));
     }
 
@@ -111,7 +112,10 @@ class StoreController extends Controller
      */
     public function show(Store $store)
     {
-        return view('admin-dashboard.stores.show',compact('store'));
+        $networks = Network::all();
+        $categories = Category::all();
+        $stores = Store::all();
+        return view('admin-dashboard.stores.show',compact( 'networks', 'categories','store','stores'));
     }
 
     /**
@@ -143,6 +147,7 @@ class StoreController extends Controller
      */
     public function update(Request $request, Store $store)
     {
+        // dd($request->all());
 
        
         try {
@@ -157,9 +162,6 @@ class StoreController extends Controller
                 'status'    => $request->input('status'),
                 'slug'    => \Str::slug($request->input('store_name')),
             ]);
-
-            // $imageOriginalName = pathinfo($request->file('image')->getClientOriginalName(), PATHINFO_FILENAME);
-
             if($request->has('image')){
                 
                 $imageName = \Str::slug($request->input('store_name')).'_logo_'.time().'.'.$request->image->extension();          
@@ -197,13 +199,22 @@ class StoreController extends Controller
                     'category_id' => $category
                 ]);
             }
-            flash()->success('Store updated');
 
-            return redirect()->route('admin.stores.index');
+            if(!$request->ajax())
+            { flash()->success('Store info updated successfully');
+                return redirect()->back();
+            }
+            else{
+                return true;
+            }
+            
+
+            // return redirect()->route('admin.stores.index');
         } catch (\Throwable $th) {
 
-            flash()->error('Error while updating the store');
-            return redirect()->route('admin.stores.index');
+            // flash()->error('Error while updating the store');
+            // return redirect()->route('admin.stores.index');
+            return $th;
 
         }
        
@@ -225,7 +236,7 @@ class StoreController extends Controller
         if($request->ajax())
         {
             $route='index';
-            $stores = Store::latest()->paginate(30);
+            $stores = Store::orderBy('id', 'DESC')->paginate(30);
 
             return view('admin-dashboard.stores.index_data', compact('stores','route'))->render();
         }
@@ -287,12 +298,12 @@ class StoreController extends Controller
                 ]);
 
             flash()->success('Image uploaded successfully');
-            return redirect()->route('admin.stores.images',$store);
+            return redirect()->route('admin.stores.show',$store);
 
         }else{
 
             flash()->error('Image is required');
-            return redirect()->route('admin.stores.images',$store);
+            return redirect()->route('admin.stores.show',$store);
         }        
     }
 
@@ -302,7 +313,7 @@ class StoreController extends Controller
         Storage::delete(['public/stores/images/'.$storeimage->image]);
         $storeimage->delete();
         flash()->success('Image deleted');
-        return redirect()->route('admin.stores.images',$store);
+        return redirect()->route('admin.stores.show',$store);
 
     }
     public function searchStores(Request $request, Store $stores)
@@ -313,6 +324,10 @@ class StoreController extends Controller
         // Search by network.
         if ($request->input('network_id')) {
             $stores->where('network_id', $request->input('network_id'));
+        }
+        // Search by id.
+        if ($request->input('store_id')) {
+            $stores->where('id', $request->input('store_id'));
         }
 
         // Search by store name.
@@ -329,5 +344,58 @@ class StoreController extends Controller
         $stores = $stores->latest()->paginate(10);
         $route='search';
         return view('admin-dashboard.stores.index_data', compact('stores','route'))->render();
+    }
+    function fetchVouchers(Request $request)
+    {
+        if($request->ajax())
+        {
+           $store = Store::where('id',$request->store)->first();
+
+            return view('admin-dashboard.stores.vouchers', compact('store'))->render();
+        }
+    }
+    function fetchCashbacks(Request $request)
+    {
+        if($request->ajax())
+        {
+           $store = Store::where('id',$request->store)->first();
+
+            return view('admin-dashboard.stores.cashbacks', compact('store'))->render();
+        }
+    }
+    function fetchReviews(Request $request)
+    {
+        if($request->ajax())
+        {
+           $store = Store::where('id',$request->store)->first();
+
+            return view('admin-dashboard.stores.reviews', compact('store'))->render();
+        }
+    }
+    public function editReview(Request $request, StoreReview $review )
+    {  
+       return view('admin-dashboard.stores.review-form', compact('review'))->render();
+
+    }
+    public function editCashback(Request $request, StoreCashback $cashback )
+    {
+        
+        return view('admin-dashboard.stores.cashback-edit', compact('cashback'))->render();
+
+    }
+    public function updateCashback(Request $request, StoreCashback $cashback)
+    {
+
+        $cashback->update($request->all());
+        return true;
+    }
+    function fetchImages(Request $request)
+    {
+        if($request->ajax())
+        {
+           $store = Store::where('id',$request->store)->first();
+
+            return view('admin-dashboard.stores.images-data', compact('store'))->render();
+        }
     }
 }

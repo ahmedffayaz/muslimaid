@@ -21,20 +21,26 @@ class StoreSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        foreach (range(1,10) as $index) {
+        foreach (range(1,50) as $index) {
 
             $store = new Store();
             $store->network_id = 1;
             $store->name = $faker->company;
-            $store->tracking_url = '#';
-            $store->store_url = '#';
+            $store->slug = \Str::slug($store->name);
+            $store->tracking_url = $faker->url;
+            $store->store_url = $faker->url;
             $store->save();	 
-            
-            $cashback = new StoreCashback();
-            $cashback->store_id = $store->id;
-            $cashback->type = 'percentage';
-            $cashback->value = 2;            
-            $cashback->save();	
+
+            foreach (range(1,3) as $i){
+                $cashback = new StoreCashback();
+                $cashback->store_id = $store->id;
+                $cashback->type = 'percentage';
+                $cashback->detail = $faker->text($maxNbChars = 100);
+                $cashback->network_detail = $faker->text($maxNbChars = 100);
+                $cashback->sale_commission = $faker->numberBetween(1,10).'%';
+                $cashback->save();
+            }
+            	
 
             DB::table('category_store')->insert([
 	           'store_id'=>$store->id,

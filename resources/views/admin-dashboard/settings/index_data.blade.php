@@ -42,10 +42,10 @@
    
   
     
-    <div class="nk-tb-col tb-col-md text-center">
+    <div class="nk-tb-col  text-center">
         <span>{{$setting->type?? ''}}</span>
     </div>
-    <div class="nk-tb-col tb-col-md text-center">
+    <div class="nk-tb-col  text-center">
         <span>{{$setting->value ?? 'unmapped'}}</span>
     </div>
    

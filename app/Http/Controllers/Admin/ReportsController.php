@@ -27,7 +27,7 @@ class ReportsController extends Controller
 
 
         $stores = Store::latest()->get();
-        $clicks = ExitClick::select(\DB::raw('count(*) as count, store_id'))->groupBy('store_id')->orderBy('count','DESC')->paginate(10);       
+        $clicks = ExitClick::select(\DB::raw('count(*) as count, store_id'))->groupBy('store_id')->orderBy('count','DESC')->paginate(20);       
         $route = 'index'; 
         return view('admin-dashboard.reports.store_performance',compact('clicks','stores','total_revenue','pending_total_revenue','clicks','coms','total_clicks','route'));
     }
@@ -56,7 +56,7 @@ class ReportsController extends Controller
          }
         
         $stores = Store::latest()->get();
-        $clicks = $clicks->select(\DB::raw('count(*) as count, store_id'))->groupBy('store_id')->orderBy('count','DESC')->paginate(10);
+        $clicks = $clicks->select(\DB::raw('count(*) as count, store_id'))->groupBy('store_id')->orderBy('count','DESC')->paginate(20);
         $route='search';
         return view('admin-dashboard.reports.store_performance_data', compact('clicks','stores','route'))->render();
     }
@@ -65,7 +65,7 @@ class ReportsController extends Controller
         {$route = 'index'; 
         if($request->ajax())
         {
-            $clicks = ExitClick::select(\DB::raw('count(*) as count, store_id'))->groupBy('store_id')->orderBy('count','DESC')->paginate(10);        
+            $clicks = ExitClick::select(\DB::raw('count(*) as count, store_id'))->groupBy('store_id')->orderBy('count','DESC')->paginate(20);        
 
             return view('admin-dashboard.reports.store_performance_data',compact('clicks','route'));
         }
@@ -80,7 +80,7 @@ class ReportsController extends Controller
         $penidng_total_cashback = UserCashback::where('status','!=','4')->sum('amount');
 
         $pending_total_revenue = $penidng_total_commission - $penidng_total_cashback;
-        $coms = UserCashback::latest()->paginate(10);
+        $coms = UserCashback::latest()->paginate(20);
         $networks = Network::latest()->get();
         $stores = Store::latest()->get();
         $statuses = CashbackStatus::latest()->get();
@@ -117,7 +117,7 @@ class ReportsController extends Controller
          }
         
         $stores = Store::latest()->get();
-        $coms = $coms->latest()->paginate(10);
+        $coms = $coms->latest()->paginate(20);
         $route = 'search';
         return view('admin-dashboard.reports.earnings_data', compact('coms','stores','route'))->render();
     }
@@ -127,7 +127,7 @@ class ReportsController extends Controller
         $route='index';
         if($request->ajax())
         {
-            $coms = UserCashback::latest()->paginate(10);
+            $coms = UserCashback::latest()->paginate(20);
             return view('admin-dashboard.reports.earnings_data', compact('coms','route'))->render();
         }
     }

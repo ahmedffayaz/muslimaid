@@ -12,7 +12,7 @@
                             <div class="nk-block-head-content">
                                 <h4 class="title nk-block-title">Add Cashback</h4>
                                 <div class="nk-block-des">
-                                    <p>You can make style out your....</p>
+                                    {{-- <p>You can make style out your....</p> --}}
                                 </div>
                             </div>
                         </div>
@@ -59,14 +59,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6">
+                                        {{-- <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="phone-no-1">Cashback Amount</label>
                                                 <div class="form-control-wrap">
                                                     <input type="text" class="form-control" id="phone-no-1" value="" name="amount" >
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="default-06">Status</label>

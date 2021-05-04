@@ -39,12 +39,14 @@
                                                 <span class="text-soft">Click Parameter: </span> <span>{{$network->click_ref}}</span>
                                             </span>
                                             <span class="release">
+                                                @if($network->importerSetting)
                                                 <span class="text-soft">Last Imported: </span> <span>@if($network->importerSetting->last_import_at)
                                                     @php echo \Carbon\Carbon::createFromTimeStamp(strtotime($network->importerSetting->last_import_at))->diffForHumans() @endphp
                                                 @else 
                                                 Never
             
                                                 @endif</span>
+                                                @endif
                                             </span>
                                         </div>
                                     </div>

@@ -28,44 +28,60 @@
                         </div><!-- .nk-block-head-content -->
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
-                <div><form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form card p-4 mb-4" method="POST">
-                    @csrf
-                    <div class="row g-4">
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label class="form-label" for="network_id">Network</label>
-                                <div class="form-control-wrap ">
-                                    <select class="form-select form-control" data-search="on" id="network_id" name="network_id">
-                                        <option value="0">All</option>
-                                        @foreach ($networks as $network)
-                                        <option value="{{$network->id}}">{{$network->name}}</option>
-                                        @endforeach
-                                    </select>
-                                   
+                <div class="card card-preview mb-4">
+                    <div class="card-inner">
+                        <div id="accordion-1" class="accordion accordion-s2">
+                            <div class="accordion-item">
+                                <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-1-1">
+                                    <h6 class="title">Search</h6>
+                                    <span class="accordion-icon"></span>
+                                </a>
+                                <div class="accordion-body collapse" id="accordion-item-1-1" data-parent="#accordion-1">
+                                    <div class="accordion-inner">
+                                        <div><form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
+                                            @csrf
+                                            <div class="row g-4">
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="network_id">Network</label>
+                                                        <div class="form-control-wrap ">
+                                                            <select class="form-select form-control" data-search="on" id="network_id" name="network_id">
+                                                                <option value="0">All</option>
+                                                                @foreach ($networks as $network)
+                                                                <option value="{{$network->id}}">{{$network->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            
+                                                <div class="col-lg-4">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="store_id">Store</label>
+                                                        <div class="form-control-wrap ">
+                                                            <select class="form-select form-control" data-search="on" id="store_id" name="store_id">
+                                                                <option value="0">All</option>
+                                                                @foreach ($stores as $store)
+                                                                <option value="{{$store->id}}">{{$store->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>                        
+                                                <div class="col-4 align-self-end">
+                                                    <div class="form-group">
+                                                        <button type="submit" class="btn btn-success btn-block">Search</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form></div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                       
-                        <div class="col-lg-4">
-                            <div class="form-group">
-                                <label class="form-label" for="store_id">Store</label>
-                                <div class="form-control-wrap ">
-                                    <select class="form-select form-control" data-search="on" id="store_id" name="store_id">
-                                        <option value="0">All</option>
-                                        @foreach ($stores as $store)
-                                        <option value="{{$store->id}}">{{$store->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>                        
-                        <div class="col-4 align-self-end">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-success btn-block">Search</button>
                             </div>
                         </div>
                     </div>
-                </form></div>
+                </div>
                 @include('flash::message')
                 <div class="nk-block">
                     <div class="card card-stretch">

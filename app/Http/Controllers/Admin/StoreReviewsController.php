@@ -71,7 +71,8 @@ class StoreReviewsController extends Controller
      */
 
     public function edit(StoreReview $review)
-    {
+    {  
+
         $stores = Store::latest()->get();
         return view('admin-dashboard.store_reviews.edit', compact('stores','review'));
     }
@@ -85,11 +86,17 @@ class StoreReviewsController extends Controller
      */
     public function update(Request $request, StoreReview $review)
     {
+        // dd($request->all());
         try{
             $review->update($request->all());
+            if(!$request->ajax())
+            {flash()->success('Review updated successfully');
+                return redirect()->back(); }else{
+                    return true;
+                }
     
-            flash()->success('Review updated successfully');
-            return redirect()->route('admin.reviews.index');
+            
+            // return redirect()->route('admin.reviews.index');
         
         } catch (\Throwable $th) {
             flash()->error('something went wrong! unable to update the review');

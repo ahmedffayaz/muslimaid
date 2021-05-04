@@ -2,14 +2,54 @@
     .nk-tb-list{
         table-layout: fixed;
     }
+    /* Remove default bullets */
+ul, #myUL {
+  list-style-type: none;
+}
+
+/* Remove margins and padding from the parent ul */
+#myUL {
+  margin: 0;
+  padding: 0;
+}
+
+/* Style the caret/arrow */
+.caret {
+  cursor: pointer;
+  user-select: none; /* Prevent text selection */
+}
+
+/* Create the caret/arrow with a unicode, and style it */
+.caret::before {
+  content: "\25B6";
+  color: black;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+/* Rotate the caret/arrow icon when clicked on (using JavaScript) */
+.caret-down::before {
+  transform: rotate(90deg);
+}
+
+/* Hide the nested list */
+.nested {
+  display: none;
+}
+
+/* Show the nested list when the user clicks on the caret/arrow (with JavaScript) */
+.active {
+  display: block;
+}
 </style>
+
 <div class="nk-tb-item nk-tb-head">
     
     
     <div class="nk-tb-col "><span class="sub-text">Category</span></div>
     <div class="nk-tb-col "><span class="sub-text">Parent Category</span></div>
     <div class="nk-tb-col tb-col-mb"><span class="sub-text">No of Stores</span></div>
-    <div class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></div>
+    <div class="nk-tb-col "><span class="sub-text">Status</span></div>
     <div class="nk-tb-col nk-tb-col-tools text-right">
         <span class="sub-text">Action</span>
        
@@ -21,19 +61,19 @@
     
    
   
-    <div class="nk-tb-col tb-col-md">
+    <div class="nk-tb-col ">
         <span><b>{{$category->name}}</b></span>
         
     </div>
-    <div class="nk-tb-col tb-col-md">
+    <div class="nk-tb-col ">
         <span><b>{{$category->parent->name ??  ''}}</b></span>
         
     </div>
     
-    <div class="nk-tb-col tb-col-md">
+    <div class="nk-tb-col ">
         <span>{{count($category->stores)}}</span>
     </div>
-    <div class="nk-tb-col tb-col-md">
+    <div class="nk-tb-col ">
         {!! $category->status ? '<span class="tb-status text-success">active</span>' : '<span class="tb-status text-danger">inactive</span>'!!}
 
     </div>

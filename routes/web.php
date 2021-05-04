@@ -32,9 +32,9 @@ Route::namespace('App\Http\Controllers\Admin')
     ->as('admin.')
     ->prefix('admin')
     ->group(function () {
+        Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
 
-    Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-    Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+    Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
 
     //Networks 
     Route::post('networks/fetch',[App\Http\Controllers\Admin\NetworkController::class,'fetch'])->name('networks.fetch');
@@ -44,6 +44,13 @@ Route::namespace('App\Http\Controllers\Admin')
 
     //Stores 
     Route::get('stores/images/{store}', [App\Http\Controllers\Admin\StoreController::class,'storeImages'])->name('stores.images');
+    Route::post('stores/vouchers', [App\Http\Controllers\Admin\StoreController::class,'fetchVouchers'])->name('stores.vouchers');
+    Route::post('stores/cashbacks', [App\Http\Controllers\Admin\StoreController::class,'fetchCashbacks'])->name('stores.cashbacks');
+    Route::post('stores/reviews', [App\Http\Controllers\Admin\StoreController::class,'fetchReviews'])->name('stores.reviews');
+    Route::post('stores/storeimages', [App\Http\Controllers\Admin\StoreController::class,'fetchImages'])->name('stores.fetchimages');
+    Route::get('stores/reviews/{review}/edit', [App\Http\Controllers\Admin\StoreController::class,'editReview'])->name('stores.reviews.edit');
+    Route::get('stores/cashbacks/{cashback}/edit', [App\Http\Controllers\Admin\StoreController::class,'editCashback'])->name('stores.cashbacks.edit');
+    Route::put('stores/cashbacks/{cashback}/update', [App\Http\Controllers\Admin\StoreController::class,'updateCashback'])->name('stores.cashbacks.update');
     Route::post('stores/images/upload/{store}', [App\Http\Controllers\Admin\StoreController::class,'uploadImage'])->name('stores.images.upload');
     Route::get('stores/images/delete/{storeimage}', [App\Http\Controllers\Admin\StoreController::class,'deleteImage'])->name('stores.images.delete');
     Route::get('stores/export', [App\Http\Controllers\Admin\StoreController::class,'exportCsv'])->name('stores.export');
@@ -70,6 +77,8 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('importedcategories', ImportedCategoryController::class);
     
     //Users 
+    Route::post('users/cashbacks', [App\Http\Controllers\Admin\UserController::class,'fetchCashbacks'])->name('users.cashbacks');
+    Route::post('users/clicks', [App\Http\Controllers\Admin\UserController::class,'fetchClicks'])->name('users.clicks');
     Route::get('users/export', [App\Http\Controllers\Admin\UserController::class,'exportCsv'])->name('users.export');
     Route::get('users/paymentinfo/{user}', [App\Http\Controllers\Admin\UserController::class,'paymentInfo'])->name('users.paymentinfo');
     Route::get('users/password/{user}', [App\Http\Controllers\Admin\UserController::class,'changePassword'])->name('users.password');

@@ -12,7 +12,7 @@
                             <div class="nk-block-head-content">
                                 <h4 class="title nk-block-title">Add Category</h4>
                                 <div class="nk-block-des">
-                                    <p>You can make style out your....</p>
+                                    {{-- <p>You can make style out your....</p> --}}
                                 </div>
                             </div>
                         </div>
@@ -52,6 +52,110 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <input name="description" type="hidden">
+                                                <label class="form-label" for="phone-no-1">Description</label>
+                                                <!-- Create the editor container -->
+                                                <div  id="editor-container">
+                                               
+                                                </div>
+                                               
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="logo_type">Logo</label>
+                                                <div class="form-control-wrap ">
+                                                    <div class="form-control-select">
+                                                        <select class="form-control" name="logo_type" id='logo_type' required>
+                                                            
+                                                            <option value="upload">Upload</option>
+                                                            <option value="link">Link</option>
+                                                                
+                                                           
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 logo_link">
+                                            <div class="form-group">
+                                                <label class="form-label" for="logo_link">Logo Link</label>
+                                                <div class="form-control-wrap">
+                                                    <input type="text" class="form-control" id="logo_link" name="name" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 logo_upload">
+                                            <div class="form-group">
+                                                <label class="form-label" for="logo_upload">Logo Upload</label>
+                                                <div class="form-control-wrap">
+                                                    <div class="custom-file">
+                                                        <input type="file" multiple="" class="custom-file-input" id="logo_upload">
+                                                        <label class="custom-file-label" for="logo_upload">Choose file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 ">
+                                            <div class="form-group">
+                                                <label class="form-label" for="banner_type">Banner</label>
+                                                <div class="form-control-wrap ">
+                                                    <div class="form-control-select">
+                                                        <select class="form-control" name="banner_type" id='banner_type' required>
+                                                            <option value="upload">Upload</option>
+                                                            <option value="link">Link</option>
+                                                            
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 banner_link">
+                                            <div class="form-group">
+                                                <label class="form-label" for="banner_link">Banner Link</label>
+                                                <div class="form-control-wrap">
+                                                    <input type="text" class="form-control" id="banner_link" name="banner_link" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 banner_upload">
+                                            <div class="form-group">
+                                                <label class="form-label" for="full-name-1">Banner Upload</label>
+                                                <div class="form-control-wrap">
+                                                    <div class="custom-file">
+                                                        <input type="file" multiple="" class="custom-file-input" id="banner_upload">
+                                                        <label class="custom-file-label" for="banner_upload">Choose file</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="full-name-1">Sort</label>
+                                                <div class="form-control-wrap">
+                                                    <input type="text" class="form-control" id="full-name-1" name="name" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="default-06">Status</label>
+                                                <div class="form-control-wrap ">
+                                                    <div class="form-control-select">
+                                                        <select class="form-control" id="default-06" name="status" required>
+                                                            
+                                                            <option value="1">Active</option>
+                                                            <option value="0">In-active</option>
+                                                                
+                                                           
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <button type="submit" class="btn btn-lg btn-primary">Save</button>
@@ -72,3 +176,104 @@
 </div>
 
 @endsection
+@push('scripts')
+<link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0')}}">
+    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0')}}"></script>
+    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0')}}"></script>
+    <script>
+    var quill = new Quill('#editor-container', {
+        modules: {
+          toolbar: [
+            ['bold', 'italic'],
+            ['link', 'blockquote', 'code-block', 'image'],
+            [{ list: 'ordered' }, { list: 'bullet' }]
+          ]
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow'
+      });
+      
+    //   var form = document.querySelector('form');
+      $(".user-form").submit(function(e) {
+          
+        // Populate hidden form on submit
+        var desc = document.querySelector('input[name=intro]');
+        desc.value = quill.root.innerHTML;
+       
+        
+      });
+</script>
+<script>
+    $(document).ready(function() {
+        if ($('#logo_type').val() == 'upload') {
+            $('.logo_upload').show();
+            $('#logo_upload').attr('required', 'required');
+            $('.logo_link').hide();
+            $('#logo_link').removeAttr('required').val('');
+
+        }
+        else if ($('#logo_type').val() == 'link') {
+           
+            $('.logo_link').show();
+            $('#logo_link').attr('required', 'required');
+            $('.logo_upload').hide();
+            $('#logo_upload').removeAttr('required').val('');
+        }
+        
+    });
+    $(document.body).on("change","#logo_type",function(){
+        if (this.value == 'upload') {
+            $('.logo_upload').show();
+            $('#logo_upload').attr('required', 'required');
+            $('.logo_link').hide();
+            $('#logo_link').removeAttr('required').val('');
+
+        }
+        else if (this.value == 'link') {
+           
+            $('.logo_link').show();
+            $('#logo_link').attr('required', 'required');
+            $('.logo_upload').hide();
+            $('#logo_upload').removeAttr('required').val('');
+        }
+        
+    });
+</script>
+<script>
+    $(document).ready(function() {
+        if ($('#banner_type').val() == 'upload') {
+            $('.banner_upload').show();
+            $('#banner_upload').attr('required', 'required');
+            $('.banner_link').hide();
+            $('#banner_link').removeAttr('required').val('');
+
+        }
+        else if ($('#banner_type').val() == 'link') {
+           
+            $('.banner_link').show();
+            $('#banner_link').attr('required', 'required');
+            $('.banner_upload').hide();
+            $('#banner_upload').removeAttr('required').val('');
+        }
+        
+    });
+    $(document.body).on("change","#banner_type",function(){
+      
+        if (this.value == 'upload') {
+            $('.banner_upload').show();
+            $('#banner_upload').attr('required', 'required');
+            $('.banner_link').hide();
+            $('#banner_link').removeAttr('required').val('');
+
+        }
+        else if (this.value == 'link') {
+           
+            $('.banner_link').show();
+            $('#banner_link').attr('required', 'required');
+            $('.banner_upload').hide();
+            $('#banner_upload').removeAttr('required').val('');
+        }
+        
+    });
+</script>
+@endpush

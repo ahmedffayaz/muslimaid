@@ -41,7 +41,7 @@
    
   
     
-    <div class="nk-tb-col tb-col-md text-center">
+    <div class="nk-tb-col  text-center">
         <span>{{$language->code?? ''}}</span>
     </div>
     

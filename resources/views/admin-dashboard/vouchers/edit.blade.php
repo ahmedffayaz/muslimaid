@@ -12,7 +12,7 @@
                             <div class="nk-block-head-content">
                                 <h4 class="title nk-block-title">Add Voucher</h4>
                                 <div class="nk-block-des">
-                                    <p>You can make style out your....</p>
+                                    {{-- <p>You can make style out your....</p> --}}
                                 </div>
                             </div>
                         </div>
@@ -74,6 +74,7 @@
                                                
                                             </div>
                                         </div>
+                                      
                                        
                                        
                                         <div class="col-lg-6">
@@ -149,6 +150,7 @@
 
 @endsection
 @push('scripts')
+
 <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0')}}">
     <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0')}}"></script>
     <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0')}}"></script>

@@ -25,7 +25,7 @@ class ClickController extends Controller
         $networks = Network::latest()->get();
         $users = User::role('user')->latest()->get();
         $clicks = ExitClick::latest()->paginate(20);
-        return view('admin-dashboard.clicks.index', compact('clicks','stores','networks','users','route'));
+        return view('admin-dashboard.clicks.index', compact('clicks', 'stores', 'networks', 'users', 'route'));
     }
 
     /**
@@ -95,13 +95,12 @@ class ClickController extends Controller
     }
     function fetch(Request $request)
     {
-     if($request->ajax())
-     {
-         $route='index';
-        $clicks = ExitClick::latest()->paginate(20);
+        if ($request->ajax()) {
+            $route = 'index';
+            $clicks = ExitClick::latest()->paginate(20);
 
-         return view('admin-dashboard.clicks.index_data', compact('clicks','route'))->render();
-     }
+            return view('admin-dashboard.clicks.index_data', compact('clicks', 'route'))->render();
+        }
     }
     public function exportCsv(Request $request)
     {
@@ -110,16 +109,17 @@ class ClickController extends Controller
             $table = ExitClick::latest()->get();
             $filename = "clicks.csv";
             $handle = fopen($filename, 'w+');
-            fputcsv($handle, array('User', 'User Email', 'Store','Exit Url', 'Time', 'Status'));
+            fputcsv($handle, array('User', 'User Email', 'Store', 'Exit Url', 'Time', 'Status'));
 
-            foreach($table as $row) {
-                fputcsv($handle, array($row->user->first_name.' '.$row->user->last_name,
-                                        $row->user->email, 
-                                        $row->store->name,
-                                        $row->exit_url,
-                                        $row->created_at, 
-                                        $row->status ? 'active' : 'in-active'
-                                        ));
+            foreach ($table as $row) {
+                fputcsv($handle, array(
+                    $row->user->first_name . ' ' . $row->user->last_name,
+                    $row->user->email,
+                    $row->store->name,
+                    $row->exit_url,
+                    $row->created_at,
+                    $row->status ? 'active' : 'in-active'
+                ));
             }
 
             fclose($handle);
@@ -131,10 +131,7 @@ class ClickController extends Controller
             flash()->error('Error while exporting exit clics');
 
             return redirect()->route('admin.clicks.index');
-
         }
-        
-
     }
     public function searchClicks(Request $request, ExitClick $clicks)
     {
@@ -148,18 +145,16 @@ class ClickController extends Controller
 
         // Search by store.
         if ($request->input('store_id')) {
-            $clicks->where('store_id',$request->input('store_id'));
-           
+            $clicks->where('store_id', $request->input('store_id'));
         }
         // Search by user.
         if ($request->input('user_id')) {
-            $clicks->where('user_id',$request->input('user_id'));
-           
+            $clicks->where('user_id', $request->input('user_id'));
         }
 
-        
+
         $clicks = $clicks->latest()->paginate(20);
-        $route='search';
-        return view('admin-dashboard.clicks.index_data', compact('clicks','route'))->render();
+        $route = 'search';
+        return view('admin-dashboard.clicks.index_data', compact('clicks', 'route'))->render();
     }
 }

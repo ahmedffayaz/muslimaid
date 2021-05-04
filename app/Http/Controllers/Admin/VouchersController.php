@@ -8,6 +8,7 @@ use App\Models\Voucher;
 use App\Models\Store;
 use App\Models\Network;
 
+
 class VouchersController extends Controller
 {
     /**
@@ -76,10 +77,17 @@ class VouchersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Voucher $voucher)
+    public function edit(Request $request, Voucher $voucher )
     {
         $stores = Store::latest()->get();
-        return view('admin-dashboard.vouchers.edit', compact('voucher','stores'));
+
+        if($request->input('store_editor')){
+            return view('admin-dashboard.vouchers.modal-edit', compact('voucher','stores'))->render();
+
+        }else{
+            return view('admin-dashboard.vouchers.edit', compact('voucher','stores'));
+
+        }
     }
 
     /**
@@ -98,9 +106,16 @@ class VouchersController extends Controller
             $inputs['promotion_end_date'] = \Carbon\Carbon::parse($request->input('promotion_end_date'))->format('Y-m-d H:i:s');
             
             $voucher->update($inputs);
+            if(!$request->ajax())
+            { 
+                 flash()->success('voucher updated successfully');
+                return redirect()->route('admin.vouchers.index');
+
+            }
+
+            return true;
     
-            flash()->success('voucher updated successfully');
-            return redirect()->route('admin.vouchers.index');
+          
         
         } catch (\Throwable $th) {
             flash()->error('something went wrong! unable to update the voucher');

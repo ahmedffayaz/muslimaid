@@ -12,7 +12,7 @@
                             <div class="nk-block-head-content">
                                 <h4 class="title nk-block-title">Add Store</h4>
                                 <div class="nk-block-des">
-                                    <p>You can make style out your....</p>
+                                    {{-- <p>You can make style out your....</p> --}}
                                 </div>
                             </div>
                         </div>
@@ -66,12 +66,13 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="pay-amount-1">Cashback</label>
+                                                <label class="form-label" for="pay-amount-1">Store url</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="pay-amount-1" value="" name="store_cashback" required>
+                                                    <input type="text" class="form-control" id="pay-amount-1" name="store_url" required>
                                                 </div>
                                             </div>
                                         </div>
+                                       
                                         <div class="col-lg-12">
                                             <div class="card">
                                                 <input name="description" type="hidden">
@@ -83,23 +84,9 @@
                                                
                                             </div>
                                         </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="phone-no-1">Tracking url</label>
-                                                <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="phone-no-1" name="tracking_url" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="pay-amount-1">Store url</label>
-                                                <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="pay-amount-1" name="store_url" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
+                                        
+                                       
+                                        {{-- <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="pay-amount-1">Terms & Conditions</label>
                                                 <div class="form-control-wrap">
@@ -114,7 +101,7 @@
                                                     <input type="text" class="form-control" id="pay-amount-1" value="" name="extra_info">
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         
                                        
                                         <div class="col-12">

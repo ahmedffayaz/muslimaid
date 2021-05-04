@@ -10,7 +10,7 @@
                             <div class="nk-block-head-content">
                                 <h4 class="title nk-block-title">Edit Store</h4>
                                 <div class="nk-block-des">
-                                    <p>You can make style out your....</p>
+                                    {{-- <p>You can make style out your....</p> --}}
                                 </div>
                             </div>
                         </div>
@@ -39,7 +39,7 @@
                                         </div>
                                     </div>
                                     <div class="row g-4">
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label class="form-label" for="full-name-1">Store Name</label>
                                                 <div class="form-control-wrap">
@@ -47,7 +47,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6">
+                                        <div class="col-lg-4">
                                             <div class="form-group">
                                                 <label class="form-label" for="default-06">Network</label>
                                                 <div class="form-control-wrap ">
@@ -60,6 +60,27 @@
                                                         </select>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-lg-4">
+                                            <div class="form-group">
+                                                <label class="form-label" for="pay-amount-1">Cashback</label>
+                                                <div class="form-control-wrap">
+                                                    <input type="text" class="form-control" id="pay-amount-1" value="{{$store->cashback->sale_commission}}" name="store_cashback" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <input name="description" type="hidden">
+                                                <label class="form-label" for="phone-no-1">Description</label>
+                                                <!-- Create the editor container -->
+                                                <div  id="editor-container">
+                                                   {!!$store->description!!}
+                                                </div>
+                                               
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
@@ -80,25 +101,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="pay-amount-1">Cashback</label>
-                                                <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="pay-amount-1" value="{{$store->cashback->sale_commission}}" name="store_cashback" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="card">
-                                                <input name="description" type="hidden">
-                                                <label class="form-label" for="phone-no-1">Description</label>
-                                                <!-- Create the editor container -->
-                                                <div  id="editor-container">
-                                                   {!!$store->description!!}
-                                                </div>
-                                               
-                                            </div>
-                                        </div>
+                                       
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="phone-no-1">Tracking url</label>
@@ -115,24 +118,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                        
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="pay-amount-1">Terms & Conditions</label>
-                                                <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="pay-amount-1" value="{{$store->terms_conditions}}" name="terms_conditions">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="pay-amount-1">Extra Info</label>
-                                                <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="pay-amount-1" value="{{$store->extra_info}}" name="extra_info">
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="default-06">Status</label>

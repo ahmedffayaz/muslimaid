@@ -4,7 +4,7 @@
     <div class="nk-tb-col tb-col-mb"><span class="sub-text">Amount</span></div>
     <div class="nk-tb-col tb-col-mb"><span class="sub-text">Cashout Type</span></div>
     <div class="nk-tb-col tb-col-lg"><span class="sub-text">Time</span></div>
-    <div class="nk-tb-col tb-col-md"><span class="sub-text">Status</span></div>
+    <div class="nk-tb-col "><span class="sub-text">Status</span></div>
     <div class="nk-tb-col nk-tb-col-tools text-right">
         <span class="sub-text">Action</span>
        
@@ -45,10 +45,10 @@
         <span>{{$cashout->cashout_type}}</span>
     </div>
     
-    <div class="nk-tb-col tb-col-md">
+    <div class="nk-tb-col ">
         <span>{{$cashout->created_at}}</span>   
    
-    <div class="nk-tb-col tb-col-md">
+    <div class="nk-tb-col ">
         <span class="tb-status text-success">{{ $cashout->status ? 'active' : 'inactive'}}</span>
     </div>
     <div class="nk-tb-col nk-tb-col-tools">

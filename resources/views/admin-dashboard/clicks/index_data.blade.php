@@ -9,8 +9,8 @@
     <div class="nk-tb-col "><span class="sub-text">User</span></div>
     <div class="nk-tb-col text-center"><span class="sub-text">Store</span></div>
     <div class="nk-tb-col tb-col-mb text-right"><span class="sub-text">Exit Url</span></div>
-    <div class="nk-tb-col tb-col-md text-right"><span class="sub-text">Time</span></div>
-    <div class="nk-tb-col tb-col-md text-right"><span class="sub-text">Status</span></div>
+    <div class="nk-tb-col  text-right"><span class="sub-text">Time</span></div>
+    <div class="nk-tb-col  text-right"><span class="sub-text">Status</span></div>
     {{-- <div class="nk-tb-col nk-tb-col-tools text-right">
         <span class="sub-text">Action</span>
        
@@ -22,7 +22,7 @@
     
    
   
-    <div class="nk-tb-col tb-col-md">
+    <div class="nk-tb-col">
         
             <div class="user-card">
                 <div class="user-avatar
@@ -38,30 +38,32 @@
                 ?>
                 
                 ">
-                    <span>{{$click->user->first_name[0]}}{{$click->user->last_name[0]}}</span>
+                    <span>{{$click->user->first_name[0] ?? 'N'}}{{$click->user->last_name[0] ?? 'A'}}</span>
                 </div>
                 <div class="user-info">
-                    <span class="tb-lead">{{$click->user->first_name}} {{$click->user->last_name}}<span class="dot dot-success d-md-none ml-1"></span></span>
-                    <span>{{$click->user->email}}</span>
+                    <span class="tb-lead">{{$click->user->first_name ?? ''}} {{$click->user->last_name ?? ''}}<span class="dot dot-success d-md-none ml-1"></span></span>
+                    <span>{{$click->user->email ?? ''}}</span>
                 </div>
             </div>
         
        
         
     </div>
-    <div class="nk-tb-col tb-col-md text-center">
-        <span><b>{{$click->store->name}}</b></span>
+    <div class="nk-tb-col text-center">
+        <span><b>{{$click->store->name ?? ''}}</b></span>
         
     </div>
     
-    <div class="nk-tb-col tb-col-md text-right">
-        <span>{{$click->exit_url}}</span>
+    <div class="nk-tb-col text-right">
+        <h5><a href='{{$click->exit_url ?? '#'}}' target="_blank"><em class="icon ni ni-link-alt"></em></a></h5>
+
+        <span></span>
     </div>
-    <div class="nk-tb-col tb-col-md text-right">
+    <div class="nk-tb-col text-right">
         <span>{{$click->created_at}}</span>
     </div>
-    <div class="nk-tb-col tb-col-md text-right">
-        {!! $click->status ? '<span class="tb-status text-success">active</span>' : '<span class="tb-status text-danger">inactive</span>'!!}
+    <div class="nk-tb-col text-right">
+        {!! $click->cashback ? '<span class="tb-status text-success">converted</span>' : '<span class="tb-status text-danger">Not converted</span>'!!}
 
     </div>
     

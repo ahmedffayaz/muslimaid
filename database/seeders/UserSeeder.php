@@ -17,9 +17,7 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        
-
-		$admin_role = Role::create(['name' => 'admin']);
+        $admin_role = Role::create(['name' => 'admin']);
 		$user_role = Role::create(['name' => 'user']);
 		
 		$admin = new User();
@@ -31,11 +29,9 @@ class UserSeeder extends Seeder
 		$admin->save();
         $admin->assignRole($admin_role);
 
-
-
         $faker = Faker::create();
 
-    	foreach (range(1,10) as $index) {
+    	foreach (range(1,50) as $index) {
 
             $user = new User();
             $user->first_name = $faker->firstName;
