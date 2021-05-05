@@ -215,8 +215,10 @@
                                       
                                     </div>
                                     <div class="tab-pane" id="tabItem6">
-                                        <h5 class="title mb-4">Cashbacks</h5>
-                                        <span id='cashbacks-data'></span>
+                                        <h5 class="title mb-4 d-inline-block">Cashbacks</h5>
+                                        <a href="#cashback-modal" class="btn btn-primary btn-sm float-right" data-toggle="modal"><em class="icon ni ni-upload-cloud"></em> <span>Add cashback</span></a>
+
+                                        <span id='cashbacks-data' class="mt-4"></span>
 
                                         
                                        
@@ -355,6 +357,57 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="cashback" class=" p-4">
+                <form action="{{route('admin.stores.cashbacks.store')}}" class="gy-3 form-validate is-alter cashback_form_add" method="POST">
+                    @csrf
+                   
+                    <input type="hidden" name="store_id" value="{{$store->id}}">
+                    <div class="row g-4">
+                    <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="form-label" for="type">Type</label>
+                        <div class="form-control-wrap ">
+                            <div class="form-control-select">
+                                <select class="form-control" id="type" name="type"  required>
+                                    <option  value="percentage">Percentage</option>
+                                    <option  value="fixed">Fixed</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="col-lg-6">
+                    <div class="form-group">
+                        <label class="form-label" for="sale_commission">Commission</label>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control" id="sale_commission" value="" name="sale_commission" required>
+                        </div>
+                    </div>
+                    </div>
+                    
+                    
+                    
+                    <div class="col-lg-12">
+                    <div class="card">
+                        <label class="form-label" for="phone-no-1" >Detail</label>
+                        <textarea name="detail" class="form-control " ></textarea>
+                        
+                    </div>
+                    </div>
+                    <div class="col-lg-12">
+                    <div class="card">
+                        <label class="form-label" for="phone-no-1" >Network Detail</label>
+                        <textarea name="network_detail" class="form-control " ></textarea>
+                        
+                    </div>
+                    </div>
+                                        
+                    <div class="col-12">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                    </div>
+                    </div>
+                    </div>
+                    </form>
 
             </div>
         </div><!-- .modal-content -->
@@ -573,12 +626,9 @@
         event.preventDefault(); 
         
         var id = $(this).attr('voucher-id');
-        
-        
-            
-             pageurl = "vouchers/"+id+"/edit"
-             store_editor = 1;
-             var _token = $("input[name=_token]").val();
+        pageurl = "vouchers/"+id+"/edit"
+        store_editor = 1;
+        var _token = $("input[name=_token]").val();
             $.ajax({
 
                 url:pageurl,
@@ -656,6 +706,27 @@
                     'use strict';
                     toastr.clear();
                     NioApp.Toast('Cashback Updated Successfully.', 'success');
+                    
+                })(NioApp, jQuery);
+                   fetchCashbacks();
+                }
+            });      
+        });
+    });
+    $(document).ready( function() {
+        $(document).on('submit', '.cashback_form_add', function(event){
+   
+          event.preventDefault();          
+          $.ajax({
+                url: $(this).attr('action'),
+                type: "POST",
+                data: $(this).serialize(),
+                success: function(data){
+                    $('#cashback-modal').modal('hide');
+                    (function(NioApp, $){
+                    'use strict';
+                    toastr.clear();
+                    NioApp.Toast('Cashback Added Successfully.', 'success');
                     
                 })(NioApp, jQuery);
                    fetchCashbacks();
@@ -818,6 +889,7 @@
 </script>
 <!-- Update Store-->
 <script>
+
 $(document).ready( function() {
     $(document).on('submit', '#store_form', function(event){
 

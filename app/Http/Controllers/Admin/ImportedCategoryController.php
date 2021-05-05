@@ -92,7 +92,7 @@ class ImportedCategoryController extends Controller
         $site_categories = Category::latest()->get();
         $parent_categories = ImportedCategory::latest()->get()->except($importedcategory->id);
 
-        return view('admin-dashboard.imported-categories.edit', compact('importedcategory','site_categories','parent_categories'));
+        return view('admin-dashboard.imported-categories.mapper', compact('importedcategory','site_categories','parent_categories'));
 
     }
 
@@ -105,11 +105,12 @@ class ImportedCategoryController extends Controller
      */
     public function update(Request $request, ImportedCategory $importedcategory)
     {
+  
         try {
             $importedcategory->update([
-                'name'=>$request->input('name'),
+             
                 'mapped_to'=>$request->input('site_category_id'),
-                'parent_id' => $request->input('parent_id'), 
+               
     
             ]);
     
@@ -138,9 +139,13 @@ class ImportedCategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(ImportedCategory $importedcategory)
     {
-        //
+        $importedcategory->delete();
+
+        flash()->success('category deleted successfully');
+        return redirect()->route('admin.networks.categories',$importedcategory->network);
+
     }
     function fetch(Request $request)
     {

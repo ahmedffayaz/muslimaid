@@ -156,6 +156,7 @@ class Importer implements ShouldQueue
                                         'detail' => $action->name.' default',
                                         'network_detail' => $action->name.' default',
                                         'store_id' => $store->id,
+                                        'default' =>1
                                     ]);
                                 }
                                 
@@ -219,7 +220,6 @@ class Importer implements ShouldQueue
 
                                 $category_child = new ImportedCategory();
                                 $category_child->name = $advertiser->{'primary-category'}->{'child'};
-                                $category_child->parent_id = $category_parent->id ?? 0;
                                 $category_child->network_id = 1;
                                 $category_child->save();
 

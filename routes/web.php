@@ -51,6 +51,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::get('stores/reviews/{review}/edit', [App\Http\Controllers\Admin\StoreController::class,'editReview'])->name('stores.reviews.edit');
     Route::get('stores/cashbacks/{cashback}/edit', [App\Http\Controllers\Admin\StoreController::class,'editCashback'])->name('stores.cashbacks.edit');
     Route::put('stores/cashbacks/{cashback}/update', [App\Http\Controllers\Admin\StoreController::class,'updateCashback'])->name('stores.cashbacks.update');
+    Route::post('stores/cashbacks/save', [App\Http\Controllers\Admin\StoreController::class,'createCashback'])->name('stores.cashbacks.store');
     Route::post('stores/images/upload/{store}', [App\Http\Controllers\Admin\StoreController::class,'uploadImage'])->name('stores.images.upload');
     Route::get('stores/images/delete/{storeimage}', [App\Http\Controllers\Admin\StoreController::class,'deleteImage'])->name('stores.images.delete');
     Route::get('stores/export', [App\Http\Controllers\Admin\StoreController::class,'exportCsv'])->name('stores.export');

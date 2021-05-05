@@ -18,7 +18,7 @@ class CategorySeeder extends Seeder
         
         $faker = Faker::create();
 
-        $categories = ['fashion', 'electricals','telecom', 'hardware','travel'];
+        $categories = ['Fashion', 'Electricals','Telecom', 'Hardware','Travel'];
         foreach($categories as $cat){
             $category = new Category();
             $category->name = $cat;

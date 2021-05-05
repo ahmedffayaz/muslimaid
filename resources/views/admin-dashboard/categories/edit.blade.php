@@ -20,14 +20,10 @@
                             
                             <option value="0">None</option>
                             @foreach ($categories as $parent)
-                            <option @if($category->parent_id == $parent->id) selected @endif value="{{$parent->id}}" style="font-weight:bold">{{$parent->name}}</option>
-                            @if(count($category->childs))
-                            @foreach($category->childs as $child))
-                                
-                            <option value="{{$child->id}}">~~{{$child->name}}</option>
-
-                            @endforeach
-                            @endif
+                            <option @if($category->parent_id == $parent->id) selected @endif  value="{{$parent->id}}" style="font-weight:bold">{{$parent->name}}</option>
+                            @if(count($parent->childs))
+                                 @include('admin-dashboard.categories.child_input',['childs' => $parent->childs,'isEdit'=> 1 ,'category'=>$category])
+                             @endif
                                 
                             @endforeach
                                 
@@ -48,6 +44,17 @@
                
             </div>
         </div>
+        
+        @if($category->logo_type == 'upload')
+        <div class="col-md-12">
+        <img src="{{asset('storage/categories/images/'.$category->logo_upload)}}" width="200px" alt="">
+        </div>
+        @elseif($category->logo_type == 'link')
+        <div class="col-md-12">
+        <img src="{{$category->logo_link}}" width="200px" alt="">
+        </div>
+        @endif
+        
        
         <div class="col-lg-6">
             <div class="form-group">
@@ -65,6 +72,7 @@
                 </div>
             </div>
         </div>
+        
         <div class="col-lg-6 logo_link">
             <div class="form-group">
                 <label class="form-label" for="logo_link">Logo Link</label>
@@ -84,6 +92,18 @@
                 </div>
             </div>
         </div>
+        
+        @if($category->banner_type == 'upload')
+        <div class="col-md-12">
+            <img src="{{asset('storage/categories/images/'.$category->banner_upload)}}" width="200px" alt="">
+        </div>
+        @elseif($category->banner_type == 'link')
+        <div class="col-md-12">
+            <img src="{{$category->banner_link}}" width="200px" alt="">
+        </div>
+        @endif
+        
+        
         <div class="col-lg-6 ">
             <div class="form-group">
                 <label class="form-label" for="banner_type">Banner</label>

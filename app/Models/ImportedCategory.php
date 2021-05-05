@@ -24,5 +24,8 @@ class ImportedCategory extends Model
         return $this->belongsTo(ImportedCategory::class, 'parent_id');
 
     }
+    public function childs() {
+        return $this->hasMany(ImportedCategory::class,'parent_id','id');
+    }
 
 }

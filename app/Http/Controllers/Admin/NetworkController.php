@@ -135,11 +135,11 @@ class NetworkController extends Controller
     public function categories(Network $network)
     {
         $route = 'index';
-        $categories = ImportedCategory::where('network_id',$network->id)->latest()->paginate(30);
+        $categories = ImportedCategory::where('network_id',$network->id)->latest()->get();
         $network_categories = ImportedCategory::where('network_id',$network->id)->latest()->get();
         $store_categories = Category::latest()->get();
     
-        return view('admin-dashboard.imported-categories.index', compact('categories','network','network_categories','store_categories','route'));
+        return view('admin-dashboard.imported-categories.categories', compact('categories','network','network_categories','store_categories','route'));
     }
 
 

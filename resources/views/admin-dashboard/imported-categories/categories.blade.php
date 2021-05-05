@@ -72,7 +72,7 @@
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">Categories</h3>
+                                <h3 class="nk-block-title page-title">Categories <span class="badge badge-dim badge-pill badge-outline-primary">{{$network->name}}</span></h3>
                                 <div class="nk-block-des text-soft">
                                 <p>You have total {{count($categories)}} categories.</p>
                                 </div>
@@ -82,7 +82,7 @@
                                     <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
-                                             <li><a href="{{route('admin.categories.create')}}" class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-plus"></em><span>Add category</span></a></li>
+                                             {{-- <li><a href="{{route('admin.categories.create')}}" class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-plus"></em><span>Add category</span></a></li> --}}
                                              {{-- <li><a href="{{route('admin.users.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
                                         </ul>
                                     </div>
@@ -102,24 +102,40 @@
                                     <h5 class="title mb-3">All Categories</h5>
                                             
                                     <ul id="tree1">
-                                        @foreach($categories as $category)
-                                            <li>
-                                                <span class="float-right">
-                                                    <a href="{{route('admin.categories.edit',$category)}}" category-id='{{$category->id}}' class='category-edit' ><em class="icon ni ni-edit text-primary"></em></a>
-                                                    <a  onclick="$('#delete-form-{{$category->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill text-danger"></em></a>
+                                        <div class="row">
+                                            <div class="col-md-4">Category Name</div>
+                                            <div class="col-md-4 text-center">Mapped to</div>
+                                            <div class="col-md-4 text-right">Actions</div>
+                                        </div>
+                                        @foreach($categories as $importedcategory)
+                                            <li><div class="row">
+                                                <div class="col-md-4">
+                                                    <em class="icon ni ni-db-fill text-primary"></em> {{ $importedcategory->name }}
+                                               
+                                                </div>
+                                                <div class="col-md-4 text-center">
+                                                  
+                                                    {{ $importedcategory->mappedTo->name ?? '' }}
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <span class="float-right">
+                                                        <a href="{{route('admin.importedcategories.edit',$importedcategory)}}" category-id='{{$importedcategory->id}}' class='category-edit' ><em class="icon ni ni-edit text-primary"></em></a>
+                                                        <a  onclick="$('#delete-form-{{$importedcategory->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill text-danger"></em></a>
                                                     
-                                                    <form action="{{ route('admin.categories.destroy', $category) }}" id="delete-form-{{$category->id}}" method="POST" class="m-0">
-                                                        @method('DELETE')
-                                                        @csrf
-                                                        
-                                                    </form>
-                                                </span>
-                                                <em class="icon ni ni-db-fill text-primary"></em> {{ $category->name }}
+                                                        <form action="{{ route('admin.importedcategories.destroy', $importedcategory) }}" id="delete-form-{{$importedcategory->id}}" method="POST" class="m-0">
+                                                            @method('DELETE')
+                                                            @csrf
+                                                            
+                                                        </form>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                                
                                                
     
                 
-                                                @if(count($category->childs))
-                                                    @include('admin-dashboard.categories.child',['childs' => $category->childs])
+                                                @if(count($importedcategory->childs))
+                                                    @include('admin-dashboard.imported-categories.child',['childs' => $importedcategory->childs])
                                                 @endif
                                             </li>
                                         @endforeach
@@ -148,7 +164,6 @@
                     <div class="nk-file-name">
                         <div class="nk-file-name-text"><span class="title">Update Category</span></div>
 
-                        {{-- <div class="nk-file-name-sub">Project</div> --}}
                     </div>
                 </div>
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
@@ -181,17 +196,7 @@
                {
                    $('#category-modal').modal('show');
                    $('#categories').html(data);
-                   var quill = new Quill('#editor-container', {
-                       modules: {
-                       toolbar: [
-                           ['bold', 'italic'],
-                           ['link', 'blockquote', 'code-block', 'image'],
-                           [{ list: 'ordered' }, { list: 'bullet' }]
-                       ]
-                       },
-                       placeholder: 'Compose an epic...',
-                       theme: 'snow'
-                   });
+                   
                }
                });
               

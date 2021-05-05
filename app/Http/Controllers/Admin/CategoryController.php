@@ -31,7 +31,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::latest()->get();
+        $categories = Category::latest()->where('parent_id',0)->get();
         return view('admin-dashboard.categories.create', compact('categories'));
 
     }
@@ -121,7 +121,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        $categories = Category::latest()->where('parent_id',0)->get()->except($category->id);
+        $categories = Category::latest()->where('parent_id',0)->get();
 
         return view('admin-dashboard.categories.edit', compact('category','categories'))->render();
 
@@ -197,9 +197,19 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        $childs = $category->childs;
+        if(count($childs)){
+            foreach($childs as $child){
+                $child->parent_id = 0;
+                $child->update();
+            }
+        }
+        $category->delete();
+
+        flash()->success('category deleted successfully');
+        return redirect()->route('admin.categories.index');
     }
     function fetch(Request $request)
     {

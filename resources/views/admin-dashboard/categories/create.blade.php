@@ -41,12 +41,15 @@
                                                         <select class="form-control" id="default-06" name="parent_id" required>
                                                             
                                                             
-                                                            <option value="0">None</option>
-                                                            @foreach ($categories as $parent)
-                                                            <option value="{{$parent->id}}">{{$parent->name}}</option>
-                                                                
-                                                            @endforeach
-                                                                
+                                                        <option value="0">None</option>
+                                                        @foreach ($categories as $parent)
+                                                        <option value="{{$parent->id}}" style="font-weight:bold">{{$parent->name}}</option>
+                                                        @if(count($parent->childs))
+                                                                @include('admin-dashboard.categories.child_input',['childs' => $parent->childs, 'isEdit'=>0])
+                                                            @endif
+                                                            
+                                                        @endforeach
+                                                                                            
                                                            
                                                         </select>
                                                     </div>

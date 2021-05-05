@@ -389,6 +389,17 @@ class StoreController extends Controller
         $cashback->update($request->all());
         return true;
     }
+    public function createCashback(Request $request)
+    {
+        // $cashback = StoreCashback::create([
+        //     'store_id'=>$store->id,
+        //     'sale_commission'=>$request->input('store_cashback'),
+        //     'click_url'=>$request->input('tracking_url')
+        // ]);
+
+        $cashback = StoreCashback::create($request->all());
+        return true;
+    }
     function fetchImages(Request $request)
     {
         if($request->ajax())

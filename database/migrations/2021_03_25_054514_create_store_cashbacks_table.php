@@ -24,6 +24,7 @@ class CreateStoreCashbacksTable extends Migration
             $table->longText('detail')->nullable();
             $table->longText('network_detail')->nullable();
             $table->float('value')->nullable();
+            $table->string('default')->default(0)->nullable();
             $table->timestamps();
         });
     }

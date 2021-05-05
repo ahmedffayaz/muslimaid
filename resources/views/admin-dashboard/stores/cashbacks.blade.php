@@ -1,3 +1,4 @@
+
 <div class="nk-tb-list nk-tb-ulist" style="table-layout: auto">
     @if(count($store->cashbacks))
     <div class="nk-tb-item nk-tb-head">
