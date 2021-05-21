@@ -15,9 +15,13 @@ class CreateSiteSettingsTable extends Migration
     {
         Schema::create('site_settings', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->string('title');
             $table->string('type');
             $table->text('value');
+            $table->string('default')->default(0);
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

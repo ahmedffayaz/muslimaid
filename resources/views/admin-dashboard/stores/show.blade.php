@@ -18,6 +18,13 @@
 .stores .select2{
     width: 300px!important;
 }
+ul.categories { 
+  list-style: none;
+  margin: 5px 5x;
+}
+ul.categories li {
+  margin: 10px 0;
+}
 </style>
 
 @section('content')
@@ -36,12 +43,12 @@
                         </div>
                         <div class="nk-block-head-content">
                             <div class="form-group stores">
-                                <label class="form-label" for="default-06">Stores</label>
+                                <label class="form-label" for="default-06"></label>
                                 <div class="form-control-wrap ">
                                     <div class="">
                                         <select class="form-control form-select" data-search="on" name="open_store" id="store_select" required>
                                             @foreach ($stores as $st)
-                                            <option @if($st->id == $store->id) selected @endif value="{{route('admin.stores.show',$st->id)}}">{{$st->name}}</option>
+                                            <option @if($st->id == $store->id) selected @endif value="{{route('admin.stores.show',$st->id)}}">{{$st->id}} {{$st->name}}</option>
                                                 
                                             @endforeach
                                          
@@ -77,7 +84,10 @@
                                
                                 <ul class="nav nav-tabs mt-n3">
                                     <li class="nav-item">
-                                        <a class="nav-link active" data-toggle="tab" href="#tabItem5"><em class="icon ni ni-file-text"></em><span>Details</span></a>
+                                        <a class="nav-link active" data-toggle="tab" href="#tabItem4"><em class="icon ni ni-file-text"></em><span>Details</span></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem5"><em class="icon ni ni-file-text"></em><span>Categories</span></a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem6"><em class="icon ni ni-link"></em><span>Cashbacks</span></a>
@@ -93,7 +103,8 @@
                                     </li>
                                 </ul>
                                 <div class="tab-content">
-                                    <div class="tab-pane active" id="tabItem5">
+                                   
+                                    <div class="tab-pane active" id="tabItem4">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
                                                 <h5 class="title">Store Information</h5>
@@ -149,24 +160,7 @@
                                                            
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="default-06">Category</label>
-                                                            <div class="form-control-wrap ">
-                                                                <div class="">
-                                                                    <select class="form-control form-select" multiple="multiple" data-placeholder="Select Multiple options" class="form-control" name="category_id[]" required>
-                                                                        @foreach ($categories as $category)
-                                                                        <option 
-                                                                        @if(in_array($category->id, $store->categories->pluck('id')->toArray())) selected @endif 
-                                                                        value="{{$category->id}}">{{$category->name}}
-                                                                        </option>
-                                                                            
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    
                                                    
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
@@ -192,13 +186,41 @@
                                                             <div class="form-control-wrap ">
                                                                 <div class="">
                                                                     <select class="form-control form-select" name="status" required>
-                                                                        
-                                                                        <option @if($store->status == 1) selected @endif value="1">Active</option>
-                                                                        <option @if($store->status == 0) selected @endif value="0">In-active</option>
+                                                                        <option @if($store->status == 'pending review') selected @endif value="pending review">Pending Review</option>
+                                                                        <option @if($store->status == 'active') selected @endif value="active">Active</option>
+                                                                        <option @if($store->status == 'disabled') selected @endif value="disabled">Disabled</option>
+                                                                        <option @if($store->status == 'closed') selected @endif value="closed">Closed at Network</option>
+                                                                        <option @if($store->status == 'error') selected @endif value="error">Error</option>
                                                                             
                                                                        
                                                                     </select>
                                                                 </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        
+                                                       
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="text-danger mt-md-4">
+                                                            @if($store->status == 'error') {{$store->status_description}} @endif
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" class="custom-control-input" id="override-cashback" name="override_cashback" value="1"
+                                                                @if($store->override_cashback==1) checked @endif>
+                                                                <label class="custom-control-label" for="override-cashback">Override Cashback</label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <div class="custom-control custom-checkbox">
+                                                                <input type="checkbox" class="custom-control-input" id="override-categories" name="override_categories" value="1"
+                                                                @if($store->override_categories==1) checked @endif>
+                                                                <label class="custom-control-label" for="override-categories">Override Categories</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -213,6 +235,41 @@
                                             </form>
                                         </div>
                                       
+                                    </div>
+                                    <div class="tab-pane" id="tabItem5">
+                                        <div class="nk-block">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">Store Categoires</h5>
+                                                <form action="{{route('admin.stores.categories.update')}}" id="store_cat_form" class="gy-3 form-validate is-alter" method="POST" enctype="multipart/form-data">
+                                                    @csrf
+                                                     @method('POST')
+                                                     <input type="hidden" name="store_id" value="{{$store->id}}">
+                                                     <div class="col-12">
+                                                        <ul class="categories">
+                                                            @foreach ($categories as $parent)
+                                                            <li class="custom-control custom-control-sm custom-checkbox d-block">
+                                                                <input @if(in_array($parent->id, $store->categories->pluck('id')->toArray())) checked @endif 
+                                                                type="checkbox" class="custom-control-input" name="category_id[]" id="{{$parent->name}}" value="{{$parent->id}}">
+                                                                <label class="custom-control-label" for="{{$parent->name}}">{{$parent->name}}</label>
+                                                                @if(count($parent->childs))
+                
+                                                                @include('admin-dashboard.stores.child_cat_input',['childs' =>$parent->childs])
+                                                            @endif
+                                                                            
+                                                            @endforeach
+            
+                                                            </li>                                      
+                                                        </ul>
+                                                     </div>
+                                                        <div class="col-12">
+                                                            <div class="form-group">
+                                                                <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                                                            </div>
+                                                        </div>
+                                           
+                                        </form>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="tab-pane" id="tabItem6">
                                         <h5 class="title mb-4 d-inline-block">Cashbacks</h5>
@@ -362,52 +419,42 @@
                    
                     <input type="hidden" name="store_id" value="{{$store->id}}">
                     <div class="row g-4">
-                    <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="form-label" for="type">Type</label>
-                        <div class="form-control-wrap ">
-                            <div class="form-control-select">
-                                <select class="form-control" id="type" name="type"  required>
-                                    <option  value="percentage">Percentage</option>
-                                    <option  value="fixed">Fixed</option>
-                                </select>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="type">Type</label>
+                                <div class="form-control-wrap ">
+                                    <div class="form-control-select">
+                                        <select class="form-control" id="type" name="type"  required>
+                                            <option  value="percentage">Percentage</option>
+                                            <option  value="fixed">Fixed</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="sale_commission">Commission</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="sale_commission" value="" name="sale_commission" required>
+                                </div>
+                            </div>
+                        </div>                   
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <label class="form-label" for="phone-no-1" >Detail</label>
+                                <textarea name="detail" class="form-control " ></textarea>
+                                
+                            </div>
+                        </div>
+                                                            
+                        <div class="col-12">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
                             </div>
                         </div>
                     </div>
-                    </div>
-                    <div class="col-lg-6">
-                    <div class="form-group">
-                        <label class="form-label" for="sale_commission">Commission</label>
-                        <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="sale_commission" value="" name="sale_commission" required>
-                        </div>
-                    </div>
-                    </div>
-                    
-                    
-                    
-                    <div class="col-lg-12">
-                    <div class="card">
-                        <label class="form-label" for="phone-no-1" >Detail</label>
-                        <textarea name="detail" class="form-control " ></textarea>
-                        
-                    </div>
-                    </div>
-                    <div class="col-lg-12">
-                    <div class="card">
-                        <label class="form-label" for="phone-no-1" >Network Detail</label>
-                        <textarea name="network_detail" class="form-control " ></textarea>
-                        
-                    </div>
-                    </div>
-                                        
-                    <div class="col-12">
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-lg btn-primary">Save</button>
-                    </div>
-                    </div>
-                    </div>
-                    </form>
+                </form>
 
             </div>
         </div><!-- .modal-content -->
@@ -845,7 +892,7 @@
                     (function(NioApp, $){
                     'use strict';
                     toastr.clear();
-                    NioApp.Toast('Image uploaded Successfully.', 'success');
+                    NioApp.Toast(data.message, data.updated);
                 })(NioApp, jQuery);
                     fetchImages();
                     $('.file-upload').trigger("reset");
@@ -919,6 +966,35 @@ $(document).ready( function() {
 
     });
 });
+$(document).ready( function() {
+    $(document).on('submit', '#store_cat_form', function(event){
+
+        event.preventDefault();
+        
+        
+        $.ajax({
+        type:'POST',
+        url: $(this).attr('action'),
+        data: $(this).serialize(),
+        success:function(data){
+        
+            (function(NioApp, $){
+            'use strict';
+            toastr.clear();
+            NioApp.Toast('Store categories updated Successfully.', 'success');
+        })(NioApp, jQuery);
+
+            // console.log(data);
+            
+        },
+        error: function(data){
+            console.log("error");
+            console.log(data);
+        }
+    });
+
+    });
+});
 </script>
 
 <!-- Change store-->
@@ -933,5 +1009,55 @@ $(document).ready( function() {
           return false;
       });
     });
+
+    $('input[type="checkbox"]').change(function(e) {
+
+var checked = $(this).prop("checked"),
+    container = $(this).parent(),
+    siblings = container.siblings();
+
+container.find('input[type="checkbox"]').prop({
+  indeterminate: false,
+  checked: checked
+});
+
+function checkSiblings(el) {
+
+  var parent = el.parent().parent(),
+      all = true;
+
+  el.siblings().each(function() {
+    let returnValue = all = ($(this).children('input[type="checkbox"]').prop("checked") === checked);
+    return returnValue;
+  });
+  
+  if (all && checked) {
+
+    parent.children('input[type="checkbox"]').prop({
+      indeterminate: false,
+      checked: checked
+    });
+
+    checkSiblings(parent);
+
+  } else if (all && !checked) {
+
+    parent.children('input[type="checkbox"]').prop("checked", checked);
+    parent.children('input[type="checkbox"]').prop("checked", (parent.find('input[type="checkbox"]:checked').length > 0));
+    checkSiblings(parent);
+
+  } else {
+
+    el.parents("li").children('input[type="checkbox"]').prop({
+      
+      checked: checked
+    });
+
+  }
+
+}
+
+checkSiblings(container);
+});
 </script>
 @endpush

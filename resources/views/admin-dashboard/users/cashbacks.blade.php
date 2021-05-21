@@ -1,15 +1,15 @@
 <div class="nk-tb-list nk-tb-ulist mt-3" style="table-layout: auto">
 
-    @if(count($user->cashbacks))
+    @if(count($cashbacks))
     <div class="nk-tb-item nk-tb-head">
         
         
     
     <div class="nk-tb-col pl-0"><span class="sub-text">Store</span></div>
-    {{-- <div class="nk-tb-col text-center"><span class="sub-text">Order Value (&#163;)</span></div> --}}
-    {{-- <div class="nk-tb-col text-center"><span class="sub-text">Network Commission (&#163;)</span></div> --}}
-    <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Network Commission (&#163;)</span></div>
-    <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Cashback (&#163;)</span></div>
+    {{-- <div class="nk-tb-col text-center"><span class="sub-text">Order Value ({{ Config::get('currency') }})</span></div> --}}
+    {{-- <div class="nk-tb-col text-center"><span class="sub-text">Network Commission ({{ Config::get('currency') }})</span></div> --}}
+    <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Network Commission ({{ Config::get('currency') }})</span></div>
+    <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Cashback ({{ Config::get('currency') }})</span></div>
     <div class="nk-tb-col  text-center"><span class="sub-text">Exit Click Id</span></div>
     <div class="nk-tb-col  text-center"><span class="sub-text">Event Time</span></div>
     <div class="nk-tb-col  text-right"><span class="sub-text">Status</span></div>
@@ -18,7 +18,7 @@
        
     </div>
     </div><!-- .nk-tb-item -->
-    @foreach ($user->cashbacks as $commission)
+    @foreach ($cashbacks as $commission)
     <div class="nk-tb-item">
     
     
@@ -28,10 +28,10 @@
         </div>
         
         <div class="nk-tb-col  text-center">
-            <span><span class="currency">&#163;</span>{{$commission->network_commission}}</span>
+            <span><span class="currency">{{ Config::get('currency') }} </span>{{$commission->network_commission}}</span>
         </div>
         <div class="nk-tb-col  text-center">
-            <span><span class="currency">&#163;</span>{{$commission->amount}}</span>
+            <span><span class="currency">{{ Config::get('currency') }} </span>{{$commission->amount}}</span>
         </div>
         <div class="nk-tb-col  text-center">
             <span>{{$commission->exit_click_id}}</span>
@@ -64,6 +64,14 @@
     </div><!-- .nk-tb-item -->
     
     @endforeach   
+    <div class="nk-block-between-md px-0 card-inner">
+        <div class="pagination g" route="" id="cashback-paginate">
+            {!!$cashbacks->links()!!}                             
+                             
+            </div> 
+        
+        
+    </div><!-- .nk-block-between --> 
                                 
                         
 

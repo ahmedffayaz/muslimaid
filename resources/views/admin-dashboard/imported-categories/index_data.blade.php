@@ -18,7 +18,7 @@
 <div class="nk-tb-item">
     
     <div class="nk-tb-col">
-        <a href="html/user-details-regular.html">
+       
             <div class="user-card">
                 <div class="user-avatar 
                 <?php
@@ -38,7 +38,7 @@
                    
                 </div>
             </div>
-        </a>
+      
     </div>
    
   

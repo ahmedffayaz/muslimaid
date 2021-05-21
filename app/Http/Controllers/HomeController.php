@@ -8,6 +8,12 @@ use App\Models\UserCashback;
 use App\Models\Store;
 use App\Models\Network;
 use App\Models\CashbackStatus;
+use App\Models\Ticket;
+use App\Models\User;
+use App\Models\StoreReview;
+use LaravelDaily\LaravelCharts\Classes\LaravelChart;
+
+
 
 class HomeController extends Controller
 {
@@ -28,20 +34,43 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $paid_total_commission = UserCashback::where('status','4')->sum('network_commission');
-        $paid_total_cashback = UserCashback::where('status','4')->sum('amount');
+        $time_period = \Carbon\Carbon::now()->subDay()->toDateTimeString();
+        $paid_total_commission = UserCashback::where('status','4')->where('event_date', '>=', $time_period)->sum('network_commission');
+        $paid_total_cashback = UserCashback::where('status','4')->where('event_date', '>=', $time_period)->sum('amount');
         $total_revenue  = $paid_total_commission - $paid_total_cashback;
-        $penidng_total_commission = UserCashback::where('status','!=','4')->sum('network_commission');
-        $penidng_total_cashback = UserCashback::where('status','!=','4')->sum('amount');
+        $penidng_total_commission = UserCashback::where('status','!=','4')->where('event_date', '>=', $time_period)->sum('network_commission');
+        $penidng_total_cashback = UserCashback::where('status','!=','4')->where('event_date', '>=', $time_period)->sum('amount');
 
         $pending_total_revenue = $penidng_total_commission - $penidng_total_cashback;
-        $coms = UserCashback::latest()->get();
-        $networks = Network::latest()->get();
+        $coms = UserCashback::where('event_date', '>=', $time_period)->latest()->get();
+        $total_coms = UserCashback::latest()->get();
         $stores = Store::latest()->get();
-        $statuses = CashbackStatus::latest()->get();
-        $clicks = ExitClick::latest()->get();
-        return view('admin-dashboard.home',compact('coms','networks','statuses','stores','total_revenue','pending_total_revenue','clicks'));
-        return view('admin-dashboard.home');
+        $clicks = ExitClick::latest()->where('created_at', '>=', $time_period)->get();
+        $total_clicks = ExitClick::latest()->get();
+        $tickets = Ticket::where('new_ticket',1)->latest()->get();
+        $users = User::role('user')->where('created_at', '>=', $time_period)->latest()->get();
+        $total_users = User::role('user')->latest()->get();
+        $reviews = StoreReview::where('status','pending')->latest()->get();
+
+        $notconverted = count($clicks ) - count($coms);
+        $converted = count($coms);
+
+
+        $chart_options = [
+            'chart_title' => 'Users by months',
+            'report_type' => 'group_by_date',
+            'model' => 'App\Models\ExitClick',
+            'group_by_field' => 'created_at',
+            'group_by_period' => 'day',
+            'chart_type' => 'bar',
+        ];
+        $chart1 = new LaravelChart($chart_options);
+      
+
+        return view('admin-dashboard.home',compact('coms','total_coms',
+        'stores','total_revenue','pending_total_revenue','clicks','total_clicks',
+        'tickets','users','total_users','reviews','converted','notconverted','chart1'));
+        
     }
     public function setLocale($locale)
     {

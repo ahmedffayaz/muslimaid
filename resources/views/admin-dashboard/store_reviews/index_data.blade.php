@@ -37,7 +37,7 @@
         <span>{{$review->store->network->name ?? ''}}</span></a>
     </div>
     <div class="nk-tb-col text-center">
-        <span>        {!! $review->status =='active'  ? '<span class="tb-status text-success">active</span>' : '<span class="tb-status text-danger">inactive</span>'!!}
+        <span>        {!! $review->status =='active'  ? '<span class="tb-status badge badge-success">active</span>' : '<span class="tb-status badge badge-danger">pending</span>'!!}
     </span>
     </div>
     <div class="nk-tb-col nk-tb-col-tools">
@@ -50,7 +50,14 @@
                         <ul class="link-list-opt no-bdr">
                             <li><a href="{{route('admin.reviews.edit', $review)}}"><em class="icon ni ni-edit"></em><span>Edit Review</span></a></li>
                             {{-- <li><a href="{{route('admin.stores.images', $store)}}"><em class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
-                    
+                            <li><a  onclick="$('#delete-review-{{$review->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Review</span></a>
+                                                    
+                                <form action="{{ route('admin.reviews.destroy', $review) }}" id="delete-review-{{$review->id}}" method="POST" class="m-0">
+                                    @method('DELETE')
+                                    @csrf
+                                    
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>

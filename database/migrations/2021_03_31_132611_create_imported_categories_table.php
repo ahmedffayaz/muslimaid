@@ -21,6 +21,8 @@ class CreateImportedCategoriesTable extends Migration
             $table->unsignedBigInteger('network_id')->default(0);
             $table->boolean('status')->default(1);
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

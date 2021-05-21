@@ -6,9 +6,10 @@
 <div class="nk-tb-item nk-tb-head">
     
     
+    <div class="nk-tb-col " style="width: 10%"><span class="sub-text">Click ID</span></div>
     <div class="nk-tb-col "><span class="sub-text">User</span></div>
     <div class="nk-tb-col text-center"><span class="sub-text">Store</span></div>
-    <div class="nk-tb-col tb-col-mb text-right"><span class="sub-text">Exit Url</span></div>
+    <div class="nk-tb-col text-right"><span class="sub-text">Exit Url</span></div>
     <div class="nk-tb-col  text-right"><span class="sub-text">Time</span></div>
     <div class="nk-tb-col  text-right"><span class="sub-text">Status</span></div>
     {{-- <div class="nk-tb-col nk-tb-col-tools text-right">
@@ -20,7 +21,10 @@
 <div class="nk-tb-item">
     
     
-   
+    <div class="nk-tb-col">
+        <span><b>{{$click->id ?? ''}}</b></span>
+        
+    </div>
   
     <div class="nk-tb-col">
         

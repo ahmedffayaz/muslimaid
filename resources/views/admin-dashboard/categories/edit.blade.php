@@ -77,7 +77,7 @@
             <div class="form-group">
                 <label class="form-label" for="logo_link">Logo Link</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="logo_link" name="logo_link" value="{{$category->logo_link}}" required>
+                    <input type="text" class="form-control" id="logo_link" name="logo_link" value="{{$category->logo_link}}">
                 </div>
             </div>
         </div>
@@ -122,7 +122,7 @@
             <div class="form-group">
                 <label class="form-label" for="banner_link">Banner Link</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="banner_link"  value="{{$category->banner_link}}" name="banner_link" required>
+                    <input type="text" class="form-control" id="banner_link"  value="{{$category->banner_link}}" name="banner_link">
                 </div>
             </div>
         </div>
@@ -173,17 +173,12 @@
     $(document).ready(function() {
         if ($('#logo_type').val() == 'upload') {
             $('.logo_upload').show();
-            $('#logo_upload').attr('required', 'required');
             $('.logo_link').hide();
-            $('#logo_link').removeAttr('required').val('');
 
         }
         else if ($('#logo_type').val() == 'link') {
-           
             $('.logo_link').show();
-            $('#logo_link').attr('required', 'required');
             $('.logo_upload').hide();
-            $('#logo_upload').removeAttr('required').val('');
         }
         
     });

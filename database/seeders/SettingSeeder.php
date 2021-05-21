@@ -35,7 +35,14 @@ class SettingSeeder extends Seeder
                             'Footer Text'=>'© 2021 Cashback Reborn.',
                             'Meta Title'=>'Cashback Websites | Earn Cashback for Online Shopping',
                             'Contact Us Email'=>'contact@trs.com',
-                            'Website Title'=>'Cashback Reborn',                            
+                            'Website Title'=>'Cashback Reborn',
+                            'Mail Driver'=>'smtp',
+                            'Mail Host'=>'smtp.mailtrap.io',
+                            'Mail Port'=>'2525',
+                            'Mail Username'=>'7d552105f38912',
+                            'Mail Password'=>'5cacef874f5744',
+                            'Mail Email'=>'support@cashback-reborn.com',
+                            'Mail Name'=>'Cashback Reborn Support'                            
                             );
 
         foreach ($settings as $key => $value) {
@@ -44,6 +51,7 @@ class SettingSeeder extends Seeder
                 'title'=>$key,
                 'type'=>str_replace([' ','-','.'],'_', strtolower($key)),
                 'value'=>$value,
+                'default'=>1
     
             ]);
         }

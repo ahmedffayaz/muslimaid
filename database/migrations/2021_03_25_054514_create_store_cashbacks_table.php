@@ -26,6 +26,8 @@ class CreateStoreCashbacksTable extends Migration
             $table->float('value')->nullable();
             $table->string('default')->default(0)->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

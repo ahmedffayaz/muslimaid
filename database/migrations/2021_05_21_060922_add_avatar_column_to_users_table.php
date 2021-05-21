@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnsToUsersTable extends Migration
+class AddAvatarColumnToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,7 @@ class AddColumnsToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->longText('intro')->after('registration_type')->nullable();
-            $table->string('address')->after('registration_type')->nullable();
-            $table->string('phone')->after('registration_type')->nullable();
-            
+            $table->string('avatar')->after('phone')->nullable();
         });
     }
 
@@ -29,10 +26,7 @@ class AddColumnsToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('intro');
-            $table->dropColumn('address');
-            $table->dropColumn('phone');
-            
+            $table->dropColumn('avatar');
         });
     }
 }

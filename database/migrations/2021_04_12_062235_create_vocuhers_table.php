@@ -29,6 +29,8 @@ class CreateVocuhersTable extends Migration
             $table->dateTime('promotion_end_date')->nullable();
             $table->dateTime('promotion_start_date')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

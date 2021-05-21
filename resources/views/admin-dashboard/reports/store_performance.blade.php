@@ -30,7 +30,7 @@
                                     <div class="media-body">
                                         <span class="text-muted text-uppercase font-size-12 font-weight-bold">Total
                                             Revenue</span>
-                                        <h3 class="mb-0 mt-2">{{$total_revenue}} &#163;</h3>
+                                        <h3 class="mb-0 mt-2">{{ Config::get('currency') }} {{$total_revenue}}</h3>
                                        
                                     </div>
                                     <div class="align-self-center text-center analytics-icon" style="    display: contents;">
@@ -49,7 +49,7 @@
                                 <div class="media p-3">
                                     <div class="media-body">
                                         <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pending Revenue</span>
-                                        <h3 class="mb-0 mt-2">{{$pending_total_revenue}} &#163;</h3>
+                                        <h3 class="mb-0 mt-2">{{ Config::get('currency') }} {{$pending_total_revenue}}</h3>
                                     </div>
                                     <div class="align-self-center text-center analytics-icon" style="    display: contents;">
                                         <em class="icon ni ni-coins text-info"></em>

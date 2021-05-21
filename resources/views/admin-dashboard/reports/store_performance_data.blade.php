@@ -21,23 +21,23 @@
                 
                 <div class="nk-tb-item">
                     <div class="nk-tb-col">
-                        <div class="icon-text"><a href="{{route('admin.stores.show',$click->store)}}">
+                        <div class="icon-text"><a href="@if($click->store){{route('admin.stores.show',$click->store)}}@else # @endif">
                             
-                            <span class="tb-lead"> <em class="text-primary icon ni ni-cart-fill mr-2"></em>{{$click->store->name}}</span></a>
+                            <span class="tb-lead"> <em class="text-primary icon ni ni-cart-fill mr-2"></em>{{$click->store->name ?? ''}}</span></a>
                         </div>
                     </div>
                     <div class="nk-tb-col">
-                        <span class="tb-sub tb-amount"><span>{{$click->store->network->name}}</span></span>
+                        <span class="tb-sub tb-amount"><span>{{$click->store->network->name ?? ''}}</span></span>
                     </div>
                     
                     <div class="nk-tb-col tb-col-sm ">
                         <span class="tb-sub">{{$click->count}}</span>
                     </div>
                     <div class="nk-tb-col tb-col-sm ">
-                        <span class="tb-sub">{{count($click->store->commissions)}}</span>
+                        <span class="tb-sub">{{ $click->store ? count($click->store->commissions) : ''}}</span>
                     </div>
                     <div class="nk-tb-col tb-col-sm ">
-                        <span class="tb-sub">{{round(((count($click->store->commissions)*100)/$click->count),2)}}%</span>
+                        <span class="tb-sub">{{ $click->store ? round(((count($click->store->commissions)*100)/$click->count),2) : '0'}}%</span>
                     </div>
                 </div><!-- .nk-tb-item -->
                 @endforeach

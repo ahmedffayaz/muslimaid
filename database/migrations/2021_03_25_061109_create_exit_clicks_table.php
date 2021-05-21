@@ -20,6 +20,8 @@ class CreateExitClicksTable extends Migration
             $table->string('status');
             $table->longText('exit_url')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

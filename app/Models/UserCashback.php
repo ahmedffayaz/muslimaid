@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Store;
 use App\Models\ExitClick;
 use App\Models\CashbackStatus;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class UserCashback extends Model
 {
-    use HasFactory;
+    use HasFactory , SoftDeletes;
 
     protected $fillable = ['store_id', 'user_id', 'amount','status', 'detalis','network_commission','order_value', 'exit_click_id','click_date','event_date'];
 
@@ -29,6 +31,10 @@ class UserCashback extends Model
     public function statusMap(){
 
         return $this->belongsTo(CashbackStatus::class, 'status');
+    }
+
+    public function statusHistory(){
+        return $this->hasMany(CashbackStatusChange::class);
     }
 
 }

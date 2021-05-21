@@ -1,6 +1,7 @@
 <div class="nk-tb-list nk-tb-ulist mt-3" style="table-layout: auto">
 
-    @if(count($user->clicks))
+    @if(count($clicks))
+
     <div class="nk-tb-item nk-tb-head">
    
     <div class="nk-tb-col pl-0"><span class="sub-text">Store</span></div>
@@ -8,7 +9,7 @@
     <div class="nk-tb-col  text-right"><span class="sub-text">Time</span></div>
     <div class="nk-tb-col  text-right pr-1"><span class="sub-text">Status</span></div>
     </div><!-- .nk-tb-item -->
-    @foreach ($user->clicks as $click)
+    @foreach ($clicks as $click)
     <div class="nk-tb-item">
     
         <div class="nk-tb-col pl-1">
@@ -32,6 +33,16 @@
     </div><!-- .nk-tb-item -->
     
     @endforeach   
+    
+    
+    <div class="nk-block-between-md px-0 card-inner">
+        <div class="pagination g" route="" id="click-paginate">
+            {!!$clicks->links()!!}                             
+                             
+            </div> 
+        
+        
+    </div><!-- .nk-block-between -->  
                                 
                         
 

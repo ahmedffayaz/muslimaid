@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SiteSetting;
+use App\Models\Currency;
 
 class SettingsController extends Controller
 {
@@ -16,8 +17,10 @@ class SettingsController extends Controller
     public function index()
     {
         $route='index';
-        $settings = SiteSetting::latest()->paginate(20);
-        return view('admin-dashboard.settings.index',compact('settings','route'));
+        $settings = SiteSetting::latest()->get()->pluck('value','type');
+        $currencies = Currency::all();
+        $sc = Currency::where('id',$settings['currency'])->pluck('symbol')->first();
+        return view('admin-dashboard.settings.settings',compact('settings','route','currencies','sc'));
     }
 
     /**
@@ -94,6 +97,10 @@ class SettingsController extends Controller
      */
     public function destroy(SiteSetting $setting)
     {
+        if($setting->default){
+            flash()->error('default settings can not be deleted');
+            return redirect()->route('admin.settings.index');
+        }
         $setting->delete();
 
         flash()->success('setting deleted successfully');
@@ -111,12 +118,10 @@ class SettingsController extends Controller
     }
     public function searchSettings(Request $request, SiteSetting $settings)
     {
-        // dd($request->all());
+        
         $settings = $settings->newQuery();
 
-       
-
-        // Search by titlee.
+        // Search by title.
         if ($request->input('title')) {
             $settings->where('title','like', '%'.$request->input('title').'%');
            
@@ -126,11 +131,72 @@ class SettingsController extends Controller
             $settings->where('type','like', '%'.$request->input('key').'%');
            
         }
-
-       
-        
         $settings = $settings->latest()->paginate(20);
         $route='search';
         return view('admin-dashboard.settings.index_data', compact('settings','route'))->render();
+    }
+
+    public function mailerSettings(){
+
+        $settings = SiteSetting::latest()->get()->pluck('value','type');
+        // dd($settings);
+        return view('admin-dashboard.settings.mailer_settings',compact('settings'));
+
+    }
+    public function saveSettings(Request $request){
+        
+        try {
+
+            $request->offsetUnset('_method');
+            $request->offsetUnset('_token');        
+            foreach ($request->input() as $key => $value) {
+
+                $settings = SiteSetting::updateOrCreate([
+                    'type'   => $key,
+                    'title'  => ucwords(str_replace('_',' ',$key)
+                    )
+                ],[
+                    'value'     => $value    
+                ]);
+           
+            } 
+            if($request->has('dashboard_logo')){
+
+                $imageName = 'dashboard_logo_'.time().'.'.$request->dashboard_logo->extension();          
+                $request->dashboard_logo->storeAs('public/dashboard/images/logo',$imageName);
+
+                $settings = SiteSetting::updateOrCreate([
+                    'type'   => 'dashboard_logo',
+                    'title'  => 'Dashboare Logo',
+                    
+                ],[
+                    'value'     =>  $imageName  
+                ]);
+    
+            } 
+            if($request->has('dashboard_small_logo')){
+
+                $imageName = 'dashboard_small_logo_'.time().'.'.$request->dashboard_small_logo->extension();          
+                $request->dashboard_small_logo->storeAs('public/dashboard/images/logo',$imageName);
+
+                $settings = SiteSetting::updateOrCreate([
+                    'type'   => 'dashboard_small_logo',
+                    'title'  => 'Small Dashboare Logo',
+                    
+                ],[
+                    'value'     =>  $imageName  
+                ]);
+    
+            } 
+            return array('message'=>'Settings saved',
+                    'response'=>'success');
+
+        } catch (\Throwable $th) {
+            return array('message'=>$th->getMessage(),
+                        'response'=>'error');
+        }
+
+        
+
     }
 }

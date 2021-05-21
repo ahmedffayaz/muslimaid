@@ -19,6 +19,8 @@ class CreateNetworksTable extends Migration
             $table->text('description');
             $table->string('click_ref');
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

@@ -76,7 +76,7 @@
                                                                 <option value="-1">Any</option>
                                                                 
                                                                 <option value="active">Active</option>
-                                                                <option value="in-active">In-active</option>
+                                                                <option value="pending">Pending</option>
                                                                     
                                                             
                                                                 

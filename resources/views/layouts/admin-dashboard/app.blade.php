@@ -14,6 +14,7 @@
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="{{ asset('admin-dashboard/css/dashlite.css?ver=2.2.0')}}">
     <link id="skin-default" rel="stylesheet" href="{{ asset('admin-dashboard/css/theme.css?ver=2.2.0')}}">
+    
 </head>
     
 <style>
@@ -46,7 +47,8 @@
     padding-left: 40px;
 }
 </style>
-
+@php $settings = App\Models\SiteSetting::latest()->get()->pluck('value','type'); @endphp
+@php $currency =  0; @endphp
 <body class="nk-body bg-lighter npc-default has-sidebar ">
     <div class="nk-app-root">
         <!-- main @s -->
@@ -78,7 +80,7 @@
     <!-- JavaScript -->
     <script src="{{ asset('admin-dashboard/js/bundle.js?ver=2.2.0')}}"></script>
     <script src="{{ asset('admin-dashboard/js/scripts.js?ver=2.2.0')}}"></script>
-    <script src="{{ asset('admin-dashboard/js/charts/chart-ecommerce.js?ver=2.2.0')}}"></script>
+    {{-- <script src="{{ asset('admin-dashboard/js/charts/chart-ecommerce.js?ver=2.2.0')}}"></script> --}}
     
 {{-- <script>
     $(document).ready(function(){
@@ -140,6 +142,7 @@
         $('div.alert').not('.alert-important').delay(3000).fadeOut(350);
         </script>
      <!-- page scripts -->
+   
     @stack('scripts')
 </body>
 

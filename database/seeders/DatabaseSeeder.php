@@ -23,7 +23,8 @@ class DatabaseSeeder extends Seeder
             ClicksSeeder::class,
             SettingSeeder::class,
             CashbackSeeder::class,
-            ReviewSeeder::class
+            ReviewSeeder::class,
+            CashoutSeeder::class
            
         ]);
         // \App\Models\User::factory(10)->create();

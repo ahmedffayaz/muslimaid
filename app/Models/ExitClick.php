@@ -6,10 +6,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Store;
 use App\Models\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ExitClick extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = ['store_id', 'user_id', 'status','exit_url'];
 

@@ -18,11 +18,16 @@ class CreateUserCashbacksTable extends Migration
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('exit_click_id')->nullable();
+            $table->longText('details')->nullable();
             $table->dateTime('click_date')->nullable();
             $table->dateTime('event_date')->nullable();
+            $table->float('network_commission')->nullable();
+            $table->float('order_value')->nullable();
             $table->string('amount');
             $table->string('status');
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

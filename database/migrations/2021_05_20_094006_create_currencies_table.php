@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddColumnsToSettingsTable extends Migration
+class CreateCurrenciesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class AddColumnsToSettingsTable extends Migration
      */
     public function up()
     {
-        Schema::table('site_settings', function (Blueprint $table) {
-            $table->string('title')->after('id');
-            
+        Schema::create('currencies', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->string('short_name');
+            $table->string('symbol');
+            $table->timestamps();
         });
     }
 
@@ -26,9 +29,6 @@ class AddColumnsToSettingsTable extends Migration
      */
     public function down()
     {
-        Schema::table('site_settings', function (Blueprint $table) {
-            $table->dropColumn('title');
-            
-        });
+        Schema::dropIfExists('currencies');
     }
 }

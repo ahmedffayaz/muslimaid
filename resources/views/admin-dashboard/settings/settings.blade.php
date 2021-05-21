@@ -1,0 +1,592 @@
+@extends('layouts.admin-dashboard.app')
+<style>
+    .nk-tb-list{
+        table-layout: fixed;
+    }
+    .nk-files-view-grid .nk-file-icon-type {
+    width: 150px;
+    padding: 2rem 0 .5rem 0;
+}
+@media (min-width: 1200px){
+    .nk-files-view-grid .nk-file {
+    width: calc(25% - 16px)!important;
+}
+}
+.nk-files-view-grid .nk-file {
+    background-color:#f5f6fa7a!important;
+}
+.stores .select2{
+    width: 300px!important;
+}
+ul.categories { 
+  list-style: none;
+  margin: 5px 5x;
+}
+ul.categories li {
+  margin: 10px 0;
+}
+</style>
+
+@section('content')
+<div class="nk-content ">
+    <div class="container-fluid">
+        <div class="nk-content-inner">
+            <div class="nk-content-body">
+                <div class="components-preview wide-md mx-auto">
+                    <div class="nk-block-head nk-block-head-lg pb-2">
+                        <div class="nk-block-between">
+                        <div class="nk-block-head-content">
+                            <h3 class="nk-block-title fw-normal">Settings</h3>
+                            <div class="nk-block-des">
+                              
+                            </div>
+                        </div>
+                        <div class="nk-block-head-content">
+                           
+                            <div class="toggle-wrap nk-block-tools-toggle">
+                                <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
+                                <div class="toggle-expand-content" data-content="pageMenu">
+                                    <ul class="nk-block-tools g-3">
+                                        {{-- <li class="nk-block-tools-opt"><a href="{{route('admin.stores.edit',$store)}}" class="btn btn-primary btn-sm"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li> --}}
+                                    
+                                        {{-- <li><a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
+                                      
+                                    </ul>
+                                </div>
+                            </div><!-- .toggle-wrap -->
+                        </div><!-- .nk-block-head-content -->
+                    </div>
+                    </div>
+                   
+                @include('flash::message')
+                    
+                    
+                    <div class="nk-block nk-block-lg">
+
+                        
+                        <div class="card card-preview">
+                            <div class="card-inner">
+                               
+                                <ul class="nav nav-tabs mt-n3">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" data-toggle="tab" href="#tabItem4"><em class="icon ni ni-setting-fill"></em><span>General</span></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem5"><em class="icon ni ni-dashboard-fill"></em><span>Dashboard</span></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem6"><em class="icon ni ni-emails-fill"></em><span>Mailer</span></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem7"><em class="icon ni ni-share-fill"></em><span>Social</span></a>
+                                    </li>
+                                    
+                                </ul>
+                                <div class="tab-content">
+                                   
+                                    <div class="tab-pane active" id="tabItem4">
+                                        <div class="nk-block">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">General Settings</h5>
+                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                            </div><!-- .nk-block-head -->
+                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="website_title">Website Title</label>
+                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" name="website_title" id="website_title" value="{{$settings['website_title'] ?? ''}}" placeholder="Title">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                               
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="email">Email</label>
+                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="email" name="email" value="{{$settings['email'] ?? ''}}" placeholder="Email">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="phone_number">Phone Number</label>
+                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{$settings['phone_number'] ?? ''}}" placeholder="Sender Name">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="currency">Currency</label>
+                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap ">
+                                                                <div class="form-control-select">
+                                                                    <select class="form-control" id="default-06" name="currency" required>
+                                                                        @foreach ($currencies as $currency)
+                                                                        <option @if($settings['currency'] == $currency->id) selected @endif value="{{$currency->id}}">{{$currency->short_name}}</option>
+                                                                            
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="cashback_percentage">Cashback Percentage</label>
+                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="cashback_percentage" name="cashback_percentage" value="{{$settings['cashback_percentage'] ?? ''}}" placeholder="Cashback Percentage">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                
+                                                <div class="row g-3">
+                                                    <div class="col-lg-9 offset-lg-3">
+                                                        <div class="form-group mt-2">
+                                                            <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                      
+                                    </div>
+                                    <div class="tab-pane" id="tabItem5">
+                                        <div class="nk-block">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">Dashboard Settings</h5>
+                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                            </div><!-- .nk-block-head -->
+                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST" enctype="multipart/form-data">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="dashboard_title">Logo</label>
+                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class=" logo">
+                                                                <label for="logo-input">
+                                                                <img id="logo" src="@isset($settings['dashboard_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
+                                                                <input id="logo-input" preview="#logo" name="dashboard_logo" class="d-none" type='file' onchange="readURL(this);" />
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="dashboard_title">Small Logo (for collapsed sidebar)</label>
+                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class=" logo">
+                                                                <label for="small-logo-input">
+                                                                <img id="small-logo" src="@isset($settings['dashboard_small_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_small_logo'])}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
+                                                                <input id="small-logo-input" preview="#small-logo"  name="dashboard_small_logo" class="d-none" type='file' onchange="readURL(this);" />
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="dashboard_title">Dashboard Title</label>
+                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" name="dashboard_title" id="dashboard_title" value="{{$settings['dashboard_title'] ?? ''}}" placeholder="Title">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                               
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="footer_text">Footer text</label>
+                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="footer_text" name="footer_text" value="{{$settings['footer_text'] ?? ''}}" placeholder="Email">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                                                             
+                                                <div class="row g-3">
+                                                    <div class="col-lg-9 offset-lg-3">
+                                                        <div class="form-group mt-2">
+                                                            <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                      
+                                    </div>
+                                    <div class="tab-pane" id="tabItem6">
+                                        <div class="nk-block">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">Mailer Settings</h5>
+                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                            </div><!-- .nk-block-head -->
+                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="mail_driver">Mail Driver</label>
+                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" name="mail_driver" id="mail_driver" value="{{$settings['mail_driver']}}" placeholder="smtp">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="mail_host">Mail Host</label>
+                                                            {{-- <span class="form-note">Specify the email address of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="mail_host" name="mail_host" value="{{$settings['mail_host']}}" placeholder="smtp.mailtrap.io">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="mail_port">Port</label>
+                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="mail_port" name="mail_port" value="{{$settings['mail_port']}}" placeholder="port">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                
+                                                
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Username</label>
+                                                            {{-- <span class="form-note">Specify the URL if your main website is external.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" name="mail_username" value="{{$settings['mail_username']}}" placeholder="username">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Password</label>
+                                                            {{-- <span class="form-note">Specify the URL if your main website is external.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" name="mail_password" value="{{$settings['mail_password']}}" placeholder="password">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="mail_email">From Email</label>
+                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="mail_email" name="mail_email" value="{{$settings['mail_email'] ?? ''}}" placeholder="sender Email">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="mail_name">From Name</label>
+                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="mail_name" name="mail_name" value="{{$settings['mail_name'] ?? ''}}" placeholder="Sender Name">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                
+                                                <div class="row g-3">
+                                                    <div class="col-lg-9 offset-lg-3">
+                                                        <div class="form-group mt-2">
+                                                            <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="tabItem7">
+                                        <div class="nk-block">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">Social Media Settings</h5>
+                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                            </div><!-- .nk-block-head -->
+                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="facebook">Facebook</label>
+                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" name="facebook" id="facebook" value="{{$settings['facebook'] ?? ''}}" placeholder="Facebook Page link">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="twitter">Twitter</label>
+                                                            {{-- <span class="form-note">Specify the email address of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="twitter" name="twitter" value="{{$settings['twitter'] ?? ''}}" placeholder="Twitter handle link">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="instagram">Instagram</label>
+                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="instagram" name="instagram" value="{{$settings['instagram'] ?? ''}}" placeholder="Instagram profile link">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="linkedin">LinkedIn</label>
+                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="linkedin" name="linkedin" value="{{$settings['linkedin'] ?? ''}}" placeholder="LinkedIn profile link">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                
+                                                
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Pinterest</label>
+                                                            {{-- <span class="form-note">Specify the URL if your main website is external.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" name="pinterest" value="{{$settings['pinterest'] ?? ''}}" placeholder="Pinterest Link">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                              
+                                                
+                                                <div class="row g-3">
+                                                    <div class="col-lg-9 offset-lg-3">
+                                                        <div class="form-group mt-2">
+                                                            <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- .card-preview -->
+                      
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@endsection
+@push('scripts')
+
+<!-- Update Store-->
+<script>
+
+$(document).ready( function() {
+    $(document).on('submit', '.form-settings', function(event){
+
+        event.preventDefault();  
+        var formData = new FormData(this);  
+        $.ajax({
+        type:'POST',
+        url: $(this).attr('action'),
+        data: formData,
+        cache:false,
+        contentType: false,
+        processData: false,
+        success:function(data){
+            
+            (function(NioApp, $){
+                'use strict';
+                toastr.clear();
+                NioApp.Toast(data.message, data.response);
+            })(NioApp, jQuery); 
+            
+        },
+        error: function(data){
+
+            (function(NioApp, $){
+                'use strict';
+                toastr.clear();
+                NioApp.Toast(data.message, data.response);
+            })(NioApp, jQuery); 
+            
+        }
+    });
+
+    });
+});
+</script>
+<script>
+    function readURL(input) {
+  if (input.files && input.files[0]) {
+      var reader = new FileReader();
+
+      reader.onload = function (e) {
+          
+          console.log(input);
+          var preview = $(input).attr('preview');
+          console.log(preview);
+          $(preview)
+              .attr('src', e.target.result)
+              .css('max-width',150).css('max-height',120);
+      };
+
+      reader.readAsDataURL(input.files[0]);
+  }
+}
+</script>
+
+@endpush
