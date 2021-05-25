@@ -140,7 +140,7 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="full-name-1">Sort</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="full-name-1" name="sort" required>
+                                                    <input type="text" class="form-control" id="full-name-1" name="sort">
                                                 </div>
                                             </div>
                                         </div>
@@ -211,7 +211,6 @@
     $(document).ready(function() {
         if ($('#logo_type').val() == 'upload') {
             $('.logo_upload').show();
-            $('#logo_upload').attr('required', 'required');
             $('.logo_link').hide();
             $('#logo_link').removeAttr('required').val('');
 
@@ -221,14 +220,13 @@
             $('.logo_link').show();
             $('#logo_link').attr('required', 'required');
             $('.logo_upload').hide();
-            $('#logo_upload').removeAttr('required').val('');
+            
         }
         
     });
     $(document.body).on("change","#logo_type",function(){
         if (this.value == 'upload') {
             $('.logo_upload').show();
-            $('#logo_upload').attr('required', 'required');
             $('.logo_link').hide();
             $('#logo_link').removeAttr('required').val('');
 
@@ -238,7 +236,7 @@
             $('.logo_link').show();
             $('#logo_link').attr('required', 'required');
             $('.logo_upload').hide();
-            $('#logo_upload').removeAttr('required').val('');
+            
         }
         
     });
@@ -247,7 +245,6 @@
     $(document).ready(function() {
         if ($('#banner_type').val() == 'upload') {
             $('.banner_upload').show();
-            $('#banner_upload').attr('required', 'required');
             $('.banner_link').hide();
             $('#banner_link').removeAttr('required').val('');
 
@@ -257,7 +254,7 @@
             $('.banner_link').show();
             $('#banner_link').attr('required', 'required');
             $('.banner_upload').hide();
-            $('#banner_upload').removeAttr('required').val('');
+           
         }
         
     });
@@ -265,7 +262,6 @@
       
         if (this.value == 'upload') {
             $('.banner_upload').show();
-            $('#banner_upload').attr('required', 'required');
             $('.banner_link').hide();
             $('#banner_link').removeAttr('required').val('');
 
@@ -275,7 +271,7 @@
             $('.banner_link').show();
             $('#banner_link').attr('required', 'required');
             $('.banner_upload').hide();
-            $('#banner_upload').removeAttr('required').val('');
+            
         }
         
     });

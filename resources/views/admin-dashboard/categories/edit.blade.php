@@ -44,21 +44,23 @@
                
             </div>
         </div>
-        
+        <div class="col-lg-12 ">
+
+        <label class="form-label">Logo/Icon</label><br>
         @if($category->logo_type == 'upload')
-        <div class="col-md-12">
-        <img src="{{asset('storage/categories/images/'.$category->logo_upload)}}" width="200px" alt="">
-        </div>
-        @elseif($category->logo_type == 'link')
-        <div class="col-md-12">
-        <img src="{{$category->logo_link}}" width="200px" alt="">
-        </div>
-        @endif
         
+        <img src="{{asset('storage/categories/images/'.$category->logo_upload)}}" style="max-height: 60px;max-width:60px" alt="">
+      
+        @elseif($category->logo_type == 'link')
+        
+        <img src="{{$category->logo_link}}" style="max-height: 60px;max-width:60px" alt="">
+     
+        @endif
+        </div>
        
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="logo_type">Logo</label>
+                <label class="form-label" for="logo_type">Logo/Icon Type</label>
                 <div class="form-control-wrap ">
                     <div class="form-control-select">
                         <select class="form-control" name="logo_type" id='logo_type' required>
@@ -75,7 +77,7 @@
         
         <div class="col-lg-6 logo_link">
             <div class="form-group">
-                <label class="form-label" for="logo_link">Logo Link</label>
+                <label class="form-label" for="logo_link">Logo/Icon Link</label>
                 <div class="form-control-wrap">
                     <input type="text" class="form-control" id="logo_link" name="logo_link" value="{{$category->logo_link}}">
                 </div>
@@ -83,7 +85,7 @@
         </div>
         <div class="col-lg-6 logo_upload">
             <div class="form-group">
-                <label class="form-label" for="logo_upload">Logo Upload</label>
+                <label class="form-label" for="logo_upload">Logo/Icon Upload</label>
                 <div class="form-control-wrap">
                     <div class="custom-file">
                         <input type="file" class="" name='logo_upload' id="logo_upload">
@@ -92,21 +94,24 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-12 ">
+
+        <label class="form-label">Banner</label><br>
         
         @if($category->banner_type == 'upload')
-        <div class="col-md-12">
-            <img src="{{asset('storage/categories/images/'.$category->banner_upload)}}" width="200px" alt="">
-        </div>
-        @elseif($category->banner_type == 'link')
-        <div class="col-md-12">
-            <img src="{{$category->banner_link}}" width="200px" alt="">
-        </div>
-        @endif
+       
+            <img src="{{asset('storage/categories/images/'.$category->banner_upload)}}" style="max-height: 150px" alt="">
         
+        @elseif($category->banner_type == 'link')
+        
+            <img src="{{$category->banner_link}}" style="max-height: 150px" alt="">
+      
+        @endif
+        </div>
         
         <div class="col-lg-6 ">
             <div class="form-group">
-                <label class="form-label" for="banner_type">Banner</label>
+                <label class="form-label" for="banner_type">Banner Type</label>
                 <div class="form-control-wrap ">
                     <div class="form-control-select">
                         <select class="form-control" name="banner_type" id='banner_type' required>
@@ -141,7 +146,7 @@
             <div class="form-group">
                 <label class="form-label" for="full-name-1">Sort</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="full-name-1" name="sort" value="{{$category->sort}}" required>
+                    <input type="text" class="form-control" id="full-name-1" name="sort" value="{{$category->sort}}">
                 </div>
             </div>
         </div>
@@ -185,7 +190,6 @@
     $(document.body).on("change","#logo_type",function(){
         if (this.value == 'upload') {
             $('.logo_upload').show();
-            $('#logo_upload').attr('required', 'required');
             $('.logo_link').hide();
             $('#logo_link').removeAttr('required').val('');
 
@@ -195,7 +199,6 @@
             $('.logo_link').show();
             $('#logo_link').attr('required', 'required');
             $('.logo_upload').hide();
-            $('#logo_upload').removeAttr('required').val('');
         }
         
     });
@@ -204,7 +207,6 @@
     $(document).ready(function() {
         if ($('#banner_type').val() == 'upload') {
             $('.banner_upload').show();
-            $('#banner_upload').attr('required', 'required');
             $('.banner_link').hide();
             $('#banner_link').removeAttr('required').val('');
 
@@ -214,7 +216,6 @@
             $('.banner_link').show();
             $('#banner_link').attr('required', 'required');
             $('.banner_upload').hide();
-            $('#banner_upload').removeAttr('required').val('');
         }
         
     });
@@ -222,7 +223,6 @@
       
         if (this.value == 'upload') {
             $('.banner_upload').show();
-            $('#banner_upload').attr('required', 'required');
             $('.banner_link').hide();
             $('#banner_link').removeAttr('required').val('');
 
@@ -232,7 +232,6 @@
             $('.banner_link').show();
             $('#banner_link').attr('required', 'required');
             $('.banner_upload').hide();
-            $('#banner_upload').removeAttr('required').val('');
         }
         
     });

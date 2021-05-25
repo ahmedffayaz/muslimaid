@@ -11,6 +11,13 @@ use Carbon\Carbon;
 
 class TicketsController extends Controller
 {
+    function __construct()
+    {
+        
+         $this->middleware('permission:view tickets', ['only' => ['index','show']]);
+         $this->middleware('permission:close tickets', ['only' => ['closeTicket']]);
+
+    }
     /**
      * Display a listing of the resource.
      *

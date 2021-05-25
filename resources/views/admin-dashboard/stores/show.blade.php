@@ -398,8 +398,8 @@ ul.categories li {
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
  
-<!-- @@ Cashback Modal @e -->
-<div class="modal fade" tabindex="-1" role="dialog" id="cashback-modal">
+<!-- @@ Edit Cashback Modal @e -->
+<div class="modal fade" tabindex="-1" role="dialog" id="edit-cashback-modal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header align-center">
@@ -408,6 +408,28 @@ ul.categories li {
                    
                     <div class="nk-file-name">
                         <div class="nk-file-name-text"><span class="title">Edit Cashback</span></div>
+                        {{-- <div class="nk-file-name-sub">Project</div> --}}
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="edit-cashback" class=" p-4">
+                
+
+            </div>
+        </div><!-- .modal-content -->
+    </div><!-- .modla-dialog -->
+</div><!-- .modal -->
+<!-- @@ Add Cashback Modal @e -->
+<div class="modal fade" tabindex="-1" role="dialog" id="cashback-modal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+              
+                   
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Add Cashback</span></div>
                         {{-- <div class="nk-file-name-sub">Project</div> --}}
                     </div>
                 </div>
@@ -732,8 +754,9 @@ ul.categories li {
                 data:{_token:_token},
                 success:function(data)
                 {
-                    $('#cashback-modal').modal('show');
-                    $('#cashback').html(data);
+                    $('#edit-cashback-modal').modal('show');
+                    $('#edit-cashback').html(data);
+                    checkCashbackType();
                 }
                 });
                
@@ -1058,6 +1081,21 @@ function checkSiblings(el) {
 }
 
 checkSiblings(container);
+});
+function checkCashbackType(){
+    
+    if ($('#type').val() == 'fixed') {    
+        $('.currency-div').show();      
+        $('#currency').attr('required', 'required');
+    }
+    else{
+        $('.currency-div').hide();      
+        $('#currency').removeAttr('required').val('');
+    }
+
+}
+$(document.body).on("change","#type",function(){
+    checkCashbackType();
 });
 </script>
 @endpush

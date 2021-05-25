@@ -13,6 +13,11 @@ use App\Models\Network;
 
 class ClickController extends Controller
 {
+    function __construct()
+    {
+         $this->middleware('permission:view clicks');
+        
+    }
     /**
      * Display a listing of the resource.
      *

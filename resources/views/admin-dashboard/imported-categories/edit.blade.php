@@ -43,6 +43,9 @@
                                                             <option @if($importedcategory->parent_id == 0) selected @endif value="0">None</option>
                                                             @foreach ($parent_categories as $parent)
                                                             <option @if($importedcategory->parent_id == $parent->id) selected @endif value="{{$parent->id}}">{{$parent->name}}</option>
+                                                            @if(count($parent->childs))
+                                                                @include('admin-dashboard.imported-categories.child_input',['childs' => $parent->childs,'isEdit'=> 1 ,'category'=>$importedcategory])
+                                                            @endif
                                                                 
                                                             @endforeach     
                                                            

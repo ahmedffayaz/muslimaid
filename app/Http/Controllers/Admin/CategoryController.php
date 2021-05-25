@@ -68,7 +68,7 @@ class CategoryController extends Controller
                 'status' => $request->input('status'), 
             ]);
 
-
+        if($request->input('logo_type')=='upload'){
             if($request->has('logo_upload')){
                 
                 $imageName = \Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo_upload->extension();          
@@ -77,7 +77,13 @@ class CategoryController extends Controller
                 $category->logo_upload = $imageName;
                 $category->update();
 
+            }else{
+                $category->logo_upload = 'category_default_logo.png';
+                $category->update();
             }
+        }
+
+        if($request->input('banner_type')=='upload'){
 
             if($request->has('banner_upload')){
                 
@@ -87,8 +93,12 @@ class CategoryController extends Controller
                 $category->banner_upload = $imageName;
                 $category->update();
 
+            }else{
+                $category->banner_upload = 'category_default_banner.png';
+                $category->update();
             }
 
+        }
             flash()->success('New Category added');
             return redirect()->route('admin.categories.index');
             
@@ -151,18 +161,21 @@ class CategoryController extends Controller
             ]); 
             
             
+            if($request->input('logo_type')=='upload'){
 
-            if($request->has('logo_upload')){
+                if($request->has('logo_upload')){
 
-                // Storage::delete(['public/categories/images/'. $category->logo_upload]);
-                
-                $imageName = \Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo_upload->extension();          
-                $request->logo_upload->storeAs('public/categories/images',$imageName);
-                
-                $category->logo_upload = $imageName;
-                $category->update();
+                    // Storage::delete(['public/categories/images/'. $category->logo_upload]);
+                    
+                    $imageName = \Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo_upload->extension();          
+                    $request->logo_upload->storeAs('public/categories/images',$imageName);
+                    
+                    $category->logo_upload = $imageName;
+                    $category->update();
 
+                }
             }
+            if($request->input('banner_type')=='upload'){
 
             if($request->has('banner_upload')){
 
@@ -174,7 +187,7 @@ class CategoryController extends Controller
                 $category->banner_upload = $imageName;
                 $category->update();
 
-            }
+            }}
 
             if(!$request->ajax()){
                 flash()->success('Category updated');

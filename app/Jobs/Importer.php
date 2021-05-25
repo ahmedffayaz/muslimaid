@@ -143,6 +143,15 @@ class Importer implements ShouldQueue
 
                             if($action->commission->default){
                                 $c_type = \Str::contains($action->commission->default, '%') ? 'percentage' : 'fixed';
+                                if($c_type=='percentage'){
+                                    $sale_commission=  str_replace('%','',$action->commission->default);
+                                    $currency = null;
+                                  }else{
+                                      $splited = explode(" ", $action->commission->default);
+                                      $sale_commission = $splited[1];
+                                    $currency = $splited[0];
+
+                                  }
                                 $cb = StoreCashback::where('store_id',$store->id)->where('type',$c_type)->where('sale_commission',$action->commission->default)->first();
                                 if($cb){
                                     $cb->update([
@@ -154,7 +163,8 @@ class Importer implements ShouldQueue
                                         'type' => $c_type,
                                         'image'           => '#',
                                         'click_url'       =>  '#',
-                                        'sale_commission' => $action->commission->default,
+                                        'sale_commission' => $sale_commission,
+                                        'currency'=>$currency,
                                         'cashback_name' => $action->name,
                                         'detail' => $action->name.' default',
                                         'network_detail' => $action->name.' default',
@@ -167,6 +177,17 @@ class Importer implements ShouldQueue
                             if($action->commission->itemlist){
                                 foreach($action->commission->itemlist as $item){
                                 $c_type= \Str::contains($item, '%') ? 'percentage' : 'fixed';
+
+                                if($c_type=='percentage'){
+                                    $sale_commission=  str_replace('%','',$item);
+                                    $currency = null;
+
+                                  }else{
+                                    $splited = explode(" ", $item);
+                                    $sale_commission = $splited[1];
+                                    $currency = $splited[0];
+
+                                  }
 
 
                                     $cb = StoreCashback::where('store_id',$store->id)->where('type',$c_type)->where('sale_commission',$item)->first();
@@ -182,7 +203,8 @@ class Importer implements ShouldQueue
                                         'type' => $c_type,
                                         'image'           => '#',
                                         'click_url'       =>  '#',
-                                        'sale_commission' => $item,
+                                        'sale_commission' => $sale_commission,
+                                        'currency'=>$currency,
                                         'cashback_name' => $action->name,
                                         'detail' => $action->name.' '.$item->attributes()->name,
                                         'network_detail' => $action->name.' '.$item->attributes()->name,
@@ -297,18 +319,31 @@ class Importer implements ShouldQueue
 
                                 if($action->commission->default){
                                     $c_type = \Str::contains($action->commission->default, '%') ? 'percentage' : 'fixed';
-                                    $cb = StoreCashback::where('store_id',$store->id)->where('type',$c_type)->where('sale_commission',$action->commission->default)->first();
+                                    
+                                    if($c_type=='percentage'){
+                                        $sale_commission=  str_replace('%','',$action->commission->default);
+                                        $currency = null;
+
+                                      }else{
+                                          $splited = explode(" ", $action->commission->default);
+                                          $sale_commission = $splited[1];
+                                          $currency = $splited[0];
+
+                                      }
+                                    $cb = StoreCashback::where('store_id',$store->id)->where('type',$c_type)->where('sale_commission',$sale_commission)->first();
                                     if($cb){
                                         $cb->update([
                                             'detail' => $cb->detail.', '.$action->name.' default',
                                             'network_detail' => $cb->network_detail.', '.$action->name.' default',
                                         ]);
                                     }else{
+
                                         $cashback = StoreCashback::create([
                                             'type' => $c_type,
                                             'image'           => '#',
                                             'click_url'       =>  '#',
-                                            'sale_commission' => $action->commission->default,
+                                            'sale_commission' => $sale_commission,
+                                            'currency'=>$currency,
                                             'cashback_name' => $action->name,
                                             'detail' => $action->name.' default',
                                             'network_detail' => $action->name.' default',
@@ -322,7 +357,18 @@ class Importer implements ShouldQueue
 
                                     foreach($action->commission->itemlist as $item){
                                         $c_type= \Str::contains($item, '%') ? 'percentage' : 'fixed';
-                                        $cb = StoreCashback::where('store_id',$store->id)->where('type',$c_type)->where('sale_commission',$item)->first();
+                                        
+                                        if($c_type=='percentage'){
+                                            $sale_commission=  str_replace('%','',$item);
+                                            $currency = null;
+
+                                          }else{
+                                            $splited = explode(" ", $item);
+                                            $sale_commission = $splited[1];
+                                            $currency = $splited[0];
+
+                                          }
+                                        $cb = StoreCashback::where('store_id',$store->id)->where('type',$c_type)->where('sale_commission',$sale_commission)->first();
                                         if($cb){
                                             $cb->update([
                                             
@@ -330,12 +376,14 @@ class Importer implements ShouldQueue
                                                 'network_detail' => $cb->network_detail.', '.$action->name.' '.$item->attributes()->name,
                                             ]);
                                         }else{
+
                                     
                                         $cashback = StoreCashback::create([
                                             'type' => $c_type,
                                             'image'           => '#',
                                             'click_url'       =>  '#',
-                                            'sale_commission' => $item,
+                                            'sale_commission' =>  $sale_commission,
+                                            'currency'=>$currency,
                                             'cashback_name' => $action->name,
                                             'detail' => $action->name.' '.$item->attributes()->name,
                                             'network_detail' => $action->name.' '.$item->attributes()->name,
@@ -475,6 +523,16 @@ class Importer implements ShouldQueue
 
                     $store = Store::where('advertiser_id',$cashback['advertiserId'])->first();
                     $click = ExitClick::where('id',$cashback['shopperId'])->first();
+
+                    if($click){
+                        $click_id = $cashback['shopperId'];
+                    }else{
+                        $new_click = ExitClick::create(['store_id'=>$store->id,
+                        'user_id'=>1,
+                        'status'=>'pending',
+                        'exit_url'=>'#']);
+                        $click_id = $new_click->id;
+                    }
                     $cashback_amount_for_user = ($cashback['pubCommissionAmountPubCurrency']/100) * $cashback_percent;
                     $commission_exist = UserCashback::where('exit_click_id',$cashback['shopperId'])->first();
                     $status = '';
@@ -489,8 +547,8 @@ class Importer implements ShouldQueue
                     
                         $commission = UserCashback::create([
                             'store_id'=>$store->id,
-                            'user_id'=> $click->user_id ?? 0,
-                            'exit_click_id'=>$cashback['shopperId'],
+                            'user_id'=> $click->user_id ?? 01,
+                            'exit_click_id'=>$click_id,
                             'amount'=>round($cashback_amount_for_user,2),
                             'network_commission'=>$cashback['pubCommissionAmountPubCurrency'],
                             'order_value'=>$cashback['saleAmountPubCurrency'],
@@ -516,8 +574,8 @@ class Importer implements ShouldQueue
                         
                         $commission_exist->update([
                             'store_id'=>$store->id,
-                            'user_id'=> $click->user_id ?? 0,
-                            'exit_click_id'=>$cashback['shopperId'],
+                            'user_id'=> $click->user_id ?? 1,
+                            'exit_click_id'=>$click_id,
                             'amount'=>round($cashback_amount_for_user,3),
                             'network_commission'=>$cashback['pubCommissionAmountPubCurrency'],
                             'order_value'=>$cashback['saleAmountPubCurrency'],

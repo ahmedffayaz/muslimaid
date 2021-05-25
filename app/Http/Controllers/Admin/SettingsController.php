@@ -6,9 +6,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SiteSetting;
 use App\Models\Currency;
-
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 class SettingsController extends Controller
 {
+    function __construct()
+    {
+         $this->middleware('permission:view settings', ['only' => ['index','show']]);
+         $this->middleware('permission:edit settings', ['only' => ['edit','update']]);
+         
+    }
     /**
      * Display a listing of the resource.
      *
@@ -196,7 +203,35 @@ class SettingsController extends Controller
                         'response'=>'error');
         }
 
-        
+    }
+
+    public function permissions(){
+        $roles = Role::whereNotIn('name', ['admin', 'user'])->get();
+        $permissions = Permission::all();
+
+        return view('admin-dashboard.settings.permissions',compact('roles','permissions'));
+    }
+
+    public function updatePermissions(Request $request){
+           
+       
+        try {
+            $request->offsetUnset('_method');
+            $request->offsetUnset('_token');        
+            foreach ($request->input() as $key => $permissions) {
+                $role = Role::findByName($key);
+                $role->syncPermissions($permissions);
+            } 
+            flash()->success('Permissions updated successfully');
+
+            return redirect()->back();
+            
+        } catch (\Throwable $th) {
+
+            flash()->error('Something went wrong!');
+            return redirect()->back();
+
+        }
 
     }
 }

@@ -10,6 +10,12 @@ use App\Models\Ticket;
 
 class RepliesController extends Controller
 {
+    function __construct()
+    {
+        
+         $this->middleware('permission:reply tickets', ['only' => ['store']]);
+
+    }
     /**
      * Display a listing of the resource.
      *

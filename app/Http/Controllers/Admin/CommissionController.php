@@ -14,6 +14,13 @@ use App\Models\SiteSetting;
 
 class CommissionController extends Controller
 {
+    function __construct()
+    {
+         $this->middleware('permission:view cashback', ['only' => ['index']]);
+         $this->middleware('permission:edit cashback', ['only' => ['edit','show','update']]);
+         $this->middleware('permission:add cashback', ['only' => ['create','Store']]);
+         $this->middleware('permission:delete cashback', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *

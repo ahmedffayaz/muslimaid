@@ -19,23 +19,28 @@
                         <div class="nk-block-head-content">
                             <div class="toggle-wrap nk-block-tools-toggle">
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-more-v"></em></a>
-                                {{-- <div class="toggle-expand-content" data-content="pageMenu">
+                                <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
                                         <li>
                                             <div class="drodown">
-                                                <a href="#" class="dropdown-toggle btn btn-white btn-dim btn-outline-light" data-toggle="dropdown"><em class="d-none d-sm-inline icon ni ni-calender-date"></em><span><span class="d-none d-md-inline">Last</span> 30 Days</span><em class="dd-indc icon ni ni-chevron-right"></em></a>
+                                                <a href="#" class="dropdown-toggle btn btn-white btn-dim btn-outline-light" data-toggle="dropdown">
+                                                    <em class="d-none d-sm-inline icon ni ni-calender-date"></em>
+                                                    
+                                                    <span><span class="d-none d-md-inline">Last</span>@if($period == 1) 24 Hours @elseif($period == 7) 7 Days @elseif($period == 30) 30 Days @endif</span>
+                                                        
+                                                        <em class="dd-indc icon ni ni-chevron-right"></em></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
                                                     <ul class="link-list-opt no-bdr">
-                                                        <li><a href="#"><span>Last 30 Days</span></a></li>
-                                                        <li><a href="#"><span>Last 6 Months</span></a></li>
-                                                        <li><a href="#"><span>Last 1 Years</span></a></li>
+                                                        <li><a href="{{route('admin.home.index',1)}}"><span>Last 24 Hours</span></a></li>
+                                                        <li><a href="{{route('admin.home.index',7)}}"><span>Last 7 Days</span></a></li>
+                                                        <li><a href="{{route('admin.home.index',30)}}"><span>Last 30 Days</span></a></li>
                                                     </ul>
                                                 </div>
                                             </div>
                                         </li>
-                                        <li class="nk-block-tools-opt"><a href="#" class="btn btn-primary"><em class="icon ni ni-reports"></em><span>Reports</span></a></li>
+                                        {{-- <li class="nk-block-tools-opt"><a href="#" class="btn btn-primary"><em class="icon ni ni-reports"></em><span>Reports</span></a></li> --}}
                                     </ul>
-                                </div> --}}
+                                </div>
                             </div>
                         </div><!-- .nk-block-head-content -->
                     </div><!-- .nk-block-between -->
@@ -51,7 +56,7 @@
                                            
                                             <div class="media p-3">
                                                 <div class="media-body">
-                                                    <h6 class="title">24 Hours Revenue</h6>
+                                                    <h6 class="title">Revenue</h6>
                                                     <h3 class="mb-0 mt-2"> {{ Config::get('currency') }} {{$total_revenue}}</h3>
                                                    
                                                 </div>
@@ -70,7 +75,7 @@
                                         <div class="card-body p-0">
                                             <div class="media p-3">
                                                 <div class="media-body">
-                                                    <h6 class="title">24 Hours Pending Revenue</h6>
+                                                    <h6 class="title">Pending Revenue</h6>
                                                     <h3 class="mb-0 mt-2">{{ Config::get('currency') }} {{$pending_total_revenue}}</h3>
                                                 </div>
                                                 <div class="align-self-center text-center analytics-icon" style="    display: contents;">
@@ -88,7 +93,7 @@
                                         <div class="card-body p-0">
                                             <div class="media p-3">
                                                 <div class="media-body">
-                                                    <h6 class="title">24 Hours Cashbacks</h6>
+                                                    <h6 class="title">Cashbacks</h6>
                                                     <h3 class="mb-0 mt-2">{{count($coms)}}</h3>
                                                 </div>
                                                 <div class="align-self-center text-center analytics-icon" style="    display: contents;">
@@ -107,7 +112,7 @@
                                         <div class="card-body p-0">
                                             <div class="media p-3">
                                                 <div class="media-body">
-                                                    <h6 class="title">24 Hours New Users</h6>
+                                                    <h6 class="title">New Users</h6>
                                                     <h3 class="mb-0 mt-2">{{count($users)}}</h3>
                                                 </div>
                                                 <div class="align-self-center text-center analytics-icon" style="    display: contents;">

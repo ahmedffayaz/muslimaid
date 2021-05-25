@@ -40,11 +40,11 @@
             ?>
             
             ">
-                <span>{{$commission->user->first_name[0] ?? 'N'}}{{$commission->user->last_name[0] ?? 'A'}}</span>
+                <span>{{$commission->exitClick->user->first_name[0] ?? 'N'}}{{$commission->exitClick->user->last_name[0] ?? 'A'}}</span>
             </div>
             <div class="user-info">
-                <span class="tb-lead">{{$commission->user->id ?? ''}} - {{$commission->user->first_name ?? ''}} {{$commission->user->last_name ?? ''}}<span class="dot dot-success d-md-none ml-1"></span></span>
-                <span>{{$commission->user->email ?? ''}}</span>
+                <span class="tb-lead">{{$commission->exitClick->user->id ?? ''}} - {{$commission->exitClick->user->first_name ?? ''}} {{$commission->exitClick->user->last_name ?? ''}}<span class="dot dot-success d-md-none ml-1"></span></span>
+                <span>{{$commission->exitClick->user->email ?? ''}}</span>
             </div>
         </div>
         

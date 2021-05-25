@@ -18,10 +18,10 @@
     
     <div class="nk-tb-item">
         <div class="nk-tb-col  pl-1">
-            <span>{{$cashback->sale_commission}}</span>
+            <span>@if($cashback->type=='fixed'){{$cashback->currency}} @endif{{$cashback->sale_commission}}@if($cashback->type=='percentage')%@endif</span>
         </div>
      
-        <div class="nk-tb-col ">
+        <div class="nk-tb-col text-capitalize">
             <span>{{$cashback->type}}</span>
         </div>
       

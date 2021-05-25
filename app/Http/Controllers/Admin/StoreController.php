@@ -16,6 +16,14 @@ use Illuminate\Support\Facades\Storage;
 
 class StoreController extends Controller
 {
+
+    function __construct()
+    {
+         $this->middleware('permission:view stores', ['only' => ['index']]);
+         $this->middleware('permission:edit stores', ['only' => ['edit','show','update']]);
+         $this->middleware('permission:add stores', ['only' => ['create','Store']]);
+         $this->middleware('permission:delete stores', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *

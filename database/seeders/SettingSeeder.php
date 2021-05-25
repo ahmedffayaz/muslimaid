@@ -7,6 +7,7 @@ use App\Models\SiteSetting;
 use App\Models\ImporterSetting;
 use App\Models\Language;
 use App\Models\Network;
+use App\Models\Currency;
 
 class SettingSeeder extends Seeder
 {
@@ -42,7 +43,8 @@ class SettingSeeder extends Seeder
                             'Mail Username'=>'7d552105f38912',
                             'Mail Password'=>'5cacef874f5744',
                             'Mail Email'=>'support@cashback-reborn.com',
-                            'Mail Name'=>'Cashback Reborn Support'                            
+                            'Mail Name'=>'Cashback Reborn Support' ,
+                            'Currency' =>1                           
                             );
 
         foreach ($settings as $key => $value) {
@@ -74,6 +76,12 @@ class SettingSeeder extends Seeder
         $language = Language::create([
             'name' => 'English',
             'code' => 'en'
+        ]);
+
+        $currency = Currency::create([
+            'name'=>'Pounds',
+            'short_name'=>'GBP',
+            'symbol'=>'£'
         ]);
      
        

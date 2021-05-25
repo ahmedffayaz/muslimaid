@@ -9,6 +9,13 @@ use App\Models\Store;
 
 class StoreReviewsController extends Controller
 {
+    function __construct()
+    {
+         $this->middleware('permission:view reviews', ['only' => ['index']]);
+         $this->middleware('permission:edit reviews', ['only' => ['edit','show','update']]);
+         $this->middleware('permission:add reviews', ['only' => ['create','Store']]);
+         $this->middleware('permission:delete reviews', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *

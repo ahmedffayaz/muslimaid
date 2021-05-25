@@ -16,6 +16,15 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    function __construct()
+    {
+         $this->middleware('permission:view users', ['only' => ['index']]);
+         $this->middleware('permission:edit users', ['only' => ['edit','show','update']]);
+         $this->middleware('permission:add users', ['only' => ['create','Store']]);
+         $this->middleware('permission:delete users', ['only' => ['destroy']]);
+         $this->middleware('permission:change password', ['only' => ['changePassword','savePassword']]);
+         $this->middleware('permission:edit payment info', ['only' => ['paymentInfo','paymentSave']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -24,7 +33,7 @@ class UserController extends Controller
     public function index()
     {
         $route='index';
-        $users = User::role('user')->latest()->paginate(30);
+        $users = User::role('user')->orderBy('id', 'DESC')->paginate(30);
         return view('admin-dashboard.users.index', compact('users','route'));
     }
 
@@ -140,7 +149,7 @@ class UserController extends Controller
         if($request->ajax())
         {
             $route="index";
-            $users = User::role('user')->latest()->paginate(30);
+            $users = User::role('user')->orderBy('id', 'DESC')->paginate(30);
 
             return view('admin-dashboard.users.index_data', compact('users','route'))->render();
         }
@@ -265,7 +274,7 @@ class UserController extends Controller
             $users->where('status', $request->input('status'));
         }
         
-        $users = $users->role('user')->latest()->paginate(30);
+        $users = $users->role('user')->orderBy('id', 'DESC')->paginate(30);
         $route='search';
         return view('admin-dashboard.users.index_data', compact('users','route'))->render();
     }

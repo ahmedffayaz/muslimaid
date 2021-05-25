@@ -17,19 +17,35 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $admin_role = Role::create(['name' => 'admin']);
-		$user_role = Role::create(['name' => 'user']);
-		$data_role = Role::create(['name' => 'data operator']);
-		$finance_role = Role::create(['name' => 'finance manager']);
-		
-		$admin = new User();
-		$admin->first_name = 'admin';
-		$admin->last_name = 'admin';
+        $admin = new User();
+		$admin->first_name = 'Super';
+		$admin->last_name = 'Admin';
 		$admin->email = 'admin@trs.com';
 		$admin->password = bcrypt('123@#$xyz990');
 		$admin->registration_type = 'sign up';
+        $admin->avatar = 'default.png';
 		$admin->save();
-        $admin->assignRole($admin_role);
+        $admin->assignRole('admin');
+
+        $data = new User();
+		$data->first_name = 'Data';
+		$data->last_name = 'Operator';
+		$data->email = 'data@trs.com';
+		$data->password = bcrypt('123@#$xyz990');
+		$data->registration_type = 'sign up';
+        $data->avatar = 'default.png';
+		$data->save();
+        $data->assignRole('data');
+
+        $finance = new User();
+		$finance->first_name = 'Finance';
+		$finance->last_name = 'Manager';
+		$finance->email = 'finance@trs.com';
+		$finance->password = bcrypt('123@#$xyz990');
+		$finance->registration_type = 'sign up';
+        $finance->avatar = 'default.png';
+		$finance->save();
+        $finance->assignRole('finance');
 
         $faker = Faker::create();
 
@@ -41,8 +57,9 @@ class UserSeeder extends Seeder
             $user->email = $faker->email;
             $user->password = bcrypt('123@#$xyz990');
             $user->registration_type = 'sign up';
+            $user->avatar = 'default.png';
             $user->save();	     
-            $user->assignRole($user_role);
+            $user->assignRole('user');
 	}
 
     }

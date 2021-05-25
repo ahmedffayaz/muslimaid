@@ -21,6 +21,9 @@ class NetworkController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('permission:view view networks', ['only' => ['index','show']]);
+        $this->middleware('permission:view network categories', ['only' => ['categories']]);
+        $this->middleware('permission:delete languages', ['only' => ['destroy']]);
     }
 
 

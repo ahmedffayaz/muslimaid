@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\DB;
 
 class ImportedCategoryController extends Controller
 {
+
+    function __construct()
+    {
+        
+         $this->middleware('permission:map categories', ['only' => ['edit','update']]);
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -89,7 +96,7 @@ class ImportedCategoryController extends Controller
      */
     public function edit(ImportedCategory $importedcategory)
     {
-        $site_categories = Category::latest()->get();
+        $site_categories = Category::latest()->where('parent_id', '=', 0)->get();
         $parent_categories = ImportedCategory::latest()->get()->except($importedcategory->id);
 
         return view('admin-dashboard.imported-categories.mapper', compact('importedcategory','site_categories','parent_categories'));

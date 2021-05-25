@@ -18,6 +18,9 @@
 .stores .select2{
     width: 300px!important;
 }
+.select2-selection__choice {
+    text-transform: capitalize;
+}
 </style>
 
 @section('content')

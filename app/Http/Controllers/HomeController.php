@@ -32,9 +32,23 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
+    public function index($period = 1)
     {
-        $time_period = \Carbon\Carbon::now()->subDay()->toDateTimeString();
+        if($period == 1){
+
+            $time_period = \Carbon\Carbon::now()->subDay()->toDateTimeString();
+        }elseif($period ==7){
+
+            $time_period = \Carbon\Carbon::now()->subDays(7)->toDateTimeString();
+        }
+        elseif($period == 30){
+            $time_period = \Carbon\Carbon::now()->subDays(30)->toDateTimeString();
+
+        }else{
+            $period = 1;
+            $time_period = \Carbon\Carbon::now()->subDay()->toDateTimeString();
+
+        }
         $paid_total_commission = UserCashback::where('status','4')->where('event_date', '>=', $time_period)->sum('network_commission');
         $paid_total_cashback = UserCashback::where('status','4')->where('event_date', '>=', $time_period)->sum('amount');
         $total_revenue  = $paid_total_commission - $paid_total_cashback;
@@ -69,7 +83,7 @@ class HomeController extends Controller
 
         return view('admin-dashboard.home',compact('coms','total_coms',
         'stores','total_revenue','pending_total_revenue','clicks','total_clicks',
-        'tickets','users','total_users','reviews','converted','notconverted','chart1'));
+        'tickets','users','total_users','reviews','converted','notconverted','chart1','period'));
         
     }
     public function setLocale($locale)

@@ -28,13 +28,16 @@ Route::namespace('App\Http\Controllers\Website')->prefix('site')->name('site.')-
 
 //Admin routes
 Route::namespace('App\Http\Controllers\Admin')
-    ->middleware(['auth','role:admin'])
+    ->middleware(['auth','role:admin|data|finance'])
     ->as('admin.')
     ->prefix('admin')
     ->group(function () {
-        Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
 
-    Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
+    Route::get('home/{period?}', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
+    Route::get('/', function(){
+        return Redirect::to('admin/home');
+    });
+
 
     //Networks 
     Route::post('networks/fetch',[App\Http\Controllers\Admin\NetworkController::class,'fetch'])->name('networks.fetch');
@@ -130,7 +133,9 @@ Route::namespace('App\Http\Controllers\Admin')
     //Settings
     Route::get('settings/export', [App\Http\Controllers\Admin\SettingsController::class,'exportCsv'])->name('settings.export');
     Route::get('mailer_settings', [App\Http\Controllers\Admin\SettingsController::class,'mailerSettings'])->name('settings.mailer_settings');
+    Route::get('permissions', [App\Http\Controllers\Admin\SettingsController::class,'permissions'])->name('settings.permissions');
     Route::post('settings/mailer_settings_save', [App\Http\Controllers\Admin\SettingsController::class,'saveMailerSettings'])->name('settings.mailer_settings_save');
+    Route::post('settings/update_permissions', [App\Http\Controllers\Admin\SettingsController::class,'updatePermissions'])->name('settings.update_permissions');
     Route::post('settings/settings_save', [App\Http\Controllers\Admin\SettingsController::class,'saveSettings'])->name('settings.settings_save');
     Route::post('settings/fetch',[App\Http\Controllers\Admin\SettingsController::class,'fetch'])->name('settings.fetch');
     Route::post('settings/search_settings',  [App\Http\Controllers\Admin\SettingsController::class,'searchSettings'])->name('settings.search_settings');

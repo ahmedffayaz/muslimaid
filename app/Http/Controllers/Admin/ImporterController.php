@@ -17,6 +17,12 @@ use App\Jobs\Importer;
 
 class ImporterController extends Controller
 {
+    function __construct()
+    {
+        
+         $this->middleware('permission:run importer', ['only' => ['import']]);
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -390,13 +396,13 @@ class ImporterController extends Controller
                     $store = Store::where('advertiser_id',$advertiser->{'advertiser-id'})->first();
                     if(true){
 
-                        // $store = Store::create([
-                        //     'name'         => $advertiser->{'advertiser-name'},
-                        //     'advertiser_id'=> $advertiser->{'advertiser-id'},
-                        //     'network_id'   => 1,
-                        //     'tracking_url' => $advertiser->{'program-url'},
-                        //     'store_url'    => $advertiser->{'program-url'},
-                        // ]);
+                        $store = Store::create([
+                            'name'         => $advertiser->{'advertiser-name'},
+                            'advertiser_id'=> $advertiser->{'advertiser-id'},
+                            'network_id'   => 1,
+                            'tracking_url' => $advertiser->{'program-url'},
+                            'store_url'    => $advertiser->{'program-url'},
+                        ]);
 
 
 
@@ -457,6 +463,13 @@ class ImporterController extends Controller
 
                             if($action->commission->default){
                             $c_type = \Str::contains($action->commission->default, '%') ? 'percentage' : 'fixed';
+                            if($c_type=='percentage'){
+                                $sale_commission=  str_replace('%','',$action->commission->default);
+                              }else{
+                                  $splited = explode(" ", $action->commission->default);
+                                  $sale_commission = $splited[1];
+                              }
+                            //   dd($sale_commission);
 
 
                                 $cb = StoreCashback::where('store_id',$store->id)->where('type',$c_type)->where('sale_commission',$action->commission->default)->first();
@@ -470,18 +483,27 @@ class ImporterController extends Controller
                                         'type' => $c_type,
                                         'image'           => '#',
                                         'click_url'       =>  '#',
-                                        'sale_commission' => $action->commission->default,
+                                        'sale_commission' => $sale_commission,
                                         'cashback_name' => $action->name,
                                         'detail' => $action->name.' default',
                                         'network_detail' => $action->name.' default',
                                         'store_id' => $store->id,
                                     ]);
+                                    dd($cashback);
                                 }
+
+                                
                                 
                             }
                             if($action->commission->itemlist){
                                 foreach($action->commission->itemlist as $item){
                             $c_type= \Str::contains($item, '%') ? 'percentage' : 'fixed';
+                            if($c_type=='percentage'){
+                                $sale_commission=  str_replace('%','',$item);
+                              }else{
+                                $splited = explode(" ", $item);
+                                $sale_commission = $splited[1];
+                              }
 
 
                                     $cb = StoreCashback::where('store_id',$store->id)->where('type',$c_type)->where('sale_commission',$item)->first();
@@ -497,7 +519,7 @@ class ImporterController extends Controller
                                         'type' => $c_type,
                                         'image'           => '#',
                                         'click_url'       =>  '#',
-                                        'sale_commission' => $item,
+                                        'sale_commission' => $sale_commission,
                                         'cashback_name' => $action->name,
                                         'detail' => $action->name.' '.$item->attributes()->name,
                                         'network_detail' => $action->name.' '.$item->attributes()->name,

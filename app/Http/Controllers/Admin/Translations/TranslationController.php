@@ -22,6 +22,11 @@ class TranslationController extends Controller
     {
         
         $this->middleware('auth');
+        $this->middleware('permission:view translations', ['only' => ['index','show']]);
+        $this->middleware('permission:add translations', ['only' => ['create','store']]);
+        $this->middleware('permission:edit translations', ['only' => ['edit','update']]);
+        $this->middleware('permission:delete translations', ['only' => ['destroy']]);
+
     }
 
     /**

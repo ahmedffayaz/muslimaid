@@ -12,7 +12,7 @@ class StoreCashback extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['store_id', 'cashback_name','type', 'value', 'image','click_url','sale_commission','detail','network_detail','default'];
+    protected $fillable = ['store_id', 'cashback_name','type', 'value', 'image','click_url','sale_commission','currency','detail','network_detail','default'];
 
     public function store(){
 

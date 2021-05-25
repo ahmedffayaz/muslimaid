@@ -41,8 +41,9 @@
     </div>
     
     
-    <div class="nk-tb-col">
-        <span>{{$store->cashback->sale_commission ?? ''}}</span>
+    <div class="nk-tb-col">@if(isset($store->cashback->type))
+        <span>@if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif {{$store->cashback->sale_commission ?? ''}}@if($store->cashback->type=='percentage')%@endif </span>
+   @endif
     </div>
     <div class="nk-tb-col text-center">
         <span>{{count($store->cashbacks)}}</span>

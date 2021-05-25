@@ -24,6 +24,14 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-6 currency-div">
+            <div class="form-group">
+                <label class="form-label" for="currency">Currency</label>
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control" id="currency" value="{{$cashback->currency}}" name="currency" required>
+                </div>
+            </div>
+        </div>
 
 
 
