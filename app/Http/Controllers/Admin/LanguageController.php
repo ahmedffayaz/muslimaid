@@ -20,6 +20,10 @@ class LanguageController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('permission:view languages', ['only' => ['index','show']]);
+        $this->middleware('permission:edit languages', ['only' => ['edit','update']]);
+        $this->middleware('permission:add languages', ['only' => ['create','Store']]);
+        $this->middleware('permission:delete languages', ['only' => ['destroy']]);
     }
 
     /**

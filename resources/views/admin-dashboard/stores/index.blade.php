@@ -75,8 +75,11 @@
                                                         <div class="form-control-wrap ">
                                                             <select class="form-select form-control" data-search="on" id="status" name="status">
                                                                 <option value="-1">Any</option>
-                                                                <option value="1">Active</option>
-                                                                <option value="0">In-active</option>
+                                                                <option value="pending review">Pending Review</option>
+                                                                <option value="active">Active</option>
+                                                                <option value="disabled">Disabled</option>
+                                                                <option value="closed">Closed at Network</option>
+                                                                <option value="error">Error</option>
                                                             </select>
                                                         </div>
                                                     </div>

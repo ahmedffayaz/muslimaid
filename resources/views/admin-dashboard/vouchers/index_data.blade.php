@@ -3,7 +3,7 @@
         table-layout: fixed;
     }
 </style>
-<div class="nk-tb-item nk-tb-head">
+<div class="nk-tb-item nk-tb-head" >
     
     
     <div class="nk-tb-col "><span class="sub-text">Store</span></div>
@@ -18,14 +18,19 @@
     </div>
 </div><!-- .nk-tb-item -->
 @foreach ($vouchers as $voucher)
-<div class="nk-tb-item">
+<div class="nk-tb-item" @if ($voucher->promotion_end_date < \Carbon\Carbon::now())
+    style="background-color:#f1f1f1"
+    @endif>
     
     
    
   
     <div class="nk-tb-col "><a href="{{route('admin.stores.show',$voucher->store ?? 0)}}">
         <span><b>{{$voucher->store->name ?? ''}}</b></span><br>
-        <span>{{$voucher->store->network->name ?? ''}}</span></a>
+        <span>{{$voucher->store->network->name ?? ''}}</span></a><br>
+        @if ($voucher->promotion_end_date < \Carbon\Carbon::now())
+    <span class="text-danger">Expired</span>
+    @endif
     </div>
     
     <div class="nk-tb-col ">
@@ -52,9 +57,16 @@
                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="link-list-opt no-bdr">
-                            <li><a href="{{route('admin.vouchers.edit', $voucher)}}"><em class="icon ni ni-edit"></em><span>Edit Voucher</span></a></li>
+                            <li><a class="edit-voucher" href="{{route('admin.vouchers.edit', $voucher)}}"><em class="icon ni ni-edit"></em><span>Edit Voucher</span></a></li>
                             {{-- <li><a href="{{route('admin.stores.images', $store)}}"><em class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
-                    
+                            <li><a  onclick="$('#delete-voucher-{{$voucher->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Voucher</span></a>
+                                                    
+                                <form action="{{ route('admin.vouchers.destroy', $voucher) }}" id="delete-voucher-{{$voucher->id}}" method="POST" class="m-0">
+                                    @method('DELETE')
+                                    @csrf
+                                    
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>

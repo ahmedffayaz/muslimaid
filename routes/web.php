@@ -28,13 +28,16 @@ Route::namespace('App\Http\Controllers\Website')->prefix('site')->name('site.')-
 
 //Admin routes
 Route::namespace('App\Http\Controllers\Admin')
-    ->middleware(['auth','role:admin'])
+    ->middleware(['auth','role:admin|data|finance'])
     ->as('admin.')
     ->prefix('admin')
     ->group(function () {
-        Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
 
-    Route::get('home', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
+    Route::get('home/{period?}', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
+    Route::get('/', function(){
+        return Redirect::to('admin/home');
+    });
+
 
     //Networks 
     Route::post('networks/fetch',[App\Http\Controllers\Admin\NetworkController::class,'fetch'])->name('networks.fetch');
@@ -50,7 +53,9 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::post('stores/storeimages', [App\Http\Controllers\Admin\StoreController::class,'fetchImages'])->name('stores.fetchimages');
     Route::get('stores/reviews/{review}/edit', [App\Http\Controllers\Admin\StoreController::class,'editReview'])->name('stores.reviews.edit');
     Route::get('stores/cashbacks/{cashback}/edit', [App\Http\Controllers\Admin\StoreController::class,'editCashback'])->name('stores.cashbacks.edit');
+    Route::post('stores/categories/update', [App\Http\Controllers\Admin\StoreController::class,'updateCategories'])->name('stores.categories.update');
     Route::put('stores/cashbacks/{cashback}/update', [App\Http\Controllers\Admin\StoreController::class,'updateCashback'])->name('stores.cashbacks.update');
+    Route::post('stores/cashbacks/save', [App\Http\Controllers\Admin\StoreController::class,'createCashback'])->name('stores.cashbacks.store');
     Route::post('stores/images/upload/{store}', [App\Http\Controllers\Admin\StoreController::class,'uploadImage'])->name('stores.images.upload');
     Route::get('stores/images/delete/{storeimage}', [App\Http\Controllers\Admin\StoreController::class,'deleteImage'])->name('stores.images.delete');
     Route::get('stores/export', [App\Http\Controllers\Admin\StoreController::class,'exportCsv'])->name('stores.export');
@@ -72,7 +77,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('categories', CategoryController::class);
     
     //IMported Network Categories 
-    Route::post('importedcategories/fetch',[App\Http\Controllers\Admin\ ImportedCategoryController::class,'fetch'])->name('importedcategories.fetch');
+    Route::post('importedcategories/fetch',[App\Http\Controllers\Admin\ImportedCategoryController::class,'fetch'])->name('importedcategories.fetch');
     Route::post('importedcategories/search_importedcategories',  [App\Http\Controllers\Admin\ImportedCategoryController::class,'searcImportedCategories'])->name('importedcategories.search_importedcategories');
     Route::resource('importedcategories', ImportedCategoryController::class);
     
@@ -107,6 +112,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::get('addmultiple/commissions',[App\Http\Controllers\Admin\CommissionController::class,'createMultiple'])->name('commissions.create_multiple');
     Route::post('commissions/storemultiple',[App\Http\Controllers\Admin\CommissionController::class,'storeMultiple'])->name('commissions.store_multiple');
     Route::post('commissions/search_commissions',  [App\Http\Controllers\Admin\CommissionController::class,'searchCommissions'])->name('commissions.search_commissions');
+    Route::get('commissions/status_history/{commission}',  [App\Http\Controllers\Admin\CommissionController::class,'statusHistory'])->name('commissions.history');
     Route::resource('commissions', CommissionController::class);
     Route::resource('cashouts', CashoutController::class);
     
@@ -126,6 +132,11 @@ Route::namespace('App\Http\Controllers\Admin')
 
     //Settings
     Route::get('settings/export', [App\Http\Controllers\Admin\SettingsController::class,'exportCsv'])->name('settings.export');
+    Route::get('mailer_settings', [App\Http\Controllers\Admin\SettingsController::class,'mailerSettings'])->name('settings.mailer_settings');
+    Route::get('permissions', [App\Http\Controllers\Admin\SettingsController::class,'permissions'])->name('settings.permissions');
+    Route::post('settings/mailer_settings_save', [App\Http\Controllers\Admin\SettingsController::class,'saveMailerSettings'])->name('settings.mailer_settings_save');
+    Route::post('settings/update_permissions', [App\Http\Controllers\Admin\SettingsController::class,'updatePermissions'])->name('settings.update_permissions');
+    Route::post('settings/settings_save', [App\Http\Controllers\Admin\SettingsController::class,'saveSettings'])->name('settings.settings_save');
     Route::post('settings/fetch',[App\Http\Controllers\Admin\SettingsController::class,'fetch'])->name('settings.fetch');
     Route::post('settings/search_settings',  [App\Http\Controllers\Admin\SettingsController::class,'searchSettings'])->name('settings.search_settings');
     Route::resource('settings', SettingsController::class);
@@ -144,5 +155,20 @@ Route::namespace('App\Http\Controllers\Admin')
 
 
 
+    Route::post('tickets/fetch',[App\Http\Controllers\Admin\TicketsController::class,'fetch'])->name('tickets.fetch');
+    Route::post('tickets/search',  [App\Http\Controllers\Admin\TicketsController::class,'searchTickets'])->name('tickets.search');
+    Route::put('tickets/close_ticket/{ticket}',[App\Http\Controllers\Admin\TicketsController::class,'closeTicket'])->name('tickets.close');
+    Route::resource('tickets',  TicketsController::class);
+    
+    Route::resource('replies', RepliesController::class);
+
+
+    Route::put('profile/passwordsave/{profile}', [App\Http\Controllers\Admin\ProfileController::class,'savePassword'])->name('profile.save_password');
+    Route::resource('profile', ProfileController::class);
+
 });
+
+
+Route::get('new_ticket', [App\Http\Controllers\Frontend\TicketsController::class, 'create']);
+Route::post('new_ticket',[App\Http\Controllers\Frontend\TicketsController::class, 'store']);
 

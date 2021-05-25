@@ -18,6 +18,9 @@
 .stores .select2{
     width: 300px!important;
 }
+.select2-selection__choice {
+    text-transform: capitalize;
+}
 </style>
 
 @section('content')
@@ -35,6 +38,22 @@
                             </div>
                         </div>
                         <div class="nk-block-head-content">
+                            <div class="form-group stores">
+                                <label class="form-label" for="default-06"></label>
+                                <div class="form-control-wrap ">
+                                    <div class="">
+                                        <select class="form-control form-select" data-search="on" name="open_store" id="user_select" required>
+                                            @foreach ($users as $item)
+                                            <option @if($user->id == $item->id) selected @endif value="{{route('admin.users.show',$item->id)}}">{{$item->id}} {{$item->first_name}} {{$item->last_name}}</option>
+                                                
+                                            @endforeach
+                                         
+                                                
+                                           
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
                             
                             <div class="toggle-wrap nk-block-tools-toggle">
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
@@ -69,13 +88,13 @@
                                     </li>
                                    
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#tabItem7"><em class="icon ni ni-notice"></em><span>Cashbacks</span></a>
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem7"><em class="icon ni ni-sign-gbp"></em><span>Cashbacks</span></a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-money"></em><span>Payment Info</span></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#tabItem9"><em class="icon ni ni-img-fill"></em><span>Change Password</span></a>
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem9"><em class="icon ni ni-lock-alt-fill"></em><span>Change Password</span></a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
@@ -122,12 +141,24 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-12">
                                                         <div class="form-group">
                                                             <label class="form-label" for="pay-amount-1">Address</label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="pay-amount-1" value="{{$user->address ?? ''}}" name="address" >
                                                             </div>
+                                                        </div>
+                                                    </div>
+                                                   
+                                                    <div class="col-lg-12">
+                                                        <div class="card">
+                                                            <input name="intro" type="hidden">
+                                                            <label class="form-label" for="phone-no-1">Introduction</label>
+                                                            <!-- Create the editor container -->
+                                                            <div  id="editor-container">
+                                                            {!!$user->intro ?? ''!!}
+                                                            </div>
+                                                           
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
@@ -143,15 +174,20 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="card">
-                                                            <input name="intro" type="hidden">
-                                                            <label class="form-label" for="phone-no-1">Introduction</label>
-                                                            <!-- Create the editor container -->
-                                                            <div  id="editor-container">
-                                                            {!!$user->intro ?? ''!!}
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="default-06">User Role</label>
+                                                            <div class="form-control-wrap ">
+                                                                <div class="form-control-select">
+                                                                    <select class="form-control form-select" id="default-06" name="roles[]" required multiple>
+
+                                                                        @foreach ($roles as $role)
+                                                                        <option @if($user->hasRole($role->name)) selected @endif value="{{$role->id}}">{{$role->name}}</option>
+                                                                            
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
                                                             </div>
-                                                           
                                                         </div>
                                                     </div>
                                                     
@@ -431,8 +467,8 @@
 </script>
 
 <script>
-    function fetchCashbacks(){
-        pageurl = "{{route('admin.users.cashbacks')}}"
+    function fetchCashbacks(page){
+        pageurl = "{{route('admin.users.cashbacks')}}?page="+page
         var _token = $("input[name=_token]").val();
         var user = '{{$user->id}}'; 
         $.ajax({
@@ -447,8 +483,8 @@
         }
         });
     }
-    function fetchClicks(){
-        pageurl = "{{route('admin.users.clicks')}}"
+    function fetchClicks(page){
+        pageurl = "{{route('admin.users.clicks')}}?page="+page
         var _token = $("input[name=_token]").val();
         var user = '{{$user->id}}'; 
         $.ajax({
@@ -463,8 +499,26 @@
         }
         });
     }
-    fetchCashbacks();
-    fetchClicks();
+    fetchCashbacks(1);
+    fetchClicks(1);
+    $(document).ready(function(){
+     $(document).on('click', '#click-paginate .pagination a', function(event){
+        event.preventDefault(); 
+        
+        var page = $(this).attr('href').split('page=')[1];
+        fetchClicks(page);  
+            
+
+         });
+         $(document).on('click', '#cashback-paginate .pagination a', function(event){
+        event.preventDefault(); 
+        
+        var page = $(this).attr('href').split('page=')[1];
+        fetchCashbacks(page);  
+            
+
+         });
+    });
 </script>
     
 <!-- Update User-->
@@ -635,6 +689,17 @@
             hide_bank();
             hide_paypal();
         }
+    });
+
+    $(function(){
+      // bind change event to select
+      $('#user_select').on('change', function () {
+          var url = $(this).val(); // get selected value
+          if (url) { // require a URL
+              window.location = url; // redirect
+          }
+          return false;
+      });
     });
 
 </script> 

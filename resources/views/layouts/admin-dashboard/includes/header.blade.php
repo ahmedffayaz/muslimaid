@@ -16,7 +16,7 @@
             </div><!-- .nk-header-news -->
             <div class="nk-header-tools">
                 <ul class="nk-quick-nav">
-                    <li class="dropdown chats-dropdown hide-mb-xs">
+                    {{-- <li class="dropdown chats-dropdown hide-mb-xs">
                         <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown">
                             <div class="icon-status icon-status-na"><em class="icon ni ni-comments"></em></div>
                         </a>
@@ -149,8 +149,8 @@
                                 <a href="html/apps-chats.html">View All</a>
                             </div>
                         </div>
-                    </li>
-                    <li class="dropdown notification-dropdown">
+                    </li> --}}
+                    {{-- <li class="dropdown notification-dropdown">
                         <a href="#" class="dropdown-toggle nk-quick-nav-icon" data-toggle="dropdown">
                             <div class="icon-status icon-status-info"><em class="icon ni ni-bell"></em></div>
                         </a>
@@ -221,16 +221,17 @@
                                 <a href="#">View All</a>
                             </div>
                         </div>
-                    </li>
+                    </li> --}}
                     <li class="dropdown user-dropdown">
                         <a href="#" class="dropdown-toggle mr-n1" data-toggle="dropdown">
                             <div class="user-toggle">
                                 <div class="user-avatar sm">
-                                    <em class="icon ni ni-user-alt"></em>
+                                    <img  src="@isset(Auth::user()->avatar){{asset('storage/users/images/avatar/'.Auth::user()->avatar)}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:50px;max-height:50px"/>
+                                   
                                 </div>
                                 <div class="user-info d-none d-xl-block">
                                     {{-- <div class="user-status user-status-unverified">Unverified</div> --}}
-                                    <div class="user-name dropdown-indicator">{{ Auth::user()->first_name }}</div>
+                                    <div class="user-name dropdown-indicator">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
                                 </div>
                             </div>
                         </a>
@@ -238,32 +239,34 @@
                             <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                                 <div class="user-card">
                                     <div class="user-avatar">
-                                        <span>AB</span>
+                                        <img src="@isset(Auth::user()->avatar){{asset('storage/users/images/avatar/'.Auth::user()->avatar)}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:50px;max-height:50px"/>
+
                                     </div>
                                     <div class="user-info">
-                                        <span class="lead-text">{{ Auth::user()->first_name }}</span>
+                                        <span class="lead-text">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span>
                                         <span class="sub-text">{{ Auth::user()->email }}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="dropdown-inner">
                                 <ul class="link-list">
-                                    <li><a href="#"><em class="icon ni ni-user-alt"></em><span>View Profile</span></a></li>
-                                    <li><a href="#"><em class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li>
+                                    <li><a href="{{route('admin.profile.index')}}"><em class="icon ni ni-user-alt"></em><span>View Profile</span></a></li>
+                                    {{-- <li><a href="#"><em class="icon ni ni-setting-alt"></em><span>Account Setting</span></a></li> --}}
                                     {{-- <li><a href="html/user-profile-activity.html"><em class="icon ni ni-activity-alt"></em><span>Login Activity</span></a></li> --}}
-                                    <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Dark Mode</span></a></li>
+                                    {{-- <li><a class="dark-switch" href="#"><em class="icon ni ni-moon"></em><span>Dark Mode</span></a></li> --}}
+                                    <li><a href="#"  onclick="event.preventDefault();
+                                        document.getElementById('logout-form').submit();"><em class="icon ni ni-signout"></em><span>Sign out</span></a></li>
                                 </ul>
                             </div>
                             <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
                             @csrf
                             </form>
                             
-                            <div class="dropdown-inner">
+                            {{-- <div class="dropdown-inner">
                                 <ul class="link-list">
-                                    <li><a href="#"  onclick="event.preventDefault();
-                                        document.getElementById('logout-form').submit();"><em class="icon ni ni-signout"></em><span>Sign out</span></a></li>
+                                    
                                 </ul>
-                            </div>
+                            </div> --}}
                         </div>
                     </li>
                 </ul>

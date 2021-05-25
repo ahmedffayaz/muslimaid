@@ -29,6 +29,7 @@ class StoreSeeder extends Seeder
             $store->slug = \Str::slug($store->name);
             $store->tracking_url = $faker->url;
             $store->store_url = $faker->url;
+            $store->status ='active';
             $store->save();	 
 
             foreach (range(1,3) as $i){
@@ -38,6 +39,7 @@ class StoreSeeder extends Seeder
                 $cashback->detail = $faker->text($maxNbChars = 100);
                 $cashback->network_detail = $faker->text($maxNbChars = 100);
                 $cashback->sale_commission = $faker->numberBetween(1,10).'%';
+                $cashback->default= 1;
                 $cashback->save();
             }
             	

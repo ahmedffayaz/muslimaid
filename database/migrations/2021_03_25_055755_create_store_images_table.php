@@ -19,6 +19,7 @@ class CreateStoreImagesTable extends Migration
             $table->string('title');
             $table->string('image');
             $table->string('image_type');
+            $table->string('is_uploaded')->default(1);
             $table->timestamps();
         });
     }

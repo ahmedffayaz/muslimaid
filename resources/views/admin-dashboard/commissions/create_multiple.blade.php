@@ -518,7 +518,7 @@
         $(this).parents('.row').remove();        
           
         });
-        function initializeSelect2() {
+    function initializeSelect2() {
         $('.select-2').select2({
             placeholder: function(){
                 $(this).data('placeholder');

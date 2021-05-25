@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\UserCashback;
+use App\Models\CashbackStatusChange;
 use App\Models\ExitClick;
 use App\Models\SiteSetting;
 use Faker\Factory as Faker;
@@ -41,6 +42,12 @@ class CashbackSeeder extends Seeder
             'click_date'=> $click->created_at,
             
         ]); 
+
+        $change_status = CashbackStatusChange::create([
+            'user_cashback_id'=>$commission->id,
+            'cashback_status_id'=>$commission->status
+
+        ]);
         }
     }
 }

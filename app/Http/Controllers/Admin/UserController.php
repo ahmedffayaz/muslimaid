@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\PaymentInfo;
+use App\Models\ExitClick;
+use App\Models\UserCashback;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
@@ -14,6 +16,15 @@ use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
+    function __construct()
+    {
+         $this->middleware('permission:view users', ['only' => ['index']]);
+         $this->middleware('permission:edit users', ['only' => ['edit','show','update']]);
+         $this->middleware('permission:add users', ['only' => ['create','Store']]);
+         $this->middleware('permission:delete users', ['only' => ['destroy']]);
+         $this->middleware('permission:change password', ['only' => ['changePassword','savePassword']]);
+         $this->middleware('permission:edit payment info', ['only' => ['paymentInfo','paymentSave']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -22,7 +33,7 @@ class UserController extends Controller
     public function index()
     {
         $route='index';
-        $users = User::role('user')->latest()->paginate(30);
+        $users = User::role('user')->orderBy('id', 'DESC')->paginate(30);
         return view('admin-dashboard.users.index', compact('users','route'));
     }
 
@@ -69,7 +80,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('admin-dashboard.users.show', compact('user'));
+        $users = User::role('user')->latest()->get();
+        $roles = Role::all();
+        return view('admin-dashboard.users.show', compact('user','users','roles'));
 
     }
 
@@ -104,6 +117,8 @@ class UserController extends Controller
             'status' => $request->status,
         ]);
 
+        $user->assignRole($request->roles);
+
         if(!$request->ajax()){
             flash()->success('User updated successfully');
             return redirect()->route('admin.users.index');
@@ -134,7 +149,7 @@ class UserController extends Controller
         if($request->ajax())
         {
             $route="index";
-            $users = User::role('user')->latest()->paginate(30);
+            $users = User::role('user')->orderBy('id', 'DESC')->paginate(30);
 
             return view('admin-dashboard.users.index_data', compact('users','route'))->render();
         }
@@ -259,7 +274,7 @@ class UserController extends Controller
             $users->where('status', $request->input('status'));
         }
         
-        $users = $users->role('user')->latest()->paginate(30);
+        $users = $users->role('user')->orderBy('id', 'DESC')->paginate(30);
         $route='search';
         return view('admin-dashboard.users.index_data', compact('users','route'))->render();
     }
@@ -268,18 +283,18 @@ class UserController extends Controller
     {
         if($request->ajax())
         {
-           $user =User::where('id',$request->user)->first();
-
-            return view('admin-dashboard.users.cashbacks', compact('user'))->render();
+            $cashbacks = UserCashback::where('user_id',$request->user)->latest()->paginate(20);
+            return view('admin-dashboard.users.cashbacks', compact('cashbacks'))->render();
         }
     }
     function fetchClicks(Request $request)
     {
         if($request->ajax())
         {
-           $user =User::where('id',$request->user)->first();
-
-            return view('admin-dashboard.users.clicks', compact('user'))->render();
+            $clicks = ExitClick::where('user_id',$request->user)->latest()->paginate(20);
+            return view('admin-dashboard.users.clicks', compact('clicks'))->render();
         }
     }
+
+
 }

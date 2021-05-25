@@ -12,6 +12,13 @@ use App\Models\CashbackStatus;
 
 class ReportsController extends Controller
 {
+
+    function __construct()
+    {
+         $this->middleware('permission:view performance', ['only' => ['store_performance','search_performance','fetchPerformance']]);
+         $this->middleware('permission:view earings', ['only' => ['earnings','search_earnings','fetchEarnings']]);
+         
+    }
    
     public function store_performance()
     {

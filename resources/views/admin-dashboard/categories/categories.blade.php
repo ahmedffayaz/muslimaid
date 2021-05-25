@@ -74,7 +74,7 @@
                             <div class="nk-block-head-content">
                                 <h3 class="nk-block-title page-title">Categories</h3>
                                 <div class="nk-block-des text-soft">
-                                    {{-- <p>You have total {{$users->total()}} users.</p> --}}
+                                <p>You have total {{count($allCategories)}} categories.</p>
                                 </div>
                             </div><!-- .nk-block-head-content -->
                             <div class="nk-block-head-content">
@@ -82,8 +82,8 @@
                                     <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
-                                            {{-- <li><a href="{{route('admin.users.create')}}" class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-plus"></em><span>Add user</span></a></li>
-                                        <li><a href="{{route('admin.users.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
+                                             <li><a href="{{route('admin.categories.create')}}" class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-plus"></em><span>Add category</span></a></li>
+                                             {{-- <li><a href="{{route('admin.users.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
                                         </ul>
                                     </div>
                                 </div><!-- .toggle-wrap -->
@@ -91,80 +91,7 @@
                         </div><!-- .nk-block-between -->
                     </div><!-- .nk-block-head -->
                     @include('flash::message')
-                    <div class="card card-preview mb-4">
-                        <div class="card-inner">
-                            <div id="accordion-1" class="accordion accordion-s2">
-                                <div class="accordion-item">
-                                    <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-1-1">
-                                        <h6 class="title">Search</h6>
-                                        <span class="accordion-icon"></span>
-                                    </a>
-                                    {{-- <div class="accordion-body collapse" id="accordion-item-1-1" data-parent="#accordion-1">
-                                        <div class="accordion-inner">
-                                            <div><form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
-                                                @csrf
-                                                <div class="row g-4">
-                                                    <div class="col-lg-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="pay-amount-1">Name</label>
-                                                            <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="pay-amount-1" value="" name="name">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                
-                                                
-                                                    <div class="col-lg-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="type">Regestration Type</label>
-                                                            <div class="form-control-wrap ">
-                                                                
-                                                                    <select class="form-select form-control" id="type" name="type">
-                                                                        <option value="-1">Any</option>
-                                                                        
-                                                                        
-                                                                        <option value="sign up">Sign up</option>
-                                                                        <option value="social">Social</option>
-                                                                        
-                                                                    </select>
-                                                            
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="status">Status</label>
-                                                            <div class="form-control-wrap ">
-                                                                
-                                                                    <select class="form-select form-control" id="status" name="status">
-                                                                        <option value="-1">Any</option>
-                                                                        
-                                                                        
-                                                                        <option value="1">Active</option>
-                                                                        <option value="0">In-active</option>
-                                                                        
-                                                                    </select>
-                                                            
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                
-                                                    
-                                                    
-                                                                        
-                                                    <div class="col-3 align-self-end">
-                                                        <div class="form-group">
-                                                            <button type="submit" class="btn btn-success btn-block">Search</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form></div>
-                                        </div>
-                                    </div> --}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                
                     <div class="nk-block">
                         <div class="card card-stretch">
                             <div class="card-inner-group">
@@ -178,8 +105,14 @@
                                         @foreach($categories as $category)
                                             <li>
                                                 <span class="float-right">
-                                                    <a href="" cashback-id='' class='cashback-edit'><em class="icon ni ni-edit"></em></a>
-                                                    <a class='cashback-edi'> <em class="icon ni ni-trash-fill"></em></a>
+                                                    <a href="{{route('admin.categories.edit',$category)}}" category-id='{{$category->id}}' class='category-edit' ><em class="icon ni ni-edit text-primary"></em></a>
+                                                    <a  onclick="$('#delete-form-{{$category->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill text-danger"></em></a>
+                                                    
+                                                    <form action="{{ route('admin.categories.destroy', $category) }}" id="delete-form-{{$category->id}}" method="POST" class="m-0">
+                                                        @method('DELETE')
+                                                        @csrf
+                                                        
+                                                    </form>
                                                 </span>
                                                 <em class="icon ni ni-db-fill text-primary"></em> {{ $category->name }}
                                                
@@ -204,52 +137,69 @@
         </div>
     </div>
 </div>
+<!-- @@ Category Modal @e -->
+<div class="modal fade" tabindex="-1" role="dialog" id="category-modal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+              
+                   
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Update Category</span></div>
+
+                        {{-- <div class="nk-file-name-sub">Project</div> --}}
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="categories" class=" p-4">
+               
+
+            </div>
+        </div><!-- .modal-content -->
+    </div><!-- .modla-dialog -->
+</div><!-- .modal -->
 @endsection
 @push('scripts')
-    <script>
-    $(document).ready(function(){
-     $(document).on('click', '.pagination a', function(event){
-        event.preventDefault(); 
-        var route = $('.pagination').attr('route');
-        var page = $(this).attr('href').split('page=')[1];
-        
-         if(route=='index'){
-            
-             pageurl = "{{route('admin.users.fetch')}}?page="
-             var _token = $("input[name=_token]").val();
-            $.ajax({
+<link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0')}}">
+    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0')}}"></script>
+    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0')}}"></script>
+<script>$(document).ready(function(){
+    $(document).on('click', '.category-edit', function(event){
+       event.preventDefault(); 
+       
+           var id = $(this).attr('category-id');
+           pageurl = $(this).attr('href');
+           var _token = $("input[name=_token]").val();
+           $.ajax({
 
-                url:pageurl+page,
-                method:"POST",
-                data:{_token:_token, page:page},
-                success:function(data)
-                {
-                    $('#table-data').html(data);
-                    $('html, body').animate({ scrollTop: 0 }, 'slow');
-                }
-                });
-         } 
-
-         if(route=='search'){
-            var _token = $("input[name=_token]").val();
-            var type = $("select[name=type]").val();
-            var status = $("select[name=status").val();
-            var name = $("input[name=name]").val();
-            $.ajax({
-              url:'{{route("admin.users.search_users")}}?page='+page,
-              method:"POST",
-              data:{_token:_token,type:type,name:name,status:status},
-              success:function(data)
-              {
-               $('#table-data').html(data);
-               $('html, body').animate({ scrollTop: 0 }, 'slow');
-              }
-            });
-           
-         }       
-     });
+               url:pageurl,
+               method:"GET",
+               data:{_token:_token},
+               success:function(data)
+               {
+                   $('#category-modal').modal('show');
+                   $('#categories').html(data);
+                   var quill = new Quill('#editor-container', {
+                       modules: {
+                       toolbar: [
+                           ['bold', 'italic'],
+                           ['link', 'blockquote', 'code-block', 'image'],
+                           [{ list: 'ordered' }, { list: 'bullet' }]
+                       ]
+                       },
+                       placeholder: 'Compose an epic...',
+                       theme: 'snow'
+                   });
+               }
+               });
+              
     });
-    </script> 
+   });
+   
+   </script>
+
     <script>
         $(document).ready(function(){
         

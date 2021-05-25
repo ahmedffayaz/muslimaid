@@ -10680,6 +10680,8 @@ body.nav-shown { overflow: hidden; }
   .nk-sidebar.is-compact:not(:hover) { width: 74px; }
   .nk-sidebar.is-compact:not(:hover) .logo-img { opacity: 0; transition: opacity .2s linear; }
   .nk-sidebar.is-compact:not(:hover) .logo-img-small { opacity: 1; left: -3px; }
+  .nk-sidebar.is-compact:hover .logo-img-small { opacity: 0; left: -3px; }
+  .nk-sidebar .logo-img-small { opacity: 0; left: -3px; }
   .nk-sidebar.is-compact:not(:hover) .user-card { position: relative; left: -5px; }
   .nk-sidebar.is-compact:not(:hover) .user-info { opacity: 0; }
   .nk-sidebar.is-compact:not(:hover) .nk-sidebar-profile .dropdown-menu { opacity: 0; }

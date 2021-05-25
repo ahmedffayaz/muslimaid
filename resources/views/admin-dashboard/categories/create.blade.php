@@ -16,12 +16,13 @@
                                 </div>
                             </div>
                         </div>
+                        @include('flash::message')
                         <div class="card">
                             <div class="card-inner">
                                 <div class="card-head">
                                     <h5 class="card-title">Category Info</h5>
                                 </div>
-                                <form action="{{route('admin.categories.store')}}" class="gy-3 form-validate is-alter" method="POST">
+                                <form action="{{route('admin.categories.store')}}" class="gy-3 form-validate is-alter" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row g-4">
                                         <div class="col-lg-6">
@@ -40,12 +41,15 @@
                                                         <select class="form-control" id="default-06" name="parent_id" required>
                                                             
                                                             
-                                                            <option value="0">None</option>
-                                                            @foreach ($categories as $parent)
-                                                            <option value="{{$parent->id}}">{{$parent->name}}</option>
-                                                                
-                                                            @endforeach
-                                                                
+                                                        <option value="0">None</option>
+                                                        @foreach ($categories as $parent)
+                                                        <option value="{{$parent->id}}" style="font-weight:bold">{{$parent->name}}</option>
+                                                        @if(count($parent->childs))
+                                                                @include('admin-dashboard.categories.child_input',['childs' => $parent->childs, 'isEdit'=>0])
+                                                            @endif
+                                                            
+                                                        @endforeach
+                                                                                            
                                                            
                                                         </select>
                                                     </div>
@@ -84,7 +88,7 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="logo_link">Logo Link</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="logo_link" name="name" required>
+                                                    <input type="text" class="form-control" id="logo_link" name="logo_link" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -93,7 +97,7 @@
                                                 <label class="form-label" for="logo_upload">Logo Upload</label>
                                                 <div class="form-control-wrap">
                                                     <div class="custom-file">
-                                                        <input type="file" multiple="" class="custom-file-input" id="logo_upload">
+                                                        <input type="file" class="custom-file-input" name='logo_upload' id="logo_upload">
                                                         <label class="custom-file-label" for="logo_upload">Choose file</label>
                                                     </div>
                                                 </div>
@@ -123,10 +127,10 @@
                                         </div>
                                         <div class="col-lg-6 banner_upload">
                                             <div class="form-group">
-                                                <label class="form-label" for="full-name-1">Banner Upload</label>
+                                                <label class="form-label" for="banner_upload">Banner Upload</label>
                                                 <div class="form-control-wrap">
                                                     <div class="custom-file">
-                                                        <input type="file" multiple="" class="custom-file-input" id="banner_upload">
+                                                        <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload">
                                                         <label class="custom-file-label" for="banner_upload">Choose file</label>
                                                     </div>
                                                 </div>
@@ -136,7 +140,7 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="full-name-1">Sort</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="full-name-1" name="name" required>
+                                                    <input type="text" class="form-control" id="full-name-1" name="sort">
                                                 </div>
                                             </div>
                                         </div>
@@ -207,7 +211,6 @@
     $(document).ready(function() {
         if ($('#logo_type').val() == 'upload') {
             $('.logo_upload').show();
-            $('#logo_upload').attr('required', 'required');
             $('.logo_link').hide();
             $('#logo_link').removeAttr('required').val('');
 
@@ -217,14 +220,13 @@
             $('.logo_link').show();
             $('#logo_link').attr('required', 'required');
             $('.logo_upload').hide();
-            $('#logo_upload').removeAttr('required').val('');
+            
         }
         
     });
     $(document.body).on("change","#logo_type",function(){
         if (this.value == 'upload') {
             $('.logo_upload').show();
-            $('#logo_upload').attr('required', 'required');
             $('.logo_link').hide();
             $('#logo_link').removeAttr('required').val('');
 
@@ -234,7 +236,7 @@
             $('.logo_link').show();
             $('#logo_link').attr('required', 'required');
             $('.logo_upload').hide();
-            $('#logo_upload').removeAttr('required').val('');
+            
         }
         
     });
@@ -243,7 +245,6 @@
     $(document).ready(function() {
         if ($('#banner_type').val() == 'upload') {
             $('.banner_upload').show();
-            $('#banner_upload').attr('required', 'required');
             $('.banner_link').hide();
             $('#banner_link').removeAttr('required').val('');
 
@@ -253,7 +254,7 @@
             $('.banner_link').show();
             $('#banner_link').attr('required', 'required');
             $('.banner_upload').hide();
-            $('#banner_upload').removeAttr('required').val('');
+           
         }
         
     });
@@ -261,7 +262,6 @@
       
         if (this.value == 'upload') {
             $('.banner_upload').show();
-            $('#banner_upload').attr('required', 'required');
             $('.banner_link').hide();
             $('#banner_link').removeAttr('required').val('');
 
@@ -271,7 +271,7 @@
             $('.banner_link').show();
             $('#banner_link').attr('required', 'required');
             $('.banner_upload').hide();
-            $('#banner_upload').removeAttr('required').val('');
+            
         }
         
     });

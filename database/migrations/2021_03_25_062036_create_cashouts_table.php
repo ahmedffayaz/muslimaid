@@ -17,9 +17,25 @@ class CreateCashoutsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
             $table->float('amount');
-            $table->string('cashout_type');
-            $table->string('status');
+            $table->string('cashout_type')->nullable();
+            $table->string('status')->nullable();
+            $table->string('payment_method')->nullable();
+            $table->string('first_name')->nullable();
+            $table->string('last_name')->nullable();
+            $table->string('paypal_email')->nullable();
+            $table->longText('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('postcode')->nullable();
+            $table->string('country')->nullable();
+            $table->string('account_name')->nullable();
+            $table->string('bank_title')->nullable();
+            $table->string('account_number')->nullable();
+            $table->string('bank_sort_code')->nullable();
+            $table->string('bic')->nullable();
+            $table->dateTime('paid_on')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

@@ -19,7 +19,7 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li class="nk-block-tools-opt"><a href="{{route('admin.commissions.create')}}" class="btn btn-primary btn-sm"><em class="icon ni ni-plus"></em><span>Add Cashback</span></a></li>
+                                        <li class="nk-block-tools-opt"><a href="#cashback-add-modal" data-toggle="modal" class="btn btn-primary btn-sm"><em class="icon ni ni-plus"></em><span>Add Cashback</span></a></li>
                                         {{-- <li class="nk-block-tools-opt"><a href="#"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAlert"><em class="icon ni ni-download"></em><span>Import Cashbacks</span></a></li> --}}
                                         <li><a href="{{route('admin.commissions.export')}}" data-toggle="tooltip" data-placement="top" title="Export cashbacks to CSV" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
                                      
@@ -149,109 +149,256 @@
         </div>
     </div>
 </div>
-
-
-<!-- Modal Alert -->
-<div class="modal fade" tabindex="-1" id="modalAlert">
-    <div class="modal-dialog" role="document">
+<!-- @@ Cashback history Modal @e -->
+<div class="modal fade" tabindex="-1" role="dialog" id="history-modal">
+    <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
-            <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross"></em></a>
-            <div class="modal-body modal-body-lg text-center">
-                <div class="nk-modal">
-                    <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-download bg-success"></em>
-                    <h4 class="nk-modal-title">Run Importer</h4>
-                    <div class="nk-modal-action">
-                        <a href="{{route('admin.importer.commissions')}}" class="btn btn-lg btn-mw btn-primary">Run</a>
+            <div class="modal-header align-center">
+                
+                <div class="nk-file-title">
+              
+                   
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Cashback Status History</span></div>
+                        {{-- <div class="nk-file-name-sub">Project</div> --}}
                     </div>
                 </div>
-            </div><!-- .modal-body -->
-            <div class="modal-footer bg-lighter">
-                <div class="text-center w-100">
-                    <p>Import Commissions</p>
-                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
-        </div>
-    </div>
-</div>
+            <div id="history" class=" p-4">
+
+            </div>
+        </div><!-- .modal-content -->
+    </div><!-- .modla-dialog -->
+</div><!-- .modal -->
+ 
+<!-- @@ Cashback Modal @e -->
+<div class="modal fade" tabindex="-1" role="dialog" id="cashback-modal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+              
+                   
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Edit Cashback</span></div>
+                        {{-- <div class="nk-file-name-sub">Project</div> --}}
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="cashback" class=" p-4">
+
+            </div>
+        </div><!-- .modal-content -->
+    </div><!-- .modla-dialog -->
+</div><!-- .modal -->
+<!-- @@ Cashback Modal @e -->
+<div class="modal fade" tabindex="-1" role="dialog" id="cashback-add-modal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+              
+                   
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Add Cashback</span></div>
+                        {{-- <div class="nk-file-name-sub">Project</div> --}}
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="" class=" p-4">
+                <form action="{{route('admin.commissions.store')}}" class="gy-3 form-validate is-alter" method="POST">
+                    @csrf
+                    @method('POST')
+                    <div class="row g-4">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="form-label" for="default-06">Exit Click</label>
+                                <select class="form-select" data-placeholder="Select user" data-search="on" name="exit_click_id" required>
+                                    <option value="0" disabled selected>Select Exit Click</option>
+                                    
+                                    @foreach ($clicks as $click)
+                                        @if($click->user && $click->store)
+                                            <option value="{{$click->id}}">{{$click->id}} - {{$click->user->first_name ?? ''}} {{$click->user->last_name ?? ''}} - {{$click->store->name ?? ''}}</option>
+                                        @endif 
+                                    @endforeach
+                                </select>
+                                    
+                            </div>
+                        </div>
+                 
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="phone-no-1">Order Value</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="phone-no-1" value="" name="order_value">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="phone-no-1">Network Commission</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="phone-no-1" value="" name="network_commission" >
+                                </div>
+                            </div>
+                        </div>
+                        {{-- <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="phone-no-1">Cashback Amount</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="phone-no-1" value="" name="amount" >
+                                </div>
+                            </div>
+                        </div> --}}
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="default-06">Status</label>
+                                <select class="form-control form-select" name="status" required>
+                                    @foreach ($statuses as $status)
+                                    <option value="{{$status->id}}">{{$status->status}}</option>
+                                        
+                                    @endforeach
+                                </select>
+                                   
+                            </div>
+                        </div>
+                    
+                       
+                        <div class="col-12">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div><!-- .modal-content -->
+    </div><!-- .modla-dialog -->
+</div><!-- .modal -->
 
  
 @endsection
 @push('scripts')
-    <script>
-    $(document).ready(function(){
-     $(document).on('click', '.pagination a', function(event){
-        event.preventDefault(); 
-        var route = $('.pagination').attr('route');
-        var page = $(this).attr('href').split('page=')[1];
-        
-         if(route=='index'){
-            
-             pageurl = "{{route('admin.commissions.fetch')}}?page="
-             var _token = $("input[name=_token]").val();
-            $.ajax({
-
-                url:pageurl+page,
-                method:"POST",
-                data:{_token:_token, page:page},
-                success:function(data)
-                {
-                    $('#table-data').html(data);
-                    $('html, body').animate({ scrollTop: 0 }, 'slow');
-                }
-                });
-         } 
-
-         if(route=='search'){
-              
-              
-            var _token = $("input[name=_token]").val();
-            var name = $("input[name=name]").val();
-            var network_id = $("select[name=network_id]").val();
-            var store_id = $("select[name=store_id]").val();
-            var click_id = $("select[name=click_id]").val();
-            var status_id = $("select[name=status_id]").val();
-            var user_id = $("select[name=user_id]").val();
-            $.ajax({
-              url:'{{route("admin.commissions.search_commissions")}}?page='+page,
-              method:"POST",
-              data:{_token:_token,name:name,network_id:network_id,store_id:store_id,click_id:click_id,status_id:status_id,user_id:user_id},
-              success:function(data)
-              {
-               $('#table-data').html(data);
-               $('html, body').animate({ scrollTop: 0 }, 'slow');
-              }
-            });
-         }       
-     });
+<script>
+    function initializeSelect2() {
+    $('.select-2').select2({
+        placeholder: function(){
+            $(this).data('placeholder');
+        }
     });
-    </script> 
-    <script>
-        $(document).ready(function(){
+}
+$(document).ready(function(){
+    $(document).on('click', '.pagination a', function(event){
+    event.preventDefault(); 
+    var route = $('.pagination').attr('route');
+    var page = $(this).attr('href').split('page=')[1];
+    
+        if(route=='index'){
         
-         $(document).on('submit', '.search_form', function(event){
-            event.preventDefault(); 
-              
+            pageurl = "{{route('admin.commissions.fetch')}}?page="
             var _token = $("input[name=_token]").val();
-            var name = $("input[name=name]").val();
-            var network_id = $("select[name=network_id]").val();
-            var store_id = $("select[name=store_id]").val();
-            var click_id = $("select[name=click_id]").val();
-            var status_id = $("select[name=status_id]").val();
-            var user_id = $("select[name=user_id]").val();
-            $.ajax({
-              url:'{{route("admin.commissions.search_commissions")}}',
-              method:"POST",
-              data:{_token:_token,name:name,network_id:network_id,store_id:store_id,click_id:click_id,status_id:status_id,user_id:user_id},
-              success:function(data)
-              {
-               $('#table-data').html(data);
-               $('html, body').animate({ scrollTop: 0 }, 'slow');
-              }
+        $.ajax({
+
+            url:pageurl+page,
+            method:"POST",
+            data:{_token:_token, page:page},
+            success:function(data)
+            {
+                $('#table-data').html(data);
+                $('html, body').animate({ scrollTop: 0 }, 'slow');
+            }
             });
-            
-         });
-        
+        } 
+
+        if(route=='search'){
+        var _token = $("input[name=_token]").val();
+        var name = $("input[name=name]").val();
+        var network_id = $("select[name=network_id]").val();
+        var store_id = $("select[name=store_id]").val();
+        var click_id = $("select[name=click_id]").val();
+        var status_id = $("select[name=status_id]").val();
+        var user_id = $("select[name=user_id]").val();
+        $.ajax({
+            url:'{{route("admin.commissions.search_commissions")}}?page='+page,
+            method:"POST",
+            data:{_token:_token,name:name,network_id:network_id,store_id:store_id,click_id:click_id,status_id:status_id,user_id:user_id},
+            success:function(data)
+            {
+            $('#table-data').html(data);
+            $('html, body').animate({ scrollTop: 0 }, 'slow');
+            }
         });
+        }       
+    });
+});
+</script> 
+<script>
+$(document).ready(function(){
+
+    $(document).on('submit', '.search_form', function(event){
+    event.preventDefault(); 
         
-        </script>  
+    var _token = $("input[name=_token]").val();
+    var name = $("input[name=name]").val();
+    var network_id = $("select[name=network_id]").val();
+    var store_id = $("select[name=store_id]").val();
+    var click_id = $("select[name=click_id]").val();
+    var status_id = $("select[name=status_id]").val();
+    var user_id = $("select[name=user_id]").val();
+    $.ajax({
+        url:'{{route("admin.commissions.search_commissions")}}',
+        method:"POST",
+        data:{_token:_token,name:name,network_id:network_id,store_id:store_id,click_id:click_id,status_id:status_id,user_id:user_id},
+        success:function(data)
+        {
+        $('#table-data').html(data);
+        $('html, body').animate({ scrollTop: 0 }, 'slow');
+        }
+    });
+    
+    });
+
+});
+$(document).ready(function(){
+    $(document).on('click', '.cashback-edit', function(event){
+        event.preventDefault(); 
+        var id = $(this).attr('cashback-id');
+        var pageurl = $(this).attr('href');
+        var _token = $("input[name=_token]").val();
+        $.ajax({
+
+            url:pageurl,
+            method:"GET",
+            data:{_token:_token},
+            success:function(data)
+            {
+                $('#cashback-modal').modal('show');
+                $('#cashback').html(data);
+                initializeSelect2()
+            }
+            });
+    });
+    $(document).on('click', '.cashback-history', function(event){
+        event.preventDefault(); 
+        var pageurl = $(this).attr('href');
+        var _token = $("input[name=_token]").val();
+        $.ajax({
+
+            url:pageurl,
+            method:"GET",
+            data:{_token:_token},
+            success:function(data)
+            {
+                $('#history-modal').modal('show');
+                $('#history').html(data);
+                
+            }
+            });
+    });
+});
+</script>  
 @endpush

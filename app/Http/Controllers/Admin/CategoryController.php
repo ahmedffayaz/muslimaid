@@ -31,7 +31,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::latest()->get();
+        $categories = Category::latest()->where('parent_id',0)->get();
         return view('admin-dashboard.categories.create', compact('categories'));
 
     }
@@ -49,6 +49,7 @@ class CategoryController extends Controller
         ]);
 
         if ($validator->fails()) {
+            flash()->success($validator->errors()->first());
             return redirect()->route('admin.categories.create')
                         ->withErrors($validator)
                         ->withInput();
@@ -58,8 +59,46 @@ class CategoryController extends Controller
             $category = Category::create([
                 'name' => $request->input('name'), 
                 'parent_id' => $request->input('parent_id'), 
+                'description' => $request->input('description'), 
+                'logo_type' => $request->input('logo_type'), 
+                'logo_link' => $request->input('logo_link'), 
+                'banner_type' => $request->input('banner_type'), 
+                'banner_link' => $request->input('banner_link'), 
+                'sort' => $request->input('sort'), 
+                'status' => $request->input('status'), 
             ]);
 
+        if($request->input('logo_type')=='upload'){
+            if($request->has('logo_upload')){
+                
+                $imageName = \Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo_upload->extension();          
+                $request->logo_upload->storeAs('public/categories/images',$imageName);
+                
+                $category->logo_upload = $imageName;
+                $category->update();
+
+            }else{
+                $category->logo_upload = 'category_default_logo.png';
+                $category->update();
+            }
+        }
+
+        if($request->input('banner_type')=='upload'){
+
+            if($request->has('banner_upload')){
+                
+                $imageName = \Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner_upload->extension();          
+                $request->logo_upload->storeAs('public/categories/images',$imageName);
+                
+                $category->banner_upload = $imageName;
+                $category->update();
+
+            }else{
+                $category->banner_upload = 'category_default_banner.png';
+                $category->update();
+            }
+
+        }
             flash()->success('New Category added');
             return redirect()->route('admin.categories.index');
             
@@ -92,9 +131,9 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        $categories = Category::latest()->get()->except($category->id);
+        $categories = Category::latest()->where('parent_id',0)->get();
 
-        return view('admin-dashboard.categories.edit', compact('category','categories'));
+        return view('admin-dashboard.categories.edit', compact('category','categories'))->render();
 
     }
 
@@ -109,13 +148,55 @@ class CategoryController extends Controller
     {
         try {
             $category->update([
-                'name'=>$request->input('name'),
+                'name' => $request->input('name'), 
                 'parent_id' => $request->input('parent_id'), 
+                'description' => $request->input('description'), 
+                'logo_type' => $request->input('logo_type'), 
+                'logo_link' => $request->input('logo_link'), 
+                'banner_type' => $request->input('banner_type'), 
+                'banner_link' => $request->input('banner_link'), 
+                'sort' => $request->input('sort'), 
+                'status' => $request->input('status'), 
     
-            ]);  
-            flash()->success('Category updated');
+            ]); 
+            
+            
+            if($request->input('logo_type')=='upload'){
 
-            return redirect()->route('admin.categories.index');
+                if($request->has('logo_upload')){
+
+                    // Storage::delete(['public/categories/images/'. $category->logo_upload]);
+                    
+                    $imageName = \Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo_upload->extension();          
+                    $request->logo_upload->storeAs('public/categories/images',$imageName);
+                    
+                    $category->logo_upload = $imageName;
+                    $category->update();
+
+                }
+            }
+            if($request->input('banner_type')=='upload'){
+
+            if($request->has('banner_upload')){
+
+                // Storage::delete(['public/categories/images/'. $category->banner_upload]);
+
+                $imageName = \Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner_upload->extension();          
+                $request->logo_upload->storeAs('public/categories/images',$imageName);
+                
+                $category->banner_upload = $imageName;
+                $category->update();
+
+            }}
+
+            if(!$request->ajax()){
+                flash()->success('Category updated');
+
+                return redirect()->route('admin.categories.index');
+            }else{
+                return 1;
+            }
+            
         } catch (\Throwable $th) {
 
             flash()->error('Error while updating the category');
@@ -129,9 +210,19 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        //
+        $childs = $category->childs;
+        if(count($childs)){
+            foreach($childs as $child){
+                $child->parent_id = 0;
+                $child->update();
+            }
+        }
+        $category->delete();
+
+        flash()->success('category deleted successfully');
+        return redirect()->route('admin.categories.index');
     }
     function fetch(Request $request)
     {

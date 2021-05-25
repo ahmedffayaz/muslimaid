@@ -2,7 +2,7 @@
     
     <div class="nk-tb-col"><span class="sub-text">User</span></div>
     <div class="nk-tb-col tb-col-mb"><span class="sub-text">Amount</span></div>
-    <div class="nk-tb-col tb-col-mb"><span class="sub-text">Cashout Type</span></div>
+    <div class="nk-tb-col tb-col-mb"><span class="sub-text">Payment Method</span></div>
     <div class="nk-tb-col tb-col-lg"><span class="sub-text">Time</span></div>
     <div class="nk-tb-col "><span class="sub-text">Status</span></div>
     <div class="nk-tb-col nk-tb-col-tools text-right">
@@ -16,7 +16,7 @@
 <div class="nk-tb-item">
     
     <div class="nk-tb-col">
-        <a href="html/user-details-regular.html">
+     
             <div class="user-card">
                 <div class="user-avatar 
                 <?php
@@ -36,20 +36,21 @@
                     <span>{{$cashout->user->email}}</span>
                 </div>
             </div>
-        </a>
+       
     </div>
     <div class="nk-tb-col tb-col-mb">
-        <span class="tb-amount">{{$cashout->cashout_type}} <span class="currency">&#163;</span></span>
+        <span class="tb-amount"><span class="currency">{{ Config::get('currency') }}</span> {{$cashout->amount}}</span>
     </div>
     <div class="nk-tb-col tb-col-mb">
-        <span>{{$cashout->cashout_type}}</span>
+        <span>{{$cashout->payment_method}}</span>
     </div>
     
     <div class="nk-tb-col ">
-        <span>{{$cashout->created_at}}</span>   
+        <span>{{$cashout->created_at}}</span>  
+    </div> 
    
     <div class="nk-tb-col ">
-        <span class="tb-status text-success">{{ $cashout->status ? 'active' : 'inactive'}}</span>
+        <span class="tb-status text-success">{{ $cashout->status}}</span>
     </div>
     <div class="nk-tb-col nk-tb-col-tools">
         <ul class="nk-tb-actions gx-1">
@@ -69,21 +70,7 @@
                 </a>
             </li> --}}
             <li>
-                <div class="drodown">
-                    <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
-                    <div class="dropdown-menu dropdown-menu-right">
-                        <ul class="link-list-opt no-bdr">
-                            <li><a href="#"><em class="icon ni ni-focus"></em><span>Quick View</span></a></li>
-                            <li><a href="#"><em class="icon ni ni-eye"></em><span>View Details</span></a></li>
-                            <li><a href="#"><em class="icon ni ni-repeat"></em><span>Transaction</span></a></li>
-                            <li><a href="#"><em class="icon ni ni-activity-round"></em><span>Activities</span></a></li>
-                            <li class="divider"></li>
-                            <li><a href="#"><em class="icon ni ni-shield-star"></em><span>Reset Pass</span></a></li>
-                            <li><a href="#"><em class="icon ni ni-shield-off"></em><span>Reset 2FA</span></a></li>
-                            <li><a href="#"><em class="icon ni ni-na"></em><span>Suspend User</span></a></li>
-                        </ul>
-                    </div>
-                </div>
+                
             </li>
         </ul>
     </div>

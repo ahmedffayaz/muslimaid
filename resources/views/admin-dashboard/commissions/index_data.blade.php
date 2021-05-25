@@ -6,10 +6,10 @@
     
     <div class="nk-tb-col "><span class="sub-text">User</span></div>
     <div class="nk-tb-col"><span class="sub-text">Store</span></div>
-    {{-- <div class="nk-tb-col text-center"><span class="sub-text">Order Value (&#163;)</span></div> --}}
-    {{-- <div class="nk-tb-col text-center"><span class="sub-text">Network Commission (&#163;)</span></div> --}}
-    <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Network Commission (&#163;)</span></div>
-    <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Cashback (&#163;)</span></div>
+    {{-- <div class="nk-tb-col text-center"><span class="sub-text">Order Value ({{ Config::get('currency') }})</span></div> --}}
+    {{-- <div class="nk-tb-col text-center"><span class="sub-text">Network Commission ({{ Config::get('currency') }})</span></div> --}}
+    <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Network Commission ({{ Config::get('currency') }})</span></div>
+    <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Cashback ({{ Config::get('currency') }})</span></div>
     <div class="nk-tb-col  text-center"><span class="sub-text">Exit Click Id</span></div>
     <div class="nk-tb-col  text-center"><span class="sub-text">Event Time</span></div>
     <div class="nk-tb-col  text-right"><span class="sub-text">Status</span></div>
@@ -40,11 +40,11 @@
             ?>
             
             ">
-                <span>{{$commission->user->first_name[0] ?? 'N'}}{{$commission->user->last_name[0] ?? 'A'}}</span>
+                <span>{{$commission->exitClick->user->first_name[0] ?? 'N'}}{{$commission->exitClick->user->last_name[0] ?? 'A'}}</span>
             </div>
             <div class="user-info">
-                <span class="tb-lead">{{$commission->user->first_name ?? ''}} {{$commission->user->last_name ?? ''}}<span class="dot dot-success d-md-none ml-1"></span></span>
-                <span>{{$commission->user->email ?? ''}}</span>
+                <span class="tb-lead">{{$commission->exitClick->user->id ?? ''}} - {{$commission->exitClick->user->first_name ?? ''}} {{$commission->exitClick->user->last_name ?? ''}}<span class="dot dot-success d-md-none ml-1"></span></span>
+                <span>{{$commission->exitClick->user->email ?? ''}}</span>
             </div>
         </div>
         
@@ -55,10 +55,10 @@
     </div>
     
     <div class="nk-tb-col  text-center">
-        <span><span class="currency">&#163;</span>{{$commission->network_commission}}</span>
+        <span><span class="currency">{{ Config::get('currency') }} </span>{{$commission->network_commission}}</span>
     </div>
     <div class="nk-tb-col  text-center">
-        <span><span class="currency">&#163;</span>{{$commission->amount}}</span>
+        <span><span class="currency">{{ Config::get('currency') }} </span>{{$commission->amount}}</span>
     </div>
     <div class="nk-tb-col  text-center">
         <span>{{$commission->exit_click_id}}</span>
@@ -80,8 +80,16 @@
                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="link-list-opt no-bdr">
-                            <li><a href="{{route('admin.commissions.edit', $commission)}}"><em class="icon ni ni-edit"></em><span>Edit</span></a></li>
-  
+                            <li><a href="{{route('admin.commissions.edit', $commission)}}"  cashback-id='{{$commission->id}}' class='cashback-edit'><em class="icon ni ni-edit"></em><span>Edit</span></a></li>
+                            <li><a href="{{route('admin.commissions.history', $commission)}}"  class='cashback-history'><em class="icon ni ni-eye"></em><span>Status History</span></a></li>
+                            <li><a  onclick="$('#delete-commission-{{$commission->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete</span></a>
+                                                    
+                                <form action="{{ route('admin.commissions.destroy', $commission) }}" id="delete-commission-{{$commission->id}}" method="POST" class="m-0">
+                                    @method('DELETE')
+                                    @csrf
+                                    
+                                </form>
+                            </li>
                         </ul>
                     </div>
                 </div>

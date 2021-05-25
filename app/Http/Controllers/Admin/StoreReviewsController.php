@@ -9,6 +9,13 @@ use App\Models\Store;
 
 class StoreReviewsController extends Controller
 {
+    function __construct()
+    {
+         $this->middleware('permission:view reviews', ['only' => ['index']]);
+         $this->middleware('permission:edit reviews', ['only' => ['edit','show','update']]);
+         $this->middleware('permission:add reviews', ['only' => ['create','Store']]);
+         $this->middleware('permission:delete reviews', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +25,7 @@ class StoreReviewsController extends Controller
     {
         $route='index';
         $stores = Store::latest()->get();
-        $reviews = StoreReview::latest()->paginate(20);
+        $reviews = StoreReview::latest()->paginate(30);
         return view('admin-dashboard.store_reviews.index',compact('reviews','stores','route'));
     }
 
@@ -90,9 +97,11 @@ class StoreReviewsController extends Controller
         try{
             $review->update($request->all());
             if(!$request->ajax())
-            {flash()->success('Review updated successfully');
-                return redirect()->back(); }else{
-                    return true;
+            {
+                flash()->success('Review updated successfully');
+                return redirect()->back(); }
+            else{
+                return true;
                 }
     
             
@@ -110,16 +119,18 @@ class StoreReviewsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(StoreReview $review)
     {
-        //
+        $review->delete();
+        flash()->success('Review deleted successfully');
+        return redirect()->back();
     }
     function fetch(Request $request)
     {
      if($request->ajax())
      {
         $route = 'index';
-        $reviews = StoreReview::latest()->paginate(20);
+        $reviews = StoreReview::latest()->paginate(30);
 
          return view('admin-dashboard.store_reviews.index_data', compact('reviews','route'))->render();
      }
@@ -173,7 +184,7 @@ class StoreReviewsController extends Controller
             $reviews->where('status', $request->input('status'));
         }
         
-        $reviews = $reviews->latest()->paginate(20);
+        $reviews = $reviews->latest()->paginate(30);
         $route='search';
         return view('admin-dashboard.store_reviews.index_data', compact('reviews','route'))->render();
         

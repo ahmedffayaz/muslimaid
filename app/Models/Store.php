@@ -6,12 +6,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Network;
 use App\Models\Category;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Store extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = ['network_id', 'name','slug', 'advertiser_id', 'tracking_url','store_url', 'description','terms_conditions','extra_info', 'status'];
+    protected $fillable = ['network_id',
+     'name',
+     'slug', 
+     'advertiser_id', 
+     'tracking_url',
+     'store_url', 
+     'description',
+     'terms_conditions',
+     'extra_info',
+     'network_status',
+     'status_description', 
+     'override_cashback',
+     'override_categories',
+     'status'];
 
     public function network(){
 
@@ -23,24 +37,19 @@ class Store extends Model
     }
     public function cashback(){
 
-        return $this->hasOne(StoreCashback::class);
-
+        return $this->hasOne(StoreCashback::class)->where('default',1);
     }
-
     public function cashbacks(){
 
         return $this->hasMany(StoreCashback::class);
-
     }
     public function images(){
 
         return $this->hasMany(StoreImage::class);
-
     }
     public function logo(){
 
         return $this->images()->where('title','logo');
-
     }
     public function vouchers(){
 

@@ -1,10 +1,12 @@
 <div class="nk-sidebar nk-sidebar-fixed is-light is-compact" data-content="sidebarMenu">
     <div class="nk-sidebar-element nk-sidebar-head">
         <div class="nk-sidebar-brand">
+
+            
             <a href="{{route('admin.home.index')}}" class="logo-link nk-sidebar-logo">
-                <img class="logo-light logo-img" src="{{ asset('admin-dashboard/images/logo.png')}}" srcset="{{ asset('admin-dashboard/images/logo2x.png')}} 2x" alt="logo">
-                <img class="logo-dark logo-img" src="{{ asset('admin-dashboard/images/logo-dark.png')}}" srcset="{{ asset('admin-dashboard/images/logo-dark2x.png')}} 2x" alt="logo-dark">
-                <img class="logo-small logo-img logo-img-small" src="{{ asset('admin-dashboard/images/logo-small.png')}}" srcset="{{ asset('admin-dashboard/images/logo-small2x.png')}} 2x" alt="logo-small">
+                <img class="logo-light logo-img" src="@isset($settings['dashboard_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif"  alt="logo">
+                <img class="logo-dark logo-img" src="@isset($settings['dashboard_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/logo-dark.png')}}@endif" alt="logo-dark">
+                <img class="logo-small logo-img logo-img-small" src="@isset($settings['dashboard_small_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_small_logo'])}}@else{{asset('admin-dashboard/images/logo-small.png')}}@endif" alt="logo-small">
             </a>
         </div>
         <div class="nk-menu-trigger mr-n2">
@@ -22,85 +24,109 @@
                             <span class="nk-menu-text">Dashboard</span>
                         </a>
                     </li><!-- .nk-menu-item -->
+                    @canany(['view categories','view stores','view reviews','view vouchers'])
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-db-fill"></em></span>
                             <span class="nk-menu-text">Data</span>
                         </a>
                         <ul class="nk-menu-sub">
+                            @can('view categories')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.categories.index')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-grid-alt-fill"></em></span>
                                     <span class="nk-menu-text">Categories</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            @endcan
+                            @can('view stores')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.stores.index')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
                                     <span class="nk-menu-text">Stores</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            @endcan
+                            @can('view reviews')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.reviews.index')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-notice"></em></span>
                                     <span class="nk-menu-text">Store Reviews</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            @endcan
+                            @can('view vouchers')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.vouchers.index')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-money"></em></span>
                                     <span class="nk-menu-text">Vouchers</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
-                            
+                            @endcan
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
+                    @endcanany
+                    @canany(['view cashbacks','add cashbacks','view cashbouts'])
+
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-sign-gbp"></em></span>
                             <span class="nk-menu-text">Cashbacks</span>
                         </a>
                         <ul class="nk-menu-sub">
+                            @can('view cashbacks')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.commissions.index')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-sign-gbp"></em></span>
                                     <span class="nk-menu-text">Manage Cashbacks</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            @endcan
+                            @can('add cashbacks')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.commissions.create_multiple')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-sign-gbp"></em></span>
                                     <span class="nk-menu-text">Add Multiple Cashbacks</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            @endcan
+                            @can('view cashbouts')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.cashouts.index')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-cc-alt2-fill"></em></span>
                                     <span class="nk-menu-text">Cashouts</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            @endcan
                             
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
+                    @endcanany
+
+                    @can('view users')
                     <li class="nk-menu-item">
                         <a href="{{route('admin.users.index')}}" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
                             <span class="nk-menu-text">Users</span>
                         </a>
                     </li><!-- .nk-menu-item -->
-                   
+                    @endcan
+                    @canany(['view clicks','view performance','view earnings'])
+
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-file-docs"></em></span>
                             <span class="nk-menu-text">Reports</span>
                         </a>
                         <ul class="nk-menu-sub">
+                            @can('view clicks')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.clicks.index')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-arrow-up-right"></em></span>
                                     <span class="nk-menu-text">Exit Clicks</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            @endcan
                             
                             {{-- <li class="nk-menu-item">
                                 <a href="{{route('admin.cashouts.index')}}" class="nk-menu-link">
@@ -108,54 +134,88 @@
                                     <span class="nk-menu-text">Cashouts</span>
                                 </a>
                             </li><!-- .nk-menu-item --> --}}
+                            @can('view performance')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.reports.performance')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-cc-alt2-fill"></em></span>
                                     <span class="nk-menu-text">Store Performance</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            @endcan
+                            @can('view earnings')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.reports.earnings')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-cc-alt2-fill"></em></span>
                                     <span class="nk-menu-text">Earnings</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            @endcan
                             
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
+                    @endcanany
+                    @canany(['view networks','view settings','view languages','view translations'])
+
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-setting-fill"></em></span>
                             <span class="nk-menu-text">Settings</span>
                         </a>
                         <ul class="nk-menu-sub">
+                            @can('view networks')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.networks.index')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-activity-round-fill"></em></span>
                                     <span class="nk-menu-text">Networks</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            @endcan
+                            @can('view settings')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.settings.index')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-setting-fill"></em></span>
-                                    <span class="nk-menu-text">Site Settings</span>
+                                    <span class="nk-menu-text">Settings</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            @endcan
+                            @can('view languages')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.languages.index')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-text2"></em></span>
                                     <span class="nk-menu-text">Languages</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            @endcan
+                            @can('view translations')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.translations.index')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-file-docs"></em></span>
                                     <span class="nk-menu-text">Translations</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
-                            
+                            @endcan
+                            @can('view permissions')
+                            <li class="nk-menu-item">
+                                <a href="{{route('admin.settings.permissions')}}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-lock-alt-fill"></em></span>
+                                    <span class="nk-menu-text">Permissions</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            @endcan
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
+                    @endcanany
+                    @can('view tickets')
+                    <li class="nk-menu-item ">
+                        @php
+                         $new_tickets = \App\Models\Ticket::where('new_ticket',1)->get();    
+                        @endphp
+                        <a href="{{route('admin.tickets.index')}}" class="nk-menu-link @if(count($new_tickets)) icon-status icon-status-info @endif">
+                            <span class="nk-menu-icon "><em class="icon ni ni-chat-fill"></em></span>
+                            <span class="nk-menu-text">Tickets</span>
+                        </a>
+                    </li><!-- .nk-menu-item -->
+                    @endcan
                     
                    
                 </ul><!-- .nk-menu -->

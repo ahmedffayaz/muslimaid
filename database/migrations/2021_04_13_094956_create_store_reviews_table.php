@@ -20,6 +20,8 @@ class CreateStoreReviewsTable extends Migration
             $table->string('reviewer')->nullable();
             $table->string('status')->default('active');
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

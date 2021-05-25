@@ -14,6 +14,13 @@ use App\Models\SiteSetting;
 
 class CommissionController extends Controller
 {
+    function __construct()
+    {
+         $this->middleware('permission:view cashback', ['only' => ['index']]);
+         $this->middleware('permission:edit cashback', ['only' => ['edit','show','update']]);
+         $this->middleware('permission:add cashback', ['only' => ['create','Store']]);
+         $this->middleware('permission:delete cashback', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -72,6 +79,13 @@ class CommissionController extends Controller
                 'click_date'=> $click->created_at,
                 
             ]); 
+
+
+            $change_status = CashbackStatusChange::create([
+                'user_cashback_id'=>$commission->id,
+                'cashback_status_id'=>$commission->status
+    
+            ]);
             
             flash()->success('New Cashback Added');
             return redirect()->route('admin.commissions.index');
@@ -105,7 +119,7 @@ class CommissionController extends Controller
     {
         $clicks = ExitClick::latest()->get();
         $statuses = \DB::table('cashback_statuses')->latest()->get();
-        return view('admin-dashboard.commissions.edit', compact('commission','clicks','statuses'));
+        return view('admin-dashboard.commissions.edit', compact('commission','clicks','statuses'))->render();
     }
 
     /**
@@ -118,7 +132,7 @@ class CommissionController extends Controller
     public function update(Request $request, UserCashback $commission)
     {
         try {
-            $click = ExitClick::findOrFail($request->exit_click_id);
+            // $click = ExitClick::findOrFail($request->exit_click_id);
             
             //track status change of the cashback
             if($commission->status!=$request->status){
@@ -130,22 +144,18 @@ class CommissionController extends Controller
             }
 
             $commission->update([
-                'store_id' => $click->store_id,
-                'user_id'  => $click->user_id ?? 0,
-                'exit_click_id' => $click->id,
                 'amount' => round($request->amount,3),
                 'network_commission' => round($request->network_commission,3),
                 'order_value' => round($request->order_value,3),
                 'status' => $request->status,
-                'event_date'=> $click->created_at,
-                'click_date'=> $click->created_at,
                 
             ]); 
             flash()->success('Cashback updated');
             return redirect()->route('admin.commissions.index');
 
         } catch (\Throwable $th) {
-            flash()->error('Error while updating the cashback');
+            flash()->error($th->getMessage());
+            // flash()->error('Error while updating the cashback');
             return redirect()->route('admin.commissions.index');
 
         }
@@ -158,9 +168,11 @@ class CommissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(UserCashback $commission)
     {
-        //
+        $commission->delete();
+        flash()->success('Cashback deleted successfully');
+        return redirect()->back();
     }
     function fetch(Request $request)
     {
@@ -227,6 +239,12 @@ class CommissionController extends Controller
                 'click_date'=> $click->created_at,
                 
             ]); 
+
+            $change_status = CashbackStatusChange::create([
+                'user_cashback_id'=>$commission->id,
+                'cashback_status_id'=>$commission->status
+    
+            ]);
             }
             
             flash()->success('New Cashback Added');
@@ -273,5 +291,13 @@ class CommissionController extends Controller
         $coms = $coms->latest()->paginate(20);
         $route='search';
         return view('admin-dashboard.commissions.index_data', compact('coms','route'))->render();
+    }
+
+    public function statusHistory(UserCashback $commission){
+
+        $history = $commission->statusHistory;
+        return view('admin-dashboard.commissions.history', compact('history'))->render();
+
+            
     }
 }

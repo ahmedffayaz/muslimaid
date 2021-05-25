@@ -1,3 +1,4 @@
+
 <div class="nk-tb-list nk-tb-ulist" style="table-layout: auto">
     @if(count($store->cashbacks))
     <div class="nk-tb-item nk-tb-head">
@@ -17,10 +18,10 @@
     
     <div class="nk-tb-item">
         <div class="nk-tb-col  pl-1">
-            <span>{{$cashback->sale_commission}}</span>
+            <span>@if($cashback->type=='fixed'){{$cashback->currency}} @endif{{$cashback->sale_commission}}@if($cashback->type=='percentage')%@endif</span>
         </div>
      
-        <div class="nk-tb-col ">
+        <div class="nk-tb-col text-capitalize">
             <span>{{$cashback->type}}</span>
         </div>
       

@@ -41,18 +41,37 @@
     </div>
     
     
-    <div class="nk-tb-col">
-        <span>{{$store->cashback->sale_commission ?? ''}}</span>
+    <div class="nk-tb-col">@if(isset($store->cashback->type))
+        <span>@if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif {{$store->cashback->sale_commission ?? ''}}@if($store->cashback->type=='percentage')%@endif </span>
+   @endif
     </div>
     <div class="nk-tb-col text-center">
-        <span>{{count($store->commissions)}}</span>
+        <span>{{count($store->cashbacks)}}</span>
     </div>
    
    
    
    
     <div class="nk-tb-col text-center">
-        {!! $store->status ? '<span class="tb-status text-success">active</span>' : '<span class="tb-status text-danger">inactive</span>'!!}
+        @if($store->status == 'error') 
+        <span class="badge badge-danger text-capitalize" data-toggle="tooltip" data-placement="top" title="{{$store->status_description}}">
+            {{$store->status}}
+        </span>
+        @elseif($store->status == 'active')
+        <span class="badge badge-success text-capitalize">
+            {{$store->status}}
+        </span>
+        @elseif($store->status == 'pending review')
+        <span class="badge badge-info text-capitalize">
+            {{$store->status}}
+        </span>
+        @elseif($store->status == 'disabled' || $store->status == 'closed')
+        <span class="badge badge-warning text-capitalize">
+            {{$store->status}}
+        </span>
+        @endif
+        
+       
     </div>
     <div class="nk-tb-col nk-tb-col-tools">
         <ul class="nk-tb-actions gx-1">
@@ -63,7 +82,14 @@
                         <ul class="link-list-opt no-bdr">
                             <li><a href="{{route('admin.stores.show', $store)}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li>
                             {{-- <li><a href="{{route('admin.stores.images', $store)}}"><em class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
-                    
+                            <li><a  onclick="$('#delete-store-{{$store->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Store</span></a>
+                                                    
+                            <form action="{{ route('admin.stores.destroy', $store) }}" id="delete-store-{{$store->id}}" method="POST" class="m-0">
+                                @method('DELETE')
+                                @csrf
+                                
+                            </form>
+                        </li>
                         </ul>
                     </div>
                 </div>

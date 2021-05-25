@@ -5,12 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Store;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class StoreCashback extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = ['store_id', 'cashback_name','type', 'value', 'image','click_url','sale_commission','detail','network_detail'];
+    protected $fillable = ['store_id', 'cashback_name','type', 'value', 'image','click_url','sale_commission','currency','detail','network_detail','default'];
 
     public function store(){
 

@@ -11,6 +11,14 @@ use App\Models\Network;
 
 class VouchersController extends Controller
 {
+    function __construct()
+    {
+         $this->middleware('permission:view vouchers', ['only' => ['index','show']]);
+         $this->middleware('permission:edit vouchers', ['only' => ['edit','update']]);
+         $this->middleware('permission:add vouchers', ['only' => ['create','Store']]);
+         $this->middleware('permission:delete vouchers', ['only' => ['destroy']]);
+         
+    }
     /**
      * Display a listing of the resource.
      *
@@ -85,7 +93,8 @@ class VouchersController extends Controller
             return view('admin-dashboard.vouchers.modal-edit', compact('voucher','stores'))->render();
 
         }else{
-            return view('admin-dashboard.vouchers.edit', compact('voucher','stores'));
+            return view('admin-dashboard.vouchers.edit-voucher', compact('voucher','stores'))->render();
+
 
         }
     }
@@ -108,7 +117,7 @@ class VouchersController extends Controller
             $voucher->update($inputs);
             if(!$request->ajax())
             { 
-                 flash()->success('voucher updated successfully');
+                 flash()->success('Voucher updated successfully');
                 return redirect()->route('admin.vouchers.index');
 
             }
@@ -118,7 +127,7 @@ class VouchersController extends Controller
           
         
         } catch (\Throwable $th) {
-            flash()->error('something went wrong! unable to update the voucher');
+            flash()->error('Something went wrong! unable to update the voucher');
             return redirect()->route('admin.vouchers.index');
         }
        
@@ -130,9 +139,11 @@ class VouchersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Voucher $voucher)
     {
-        //
+        $voucher->delete();
+        flash()->success('Voucher deleted successfully');
+        return redirect()->back();
     }
     function fetch(Request $request)
     {

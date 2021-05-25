@@ -4,10 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 
 class ImportedCategory extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [ 'name', 'status','parent_id','mapped_to', 'network_id'];
 
@@ -23,6 +25,9 @@ class ImportedCategory extends Model
 
         return $this->belongsTo(ImportedCategory::class, 'parent_id');
 
+    }
+    public function childs() {
+        return $this->hasMany(ImportedCategory::class,'parent_id','id');
     }
 
 }

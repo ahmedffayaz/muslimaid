@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class TranslationController extends Controller
 {
+
+    
     /**
      * Display a listing of the resource.
      *

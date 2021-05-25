@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
 
         $this->call([
+            RolesPermissionsSeeder::class,
             UserSeeder::class,
             NetworkSeeder::class,
             StoreSeeder::class,
@@ -23,7 +24,8 @@ class DatabaseSeeder extends Seeder
             ClicksSeeder::class,
             SettingSeeder::class,
             CashbackSeeder::class,
-            ReviewSeeder::class
+            ReviewSeeder::class,
+            CashoutSeeder::class
            
         ]);
         // \App\Models\User::factory(10)->create();

@@ -16,6 +16,14 @@ use Illuminate\Support\Facades\Storage;
 
 class StoreController extends Controller
 {
+
+    function __construct()
+    {
+         $this->middleware('permission:view stores', ['only' => ['index']]);
+         $this->middleware('permission:edit stores', ['only' => ['edit','show','update']]);
+         $this->middleware('permission:add stores', ['only' => ['create','Store']]);
+         $this->middleware('permission:delete stores', ['only' => ['destroy']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -113,8 +121,8 @@ class StoreController extends Controller
     public function show(Store $store)
     {
         $networks = Network::all();
-        $categories = Category::all();
-        $stores = Store::all();
+        $categories = Category::where('parent_id',0)->get();
+        $stores = Store::latest()->get();
         return view('admin-dashboard.stores.show',compact( 'networks', 'categories','store','stores'));
     }
 
@@ -147,9 +155,6 @@ class StoreController extends Controller
      */
     public function update(Request $request, Store $store)
     {
-        // dd($request->all());
-
-       
         try {
             $store->update([
                 'name'         => $request->input('store_name'),
@@ -161,44 +166,9 @@ class StoreController extends Controller
                 'terms_conditions'    => $request->input('terms_conditions'),
                 'status'    => $request->input('status'),
                 'slug'    => \Str::slug($request->input('store_name')),
+                'override_categories' =>$request->has('override_categories') ? 1 : 0,
+                'override_cashback' =>$request->has('override_cashback') ? 1 : 0,
             ]);
-            if($request->has('image')){
-                
-                $imageName = \Str::slug($request->input('store_name')).'_logo_'.time().'.'.$request->image->extension();          
-                $request->image->storeAs('public/stores/images',$imageName);
-                $logo = StoreImage::where([ 'store_id'=>$store->id, 'title'=>'logo' ])->first();
-
-                if($logo){
-                    Storage::delete(['public/stores/images/'.$logo->image]);
-                    $logo->update([ 'image' => $imageName ]);
-                }
-                else{
-                    $logo = StoreImage::create([
-                        'store_id'=>$store->id,
-                        'title' => 'logo',
-                        'image' =>$imageName,
-                        'image_type'=>'store_logo'
-                    ]);
-                }
-
-            }
-
-            
-
-            $cashback = StoreCashback::where('store_id',$store->id)->first();
-            $cashback->update([
-                'sale_commission'=>$request->input('store_cashback'),
-                'click_url'=>$request->input('tracking_url')
-            ]);
-    
-            DB::table('category_store')->where('store_id', $store->id)->delete();
-            
-            foreach ($request->input('category_id') as $category) {
-                DB::table('category_store')->insert([
-                    'store_id' => $store->id,
-                    'category_id' => $category
-                ]);
-            }
 
             if(!$request->ajax())
             { flash()->success('Store info updated successfully');
@@ -207,13 +177,9 @@ class StoreController extends Controller
             else{
                 return true;
             }
-            
 
-            // return redirect()->route('admin.stores.index');
         } catch (\Throwable $th) {
 
-            // flash()->error('Error while updating the store');
-            // return redirect()->route('admin.stores.index');
             return $th;
 
         }
@@ -226,9 +192,13 @@ class StoreController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Store $store)
     {
-        //
+        $store->reviews()->delete();
+        $store->vouchers()->delete();
+        $store->cashbacks()->delete();
+        $store->delete();
+        return redirect()->back();
     }
 
     function fetch(Request $request)
@@ -237,7 +207,6 @@ class StoreController extends Controller
         {
             $route='index';
             $stores = Store::orderBy('id', 'DESC')->paginate(30);
-
             return view('admin-dashboard.stores.index_data', compact('stores','route'))->render();
         }
     }
@@ -281,10 +250,21 @@ class StoreController extends Controller
     {
         if($request->has('image')){
 
-            $title_exist = StoreImage::where([ 'store_id'=>$store->id, 'title'=>$request->title ])->first();
-            if($title_exist ){
-                flash()->error('Image with same title already exist');
-                return redirect()->route('admin.stores.images',$store);
+            $img_exist = StoreImage::where([ 'store_id'=>$store->id, 'title'=>$request->title ])->first();
+            $imageName = \Str::slug($store->name).'_logo_'.time().'.'.$request->image->extension();          
+            $request->image->storeAs('public/stores/images',$imageName);
+
+            if($img_exist ){
+                $img_exist->update([
+
+                    'title' => $request->title,
+                    'image' =>$imageName,
+                    'is_uploaded' =>1
+
+                ]);
+              
+                return array('message'=>'Image uploaded successfully',
+                        'updated'=>'success');
             }
                 
             $imageName = \Str::slug($store->name).'_logo_'.time().'.'.$request->image->extension();          
@@ -294,16 +274,17 @@ class StoreController extends Controller
                     'store_id'=>$store->id,
                     'title' => $request->title,
                     'image' =>$imageName,
-                    'image_type'=>'store_logo'
+                    'image_type'=>'store_logo',
+                    'is_uploaded' =>1
                 ]);
 
-            flash()->success('Image uploaded successfully');
-            return redirect()->route('admin.stores.show',$store);
+                return array('message'=>'Image uploaded successfully',
+                'updated'=>'success');
 
         }else{
 
-            flash()->error('Image is required');
-            return redirect()->route('admin.stores.show',$store);
+            return array('message'=>'Image is required',
+                        'updated'=>'error');
         }        
     }
 
@@ -350,7 +331,6 @@ class StoreController extends Controller
         if($request->ajax())
         {
            $store = Store::where('id',$request->store)->first();
-
             return view('admin-dashboard.stores.vouchers', compact('store'))->render();
         }
     }
@@ -359,7 +339,6 @@ class StoreController extends Controller
         if($request->ajax())
         {
            $store = Store::where('id',$request->store)->first();
-
             return view('admin-dashboard.stores.cashbacks', compact('store'))->render();
         }
     }
@@ -368,25 +347,25 @@ class StoreController extends Controller
         if($request->ajax())
         {
            $store = Store::where('id',$request->store)->first();
-
             return view('admin-dashboard.stores.reviews', compact('store'))->render();
         }
     }
     public function editReview(Request $request, StoreReview $review )
     {  
-       return view('admin-dashboard.stores.review-form', compact('review'))->render();
-
+         return view('admin-dashboard.stores.review-form', compact('review'))->render();
     }
     public function editCashback(Request $request, StoreCashback $cashback )
-    {
-        
+    { 
         return view('admin-dashboard.stores.cashback-edit', compact('cashback'))->render();
-
     }
     public function updateCashback(Request $request, StoreCashback $cashback)
     {
-
         $cashback->update($request->all());
+        return true;
+    }
+    public function createCashback(Request $request)
+    {
+        $cashback = StoreCashback::create($request->all());
         return true;
     }
     function fetchImages(Request $request)
@@ -394,8 +373,20 @@ class StoreController extends Controller
         if($request->ajax())
         {
            $store = Store::where('id',$request->store)->first();
-
             return view('admin-dashboard.stores.images-data', compact('store'))->render();
         }
+    }
+
+    function updateCategories(Request $request){
+
+        DB::table('category_store')->where('store_id', $request->input('store_id'))->delete();
+            
+        foreach ($request->input('category_id') as $category) {
+            DB::table('category_store')->insert([
+                'store_id' => $request->input('store_id'),
+                'category_id' => $category
+            ]);
+        }
+
     }
 }
