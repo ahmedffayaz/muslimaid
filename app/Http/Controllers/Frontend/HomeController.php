@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\StoreCashback;
 use App\Models\Language;
+use App\Models\Category;
+use App\Models\Store;
 use Illuminate\Support\Facades\App;
+use App\Models\Slider;
 
 
 class HomeController extends Controller
@@ -18,9 +21,13 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $cashbacks = StoreCashback::latest()->get();
+        
+        $stores = Store::where('feature_homepage',1)->latest()->get();
         $languages = Language::orderBy('id', 'desc')->get();
-        return view('welcome',compact('cashbacks','languages'));
+        $featured_categories = Category::where('feature_homepage',1)->orderBy('name', 'ASC')->latest()->get();
+        $slider = Slider::where('name','Home')->first();
+        
+        return view('frontend.pages.home',compact('stores','languages','featured_categories','slider'));
     }
 
     /**

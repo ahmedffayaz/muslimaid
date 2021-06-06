@@ -7,7 +7,7 @@
     
     
     <div class="nk-tb-col "><span class="sub-text">Store ID</span></div>
-    <div class="nk-tb-col "><span class="sub-text">Store Name</span></div>
+    <div class="nk-tb-col " ><span class="sub-text">Store Name</span></div>
     {{-- <div class="nk-tb-col "><span class="sub-text">Network</span></div> --}}
     {{-- <div class="nk-tb-col "><span class="sub-text">Category</span></div> --}}
     <div class="nk-tb-col "><span class="sub-text">Store Url</span></div>
@@ -26,12 +26,15 @@
     
    
     <div class="nk-tb-col">
-        <span><a href="{{route('admin.stores.show',$store)}}"><div class="tb-lead">{{$store->id}}</div></a></span><br>
+        <span><a href="{{route('admin.stores.show',$store)}}"><div class="tb-lead">{{$store->id}}<img width="40px" class="float-right" @if($store->logo->first()->is_uploaded)
+            src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+            @else
+            src="{{asset('frontend/images/products/product-16.jpg')}}" @endif alt=""></div></a></span><br>
         
     </div>
     <div class="nk-tb-col">
-        <span><a href="{{route('admin.stores.show',$store)}}"><div class="tb-lead">{{$store->name}}</div></a></span>
-        <span>{{$store->network->name}}</span>
+        <span><a href="{{route('admin.stores.show',$store)}}"><div class="tb-lead">{{$store->name}} </div></a></span>
+    <span>{{$store->network->name}}</span>
     </div>
    
     

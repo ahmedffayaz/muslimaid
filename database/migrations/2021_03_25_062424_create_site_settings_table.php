@@ -17,7 +17,7 @@ class CreateSiteSettingsTable extends Migration
             $table->bigIncrements('id');
             $table->string('title');
             $table->string('type');
-            $table->text('value');
+            $table->text('value')->nullable();
             $table->string('default')->default(0);
             $table->timestamps();
             $table->softDeletes();

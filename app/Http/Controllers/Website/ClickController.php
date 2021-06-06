@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\ExitClick;
 use App\Models\Store;
+use App\Models\SiteSetting;
 
 class ClickController extends Controller
 {
@@ -37,6 +38,11 @@ class ClickController extends Controller
      */
     public function store(Request $request)
     {
+       $cashback_percent = SiteSetting::where('type','cashback_percentage')->first()->value;
+       if(!$cashback_percent){
+        $cashback_percent = 0;
+       }
+        
 
         $store = Store::where('id',$request->input('store_id'))->first();
         
@@ -45,6 +51,7 @@ class ClickController extends Controller
             'user_id'=>$request->input('user_id'),
             'status'=>'pending',
             'exit_url'=>'#',
+            'current_cashback_percentage' => $cashback_percent
 
         ]);
 

@@ -22,7 +22,7 @@
                             @foreach ($categories as $parent)
                             <option @if($category->parent_id == $parent->id) selected @endif  value="{{$parent->id}}" style="font-weight:bold">{{$parent->name}}</option>
                             @if(count($parent->childs))
-                                 @include('admin-dashboard.categories.child_input',['childs' => $parent->childs,'isEdit'=> 1 ,'category'=>$category])
+                                 @include('admin-dashboard.categories.child_input',['childs' => $parent->childs,'isEdit'=> 1 ,'category'=>$category,'dashes'=>'~'])
                              @endif
                                 
                             @endforeach
@@ -94,7 +94,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-12 ">
+        <div class="col-lg-12 d-none">
 
         <label class="form-label">Banner</label><br>
         
@@ -109,7 +109,7 @@
         @endif
         </div>
         
-        <div class="col-lg-6 ">
+        <div class="col-lg-6 d-none">
             <div class="form-group">
                 <label class="form-label" for="banner_type">Banner Type</label>
                 <div class="form-control-wrap ">
@@ -123,7 +123,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 banner_link">
+        <div class="col-lg-6 banner_link d-none">
             <div class="form-group">
                 <label class="form-label" for="banner_link">Banner Link</label>
                 <div class="form-control-wrap">
@@ -131,7 +131,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 banner_upload">
+        <div class="col-lg-6 banner_upload d-none">
             <div class="form-group">
                 <label class="form-label" for="banner_upload">Banner Upload</label>
                 <div class="form-control-wrap">
@@ -166,6 +166,34 @@
                 </div>
             </div>
         </div>
+        {{-- <div class="col-md-12">
+            <label class="form-label" for="default-06">Editor Picks</label>
+                <div class="form-control-wrap ">
+                    <div class="">
+                        <select class="form-control form-select select-2" name="picks[]" id="picks" required multiple>
+
+                            @foreach ($stores as $store)
+                              <option  @if(in_array($store->id, $category->picks->pluck('store_id')->toArray())) selected  @endif value="{{$store->id}}">{{$store->id}} - {{$store->name}}</option>
+                            @endforeach
+                          
+                        </select>
+                    </div>
+                </div> 
+        </div> --}}
+        @if($category->parent_id == 0)
+        <div class="col-md-12">
+            <label class="form-label" for="default-06">Tags</label>
+                <div class="form-control-wrap ">
+                    <div class="">
+                        <select class="form-control form-select select-2" name="tags[]" id="tags" multiple>
+                            <option @if($category->feature_homepage) selected @endif value="feature_homepage">Homepage featured</option>
+                            <option @if($category->feature_sidebar) selected @endif value="feature_sidebar">Sidebar featured</option>
+                        </select>
+                    </div>
+                </div> 
+        </div>
+        
+        @endif
         <div class="col-12">
             <div class="form-group">
                 <button type="submit" class="btn btn-lg btn-primary">Save</button>

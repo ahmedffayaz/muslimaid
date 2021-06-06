@@ -256,13 +256,13 @@ class Importer implements ShouldQueue
                             ]);
                         }
 
-                        $storelogo = StoreImage::create([
-                            'store_id'=>$store->id,
-                            'title' => 'logo',
-                            'image' =>'default.png',
-                            'image_type'=>'store_logo',
-                            'is_uploaded'=>0
-                        ]);
+                        // $storelogo = StoreImage::create([
+                        //     'store_id'=>$store->id,
+                        //     'title' => 'logo',
+                        //     'image' =>'default.png',
+                        //     'image_type'=>'store_logo',
+                        //     'is_uploaded'=>0
+                        // ]);
                     
                     }else{
 
@@ -449,11 +449,11 @@ class Importer implements ShouldQueue
 
                     $store->status_description = '';
                     $logo_exits = StoreImage::where([ 'store_id'=>$store->id, 'title'=>'logo' ])->first();
-                    if($logo_exits->is_uploaded && $store->cashbacks && $store->categories && $store->description){
+                    if($logo_exits && $store->cashbacks && $store->categories && $store->description){
                         $store->update(['status'=>'pending review']);
                     }else{
                         $store->status = 'error';
-                        if(!$logo_exits->is_uploaded){
+                        if(!$logo_exits){
                             $store->status_description = $store->status_description.' '.'image,';
                         }
                         if(!$store->cashbacks){
@@ -487,7 +487,7 @@ class Importer implements ShouldQueue
 
             //importing cashbacks
 
-            $cashback_percent = SiteSetting::where('type','cashback_percentage')->first()->value;
+            $cashback_percent_setting = SiteSetting::where('type','cashback_percentage')->first()->value;
             $total_callback = 0;
             $beforePostingDate = date('Y-m-d\TH:i:s\z');
             $sincePostingDate = date('Y-m-d\TH:i:s\z', strtotime('-31 days'));
@@ -518,7 +518,7 @@ class Importer implements ShouldQueue
             if(array_key_exists('data',$result_array) 
             && array_key_exists('publisherCommissions',$result_array['data']) 
             && array_key_exists('records',$result_array['data']['publisherCommissions'])){
-
+                $cashback_percent = 0;
                 foreach($result_array['data']['publisherCommissions']['records'] as $cashback){
 
                     $store = Store::where('advertiser_id',$cashback['advertiserId'])->first();
@@ -526,12 +526,17 @@ class Importer implements ShouldQueue
 
                     if($click){
                         $click_id = $cashback['shopperId'];
+                        $cashback_percent = $click->current_cashback_percentage;
+                        
                     }else{
                         $new_click = ExitClick::create(['store_id'=>$store->id,
                         'user_id'=>1,
                         'status'=>'pending',
-                        'exit_url'=>'#']);
+                        'exit_url'=>'#',
+                        'current_cashback_percentage'=>$cashback_percent_setting]);
                         $click_id = $new_click->id;
+                        $cashback_percent = $cashback_percent_setting;
+
                     }
                     $cashback_amount_for_user = ($cashback['pubCommissionAmountPubCurrency']/100) * $cashback_percent;
                     $commission_exist = UserCashback::where('exit_click_id',$cashback['shopperId'])->first();

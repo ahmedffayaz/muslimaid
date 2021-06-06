@@ -10,6 +10,7 @@ use App\Models\StoreImage;
 use App\Models\Network;
 use App\Models\Category;
 use App\Models\StoreReview;
+use App\Models\EditorPick;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -168,7 +169,16 @@ class StoreController extends Controller
                 'slug'    => \Str::slug($request->input('store_name')),
                 'override_categories' =>$request->has('override_categories') ? 1 : 0,
                 'override_cashback' =>$request->has('override_cashback') ? 1 : 0,
+                'feature_homepage' =>0,
+                'feature_sidebar' =>0,
+                'editor_pick' =>0,
             ]);
+
+            foreach($request->input('tags') as $tag){
+                $store->update([
+                    $tag => 1
+                ]);
+            }
 
             if(!$request->ajax())
             { flash()->success('Store info updated successfully');
@@ -388,5 +398,68 @@ class StoreController extends Controller
             ]);
         }
 
+    }
+    function editorPicks(){
+        $route='index';
+        $networks = Network::all();
+        $stores = Store::latest()->get();
+        $categories = Category::where('parent_id',0)->get();
+        $picks = Store::has('editorPicks')->latest()->paginate(30);
+
+        // dd($picks);
+        return view('admin-dashboard.stores.editor_picks', compact('picks','route','networks','stores','categories'));
+    }
+    function fetchEditorPicks(Request $request)
+    {
+        if($request->ajax())
+        {
+            $route='index';
+            $picks = Store::has('editorPicks')->latest()->paginate(30);
+            return view('admin-dashboard.stores.picks_data', compact('picks','route'))->render();
+        }
+    }
+    public function searchEditorPicks(Request $request, Store $picks)
+    {
+        // dd($request->all());
+        $picks = $picks->newQuery();
+
+        // Search by network.
+        if ($request->input('network_id')) {
+            $picks->where('network_id', $request->input('network_id'));
+        }
+        // Search by id.
+        if ($request->input('store_id')) {
+            $picks->where('id', $request->input('store_id'));
+        }
+
+        // Search by store name.
+        if ($request->input('store_name')) {
+            $picks->where('name','like', '%'.$request->input('store_name').'%');
+           
+        }
+
+        // Search by status.
+        if ($request->input('status')!=-1) {
+            $picks->where('status', $request->input('status'));
+        }
+        
+        $picks = $picks->has('editorPicks')->latest()->paginate(30);
+        $route='search';
+        return view('admin-dashboard.stores.picks_data', compact('picks','route'))->render();
+    }
+    public function createEditorPick(Request $request){
+        foreach($request->input('picks') as $pick){
+            EditorPick::firstOrCreate(
+                [
+                'category_id' => $request->input('category_id'),
+                'store_id' => $pick
+            ],
+                [
+                'category_id' => $request->input('category_id'),
+                'store_id' => $pick
+            ]);
+        }
+        flash()->success('Category updated');
+        return redirect()->back();
     }
 }

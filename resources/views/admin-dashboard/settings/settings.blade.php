@@ -72,6 +72,9 @@ ul.categories li {
                                         <a class="nav-link active" data-toggle="tab" href="#tabItem4"><em class="icon ni ni-setting-fill"></em><span>General</span></a>
                                     </li>
                                     <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem9"><em class="icon ni ni-coins"></em><span>Cashback</span></a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem5"><em class="icon ni ni-dashboard-fill"></em><span>Dashboard</span></a>
                                     </li>
                                     <li class="nav-item">
@@ -79,6 +82,9 @@ ul.categories li {
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem7"><em class="icon ni ni-share-fill"></em><span>Social</span></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-code"></em><span>Integration</span></a>
                                     </li>
                                     
                                 </ul>
@@ -136,46 +142,6 @@ ul.categories li {
                                                         <div class="form-group">
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="phone_number" name="phone_number" value="{{$settings['phone_number'] ?? ''}}" placeholder="Sender Name">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                </div>
-                                                <div class="row g-3 align-center">
-                                                    <div class="col-lg-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="currency">Currency</label>
-                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-9">
-                                                        <div class="form-group">
-                                                            <div class="form-control-wrap ">
-                                                                <div class="form-control-select">
-                                                                    <select class="form-control" id="default-06" name="currency" required>
-                                                                        @foreach ($currencies as $currency)
-                                                                        <option @if($settings['currency'] == $currency->id) selected @endif value="{{$currency->id}}">{{$currency->short_name}}</option>
-                                                                            
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                       
-                                                    </div>
-                                                    
-                                                </div>
-                                                <div class="row g-3 align-center">
-                                                    <div class="col-lg-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="cashback_percentage">Cashback Percentage</label>
-                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-9">
-                                                        <div class="form-group">
-                                                            <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="cashback_percentage" name="cashback_percentage" value="{{$settings['cashback_percentage'] ?? ''}}" placeholder="Cashback Percentage">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -513,6 +479,105 @@ ul.categories li {
                                                 </div>
                                             </form>
                                         </div>
+                                    </div>
+                                    <div class="tab-pane" id="tabItem8">
+                                        <div class="nk-block">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">Scripts Integration</h5>
+                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                            </div><!-- .nk-block-head -->
+                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="ga_tracking_id">Google Analytics Tracking ID</label>
+                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" name="ga_tracking_id" id="ga_tracking_id" value="{{$settings['ga_tracking_id'] ?? ''}}" placeholder="UA-1XXXXXXXX-X">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                               
+                                              
+                                                
+                                                <div class="row g-3">
+                                                    <div class="col-lg-9 offset-lg-3">
+                                                        <div class="form-group mt-2">
+                                                            <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="tabItem9">
+                                        <div class="nk-block">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">Cashback Settings</h5>
+                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                            </div><!-- .nk-block-head -->
+                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="currency">Currency</label>
+                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap ">
+                                                                <div class="form-control-select">
+                                                                    <select class="form-control" id="default-06" name="currency" required>
+                                                                        @foreach ($currencies as $currency)
+                                                                        <option @if($settings['currency'] == $currency->id) selected @endif value="{{$currency->id}}">{{$currency->short_name}}</option>
+                                                                            
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="cashback_percentage">Cashback Percentage</label>
+                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="cashback_percentage" name="cashback_percentage" value="{{$settings['cashback_percentage'] ?? ''}}" placeholder="Cashback Percentage">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                
+                                                <div class="row g-3">
+                                                    <div class="col-lg-9 offset-lg-3">
+                                                        <div class="form-group mt-2">
+                                                            <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                      
                                     </div>
                                 </div>
                             </div>

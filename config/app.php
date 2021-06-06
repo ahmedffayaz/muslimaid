@@ -181,6 +181,7 @@ return [
         App\Providers\MailConfigServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
         ConsoleTVs\Charts\ChartsServiceProvider::class,
+        Intervention\Image\ImageServiceProvider::class
 
     ],
 
@@ -234,6 +235,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Charts' => ConsoleTVs\Charts\Facades\Charts::class,
+        'Image' => Intervention\Image\Facades\Image::class
 
     ],
 

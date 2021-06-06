@@ -36,7 +36,7 @@ ul.categories li {
                     <div class="nk-block-head nk-block-head-lg pb-2">
                         <div class="nk-block-between">
                         <div class="nk-block-head-content">
-                            <h3 class="nk-block-title fw-normal">{{$store->name}} <span class="badge badge-dim badge-pill badge-outline-primary">{{$store->network->name}}</span></h3>
+                            <h3 class="nk-block-title fw-normal"><a href="{{route('store.show',$store->slug)}}" target="_blank">{{$store->name}}</a> <span class="badge badge-dim badge-pill badge-outline-primary">{{$store->network->name}}</span></h3>
                             <div class="nk-block-des">
                               
                             </div>
@@ -206,17 +206,26 @@ ul.categories li {
                                                             @if($store->status == 'error') {{$store->status_description}} @endif
                                                         </div>
                                                     </div>
+                                                    <div class="col-md-12">
+                                                        <label class="form-label" for="default-06">Tags</label>
+                                                            <div class="form-control-wrap ">
+                                                                <div class="">
+                                                                    <select class="form-control form-select" name="tags[]" required multiple>
+                                                                        <option @if($store->editor_pick) selected @endif value="editor_pick">Editor Pick</option>
+                                                                        <option @if($store->feature_homepage) selected @endif value="feature_homepage">Homepage featured</option>
+                                                                        <option @if($store->feature_sidebar) selected @endif value="feature_sidebar">Sidebar featured</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div> 
+                                                    </div>
+                                                    
                                                     <div class="col-12">
                                                         <div class="form-group">
-                                                            <div class="custom-control custom-checkbox">
+                                                            <div class="custom-control custom-checkbox mr-3">
                                                                 <input type="checkbox" class="custom-control-input" id="override-cashback" name="override_cashback" value="1"
                                                                 @if($store->override_cashback==1) checked @endif>
                                                                 <label class="custom-control-label" for="override-cashback">Override Cashback</label>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div class="form-group">
                                                             <div class="custom-control custom-checkbox">
                                                                 <input type="checkbox" class="custom-control-input" id="override-categories" name="override_categories" value="1"
                                                                 @if($store->override_categories==1) checked @endif>
@@ -224,8 +233,9 @@ ul.categories li {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
                                                    
+                                                   
+                                                    
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <button type="submit" class="btn btn-lg btn-primary">Update</button>
@@ -499,6 +509,29 @@ ul.categories li {
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="review" class=" p-4">
+             
+
+            </div>
+        </div><!-- .modal-content -->
+    </div><!-- .modla-dialog -->
+</div><!-- .modal -->
+<!-- @@ Review Modal @e -->
+<div class="modal fade" tabindex="-1" role="dialog" id="add-review-modal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+              
+                   
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Review</span></div>
+
+                        {{-- <div class="nk-file-name-sub">Project</div> --}}
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="" class=" p-4">
                 <form action="{{route('admin.reviews.store')}}" class="gy-3 form-validate is-alter review_form_add" method="POST">
                     @csrf
                  
@@ -510,6 +543,37 @@ ul.categories li {
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="reviewer" name="reviewer" value="" required>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="rating">Rating</label>
+                                <div class="form-control-wrap ">
+                                    
+                                        <select class="form-select form-control"  id="rating" name="rating" required>
+                                            
+                                            <option  value="1">1</option>
+                                            <option  value="2">2</option>
+                                            <option  value="3">3</option>
+                                            <option  value="4">4</option>
+                                            <option  value="5">5</option>
+                                            
+                                        </select>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                      
+                        
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <input name="review" type="hidden">
+                                <label class="form-label" for="phone-no-1">Review</label>
+                                <!-- Create the editor container -->
+                                <div  id="reditor-container">
+                                    
+                                </div>
+                                
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -528,18 +592,6 @@ ul.categories li {
                             </div>
                         </div>
                         
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <input name="review" type="hidden">
-                                <label class="form-label" for="phone-no-1">Review</label>
-                                <!-- Create the editor container -->
-                                <div  id="reditor-container">
-                                    
-                                </div>
-                                
-                            </div>
-                        </div>
-                        
                         <div class="col-12">
                             <div class="form-group">
                                 <button type="submit" class="btn btn-lg btn-primary">Save</button>
@@ -552,6 +604,7 @@ ul.categories li {
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
+
 
 
 @endsection

@@ -6,9 +6,7 @@
                 </div>
             <div class="nk-footer-links">
                 <ul class="nav nav-sm">
-                    <li class="nav-item"><a class="nav-link" href="#">Terms</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Privacy</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Help</a></li>
+                    <li class="nav-item">Designed and Developed by <a class="nav-link pl-0" href="https://therightsw.com">The Right Software</a></li>
                 </ul>
             </div>
         </div>

@@ -127,13 +127,6 @@
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan
-                            
-                            {{-- <li class="nk-menu-item">
-                                <a href="{{route('admin.cashouts.index')}}" class="nk-menu-link">
-                                    <span class="nk-menu-icon"><em class="icon ni ni-cc-alt2-fill"></em></span>
-                                    <span class="nk-menu-text">Cashouts</span>
-                                </a>
-                            </li><!-- .nk-menu-item --> --}}
                             @can('view performance')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.reports.performance')}}" class="nk-menu-link">
@@ -202,6 +195,12 @@
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan
+                            <li class="nk-menu-item">
+                                <a href="{{route('admin.sliders.index')}}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-layers"></em></span>
+                                    <span class="nk-menu-text">Sliders</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
                     @endcanany

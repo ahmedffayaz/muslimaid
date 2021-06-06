@@ -26,6 +26,7 @@ class ReviewSeeder extends Seeder
             'store_id' => $store->id,
             'reviewer' => $faker->name,
             'review' => $faker->paragraph($nbSentences = 3, $variableNbSentences = true),
+            'rating' =>  $faker->numberBetween(1,5)
            
             
         ]); 
