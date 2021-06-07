@@ -23,10 +23,9 @@ class SettingsServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $settings = \App\Models\SiteSetting::latest()->get()->pluck('value','type');
-        config()->set('settings',$settings);
-        
-        $currency = \App\Models\Currency::where('id',$settings['currency'])->pluck('symbol')->first();
-        config()->set('currency',$currency);
+        // $settings = \App\Models\SiteSetting::latest()->get()->pluck('value','type');
+        // config()->set('settings',$settings);
+        // $currency = \App\Models\Currency::where('id',$settings['currency'])->pluck('symbol')->first();
+        // config()->set('currency',$currency);
     }
 }

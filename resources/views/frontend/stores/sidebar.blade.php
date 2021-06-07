@@ -37,7 +37,7 @@
                         <div class="widget-products__image">
                             <div class="product-image">
                                 {{-- <a href="{{route('store.show',$item->slug)}}" class="mb-2 d-inline-block"> --}}
-                                    <img class="" @if($item->logo->first()->is_uploaded)
+                                    <img class="" @if($item->logo->first())
                                     src="{{asset('storage/stores/images/'.$item->logo->first()->image)}}"
                                     @else
                                     src="{{asset('frontend/images/products/product-16.jpg')}}" 

@@ -209,5 +209,5 @@ Route::namespace('App\Http\Controllers\Client')
         Route::get('clicks',[App\Http\Controllers\Client\DashboardController::class, 'clicks'])->name('clicks');
         Route::get('change_password',[App\Http\Controllers\Client\DashboardController::class, 'changePassword'])->name('change_password');
         Route::post('users/passwordsave/', [App\Http\Controllers\Client\DashboardController::class,'savePassword'])->name('save_password');
-
+        Route::resource('withdraw',PaymentController::class);
     });

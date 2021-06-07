@@ -21,7 +21,7 @@ class CategoryController extends Controller
     public function index()
     {
         $route = 'index';
-        $categories = Category::latest()->where('parent_id', '=', 0)->get();
+        $categories = Category::where('parent_id', '=', 0)->orderBy('name', 'ASC')->get();
         $allCategories = Category::latest()->get();
         return view('admin-dashboard.categories.categories', compact('categories','allCategories','route'));
     }
@@ -33,7 +33,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::latest()->where('parent_id',0)->get();
+        $categories = Category::where('parent_id',0)->orderBy('name', 'ASC')->get();
         return view('admin-dashboard.categories.create', compact('categories'));
 
     }
@@ -149,6 +149,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+        
         try {
             $category->update([
                 'name' => $request->input('name'), 
@@ -164,15 +165,15 @@ class CategoryController extends Controller
                 'feature_sidebar' =>0,
     
             ]); 
-            if($category->picks->count()){
-                $category->picks()->delete(); 
-            }
-            foreach($request->input('picks') as $pick){
-                EditorPick::create([
-                    'category_id' => $category->id,
-                    'store_id' => $pick
-                ]);
-            }
+            // if($category->picks->count()){
+            //     $category->picks()->delete(); 
+            // }
+            // foreach($request->input('picks') as $pick){
+            //     EditorPick::create([
+            //         'category_id' => $category->id,
+            //         'store_id' => $pick
+            //     ]);
+            // }
             
             foreach($request->input('tags') as $tag){
                 $category->update([
@@ -219,7 +220,7 @@ class CategoryController extends Controller
             
         } catch (\Throwable $th) {
 
-            flash()->error('Error while updating the category');
+            flash()->error($th->getMessage().'Error while updating the category');
             return redirect()->route('admin.categories.index');
         }
     }

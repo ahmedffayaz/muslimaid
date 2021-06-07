@@ -351,5 +351,13 @@ function initializeSelect2() {
             }
         });
     }
+    $(".category_form").submit(function(e) {
+          
+          // Populate hidden form on submit
+          var desc = document.querySelector('input[name=description]');
+          desc.value = quill.root.innerHTML;
+         
+          
+        });
         </script>
 @endpush

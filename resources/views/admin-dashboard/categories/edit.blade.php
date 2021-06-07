@@ -16,15 +16,12 @@
                 <div class="form-control-wrap ">
                     <div class="form-control-select">
                         <select class="form-control" id="default-06" name="parent_id" required>
-                            
-                            
                             <option value="0">None</option>
                             @foreach ($categories as $parent)
                             <option @if($category->parent_id == $parent->id) selected @endif  value="{{$parent->id}}" style="font-weight:bold">{{$parent->name}}</option>
-                            @if(count($parent->childs))
-                                 @include('admin-dashboard.categories.child_input',['childs' => $parent->childs,'isEdit'=> 1 ,'category'=>$category,'dashes'=>'~'])
-                             @endif
-                                
+                                @if(count($parent->childs))
+                                    @include('admin-dashboard.categories.child_input',['childs' => $parent->childs,'isEdit'=> 1 ,'category'=>$category,'dashes'=>'~'])
+                                @endif
                             @endforeach
                                 
                            
@@ -35,12 +32,10 @@
         </div>
         <div class="col-lg-12">
             <div class="card">
-                <input name="description" type="hidden">
                 <label class="form-label" for="phone-no-1">Description</label>
-                <!-- Create the editor container -->
-                <div  id="editor-container">
-                {!!$category->description!!}
-                </div>
+                
+                <textarea class="form-control" name="description" rows="5">{!!$category->description!!}</textarea>
+                
                
             </div>
         </div>
@@ -263,4 +258,5 @@
         }
         
     });
+   
 </script>

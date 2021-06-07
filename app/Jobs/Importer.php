@@ -19,6 +19,7 @@ use App\Models\ExitClick;
 use App\Models\ImporterSetting;
 use App\Models\SiteSetting;
 use App\Models\CashbackStatusChange;
+use App\Models\Network;
 use Illuminate\Support\Facades\DB;
 
 class Importer implements ShouldQueue
@@ -43,8 +44,9 @@ class Importer implements ShouldQueue
     public function handle()
     {
         //fetching importer settings
-
+        $network = Network::where('id',1)->first();
         $setting = ImporterSetting::where('network_id',1)->first();
+        
 
         //importing advertisers/stores/merchents
 
@@ -57,12 +59,12 @@ class Importer implements ShouldQueue
 
                 $ch = curl_init();
 
-                curl_setopt($ch, CURLOPT_URL, 'https://advertiser-lookup.api.cj.com/v2/advertiser-lookup?requestor-cid=5499477&advertiser-ids=joined&records-per-page=100&page-number='.$page);
+                curl_setopt($ch, CURLOPT_URL, 'https://advertiser-lookup.api.cj.com/v2/advertiser-lookup?requestor-cid='.$network->requestor_cid.'&advertiser-ids=joined&records-per-page=100&page-number='.$page);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 
                 $headers = array();
-                $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
+                $headers[] = 'Authorization: Bearer '.$network->token;
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
                 $result = curl_exec($ch);
@@ -97,7 +99,7 @@ class Importer implements ShouldQueue
                         
                         $ch = curl_init();
 
-                        curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&link-type=banner&advertiser-ids='.$advertiser->{'advertiser-id'});
+                        curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id='.$network->website_id.'&link-type=banner&advertiser-ids='.$advertiser->{'advertiser-id'});
                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 
@@ -501,9 +503,9 @@ class Importer implements ShouldQueue
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>'{ publisherCommissions(forPublishers: ["5499477"], sincePostingDate:"'.$sincePostingDate.'",beforePostingDate:"'.$beforePostingDate.'"){count payloadComplete records {actionTrackerName websiteName advertiserName advertiserId pubCommissionAmountPubCurrency postingDate pubCommissionAmountUsd saleAmountPubCurrency actionStatus validationStatus clickDate eventDate shopperId   items { quantity perItemSaleAmountPubCurrency totalCommissionPubCurrency  }}}}',
+            CURLOPT_POSTFIELDS =>'{ publisherCommissions(forPublishers: ["'.$network->requestor_cid.'"], sincePostingDate:"'.$sincePostingDate.'",beforePostingDate:"'.$beforePostingDate.'"){count payloadComplete records {actionTrackerName websiteName advertiserName advertiserId pubCommissionAmountPubCurrency postingDate pubCommissionAmountUsd saleAmountPubCurrency actionStatus validationStatus clickDate eventDate shopperId   items { quantity perItemSaleAmountPubCurrency totalCommissionPubCurrency  }}}}',
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588',
+                'Authorization: Bearer '.$network->token,
                 'Content-Type: application/json'
             ),
             ));
@@ -605,11 +607,11 @@ class Importer implements ShouldQueue
             while($fetched_records < $total_records){ 
             
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&promotion-type=coupon&advertiser-ids=joined&records-per-page=100&page-number='.$page);
+                curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id='.$network->website_id.'&promotion-type=coupon&advertiser-ids=joined&records-per-page=100&page-number='.$page);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
                 $headers = array();
-                $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
+                $headers[] = 'Authorization: Bearer '.$network->token;
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
                 
                 $link_result = curl_exec($ch);

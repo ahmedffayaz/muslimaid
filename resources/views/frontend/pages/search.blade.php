@@ -79,7 +79,7 @@
                                     <div class="product-card product-card--hidden-actions ">
                                         <div class="product-card__image product-image">
                                             <a href="{{route('store.show',$store->slug)}}" class="product-image__body">
-                                                <img class="product-image__img" @if($store->logo->first()->is_uploaded)
+                                                <img class="product-image__img" @if($store->logo->first())
                                                 src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
                                                 @else
                                                 src="{{asset('frontend/images/products/product-16.jpg')}}" 

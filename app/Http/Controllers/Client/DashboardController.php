@@ -132,7 +132,5 @@ class DashboardController extends Controller
 
         flash()->success('Password changed successfully');
         return redirect()->back();
-        
-
     }
 }

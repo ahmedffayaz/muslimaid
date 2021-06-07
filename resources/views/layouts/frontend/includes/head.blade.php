@@ -22,7 +22,7 @@
  $settings = Config::get('settings');   
 
 @endphp
-@if($settings['ga_tracking_id'])
+{{-- @if(array_key_exists('ga_tracking_id',$settings))
     <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id={{$settings['ga_tracking_id']}}"></script>
 <script>
@@ -32,5 +32,5 @@
 
   gtag('config', "{{$settings['ga_tracking_id']}}");
 </script>
-@endif
+@endif --}}
 </head>

@@ -26,7 +26,8 @@
     
    
     <div class="nk-tb-col">
-        <span><a href="{{route('admin.stores.show',$store)}}"><div class="tb-lead">{{$store->id}}<img width="40px" class="float-right" @if($store->logo->first()->is_uploaded)
+        <span><a href="{{route('admin.stores.show',$store)}}"><div class="tb-lead">{{$store->id}}
+            <img width="40px" class="float-right" @if($store->logo->first())
             src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
             @else
             src="{{asset('frontend/images/products/product-16.jpg')}}" @endif alt=""></div></a></span><br>

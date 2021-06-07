@@ -78,7 +78,7 @@
         <div class="row">
             <div class="col-12 mt-5">
                 <h1 class="text-center">{{$category->name}}</h1>
-                <p  class="text-center">Browse our best offers, including exclusive cashback deals increased for a limited time only.</p>
+                <p  class="text-center">{!!$category->description!!}</p>
                 @if($category->picks->count())
                 
                 <div class="row bhoechie-tab-container my-5 col-lg-10 mx-auto">
@@ -91,7 +91,7 @@
                         <div class="bhoechie-tab-content @if($key==0) active @endif">
                             <div class="row">
                                 <div class="col-lg-12 align-self-center py-4">
-                                    <img style="max-height: 50px;" class="mb-2" @if($pick->store->logo->first()->is_uploaded)
+                                    <img style="max-height: 50px;" class="mb-2" @if($pick->store->logo->first())
                                     src="{{asset('storage/stores/images/'.$pick->store->logo->first()->image)}}"
                                     @else
                                     src="{{asset('frontend/images/products/product-16.jpg')}}" 
@@ -116,7 +116,7 @@
                         <div class="list-group">
                             @foreach ($category->picks->take(5) as $key=>$pick)
                             <a href="#" class="list-group-item @if($key==0) active @endif text-center">
-                            <img style="max-height: 40px;" class="" @if($pick->store->logo->first()->is_uploaded)
+                            <img style="max-height: 40px;" class="" @if($pick->store->logo->first())
                                     src="{{asset('storage/stores/images/'.$pick->store->logo->first()->image)}}"
                                     @else
                                     src="{{asset('frontend/images/products/product-16.jpg')}}" 
@@ -148,7 +148,7 @@
                                         
                                         <div class="product-card__image product-image">
                                             <a href="{{route('store.show',$store->slug)}}" class="product-image__body" style="padding-bottom:100px">
-                                                <img class="product-image__img" @if($store->logo->first()->is_uploaded)
+                                                <img class="product-image__img" @if($store->logo->first())
                                                 src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
                                                 @else
                                                 src="{{asset('frontend/images/products/product-16.jpg')}}" 

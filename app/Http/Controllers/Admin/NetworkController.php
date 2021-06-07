@@ -107,9 +107,12 @@ class NetworkController extends Controller
     {
         try {
             $network->update([
-                'name'=>$request->input('network_name'),
-                'click_ref'=>$request->input('click_ref'),
-                'description'=>$request->input('network_name'),
+                // 'name'=>$request->input('network_name'),
+                // 'click_ref'=>$request->input('click_ref'),
+                // 'description'=>$request->input('network_name'),
+                'token'=>$request->input('token'),
+                'website_id'=>$request->input('website_id'),
+                'requestor_cid'=>$request->input('requestor_cid'),
             ]);
 
             flash()->success('Network updated');

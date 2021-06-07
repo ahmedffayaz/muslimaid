@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SiteSetting extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory;
 
     protected $fillable = ['title','type', 'value','category'];
 

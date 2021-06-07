@@ -4,7 +4,7 @@
     <li class="suggestions__item @if($key==0) selected @endif"  >
         <div class="suggestions__item-image product-image">
             <div class="product-image__body">
-                <img class="product-image__img" @if($store->logo->first()->is_uploaded)
+                <img class="product-image__img" @if($store->logo->first())
                 src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
                 @else
                 src="{{asset('frontend/images/products/product-16.jpg')}}" 

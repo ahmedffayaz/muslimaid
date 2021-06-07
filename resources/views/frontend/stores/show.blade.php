@@ -31,7 +31,7 @@
                             <div class="product-gallery">
                                 <img class="product-image__img" style="position: relative;" 
                                 @if($store->logo->count())
-                                    @if($store->logo->first()->is_uploaded)
+                                    @if($store->logo->first())
                                         src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
                                     @else
                                         src="{{asset('frontend/images/products/product-16.jpg')}}" alt=""

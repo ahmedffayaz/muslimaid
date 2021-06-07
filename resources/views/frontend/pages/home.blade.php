@@ -4,6 +4,7 @@
     width: 100px;
 }</style>
 @auth
+@if($slider)
    <!-- .block-slideshow -->
    <div class="block-slideshow block-slideshow--layout--full block mt-5">
     <div class="container">
@@ -40,7 +41,9 @@
         </div>
     </div>
 </div>
+
 <!-- .block-slideshow / end -->
+@endif
 @endauth
 @guest
 <!-- .block-slideshow -->
@@ -145,7 +148,7 @@
                                         <div class="product-card__image product-image">
                                             <a href="{{route('store.show',$store->slug)}}" class="product-image__body" style="padding-bottom:100px">
                                                 <img class="product-image__img" 
-                                                @if($store->logo->first()->is_uploaded)
+                                                @if($store->logo->first())
                                 src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
                                 @else
                                 src="{{asset('frontend/images/products/product-16.jpg')}}" 

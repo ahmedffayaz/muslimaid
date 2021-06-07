@@ -12,7 +12,7 @@ class Network extends Model
 {
     use HasFactory , SoftDeletes;
 
-    protected $fillable = ['name', 'description', 'click_ref'];
+    protected $fillable = ['name', 'description', 'click_ref','token','website_id','requestor_cid'];
 
 
     public function stores(){

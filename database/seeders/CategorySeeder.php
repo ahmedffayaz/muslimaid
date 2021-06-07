@@ -125,6 +125,7 @@ class CategorySeeder extends Seeder
             $category                   = new Category();
             $category->name             = $cat['name'];
             $category->slug             =  \Str::slug($cat['name']);
+            $category->description       = 'Browse our best offers, including exclusive cashback deals increased for a limited time only.';
             $category->parent_id        = $cat['parent_id'];
             $category->logo_type        = 'upload';
             $category->logo_upload      = 'category_default_logo.png';
