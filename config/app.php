@@ -181,7 +181,8 @@ return [
         App\Providers\MailConfigServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
         ConsoleTVs\Charts\ChartsServiceProvider::class,
-        Intervention\Image\ImageServiceProvider::class
+        Intervention\Image\ImageServiceProvider::class,
+        Harimayco\Menu\MenuServiceProvider::class,
 
     ],
 
@@ -235,7 +236,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Charts' => ConsoleTVs\Charts\Facades\Charts::class,
-        'Image' => Intervention\Image\Facades\Image::class
+        'Image' => Intervention\Image\Facades\Image::class,
+        'Menu' => Harimayco\Menu\Facades\Menu::class,
 
     ],
 

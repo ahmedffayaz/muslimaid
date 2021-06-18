@@ -3,6 +3,8 @@
 use Carbon\Carbon;
 use App\Models\Category;
 use App\Models\Store;
+use Harimayco\Menu\Models\Menus;
+use Harimayco\Menu\Models\MenuItems;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -280,10 +282,20 @@ function getCategories()
     return $categories;
 }
 
-function siteSettings(){
-    
+function SiteSetting(){
+    return \App\Models\SiteSetting::latest()->get()->pluck('value','type');
+}
+function currency(){
+    $settings = SiteSetting();
+$currency = \App\Models\Currency::where('id',$settings['currency'])->pluck('symbol')->first();
+return $currency;
+
 }
 
+// config()->set('settings',$settings);
+// $currency = \App\Models\Currency::where('id',$settings['currency'])->pluck('symbol')->first();
+// config()->set('currency',$currency);
+    
 function sidebarCategories(){
     $sidebar_categories = Category::where('feature_sidebar',1)->orderBy('name', 'ASC')->get();
     return $sidebar_categories;
@@ -295,5 +307,16 @@ function sidebarStores(){
 }
 function textHighlight($text,$search,$highlightColor='#3366cc',$casesensitive=false)
 {
-        return preg_replace('/(' . $search . ')/i', "<span style='color:$highlightColor'>$1</span>", $text);
+    return preg_replace('/(' . $search . ')/i', "<span class='color-primary'>$1</span>", $text);
+}
+
+function similarStores($store){
+    $categoryIds = $store->categories->pluck('id')->toArray();
+
+    $similarStores = Store::whereHas('categories', function ($query) use ($categoryIds) {
+        return $query->whereIn('categories.id', $categoryIds);
+    })->where('id','!=', $store->id)
+        ->limit(10)
+        ->get();
+    return $similarStores;
 }

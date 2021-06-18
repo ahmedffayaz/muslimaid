@@ -41,13 +41,13 @@
                     
                 
                     <div class="nk-tb-col ">
-                        <span><span class="currency">{{ Config::get('currency') }} </span>{{$com->network_commission}}</span>
+                        <span><span class="currency">{{ currency() }} </span>{{$com->network_commission}}</span>
                     </div>
                     <div class="nk-tb-col ">
-                        <span><span class="currency">{{ Config::get('currency') }} </span>{{$com->amount}}</span>
+                        <span><span class="currency">{{ currency() }} </span>{{$com->amount}}</span>
                     </div>
                     <div class="nk-tb-col ">
-                        <span><span class="currency">{{ Config::get('currency') }} </span>{{$com->network_commission - $com->amount}}</span>
+                        <span><span class="currency">{{ currency() }} </span>{{$com->network_commission - $com->amount}}</span>
                     </div>
                     <div class="nk-tb-col ">
                         <span>{{$com->event_date}}</span>

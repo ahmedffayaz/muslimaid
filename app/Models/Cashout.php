@@ -33,6 +33,9 @@ class Cashout extends Model
 
         return $this->belongsTo(User::class);
     }
+    public function cashbacks(){
+        return $this->hasMany(UserCashback::class);
+    }
 
 }
 

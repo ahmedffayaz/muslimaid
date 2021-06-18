@@ -26,6 +26,7 @@ class UserSeeder extends Seeder
         $admin->avatar = 'default.png';
 		$admin->save();
         $admin->assignRole('admin');
+        $admin->assignRole('user');
 
         $data = new User();
 		$data->first_name = 'Data';

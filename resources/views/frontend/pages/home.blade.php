@@ -2,7 +2,13 @@
 @section('content')
 <style>.category-card__image {
     width: 100px;
-}</style>
+}
+@media (max-width: 767px){
+[dir=ltr] .block-slideshow__slide-content {
+    width: 350px!important;
+}.block-slideshow__slide-text {
+    display: block;
+}}</style>
 @auth
 @if($slider)
    <!-- .block-slideshow -->
@@ -264,7 +270,7 @@
                         <a href="{{route('cashabck',$category->slug)}}">
                             @if($category->logo_type == 'upload')
         
-                            <img src="{{asset('storage/categories/images/'.$category->logo_upload)}}"  alt="">
+                            <img src="{{asset('frontend/images/categories/images/'.$category->logo_upload)}}"  alt="">
                           
                             @elseif($category->logo_type == 'link')
                             

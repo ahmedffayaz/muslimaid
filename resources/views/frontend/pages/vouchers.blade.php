@@ -20,32 +20,16 @@
 .products-list[data-layout="list"] .product-card .product-card__features-list li::before {
     top: 12px;
 }</style>
-<div class="page-header">
-    <div class="page-header__container container">
-        <div class="page-header__breadcrumb">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="index.html">Home</a>
-                        <svg class="breadcrumb-arrow" width="6px" height="9px">
-                            <use xlink:href="{{asset('frontend/images/sprite.svg')}}#arrow-rounded-right-6x9"></use>
-                        </svg>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="">Breadcrumb</a>
-                        <svg class="breadcrumb-arrow" width="6px" height="9px">
-                            <use xlink:href="{{asset('frontend/images/sprite.svg')}}#arrow-rounded-right-6x9"></use>
-                        </svg>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">Screwdrivers</li>
-                </ol>
-            </nav>
+<div class="block block-product-columns mt-5">
+    <div class="container">
+        <div class="row">
+           
+            <div class="col-lg-12">
+                <div id="your_container"> <!-- The element you want to render the content in -->
+                    {!! $page->lb_content !!}
+                  </div>
+            </div>
         </div>
-        @if($term)
-        <div class="page-header__title">
-            <h1>Search results for "{{$term}}"</h1>
-        </div>
-        @endif
     </div>
 </div>
 <div class="container">
@@ -59,23 +43,11 @@
                             <div class="view-options__layout">
                                 <div class="layout-switcher">
                                     <div class="layout-switcher__list">
-                                        {{-- <button data-layout="grid-3-sidebar" data-with-features="false" title="Grid" type="button" class="layout-switcher__button ">
-                                            <svg width="16px" height="16px">
-                                                <use xlink:href="{{asset('frontend/images/sprite.svg')}}#layout-grid-16x16"></use>
-                                            </svg>
-                                        </button> --}}
-                                        {{-- <button data-layout="list" data-with-features="false" title="List" type="button" class="layout-switcher__button  layout-switcher__button--active ">
-                                            <svg width="16px" height="16px">
-                                                <use xlink:href="{{asset('frontend/images/sprite.svg')}}#layout-list-16x16"></use>
-                                            </svg>
-                                        </button> --}}
+                                        
                                     </div>
                                 </div>
                             </div>
-                            @if($term)
-                            <div class="view-options__legend">We found 20 results for <b>{{$term}}</b></div>
-                            <div class="view-options__divider"></div>
-                            @endif
+                            
                         </div>
                     </div>
                     <div class="products-view__list products-list  scrolling-pagination" data-layout="list" data-with-features="false" data-mobile-grid-columns="2">

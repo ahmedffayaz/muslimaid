@@ -61,12 +61,17 @@ class CommissionController extends Controller
      */
     public function store(Request $request)
     {
-
-        $cashback_percent = SiteSetting::where('type','cashback_percentage')->first()->value;
-        
         try {
 
             $click = ExitClick::findOrFail($request->exit_click_id);
+            $custom_cashback_percentage = $click->store->custom_cashback_percentage;
+
+            if($custom_cashback_percentage){
+                $cashback_percent = $custom_cashback_percentage;
+            }else{
+                $cashback_percent = SiteSetting::where('type','cashback_percentage')->first()->value;
+            }
+
             $commission = UserCashback::create([
                 'store_id' => $click->store_id,
                 'user_id'  => $click->user_id ?? 0,
@@ -225,8 +230,17 @@ class CommissionController extends Controller
     {
         
         try {
+            
+            $global_percentage = SiteSetting::where('type','cashback_percentage')->first()->value;
             foreach ($request->exit_click_id as $key => $value) {
                 $click = ExitClick::findOrFail($value);
+                $custom_cashback_percentage = $click->store->custom_cashback_percentage;
+
+            if($custom_cashback_percentage){
+                $cashback_percent = $custom_cashback_percentage;
+            }else{
+                $cashback_percent = $global_percentage;
+            }
             $commission = UserCashback::create([
                 'store_id' => $click->store_id,
                 'user_id'  => $click->user_id ?? 0,

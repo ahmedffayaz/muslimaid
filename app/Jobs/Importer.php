@@ -105,7 +105,7 @@ class Importer implements ShouldQueue
 
 
                         $headers = array();
-                        $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
+                        $headers[] = 'Authorization: Bearer '.$network->token;
                         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
                         $link_result = curl_exec($ch);
@@ -709,11 +709,11 @@ class Importer implements ShouldQueue
             while($fetched_records < $total_records){ 
 
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&promotion-type=sale/discount&advertiser-ids=joined&records-per-page=100&page-number='.$page);
+                curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id='.$network->website_id.'&promotion-type=sale/discount&advertiser-ids=joined&records-per-page=100&page-number='.$page);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
                 $headers = array();
-                $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
+                $headers[] = 'Authorization: Bearer '.$network->token;
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
                 
                 $link_result = curl_exec($ch);
@@ -751,8 +751,8 @@ class Importer implements ShouldQueue
                                     "link_id" => empty($link['link-id']) ? NULL : $link['link-id'],
                                     "link_name" => empty($link['link-name']) ? NULL : $link['link-name'],
                                     "link_type" => empty($link['link-type']) ? NULL : $link['link-type'],
-                                    "promotion_end_date" => empty($link['promotion-end-date']) ? NULL : $link['promotion-end-date'],
-                                    "promotion_start_date" => empty($link['promotion-start-date']) ? NULL : $link['promotion-start-date'],
+                                    "promotion_end_date" => empty($link['promotion-end-date']) ? NULL : \Carbon\Carbon::parse($link['promotion-end-date'])->format('Y-m-d H:i:s'),
+                                    "promotion_start_date" => empty($link['promotion-start-date']) ? NULL : \Carbon\Carbon::parse($link['promotion-start-date'])->format('Y-m-d H:i:s'),
                                     "promotion_type" => empty($link['promotion-type']) ? NULL: $link['promotion-type'],
                                     "coupon_code" => empty($link['coupon-code']) ? NULL : $link['coupon-code'],           
                             ]);
@@ -781,8 +781,8 @@ class Importer implements ShouldQueue
                                     "link_id" => empty($link['link-id']) ? NULL : $link['link-id'],
                                     "link_name" => empty($link['link-name']) ? NULL : $link['link-name'],
                                     "link_type" => empty($link['link-type']) ? NULL : $link['link-type'],
-                                    "promotion_end_date" => empty($link['promotion-end-date']) ? NULL : $link['promotion-end-date'],
-                                    "promotion_start_date" => empty($link['promotion-start-date']) ? NULL : $link['promotion-start-date'],
+                                    "promotion_end_date" => empty($link['promotion-end-date']) ? NULL : \Carbon\Carbon::parse($link['promotion-end-date'])->format('Y-m-d H:i:s'),
+                                    "promotion_start_date" => empty($link['promotion-start-date']) ? NULL : \Carbon\Carbon::parse($link['promotion-start-date'])->format('Y-m-d H:i:s'),
                                     "promotion_type" => empty($link['promotion-type']) ? NULL: $link['promotion-type'],
                                     "coupon_code" => empty($link['coupon-code']) ? NULL : $link['coupon-code'],
                         ]);

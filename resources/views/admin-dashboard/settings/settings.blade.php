@@ -24,7 +24,19 @@ ul.categories {
 }
 ul.categories li {
   margin: 10px 0;
+} 
+.custom-size .colorpicker-saturation { 
+    width: 200px;
+    height: 200px;
+}    
+.custom-size .colorpicker-hue, .custom-size .colorpicker-alpha {
+    width: 30px;
+    height: 200px;
 }
+.custom-size .colorpicker-color, .custom-size .colorpicker-color div {
+    height: 30px;
+}
+     
 </style>
 
 @section('content')
@@ -72,10 +84,10 @@ ul.categories li {
                                         <a class="nav-link active" data-toggle="tab" href="#tabItem4"><em class="icon ni ni-setting-fill"></em><span>General</span></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#tabItem9"><em class="icon ni ni-coins"></em><span>Cashback</span></a>
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem5"><em class="icon ni ni-dashboard-fill"></em><span>Website</span></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#tabItem5"><em class="icon ni ni-dashboard-fill"></em><span>Dashboard</span></a>
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem9"><em class="icon ni ni-coins"></em><span>Cashback</span></a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem6"><em class="icon ni ni-emails-fill"></em><span>Mailer</span></a>
@@ -85,6 +97,9 @@ ul.categories li {
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-code"></em><span>Integration</span></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem10"><em class="icon ni ni-color-palette-fill"></em><span>Appearance</span></a>
                                     </li>
                                     
                                 </ul>
@@ -99,21 +114,7 @@ ul.categories li {
                                             <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
                                                 @csrf
                                                 @method('POST')
-                                                <div class="row g-3 align-center">
-                                                    <div class="col-lg-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="website_title">Website Title</label>
-                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-9">
-                                                        <div class="form-group">
-                                                            <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" name="website_title" id="website_title" value="{{$settings['website_title'] ?? ''}}" placeholder="Title">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                
                                                
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
@@ -162,7 +163,7 @@ ul.categories li {
                                     <div class="tab-pane" id="tabItem5">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
-                                                <h5 class="title">Dashboard Settings</h5>
+                                                <h5 class="title">Website Settings</h5>
                                                 {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
                                             <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST" enctype="multipart/form-data">
@@ -171,7 +172,26 @@ ul.categories li {
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="dashboard_title">Logo</label>
+                                                            <label class="form-label" for="website_title">Website Logo</label>
+                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class=" logo">
+                                                                <label for="website-logo-input">
+                                                                <img id="website-logo" src="@isset($settings['website_logo']){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
+                                                                <input id="website-logo-input" preview="#website-logo" name="website_logo" class="d-none" type='file' onchange="readURL(this);" />
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="dashboard_title">Dashboard Logo</label>
                                                             {{-- <span class="form-note">Specify the driver for mail.</span> --}}
                                                         </div>
                                                         
@@ -190,7 +210,7 @@ ul.categories li {
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="dashboard_title">Small Logo (for collapsed sidebar)</label>
+                                                            <label class="form-label" for="favicon">Favicon</label>
                                                             {{-- <span class="form-note">Specify the driver for mail.</span> --}}
                                                         </div>
                                                         
@@ -198,9 +218,9 @@ ul.categories li {
                                                     <div class="col-lg-9">
                                                         <div class="form-group">
                                                             <div class=" logo">
-                                                                <label for="small-logo-input">
-                                                                <img id="small-logo" src="@isset($settings['dashboard_small_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_small_logo'])}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
-                                                                <input id="small-logo-input" preview="#small-logo"  name="dashboard_small_logo" class="d-none" type='file' onchange="readURL(this);" />
+                                                                <label for="favicon-input">
+                                                                <img id="favicon" src="@isset($settings['favicon']){{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
+                                                                <input id="favicon-input" preview="#favicon"  name="favicon" class="d-none" type='file' onchange="readURL(this);" />
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -209,14 +229,14 @@ ul.categories li {
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="dashboard_title">Dashboard Title</label>
+                                                            <label class="form-label" for="website_title">Website Title</label>
                                                             {{-- <span class="form-note">Specify the driver for mail.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
                                                         <div class="form-group">
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" name="dashboard_title" id="dashboard_title" value="{{$settings['dashboard_title'] ?? ''}}" placeholder="Title">
+                                                                <input type="text" class="form-control" name="website_title" id="website_title" value="{{$settings['website_title'] ?? ''}}" placeholder="Title">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -536,20 +556,17 @@ ul.categories li {
                                                     </div>
                                                     <div class="col-lg-9">
                                                         <div class="form-group">
-                                                            <div class="form-control-wrap ">
-                                                                <div class="form-control-select">
-                                                                    <select class="form-control" id="default-06" name="currency" required>
+                                                            <div class="">
+                                                                <div class="">
+                                                                    <select class="form-control form-select" id="default-06" name="currency" required>
                                                                         @foreach ($currencies as $currency)
-                                                                        <option @if($settings['currency'] == $currency->id) selected @endif value="{{$currency->id}}">{{$currency->short_name}}</option>
-                                                                            
+                                                                            <option @if($settings['currency'] == $currency->id) selected @endif value="{{$currency->id}}">{{$currency->short_name}}</option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                       
-                                                    </div>
-                                                    
+                                                    </div>                                                    
                                                 </div>
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
@@ -567,6 +584,93 @@ ul.categories li {
                                                     </div>
                                                     
                                                 </div>
+                                                
+                                                <div class="row g-3">
+                                                    <div class="col-lg-9 offset-lg-3">
+                                                        <div class="form-group mt-2">
+                                                            <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                      
+                                    </div>
+                                    <div class="tab-pane" id="tabItem10">
+                                        <div class="nk-block">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">Appearance Settings</h5>
+                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                            </div><!-- .nk-block-head -->
+                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="theme_skin">Website Theme</label>
+                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="">
+                                                                <div class="">
+                                                                    <select class="form-control form-select" id="theme_skin" name="theme_skin" required>
+                                                                        
+                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'blue') selected  @endif @endisset value="blue">Blue</option>
+                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'black') selected @endif @endisset value="black">Black</option>
+                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'green') selected @endif @endisset value="green">Green</option>
+                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'red') selected @endif @endisset value="red">Red</option>
+                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'yellow') selected @endif @endisset value="yellow">Yellow</option>
+                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'custom') selected @endif @endisset value="custom">Custom</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="row g-3 custom_color" @isset($settings['theme_skin']) @if($settings['theme_skin'] != 'custom') style="display: none" @endif @endisset>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="theme_color">Theme Color</label>
+                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control colorpicker" name="theme_color" id="theme_color" value="{{$settings['theme_color'] ?? ''}}" placeholder="Theme Color">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3 custom_color">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="theme_color">Dashbaord Menu Type</label>
+                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class=" ">
+                                                                <div class="">
+                                                                    <select class="form-control form-select" id="dashboard_menu_type" name="dashboard_menu_type" required>
+                                                                        
+                                                                        <option @isset($settings['dashboard_menu_type']) @if($settings['dashboard_menu_type'] == 'top') selected  @endif @endisset value="top">Top Menu</option>
+                                                                        <option @isset($settings['dashboard_menu_type']) @if($settings['dashboard_menu_type'] == 'sidebar') selected  @endif @endisset value="sidebar">Sidebar Menu</option>
+                                                                        
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                    </div>
+                                                </div>
+                                               
                                                 
                                                 <div class="row g-3">
                                                     <div class="col-lg-9 offset-lg-3">
@@ -652,6 +756,56 @@ $(document).ready( function() {
       reader.readAsDataURL(input.files[0]);
   }
 }
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/js/bootstrap-colorpicker.min.js"></script>
+<script>$('.colorpicker').colorpicker({
+     
+customClass: 'custom-size',
+ 
+ sliders: {
+  
+ saturation: {
+  
+ maxLeft: 200,
+  
+ maxTop: 200
+  
+ },
+  
+ hue: {
+  
+ maxTop: 200
+  
+ },
+  
+ alpha: {
+  
+ maxTop: 200
+  
+ }
+  
+ }
+  
+});</script>
+
+<script>
+
+function checkThemeType(){
+    
+    if ($('#theme_skin').val() == 'custom') {    
+        $('.custom_color').show();      
+        $('#theme_color').attr('required', 'required');
+    }
+    else{
+        $('.custom_color').hide();      
+        $('#theme_color').removeAttr('required').val('');
+    }
+
+}
+$(document.body).on("change","#theme_skin",function(){
+    checkThemeType();
+});
 </script>
 
 @endpush

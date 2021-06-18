@@ -1,6 +1,6 @@
 @extends('layouts.frontend.app')
 @section('content')
-<div class="page-header">
+{{-- <div class="page-header">
     <div class="page-header__container container">
         <div class="page-header__breadcrumb">
             <nav aria-label="breadcrumb">
@@ -25,82 +25,85 @@
             <h1>My Account</h1>
         </div>
     </div>
-</div>
-<div class="block">
+</div> --}}
+<div class="block mt-5">
     <div class="container">
         <div class="row">
             <div class="col-12 col-lg-3 d-flex">
                 @include('client-dashboard.side-nav')
             </div>
             <div class="col-12 col-lg-9 mt-4 mt-lg-0">
-                <h2>Withdraw</h2>
+                @include('flash::message')
+                <div class="row ">
+                    <div class="col-lg-8">
+                        <h2>Withdraw</h2>
                         <p>You can withdraw your earned cashback in a variety of ways...</p>
-                <div class="products-view__list products-list  scrolling-pagination" data-layout="list" data-with-features="false" data-mobile-grid-columns="2">
+                    </div>
+                    <div class="col-lg-4 text-right" >
+                        <h3>Balance {{ currency() }} {{Auth::user()->balance->sum('amount')}}</h3>
+                        </p>Select a payment method</p>
+                    </div>
+                </div>
+                <div class="products-view__list products-list" data-layout="list" data-with-features="false" data-mobile-grid-columns="2">
                     <div class="products-list__body">
-                      
-                        @foreach($stores as $store)
-                            <div class="products-list__item">
-                                <div class="product-card product-card--hidden-actions ">
-                                    <div class="product-card__image product-image">
-                                        <a href="{{route('store.show',$store->slug)}}" class="product-image__body">
-                                            <img class="product-image__img" @if($store->logo->first())
-                                            src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
-                                            @else
-                                            src="{{asset('frontend/images/products/product-16.jpg')}}" 
-                                            @endif alt="">
-                                        </a>
+                        <div class="products-list__item">
+                            <div class="product-card product-card--hidden-actions ">
+                                <div class="product-card__image product-image pt-0 " >
+                                    <img class="product-image__img" style="width: 150px"
+                                    src="{{asset('frontend/images/logos/paypal-logo.png')}}"  alt="">
+                                </div>
+                                <div class="product-card__info align-self-center">
+                                    <div class="product-card__name ">
+                                        <ul class="product-card__features-list">
+                                            <li>Receive payment using an email address</li>
+                                            <li>Minimum withdrawal £1</li>                                            
+                                        </ul>
                                     </div>
-                                    <div class="product-card__info align-self-center">
-                                        <div class="product-card__name ">
-                                            <a href="{{route('store.show',$store->slug)}}"> {!!textHighlight($store->name,$term)!!}</a>
-                                        </div>
-                                        @if($store->reviews->count())
-                                            <div class="product-card__rating">
-                                                <div class="product-card__rating-stars">
-                                                    <div class="rating">
-                                                        <div class="rating__body">
-                                                            @foreach (range(1,5) as $index)
-                                                            <svg class="rating__star @if($index <= $store->reviews->avg('rating')) rating__star--active @endif" width="13px" height="12px">
-                                                                <g class="rating__fill">
-                                                                    <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal"></use>
-                                                                </g>
-                                                                <g class="rating__stroke">
-                                                                    <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal-stroke"></use>
-                                                                </g>
-                                                            </svg>
-                                                            <div class="rating__star rating__star--only-edge @if($index <= $store->reviews->avg('rating')) rating__star--active @endif">
-                                                                <div class="rating__fill">
-                                                                    <div class="fake-svg-icon"></div>
-                                                                </div>
-                                                                <div class="rating__stroke">
-                                                                    <div class="fake-svg-icon"></div>
-                                                                </div>
-                                                            </div>
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="product-card__rating-legend">{{$store->reviews->count()}} Reviews</div>
-                                            </div>
+                                </div>
+                                <div class="product-card__actions align-self-center">
+                                    <div class="product-card__buttons mt-2">
+                                        @if(Auth::user()->balance->sum('amount') < 1)
+                                        <p class="small">Your cashback balance is currently less than £1</p>
                                         @endif
-
-                                    </div>
-                                    <div class="product-card__actions align-self-center">
-                                        
-                                        <div class="product-card__prices">
-                                            @if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif{{$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif Cashback
-                                        </div>
-                                        <div class="product-card__buttons mt-2">
-                                            {{-- <button class="btn btn-primary product-card__addtocart" type="button">Shop Now</button> --}}
-                                            <a href="{{route('store.show',$store->slug)}}" class="btn btn-primary product-card__addtocart product-card__addtocart--list" type="button">Shop Now</a>
-                                        
-                                        </div>
+                                        <form action="{{route('account.cashout')}}" class="m-auto" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="payment_method" value="paypal">
+                                            <button type="subimt" class="btn btn-success @if(Auth::user()->balance->sum('amount') < 1) disabled @endif" >Withdraw</button>                                  
+                                            
+                                        </form>
                                     </div>
                                 </div>
                             </div>
-                        @endforeach
+                        </div>
+                        <div class="products-list__item">
+                            <div class="product-card product-card--hidden-actions ">
+                                <div class="product-card__image product-image align-self-center" >
+                                    <h4>Bank Transfer</h4>
+                                </div>
+                                <div class="product-card__info align-self-center">
+                                    <div class="product-card__name ">
+                                        <ul class="product-card__features-list">
+                                            <li>Free & secure</li>
+                                            <li>Minimum withdrawal £1</li>                                            
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="product-card__actions align-self-center">
+                                    <div class="product-card__buttons mt-2">
+                                        @if(Auth::user()->balance->sum('amount') < 1)
+                                        <p class="small">Your cashback balance is currently less than £1</p>
+                                        @endif
+                                        <form action="{{route('account.cashout')}}" class="m-auto" method="POST">
+                                            @csrf
+                                            <input type="hidden" name="payment_method" value="bank">
+                                            <button type="subimt" class="btn btn-success @if(Auth::user()->balance->sum('amount') < 1) disabled @endif" >Withdraw</button>                                  
+                                            
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    {!! $stores->links()!!} 
                 </div>
             </div>
         </div>

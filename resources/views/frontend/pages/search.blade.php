@@ -14,9 +14,9 @@
 }.products-list[data-layout="grid-3-sidebar"] .product-card--hidden-actions:hover, .products-list[data-layout="grid-4-full"] .product-card--hidden-actions:hover {
     margin-bottom: auto;
 }</style>
-<div class="page-header">
+<div class="page-header mt-3">
     <div class="page-header__container container">
-        <div class="page-header__breadcrumb">
+        {{-- <div class="page-header__breadcrumb">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
@@ -34,7 +34,7 @@
                     <li class="breadcrumb-item active" aria-current="page">Screwdrivers</li>
                 </ol>
             </nav>
-        </div>
+        </div> --}}
         @if($term)
         <div class="page-header__title">
             <h1>Search results for "{{$term}}"</h1>
@@ -87,7 +87,7 @@
                                             </a>
                                         </div>
                                         <div class="product-card__info align-self-center">
-                                            <div class="product-card__name ">
+                                            <div class="product-card__name text-center text-lg-left">
                                                 <a href="{{route('store.show',$store->slug)}}"> {!!textHighlight($store->name,$term)!!}</a>
                                             </div>
                                             @if($store->reviews->count())
@@ -128,7 +128,7 @@
                                             </div>
                                             <div class="product-card__buttons mt-2">
                                                 {{-- <button class="btn btn-primary product-card__addtocart" type="button">Shop Now</button> --}}
-                                                <a href="{{route('store.show',$store->slug)}}" class="btn btn-primary product-card__addtocart product-card__addtocart--list" type="button">Shop Now</a>
+                                                <a href="{{route('store.show',$store->slug)}}" class="btn btn-primary product-card__addtocart product-card__addtocart--list m-auto" type="button">Shop Now</a>
                                             
                                             </div>
                                         </div>

@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ExitClick;
 use App\Models\Store;
 use App\Models\SiteSetting;
+use App\Models\RedeemedVoucher;
 
 class ClickController extends Controller
 {
@@ -17,7 +18,10 @@ class ClickController extends Controller
      */
     public function index()
     {
-        //
+        $store = Store::findOrFail(74);
+        $url = 'danishmemon.com';
+        return view('frontend.pages.exit', compact('store','url'));
+
     }
 
     /**
@@ -38,14 +42,20 @@ class ClickController extends Controller
      */
     public function store(Request $request)
     {
-       $cashback_percent = SiteSetting::where('type','cashback_percentage')->first()->value;
-       if(!$cashback_percent){
-        $cashback_percent = 0;
-       }
-        
-
         $store = Store::where('id',$request->input('store_id'))->first();
-        
+
+        $custom_cashback_percentage = $store->custom_cashback_percentage;
+
+            if($custom_cashback_percentage){
+                $cashback_percent = $custom_cashback_percentage;
+            }else{
+                $cashback_percent = SiteSetting::where('type','cashback_percentage')->first()->value;
+            }
+
+            if(!$cashback_percent){
+                $cashback_percent = 0;
+            }
+                
         $click = ExitClick::create([
             'store_id'=>$request->input('store_id'),
             'user_id'=>$request->input('user_id'),
@@ -58,7 +68,19 @@ class ClickController extends Controller
         $click->exit_url=$request->input('url').'?'.$store->network->click_ref.'='.$click->id;
         $click->update();
 
-        return redirect($click->exit_url);
+        $url = $click->exit_url;
+
+        if($request->input('voucher_id')){
+            $redeemed = RedeemedVoucher::create([
+                'user_id'=>$request->input('user_id'),
+                'voucher_id'=>$request->input('voucher_id'),
+            ]);
+        }
+
+
+        return view('frontend.pages.exit', compact('store','url'));
+
+        // return redirect($click->exit_url);
     }
 
     /**

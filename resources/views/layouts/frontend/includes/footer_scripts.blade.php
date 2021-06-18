@@ -1,5 +1,7 @@
 <!-- js -->
-<script src="{{ asset('frontend/vendor/jquery/jquery.min.js')}}"></script>
+{{-- <script src="{{ asset('frontend/vendor/jquery/jquery.min.js')}}"></script> --}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{ asset('frontend/vendor/owl-carousel/owl.carousel.min.js')}}"></script>
 <script src="{{ asset('frontend/vendor/nouislider/nouislider.min.js')}}"></script>
@@ -10,7 +12,7 @@
 <script src="{{ asset('frontend/js/main.js')}}"></script>
 <script src="{{ asset('frontend/js/header.js')}}"></script>
 <script src="{{ asset('frontend/vendor/svg4everybody/svg4everybody.min.js')}}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jscroll/2.4.1/jquery.jscroll.min.js"></script>
 <script>
     svg4everybody();
@@ -42,4 +44,9 @@
         break;
     }
   });
+  $(function () {
+  $('[data-toggle="popover"]').popover({
+    trigger: 'hover'
+  });
+});
   </script>

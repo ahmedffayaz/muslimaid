@@ -10,6 +10,6 @@ class CashbackStatus extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['status'];
+    protected $fillable = ['status','details'];
 
 }

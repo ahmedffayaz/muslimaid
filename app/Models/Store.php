@@ -28,6 +28,7 @@ class Store extends Model
      'feature_sidebar',
      'feature_homepage',
      'editor_pick',
+     'custom_cashback_percentage',
      'status'];
 
     public function network(){
@@ -68,6 +69,9 @@ class Store extends Model
     }
     public function editorPicks(){
         return $this->hasMany(EditorPick::class);
+    }
+    public function clicks(){
+        return $this->hasMany(ExitClick::class);
     }
 
 }

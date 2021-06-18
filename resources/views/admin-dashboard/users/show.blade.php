@@ -101,7 +101,7 @@
                                     <div class="tab-pane active" id="tabItem5">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
-                                                <h5 class="title">Store Information</h5>
+                                                <h5 class="title">User Information</h5>
                                                 {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
                                             <form action="{{route('admin.users.update',$user)}}" class="gy-3 form-validate is-alter user-form" method="POST">

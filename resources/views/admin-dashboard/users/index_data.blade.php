@@ -38,7 +38,7 @@
        
     </div>
     <div class="nk-tb-col tb-col-mb">
-        <span class="tb-amount"><span class="currency">{{ Config::get('currency') }} </span>{{$user->balance->sum('amount')}}</span>
+        <span class="tb-amount"><span class="currency">{{ currency() }} </span>{{$user->balance->sum('amount')}}</span>
     </div>
     <div class="nk-tb-col tb-col-mb">
         <span>{{$user->registration_type}}</span>

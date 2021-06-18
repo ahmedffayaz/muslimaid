@@ -43,8 +43,16 @@ class SettingSeeder extends Seeder
                             'Mail Username'=>'7d552105f38912',
                             'Mail Password'=>'5cacef874f5744',
                             'Mail Email'=>'support@cashback-reborn.com',
-                            'Mail Name'=>'Cashback Reborn Support' ,
-                            'Currency' =>1                           
+                            'Mail Name'=>'Cashback Reborn Support',
+                            'Currency' =>1,
+                            'Dashboare Logo'=>'dashboard_logo_1623648325.png',
+                            'Website Logo'=>'website_logo_1623648325.png',
+                            'Favicon'=>'favicon_1623648325.png',
+                            'Theme Color'=>NULL,
+                            'Theme Skin'=>'blue',
+                            'Dashboard Menu Type'=>'top'
+
+
                             );
 
         foreach ($settings as $key => $value) {

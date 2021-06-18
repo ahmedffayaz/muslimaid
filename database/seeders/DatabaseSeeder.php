@@ -25,7 +25,9 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             CashbackSeeder::class,
             ReviewSeeder::class,
-            CashoutSeeder::class
+            CashoutSeeder::class,
+            PagesSeeder::class,
+            MenuSeeder::class
            
         ]);
         // \App\Models\User::factory(10)->create();

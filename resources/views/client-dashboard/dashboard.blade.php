@@ -1,6 +1,6 @@
 @extends('layouts.frontend.app')
 @section('content')
-<div class="page-header">
+{{-- <div class="page-header">
     <div class="page-header__container container">
         <div class="page-header__breadcrumb">
             <nav aria-label="breadcrumb">
@@ -25,8 +25,8 @@
             <h1>My Account</h1>
         </div>
     </div>
-</div>
-<div class="block">
+</div> --}}
+<div class="block mt-5">
     <div class="container">
         <div class="row">
             <div class="col-12 col-lg-3 d-flex">
@@ -67,7 +67,10 @@
                     @if($user->cashbacks->count())
                     <div class="dashboard__orders card">
                         <div class="card-header">
-                            <h5>Recent Cashback</h5>
+                            <h5 class="d-inline-block">Recent Cashback</h5>
+                            @if($user->clicks->count() > 5)
+                            <a href="{{route('account.cashback')}}" class="float-right font-14">View All</a>
+                            @endif
                         </div>
                         <div class="card-divider"></div>
                         <div class="card-table">
@@ -84,12 +87,12 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($user->cashbacks as $item)
+                                        @foreach ($user->cashbacks->take(0) as $item)
                                             <tr>
                                                 
                                                 <td><a href="{{route('store.show',$item->store->slug)}}" target="_blank">{{$item->store->name}}</a></td>
-                                                <td>{{ Config::get('currency') }} {{$item->order_value}}</td>
-                                                <td>{{ Config::get('currency') }} {{$item->amount}}</td>
+                                                <td>{{ currency() }} {{$item->order_value}}</td>
+                                                <td>{{ currency() }} {{$item->amount}}</td>
                                                 <td>{{Carbon\Carbon::parse($item->event_date)->isoFormat('Do MMMM YYYY')}}</td>
                                                 <td>{{$item->statusMap->status}}</td>
                                             </tr>
@@ -103,7 +106,10 @@
                     @if($user->clicks->count())
                     <div class="dashboard__orders card">
                         <div class="card-header">
-                            <h5>Recent Clicks</h5>
+                            <h5 class="d-inline-block">Recent Clicks </h5>
+                            @if($user->clicks->count() > 5)
+                            <a href="{{route('account.clicks')}}" class="float-right font-14">View All</a>
+                            @endif
                         </div>
                         <div class="card-divider"></div>
                         <div class="card-table">
@@ -117,7 +123,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($user->clicks as $item)
+                                        @foreach ($user->clicks->take(5) as $item)
                                             <tr>
                                                 <td><a href="{{route('store.show',$item->store->slug)}}" target="_blank">{{$item->store->name}}</a></td>
                                                 <td>{{Carbon\Carbon::parse($item->created_at)->isoFormat('Do MMMM YYYY')}}</td>
@@ -125,6 +131,7 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
+                                   
                                 </table>
                             </div>
                         </div>

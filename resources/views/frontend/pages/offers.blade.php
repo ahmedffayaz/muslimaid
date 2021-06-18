@@ -14,14 +14,23 @@
 <div class="block block-product-columns mt-5">
     <div class="container">
         <div class="row">
-            <div class="col-12 text-center mt-5">
-                <h1>TOP OFFERS</h1>
-                <p>Browse our best offers, including exclusive cashback deals increased for a limited time only.</p>
+           
+            <div class="col-lg-12">
+                <div id="your_container"> <!-- The element you want to render the content in -->
+                    {!! $page->lb_content !!}
+                  </div>
             </div>
+        </div>
+    </div>
+</div>
+<div class="block block-product-columns">
+    <div class="container">
+        <div class="row">
+           
             @foreach ($categories as $category)
                @if($category->stores->count()) 
             
-            <div class="col-4 mt-5">
+            <div class="col-lg-4 mt-5">
                 <div class="block-header">
                     <h3 class="block-header__title"> @if($category->logo_type == 'upload')
         
@@ -34,7 +43,7 @@
                         @endif{{$category->name}}</h3>
                     <div class="block-header__divider"></div>
                     <ul class="block-header__groups-list">
-                        <li><a href="{{route('cashabck',$category->slug)}}" type="button" class="block-header__group text-primary">View More</a></li>
+                        <li><a href="{{route('cashabck',$category->slug)}}" type="button" class="block-header__group color-primary">View More</a></li>
                     </ul>
                 </div>
                 <div class="block-product-columns__column">

@@ -1,3 +1,7 @@
+@php
+     $settings = SiteSetting();   
+    //  dd($settings);
+    @endphp
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
@@ -15,8 +19,19 @@
         top: 20px;
         font-size: 18px;
     }
-    .suggestions__item.selected{background-color:#faf2e2}</style>
+    .suggestions__item.selected{background-color:#faf2e2}
+    
+    #accordion .btn.focus, .btn:focus {
+    box-shadow: none;
+}
+    </style>
     <!-- site -->
+    @isset($settings['theme_skin'])
+        @if($settings['theme_skin']=='custom')
+            @include('layouts.frontend.includes.colors')
+        @endif
+    @endisset
+    
     <div class="site">
         <!-- mobile site__header -->
         @include('layouts.frontend.includes.mobile_header')

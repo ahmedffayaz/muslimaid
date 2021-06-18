@@ -1,4 +1,8 @@
-<div class="nk-sidebar nk-sidebar-fixed is-light is-compact" data-content="sidebarMenu">
+<div class="nk-sidebar nk-sidebar-fixed is-light is-compact 
+@isset($settings['dashboard_menu_type']) @if($settings['dashboard_menu_type'] == 'top')
+d-xl-none
+@endif @endisset"
+data-content="sidebarMenu">
     <div class="nk-sidebar-element nk-sidebar-head">
         <div class="nk-sidebar-brand">
 
@@ -6,7 +10,7 @@
             <a href="{{route('admin.home.index')}}" class="logo-link nk-sidebar-logo">
                 <img class="logo-light logo-img" src="@isset($settings['dashboard_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif"  alt="logo">
                 <img class="logo-dark logo-img" src="@isset($settings['dashboard_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/logo-dark.png')}}@endif" alt="logo-dark">
-                <img class="logo-small logo-img logo-img-small" src="@isset($settings['dashboard_small_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_small_logo'])}}@else{{asset('admin-dashboard/images/logo-small.png')}}@endif" alt="logo-small">
+                <img class="logo-small logo-img logo-img-small" src="@isset($settings['favicon']){{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}@else{{asset('admin-dashboard/images/logo-small.png')}}@endif" alt="logo-small">
             </a>
         </div>
         <div class="nk-menu-trigger mr-n2">
@@ -71,7 +75,7 @@
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-sign-gbp"></em></span>
-                            <span class="nk-menu-text">Cashbacks</span>
+                            <span class="nk-menu-text">Sales</span>
                         </a>
                         <ul class="nk-menu-sub">
                             @can('view cashbacks')
@@ -201,20 +205,47 @@
                                     <span class="nk-menu-text">Sliders</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="/admin/menu" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-menu"></em></span>
+                                    <span class="nk-menu-text">Menu</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
+                    
                     @endcanany
-                    @can('view tickets')
-                    <li class="nk-menu-item ">
-                        @php
-                         $new_tickets = \App\Models\Ticket::where('new_ticket',1)->get();    
-                        @endphp
-                        <a href="{{route('admin.tickets.index')}}" class="nk-menu-link @if(count($new_tickets)) icon-status icon-status-info @endif">
-                            <span class="nk-menu-icon "><em class="icon ni ni-chat-fill"></em></span>
-                            <span class="nk-menu-text">Tickets</span>
+                    <li class="nk-menu-item has-sub">
+                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                            <span class="nk-menu-icon"><em class="icon ni ni-layout-alt-fill"></em></span>
+                            <span class="nk-menu-text">CMS</span>
                         </a>
-                    </li><!-- .nk-menu-item -->
-                    @endcan
+                        <ul class="nk-menu-sub">
+                            @can('view tickets')
+                            <li class="nk-menu-item ">
+                                @php
+                                $new_tickets = \App\Models\Ticket::where('new_ticket',1)->get();    
+                                @endphp
+                                <a href="{{route('admin.tickets.index')}}" class="nk-menu-link @if(count($new_tickets)) icon-status icon-status-info @endif">
+                                    <span class="nk-menu-icon "><em class="icon ni ni-chat-fill"></em></span>
+                                    <span class="nk-menu-text">Tickets</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            @endcan
+                            <li class="nk-menu-item ">
+                                <a href="{{route('admin.pages.index')}}" class="nk-menu-link">
+                                    <span class="nk-menu-icon "><em class="icon ni ni-text-rich"></em></span>
+                                    <span class="nk-menu-text">Pages</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item ">
+                                <a href="{{route('admin.blogs.index')}}" class="nk-menu-link">
+                                    <span class="nk-menu-icon "><em class="icon ni ni-article"></em></span>
+                                    <span class="nk-menu-text">Blog</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                        </ul>
+                    </li>
                     
                    
                 </ul><!-- .nk-menu -->

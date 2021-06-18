@@ -29,7 +29,7 @@
                                         <div id="accordion-{{$role->name}}" class="accordion accordion-s2">
                                             <div class="accordion-item">
                                                 <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#{{$role->name}}">
-                                                    <h6 class="title text-capitalize">{{$role->name}}</h6>
+                                                    <h6 class="title text-capitalize">Role: {{$role->name}}</h6>
                                                     <span class="accordion-icon"></span>
                                                 </a>
                                                 <div class="accordion-body collapse" id="{{$role->name}}" data-parent="#accordion-{{$role->name}}">

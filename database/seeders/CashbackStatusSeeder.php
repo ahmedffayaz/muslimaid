@@ -17,11 +17,15 @@ class CashbackStatusSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        $statuses = ['pending', 'failed','confirmed', 'paid'];
-        foreach($statuses as $statusName){
-            $status = new CashbackStatus();
-            $status->status = $statusName;
-            $status->save();
+        $statuses = [
+            ['status'=>'pending','details'=>'Assigned when the cashback is penidng'],
+            ['status'=>'failed','details'=>'Assigned when the cashback is failed'],
+            ['status'=>'confirmed','details'=>'Assigned when the cashback is confirmed'],
+            ['status'=> 'paid','details'=>'Assigned when the cashback is paid'],
+            ['status'=>'processing','details'=>'Assigned when the cashback is in process of cashout']
+        ];
+        foreach($statuses as $status){
+            $st = CashbackStatus::create($status);
         }
     }
 }

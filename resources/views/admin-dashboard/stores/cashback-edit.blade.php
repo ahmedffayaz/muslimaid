@@ -18,23 +18,43 @@
         </div>
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="sale_commission">Commission</label>
+                <label class="form-label" for="custom_cashback_percentage">Cashback Percentage</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="sale_commission" value="{{$cashback->sale_commission}}" name="sale_commission" required>
+                    <input type="text" class="form-control" id="custom_cashback_percentagee" value="{{$cashback->store->custom_cashback_percentage}}" name="custom_cashback_percentage" required oninput="calcCashback()">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label class="form-label" for="sale_commission">Network Commission</label>
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control" id="sale_commission" value="{{$cashback->sale_commission}}" name="sale_commission" required oninput="calcPercentage()">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group">
+                <label class="form-label" for="cashback">Cashback</label>
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control" id="cashback" value="{{$cashback->cashback}}" name="cashback" required oninput="calcPercentage()">
                 </div>
             </div>
         </div>
         <div class="col-lg-6 currency-div">
             <div class="form-group">
                 <label class="form-label" for="currency">Currency</label>
-                <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="currency" value="{{$cashback->currency}}" name="currency" required>
+                <div class="form-control-wrap ">
+                    <div class="form-control-select">
+                        <select class="form-control" id="currency" name="currency" required>
+                            @foreach ($currencies as $currency)
+                            <option @if($cashback->currency == $currency->id) selected @endif value="{{$currency->id}}">{{$currency->short_name}}</option>
+                                
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
-
-
-
         <div class="col-lg-12">
             <div class="card">
                 <label class="form-label" for="phone-no-1" >Detail</label>

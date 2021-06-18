@@ -35,53 +35,33 @@ ul.categories li {
                 <div class="components-preview wide-md mx-auto">
                     <div class="nk-block-head nk-block-head-lg pb-2">
                         <div class="nk-block-between">
-                        <div class="nk-block-head-content">
-                            <h3 class="nk-block-title fw-normal"><a href="{{route('store.show',$store->slug)}}" target="_blank">{{$store->name}}</a> <span class="badge badge-dim badge-pill badge-outline-primary">{{$store->network->name}}</span></h3>
-                            <div class="nk-block-des">
-                              
+                            <div class="nk-block-head-content">
+                                <h3 class="nk-block-title fw-normal"><a href="{{route('store.show',$store->slug)}}" target="_blank">{{$store->name}}</a> <span class="badge badge-dim badge-pill badge-outline-primary">{{$store->network->name}}</span></h3>
+                                <div class="nk-block-des">
+                                
+                                </div>
                             </div>
-                        </div>
-                        <div class="nk-block-head-content">
-                            <div class="form-group stores">
-                                <label class="form-label" for="default-06"></label>
-                                <div class="form-control-wrap ">
-                                    <div class="">
-                                        <select class="form-control form-select" data-search="on" name="open_store" id="store_select" required>
-                                            @foreach ($stores as $st)
-                                            <option @if($st->id == $store->id) selected @endif value="{{route('admin.stores.show',$st->id)}}">{{$st->id}} {{$st->name}}</option>
-                                                
-                                            @endforeach
-                                         
-                                                
-                                           
-                                        </select>
+                            <div class="nk-block-head-content">
+                                <div class="form-group stores">
+                                    <label class="form-label" for="default-06"></label>
+                                    <div class="form-control-wrap ">
+                                        <div class="">
+                                            <select class="form-control form-select" data-search="on" name="open_store" id="store_select" required>
+                                                @foreach ($stores as $st)
+                                                    <option @if($st->id == $store->id) selected @endif value="{{route('admin.stores.show',$st->id)}}">{{$st->id}} - {{$st->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="toggle-wrap nk-block-tools-toggle">
-                                <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
-                                <div class="toggle-expand-content" data-content="pageMenu">
-                                    <ul class="nk-block-tools g-3">
-                                        {{-- <li class="nk-block-tools-opt"><a href="{{route('admin.stores.edit',$store)}}" class="btn btn-primary btn-sm"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li> --}}
-                                    
-                                        {{-- <li><a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
-                                      
-                                    </ul>
-                                </div>
-                            </div><!-- .toggle-wrap -->
-                        </div><!-- .nk-block-head-content -->
-                    </div>
+                            </div><!-- .nk-block-head-content -->
+                        </div>
                     </div>
                    
-                @include('flash::message')
-                    
-                    
+                    @include('flash::message')
                     <div class="nk-block nk-block-lg">
-
-                        
                         <div class="card card-preview">
                             <div class="card-inner">
-                               
                                 <ul class="nav nav-tabs mt-n3">
                                     <li class="nav-item">
                                         <a class="nav-link active" data-toggle="tab" href="#tabItem4"><em class="icon ni ni-file-text"></em><span>Details</span></a>
@@ -103,18 +83,14 @@ ul.categories li {
                                     </li>
                                 </ul>
                                 <div class="tab-content">
-                                   
                                     <div class="tab-pane active" id="tabItem4">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
                                                 <h5 class="title">Store Information</h5>
-                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
                                             <form action="{{route('admin.stores.update', $store)}}" id="store_form" class="gy-3 form-validate is-alter" method="POST" enctype="multipart/form-data">
                                                @csrf
                                                 @method('PUT')
-                                                {{-- <meta name="csrf-token" content="{{ csrf_token() }}" /> --}}
-
                                                <div class="row g-4">
                                                     <div class="col-lg-4">
                                                         <div class="form-group">
@@ -147,8 +123,6 @@ ul.categories li {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
-                                                
                                                     <div class="col-lg-12">
                                                         <div class="card">
                                                             <input name="description" type="hidden">
@@ -157,11 +131,8 @@ ul.categories li {
                                                             <div  id="editor-container">
                                                                {!!$store->description!!}
                                                             </div>
-                                                           
                                                         </div>
                                                     </div>
-                                                    
-                                                   
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
                                                             <label class="form-label" for="phone-no-1">Tracking url</label>
@@ -178,11 +149,9 @@ ul.categories li {
                                                             </div>
                                                         </div>
                                                     </div>
-            
-                                                   
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="default-06">Status</label>
+                                                            <label class="form-label" for="default-06">Status  @if($store->status == 'error') (<span class="text-danger"> Error: missing {{$store->status_description}}</span>) @endif</label>
                                                             <div class="form-control-wrap ">
                                                                 <div class="">
                                                                     <select class="form-control form-select" name="status" required>
@@ -191,51 +160,30 @@ ul.categories li {
                                                                         <option @if($store->status == 'disabled') selected @endif value="disabled">Disabled</option>
                                                                         <option @if($store->status == 'closed') selected @endif value="closed">Closed at Network</option>
                                                                         <option @if($store->status == 'error') selected @endif value="error">Error</option>
-                                                                            
-                                                                       
                                                                     </select>
                                                                 </div>
                                                             </div>
-                                                            
                                                         </div>
-                                                        
-                                                       
-                                                    </div>
+                                                   </div>
                                                     <div class="col-md-6">
-                                                        <div class="text-danger mt-md-4">
-                                                            @if($store->status == 'error') {{$store->status_description}} @endif
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="custom_cashback_percentage">Override Cashback Percentage  <em class="icon ni ni-question" data-toggle="tooltip" data-placement="top" title="Define custom cashback percentage for this store, keep empty to use global setting"></em></label>
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="custom_cashback_percentage" value="{{$store->custom_cashback_percentage}}" name="custom_cashback_percentage">
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-md-12">
                                                         <label class="form-label" for="default-06">Tags</label>
                                                             <div class="form-control-wrap ">
                                                                 <div class="">
-                                                                    <select class="form-control form-select" name="tags[]" required multiple>
-                                                                        <option @if($store->editor_pick) selected @endif value="editor_pick">Editor Pick</option>
+                                                                    <select class="form-control form-select" name="tags[]" multiple>
                                                                         <option @if($store->feature_homepage) selected @endif value="feature_homepage">Homepage featured</option>
                                                                         <option @if($store->feature_sidebar) selected @endif value="feature_sidebar">Sidebar featured</option>
                                                                     </select>
                                                                 </div>
                                                             </div> 
                                                     </div>
-                                                    
-                                                    <div class="col-12">
-                                                        <div class="form-group">
-                                                            <div class="custom-control custom-checkbox mr-3">
-                                                                <input type="checkbox" class="custom-control-input" id="override-cashback" name="override_cashback" value="1"
-                                                                @if($store->override_cashback==1) checked @endif>
-                                                                <label class="custom-control-label" for="override-cashback">Override Cashback</label>
-                                                            </div>
-                                                            <div class="custom-control custom-checkbox">
-                                                                <input type="checkbox" class="custom-control-input" id="override-categories" name="override_categories" value="1"
-                                                                @if($store->override_categories==1) checked @endif>
-                                                                <label class="custom-control-label" for="override-categories">Override Categories</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                   
-                                                   
-                                                    
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <button type="submit" class="btn btn-lg btn-primary">Update</button>
@@ -244,12 +192,26 @@ ul.categories li {
                                                 </div>
                                             </form>
                                         </div>
-                                      
                                     </div>
                                     <div class="tab-pane" id="tabItem5">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
-                                                <h5 class="title">Store Categoires</h5>
+                                                <form action="{{route('admin.stores.override_categories', $store)}}" id="override-categories-form" class="gy-3 form-validate is-alter" method="POST" enctype="multipart/form-data">
+                                                    @csrf
+                                                     @method('PUT')
+                                                    <div class="row g-4">
+                                                         <div class="col-12">
+                                                             <div class="form-group">
+                                                                 <div class="custom-control custom-checkbox">
+                                                                     <input type="checkbox" class="custom-control-input" id="override-categories" name="override_categories" value="1"
+                                                                     @if($store->override_categories==1) checked @endif>
+                                                                     <label class="custom-control-label" for="override-categories">Override Categories <em class="icon ni ni-question" data-toggle="tooltip" data-placement="top" title="If checked categories will be overriden when importer runs next time"></em></label>
+                                                                 </div>
+                                                             </div>
+                                                         </div>
+                                                     </div>
+                                                 </form>
+                                                <h5 class="title mt-3">Categoires</h5>
                                                 <form action="{{route('admin.stores.categories.update')}}" id="store_cat_form" class="gy-3 form-validate is-alter" method="POST" enctype="multipart/form-data">
                                                     @csrf
                                                      @method('POST')
@@ -257,62 +219,62 @@ ul.categories li {
                                                      <div class="col-12">
                                                         <ul class="categories">
                                                             @foreach ($categories as $parent)
-                                                            <li class="custom-control custom-control-sm custom-checkbox d-block">
-                                                                <input @if(in_array($parent->id, $store->categories->pluck('id')->toArray())) checked @endif 
-                                                                type="checkbox" class="custom-control-input" name="category_id[]" id="{{$parent->name}}" value="{{$parent->id}}">
-                                                                <label class="custom-control-label" for="{{$parent->name}}">{{$parent->name}}</label>
-                                                                @if(count($parent->childs))
-                
-                                                                @include('admin-dashboard.stores.child_cat_input',['childs' =>$parent->childs])
-                                                            @endif
-                                                                            
+                                                                <li class="custom-control custom-control-sm custom-checkbox d-block">
+                                                                    <input @if(in_array($parent->id, $store->categories->pluck('id')->toArray())) checked @endif 
+                                                                    type="checkbox" class="custom-control-input" name="category_id[]" id="{{$parent->name}}" value="{{$parent->id}}">
+                                                                    <label class="custom-control-label" for="{{$parent->name}}">{{$parent->name}}</label>
+                                                                    @if(count($parent->childs))
+                                                                        @include('admin-dashboard.stores.child_cat_input',['childs' =>$parent->childs])
+                                                                    @endif
+                                                                </li>            
                                                             @endforeach
-            
-                                                            </li>                                      
                                                         </ul>
                                                      </div>
-                                                        <div class="col-12">
-                                                            <div class="form-group">
-                                                                <button type="submit" class="btn btn-lg btn-primary">Update</button>
-                                                            </div>
+                                                    <div class="col-12">
+                                                        <div class="form-group">
+                                                            <button type="submit" class="btn btn-lg btn-primary">Update</button>
                                                         </div>
+                                                    </div>
                                            
-                                        </form>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="tabItem6">
-                                        <h5 class="title mb-4 d-inline-block">Cashbacks</h5>
+                                        <form action="{{route('admin.stores.override_cashback', $store)}}" id="override-cashback-form" class="gy-3 form-validate is-alter" method="POST" enctype="multipart/form-data">
+                                            @csrf
+                                            @method('PUT')
+                                            <div class="row g-4">
+                                                <div class="col-12">
+                                                    <div class="form-group">
+                                                        <div class="custom-control custom-checkbox mr-3">
+                                                            <input type="checkbox" class="custom-control-input" id="override-cashback" name="override_cashback" value="1"
+                                                            @if($store->override_cashback==1) checked @endif>
+                                                            <label class="custom-control-label" for="override-cashback">Override Cashback  <em class="icon ni ni-question" data-toggle="tooltip" data-placement="top" title="If checked cashbacks will be overriden when importer runs next time"></em></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                         </form>
+                                        <h5 class="title mb-4 d-inline-block mt-3">Cashbacks</h5>
                                         <a href="#cashback-modal" class="btn btn-primary btn-sm float-right" data-toggle="modal"><em class="icon ni ni-upload-cloud"></em> <span>Add cashback</span></a>
-
-                                        <span id='cashbacks-data' class="mt-4"></span>
-
-                                        
-                                       
+                                        <span id='cashbacks-data' class="mt-4"></span>                                       
                                     </div>
                                     <div class="tab-pane" id="tabItem7">
                                         <h5 class="title mb-4">Vouchers</h5>
                                         <span id='vouchers-data'></span>
-                                        
                                     </div>
                                     <div class="tab-pane" id="tabItem8">
-                     
-
                                         <h5 class="title mb-4 d-inline">Reviews</h5>
                                         <span id='reviews-data'></span>
-                                        
-                                        
                                     </div>
                                     <div class="tab-pane" id="tabItem9">
                                         <span id="images-data"></span>
-                                  
                                     </div>
                                 </div>
                             </div>
                         </div><!-- .card-preview -->
-                      
                     </div>
-                  
                 </div>
             </div>
         </div>
@@ -1151,4 +1113,72 @@ $(document.body).on("change","#type",function(){
     checkCashbackType();
 });
 </script>
+<script>
+    $("#override-categories").change(function () {
+    var value = $(this).val();
+    
+    $.ajax({
+        type:'PUT',
+        url: $('#override-categories-form').attr('action'),
+        data: $('#override-categories-form').serialize(),
+        success:function(data){
+        
+            (function(NioApp, $){
+            'use strict';
+            toastr.clear();
+            NioApp.Toast('Store setting updated Successfully.', 'success');
+        })(NioApp, jQuery);
+
+            // console.log(data);
+            
+        },
+        error: function(data){
+            console.log("error");
+            console.log(data);
+        }
+    });
+});
+$("#override-cashback").change(function () {
+    var value = $(this).val();
+    
+    $.ajax({
+        type:'PUT',
+        url: $('#override-cashback-form').attr('action'),
+        data: $('#override-cashback-form').serialize(),
+        success:function(data){
+        
+            (function(NioApp, $){
+            'use strict';
+            toastr.clear();
+            NioApp.Toast('Store setting updated Successfully.', 'success');
+        })(NioApp, jQuery);
+        fetchCashbacks();
+            // console.log(data);
+            
+        },
+        error: function(data){
+            console.log("error");
+            console.log(data);
+        }
+    });
+});
+
+</script>
+<script>
+    function calcPercentage(){
+      
+        var network_commission = $('#sale_commission').val();
+        var cashback = $('#cashback').val();
+        var percentage = (Math.round((cashback/network_commission)*100)).toFixed(2);
+        $('#custom_cashback_percentagee').val(percentage);
+    }
+    function calcCashback(){
+
+        var percentage =$('#custom_cashback_percentagee').val();
+        var network_commission = $('#sale_commission').val();
+        var cashback = (Math.round((percentage/100)*network_commission)).toFixed(2);
+        $('#cashback').val(cashback);
+    }
+    
+    </script>
 @endpush

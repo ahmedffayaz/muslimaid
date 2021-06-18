@@ -1,6 +1,6 @@
 @extends('layouts.frontend.app')
 @section('content')
-<div class="page-header">
+{{-- <div class="page-header">
     <div class="page-header__container container">
         <div class="page-header__breadcrumb">
             <nav aria-label="breadcrumb">
@@ -25,8 +25,8 @@
             <h1>My Account</h1>
         </div>
     </div>
-</div>
-<div class="block">
+</div> --}}
+<div class="block mt-5">
     <div class="container">
         <div class="row">
             <div class="col-12 col-lg-3 d-flex">

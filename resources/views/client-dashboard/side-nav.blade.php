@@ -13,6 +13,15 @@
         <li class="account-nav__item {{ (request()->is('account/clicks')) ? 'account-nav__item--active ' : '' }}">
             <a href="{{route('account.clicks')}}">Clicks</a>
         </li>
+        <li class="account-nav__item {{ (request()->is('account/withdraw')) ? 'account-nav__item--active ' : '' }}">
+            <a href="{{route('account.withdraw.index')}}">Withdraw</a>
+        </li>
+        <li class="account-nav__item {{ (request()->is('account/payment-details')) ? 'account-nav__item--active ' : '' }}">
+            <a href="{{route('account.payment_details')}}">Payment Method</a>
+        </li>
+        <li class="account-nav__item {{ (request()->is('account/statement')) ? 'account-nav__item--active ' : '' }}">
+            <a href="{{route('account.statement')}}">Statement</a>
+        </li>
         <li class="account-nav__item {{ (request()->is('account/change_password')) ? 'account-nav__item--active ' : '' }}">
             <a href="{{route('account.change_password')}}">Change Password</a>
         </li>

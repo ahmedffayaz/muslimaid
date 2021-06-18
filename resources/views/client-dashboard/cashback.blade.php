@@ -1,6 +1,6 @@
 @extends('layouts.frontend.app')
 @section('content')
-<div class="page-header">
+{{-- <div class="page-header">
     <div class="page-header__container container">
         <div class="page-header__breadcrumb">
             <nav aria-label="breadcrumb">
@@ -25,8 +25,8 @@
             <h1>My Account</h1>
         </div>
     </div>
-</div>
-<div class="block">
+</div> --}}
+<div class="block mt-5">
     <div class="container">
         <div class="row">
             <div class="col-12 col-lg-3 d-flex">
@@ -58,8 +58,8 @@
                                     @foreach ($cashbacks as $cashback)
                                     <tr>
                                         <td><a href="{{route('store.show',$cashback->store->slug)}}" target="_blank">{{$cashback->store->name}}</a></td>
-                                        <td>{{ Config::get('currency') }} {{$cashback->order_value}}</td>
-                                        <td>{{ Config::get('currency') }} {{$cashback->amount}}</td>
+                                        <td>{{ currency() }} {{$cashback->order_value}}</td>
+                                        <td>{{ currency() }} {{$cashback->amount}}</td>
                                         <td>{{Carbon\Carbon::parse($cashback->event_date)->isoFormat('Do MMMM YYYY')}}</td>
                                         <td>{{$cashback->statusMap->status}}</td>
                                     </tr> 
@@ -78,7 +78,7 @@
                    <p>Once you start earning cashback your transactions will be listed here.</p>
                     <img src="{{asset('frontend/images/pages/wallet.png')}}" alt="" width="100%" style="max-width: 300px">
                     <div>
-                        <button type="submit" class="btn btn-primary mt-4">Start Shopping</button>
+                        <a href="{{route('offers')}}" class="btn btn-primary mt-4">View Offers</a>
                     </div>
                 </div>
                 @endif
