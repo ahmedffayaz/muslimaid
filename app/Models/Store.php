@@ -25,6 +25,10 @@ class Store extends Model
      'status_description', 
      'override_cashback',
      'override_categories',
+     'feature_sidebar',
+     'feature_homepage',
+     'editor_pick',
+     'custom_cashback_percentage',
      'status'];
 
     public function network(){
@@ -62,6 +66,12 @@ class Store extends Model
     public function commissions(){
         
         return $this->hasMany(UserCashback::class);
+    }
+    public function editorPicks(){
+        return $this->hasMany(EditorPick::class);
+    }
+    public function clicks(){
+        return $this->hasMany(ExitClick::class);
     }
 
 }

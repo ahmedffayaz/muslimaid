@@ -57,7 +57,7 @@
                                             <div class="media p-3">
                                                 <div class="media-body">
                                                     <h6 class="title">Revenue</h6>
-                                                    <h3 class="mb-0 mt-2"> {{ Config::get('currency') }} {{$total_revenue}}</h3>
+                                                    <h3 class="mb-0 mt-2"> {{ currency() }} {{$total_revenue}}</h3>
                                                    
                                                 </div>
                                                 <div class="align-self-center text-center analytics-icon" style="    display: contents;">
@@ -76,7 +76,7 @@
                                             <div class="media p-3">
                                                 <div class="media-body">
                                                     <h6 class="title">Pending Revenue</h6>
-                                                    <h3 class="mb-0 mt-2">{{ Config::get('currency') }} {{$pending_total_revenue}}</h3>
+                                                    <h3 class="mb-0 mt-2">{{ currency() }} {{$pending_total_revenue}}</h3>
                                                 </div>
                                                 <div class="align-self-center text-center analytics-icon" style="    display: contents;">
                                                     <em class="icon ni ni-coins text-info"></em>
@@ -295,7 +295,7 @@
                                              
                                             </div>
                                             <div class="total">
-                                                <div class="amount"> {{ Config::get('currency') }} {{$com->amount}}</div>
+                                                <div class="amount"> {{ currency() }} {{$com->amount}}</div>
                                                 <div class="count">
                                                     @php echo \Carbon\Carbon::createFromTimeStamp(strtotime($com->event_date))->diffForHumans() @endphp
                                                    </div>

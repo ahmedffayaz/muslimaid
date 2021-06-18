@@ -1,3 +1,5 @@
+@php $settings = SiteSetting(); @endphp
+
 <!DOCTYPE html>
 <html lang="zxx" class="js">
 
@@ -8,12 +10,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
     <!-- Fav Icon  -->
-    <link rel="shortcut icon" href="./images/favicon.png">
+    <link rel="shortcut icon" href="@isset($settings['favicon']){{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}@else{{asset('frontend/images/favicon.png')}}@endif">
     <!-- Page Title  -->
-    <title>Cashback Reborn | Admin Panel</title>
+    <title>{{$settings['website_title']}} | Admin Panel</title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="{{ asset('admin-dashboard/css/dashlite.css?ver=2.2.0')}}">
     <link id="skin-default" rel="stylesheet" href="{{ asset('admin-dashboard/css/theme.css?ver=2.2.0')}}">
+    <link rel="stylesheet" href="{{asset('vendor/laraberg/css/laraberg.css')}}">
+    <script src="https://unpkg.com/react@16.8.6/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@16.8.6/umd/react-dom.production.min.js"></script>
+    <script src="{{ asset('vendor/laraberg/js/laraberg.js') }}"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" rel="stylesheet">
     
 </head>
     
@@ -46,6 +53,66 @@
 .nk-sidebar .nk-menu > li .nk-menu-sub .nk-menu-link {
     padding-left: 40px;
 }
+    /* Dropdown Button */
+.dropbtn {
+  color: #526484;
+  padding: 16px;
+  border: none;
+  font-size: 14px;
+}
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  display: none;
+  position: absolute;
+  min-width: 225px;
+  /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+  z-index: 1;
+margin-top:15px;
+left: 0;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: #526484;
+  /* padding: 12px 16px; */
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+/* .dropdown-content a:hover {background-color: #ddd;} */
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+@media (min-width: 576px){
+    .nk-header-search {
+    justify-content: center;
+}
+}
+@media only screen and (max-width: 1199px) {
+    .is-compact:not(:hover) .nk-menu-text {
+    opacity: 1;
+}
+.is-compact:not(:hover) .nk-menu-badge, .is-compact:not(:hover) .nk-menu-toggle:after {
+    opacity: 1;
+}
+}
+@media (min-width: 1200px){
+    .nk-sidebar.is-compact.d-xl-none + .nk-wrap {
+    padding-left: 0;
+}
+.nk-sidebar.is-compact.d-xl-none + .nk-wrap > .nk-header-fixed {
+    left: 0;
+}
+}
+
 </style>
 @php $settings = App\Models\SiteSetting::latest()->get()->pluck('value','type'); @endphp
 @php $currency =  0; @endphp
@@ -53,9 +120,11 @@
     <div class="nk-app-root">
         <!-- main @s -->
         <div class="nk-main ">
+            
             <!-- sidebar -->
             @include('layouts.admin-dashboard.includes.sidebar')
             <!-- /sidebar-->
+          
             <!-- wrap @s -->
             <div class="nk-wrap ">
                 <!-- header -->
@@ -80,6 +149,8 @@
     <!-- JavaScript -->
     <script src="{{ asset('admin-dashboard/js/bundle.js?ver=2.2.0')}}"></script>
     <script src="{{ asset('admin-dashboard/js/scripts.js?ver=2.2.0')}}"></script>
+    
+
     {{-- <script src="{{ asset('admin-dashboard/js/charts/chart-ecommerce.js?ver=2.2.0')}}"></script> --}}
     
 {{-- <script>
@@ -140,6 +211,14 @@
      </script>
      <script>
         $('div.alert').not('.alert-important').delay(3000).fadeOut(350);
+        $('a.dropbtn').click(function(e)
+{
+    // Special stuff to do when this link is clicked...
+
+    // Cancel the default action
+    e.preventDefault();
+});
+        
         </script>
      <!-- page scripts -->
    

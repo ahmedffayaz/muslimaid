@@ -26,7 +26,7 @@
    
   
     <div class="nk-tb-col "><a href="{{route('admin.stores.show',$voucher->store ?? 0)}}">
-        <span><b>{{$voucher->store->name ?? ''}}</b></span><br>
+        <span><b>{{$voucher->store->id ?? ''}} - {{$voucher->store->name ?? ''}}</b></span><br>
         <span>{{$voucher->store->network->name ?? ''}}</span></a><br>
         @if ($voucher->promotion_end_date < \Carbon\Carbon::now())
     <span class="text-danger">Expired</span>

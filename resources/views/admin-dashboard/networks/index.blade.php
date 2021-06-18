@@ -61,8 +61,9 @@
                                         <a href="#" class="dropdown-toggle btn  btn-primary" data-toggle="dropdown"><em class="icon ni ni-plus mr-1"></em>Options</a>
                                         <div class="dropdown-menu dropdown-menu-right">
                                             <ul class="link-list-opt no-bdr d-block">
-                                                <a href="{{route('admin.networks.edit',$network)}}"><em class="icon ni ni-edit"></em><span>Edit Network</span></a>
-                                                <a href="{{route('admin.networks.categories',$network)}}"><em class="icon ni ni-eye"></em><span>View Categories</span></a>
+                                                <a href="{{route('admin.networks.edit',$network)}}" data-toggle="modal" data-target="#modalsettings"><em class="icon ni ni-setting"></em><span>Settings</span></a>
+                                                
+                                                <a href="{{route('admin.networks.categories',$network)}}"><em class="icon ni ni-eye"></em><span>Categories</span></a>
                                             </ul>
                                         </div>
                                     </div>        
@@ -111,6 +112,49 @@
                                 </div>
                             </div>
                         </div>
+                        <!-- Settings Modal -->
+                        <div class="modal fade" tabindex="-1" id="modalsettings">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross"></em></a>
+                                    <div class="modal-body">
+                                        <div class="nk-modal">
+                                            <h4 class="nk-modal-title">{{$network->name}} Settings</h4>
+                                            <div class="nk-modal-text">
+                                            <form action="{{route('admin.networks.update',$network)}}" method="post">
+                                                @csrf
+                                                @method('PUT')
+                                                <input type="hidden" name="network_id" value="{{$network->id}}">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="website_id">Website ID</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" id="website_id" value="{{$network->website_id}}" name="website_id" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label" for="requestor_cid">Requestor ID/ CID</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" id="requestor_cid" value="{{$network->requestor_cid}}" name="requestor_cid" required>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="form-label" for="token">Authorization Token</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" id="token" value="{{$network->token}}" name="token" required>
+                                                    </div>
+                                                </div>
+                                                <div class="nk-modal-action">
+                                                <button type="submit"  class="btn btn-mw btn-primary">Save</button>
+                                            </div>
+                                            </form>
+                                            </div>
+                                            
+                                            <div class="nk-modal-action"><p class="setting-message"></p></div>
+                                        </div>
+                                    </div><!-- .modal-body -->
+                                </div>
+                            </div>
+                        </div>
                         @endforeach
                        
                         
@@ -152,6 +196,7 @@
         </div>
     </div>
 </div>
+
 
 
  

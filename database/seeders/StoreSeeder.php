@@ -8,6 +8,8 @@ use App\Models\Store;
 use App\Models\StoreCashback;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use App\Models\StoreImage;
+
 
 
 class StoreSeeder extends Seeder
@@ -30,7 +32,17 @@ class StoreSeeder extends Seeder
             $store->tracking_url = $faker->url;
             $store->store_url = $faker->url;
             $store->status ='active';
+            $store->feature_homepage = $faker->randomElement($array = array ('1','0'));
+            $store->feature_sidebar = $faker->randomElement($array = array ('1','0'));
             $store->save();	 
+
+            // $storelogo = StoreImage::create([
+            //     'store_id'=>$store->id,
+            //     'title' => 'logo',
+            //     'image' => $faker->image(public_path('storage/stores/images'),350,350,$faker->randomElement($array = array ('business','animals','sports','fashion')),null,true,null,false),
+            //     'image_type'=>'store_logo',
+            //     'is_uploaded'=>1
+            // ]);
 
             foreach (range(1,3) as $i){
                 $cashback = new StoreCashback();
@@ -38,7 +50,7 @@ class StoreSeeder extends Seeder
                 $cashback->type = 'percentage';
                 $cashback->detail = $faker->text($maxNbChars = 100);
                 $cashback->network_detail = $faker->text($maxNbChars = 100);
-                $cashback->sale_commission = $faker->numberBetween(1,10).'%';
+                $cashback->sale_commission = $faker->numberBetween(1,10);
                 $cashback->default= 1;
                 $cashback->save();
             }

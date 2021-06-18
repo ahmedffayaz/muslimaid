@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\SiteSetting;
 use App\Models\Currency;
+use App\Models\CashbackStatus;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 class SettingsController extends Controller
@@ -181,6 +182,34 @@ class SettingsController extends Controller
                 ]);
     
             } 
+            if($request->has('website_logo')){
+
+                $imageName = 'website_logo_'.time().'.'.$request->website_logo->extension();          
+                $request->website_logo->storeAs('public/dashboard/images/logo',$imageName);
+
+                $settings = SiteSetting::updateOrCreate([
+                    'type'   => 'website_logo',
+                    'title'  => 'Website Logo',
+                    
+                ],[
+                    'value'     =>  $imageName  
+                ]);
+    
+            } 
+            if($request->has('favicon')){
+
+                $imageName = 'favicon_'.time().'.'.$request->favicon->extension();          
+                $request->favicon->storeAs('public/dashboard/images/logo',$imageName);
+
+                $settings = SiteSetting::updateOrCreate([
+                    'type'   => 'favicon',
+                    'title'  => 'Favicon',
+                    
+                ],[
+                    'value'     =>  $imageName  
+                ]);
+    
+            } 
             if($request->has('dashboard_small_logo')){
 
                 $imageName = 'dashboard_small_logo_'.time().'.'.$request->dashboard_small_logo->extension();          
@@ -233,5 +262,26 @@ class SettingsController extends Controller
 
         }
 
+    }
+    public function menu(){
+        return view('admin-dashboard.menus.index');
+    }
+
+    public function cashbackStatusNames(){
+        $statuses = CashbackStatus::all()->toArray();
+        // dd($statuses);
+        return view('admin-dashboard.settings.cashback_status_names',compact('statuses'));
+    }
+
+    public function saveCashbackStatuses(Request $request){
+
+        foreach($request->input('status') as $key=>$status){
+            CashbackStatus::find($key)->update([
+                'status' => $status
+            ]);
+        }
+        flash()->success('Cashback status titles updated successfully');
+
+        return redirect()->back();
     }
 }

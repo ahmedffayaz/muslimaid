@@ -33,7 +33,7 @@
         <span>{!!$review->review!!}</span>
     </div>
     <div class="nk-tb-col"><a href="{{route('admin.stores.show',$review->store)}}">
-        <span><b>{{$review->store->name ?? ''}}</b></span><br>
+        <span><b>{{$review->store->id ?? ''}} - {{$review->store->name ?? ''}}</b></span><br>
         <span>{{$review->store->network->name ?? ''}}</span></a>
     </div>
     <div class="nk-tb-col text-center">

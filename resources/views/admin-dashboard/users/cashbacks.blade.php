@@ -6,10 +6,10 @@
         
     
     <div class="nk-tb-col pl-0"><span class="sub-text">Store</span></div>
-    {{-- <div class="nk-tb-col text-center"><span class="sub-text">Order Value ({{ Config::get('currency') }})</span></div> --}}
-    {{-- <div class="nk-tb-col text-center"><span class="sub-text">Network Commission ({{ Config::get('currency') }})</span></div> --}}
-    <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Network Commission ({{ Config::get('currency') }})</span></div>
-    <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Cashback ({{ Config::get('currency') }})</span></div>
+    {{-- <div class="nk-tb-col text-center"><span class="sub-text">Order Value ({{ currency() }})</span></div> --}}
+    {{-- <div class="nk-tb-col text-center"><span class="sub-text">Network Commission ({{ currency() }})</span></div> --}}
+    <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Network Commission ({{ currency() }})</span></div>
+    <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Cashback ({{ currency() }})</span></div>
     <div class="nk-tb-col  text-center"><span class="sub-text">Exit Click Id</span></div>
     <div class="nk-tb-col  text-center"><span class="sub-text">Event Time</span></div>
     <div class="nk-tb-col  text-right"><span class="sub-text">Status</span></div>
@@ -28,10 +28,10 @@
         </div>
         
         <div class="nk-tb-col  text-center">
-            <span><span class="currency">{{ Config::get('currency') }} </span>{{$commission->network_commission}}</span>
+            <span><span class="currency">{{ currency() }} </span>{{$commission->network_commission}}</span>
         </div>
         <div class="nk-tb-col  text-center">
-            <span><span class="currency">{{ Config::get('currency') }} </span>{{$commission->amount}}</span>
+            <span><span class="currency">{{ currency() }} </span>{{$commission->amount}}</span>
         </div>
         <div class="nk-tb-col  text-center">
             <span>{{$commission->exit_click_id}}</span>

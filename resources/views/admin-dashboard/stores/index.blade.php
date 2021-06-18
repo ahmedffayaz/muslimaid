@@ -102,6 +102,12 @@
                 </div>
                 @include('flash::message')
                 <div class="nk-block">
+                    <div class="row g-gs" id="table-data">
+                        @include('admin-dashboard.stores.index_data')
+                       
+                    </div>
+                </div><!-- .nk-block -->
+                {{-- <div class="nk-block">
                     <div class="card card-stretch">
                         <div class="card-inner-group">
                            
@@ -115,7 +121,7 @@
                            
                         </div><!-- .card-inner-group -->
                     </div><!-- .card -->
-                </div><!-- .nk-block -->
+                </div><!-- .nk-block --> --}}
             </div>
         </div>
     </div>

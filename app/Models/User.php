@@ -55,17 +55,26 @@ class User extends Authenticatable
     public function paymentInfo(){
         return $this->hasOne(PaymentInfo::class);
     }
+    public function paypalInfo(){
+        return $this->paymentInfo()->where('payment_method','paypal');
+    }
+    public function bankInfo(){
+        return $this->paymentInfo()->where('payment_method','bank');
+    }
 
 
     public function cashbacks(){
         return $this->hasMany(UserCashback::class);
     }
     public function balance(){
-        return $this->cashbacks()->where('status','!=','4');
+        return $this->cashbacks()->where('status','=','3');
     }  
     public function clicks(){
-        return $this->hasMany(ExitClick::class);
+        return $this->hasMany(ExitClick::class)->orderByDesc('created_at');
     } 
+    public function cashouts(){
+        return $this->hasMany(Cashout::class);
+    }
 
     
 }

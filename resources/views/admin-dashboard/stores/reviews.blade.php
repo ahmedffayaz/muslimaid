@@ -1,4 +1,4 @@
-<a href="#review-modal" class="btn btn-primary float-right btn-sm" data-toggle="modal"><em class="icon ni ni-plus"></em> <span>Add Review</span></a>
+<a href="#add-review-modal" class="btn btn-primary float-right btn-sm" data-toggle="modal"><em class="icon ni ni-plus"></em> <span>Add Review</span></a>
 <div class="card mt-3">
     @if(count($store->reviews))
         @foreach ($store->reviews as $review)

@@ -12,20 +12,17 @@ class ExitClick extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['store_id', 'user_id', 'status','exit_url'];
+    protected $fillable = ['store_id', 'user_id', 'status','exit_url', 'current_cashback_percentage'];
 
     public function store(){
-
         return $this->belongsTo(Store::class);
     }
 
     public function user(){
-
         return $this->belongsTo(User::class);
     }
 
     public function cashback(){
-        
         return $this->hasOne(UserCashback::class);
     }
 

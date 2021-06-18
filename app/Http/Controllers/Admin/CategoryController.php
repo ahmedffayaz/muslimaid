@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\Store;
+use App\Models\EditorPick;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
 
@@ -19,7 +21,7 @@ class CategoryController extends Controller
     public function index()
     {
         $route = 'index';
-        $categories = Category::latest()->where('parent_id', '=', 0)->get();
+        $categories = Category::where('parent_id', '=', 0)->orderBy('name', 'ASC')->get();
         $allCategories = Category::latest()->get();
         return view('admin-dashboard.categories.categories', compact('categories','allCategories','route'));
     }
@@ -31,7 +33,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::latest()->where('parent_id',0)->get();
+        $categories = Category::where('parent_id',0)->orderBy('name', 'ASC')->get();
         return view('admin-dashboard.categories.create', compact('categories'));
 
     }
@@ -88,7 +90,7 @@ class CategoryController extends Controller
             if($request->has('banner_upload')){
                 
                 $imageName = \Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner_upload->extension();          
-                $request->logo_upload->storeAs('public/categories/images',$imageName);
+                $request->banner_upload->storeAs('public/categories/images',$imageName);
                 
                 $category->banner_upload = $imageName;
                 $category->update();
@@ -132,8 +134,9 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         $categories = Category::latest()->where('parent_id',0)->get();
+        $stores = Store::latest()->get();
 
-        return view('admin-dashboard.categories.edit', compact('category','categories'))->render();
+        return view('admin-dashboard.categories.edit', compact('category','categories','stores'))->render();
 
     }
 
@@ -146,6 +149,7 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
+        
         try {
             $category->update([
                 'name' => $request->input('name'), 
@@ -157,9 +161,26 @@ class CategoryController extends Controller
                 'banner_link' => $request->input('banner_link'), 
                 'sort' => $request->input('sort'), 
                 'status' => $request->input('status'), 
+                'feature_homepage' =>0,
+                'feature_sidebar' =>0,
     
             ]); 
+            // if($category->picks->count()){
+            //     $category->picks()->delete(); 
+            // }
+            // foreach($request->input('picks') as $pick){
+            //     EditorPick::create([
+            //         'category_id' => $category->id,
+            //         'store_id' => $pick
+            //     ]);
+            // }
             
+            foreach($request->input('tags') as $tag){
+                $category->update([
+                    $tag => 1
+                ]);
+            }
+
             
             if($request->input('logo_type')=='upload'){
 
@@ -199,7 +220,7 @@ class CategoryController extends Controller
             
         } catch (\Throwable $th) {
 
-            flash()->error('Error while updating the category');
+            flash()->error($th->getMessage().'Error while updating the category');
             return redirect()->route('admin.categories.index');
         }
     }
@@ -213,9 +234,11 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $childs = $category->childs;
+
+        
         if(count($childs)){
             foreach($childs as $child){
-                $child->parent_id = 0;
+                $child->parent_id = $category->parent_id;
                 $child->update();
             }
         }
@@ -283,5 +306,11 @@ class CategoryController extends Controller
         $route='search';
         return view('admin-dashboard.categories.index_data', compact('categories','route'))->render();
 
+    }
+
+    public function picks(Category $category){
+        $categories = Category::latest()->where('parent_id',0)->get();
+        $stores = Store::latest()->get();
+        return view('admin-dashboard.categories.picks-form',compact('category','categories','stores'))->render();
     }
 }

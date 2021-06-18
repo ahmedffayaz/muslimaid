@@ -19,6 +19,7 @@ use App\Models\ExitClick;
 use App\Models\ImporterSetting;
 use App\Models\SiteSetting;
 use App\Models\CashbackStatusChange;
+use App\Models\Network;
 use Illuminate\Support\Facades\DB;
 
 class Importer implements ShouldQueue
@@ -43,8 +44,9 @@ class Importer implements ShouldQueue
     public function handle()
     {
         //fetching importer settings
-
+        $network = Network::where('id',1)->first();
         $setting = ImporterSetting::where('network_id',1)->first();
+        
 
         //importing advertisers/stores/merchents
 
@@ -57,12 +59,12 @@ class Importer implements ShouldQueue
 
                 $ch = curl_init();
 
-                curl_setopt($ch, CURLOPT_URL, 'https://advertiser-lookup.api.cj.com/v2/advertiser-lookup?requestor-cid=5499477&advertiser-ids=joined&records-per-page=100&page-number='.$page);
+                curl_setopt($ch, CURLOPT_URL, 'https://advertiser-lookup.api.cj.com/v2/advertiser-lookup?requestor-cid='.$network->requestor_cid.'&advertiser-ids=joined&records-per-page=100&page-number='.$page);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 
                 $headers = array();
-                $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
+                $headers[] = 'Authorization: Bearer '.$network->token;
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
                 $result = curl_exec($ch);
@@ -97,13 +99,13 @@ class Importer implements ShouldQueue
                         
                         $ch = curl_init();
 
-                        curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&link-type=banner&advertiser-ids='.$advertiser->{'advertiser-id'});
+                        curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id='.$network->website_id.'&link-type=banner&advertiser-ids='.$advertiser->{'advertiser-id'});
                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 
 
                         $headers = array();
-                        $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
+                        $headers[] = 'Authorization: Bearer '.$network->token;
                         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
                         $link_result = curl_exec($ch);
@@ -256,13 +258,13 @@ class Importer implements ShouldQueue
                             ]);
                         }
 
-                        $storelogo = StoreImage::create([
-                            'store_id'=>$store->id,
-                            'title' => 'logo',
-                            'image' =>'default.png',
-                            'image_type'=>'store_logo',
-                            'is_uploaded'=>0
-                        ]);
+                        // $storelogo = StoreImage::create([
+                        //     'store_id'=>$store->id,
+                        //     'title' => 'logo',
+                        //     'image' =>'default.png',
+                        //     'image_type'=>'store_logo',
+                        //     'is_uploaded'=>0
+                        // ]);
                     
                     }else{
 
@@ -449,11 +451,11 @@ class Importer implements ShouldQueue
 
                     $store->status_description = '';
                     $logo_exits = StoreImage::where([ 'store_id'=>$store->id, 'title'=>'logo' ])->first();
-                    if($logo_exits->is_uploaded && $store->cashbacks && $store->categories && $store->description){
+                    if($logo_exits && $store->cashbacks && $store->categories && $store->description){
                         $store->update(['status'=>'pending review']);
                     }else{
                         $store->status = 'error';
-                        if(!$logo_exits->is_uploaded){
+                        if(!$logo_exits){
                             $store->status_description = $store->status_description.' '.'image,';
                         }
                         if(!$store->cashbacks){
@@ -487,7 +489,7 @@ class Importer implements ShouldQueue
 
             //importing cashbacks
 
-            $cashback_percent = SiteSetting::where('type','cashback_percentage')->first()->value;
+            $cashback_percent_setting = SiteSetting::where('type','cashback_percentage')->first()->value;
             $total_callback = 0;
             $beforePostingDate = date('Y-m-d\TH:i:s\z');
             $sincePostingDate = date('Y-m-d\TH:i:s\z', strtotime('-31 days'));
@@ -501,9 +503,9 @@ class Importer implements ShouldQueue
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>'{ publisherCommissions(forPublishers: ["5499477"], sincePostingDate:"'.$sincePostingDate.'",beforePostingDate:"'.$beforePostingDate.'"){count payloadComplete records {actionTrackerName websiteName advertiserName advertiserId pubCommissionAmountPubCurrency postingDate pubCommissionAmountUsd saleAmountPubCurrency actionStatus validationStatus clickDate eventDate shopperId   items { quantity perItemSaleAmountPubCurrency totalCommissionPubCurrency  }}}}',
+            CURLOPT_POSTFIELDS =>'{ publisherCommissions(forPublishers: ["'.$network->requestor_cid.'"], sincePostingDate:"'.$sincePostingDate.'",beforePostingDate:"'.$beforePostingDate.'"){count payloadComplete records {actionTrackerName websiteName advertiserName advertiserId pubCommissionAmountPubCurrency postingDate pubCommissionAmountUsd saleAmountPubCurrency actionStatus validationStatus clickDate eventDate shopperId   items { quantity perItemSaleAmountPubCurrency totalCommissionPubCurrency  }}}}',
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588',
+                'Authorization: Bearer '.$network->token,
                 'Content-Type: application/json'
             ),
             ));
@@ -518,7 +520,7 @@ class Importer implements ShouldQueue
             if(array_key_exists('data',$result_array) 
             && array_key_exists('publisherCommissions',$result_array['data']) 
             && array_key_exists('records',$result_array['data']['publisherCommissions'])){
-
+                $cashback_percent = 0;
                 foreach($result_array['data']['publisherCommissions']['records'] as $cashback){
 
                     $store = Store::where('advertiser_id',$cashback['advertiserId'])->first();
@@ -526,12 +528,17 @@ class Importer implements ShouldQueue
 
                     if($click){
                         $click_id = $cashback['shopperId'];
+                        $cashback_percent = $click->current_cashback_percentage;
+                        
                     }else{
                         $new_click = ExitClick::create(['store_id'=>$store->id,
                         'user_id'=>1,
                         'status'=>'pending',
-                        'exit_url'=>'#']);
+                        'exit_url'=>'#',
+                        'current_cashback_percentage'=>$cashback_percent_setting]);
                         $click_id = $new_click->id;
+                        $cashback_percent = $cashback_percent_setting;
+
                     }
                     $cashback_amount_for_user = ($cashback['pubCommissionAmountPubCurrency']/100) * $cashback_percent;
                     $commission_exist = UserCashback::where('exit_click_id',$cashback['shopperId'])->first();
@@ -600,11 +607,11 @@ class Importer implements ShouldQueue
             while($fetched_records < $total_records){ 
             
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&promotion-type=coupon&advertiser-ids=joined&records-per-page=100&page-number='.$page);
+                curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id='.$network->website_id.'&promotion-type=coupon&advertiser-ids=joined&records-per-page=100&page-number='.$page);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
                 $headers = array();
-                $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
+                $headers[] = 'Authorization: Bearer '.$network->token;
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
                 
                 $link_result = curl_exec($ch);
@@ -702,11 +709,11 @@ class Importer implements ShouldQueue
             while($fetched_records < $total_records){ 
 
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&promotion-type=sale/discount&advertiser-ids=joined&records-per-page=100&page-number='.$page);
+                curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id='.$network->website_id.'&promotion-type=sale/discount&advertiser-ids=joined&records-per-page=100&page-number='.$page);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
                 $headers = array();
-                $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
+                $headers[] = 'Authorization: Bearer '.$network->token;
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
                 
                 $link_result = curl_exec($ch);
@@ -744,8 +751,8 @@ class Importer implements ShouldQueue
                                     "link_id" => empty($link['link-id']) ? NULL : $link['link-id'],
                                     "link_name" => empty($link['link-name']) ? NULL : $link['link-name'],
                                     "link_type" => empty($link['link-type']) ? NULL : $link['link-type'],
-                                    "promotion_end_date" => empty($link['promotion-end-date']) ? NULL : $link['promotion-end-date'],
-                                    "promotion_start_date" => empty($link['promotion-start-date']) ? NULL : $link['promotion-start-date'],
+                                    "promotion_end_date" => empty($link['promotion-end-date']) ? NULL : \Carbon\Carbon::parse($link['promotion-end-date'])->format('Y-m-d H:i:s'),
+                                    "promotion_start_date" => empty($link['promotion-start-date']) ? NULL : \Carbon\Carbon::parse($link['promotion-start-date'])->format('Y-m-d H:i:s'),
                                     "promotion_type" => empty($link['promotion-type']) ? NULL: $link['promotion-type'],
                                     "coupon_code" => empty($link['coupon-code']) ? NULL : $link['coupon-code'],           
                             ]);
@@ -774,8 +781,8 @@ class Importer implements ShouldQueue
                                     "link_id" => empty($link['link-id']) ? NULL : $link['link-id'],
                                     "link_name" => empty($link['link-name']) ? NULL : $link['link-name'],
                                     "link_type" => empty($link['link-type']) ? NULL : $link['link-type'],
-                                    "promotion_end_date" => empty($link['promotion-end-date']) ? NULL : $link['promotion-end-date'],
-                                    "promotion_start_date" => empty($link['promotion-start-date']) ? NULL : $link['promotion-start-date'],
+                                    "promotion_end_date" => empty($link['promotion-end-date']) ? NULL : \Carbon\Carbon::parse($link['promotion-end-date'])->format('Y-m-d H:i:s'),
+                                    "promotion_start_date" => empty($link['promotion-start-date']) ? NULL : \Carbon\Carbon::parse($link['promotion-start-date'])->format('Y-m-d H:i:s'),
                                     "promotion_type" => empty($link['promotion-type']) ? NULL: $link['promotion-type'],
                                     "coupon_code" => empty($link['coupon-code']) ? NULL : $link['coupon-code'],
                         ]);

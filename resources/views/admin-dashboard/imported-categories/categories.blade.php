@@ -95,12 +95,8 @@
                     <div class="nk-block">
                         <div class="card card-stretch">
                             <div class="card-inner-group">
-                                
                                 <div class="card-inner">
-                                
-        
                                     <h5 class="title mb-3">All Categories</h5>
-                                            
                                     <ul id="tree1">
                                         <div class="row">
                                             <div class="col-md-4">Category Name</div>
@@ -108,10 +104,9 @@
                                             <div class="col-md-4 text-right">Actions</div>
                                         </div>
                                         @foreach($categories as $importedcategory)
-                                            <li><div class="row">
+                                            <li><div class="row  border mt-2 py-1">
                                                 <div class="col-md-4">
                                                     <em class="icon ni ni-db-fill text-primary"></em> {{ $importedcategory->name }}
-                                               
                                                 </div>
                                                 <div class="col-md-4 text-center">
                                                   
@@ -121,7 +116,6 @@
                                                     <span class="float-right">
                                                         <a href="{{route('admin.importedcategories.edit',$importedcategory)}}" category-id='{{$importedcategory->id}}' class='category-edit' ><em class="icon ni ni-edit text-primary"></em></a>
                                                         <a  onclick="$('#delete-form-{{$importedcategory->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill text-danger"></em></a>
-                                                    
                                                         <form action="{{ route('admin.importedcategories.destroy', $importedcategory) }}" id="delete-form-{{$importedcategory->id}}" method="POST" class="m-0">
                                                             @method('DELETE')
                                                             @csrf
@@ -130,25 +124,17 @@
                                                     </span>
                                                 </div>
                                             </div>
-                                                
-                                               
-    
-                
-                                                @if(count($importedcategory->childs))
+                                            @if(count($importedcategory->childs))
                                                     @include('admin-dashboard.imported-categories.child',['childs' => $importedcategory->childs])
                                                 @endif
                                             </li>
                                         @endforeach
                                     </ul>
-                                  
-                                      
-                                
                                 </div><!-- .card-inner -->
-                            
                             </div><!-- .card-inner-group -->
                         </div><!-- .card -->
                     </div><!-- .nk-block -->
-            </div>
+                </div>
             </div>
         </div>
     </div>
@@ -159,18 +145,13 @@
         <div class="modal-content">
             <div class="modal-header align-center">
                 <div class="nk-file-title">
-              
-                   
                     <div class="nk-file-name">
                         <div class="nk-file-name-text"><span class="title">Update Category</span></div>
-
                     </div>
                 </div>
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="categories" class=" p-4">
-               
-
             </div>
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->

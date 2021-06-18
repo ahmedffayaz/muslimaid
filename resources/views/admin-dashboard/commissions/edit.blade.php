@@ -6,9 +6,7 @@
         <div class="col-lg-12">
             <div class="form-group">
                 <label class="form-label" for="default-06">Exit Click</label>
-               
-                 
-                        <select class="form-select select-2" data-placeholder="Select user" data-search="on" name="exit_click_id" required disabled>
+               <select class="form-select select-2" data-placeholder="Select user" data-search="on" name="exit_click_id" required disabled>
                             <option value="0" disabled selected>Select Exit Click</option>
                             
                             @foreach ($clicks as $click)

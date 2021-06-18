@@ -112,28 +112,29 @@ class ImportedCategoryController extends Controller
      */
     public function update(Request $request, ImportedCategory $importedcategory)
     {
-  
         try {
             $importedcategory->update([
-             
                 'mapped_to'=>$request->input('site_category_id'),
-               
-    
             ]);
     
     
              if($request->input('site_category_id')){
+                 $mapped_category = Category::findOrFail($request->input('site_category_id'));
                 DB::table('category_store')
                 ->where('network_category_id',$importedcategory->id)
                 ->update([
                     'category_id' => $importedcategory->mapped_to,
                     ]);
-                
+                    $stores = DB::table('category_store')
+                    ->where('network_category_id',$importedcategory->id)->get();
+                    $this->assignChildCategories($mapped_category,$importedcategory,$stores); 
+                    $this->assignParentCategories($mapped_category,$importedcategory,$stores);
+
              }   
              flash()->success('Category updated');
             return redirect()->route('admin.networks.categories',$importedcategory->network);
         } catch (\Throwable $th) {
-            flash()->error('Something went wrong!');
+            flash()->error($th->getMessage().'Something went wrong!');
             return redirect()->route('admin.networks.categories',$importedcategory->network);
         }
         
@@ -188,5 +189,40 @@ class ImportedCategoryController extends Controller
         $categories = $categories->latest()->paginate(10);
         $route='search';
         return view('admin-dashboard.imported-categories.index_data', compact('categories','route'))->render();
+    }
+
+    public function assignChildCategories(Category $mapped_category, ImportedCategory $importedcategory, $stores){
+
+        if($mapped_category->childs->count()){
+            foreach($mapped_category->childs as $child){
+                foreach($stores as $store){
+                DB::table('category_store')
+                ->insert([
+                'network_category_id'=>$importedcategory->id,
+                'category_id' => $child->id,
+                'store_id' => $store->store_id
+                ]);
+            }
+                $this->assignChildCategories($child,$importedcategory, $stores);
+            }
+            
+        }
+
+    }
+
+    public function assignParentCategories(Category $mapped_category,ImportedCategory $importedcategory, $stores){
+        if($mapped_category->parent_id){
+            foreach($stores as $store){
+                DB::table('category_store')
+                ->insert([
+                    'network_category_id'=>$importedcategory->id,
+                    'category_id' => $mapped_category->parent_id,
+                    'store_id' => $store->store_id
+                    ]);
+            }
+            
+                $this->assignParentCategories($mapped_category->parent,$importedcategory, $stores);
+
+        }
     }
 }

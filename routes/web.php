@@ -61,6 +61,12 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::get('stores/export', [App\Http\Controllers\Admin\StoreController::class,'exportCsv'])->name('stores.export');
     Route::post('stores/fetch',[App\Http\Controllers\Admin\StoreController::class,'fetch'])->name('stores.fetch');
     Route::post('stores/search_stores',  [App\Http\Controllers\Admin\StoreController::class,'searchStores'])->name('stores.search_stores');
+    Route::get('stores/editor_picks', [App\Http\Controllers\Admin\StoreController::class,'editorPicks'])->name('stores.editor_picks');
+    Route::post('stores/create_editor_picks',[App\Http\Controllers\Admin\StoreController::class,'createEditorPick'])->name('stores.create_editor_picks');
+    Route::post('stores/fetch_editor_picks',[App\Http\Controllers\Admin\StoreController::class,'fetchEditorPicks'])->name('stores.fetch_editor_picks');
+    Route::post('stores/search_editor_picks',  [App\Http\Controllers\Admin\StoreController::class,'searchEditorPicks'])->name('stores.search_editor_picks');
+    Route::put('stores/override_categories/{store}/update', [App\Http\Controllers\Admin\StoreController::class,'overrideCategories'])->name('stores.override_categories');
+    Route::put('stores/override_cashback/{store}/update', [App\Http\Controllers\Admin\StoreController::class,'overrideCashback'])->name('stores.override_cashback');
     Route::resource('stores', StoreController::class);
     Route::resource('storecashbacks', StoreCashbackController::class);
 
@@ -72,6 +78,7 @@ Route::namespace('App\Http\Controllers\Admin')
 
     //Categoires
     Route::get('categories/export', [App\Http\Controllers\Admin\CategoryController::class,'exportCsv'])->name('categories.export');
+    Route::get('categories/picks/{category}', [App\Http\Controllers\Admin\CategoryController::class,'picks'])->name('categories.picks');
     Route::post('categories/fetch',[App\Http\Controllers\Admin\CategoryController::class,'fetch'])->name('categories.fetch');
     Route::post('categories/search_categories',  [App\Http\Controllers\Admin\CategoryController::class,'searcCategories'])->name('categories.search_categories');
     Route::resource('categories', CategoryController::class);
@@ -133,13 +140,23 @@ Route::namespace('App\Http\Controllers\Admin')
     //Settings
     Route::get('settings/export', [App\Http\Controllers\Admin\SettingsController::class,'exportCsv'])->name('settings.export');
     Route::get('mailer_settings', [App\Http\Controllers\Admin\SettingsController::class,'mailerSettings'])->name('settings.mailer_settings');
+    Route::get('cashback_status', [App\Http\Controllers\Admin\SettingsController::class,'cashbackStatusNames'])->name('settings.cashback_status');
     Route::get('permissions', [App\Http\Controllers\Admin\SettingsController::class,'permissions'])->name('settings.permissions');
+    Route::get('menu', [App\Http\Controllers\Admin\SettingsController::class,'menu'])->name('settings.menu');
     Route::post('settings/mailer_settings_save', [App\Http\Controllers\Admin\SettingsController::class,'saveMailerSettings'])->name('settings.mailer_settings_save');
+    Route::post('settings/cashback_statuses_save', [App\Http\Controllers\Admin\SettingsController::class,'saveCashbackStatuses'])->name('settings.cashback_statuses_save');
     Route::post('settings/update_permissions', [App\Http\Controllers\Admin\SettingsController::class,'updatePermissions'])->name('settings.update_permissions');
     Route::post('settings/settings_save', [App\Http\Controllers\Admin\SettingsController::class,'saveSettings'])->name('settings.settings_save');
     Route::post('settings/fetch',[App\Http\Controllers\Admin\SettingsController::class,'fetch'])->name('settings.fetch');
     Route::post('settings/search_settings',  [App\Http\Controllers\Admin\SettingsController::class,'searchSettings'])->name('settings.search_settings');
     Route::resource('settings', SettingsController::class);
+
+    Route::get('manage-menus/{id?}',[App\Http\Controllers\Admin\MenuController::class,'index']);
+    Route::post('create-menu',[App\Http\Controllers\Admin\MenuController::class,'store']);
+    Route::get('add-categories-to-menu',[App\Http\Controllers\Admin\MenuController::class,'addCatToMenu']);
+    Route::get('add-post-to-menu',[App\Http\Controllers\Admin\MenuController::class,'addPostToMenu']);
+    Route::get('add-custom-link',[App\Http\Controllers\Admin\MenuController::class,'addCustomLink']);	
+    Route::get('update-menu',[App\Http\Controllers\Admin\MenuController::class,'updateMenu']);			
     
     // Languages 
     Route::post('languages/fetch',[App\Http\Controllers\Admin\LanguageController::class,'fetch'])->name('languages.fetch');
@@ -166,9 +183,58 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::put('profile/passwordsave/{profile}', [App\Http\Controllers\Admin\ProfileController::class,'savePassword'])->name('profile.save_password');
     Route::resource('profile', ProfileController::class);
 
+    Route::resource('sliders', SliderController::class);
+    Route::resource('slides', SlidesController::class);
+    Route::resource('pages', PagesController::class);
+    Route::resource('blogs', BlogController::class);
+
+
 });
 
+//Front Website Routes
 
 Route::get('new_ticket', [App\Http\Controllers\Frontend\TicketsController::class, 'create']);
 Route::post('new_ticket',[App\Http\Controllers\Frontend\TicketsController::class, 'store']);
 
+Route::get('offers',[App\Http\Controllers\Frontend\PagesController::class, 'offers'])->name('offers');
+Route::get('vouchers',[App\Http\Controllers\Frontend\PagesController::class, 'vouchers'])->name('vouchers');
+Route::get('about',[App\Http\Controllers\Frontend\PagesController::class, 'about'])->name('about');
+Route::get('contact',[App\Http\Controllers\Frontend\PagesController::class, 'contact'])->name('contact');
+Route::get('blog',[App\Http\Controllers\Frontend\PagesController::class, 'blog'])->name('blog');
+Route::get('search',[App\Http\Controllers\Frontend\PagesController::class, 'search'])->name('search');
+Route::get('category/{slug}',[App\Http\Controllers\Frontend\PagesController::class, 'cashbackByCategory'])->name('cashabck');
+Route::get('top-cashback',[App\Http\Controllers\Frontend\PagesController::class, 'topStores'])->name('top_stores');
+Route::get('trending',[App\Http\Controllers\Frontend\PagesController::class, 'trending'])->name('trending');
+Route::get('store/{slug}',[App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
+Route::get('account/login',[App\Http\Controllers\Frontend\PagesController::class, 'login'])->name('account.login');
+Route::get('search_suggestions',[App\Http\Controllers\Frontend\PagesController::class, 'searchSuggestions'])->name('search_suggestions');
+Route::get('pages/{page}',[App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('page');
+Route::get('post/{blog}',[App\Http\Controllers\Frontend\PagesController::class, 'blogPost'])->name('post');
+
+
+
+
+//CLient Dashboard routes
+Route::namespace('App\Http\Controllers\Client')
+    ->middleware(['auth','role:user'])
+    ->as('account.')
+    ->prefix('account')
+    ->group(function () {
+        Route::get('dashboard',[App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
+        Route::get('profile',[App\Http\Controllers\Client\DashboardController::class, 'edit'])->name('profile');
+        Route::put('profile/update/{user}',[App\Http\Controllers\Client\DashboardController::class, 'update'])->name('profile.update');
+        Route::get('cashback',[App\Http\Controllers\Client\DashboardController::class, 'cashback'])->name('cashback');
+        Route::get('clicks',[App\Http\Controllers\Client\DashboardController::class, 'clicks'])->name('clicks');
+        Route::get('change_password',[App\Http\Controllers\Client\DashboardController::class, 'changePassword'])->name('change_password');
+        Route::post('users/passwordsave/', [App\Http\Controllers\Client\DashboardController::class,'savePassword'])->name('save_password');
+        Route::resource('withdraw',PaymentController::class);
+        Route::get('statement',[App\Http\Controllers\Client\PaymentController::class,'statement'])->name('statement');
+        Route::get('payment-details',[App\Http\Controllers\Client\PaymentController::class,'paymentDetails'])->name('payment_details');
+        Route::post('payment-save',[App\Http\Controllers\Client\PaymentController::class,'paymentSave'])->name('payment_save');
+        Route::post('cashout',[App\Http\Controllers\Client\PaymentController::class,'cashout'])->name('cashout');
+    });
+
+
+    Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], function () {
+        \UniSharp\LaravelFilemanager\Lfm::routes();
+    });
