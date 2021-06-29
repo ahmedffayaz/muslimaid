@@ -37,13 +37,13 @@ class MenuSeeder extends Seeder
 
           foreach ($admin_menu_items as $item) {
             DB::table('admin_menu_items')->insert([
-                'label'=>$menu['label'],
-                'link'=>$menu['link'],
-                'parent'=>$menu['parent'],
-                'sort'=>$menu['sort'],
-                'class'=>$menu['class'],
-                'menu'=>$menu['menu'],
-                'depth'=>$menu['depth'],
+                'label'=>$item['label'],
+                'link'=>$item['link'],
+                'parent'=>$item['parent'],
+                'sort'=>$item['sort'],
+                'class'=>$item['class'],
+                'menu'=>$item['menu'],
+                'depth'=>$item['depth'],
              ]);
         }
           

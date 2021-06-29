@@ -15,19 +15,24 @@ class CreateTicketsTable extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('user_id')->unsigned();
-            $table->integer('category_id')->unsigned();
-            $table->string('ticket_id')->unique();
+            $table->unsignedBigInteger('store_id')->nullable();
+            $table->unsignedBigInteger('user_id');
+            $table->integer('category_id')->unsigned()->nullable();
+            $table->integer('click_id')->unsigned()->nullable();
+            $table->integer('cashback_id')->unsigned()->nullable();
+            $table->string('ticket_id')->unique()->nullable();
             $table->string('title');
-            $table->string('priority');
-            $table->text('message');
+            $table->string('ticket_type')->nullable();
+            $table->string('claim_type')->nullable();
+            $table->string('priority')->nullable();
+            $table->string('claim_amount')->nullable();
+            $table->text('message')->nullable();
             $table->string('new_ticket')->default(1);
             $table->dateTime('closing_time')->nullable();
             $table->unsignedBigInteger('closed_by')->nullable();  
             $table->string('status');
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

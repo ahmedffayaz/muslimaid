@@ -112,17 +112,16 @@
                         <div class="product__gallery">
                             <div class="product-gallery">
                                 <img class="product-image__img" style="position: relative;" 
-                                @if($store->logo->count())
-                                    @if($store->logo->first())
-                                        src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                                @if($store->logo->first())
+                                    @if($store->logo->first()->is_fake)
+                                        src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
                                     @else
-                                        src="{{asset('frontend/images/products/product-16.jpg')}}" alt=""
+                                        src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
                                     @endif
-                                
                                 @else
-                                        src="{{asset('frontend/images/products/product-16.jpg')}}" alt=""
-                                    @endif
-                                >
+                                    src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                                @endif alt="">
+                                
                             </div>
                         </div>
                         <!-- .product__gallery / end -->
@@ -174,18 +173,9 @@
                             <div class="typography">
                                 <h4>Description</h4>
                                 <p>
-                                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas fermentum, diam non iaculis finibus,
-                                    ipsum arcu sollicitudin dolor, ut cursus sapien sem sed purus. Donec vitae fringilla tortor, sed
-                                    fermentum nunc. Suspendisse sodales turpis dolor, at rutrum dolor tristique id. Quisque pellentesque
-                                    ullamcorper felis, eget gravida mi elementum a. Maecenas consectetur volutpat ante, sit amet molestie
-                                    urna luctus in. Nulla eget dolor semper urna malesuada dictum. Duis eleifend pellentesque dui et
-                                    finibus. Pellentesque dapibus dignissim augue. Etiam odio est, sodales ac aliquam id, iaculis eget
-                                    lacus. Aenean porta, ante vitae suscipit pulvinar, purus dui interdum tellus, sed dapibus mi mauris
-                                    vitae tellus.
+                                   {!!$store->description!!}
                                 </p>
-                               
-                         
-                            @if($store->vouchers->count())
+                                @if($store->vouchers->count())
                         
                                 <h4>Vouchers</h4>
                                 @foreach ($store->vouchers->unique('link_name') as $voucher)
@@ -320,7 +310,7 @@
            <h5>Get upto @if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif{{$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif Cashback</h5>
         </div>
         <div class="modal-footer">
-            <a href="{{route('register')}}" class="btn btn-primary">Yes, Ofcourse</a>
+            <a href="{{route('account.login')}}" class="btn btn-primary">Yes, Ofcourse</a>
             <a href="#" onclick="document.getElementById('form_{{$store->id}}').submit()" class="btn btn-warning btn-dim">No, Continue without cashback</a>
           </div>
         
@@ -356,7 +346,7 @@
            <h5>Get upto @if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif{{$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif Cashback</h5>
         </div>
         <div class="modal-footer">
-            <a href="{{route('register')}}" class="btn btn-primary">Yes, Ofcourse</a>
+            <a href="{{route('account.login')}}" class="btn btn-primary">Yes, Ofcourse</a>
             <a href="" form_id="" target="_blank" class="btn btn-warning btn-dim discard-btn" data-code="">No, Continue without cashback</a>
           </div>
         

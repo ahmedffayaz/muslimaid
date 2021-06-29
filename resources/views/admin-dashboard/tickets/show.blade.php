@@ -43,11 +43,15 @@
                                     <div class="nk-msg-head">
                                         <h4 class="title d-none d-lg-block mb-2">{{$ticket->title}}</h4>
                                         <div class="nk-msg-head-meta align-items-start">
+                                            
                                             <div class="d-none d-lg-block">
+                                                @if($ticket->category_id)
                                                 <ul class="nk-msg-tags">
-                                                    <li><span class="label-tag"><em class="icon ni ni-flag-fill"></em> <span>{{$ticket->category->name}}</span></span></li>
+                                                   <li><span class="label-tag"><em class="icon ni ni-flag-fill"></em> <span>{{$ticket->category->name ?? ''}}</span></span></li>
                                                 </ul>
+                                                @endif
                                             </div>
+                                            
                                             <ul class="nk-msg-actions">
                                                 <li class="text-right">@if($ticket->status!='closed')
                                                     <a  onclick="$('#close-{{$ticket->id}}').submit();"  style="cursor: pointer" class="btn btn-dim btn-sm btn-outline-light"> <em class="icon ni ni-check"></em><span>Mark as Closed</span></a>
@@ -63,7 +67,7 @@
                                                     <div class="mt-1">Closed by: {{$ticket->closedByUser->first_name ?? 'admin'}} at {{$ticket->closing_time ?? ''}}</div>
                                                     @endif
 
-</li>
+                                                </li>
                                                
                                             </ul>
                                         </div>
@@ -72,7 +76,7 @@
                                         <div class="nk-msg-head py-4 d-lg-none">
                                             <h4 class="title">{{$ticket->title}}</h4>
                                             <ul class="nk-msg-tags">
-                                                <li><span class="label-tag"><em class="icon ni ni-flag-fill"></em> <span>{{$ticket->category->name}}</span></span></li>
+                                             @if($ticket->category_id)   <li><span class="label-tag"><em class="icon ni ni-flag-fill"></em> <span>{{$ticket->category->name ?? ''}}</span></span></li>@endif
                                             </ul>
                                         </div>
                                         <div class="nk-reply-item">
@@ -83,10 +87,19 @@
                                                     </div>
                                                     <div class="user-name text-capitalize">{{$ticket->user->first_name}} {{$ticket->user->last_name}}</div>
                                                 </div>
-                                                <div class="date-time">{{$ticket->created_at}}</div>
+                                                <div class="date-time">{{Carbon\Carbon::parse($ticket->created_at)->isoFormat('Do MMMM YYYY')}}</div>
                                             </div>
                                             <div class="nk-reply-body">
                                                 <div class="nk-reply-entry entry">
+                                                    @if($ticket->ticket_type == 'claim')
+
+                                                    Store: <a href="{{route('admin.stores.show',$ticket->store)}}">{{$ticket->store->id}} - {{$ticket->store->name}}</a><br>
+                                                    Purchase Amount: {{ currency() }}{{$ticket->claim_amount}}<br>
+                                                    Claim date: {{Carbon\Carbon::parse($ticket->created_at)->isoFormat('Do MMMM YYYY')}}<br>
+                                                    Click ID: {{$ticket->click_id}}<br>
+                                                    Click date: {{Carbon\Carbon::parse($ticket->click->created_at)->isoFormat('Do MMMM YYYY')}}<br>
+                                                    
+                                                    @endif
                                                     <p>{{$ticket->message}}</p>
                                                    
                                                 </div>
@@ -103,7 +116,7 @@
                                                             </div>
                                                             <div class="user-name text-capitalize">{{$reply->user->first_name}} {{$reply->user->last_name}}</span></div>
                                                         </div>
-                                                        <div class="date-time">{{$reply->created_at}}</div>
+                                                        <div class="date-time">{{Carbon\Carbon::parse($reply->created_at)->isoFormat('Do MMMM YYYY')}}</div>
                                                     </div>
                                                     <div class="nk-reply-body">
                                                         <div class="nk-reply-entry entry">

@@ -6,8 +6,9 @@
             </div>
             <div class="nk-header-brand @isset($settings['dashboard_menu_type']) @if($settings['dashboard_menu_type'] != 'top') d-xl-none  @endif @endisset  ">
                 <a href="{{route('admin.home.index')}}" class="logo-link">
-                    <img class="logo-light logo-img" src="@isset($settings['dashboard_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/logo-dark.png')}}@endif" alt="logo">
-                    <img class="logo-dark logo-img" src="@isset($settings['dashboard_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/logo-dark.png')}}@endif" alt="logo-dark">
+                    <img class="logo-light logo-img" src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif"  alt="logo">
+                <img class="logo-dark logo-img" src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/logo-dark.png')}}@endif" alt="logo-dark">
+
                 </a>
             </div><!-- .nk-header-brand -->
             @isset($settings['dashboard_menu_type']) @if($settings['dashboard_menu_type'] == 'top')  
@@ -181,6 +182,12 @@
                                         <span class="nk-menu-text">Settings</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
+                                <li class="">
+                                    <a href="{{route('admin.email_templates.index')}}" class="">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-emails"></em></span>
+                                        <span class="nk-menu-text">Email Templates</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
                                 @endcan
                                 @can('view languages')
                                 <li class="">
@@ -254,25 +261,27 @@
                         </div> 
                     </div>
                 </div>
-                <a href="{{url('/')}}" target="_blank"  class="btn btn-outline-primary btn-dim btn-sm"><em class="icon ni ni-external-alt mr-1"></em> Visit Site</a>
+               
                
             </div><!-- .nk-header-news -->
             
             @endif @endisset
-            @isset($settings['dashboard_menu_type']) @if($settings['dashboard_menu_type'] == 'sidebar')
-            <div class="nk-header-search justify-content-start">
-            <a href="{{url('/')}}" target="_blank"  class="btn btn-outline-primary btn-dim btn-sm ">Visit Site <em class="icon ni ni-external-alt mr-1"></em></a>
-            </div>
-            @endif @endisset
+            
             <div class="nk-header-tools">
                 <ul class="nk-quick-nav">
+                    <li> <a href="{{url('/')}}" target="_blank"  class="btn btn-outline-primary btn-dim btn-sm"><em class="icon ni ni-external-alt mr-1"></em> Visit Site</a></li>
+
                     <li class="dropdown user-dropdown">
                         <a href="#" class="dropdown-toggle mr-n1" data-toggle="dropdown">
                             <div class="user-toggle">
                                 <div class="user-avatar sm">
-                                    <img  src="@isset(Auth::user()->avatar){{asset('storage/users/images/avatar/'.Auth::user()->avatar)}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif"
+                                    @if(Auth::user()->avatar == 'default.png')   
+                                    <img src="{{asset('admin-dashboard/images/avatar.png')}}"
                                      alt="store logo" class="" style="max-width:50px;max-height:50px"/>
-                                   
+                                @else    
+                                     <img src="@isset(Auth::user()->avatar){{asset('storage/users/images/avatar/'.Auth::user()->avatar)}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif"
+                                     alt="store logo" class="" style="max-width:50px;max-height:50px"/>
+                                @endif
                                 </div>
                                 <div class="user-info d-none d-xl-block">
                                     {{-- <div class="user-status user-status-unverified">Unverified</div> --}}
@@ -284,9 +293,15 @@
                             <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                                 <div class="user-card">
                                     <div class="user-avatar">
-                                        <img src="@isset(Auth::user()->avatar){{asset('storage/users/images/avatar/'.Auth::user()->avatar)}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif"
+                                    @if(Auth::user()->avatar == 'default.png')   
+                                        <img src="{{asset('admin-dashboard/images/avatar.png')}}"
                                          alt="store logo" class="" style="max-width:50px;max-height:50px"/>
-                                    </div>
+                                    @else    
+                                         <img src="@isset(Auth::user()->avatar){{asset('storage/users/images/avatar/'.Auth::user()->avatar)}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif"
+                                         alt="store logo" class="" style="max-width:50px;max-height:50px"/>
+                                    @endif
+                                    
+                                        </div>
                                     <div class="user-info">
                                         <span class="lead-text">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span>
                                         <span class="sub-text">{{ Auth::user()->email }}</span>

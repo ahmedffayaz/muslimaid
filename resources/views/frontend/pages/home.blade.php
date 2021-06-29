@@ -20,18 +20,35 @@
                     <div class="owl-carousel">
                         @foreach ($slider->slides as $slide)
                         <a class="block-slideshow__slide" href="{{route('store.show',$slide->store->slug)}}">
+                            
+                            @if($slide->banner == 'default1.png' || $slide->banner == 'default2.png' || $slide->banner == 'default3.png')
+                            <div class="block-slideshow__slide-image block-slideshow__slide-image--desktop" style="background-image: url({{asset('frontend/images/slides/'.$slide->banner)}})"></div>
+                            @else
                             <div class="block-slideshow__slide-image block-slideshow__slide-image--desktop" style="background-image: url({{asset('storage/slider/slides/images/'.$slide->banner)}})"></div>
+                            @endif
+                            
+                            @if($slide->banner == 'default1.png' || $slide->banner == 'default2.png' || $slide->banner == 'default3.png')
+                            <div class="block-slideshow__slide-image block-slideshow__slide-image--mobile" style="background-image: url({{asset('frontend/images/slides/'.$slide->banner)}})"></div>
+                            @else
                             <div class="block-slideshow__slide-image block-slideshow__slide-image--mobile" style="background-image: url({{asset('storage/slider/slides/images/'.$slide->banner)}})"></div>
+                            @endif
+                            
+                            
                             <div class="block-slideshow__slide-content" style="background-color:hsla(0,0%,100%,.92); width:450px">
                                 <div class="block-slideshow__slide-title" style="padding:20px; background-color:white; margin:0">
-                                    <img style="height: auto; width: 100px; border: 1px solid #dfdfdf;border-radius: 2px;" 
-                                    src="{{asset('storage/slider/slides/images/'.$slide->logo)}}" alt="">
+                                   
+                                    @if($slide->logo == 'default1.png' || $slide->logo == 'default2.png' || $slide->logo == 'default3.png')
+                                        <img style="height: auto; width: 100px; border: 1px solid #dfdfdf;border-radius: 2px;" 
+                                        src="{{asset('frontend/images/slides/logo/'.$slide->logo)}}" alt="">
+                                    @else
+                                        <img style="height: auto; width: 100px; border: 1px solid #dfdfdf;border-radius: 2px;" 
+                                        src="{{asset('storage/slider/slides/images/'.$slide->logo)}}" alt="">
+                                    @endif
                                     <span class="slider-store-name">{{$slide->store->name}}</span>
                                 </div>
                                 <div class="block-slideshow__slide-title" style="padding:30px 20px 0px 20px; margin:0">
                                     @if($slide->store->cashback->type=='fixed'){{$slide->store->cashback->currency}}@endif
-                                    {{$slide->store->cashback->sale_commission}}
-                                    @if($slide->store->cashback->type=='percentage')%@endif Cashback 
+                                    {{$slide->store->cashback->sale_commission}}@if($slide->store->cashback->type=='percentage')%@endif Cashback 
                                  
                                 </div>
                                 <div class="block-slideshow__slide-text" style="padding:10px 20px 30px 20px; ">{{$slide->description}}</div>
@@ -155,10 +172,14 @@
                                             <a href="{{route('store.show',$store->slug)}}" class="product-image__body" style="padding-bottom:100px">
                                                 <img class="product-image__img" 
                                                 @if($store->logo->first())
-                                src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
-                                @else
-                                src="{{asset('frontend/images/products/product-16.jpg')}}" 
-                                @endif alt="">
+                                                    @if($store->logo->first()->is_fake)
+                                                        src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
+                                                    @else
+                                                        src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                                                    @endif
+                                                @else
+                                                    src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                                                @endif alt="">
                                             </a>
                                         </div>
                                         <div class="product-card__info">
@@ -208,7 +229,7 @@
                                 
                             </div>
                         </div>
-                        <a href="{{url('/offers')}}" class="btn btn-primary mt-5 mx-auto d-table">More Cashback</a>
+                        <a href="{{url('/pages/offers')}}" class="btn btn-primary mt-5 mx-auto d-table">More Cashback</a>
                     </div>
 
                 </div>

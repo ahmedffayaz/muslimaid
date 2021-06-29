@@ -32,17 +32,20 @@ class StoreSeeder extends Seeder
             $store->tracking_url = $faker->url;
             $store->store_url = $faker->url;
             $store->status ='active';
+            $store->is_fake =1;
+            $store->description = $faker->text($maxNbChars = 500);  
             $store->feature_homepage = $faker->randomElement($array = array ('1','0'));
             $store->feature_sidebar = $faker->randomElement($array = array ('1','0'));
             $store->save();	 
 
-            // $storelogo = StoreImage::create([
-            //     'store_id'=>$store->id,
-            //     'title' => 'logo',
-            //     'image' => $faker->image(public_path('storage/stores/images'),350,350,$faker->randomElement($array = array ('business','animals','sports','fashion')),null,true,null,false),
-            //     'image_type'=>'store_logo',
-            //     'is_uploaded'=>1
-            // ]);
+            $storelogo = StoreImage::create([
+                'store_id'=>$store->id,
+                'title' => 'logo',
+                'image' => $faker->numberBetween(1,20).'.png',
+                'image_type'=>'store_logo',
+                'is_uploaded'=>1,
+                'is_fake' =>1
+            ]);
 
             foreach (range(1,3) as $i){
                 $cashback = new StoreCashback();

@@ -43,7 +43,7 @@
                     <div class="card">
                       <div class="card-header" id="headingOne">
                         <h5 class="mb-0">
-                          <button class="btn btn-link collapsed text-dark" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                          <button class="btn btn-link collapsed text-dark pl-0" data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                             Bank Transfer
                           </button>
                         </h5>
@@ -52,7 +52,7 @@
                    $user = Auth::user();   
                   @endphp
                       <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
-                        <div class="card-body">
+                        <div class="card-body pt-0">
                           <form action="{{route('account.payment_save')}}" method="POST">
                             @csrf
                            <input type="hidden" name="payment_method" value="bank">
@@ -114,13 +114,13 @@
                     <div class="card">
                       <div class="card-header" id="headingTwo">
                         <h5 class="mb-0">
-                          <button class="btn btn-link collapsed text-dark" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                          <button class="btn btn-link collapsed text-dark pl-0" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                             Paypal
                           </button>
                         </h5>
                       </div>
                       <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-                        <div class="card-body">
+                        <div class="card-body pt-0">
                           <form action="{{route('account.payment_save')}}" method="POST">
                            @csrf
                            <input type="hidden" name="payment_method" value="paypal">
@@ -148,13 +148,13 @@
                     <div class="card">
                       <div class="card-header" id="headingThree">
                         <h5 class="mb-0">
-                          <button class="btn btn-link collapsed text-dark" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                          <button class="btn btn-link collapsed text-dark pl-0" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
                            Gift Cards
                           </button>
                         </h5>
                       </div>
                       <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-                        <div class="card-body">
+                        <div class="card-body pt-0">
                           {{Auth::user()->email}}
                         </div>
                       </div>

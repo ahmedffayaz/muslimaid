@@ -41,20 +41,20 @@
                                             <div class="row g-4 justify-content-md-center">
                                                 <div class="col-lg-2">
                                                     <div class="form-group">
-                                                        <label class="form-label" for="store_id">Store ID</label>
+                                                        <label class="form-label" for="store_id">Store ID/Name</label>
                                                         <div class="form-control-wrap">
-                                                            <input type="text" class="form-control" id="store_id" value="" name="store_id">
+                                                            <input type="text" class="form-control" id="store" value="" name="store">
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-2">
+                                                {{-- <div class="col-lg-2">
                                                     <div class="form-group">
                                                         <label class="form-label" for="pay-amount-1">Store name</label>
                                                         <div class="form-control-wrap">
                                                             <input type="text" class="form-control" id="pay-amount-1" value="" name="store_name">
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                             
                                                 <div class="col-lg-2">
                                                     <div class="form-group">
@@ -84,6 +84,17 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="col-lg-2">
+                                                    <div class="form-group">
+                                                        <label class="form-label" for="status">Cashback/Categories Override</label>
+                                                        <div class="form-control-wrap ">
+                                                    <div class="custom-control custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="customCheck1" name="overridden">
+                                                        <label class="custom-control-label" for="customCheck1">Overridden</label>
+                                                    </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="col-2 align-self-end">
                                                     <div class="form-group">
                                                         <button type="submit" class="btn btn-success btn-block">Search</button>
@@ -101,11 +112,9 @@
                
                 </div>
                 @include('flash::message')
-                <div class="nk-block">
-                    <div class="row g-gs" id="table-data">
-                        @include('admin-dashboard.stores.index_data')
-                       
-                    </div>
+                <div class="nk-block" id="table-data">
+                    @include('admin-dashboard.stores.index_data')
+                    
                 </div><!-- .nk-block -->
                 {{-- <div class="nk-block">
                     <div class="card card-stretch">
@@ -179,14 +188,19 @@
             event.preventDefault(); 
               
             var _token = $("input[name=_token]").val();
-            var store_id = $("input[name=store_id]").val();
+            var store = $("input[name=store]").val();
             var network_id = $("select[name=network_id]").val();
             var status = $("select[name=status").val();
             var store_name = $("input[name=store_name]").val();
+            var overridden = 0;
+            if($("input[name=overridden]").prop("checked")){
+                var overridden = 1;
+            }
+            
             $.ajax({
               url:'{{route("admin.stores.search_stores")}}',
               method:"POST",
-              data:{_token:_token,network_id:network_id,store_id:store_id,store_name:store_name,status:status},
+              data:{_token:_token,network_id:network_id,store:store,store_name:store_name,status:status,overridden:overridden},
               success:function(data)
               {
                $('#table-data').html(data);
@@ -199,4 +213,24 @@
         });
         
         </script>  
+        <script>
+            $(document).ready(function(){
+               
+               $(document).on('click', '.delete-store', function(event){
+                    var form_id = $(this).attr('form_id');
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: "You won't be able to revert this!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, delete it!'
+                    }).then(function (result) {
+                        if (result.value) {
+                        $('#'+form_id).submit();
+                        }
+                   });
+                   event.preventDefault(); 
+                });
+           });
+        </script>
 @endpush

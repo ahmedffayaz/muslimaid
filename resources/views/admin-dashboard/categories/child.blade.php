@@ -9,7 +9,7 @@
                             <ul class="link-list-opt no-bdr d-block ml-0">
                                 <a href="{{route('admin.categories.picks',$child)}}" category-id='{{$child->id}}' class='picks-edit'  ><em class="icon ni ni-cart-fill"></em> Editor Picks</a>
                                 <a href="{{route('admin.categories.edit',$child)}}" category-id='{{$child->id}}' class='category-edit' ><em class="icon ni ni-edit"></em> Edit</a>
-                                <a  onclick="$('#delete-form-{{$child->id}}').submit();"  style="cursor: pointer"  > <em class="icon ni ni-trash-fill"></em> Delete</a>
+                                <a class='category-delete'  form_id = "delete-form-{{$child->id}}"   style="cursor: pointer"  > <em class="icon ni ni-trash-fill"></em> Delete</a>
                             </ul>
                         </div>
                     </div>        
@@ -19,7 +19,11 @@
                     @csrf
                 </form>
             </span>
-            <em class="icon ni ni-db-fill text-success"></em>  {{ $child->name}}
+            <em class="icon ni ni-db-fill text-success"></em>  {{ $child->name}} <span class="ml-1">@if($child->picks->count())
+            <span class="badge badge-dim badge-pill badge-primary text-capitalize">
+                <em class="icon ni ni-done"></em> Editor Picks
+             </span>
+             @endif</span>
             @if(count($child->childs))
                 @include('admin-dashboard.categories.child',['childs' => $child->childs])
             @endif

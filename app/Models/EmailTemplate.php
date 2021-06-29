@@ -5,9 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Claim extends Model
+class EmailTemplate extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['store_id','user_id','order_amount','date','time'];
+    protected $fillable = ['title','detail','key','subect','message','keywords'];
 }

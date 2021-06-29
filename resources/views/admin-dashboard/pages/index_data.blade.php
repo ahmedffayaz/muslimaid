@@ -50,7 +50,7 @@
                         <ul class="link-list-opt no-bdr">
                             <li><a href="{{route('admin.pages.edit', $page)}}"><em class="icon ni ni-edit"></em><span>Edit Page</span></a></li>
                             @if(!$page->default)
-                            <li><a  onclick="$('#delete-page-{{$page->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Page</span></a>
+                            <li><a  class='delete'  form_id = "delete-page-{{$page->id}}"   style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Page</span></a>
                                                     
                                 <form action="{{ route('admin.pages.destroy', $page) }}" id="delete-page-{{$page->id}}" method="POST" class="m-0">
                                     @method('DELETE')

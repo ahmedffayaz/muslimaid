@@ -38,7 +38,6 @@ ul.categories li {
                             <div class="nk-block-head-content">
                                 <h3 class="nk-block-title fw-normal"><a href="{{route('store.show',$store->slug)}}" target="_blank">{{$store->name}}</a> <span class="badge badge-dim badge-pill badge-outline-primary">{{$store->network->name}}</span></h3>
                                 <div class="nk-block-des">
-                                
                                 </div>
                             </div>
                             <div class="nk-block-head-content">
@@ -94,17 +93,17 @@ ul.categories li {
                                                <div class="row g-4">
                                                     <div class="col-lg-4">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="full-name-1">Store Name</label>
+                                                            <label class="form-label" for="store_name">Store Name</label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="full-name-1" value="{{$store->name}}" name="store_name" required>
+                                                                <input type="text" class="form-control" id="store_name" value="{{$store->name}}" name="store_name" required>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="full-name-1">Slug</label>
+                                                            <label class="form-label" for="slug">Slug</label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="full-name-1" value="{{$store->slug}}" name="slug" required>
+                                                                <input type="text" class="form-control" id="slug" value="{{$store->slug}}" name="slug" required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -126,7 +125,7 @@ ul.categories li {
                                                     <div class="col-lg-12">
                                                         <div class="card">
                                                             <input name="description" type="hidden">
-                                                            <label class="form-label" for="phone-no-1">Description</label>
+                                                            <label class="form-label" for="description">Description</label>
                                                             <!-- Create the editor container -->
                                                             <div  id="editor-container">
                                                                {!!$store->description!!}
@@ -135,36 +134,27 @@ ul.categories li {
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="phone-no-1">Tracking url</label>
+                                                            <label class="form-label" for="tracking_url">Tracking url</label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="phone-no-1" value="{{$store->tracking_url}}" name="tracking_url" required>
+                                                                <input type="text" class="form-control" id="tracking_url" value="{{$store->tracking_url}}" name="tracking_url" required>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="pay-amount-1">Store url</label>
-                                                            <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="pay-amount-1" value="{{$store->store_url}}" name="store_url" required>
-                                                            </div>
-                                                        </div>
+                                                    <div class="col-lg-6" style="align-self: center; margin-top:20px">
+                                                      
+                                                            ?{{$store->network->click_ref}}=2323232
+                                                        
+                                                      
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="default-06">Status  @if($store->status == 'error') (<span class="text-danger"> Error: missing {{$store->status_description}}</span>) @endif</label>
-                                                            <div class="form-control-wrap ">
-                                                                <div class="">
-                                                                    <select class="form-control form-select" name="status" required>
-                                                                        <option @if($store->status == 'pending review') selected @endif value="pending review">Pending Review</option>
-                                                                        <option @if($store->status == 'active') selected @endif value="active">Active</option>
-                                                                        <option @if($store->status == 'disabled') selected @endif value="disabled">Disabled</option>
-                                                                        <option @if($store->status == 'closed') selected @endif value="closed">Closed at Network</option>
-                                                                        <option @if($store->status == 'error') selected @endif value="error">Error</option>
-                                                                    </select>
-                                                                </div>
+                                                            <label class="form-label" for="store_url">Store url</label>
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="store_url" value="{{$store->store_url}}" name="store_url" required>
                                                             </div>
                                                         </div>
-                                                   </div>
+                                                    </div>
+                                                    
                                                     <div class="col-md-6">
                                                         <div class="form-group">
                                                             <label class="form-label" for="custom_cashback_percentage">Override Cashback Percentage  <em class="icon ni ni-question" data-toggle="tooltip" data-placement="top" title="Define custom cashback percentage for this store, keep empty to use global setting"></em></label>
@@ -184,6 +174,22 @@ ul.categories li {
                                                                 </div>
                                                             </div> 
                                                     </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="default-06">Status  @if($store->status == 'error') (<span class="text-danger"> Error: missing {{$store->status_description}}</span>) @endif</label>
+                                                            <div class="form-control-wrap ">
+                                                                <div class="">
+                                                                    <select class="form-control form-select" name="status" required>
+                                                                        <option @if($store->status == 'pending review') selected @endif value="pending review">Pending Review</option>
+                                                                        <option @if($store->status == 'active') selected @endif value="active">Active</option>
+                                                                        <option @if($store->status == 'disabled') selected @endif value="disabled">Disabled</option>
+                                                                        <option @if($store->status == 'closed') selected @endif value="closed">Closed at Network</option>
+                                                                        <option @if($store->status == 'error') selected @endif value="error">Error</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                   </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
                                                             <button type="submit" class="btn btn-lg btn-primary">Update</button>
@@ -221,8 +227,8 @@ ul.categories li {
                                                             @foreach ($categories as $parent)
                                                                 <li class="custom-control custom-control-sm custom-checkbox d-block">
                                                                     <input @if(in_array($parent->id, $store->categories->pluck('id')->toArray())) checked @endif 
-                                                                    type="checkbox" class="custom-control-input" name="category_id[]" id="{{$parent->name}}" value="{{$parent->id}}">
-                                                                    <label class="custom-control-label" for="{{$parent->name}}">{{$parent->name}}</label>
+                                                                    type="checkbox" class="custom-control-input" name="category_id[]" id="{{$parent->name}}_{{$parent->id}}" value="{{$parent->id}}">
+                                                                    <label class="custom-control-label" for="{{$parent->name}}_{{$parent->id}}">{{$parent->name}}</label>
                                                                     @if(count($parent->childs))
                                                                         @include('admin-dashboard.stores.child_cat_input',['childs' =>$parent->childs])
                                                                     @endif
@@ -250,19 +256,18 @@ ul.categories li {
                                                         <div class="custom-control custom-checkbox mr-3">
                                                             <input type="checkbox" class="custom-control-input" id="override-cashback" name="override_cashback" value="1"
                                                             @if($store->override_cashback==1) checked @endif>
-                                                            <label class="custom-control-label" for="override-cashback">Override Cashback  <em class="icon ni ni-question" data-toggle="tooltip" data-placement="top" title="If checked cashbacks will be overriden when importer runs next time"></em></label>
+                                                            <label class="custom-control-label" for="override-cashback">Override Cashback  <em class="icon ni ni-question" data-toggle="tooltip" data-placement="top" title=" If checked, admin will be in charge, cashbacks will not auto-update."></em></label>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                          </form>
-                                        <h5 class="title mb-4 d-inline-block mt-3">Cashbacks</h5>
-                                        <a href="#cashback-modal" class="btn btn-primary btn-sm float-right" data-toggle="modal"><em class="icon ni ni-upload-cloud"></em> <span>Add cashback</span></a>
+                                         <h5 class="title mb-4 d-inline-block mt-3">Cashbacks</h5>
                                         <span id='cashbacks-data' class="mt-4"></span>                                       
                                     </div>
                                     <div class="tab-pane" id="tabItem7">
-                                        <h5 class="title mb-4">Vouchers</h5>
-                                        <span id='vouchers-data'></span>
+                                        <h5 class="title mb-4  d-inline-block">Vouchers</h5>
+                                        <span id='vouchers-data' class="mt-4"></span>
                                     </div>
                                     <div class="tab-pane" id="tabItem8">
                                         <h5 class="title mb-4 d-inline">Reviews</h5>
@@ -369,6 +374,113 @@ ul.categories li {
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
+
+<!-- Add Voucher Modal -->
+<div class="modal fade" tabindex="-1" id="add-voucher-modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Add Voucher</span></div>
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="add-voucher-form" class=" p-4">
+                <form action="{{route('admin.vouchers.store')}}" class="gy-3 form-validate is-alter add_voucher_form" method="POST">
+                    @csrf
+                    <input type="hidden" name="store_id" value="{{$store->id}}">
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="full-name-1">Title</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="full-name-1" name="link_name" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="vsale_commission">Sale commission</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="vsale_commission" value="" name="sale_commission" required>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="click_url">Click url</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="click_url" name="click_url" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="phone-no-1">Destination url</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="phone-no-1" name="destination" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <input name="description" type="hidden">
+                                <label class="form-label" for="phone-no-1">Description</label>
+                                <textarea name="description" class="form-control " ></textarea>                               
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label class="form-label" for="promotion_type">Promotion Type</label>
+                                    <div class="form-control-wrap ">
+                                        <select class="form-select form-control select-2" data-search="on"   id="promotion_type" name="promotion_type" required>
+                                            <option value="Coupon">Coupon</option>
+                                            <option value="Sale/Discount">Sale/Discount</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       <div class="col-lg-6 coupon-div">
+                            <div class="form-group">
+                                <label class="form-label" for="coupon_code">Coupon Code</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="coupon_code" value="" name="coupon_code" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="promotion_start_date">Promotion Start Date</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control date-picker" id="promotion_start_date" value="" name="promotion_start_date" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="promotion_end_date">Promotion End Date</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control date-picker" id="promotion_end_date" value="" name="promotion_end_date" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- .modal -->
  
 <!-- @@ Edit Cashback Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="edit-cashback-modal">
@@ -483,12 +595,8 @@ ul.categories li {
         <div class="modal-content">
             <div class="modal-header align-center">
                 <div class="nk-file-title">
-              
-                   
                     <div class="nk-file-name">
                         <div class="nk-file-name-text"><span class="title">Review</span></div>
-
-                        {{-- <div class="nk-file-name-sub">Project</div> --}}
                     </div>
                 </div>
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
@@ -496,7 +604,6 @@ ul.categories li {
             <div id="" class=" p-4">
                 <form action="{{route('admin.reviews.store')}}" class="gy-3 form-validate is-alter review_form_add" method="POST">
                     @csrf
-                 
                     <input type="hidden" name="store_id" value="{{$store->id}}">
                     <div class="row g-4">
                         <div class="col-lg-6">
@@ -511,22 +618,16 @@ ul.categories li {
                             <div class="form-group">
                                 <label class="form-label" for="rating">Rating</label>
                                 <div class="form-control-wrap ">
-                                    
-                                        <select class="form-select form-control"  id="rating" name="rating" required>
-                                            
-                                            <option  value="1">1</option>
-                                            <option  value="2">2</option>
-                                            <option  value="3">3</option>
-                                            <option  value="4">4</option>
-                                            <option  value="5">5</option>
-                                            
-                                        </select>
-                                    
+                                    <select class="form-select form-control"  id="rating" name="rating" required>
+                                        <option  value="1">1</option>
+                                        <option  value="2">2</option>
+                                        <option  value="3">3</option>
+                                        <option  value="4">4</option>
+                                        <option  value="5">5</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                      
-                        
                         <div class="col-lg-12">
                             <div class="card">
                                 <input name="review" type="hidden">
@@ -542,18 +643,13 @@ ul.categories li {
                             <div class="form-group">
                                 <label class="form-label" for="default-06">Status</label>
                                 <div class="form-control-wrap ">
-                                    
-                                        <select class="form-select form-control" data-search="on" id="default-06" name="status" required>
-                                            
-                                            <option value="active">Active</option>
-                                            <option value="in-active">In-active</option>
-                                            
-                                        </select>
-                                    
+                                    <select class="form-select form-control" data-search="on" id="default-06" name="status" required>
+                                        <option value="active">Active</option>
+                                        <option value="in-active">In-active</option>  
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                        
                         <div class="col-12">
                             <div class="form-group">
                                 <button type="submit" class="btn btn-lg btn-primary">Save</button>
@@ -561,7 +657,6 @@ ul.categories li {
                         </div>
                     </div>
                 </form>
-
             </div>
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
@@ -569,8 +664,10 @@ ul.categories li {
 
 
 
+
 @endsection
 @push('scripts')
+
 <script>
     $(document).ready( function() {
         fetchVouchers();
@@ -579,50 +676,44 @@ ul.categories li {
         fetchImages();
     });
 </script>
+
 <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0')}}">
 <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0')}}"></script>
 <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0')}}"></script>
 
-<!-- Quill Editor-->
+
 <script>
+    // Quill Editor
     var quill = new Quill('#editor-container', {
         modules: {
-          toolbar: [
+            toolbar: [
             ['bold', 'italic'],
             ['link', 'blockquote', 'code-block', 'image'],
             [{ list: 'ordered' }, { list: 'bullet' }]
-          ]
+            ]
         },
         placeholder: 'Compose an epic...',
         theme: 'snow'
-      });
-      var rquill = new Quill('#reditor-container', {
-                        modules: {
-                        toolbar: [
-                            ['bold', 'italic'],
-                            ['link', 'blockquote', 'code-block', 'image'],
-                            [{ list: 'ordered' }, { list: 'bullet' }]
-                        ]
-                        },
-                        placeholder: 'Compose an epic...',
-                        theme: 'snow'
-                    });
-      
-     
-      
-      $("#store_form").submit(function(e) {
-          
+    });
+    // Quill Editor
+    var rquill = new Quill('#reditor-container', {
+        modules: {
+        toolbar: [
+            ['bold', 'italic'],
+            ['link', 'blockquote', 'code-block', 'image'],
+            [{ list: 'ordered' }, { list: 'bullet' }]
+        ]
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow'
+    });  
+
+    $("#store_form").submit(function(e) {
         // Populate hidden form on submit
         var desc = document.querySelector('input[name=description]');
         desc.value = quill.root.innerHTML;
-       
-        
-      });
-      
-</script>
+    });  
 
-<!-- Fetch Data-->
-<script>
     function fetchVouchers(){
         pageurl = "{{route('admin.stores.vouchers')}}"
         var _token = $("input[name=_token]").val();
@@ -687,10 +778,7 @@ ul.categories li {
         }
         });
     }
-</script>
-      
-<!-- Image uploader popup-->
-<script>
+
     function readURL(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
@@ -702,31 +790,32 @@ ul.categories li {
             reader.readAsDataURL(input.files[0]);
         }
     }
-</script>
-<!--Voucher-->
-<script>
-    $(document).ready(function(){
-     $(document).on('click', '.voucher-edit', function(event){
-        event.preventDefault(); 
-        
-        var id = $(this).attr('voucher-id');
-        pageurl = "vouchers/"+id+"/edit"
-        store_editor = 1;
-        var _token = $("input[name=_token]").val();
-            $.ajax({
 
-                url:pageurl,
-                method:"GET",
-                data:{_token:_token,store_editor:store_editor},
-                success:function(data)
-                {
-                    $('#voucher-modal').modal('show');
-                    $('#voucher').html(data);
-                }
-                });
+    // Edit Voucher popup
+    $(document).ready(function(){
+        $(document).on('click', '.voucher-edit', function(event){
+            event.preventDefault(); 
+            
+            var id = $(this).attr('voucher-id');
+            pageurl = "vouchers/"+id+"/edit"
+            store_editor = 1;
+            var _token = $("input[name=_token]").val();
+                $.ajax({
+
+                    url:pageurl,
+                    method:"GET",
+                    data:{_token:_token,store_editor:store_editor},
+                    success:function(data)
+                    {
+                        $('#voucher-modal').modal('show');
+                        $('#voucher').html(data);
+                    }
+                    });
                
-     });
+        });
     });
+
+    // Voucher update
     $(document).ready( function() {
         $(document).on('submit', '.voucher_form', function(event){
    
@@ -748,22 +837,38 @@ ul.categories li {
             });      
         });
     });
-</script>
 
-<!-- Cashback-->
-<script>
+    // Add Voucher
+    $(document).ready( function() {
+        $(document).on('submit', '.add_voucher_form', function(event){
+   
+          event.preventDefault();          
+          $.ajax({
+                url: $(this).attr('action'),
+                type: "POST",
+                data: $(this).serialize(),
+                success: function(data){
+                    $('#add-voucher-modal').modal('hide');
+                    (function(NioApp, $){
+                    'use strict';
+                    toastr.clear();
+                    NioApp.Toast('Voucher Added Successfully.', 'success');
+                    
+                })(NioApp, jQuery);
+                    fetchVouchers();
+                }
+            });      
+        });
+    });
+
+    // Edit Cashback Popup
     $(document).ready(function(){
-     $(document).on('click', '.cashback-edit', function(event){
-        event.preventDefault(); 
-        
-        var id = $(this).attr('cashback-id');
-        
-        
-            
+        $(document).on('click', '.cashback-edit', function(event){
+            event.preventDefault(); 
+            var id = $(this).attr('cashback-id');
              pageurl = 'stores/cashbacks/'+id+'/edit';
              var _token = $("input[name=_token]").val();
             $.ajax({
-
                 url:pageurl,
                 method:"GET",
                 data:{_token:_token},
@@ -772,25 +877,31 @@ ul.categories li {
                     $('#edit-cashback-modal').modal('show');
                     $('#edit-cashback').html(data);
                     checkCashbackType();
+                    calcCashback();
                 }
-                });
+            });
                
-     });
+        });
     });
+
+    // Cashback Update
     $(document).ready( function() {
         $(document).on('submit', '.cashback_form', function(event){
    
-          event.preventDefault();          
+          event.preventDefault(); 
+                
           $.ajax({
                 url: $(this).attr('action'),
                 type: "PUT",
                 data: $(this).serialize(),
                 success: function(data){
-                    $('#cashback-modal').modal('hide');
+                    $('#edit-cashback-modal').modal('hide');
                     (function(NioApp, $){
                     'use strict';
                     toastr.clear();
                     NioApp.Toast('Cashback Updated Successfully.', 'success');
+                    
+                    $('#custom_cashback_percentage').val(data['percentage']);
                     
                 })(NioApp, jQuery);
                    fetchCashbacks();
@@ -798,6 +909,8 @@ ul.categories li {
             });      
         });
     });
+
+    // Add Cashback
     $(document).ready( function() {
         $(document).on('submit', '.cashback_form_add', function(event){
    
@@ -819,15 +932,11 @@ ul.categories li {
             });      
         });
     });
-</script>
 
-<!-- Review-->
-
-<script>
+    // Review Edit Popup
     $(document).ready(function(){
-     $(document).on('click', '.review-edit', function(event){
-        event.preventDefault(); 
-        
+        $(document).on('click', '.review-edit', function(event){
+            event.preventDefault(); 
             var id = $(this).attr('review-id');
             pageurl = 'stores/reviews/'+id+'/edit';
             var _token = $("input[name=_token]").val();
@@ -852,16 +961,16 @@ ul.categories li {
                         theme: 'snow'
                     });
                 }
-                });
+            });
                
-     });
+        });
     });
+
+    // Review Update
     $(document).ready( function() {
         $(document).on('submit', '.review_form', function(event){
-   
             event.preventDefault();      
             var editor = document.querySelector('#reditor-container')
-
             var desc = document.querySelector('input[name=review]');
             desc.value = editor.children[0].innerHTML 
             $.ajax({
@@ -883,6 +992,8 @@ ul.categories li {
             });      
         });
     });
+
+    // Add Review
     $(document).ready( function() {
         $(document).on('submit', '.review_form_add', function(event){
    
@@ -908,14 +1019,10 @@ ul.categories li {
             });      
         });
     });
-</script>
 
-
-<!-- Image upload-->
-<script>
-  $(document).ready( function() {
+    // Upload Image
+    $(document).ready( function() {
         $(document).on('submit', '.file-upload', function(event){
-
             event.preventDefault();
             var formData = new FormData(this);
             $.ajax({
@@ -944,99 +1051,93 @@ ul.categories li {
      
         });
     });
+    // Delete Image
     $(document).ready(function(){
-     $(document).on('click', '.delete-img', function(event){
-        event.preventDefault(); 
-        
+       
+        $(document).on('click', '.delete-img', function(event){
             var storeimage = $(this).attr('image-id');
-            pageurl = 'stores/images/delete/'+storeimage;
-            var _token = $("input[name=_token]").val();
-            $.ajax({
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!'
+            }).then(function (result) {
+            if (result.value) {
+                pageurl = 'stores/images/delete/'+storeimage;
+                var _token = $("input[name=_token]").val();
+                $.ajax({
 
-                url:pageurl,
-                method:"GET",
-                data:{_token:_token},
-                success:function(data)
-                {
-                    (function(NioApp, $){
-                    'use strict';
-                    toastr.clear();
-                    NioApp.Toast('Image deleted Successfully.', 'success');
-                })(NioApp, jQuery);
-                    fetchImages();
-            
-                }
+                    url:pageurl,
+                    method:"GET",
+                    data:{_token:_token},
+                    success:function(data)
+                    {
+                        fetchImages();
+                    }
                 });
-               
-     });
+                Swal.fire('Deleted!', 'Image has been deleted.', 'success');
+            }
+            });
+            event.preventDefault(); 
+        });
     });
 
-</script>
-<!-- Update Store-->
-<script>
 
-$(document).ready( function() {
-    $(document).on('submit', '#store_form', function(event){
-
-        event.preventDefault();
-        
-        
-        $.ajax({
-        type:'PUT',
-        url: $(this).attr('action'),
-        data: $(this).serialize(),
-        success:function(data){
-        
-            (function(NioApp, $){
-            'use strict';
-            toastr.clear();
-            NioApp.Toast('Store updated Successfully.', 'success');
-        })(NioApp, jQuery);
-
-            // console.log(data);
+    //Update Store 
+    $(document).ready( function() {
+        $(document).on('submit', '#store_form', function(event){
+            event.preventDefault();
+            $.ajax({
+            type:'PUT',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success:function(data){
             
-        },
-        error: function(data){
-            console.log("error");
-            console.log(data);
-        }
+                (function(NioApp, $){
+                'use strict';
+                toastr.clear();
+                NioApp.Toast('Store updated Successfully.', 'success');
+                })(NioApp, jQuery);
+                
+            },
+            error: function(data){
+                console.log("error");
+                console.log(data);
+            }
+            });
+
+        });
     });
-
-    });
-});
-$(document).ready( function() {
-    $(document).on('submit', '#store_cat_form', function(event){
-
-        event.preventDefault();
-        
-        
-        $.ajax({
-        type:'POST',
-        url: $(this).attr('action'),
-        data: $(this).serialize(),
-        success:function(data){
-        
-            (function(NioApp, $){
-            'use strict';
-            toastr.clear();
-            NioApp.Toast('Store categories updated Successfully.', 'success');
-        })(NioApp, jQuery);
-
-            // console.log(data);
+    // Update categories
+    $(document).ready( function() {
+        $(document).on('submit', '#store_cat_form', function(event){
+            event.preventDefault();            
+            $.ajax({
+            type:'POST',
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success:function(data){
             
-        },
-        error: function(data){
-            console.log("error");
-            console.log(data);
-        }
+                (function(NioApp, $){
+                'use strict';
+                toastr.clear();
+                NioApp.Toast('Store categories updated Successfully.', 'success');
+            })(NioApp, jQuery);
+
+                // console.log(data);
+                
+            },
+            error: function(data){
+                console.log("error");
+                console.log(data);
+            }
+        });
+
+        });
     });
 
-    });
-});
-</script>
-
-<!-- Change store-->
-<script>
+    // Change Store
     $(function(){
       // bind change event to select
       $('#store_select').on('change', function () {
@@ -1048,137 +1149,164 @@ $(document).ready( function() {
       });
     });
 
+    // Categoires child parent selector
+
     $('input[type="checkbox"]').change(function(e) {
 
-var checked = $(this).prop("checked"),
-    container = $(this).parent(),
-    siblings = container.siblings();
+        var checked = $(this).prop("checked"),
+            container = $(this).parent(),
+            siblings = container.siblings();
 
-container.find('input[type="checkbox"]').prop({
-  indeterminate: false,
-  checked: checked
-});
+        container.find('input[type="checkbox"]').prop({
+        indeterminate: false,
+        checked: checked
+        });
 
-function checkSiblings(el) {
+        function checkSiblings(el) {
 
-  var parent = el.parent().parent(),
-      all = true;
+            var parent = el.parent().parent(),
+                all = true;
 
-  el.siblings().each(function() {
-    let returnValue = all = ($(this).children('input[type="checkbox"]').prop("checked") === checked);
-    return returnValue;
-  });
-  
-  if (all && checked) {
+            el.siblings().each(function() {
+                let returnValue = all = ($(this).children('input[type="checkbox"]').prop("checked") === checked);
+                return returnValue;
+            });
 
-    parent.children('input[type="checkbox"]').prop({
-      indeterminate: false,
-      checked: checked
+            if (all && checked) {
+
+                parent.children('input[type="checkbox"]').prop({
+                indeterminate: false,
+                checked: checked
+                });
+
+                checkSiblings(parent);
+
+            } else if (all && !checked) {
+
+                parent.children('input[type="checkbox"]').prop("checked", checked);
+                parent.children('input[type="checkbox"]').prop("checked", (parent.find('input[type="checkbox"]:checked').length > 0));
+                checkSiblings(parent);
+
+            } else {
+
+                el.parents("li").children('input[type="checkbox"]').prop({
+                checked: checked
+                });
+            }
+        }
+
+        checkSiblings(container);
     });
 
-    checkSiblings(parent);
 
-  } else if (all && !checked) {
+    // Cashback Type checker
+    function checkCashbackType(){
+        
+        if ($('#type').val() == 'fixed') {    
+            $('.currency-div').show();      
+            $('#currency').attr('required', 'required');
+        }
+        else{
+            $('.currency-div').hide();      
+            $('#currency').removeAttr('required').val('');
+        }
 
-    parent.children('input[type="checkbox"]').prop("checked", checked);
-    parent.children('input[type="checkbox"]').prop("checked", (parent.find('input[type="checkbox"]:checked').length > 0));
-    checkSiblings(parent);
-
-  } else {
-
-    el.parents("li").children('input[type="checkbox"]').prop({
-      
-      checked: checked
+    }
+    $(document.body).on("change","#type",function(){
+        checkCashbackType();
     });
 
-  }
 
-}
-
-checkSiblings(container);
-});
-function checkCashbackType(){
-    
-    if ($('#type').val() == 'fixed') {    
-        $('.currency-div').show();      
-        $('#currency').attr('required', 'required');
-    }
-    else{
-        $('.currency-div').hide();      
-        $('#currency').removeAttr('required').val('');
-    }
-
-}
-$(document.body).on("change","#type",function(){
-    checkCashbackType();
-});
-</script>
-<script>
+    // Override Categoires
     $("#override-categories").change(function () {
-    var value = $(this).val();
-    
-    $.ajax({
-        type:'PUT',
-        url: $('#override-categories-form').attr('action'),
-        data: $('#override-categories-form').serialize(),
-        success:function(data){
+        var value = $(this).val();
         
-            (function(NioApp, $){
-            'use strict';
-            toastr.clear();
-            NioApp.Toast('Store setting updated Successfully.', 'success');
-        })(NioApp, jQuery);
-
-            // console.log(data);
+        $.ajax({
+            type:'PUT',
+            url: $('#override-categories-form').attr('action'),
+            data: $('#override-categories-form').serialize(),
+            success:function(data){
             
-        },
-        error: function(data){
-            console.log("error");
-            console.log(data);
-        }
+                (function(NioApp, $){
+                'use strict';
+                toastr.clear();
+                NioApp.Toast('Store setting updated Successfully.', 'success');
+            })(NioApp, jQuery);
+
+                // console.log(data);
+                
+            },
+            error: function(data){
+                console.log("error");
+                console.log(data);
+            }
+        });
     });
-});
-$("#override-cashback").change(function () {
-    var value = $(this).val();
-    
-    $.ajax({
-        type:'PUT',
-        url: $('#override-cashback-form').attr('action'),
-        data: $('#override-cashback-form').serialize(),
-        success:function(data){
+
+    // Override cashback
+    $("#override-cashback").change(function () {
+        var value = $(this).val();
         
-            (function(NioApp, $){
-            'use strict';
-            toastr.clear();
-            NioApp.Toast('Store setting updated Successfully.', 'success');
-        })(NioApp, jQuery);
-        fetchCashbacks();
-            // console.log(data);
+        $.ajax({
+            type:'PUT',
+            url: $('#override-cashback-form').attr('action'),
+            data: $('#override-cashback-form').serialize(),
+            success:function(data){
             
-        },
-        error: function(data){
-            console.log("error");
-            console.log(data);
-        }
+                (function(NioApp, $){
+                'use strict';
+                toastr.clear();
+                NioApp.Toast('Store setting updated Successfully.', 'success');
+            })(NioApp, jQuery);
+            fetchCashbacks();
+                // console.log(data);
+                
+            },
+            error: function(data){
+                console.log("error");
+                console.log(data);
+            }
+        });
     });
-});
 
-</script>
-<script>
+
+    // Cashback and Percentage calculator for edit cashback
     function calcPercentage(){
       
         var network_commission = $('#sale_commission').val();
         var cashback = $('#cashback').val();
-        var percentage = (Math.round((cashback/network_commission)*100)).toFixed(2);
+        var percentage = ((cashback/network_commission)*100).toFixed(2);
         $('#custom_cashback_percentagee').val(percentage);
+        $('#custom_cashback_percentage').val(percentage);
     }
     function calcCashback(){
 
         var percentage =$('#custom_cashback_percentagee').val();
         var network_commission = $('#sale_commission').val();
-        var cashback = (Math.round((percentage/100)*network_commission)).toFixed(2);
+        var cashback = ((percentage/100)*network_commission).toFixed(2);
         $('#cashback').val(cashback);
     }
     
-    </script>
+
+    // Voucher type checker
+    function checkVoucherType(){
+    
+        if ($('#promotion_type').val() == 'Coupon') {    
+            $('.coupon-div').show();      
+            $('#coupon_code').attr('required', 'required');
+        }
+        else{
+            $('.coupon-div').hide();      
+            $('#coupon_code').removeAttr('required').val('');
+        }
+
+    }
+    $(document.body).on("change","#promotion_type",function(){
+        checkVoucherType()
+    });
+</script>
+
+
+
+
 @endpush

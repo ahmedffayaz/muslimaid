@@ -45,9 +45,9 @@ class SettingSeeder extends Seeder
                             'Mail Email'=>'support@cashback-reborn.com',
                             'Mail Name'=>'Cashback Reborn Support',
                             'Currency' =>1,
-                            'Dashboare Logo'=>'dashboard_logo_1623648325.png',
-                            'Website Logo'=>'website_logo_1623648325.png',
-                            'Favicon'=>'favicon_1623648325.png',
+                            'Dashboard Logo'=>'default.png',
+                            'Website Logo'=>'default.png',
+                            'Favicon'=>'default.png',
                             'Theme Color'=>NULL,
                             'Theme Skin'=>'blue',
                             'Dashboard Menu Type'=>'top'

@@ -110,7 +110,7 @@
                                                                 <ul class="link-list-opt no-bdr d-block ml-0">
                                                                     <a href="{{route('admin.categories.picks',$category)}}" category-id='{{$category->id}}' class='picks-edit' ><em class="icon ni ni-cart-fill"></em> Editor Picks</a>
                                                                     <a href="{{route('admin.categories.edit',$category)}}" category-id='{{$category->id}}' class='category-edit' ><em class="icon ni ni-edit"></em> Edit</a>
-                                                                    <a  onclick="$('#delete-form-{{$category->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em> Delete</a>
+                                                                    <a class='category-delete'  form_id = "delete-form-{{$category->id}}"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em> Delete</a>
                                                                 </ul>
                                                             </div>
                                                         </div>        
@@ -121,7 +121,11 @@
                                                         
                                                     </form>
                                                 </span>
-                                                <em class="icon ni ni-db-fill text-primary"></em> {{ $category->name }}
+                                                <em class="icon ni ni-db-fill text-primary"></em> {{ $category->name }} <span class="ml-1">@if($category->picks->count())
+                                                <span class="badge badge-dim badge-pill badge-primary text-capitalize">
+                                                    <em class="icon ni ni-done"></em> Editor Picks
+                                                 </span>
+                                                 @endif</span>
                                                 @if(count($category->childs))
                                                     @include('admin-dashboard.categories.child',['childs' => $category->childs])
                                                 @endif
@@ -179,9 +183,12 @@
 <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0')}}">
 <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0')}}"></script>
 <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0')}}"></script>
-<script>$(document).ready(function(){
+
+<script>
+
+    $(document).ready(function(){
         $(document).on('click', '.category-edit', function(event){
-       event.preventDefault(); 
+            event.preventDefault(); 
        
            var id = $(this).attr('category-id');
            pageurl = $(this).attr('href');
@@ -208,40 +215,35 @@
                        theme: 'snow'
                    });
                }
-               });
+            });
               
-    });
-    $(document).on('click', '.picks-edit', function(event){
-       event.preventDefault(); 
-       
-           var id = $(this).attr('category-id');
-           pageurl = $(this).attr('href');
-           var _token = $("input[name=_token]").val();
-           $.ajax({
+        });
+        $(document).on('click', '.picks-edit', function(event){
+        event.preventDefault(); 
+        
+            var id = $(this).attr('category-id');
+            pageurl = $(this).attr('href');
+            var _token = $("input[name=_token]").val();
+            $.ajax({
 
-               url:pageurl,
-               method:"GET",
-               data:{_token:_token},
-               success:function(data)
-               {
-                   $('#picks-modal').modal('show');
-                   $('#picks-form').html(data);
-                   initializeSelect2();
+                url:pageurl,
+                method:"GET",
+                data:{_token:_token},
+                success:function(data)
+                {
+                    $('#picks-modal').modal('show');
+                    $('#picks-form').html(data);
+                    initializeSelect2();
 
-               }
-               });
+                }
+            });
               
-    });
+        });
    });
    
-   </script>
-
-    <script>
-        $(document).ready(function(){
-        
-         $(document).on('submit', '.search_form', function(event){
+    $(document).ready(function(){
+        $(document).on('submit', '.search_form', function(event){
             event.preventDefault(); 
-              
             var _token = $("input[name=_token]").val();
             var type = $("select[name=type]").val();
             var status = $("select[name=status").val();
@@ -256,27 +258,23 @@
                $('html, body').animate({ scrollTop: 0 }, 'slow');
               }
             });
-            
-         });
-        
         });
+    });
         
-        </script>  
-        <script>
-            $.fn.extend({
-    treed: function (o) {
+    $.fn.extend({
+        treed: function (o) {
       
-      var openedClass = 'glyphicon-minus-sign';
-      var closedClass = 'glyphicon-plus-sign';
-      
-      if (typeof o != 'undefined'){
-        if (typeof o.openedClass != 'undefined'){
-        openedClass = o.openedClass;
-        }
-        if (typeof o.closedClass != 'undefined'){
-        closedClass = o.closedClass;
-        }
-      };
+        var openedClass = 'glyphicon-minus-sign';
+        var closedClass = 'glyphicon-plus-sign';
+        
+        if (typeof o != 'undefined'){
+            if (typeof o.openedClass != 'undefined'){
+            openedClass = o.openedClass;
+            }
+            if (typeof o.closedClass != 'undefined'){
+            closedClass = o.closedClass;
+            }
+        };
       
         /* initialize each of the top levels */
         var tree = $(this);
@@ -314,12 +312,12 @@
                 e.preventDefault();
             });
         });
-    }
-});
-/* Initialization of treeviews */
-$('#tree1').treed();
+        }
+    });
+    /* Initialization of treeviews */
+    $('#tree1').treed();
 
-function initializeSelect2() {
+    function initializeSelect2() {
         $('.select-2').select2({
             // maximumSelectionLength: 5,
             placeholder: function(){
@@ -328,13 +326,31 @@ function initializeSelect2() {
             }
         });
     }
-    $(".category_form").submit(function(e) {
-          
-          // Populate hidden form on submit
-          var desc = document.querySelector('input[name=description]');
-          desc.value = quill.root.innerHTML;
-         
-          
+    $(".category_form").submit(function(e) { 
+
+        // Populate hidden form on submit
+        var desc = document.querySelector('input[name=description]');
+        desc.value = quill.root.innerHTML;           
+    });
+</script>
+<script>
+    $(document).ready(function(){
+       
+       $(document).on('click', '.category-delete', function(event){
+            var form_id = $(this).attr('form_id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function (result) {
+                if (result.value) {
+                $('#'+form_id).submit();
+                }
+           });
+           event.preventDefault(); 
         });
-        </script>
+   });
+</script>
 @endpush

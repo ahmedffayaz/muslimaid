@@ -116,11 +116,15 @@
                         <div class="list-group">
                             @foreach ($category->picks->take(5) as $key=>$pick)
                             <a href="#" class="list-group-item @if($key==0) active @endif text-center">
-                            <img style="max-height: 40px;" class="" @if($pick->store->logo->first())
-                                    src="{{asset('storage/stores/images/'.$pick->store->logo->first()->image)}}"
-                                    @else
-                                    src="{{asset('frontend/images/products/product-16.jpg')}}" 
-                                    @endif alt="">
+                            <img style="max-height: 40px;" class=""  @if($pick->store->logo->first())
+                            @if($pick->store->logo->first()->is_fake)
+                                src="{{asset('frontend/images/logos/'.$pick->store->logo->first()->image)}}"
+                            @else
+                                src="{{asset('storage/stores/images/'.$pick->store->logo->first()->image)}}"
+                            @endif
+                        @else
+                            src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                        @endif alt="">
                                     <p class="small mb-0 text-dark mt-1"> @if($pick->store->cashback->type=='fixed'){{$pick->store->cashback->currency}} @endif{{$pick->store->cashback->sale_commission}}@if($pick->store->cashback->type=='percentage')%@endif Cashback</p>
                             </a>
 
@@ -148,11 +152,15 @@
                                         
                                         <div class="product-card__image product-image">
                                             <a href="{{route('store.show',$store->slug)}}" class="product-image__body" style="padding-bottom:100px">
-                                                <img class="product-image__img" @if($store->logo->first())
-                                                src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                                                <img class="product-image__img"  @if($store->logo->first())
+                                                @if($store->logo->first()->is_fake)
+                                                    src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
                                                 @else
+                                                    src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                                                @endif
+                                            @else
                                                 src="{{asset('frontend/images/products/product-16.jpg')}}" 
-                                                @endif alt="">
+                                            @endif alt="">
                                             </a>
                                         </div>
                                         <div class="product-card__info">

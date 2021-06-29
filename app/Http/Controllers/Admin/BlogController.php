@@ -85,7 +85,8 @@ class BlogController extends Controller
         $blog->excerpt = $request->excerpt;
         $blog->lb_content = $request->content;
         $blog->save();
-        return redirect()->route('admin.pages.index');
+        flash()->success('blog updated successfully');
+        return redirect()->route('admin.blogs.index');
     }
 
     /**
@@ -94,9 +95,11 @@ class BlogController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Blog $blog)
     {
-        //
+        $blog->delete();
+        flash()->success('blog deleted successfully');
+        return redirect()->route('admin.blogs.index');
     }
     public function runValidation($request)
     {

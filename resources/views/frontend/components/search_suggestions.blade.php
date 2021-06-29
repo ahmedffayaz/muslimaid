@@ -4,11 +4,15 @@
     <li class="suggestions__item @if($key==0) selected @endif"  >
         <div class="suggestions__item-image product-image">
             <div class="product-image__body">
-                <img class="product-image__img" @if($store->logo->first())
-                src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                <img class="product-image__img"  @if($store->logo->first())
+                @if($store->logo->first()->is_fake)
+                    src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
                 @else
+                    src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                @endif
+            @else
                 src="{{asset('frontend/images/products/product-16.jpg')}}" 
-                @endif alt="">
+            @endif alt="">
             </div>
         </div>
         <div class="suggestions__item-info">

@@ -40,17 +40,15 @@
     <img class="" src="{{asset('frontend/images/pages/redirecting.gif')}}" alt="logo">
 
     <img class="ml-5"
-    @if($store->logo->count())
-     @if($store->logo->first())
-     src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+    @if($store->logo->first())
+    @if($store->logo->first()->is_fake)
+        src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
     @else
-    src="{{asset('frontend/images/products/product-16.jpg')}}" alt=""
+        src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
     @endif
-    
-    @else
-    src="{{asset('frontend/images/products/product-16.jpg')}}" alt=""
-    @endif
-    >
+@else
+    src="{{asset('frontend/images/products/product-16.jpg')}}" 
+@endif alt="">
    <p class="mt-3"> If you are not redirected after 3 seconds please continue to <a href="{{$url}}">{{$store->name}}</a></p>
     
 </div>

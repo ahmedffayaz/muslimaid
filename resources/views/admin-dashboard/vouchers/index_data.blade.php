@@ -59,7 +59,7 @@
                         <ul class="link-list-opt no-bdr">
                             <li><a class="edit-voucher" href="{{route('admin.vouchers.edit', $voucher)}}"><em class="icon ni ni-edit"></em><span>Edit Voucher</span></a></li>
                             {{-- <li><a href="{{route('admin.stores.images', $store)}}"><em class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
-                            <li><a  onclick="$('#delete-voucher-{{$voucher->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Voucher</span></a>
+                            <li><a class='delete' form_id = "delete-voucher-{{$voucher->id}}" style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Voucher</span></a>
                                                     
                                 <form action="{{ route('admin.vouchers.destroy', $voucher) }}" id="delete-voucher-{{$voucher->id}}" method="POST" class="m-0">
                                     @method('DELETE')
@@ -80,8 +80,6 @@
     <div class="pagination g" route="{{$route}}">
         {!! $vouchers->links()!!}                             
                          
-        </div> 
-    
-    
+    </div>     
 </div><!-- .nk-block-between -->                                 
                     

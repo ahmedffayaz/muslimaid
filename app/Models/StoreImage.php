@@ -10,6 +10,6 @@ class StoreImage extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['store_id', 'title', 'image','image_type', 'is_uploaded'];
+    protected $fillable = ['store_id', 'title', 'image','image_type', 'is_uploaded','is_fake'];
 
 }

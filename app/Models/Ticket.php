@@ -12,7 +12,7 @@ class Ticket extends Model
     use HasFactory , SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'category_id', 'ticket_id', 'title', 'priority', 'message','new_ticket','closing_time','closed_by', 'status'
+        'user_id', 'category_id', 'ticket_id', 'title', 'priority','ticket_type','claim_type','claim_amount', 'store_id','click_id', 'message','new_ticket','closing_time','closed_by', 'status'
     ];
 
     public function category()
@@ -21,7 +21,6 @@ class Ticket extends Model
     }
     public function user(){
         return $this->belongsTo(User::class);
-
     }
     
     public function replies()
@@ -31,7 +30,6 @@ class Ticket extends Model
 
     public function closedByUser(){
         return $this->belongsTo(User::class, 'closed_by');
-
     }
 
     public function newReply(){
@@ -40,5 +38,11 @@ class Ticket extends Model
     
     public function lastReply(){
         return $this->hasOne(TicketReply::class)->latest();
+    }
+    public function store(){
+        return $this->belongsTo(Store::class);
+    }
+    public function click(){
+        return $this->belongsTo(ExitClick::class);
     }
 }

@@ -55,10 +55,10 @@ class ImporterController extends Controller
 
     public function import_commissions(){
 
-        $cashback_percent = \Config::get('app.cashback_percent');
+        // $cashback_percent = \Config::get('app.cashback_percent');
         $total_callback = 0;
-        $beforePostingDate = date('Y-m-d\TH:i:s\z');
-        $sincePostingDate = date('Y-m-d\TH:i:s\z', strtotime('-31 days'));
+        $beforePostingDate = date('Y-m-d\TH:i:s\z',strtotime('-91 days'));
+        $sincePostingDate = date('Y-m-d\TH:i:s\z', strtotime('-121 days'));
         $curl = curl_init();
         curl_setopt_array($curl, array(
         CURLOPT_URL => 'https://commissions.api.cj.com/query',
@@ -69,7 +69,7 @@ class ImporterController extends Controller
         CURLOPT_FOLLOWLOCATION => true,
         CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
         CURLOPT_CUSTOMREQUEST => 'POST',
-        CURLOPT_POSTFIELDS =>'{ publisherCommissions(forPublishers: ["5499477"], sincePostingDate:"'.$sincePostingDate.'",beforePostingDate:"'.$beforePostingDate.'"){count payloadComplete records {actionTrackerName websiteName advertiserName advertiserId pubCommissionAmountPubCurrency postingDate pubCommissionAmountUsd saleAmountPubCurrency actionStatus validationStatus clickDate eventDate shopperId   items { quantity perItemSaleAmountPubCurrency totalCommissionPubCurrency  }}}}',
+        CURLOPT_POSTFIELDS =>'{ publisherCommissions(forPublishers: ["5499477"], sincePostingDate:"'.$sincePostingDate.'",beforePostingDate:"'.$beforePostingDate.'"){count payloadComplete records {actionTrackerName clickReferringURL commissionId orderId websiteName advertiserName advertiserId pubCommissionAmountPubCurrency postingDate pubCommissionAmountUsd saleAmountPubCurrency actionStatus validationStatus clickDate eventDate shopperId   items { quantity perItemSaleAmountPubCurrency totalCommissionPubCurrency  }}}}',
         CURLOPT_HTTPHEADER => array(
             'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588',
             'Content-Type: application/json'
@@ -83,7 +83,7 @@ class ImporterController extends Controller
         curl_close($curl);
         $result_array = json_decode($result, TRUE);
 
-        // dd($result_array);
+        dd($result_array);
 
         if(array_key_exists('data',$result_array) 
         && array_key_exists('publisherCommissions',$result_array['data']) 

@@ -10,7 +10,7 @@
                     <div class="nk-block nk-block-lg">
                         <div class="nk-block-head">
                             <div class="nk-block-head-content">
-                                <h4 class="title nk-block-title">Add Voucher</h4>
+                                <h4 class="title nk-block-title">Edit Voucher</h4>
                                 <div class="nk-block-des">
                                     {{-- <p>You can make style out your....</p> --}}
                                 </div>

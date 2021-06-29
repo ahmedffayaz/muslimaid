@@ -44,7 +44,7 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="link-list-opt no-bdr">
                             <li><a href="{{route('admin.blogs.edit', $blog)}}"><em class="icon ni ni-edit"></em><span>Edit Blog</span></a></li>
-                           <li><a  onclick="$('#delete-blog-{{$blog->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Blog</span></a>
+                           <li><a  form_id="delete-blog-{{$blog->id}}"  class="delete" style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Blog</span></a>
                                                     
                                 <form action="{{ route('admin.blogs.destroy', $blog) }}" id="delete-blog-{{$blog->id}}" method="POST" class="m-0">
                                     @method('DELETE')

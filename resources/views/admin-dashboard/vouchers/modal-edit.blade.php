@@ -14,9 +14,9 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="coupon_code">Coupon Code</label>
+                                                <label class="form-label" for="sale_commission">Sale commission</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="coupon_code" value="{{$voucher->coupon_code}}" name="coupon_code" required>
+                                                    <input type="text" class="form-control" id="sale_commission" value="{{$voucher->sale_commission}}" name="sale_commission" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -54,18 +54,19 @@
                                                 </div>
                                             </div>
                                         </div>
-                                       
-                                       
-                                        
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="sale_commission">Sale commission</label>
+                                                <label class="form-label" for="coupon_code">Coupon Code</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="sale_commission" value="{{$voucher->sale_commission}}" name="sale_commission" required>
+                                                    <input type="text" class="form-control" id="coupon_code" value="{{$voucher->coupon_code}}" name="coupon_code" required>
                                                 </div>
                                             </div>
                                         </div>
-                                        {{-- <div class="col-lg-6">
+                                       
+                                       
+                                        
+                                       
+                                        <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="promotion_start_date">Promotion Start Date</label>
                                                 <div class="form-control-wrap">
@@ -80,7 +81,7 @@
                                                     <input type="text" class="form-control date-picker" id="promotion_end_date" value="{{$voucher->promotion_end_date}}" name="promotion_end_date" required>
                                                 </div>
                                             </div>
-                                        </div> --}}
+                                        </div>
                                         
                                                                
                                         <div class="col-12">

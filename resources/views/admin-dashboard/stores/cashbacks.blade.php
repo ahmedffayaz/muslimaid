@@ -1,10 +1,14 @@
 
+ @if($store->override_cashback)
+<a href="#cashback-modal" class="btn btn-primary btn-sm float-right" data-toggle="modal"><em class="icon ni ni-upload-cloud"></em> <span>Add cashback</span></a>
+@endif
 <div class="nk-tb-list nk-tb-ulist" style="table-layout: auto">
     @if(count($store->cashbacks))
     <div class="nk-tb-item nk-tb-head">
         
         
         <div class="nk-tb-col tb-col-mb pl-0"><span class="sub-text">Cashback</span></div>
+        <div class="nk-tb-col tb-col-mb pl-0"><span class="sub-text">Commission</span></div>
         <div class="nk-tb-col tb-col-mb"><span class="sub-text">Type</span></div>
         
         <div class="nk-tb-col tb-col-mb"><span class="sub-text">Detail</span></div>
@@ -19,6 +23,15 @@
     <div class="nk-tb-item">
         <div class="nk-tb-col  pl-1">
             <span>@if($cashback->type=='fixed'){{$cashback->currency}} @endif{{$cashback->sale_commission}}@if($cashback->type=='percentage')%@endif</span>
+        </div>
+        <div class="nk-tb-col  pl-1">
+            <span>@if($cashback->type=='fixed'){{$cashback->currency}} @endif
+                @if($store->custom_cashback_percentage)
+                {{($store->custom_cashback_percentage/100)*$cashback->sale_commission}}
+                @else 
+                {{(SiteSetting()['cashback_percentage']/100)*$cashback->sale_commission}}
+                @endif
+                @if($cashback->type=='percentage')%@endif</span>
         </div>
      
         <div class="nk-tb-col text-capitalize">

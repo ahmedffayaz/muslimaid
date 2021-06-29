@@ -101,17 +101,17 @@
 </div>
 @endsection
 @push('scripts')
-    <script>
+<script>
     $(document).ready(function(){
-     $(document).on('click', '.pagination a', function(event){
+        $(document).on('click', '.pagination a', function(event){
         event.preventDefault(); 
         var route = $('.pagination').attr('route');
         var page = $(this).attr('href').split('page=')[1];
         
-         if(route=='index'){
+            if(route=='index'){
             
-             pageurl = "{{route('admin.reviews.fetch')}}?page="
-             var _token = $("input[name=_token]").val();
+                pageurl = "{{route('admin.reviews.fetch')}}?page="
+                var _token = $("input[name=_token]").val();
             $.ajax({
 
                 url:pageurl+page,
@@ -123,55 +123,74 @@
                     $('html, body').animate({ scrollTop: 0 }, 'slow');
                 }
                 });
-         } 
+            } 
 
-         if(route=='search'){
-              
-              
+            if(route=='search'){
+                
+                
             var _token = $("input[name=_token]").val();
             var reviewer = $("input[name=reviewer]").val();
             var store_id = $("select[name=store_id]").val();
-           
-            var status = $("select[name=status]").val();
-            $.ajax({
-              url:'{{route("admin.reviews.search_reviews")}}?page='+page,
-              method:"POST",
-              data:{_token:_token,reviewer:reviewer,store_id:store_id,status:status},
-              success:function(data)
-              {
-               $('#table-data').html(data);
-               $('html, body').animate({ scrollTop: 0 }, 'slow');
-              }
-            });
-         }       
-     });
-    });
-    </script> 
-    <script>
-        $(document).ready(function(){
-        
-         $(document).on('submit', '.search_form', function(event){
-            event.preventDefault(); 
-              
-            var _token = $("input[name=_token]").val();
-            var reviewer = $("input[name=reviewer]").val();
-            var store_id = $("select[name=store_id]").val();
-           
-            var status = $("select[name=status]").val();
-            $.ajax({
-            url:'{{route("admin.reviews.search_reviews")}}',
-              method:"POST",
-              data:{_token:_token,reviewer:reviewer,store_id:store_id,status:status},
-              success:function(data)
-              {
-               $('#table-data').html(data);
-               $('html, body').animate({ scrollTop: 0 }, 'slow');
-              }
-            });
             
-         });
+            var status = $("select[name=status]").val();
+            $.ajax({
+                url:'{{route("admin.reviews.search_reviews")}}?page='+page,
+                method:"POST",
+                data:{_token:_token,reviewer:reviewer,store_id:store_id,status:status},
+                success:function(data)
+                {
+                $('#table-data').html(data);
+                $('html, body').animate({ scrollTop: 0 }, 'slow');
+                }
+            });
+            }       
+        });
+    });
+
+    $(document).ready(function(){
+    
+        $(document).on('submit', '.search_form', function(event){
+        event.preventDefault(); 
+            
+        var _token = $("input[name=_token]").val();
+        var reviewer = $("input[name=reviewer]").val();
+        var store_id = $("select[name=store_id]").val();
         
+        var status = $("select[name=status]").val();
+        $.ajax({
+        url:'{{route("admin.reviews.search_reviews")}}',
+            method:"POST",
+            data:{_token:_token,reviewer:reviewer,store_id:store_id,status:status},
+            success:function(data)
+            {
+            $('#table-data').html(data);
+            $('html, body').animate({ scrollTop: 0 }, 'slow');
+            }
         });
         
-        </script>  
+        });
+    
+    });
+    
+</script> 
+<script>
+    $(document).ready(function(){
+       
+       $(document).on('click', '.delete', function(event){
+            var form_id = $(this).attr('form_id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function (result) {
+                if (result.value) {
+                $('#'+form_id).submit();
+                }
+           });
+           event.preventDefault(); 
+        });
+   });
+</script> 
 @endpush

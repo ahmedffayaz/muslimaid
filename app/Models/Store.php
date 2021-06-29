@@ -29,7 +29,9 @@ class Store extends Model
      'feature_homepage',
      'editor_pick',
      'custom_cashback_percentage',
-     'status'];
+     'status',
+     'is_fake',
+    ];
 
     public function network(){
 

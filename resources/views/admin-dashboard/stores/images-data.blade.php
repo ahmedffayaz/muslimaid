@@ -12,7 +12,13 @@
                     <div class="nk-file-icon">
                         <a class="nk-file-icon-link" href="{{asset('storage/stores/images/'.$item->image)}}" target="_blank">
                             <span class="nk-file-icon-type">
-                               <img src="{{asset('storage/stores/images/'.$item->image)}}" alt="">
+                               <img  
+                               @if($item->is_fake)
+                                   src="{{asset('frontend/images/logos/'.$item->image)}}"
+                               @else
+                                   src="{{asset('storage/stores/images/'.$item->image)}}"
+                               @endif
+                         alt="">
                             </span>
                         </a>
                     </div>

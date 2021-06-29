@@ -10,7 +10,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
     <!-- Fav Icon  -->
-    <link rel="shortcut icon" href="@isset($settings['favicon']){{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}@else{{asset('frontend/images/favicon.png')}}@endif">
+    
+    <link rel="shortcut icon"
+    
+    @isset($settings['favicon'])
+        @if($settings['favicon'] == 'default.png')
+            href="{{asset('admin-dashboard/images/favicon.png')}}"
+        @else
+            href="{{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}"
+        @endif
+
+        @else  
+        href="{{asset('admin-dashboard/images/favicon.png')}}"
+        
+    @endisset>
+    
     <!-- Page Title  -->
     <title>{{$settings['website_title']}} | Admin Panel</title>
     <!-- StyleSheets  -->
@@ -94,12 +108,14 @@ left: 0;
 @media (min-width: 576px){
     .nk-header-search {
     justify-content: center;
+    display: none;
 }
 }
 @media only screen and (max-width: 1199px) {
     .is-compact:not(:hover) .nk-menu-text {
     opacity: 1;
 }
+
 .is-compact:not(:hover) .nk-menu-badge, .is-compact:not(:hover) .nk-menu-toggle:after {
     opacity: 1;
 }
@@ -110,6 +126,12 @@ left: 0;
 }
 .nk-sidebar.is-compact.d-xl-none + .nk-wrap > .nk-header-fixed {
     left: 0;
+}
+.nk-header-search {
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    flex-grow: 1;
 }
 }
 

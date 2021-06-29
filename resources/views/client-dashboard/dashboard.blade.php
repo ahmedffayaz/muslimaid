@@ -1,31 +1,5 @@
 @extends('layouts.frontend.app')
 @section('content')
-{{-- <div class="page-header">
-    <div class="page-header__container container">
-        <div class="page-header__breadcrumb">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="index.html">Home</a>
-                        <svg class="breadcrumb-arrow" width="6px" height="9px">
-                            <use xlink:href="images/sprite.svg#arrow-rounded-right-6x9"></use>
-                        </svg>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="">Breadcrumb</a>
-                        <svg class="breadcrumb-arrow" width="6px" height="9px">
-                            <use xlink:href="images/sprite.svg#arrow-rounded-right-6x9"></use>
-                        </svg>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">My Account</li>
-                </ol>
-            </nav>
-        </div>
-        <div class="page-header__title">
-            <h1>My Account</h1>
-        </div>
-    </div>
-</div> --}}
 <div class="block mt-5">
     <div class="container">
         <div class="row">
@@ -68,7 +42,7 @@
                     <div class="dashboard__orders card">
                         <div class="card-header">
                             <h5 class="d-inline-block">Recent Cashback</h5>
-                            @if($user->clicks->count() > 5)
+                            @if($user->cashbacks->count() > 5)
                             <a href="{{route('account.cashback')}}" class="float-right font-14">View All</a>
                             @endif
                         </div>
@@ -87,7 +61,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @foreach ($user->cashbacks->take(0) as $item)
+                                        @foreach ($user->cashbacks->take(5) as $item)
                                             <tr>
                                                 
                                                 <td><a href="{{route('store.show',$item->store->slug)}}" target="_blank">{{$item->store->name}}</a></td>

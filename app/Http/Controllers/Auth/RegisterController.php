@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Mail;
+use App\Models\EmailTemplate;
 
 class RegisterController extends Controller
 {
@@ -78,6 +80,23 @@ class RegisterController extends Controller
 
         $user->assignRole('user');
 
+        $email_template = EmailTemplate::where('key','user_welcome')->first(); 
+
+        $filtered_message  = str_replace(['%SITE_TITLE%', '%SITE_URL%', '%NAME%', '%EMAIL%'],[SiteSetting()['website_title'], url('/') ,$user->first_name,$user->email],$email_template->message );
+        
+        $email_data = array(
+            'name' =>  $data['firstname'],
+            'email' => $data['email'],
+            'email_message'=>$filtered_message,
+            'subject'=>$email_template->subject
+        );
+        
+        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
+            $message->to($email_data['email'], $email_data['name'])
+                ->subject($email_data['subject']);
+        });
+
         return $user;
     }
+    
 }

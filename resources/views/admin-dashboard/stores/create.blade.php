@@ -49,26 +49,20 @@
                                         </div>
                                        
                                         
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="default-06">Category</label>
-                                                <div class="form-control-wrap ">
-                                                    <div class="form-control-select">
-                                                        <select class="form-select form-control" multiple="multiple" data-placeholder="Select Multiple options" id="category_select" name="category_id[]" required>
-                                                            @foreach ($categories as $category)
-                                                            <option value="{{$category->id}}">{{$category->name}}</option>
-                                                                
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                        
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="pay-amount-1">Store url</label>
                                                 <div class="form-control-wrap">
                                                     <input type="text" class="form-control" id="pay-amount-1" name="store_url" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="tracking_url">Tracking url</label>
+                                                <div class="form-control-wrap">
+                                                    <input type="text" class="form-control" id="tracking_url" name="tracking_url" required>
                                                 </div>
                                             </div>
                                         </div>

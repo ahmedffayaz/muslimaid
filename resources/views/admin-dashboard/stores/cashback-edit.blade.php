@@ -20,7 +20,7 @@
             <div class="form-group">
                 <label class="form-label" for="custom_cashback_percentage">Cashback Percentage</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="custom_cashback_percentagee" value="{{$cashback->store->custom_cashback_percentage}}" name="custom_cashback_percentage" required oninput="calcCashback()">
+                    <input type="text" class="form-control" id="custom_cashback_percentagee" value="{{$cashback->store->custom_cashback_percentage ?? SiteSetting()['cashback_percentage']}}" name="custom_cashback_percentage" required oninput="calcCashback()">
                 </div>
             </div>
         </div>

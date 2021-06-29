@@ -12,6 +12,7 @@ use App\Models\Ticket;
 use App\Models\User;
 use App\Models\StoreReview;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
+use Illuminate\Support\Facades\Cookie;
 
 
 
@@ -32,22 +33,50 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index($period = 1)
+    public function index()
     {
+        return view('admin-dashboard.home');
+        
+    }
+    public function setLocale($locale)
+    {
+        session()->put('locale', $locale );
+        return response()->json([
+            'status' => true,
+            'message' => 'Language changed!'
+        ]);
+    }
+
+    public function dataByPeriod(Request $request){
+        
+        $period = $request->input('period');
+        if($period == 0){
+            if(Cookie::get('period')){
+                $period = Cookie::get('period');
+            
+            }else{
+                $period = 1;
+            }
+        }
+
         if($period == 1){
 
             $time_period = \Carbon\Carbon::now()->subDay()->toDateTimeString();
+
+            Cookie::queue(Cookie::make('period', 1, 120));
         }elseif($period ==7){
 
             $time_period = \Carbon\Carbon::now()->subDays(7)->toDateTimeString();
+            Cookie::queue(Cookie::make('period', 7, 120));
+
+
         }
         elseif($period == 30){
             $time_period = \Carbon\Carbon::now()->subDays(30)->toDateTimeString();
+            Cookie::queue(Cookie::make('period', 30, 120));
+
 
         }else{
-            $period = 1;
-            $time_period = \Carbon\Carbon::now()->subDay()->toDateTimeString();
-
         }
         $paid_total_commission = UserCashback::where('status','4')->where('event_date', '>=', $time_period)->sum('network_commission');
         $paid_total_cashback = UserCashback::where('status','4')->where('event_date', '>=', $time_period)->sum('amount');
@@ -69,29 +98,9 @@ class HomeController extends Controller
         $notconverted = count($clicks ) - count($coms);
         $converted = count($coms);
 
-
-        $chart_options = [
-            'chart_title' => 'Users by months',
-            'report_type' => 'group_by_date',
-            'model' => 'App\Models\ExitClick',
-            'group_by_field' => 'created_at',
-            'group_by_period' => 'day',
-            'chart_type' => 'bar',
-        ];
-        $chart1 = new LaravelChart($chart_options);
-      
-
-        return view('admin-dashboard.home',compact('coms','total_coms',
+        return view('admin-dashboard.home_data',compact('coms','total_coms',
         'stores','total_revenue','pending_total_revenue','clicks','total_clicks',
-        'tickets','users','total_users','reviews','converted','notconverted','chart1','period'));
-        
-    }
-    public function setLocale($locale)
-    {
-        session()->put('locale', $locale );
-        return response()->json([
-            'status' => true,
-            'message' => 'Language changed!'
-        ]);
+        'tickets','users','total_users','reviews','converted','notconverted','period'))->render();
+
     }
 }

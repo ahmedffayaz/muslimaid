@@ -8,8 +8,12 @@ use App\Models\Store;
 use App\Models\Category;
 use App\Models\Page;
 use App\Models\Blog;
+use App\Models\contactForm;
 use Harimayco\Menu\Models\Menus;
 use Harimayco\Menu\Models\MenuItems;
+use Illuminate\Support\Facades\Mail;
+use App\Models\EmailTemplate;
+
 
 class PagesController extends Controller
 {
@@ -56,9 +60,12 @@ class PagesController extends Controller
         if($slug == 'offers'){
             return view('frontend.pages.offers',compact('page'));
         }
+        if($slug == 'contact'){
+            return view('frontend.pages.contact',compact('page'));
+        }
         if($slug == 'vouchers'){
             $stores = Store::has('vouchers')->latest()->paginate(10);
-        $term = null;
+            $term = null;
         return view('frontend.pages.vouchers',compact('stores','term','page'));
         }
 
@@ -175,5 +182,45 @@ class PagesController extends Controller
         $blog = Blog::where('slug', $slug)->first();
 
         return view('frontend.pages.single_blog',compact('blog'));
+    }
+
+
+    public function contactForm(Request $request){
+        $contact = contactForm::create($request->all());
+
+        $user_email_template = EmailTemplate::where('key','user_new_contact')->first(); 
+        $admin_email_template = EmailTemplate::where('key','admin_new_contact')->first(); 
+
+        $filtered_user_message  = str_replace(['%SITE_TITLE%', '%SITE_URL%', '%NAME%', '%EMAIL%','%SUBJECT%','%MESSAGE%'],
+                                            [SiteSetting()['website_title'], url('/') ,$request->input('name'),$request->input('email'),$request->input('subject'),$request->input('message')],
+                                            $user_email_template->message );
+        $filtered_admin_message  = str_replace(['%SITE_TITLE%', '%SITE_URL%', '%NAME%', '%EMAIL%', '%SUBJECT%','%MESSAGE%'],
+                                            [SiteSetting()['website_title'], url('/') ,$request->input('name'),$request->input('email'),$request->input('subject'),$request->input('message')],
+                                            $admin_email_template->message );
+
+        $email_data = array(
+            'name' =>  $request->input('name'),
+            'email' => $request->input('email'),
+            'message'=>$request->input('message'),
+            'email_message'=> $filtered_admin_message,
+            'subject'=> $admin_email_template->subject
+        );
+        
+        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
+            $message->to('admin@trs.com', $email_data['name'])
+                ->subject($email_data['subject']);
+        });
+        $email_data = array(
+            'name' =>  $request->input('name'),
+            'email' => $request->input('email'),
+            'message'=>$request->input('message'),
+            'email_message'=>$filtered_user_message,
+            'subject'=>$user_email_template->subject
+        );
+        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
+            $message->to($email_data['email'], $email_data['name'])
+                ->subject($email_data['subject']);
+        });
+        return redirect()->back();
     }
 }

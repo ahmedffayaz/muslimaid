@@ -8,7 +8,7 @@
     justify-content: center;
     align-items: center;
     
-    height: 220px
+    height: 160px
 }
 .store-header  .drodown {
     position: absolute;
@@ -22,15 +22,19 @@
 
     color: #9769ff;
 }.card-img, .card-img-top {
-    max-height: 150px;
-    max-width: 150px;
+    /* max-height: 150px; */
+    max-width: 120px;
 }
 .card-header {
     background-color: floralwhite;
 }
+.g-gs > li, .g-gs > div {
+    padding: 10px !important;
+}
 </style>
-@foreach ($stores as $store)
-<div class="col-sm-6 col-lg-3 col-xxl-3">
+<div class="row g-gs" >
+    @foreach ($stores as $store)
+<div class="col-sm-6 col-lg-3 col-xl-2">
     <div class="card h-100">
         <div class="card-header store-header">
             <div class="drodown">
@@ -39,7 +43,7 @@
                     <ul class="link-list-opt no-bdr">
                         <li><a href="{{route('admin.stores.show', $store)}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li>
                         {{-- <li><a href="{{route('admin.stores.images', $store)}}"><em class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
-                        <li><a  onclick="$('#delete-store-{{$store->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Store</span></a>
+                        <li><a   class='delete-store'  form_id = "delete-store-{{$store->id}}"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Store</span></a>
                                                 
                         <form action="{{ route('admin.stores.destroy', $store) }}" id="delete-store-{{$store->id}}" method="POST" class="m-0">
                             @method('DELETE')
@@ -49,10 +53,15 @@
                     </li>
                     </ul>
                 </div>
-            </div><a href="{{route('admin.stores.show', $store)}}"><img @if($store->logo->first())
-                src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+            </div><a href="{{route('admin.stores.show', $store)}}"><img  @if($store->logo->first())
+                @if($store->logo->first()->is_fake)
+                    src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
                 @else
-                src="{{asset('frontend/images/products/product-16.jpg')}}" @endif class="card-img-top" alt=""></a>
+                    src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                @endif
+            @else
+                src="{{asset('frontend/images/products/product-16.jpg')}}" 
+             @endif class="card-img-top" alt=""></a>
             
             <div class="status">@if($store->status == 'error') 
                 <span class="badge badge-danger text-capitalize" data-toggle="tooltip" data-placement="top" title="{{$store->status_description}}">
@@ -70,10 +79,12 @@
                 <span class="badge badge-warning text-capitalize">
                     {{$store->status}}
                 </span>
-                @endif</div>
+                @endif
+                
+            </div>
         </div>
       
-        <div class="card-inner">
+        <div class="card-inner px-2 py-3">
             <div class="project">
                 <div class="project-head mb-0">
                     
@@ -91,7 +102,19 @@
                            <div>
                             Clicks: {{$store->clicks->count()}}
                            </div>
-                            
+                           <div class="override mt-2">
+                               @if($store->override_cashback)
+                            <span class="badge badge-dim badge-pill badge-primary text-capitalize">
+                                <em class="icon ni ni-done"></em> Cashabck Overridden
+                             </span>
+                             @endif
+                             @if($store->override_categories)
+                             <span class="badge badge-dim badge-pill badge-primary text-capitalize">
+                                <em class="icon ni ni-done"></em> Categories Overridden
+                              </span>
+                              @endif
+                           </div>
+                           
                             
                         </div>
                     </span>
@@ -117,8 +140,11 @@
     </div>
 </div>
 
-@endforeach   
-<div class="nk-block-between-md g-3 card-inner">
+@endforeach                    
+                       
+</div>
+  
+<div class="nk-block-between-md g-3 card-inner px-0 ">
     <div class="pagination g" route="{{$route}}">
         {!! $stores->links()!!}                             
                          

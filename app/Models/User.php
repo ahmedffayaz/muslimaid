@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Notifications\ResetPasswordNotification;
 
 
 class User extends Authenticatable
@@ -74,6 +75,14 @@ class User extends Authenticatable
     } 
     public function cashouts(){
         return $this->hasMany(Cashout::class);
+    }
+    public function claims(){
+        return $this->hasMany(Ticket::class)->where('ticket_type','claim')->orderByDesc('created_at');
+    }
+
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 
     

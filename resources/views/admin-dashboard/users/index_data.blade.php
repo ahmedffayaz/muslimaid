@@ -70,7 +70,7 @@
                                     
                                 </form>
                                 
-                                <a onclick="$('#delete-form-{{$user->id}}').submit();" style="cursor: pointer">
+                                <a  class='delete'  form_id = "delete-form-{{$user->id}}" style="cursor: pointer">
                                 
                                 <em class="icon ni ni-trash-fill"></em></em><span>Delete User</span></a></li>
                         </ul>

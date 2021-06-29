@@ -268,7 +268,7 @@ class Importer implements ShouldQueue
                     
                     }else{
 
-                        if($store->override_cashback){
+                        if(!$store->override_cashback){
                             
                             $ch = curl_init();
 
@@ -400,7 +400,7 @@ class Importer implements ShouldQueue
 
                         }
 
-                        if($store->override_categories){
+                        if(!$store->override_categories){
                             if(count($store->categories)){
                                 $store->categories()->delete();
                             }
@@ -541,7 +541,7 @@ class Importer implements ShouldQueue
 
                     }
                     $cashback_amount_for_user = ($cashback['pubCommissionAmountPubCurrency']/100) * $cashback_percent;
-                    $commission_exist = UserCashback::where('exit_click_id',$cashback['shopperId'])->first();
+                    $commission_exist = UserCashback::where(['exit_click_id'=>$cashback['shopperId'],'network_commission_id'=>$cashback['commissionId']])->first();
                     $status = '';
                     if($cashback['actionStatus'] == 'new' || $cashback['actionStatus'] == 'extended' || $cashback['actionStatus'] == 'locked'){
                         $status = 1;
@@ -558,6 +558,8 @@ class Importer implements ShouldQueue
                             'exit_click_id'=>$click_id,
                             'amount'=>round($cashback_amount_for_user,2),
                             'network_commission'=>$cashback['pubCommissionAmountPubCurrency'],
+                            'network_commission_id'=>$cashback['commissionId'],
+                            'network_order_id'=>$cashback['orderId'],
                             'order_value'=>$cashback['saleAmountPubCurrency'],
                             'status'=>$status,
                             'event_date'=> \Carbon\Carbon::parse($cashback['eventDate'])->toDateTimeString(),

@@ -30,8 +30,8 @@
                             <h5 class="footer-links__title">Hot offers</h5>
                             <ul class="footer-links__list">
                                 <li class="footer-links__item"><a href="{{route('trending')}}" class="footer-links__link">Hottest</a></li>
-                                <li class="footer-links__item"><a href="{{route('top_stores')}}" class="footer-links__link">Top cashback deals</a></li>
-                                <li class="footer-links__item"><a href="" class="footer-links__link">Top voucher codes</a></li>
+                                <li class="footer-links__item"><a href="#" class="footer-links__link">Top cashback deals</a></li>
+                                <li class="footer-links__item"><a href="#" class="footer-links__link">Top voucher codes</a></li>
                                
                             </ul>
                         </div>
@@ -41,7 +41,7 @@
                         <div class="site-footer__widget footer-links">
                             <h5 class="footer-links__title">Policies</h5>
                             <ul class="footer-links__list">
-                                <li class="footer-links__item"><a href="{{route('page','	privacy-policy')}}" class="footer-links__link">Privacy Policy</a></li>
+                                <li class="footer-links__item"><a href="{{route('page','privacy-policy')}}" class="footer-links__link">Privacy Policy</a></li>
                                 <li class="footer-links__item"><a href="{{route('page','cookie-policy')}}" class="footer-links__link">Cookies Policy</a></li>
                                 <li class="footer-links__item"><a href="{{route('page','terms-and-conditions')}}" class="footer-links__link">Terms and Conditions</a></li>
                              

@@ -29,6 +29,7 @@ class CreateStoresTable extends Migration
             $table->string('override_cashback')->default(0);
             $table->string('override_categories')->default(0);
             $table->string('status')->default(1);
+            $table->string('is_fake')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });

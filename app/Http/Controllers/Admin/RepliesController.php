@@ -13,7 +13,7 @@ class RepliesController extends Controller
     function __construct()
     {
         
-         $this->middleware('permission:reply tickets', ['only' => ['store']]);
+        //  $this->middleware('permission:reply tickets', ['only' => ['store']]);
 
     }
     /**
@@ -59,7 +59,7 @@ class RepliesController extends Controller
 
         $reply->ticket->update(['status'=>'pending']);
 
-        // return back();
+        return back();
     }
 
 

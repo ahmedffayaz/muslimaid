@@ -190,5 +190,25 @@
         
         });
         
-        </script>  
+</script>
+<script>
+    $(document).ready(function(){
+       
+       $(document).on('click', '.delete', function(event){
+            var form_id = $(this).attr('form_id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function (result) {
+                if (result.value) {
+                $('#'+form_id).submit();
+                }
+           });
+           event.preventDefault(); 
+        });
+   });
+</script>  
 @endpush

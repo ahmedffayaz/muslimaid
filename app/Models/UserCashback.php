@@ -14,7 +14,7 @@ class UserCashback extends Model
 {
     use HasFactory , SoftDeletes;
 
-    protected $fillable = ['store_id', 'user_id','cashout_id', 'amount','status', 'detalis','network_commission','order_value', 'exit_click_id','click_date','event_date'];
+    protected $fillable = ['store_id', 'user_id','cashout_id', 'amount','status', 'detalis','network_commission','order_value', 'exit_click_id','network_order_id','network_commission_id','click_date','event_date'];
 
     public function store(){
 

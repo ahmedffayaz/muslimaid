@@ -181,7 +181,7 @@ ul.categories li {
                                                         <div class="form-group">
                                                             <div class=" logo">
                                                                 <label for="website-logo-input">
-                                                                <img id="website-logo" src="@isset($settings['website_logo']){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
+                                                                <img id="website-logo" src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
                                                                 <input id="website-logo-input" preview="#website-logo" name="website_logo" class="d-none" type='file' onchange="readURL(this);" />
                                                                 </label>
                                                             </div>
@@ -200,7 +200,7 @@ ul.categories li {
                                                         <div class="form-group">
                                                             <div class=" logo">
                                                                 <label for="logo-input">
-                                                                <img id="logo" src="@isset($settings['dashboard_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
+                                                                <img id="logo" src="@if(isset($settings['dashboard_logo']) && $settings['dashboard_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
                                                                 <input id="logo-input" preview="#logo" name="dashboard_logo" class="d-none" type='file' onchange="readURL(this);" />
                                                                 </label>
                                                             </div>
@@ -219,7 +219,7 @@ ul.categories li {
                                                         <div class="form-group">
                                                             <div class=" logo">
                                                                 <label for="favicon-input">
-                                                                <img id="favicon" src="@isset($settings['favicon']){{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
+                                                                <img id="favicon" src="@if(isset($settings['favicon']) && $settings['favicon']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
                                                                 <input id="favicon-input" preview="#favicon"  name="favicon" class="d-none" type='file' onchange="readURL(this);" />
                                                                 </label>
                                                             </div>
@@ -722,6 +722,7 @@ $(document).ready( function() {
                 toastr.clear();
                 NioApp.Toast(data.message, data.response);
             })(NioApp, jQuery); 
+            location.reload(true);
             
         },
         error: function(data){

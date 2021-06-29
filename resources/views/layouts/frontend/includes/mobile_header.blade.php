@@ -11,7 +11,7 @@
                     </button>
                     <a class="mobile-header__logo" href="{{url('/')}}">
                           <!-- logo -->
-                    <img width="196px" src="@isset($settings['website_logo']){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif" alt="">
+                    <img width="196px" src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif" alt="">
                    
                     <!-- logo / end -->
                     </a>

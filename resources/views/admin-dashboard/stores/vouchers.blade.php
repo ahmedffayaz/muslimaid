@@ -1,16 +1,19 @@
-<div class="nk-tb-list nk-tb-ulist" style="table-layout: auto">
+
+<a href="#add-voucher-modal" class="btn btn-primary float-right btn-sm" data-toggle="modal"><em class="icon ni ni-plus"></em> <span>Add Voucher</span></a>
+
+<div class="nk-tb-list nk-tb-ulist mt-3" style="table-layout: auto">
 
     @if(count($store->vouchers))
     <div class="nk-tb-item nk-tb-head">
         
         
-        <div class="nk-tb-col tb-col-mb pl-0"><span class="sub-text">Deal title</span></div>
-        <div class="nk-tb-col tb-col-mb"><span class="sub-text">Coupon</span></div>
+        <div class="nk-tb-col pl-0"><span class="sub-text">Deal title</span></div>
+        <div class="nk-tb-col"><span class="sub-text">Coupon</span></div>
         
-        <div class="nk-tb-col tb-col-mb"><span class="sub-text">Click Url</span></div>
-        <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Commission</span></div>
+        <div class="nk-tb-col"><span class="sub-text">Click Url</span></div>
+        <div class="nk-tb-col"><span class="sub-text">Commission</span></div>
         <div class="nk-tb-col "><span class="sub-text">Expiry Date</span></div>
-        <div class="nk-tb-col nk-tb-col-tools text-right pr-0">
+        <div class="nk-tb-col nk-tb-col-tools pr-0">
             <span class="sub-text">Edit</span>
         
         </div>
@@ -30,11 +33,12 @@
             data-placement='top' title='{{$voucher->click_url ?? "#"}}'><em class="icon ni ni-link-alt"></em></a></h5>
 
         </div>
-        <div class="nk-tb-col  text-center">
+        <div class="nk-tb-col ">
             <span>{{$voucher->sale_commission ?? ''}}</span>
         </div>
-        <div class="nk-tb-col  text-center">
-            <span>{{$voucher->promotion_end_date ?? ''}}</span>
+        <div class="nk-tb-col ">
+            <span>{{Carbon\Carbon::parse($voucher->promotion_end_date)->isoFormat('Do MMMM YYYY') ?? ''}}
+                </span>
         </div>
     
         <div class="nk-tb-col nk-tb-col-tools pr-0">

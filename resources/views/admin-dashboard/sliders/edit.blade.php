@@ -24,19 +24,29 @@
                         </div><!-- .nk-block-head-content -->
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
+                @include('flash::message')
                 <div class="nk-block">
                     <div class="row g-gs">
                        @foreach ($slider->slides as $slide)
                        <div class="col-sm-6 col-lg-4 col-xxl-3">
                         <div class="card h-100">
+                            @if($slide->banner == 'default1.png' || $slide->banner == 'default2.png' || $slide->banner == 'default3.png')
+                            <img src="{{asset('frontend/images/slides/'.$slide->banner)}}" class="card-img-top" alt="">
+                            @else
                             <img src="{{asset('storage/slider/slides/images/'.$slide->banner)}}" class="card-img-top" alt="">
+
+                            @endif
                             <div class="card-inner">
                                 <div class="project">
                                     <div class="project-head">
                                         <span  class="project-title">
                                             <div class="project-info">
                                                 <h6 class="title mb-2">{{$slide->name}}</h6>
-                                                <img src="{{asset('storage/slider/slides/images/'.$slide->logo)}}" class="float-right" alt="" style="max-height: 50px">                                              
+                                                @if($slide->logo == 'default1.png' || $slide->logo == 'default2.png' || $slide->logo == 'default3.png')
+                                                <img src="{{asset('frontend/images/slides/logo/'.$slide->logo)}}" class="float-right" alt="" style="max-height: 50px">    
+                                                @else 
+                                                <img src="{{asset('storage/slider/slides/images/'.$slide->logo)}}" class="float-right" alt="" style="max-height: 50px">    
+                                                @endif                                          
                                             </div>
                                         </span>
                                     </div>
@@ -47,8 +57,16 @@
                                    
                                     <div class="project-meta">
                                         <div class="project-progress-task"><a href="{{route('admin.stores.show',$slide->store)}}"><em class="icon ni ni-cart-fill"></em><span>{{$slide->store->id}} - {{$slide->store->name}}</span></a></div>
-                                        <a class="btn btn-primary btn-sm edit-slide"  href="{{route('admin.slides.edit',$slide)}}"><em class="icon ni ni-edit"></em><span>Edit Slide</span></a>
-
+                                        <div class="float-right">
+                                            <a class="btn btn-primary btn-sm edit-slide"  href="{{route('admin.slides.edit',$slide)}}"><em class="icon ni ni-edit"></em></a>
+                                            <a class="btn btn-danger btn-sm text-white"   onclick="$('#delete-slide-{{$slide->id}}').submit();"  style="cursor: pointer"><em class="icon ni ni-trash"></em></a>
+                                            <form action="{{ route('admin.slides.destroy', $slide) }}" id="delete-slide-{{$slide->id}}" method="POST" class="m-0">
+                                                @method('DELETE')
+                                                @csrf
+                                                
+                                            </form>
+                                        </div>
+                                        
                                     </div>
                                 </div>
                             </div>

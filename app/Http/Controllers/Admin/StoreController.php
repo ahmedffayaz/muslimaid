@@ -36,7 +36,7 @@ class StoreController extends Controller
     {
         $route='index';
         $networks = Network::all();
-        $stores = Store::orderBy('id', 'DESC')->paginate(32);
+        $stores = Store::orderBy('id', 'DESC')->paginate(48);
         $slider = Slider::where('name','Home')->first();
         return view('admin-dashboard.stores.index', compact('stores','route','networks','slider'));
     }
@@ -66,8 +66,8 @@ class StoreController extends Controller
         $validator = Validator::make($request->all(), [
             'store_name' => 'required|max:255',
             'network_id' => 'required',
-            'category_id' => 'required',
-            'tracking_url' => 'required',
+            // 'category_id' => 'required',
+            // 'tracking_url' => 'required',
             'store_url' => 'required',
         ]);
 
@@ -84,25 +84,26 @@ class StoreController extends Controller
                 'tracking_url' => $request->input('tracking_url'),
                 'store_url'    => $request->input('store_url'),
                 'description'    => $request->input('description'),
-                'extra_info'    => $request->input('extra_info'),
-                'terms_conditions'    => $request->input('terms_conditions'),
-                'status'    => 1,
+                // 'extra_info'    => $request->input('extra_info'),
+                // 'terms_conditions'    => $request->input('terms_conditions'),
+                'status'    => 'active',
+                'override_cashback'=>1,
                 'slug'    => \Str::slug($request->input('store_name')),
             ]);
 
             
-            $cashback = StoreCashback::create([
-                'store_id'=>$store->id,
-                'sale_commission'=>$request->input('store_cashback'),
-                'click_url'=>$request->input('tracking_url')
-            ]);
+            // $cashback = StoreCashback::create([
+            //     'store_id'=>$store->id,
+            //     'sale_commission'=>$request->input('store_cashback'),
+            //     'click_url'=>$request->input('tracking_url')
+            // ]);
 
-            foreach ($request->input('category_id') as $category) {
-                DB::table('category_store')->insert([
-                    'store_id' => $store->id,
-                    'category_id' => $category
-                ]);
-            }
+            // foreach ($request->input('category_id') as $category) {
+            //     DB::table('category_store')->insert([
+            //         'store_id' => $store->id,
+            //         'category_id' => $category
+            //     ]);
+            // }
 
             
             flash()->success('New store added');
@@ -212,6 +213,7 @@ class StoreController extends Controller
         $store->vouchers()->delete();
         $store->cashbacks()->delete();
         $store->delete();
+        flash()->success('store delete successfully');
         return redirect()->back();
     }
 
@@ -220,40 +222,29 @@ class StoreController extends Controller
         if($request->ajax())
         {
             $route='index';
-            $stores = Store::orderBy('id', 'DESC')->paginate(32);
+            $stores = Store::orderBy('id', 'DESC')->paginate(48);
             return view('admin-dashboard.stores.index_data', compact('stores','route'))->render();
         }
     }
     public function exportCsv(Request $request)
     {
-        try {
-            
+        try {  
             $table = Store::latest()->get();
             $filename = "stores.csv";
             $handle = fopen($filename, 'w+');
             fputcsv($handle, array('Name', 'slug','Network', 'Cashback', 'Tracking Url','Store Url', 'Description','Terms & Conditions','Extra Info', 'Status'));
-
             foreach($table as $row) {
                 fputcsv($handle, array($row->name, $row->network->name, $row->network->slug, $row->cashback->sale_commission ?? 'NA', $row->cashback->click_url ?? "#", $row['store_url'], strip_tags($row['description']), $row['terms_conditions'],$row['extra_info'], $row['status']));
             }
-
             fclose($handle);
-
             $headers = array(
                 'Content-Type' => 'text/csv',
             );
-
             return \Response::download($filename, 'stores.csv', $headers);
-
-        } catch (\Throwable $th) {
-
+        }catch (\Throwable $th) {
             flash()->error('Error while exporting the stores');
             return redirect()->route('admin.stores.index');
-
         }
-        
-
-
     }
     public function storeImages(Store $store){
 
@@ -265,7 +256,7 @@ class StoreController extends Controller
         if($request->has('image')){
 
             $img_exist = StoreImage::where([ 'store_id'=>$store->id, 'title'=>$request->title ])->first();
-            $imageName = \Str::slug($store->name).'_logo_'.time().'.'.$request->image->extension();          
+            $imageName = \Str::slug($store->name).'_'.$request->title.'_'.time().'.'.$request->image->extension();          
             $request->image->storeAs('public/stores/images',$imageName);
 
             if($img_exist ){
@@ -273,7 +264,8 @@ class StoreController extends Controller
 
                     'title' => $request->title,
                     'image' =>$imageName,
-                    'is_uploaded' =>1
+                    'is_uploaded' =>1,
+                    'is_fake'=>0
 
                 ]);
               
@@ -281,7 +273,7 @@ class StoreController extends Controller
                         'updated'=>'success');
             }
                 
-            $imageName = \Str::slug($store->name).'_logo_'.time().'.'.$request->image->extension();          
+            $imageName = \Str::slug($store->name).'_'.$request->title.'_'.time().'.'.$request->image->extension();          
             $request->image->storeAs('public/stores/images',$imageName);
          
                 $logo = StoreImage::create([
@@ -290,6 +282,7 @@ class StoreController extends Controller
                     'image' =>$imageName,
                     'image_type'=>'store_logo',
                     'is_uploaded' =>1
+
                 ]);
 
                 return array('message'=>'Image uploaded successfully',
@@ -321,13 +314,18 @@ class StoreController extends Controller
             $stores->where('network_id', $request->input('network_id'));
         }
         // Search by id.
-        if ($request->input('store_id')) {
-            $stores->where('id', $request->input('store_id'));
+        if ($request->input('store')) {
+            $stores->where('id', $request->input('store'))->orWhere('name','like', '%'.$request->input('store').'%');
         }
 
         // Search by store name.
         if ($request->input('store_name')) {
             $stores->where('name','like', '%'.$request->input('store_name').'%');
+           
+        }
+        // Search by store name.
+        if ($request->input('overridden')) {
+            $stores->where('override_cashback', 1)->orWhere('override_categories',1);
            
         }
 
@@ -336,7 +334,7 @@ class StoreController extends Controller
             $stores->where('status', $request->input('status'));
         }
         
-        $stores = $stores->latest()->paginate(10);
+        $stores = $stores->orderBy('id', 'DESC')->paginate(48);
         $route='search';
         return view('admin-dashboard.stores.index_data', compact('stores','route'))->render();
     }
@@ -378,7 +376,7 @@ class StoreController extends Controller
         $cashback->update($request->all());
         $store = $cashback->store;
         $store->update(['custom_cashback_percentage'=>$request->input('custom_cashback_percentage')]);
-        return true;
+        return ['percentage'=>$store->custom_cashback_percentage,'updated'=>true];
     }
     public function createCashback(Request $request)
     {

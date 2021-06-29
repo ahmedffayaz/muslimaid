@@ -38,6 +38,8 @@ Route::namespace('App\Http\Controllers\Admin')
         return Redirect::to('admin/home');
     });
 
+    Route::post('dataByPeriod', [App\Http\Controllers\HomeController::class, 'dataByPeriod'])->name('home.index_data');
+
 
     //Networks 
     Route::post('networks/fetch',[App\Http\Controllers\Admin\NetworkController::class,'fetch'])->name('networks.fetch');
@@ -187,6 +189,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('slides', SlidesController::class);
     Route::resource('pages', PagesController::class);
     Route::resource('blogs', BlogController::class);
+    Route::resource('email_templates', EmailTemplatesController::class);
 
 
 });
@@ -210,6 +213,7 @@ Route::get('account/login',[App\Http\Controllers\Frontend\PagesController::class
 Route::get('search_suggestions',[App\Http\Controllers\Frontend\PagesController::class, 'searchSuggestions'])->name('search_suggestions');
 Route::get('pages/{page}',[App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('page');
 Route::get('post/{blog}',[App\Http\Controllers\Frontend\PagesController::class, 'blogPost'])->name('post');
+Route::post('contact_form',[App\Http\Controllers\Frontend\PagesController::class, 'contactForm'])->name('contactForm');
 
 
 
@@ -232,9 +236,13 @@ Route::namespace('App\Http\Controllers\Client')
         Route::get('payment-details',[App\Http\Controllers\Client\PaymentController::class,'paymentDetails'])->name('payment_details');
         Route::post('payment-save',[App\Http\Controllers\Client\PaymentController::class,'paymentSave'])->name('payment_save');
         Route::post('cashout',[App\Http\Controllers\Client\PaymentController::class,'cashout'])->name('cashout');
+        Route::post('claim/step2',[App\Http\Controllers\Client\ClaimController::class,'step2'])->name('claim.step2');
+        Route::post('claim/step3',[App\Http\Controllers\Client\ClaimController::class,'step3'])->name('claim.step3');
+        Route::resource('claim', ClaimController::class);
     });
 
 
     Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], function () {
         \UniSharp\LaravelFilemanager\Lfm::routes();
     });
+

@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use App\Models\Page;
 
 class PagesSeeder extends Seeder
 {
@@ -30,13 +31,13 @@ class PagesSeeder extends Seeder
           );
 
           foreach ($pages as $page) {
-            $page = new Page;
-            $page->title = $page['title'];
-            $page->slug = $page['slug'];
-            $page->excerpt = $page['excerpt'];
-            $page->status = $page['status'];
-            $page->default = $page['default'];
-            $page->save();
+            $p = new Page;
+            $p->title = $page['title'];
+            $p->slug = $page['slug'];
+            $p->excerpt = $page['excerpt'];
+            $p->status = $page['status'];
+            $p->default = $page['default'];
+            $p->save();
           }
           
     }

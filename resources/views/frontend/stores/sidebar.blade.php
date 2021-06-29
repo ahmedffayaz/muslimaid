@@ -26,6 +26,7 @@
                 </ul>
             </div>
         </div> --}}
+        @isset($store)
         <div class="block-sidebar__item">
             <div class="widget-categories widget-categories--location--shop widget">
                 <h4 class="widget__title">Store Stats</h4>
@@ -63,6 +64,7 @@
                 </ul>
             </div>
         </div>
+        @endisset
         @isset($store)
         @php $sidebar_stores = similarStores($store); @endphp
        @if($sidebar_stores->count())
@@ -73,15 +75,19 @@
                     
                     @foreach ($sidebar_stores->take(5) as $item)
                
-                    <a href=" {{route('store.show',$item->slug)}}" class="widget-products__item">
+                    <a href="{{route('store.show',$item->slug)}}" class="widget-products__item">
                         <div class="widget-products__image">
                             <div class="product-image">
                                 {{-- <a href="{{route('store.show',$item->slug)}}" class="mb-2 d-inline-block"> --}}
                                     <img class="" @if($item->logo->first())
-                                    src="{{asset('storage/stores/images/'.$item->logo->first()->image)}}"
+                                    @if($item->logo->first()->is_fake)
+                                        src="{{asset('frontend/images/logos/'.$item->logo->first()->image)}}"
                                     @else
+                                        src="{{asset('storage/stores/images/'.$item->logo->first()->image)}}"
+                                    @endif
+                                @else
                                     src="{{asset('frontend/images/products/product-16.jpg')}}" 
-                                    @endif  alt="">
+                                @endif alt="">
                                 {{-- </a> --}}
                             </div>
                         </div>
@@ -108,15 +114,19 @@
                     @php $sidebar_stores = sidebarStores(); @endphp
                     @foreach ($sidebar_stores->take(5) as $item)
                
-                    <a href="" class="widget-products__item">
+                    <a href="{{route('store.show',$item->slug)}}" class="widget-products__item">
                         <div class="widget-products__image">
                             <div class="product-image">
                                 {{-- <a href="{{route('store.show',$item->slug)}}" class="mb-2 d-inline-block"> --}}
-                                    <img class="" @if($item->logo->first())
-                                    src="{{asset('storage/stores/images/'.$item->logo->first()->image)}}"
+                                    <img class=""   @if($item->logo->first())
+                                    @if($item->logo->first()->is_fake)
+                                        src="{{asset('frontend/images/logos/'.$item->logo->first()->image)}}"
                                     @else
+                                        src="{{asset('storage/stores/images/'.$item->logo->first()->image)}}"
+                                    @endif
+                                @else
                                     src="{{asset('frontend/images/products/product-16.jpg')}}" 
-                                    @endif  alt="">
+                                @endif alt="">
                                 {{-- </a> --}}
                             </div>
                         </div>

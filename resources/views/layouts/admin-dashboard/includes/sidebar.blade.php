@@ -8,9 +8,19 @@ data-content="sidebarMenu">
 
             
             <a href="{{route('admin.home.index')}}" class="logo-link nk-sidebar-logo">
-                <img class="logo-light logo-img" src="@isset($settings['dashboard_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif"  alt="logo">
-                <img class="logo-dark logo-img" src="@isset($settings['dashboard_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/logo-dark.png')}}@endif" alt="logo-dark">
-                <img class="logo-small logo-img logo-img-small" src="@isset($settings['favicon']){{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}@else{{asset('admin-dashboard/images/logo-small.png')}}@endif" alt="logo-small">
+                <img class="logo-light logo-img" src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif"  alt="logo">
+                <img class="logo-dark logo-img" src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/logo-dark.png')}}@endif" alt="logo-dark">
+
+                <img class="logo-small logo-img logo-img-small" 
+                @isset($settings['favicon'])
+                    @if($settings['favicon'] == 'default.png')
+                    src="{{asset('admin-dashboard/images/favicon.png')}}"
+                    @else
+                    src="{{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}"
+                @endif
+                @else 
+                src="{{asset('admin-dashboard/images/favicon.png')}}" 
+                @endif alt="logo-small">
             </a>
         </div>
         <div class="nk-menu-trigger mr-n2">
@@ -172,6 +182,12 @@ data-content="sidebarMenu">
                                 <a href="{{route('admin.settings.index')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-setting-fill"></em></span>
                                     <span class="nk-menu-text">Settings</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="{{route('admin.email_templates.index')}}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-emails"></em></span>
+                                    <span class="nk-menu-text">Email Templates</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan

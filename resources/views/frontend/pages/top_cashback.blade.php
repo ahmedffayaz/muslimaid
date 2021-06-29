@@ -96,10 +96,14 @@
                                         
                                         <div class="product-card__image product-image">
                                             <a href="{{route('store.show',$store->slug)}}" class="product-image__body" style="padding-bottom:100px">
-                                                <img class="product-image__img" @if($store->logo->first())
-                                                src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                                                <img class="product-image__img"  @if($store->logo->first())
+                                                    @if($store->logo->first()->is_fake)
+                                                        src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
+                                                    @else
+                                                        src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                                                    @endif
                                                 @else
-                                                src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                                                    src="{{asset('frontend/images/products/product-16.jpg')}}" 
                                                 @endif alt="">
                                             </a>
                                         </div>

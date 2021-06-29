@@ -51,7 +51,7 @@
             @if($ticket->lastReply->reply_by =='client') <span class="badge badge-warning">Awaiting your reply </span>@endif
 
         @elseif($ticket->status=='closed')
-            <span class="badge badge-success">{{$ticket->lastReply}}</span>
+            <span class="badge badge-success">Closed</span>
 
         @endif
 
