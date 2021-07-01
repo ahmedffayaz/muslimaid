@@ -29,75 +29,64 @@
                 </div><!-- .nk-block-head -->
                 <div class="card card-preview mb-4">
                     <div class="card-inner">
-                        <div id="accordion-1" class="accordion accordion-s2">
-                            <div class="accordion-item">
-                                <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-1-1">
-                                    <h6 class="title">Search</h6>
-                                    <span class="accordion-icon"></span>
-                                </a>
-                                <div class="accordion-body collapse" id="accordion-item-1-1" data-parent="#accordion-1">
-                                    <div class="accordion-inner">
-                                        <div><form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
-                                            @csrf
-                                            <div class="row g-4">
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <div class="form-control-wrap ">
-                                                            <label class="form-label" for="reviewer">Reviewer Name</label>
-                                                            <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="reviewer" value="" name="reviewer">
-                                                            </div>
-                                                                
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                            
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="store_id">Store</label>
-                                                        <div class="form-control-wrap ">
-                                                            <select class="form-select form-control" data-search="on" id="store_id" name="store_id">
-                                                                <option value="0">All</option>
-                                                                @foreach ($stores as $store)
-                                                                <option value="{{$store->id}}">{{$store->name}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div> 
-                                                    
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="status">Status</label>
-                                                        <div class="form-control-wrap ">
-                                                            
-                                                            <select class="form-control form-select" name="status" required>
-                                                                <option value="-1">Any</option>
-                                                                
-                                                                <option value="active">Active</option>
-                                                                <option value="pending">Pending</option>
-                                                                    
-                                                            
-                                                                
-                                                                    
-                                                            
-                                                            </select>
-                                                        
-                                                        </div>
-                                                    </div>
-                                                </div>                  
-                                                <div class="col-3 align-self-end">
-                                                    <div class="form-group">
-                                                        <button type="submit" class="btn btn-success btn-block">Search</button>
-                                                    </div>
-                                                </div>
+                        <form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
+                            @csrf
+                            <div class="row g-4">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <div class="form-control-wrap ">
+                                            <label class="form-label" for="reviewer">Reviewer Name</label>
+                                            <div class="form-control-wrap">
+                                                <input type="text" class="form-control" id="reviewer" value="" name="reviewer">
                                             </div>
-                                        </form></div>
+                                                
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label" for="store_id">Store</label>
+                                        <div class="form-control-wrap ">
+                                            <select class="form-select form-control" data-search="on" id="store_id" name="store_id">
+                                                <option value="0">All</option>
+                                                @foreach ($stores as $store)
+                                                <option value="{{$store->id}}">{{$store->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div> 
+                                    
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label" for="status">Status</label>
+                                        <div class="form-control-wrap ">
+                                            
+                                            <select class="form-control form-select" name="status" required>
+                                                <option value="-1">Any</option>
+                                                
+                                                <option value="active">Active</option>
+                                                <option value="pending">Pending</option>
+                                                    
+                                            
+                                                
+                                                    
+                                            
+                                            </select>
+                                        
+                                        </div>
+                                    </div>
+                                </div>                  
+                                <div class="col-3 align-self-end">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success btn-block">Search</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
+                       
                     </div>
                 </div>
                 @include('flash::message')
@@ -120,8 +109,34 @@
         </div>
     </div>
 </div>
+<!-- @@ Review Modal @e -->
+<div class="modal fade" tabindex="-1" role="dialog" id="review-modal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+              
+                   
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Review</span></div>
+
+                        {{-- <div class="nk-file-name-sub">Project</div> --}}
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="review" class=" p-4">
+             
+
+            </div>
+        </div><!-- .modal-content -->
+    </div><!-- .modla-dialog -->
+</div><!-- .modal -->
 @endsection
 @push('scripts')
+<link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0')}}">
+<script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0')}}"></script>
+<script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0')}}"></script>
     <script>
     $(document).ready(function(){
      $(document).on('click', '.pagination a', function(event){
@@ -193,6 +208,28 @@
          });
         
         });
-        
+         // Review Edit Popup
+    $(document).ready(function(){
+        $(document).on('click', '.review-edit', function(event){
+            event.preventDefault(); 
+            var id = $(this).attr('review-id');
+            pageurl = $(this).attr('href');
+            var _token = $("input[name=_token]").val();
+            $.ajax({
+
+                url:pageurl,
+                method:"GET",
+                data:{_token:_token},
+                success:function(data)
+                {
+                    $('#review-modal').modal('show');
+                    $('#review').html(data);
+                   
+                }
+            });
+               
+        });
+    });
+   
         </script>  
 @endpush

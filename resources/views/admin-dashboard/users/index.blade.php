@@ -28,76 +28,52 @@
                 @include('flash::message')
                 <div class="card card-preview mb-4">
                     <div class="card-inner">
-                        <div id="accordion-1" class="accordion accordion-s2">
-                            <div class="accordion-item">
-                                <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-1-1">
-                                    <h6 class="title">Search</h6>
-                                    <span class="accordion-icon"></span>
-                                </a>
-                                <div class="accordion-body collapse" id="accordion-item-1-1" data-parent="#accordion-1">
-                                    <div class="accordion-inner">
-                                        <div><form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
-                                            @csrf
-                                            <div class="row g-4">
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="pay-amount-1">Name</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="text" class="form-control" id="pay-amount-1" value="" name="name">
-                                                        </div>
-                                                    </div>
-                                                </div>
+                        <form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
+                            @csrf
+                            <div class="row g-4">
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label" for="pay-amount-1">Name</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control" id="pay-amount-1" value="" name="name">
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                            
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label" for="type">Regestration Type</label>
+                                        <div class="form-control-wrap ">
                                             
-                                            
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="type">Regestration Type</label>
-                                                        <div class="form-control-wrap ">
-                                                            
-                                                                <select class="form-select form-control" id="type" name="type">
-                                                                    <option value="-1">Any</option>
-                                                                    
-                                                                    
-                                                                    <option value="sign up">Sign up</option>
-                                                                    <option value="social">Social</option>
-                                                                    
-                                                                </select>
-                                                        
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="status">Status</label>
-                                                        <div class="form-control-wrap ">
-                                                            
-                                                                <select class="form-select form-control" id="status" name="status">
-                                                                    <option value="-1">Any</option>
-                                                                    
-                                                                    
-                                                                    <option value="1">Active</option>
-                                                                    <option value="0">In-active</option>
-                                                                    
-                                                                </select>
-                                                        
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            
-                                                
-                                                
-                                                                    
-                                                <div class="col-3 align-self-end">
-                                                    <div class="form-group">
-                                                        <button type="submit" class="btn btn-success btn-block">Search</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form></div>
+                                            <select class="form-select form-control" id="type" name="type">
+                                                <option value="-1">Any</option>
+                                                <option value="sign up">Sign up</option>
+                                                <option value="social">Social</option>
+                                            </select>
+                                        
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label" for="status">Status</label>
+                                        <div class="form-control-wrap ">
+                                            <select class="form-select form-control" id="status" name="status">
+                                                <option value="-1">Any</option>
+                                                <option value="1">Active</option>
+                                                <option value="0">In-active</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-3 align-self-end">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success btn-block">Search</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
                 <div class="nk-block">

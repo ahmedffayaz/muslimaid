@@ -269,7 +269,7 @@
             
             <div class="nk-header-tools">
                 <ul class="nk-quick-nav">
-                    <li> <a href="{{url('/')}}" target="_blank"  class="btn btn-outline-primary btn-dim btn-sm"><em class="icon ni ni-external-alt mr-1"></em> Visit Site</a></li>
+                    <li> <a href="{{url('/')}}" target="_blank"  class="btn btn-outline-primary btn-dim btn-sm d-none d-md-block"><em class="icon ni ni-external-alt mr-1"></em> Visit Site</a></li>
 
                     <li class="dropdown user-dropdown">
                         <a href="#" class="dropdown-toggle mr-n1" data-toggle="dropdown">

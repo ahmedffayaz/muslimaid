@@ -164,17 +164,18 @@
 
                 if (input.val()) {
                     // YOUR AJAX REQUEST HERE.
-                    xhr = $.ajax({
-                        url: "/search_suggestions",
-                        data:{term:input.val()},
-                        success: function(data) {
-                            xhr = null;
-                            setSuggestion(data);
-                        }
-                    });
+                    // xhr = $.ajax({
+                    //     url: "/search_suggestions",
+                    //     data:{term:input.val()},
+                    //     success: function(data) {
+                    //         xhr = null;
+                    //         setSuggestion(data);
+                    //     }
+                    // });
+                    // setSuggestion('');
                 } else {
                     // Remove suggestions.
-                    setSuggestion('');
+                    // setSuggestion('');
                 }
             });
             input.on('focus', function() {

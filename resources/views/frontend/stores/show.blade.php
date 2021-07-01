@@ -3,8 +3,8 @@
 <style>
 @media (min-width: 992px){
     .product--layout--sidebar .product__content {
-    -ms-grid-columns: 30% 70%;
-    grid-template-columns: [gallery] calc(30% - 16px) [info] calc(70% - 16px);
+    -ms-grid-columns: 20% 80%;
+    grid-template-columns: [gallery] calc(20% - 16px) [info] calc(80% - 16px);
     grid-column-gap: 32px;
 }
 }
@@ -101,6 +101,7 @@
 }
 </style>
 <div class="block mt-5">
+    @include('flash::message')
 <div class="container">
     <div class="shop-layout shop-layout--sidebar--start">
         @include('frontend.stores.sidebar')
@@ -111,7 +112,7 @@
                         <!-- .product__gallery -->
                         <div class="product__gallery">
                             <div class="product-gallery">
-                                <img class="product-image__img" style="position: relative;" 
+                                <img class="product-image__img" style="position: relative; margin:auto; width:120px"
                                 @if($store->logo->first())
                                     @if($store->logo->first()->is_fake)
                                         src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
@@ -310,7 +311,7 @@
            <h5>Get upto @if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif{{$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif Cashback</h5>
         </div>
         <div class="modal-footer">
-            <a href="{{route('account.login')}}" class="btn btn-primary">Yes, Ofcourse</a>
+            <a href="{{route('account.login')}}?prvUrl={{ request()->fullUrl() }}"class="btn btn-primary">Yes, Ofcourse</a>
             <a href="#" onclick="document.getElementById('form_{{$store->id}}').submit()" class="btn btn-warning btn-dim">No, Continue without cashback</a>
           </div>
         
@@ -346,7 +347,7 @@
            <h5>Get upto @if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif{{$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif Cashback</h5>
         </div>
         <div class="modal-footer">
-            <a href="{{route('account.login')}}" class="btn btn-primary">Yes, Ofcourse</a>
+            <a href="{{route('account.login')}}?prvUrl={{ request()->fullUrl() }}" class="btn btn-primary">Yes, Ofcourse</a>
             <a href="" form_id="" target="_blank" class="btn btn-warning btn-dim discard-btn" data-code="">No, Continue without cashback</a>
           </div>
         

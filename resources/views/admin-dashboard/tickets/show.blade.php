@@ -93,7 +93,7 @@
                                                 <div class="nk-reply-entry entry">
                                                     @if($ticket->ticket_type == 'claim')
 
-                                                    Store: <a href="{{route('admin.stores.show',$ticket->store)}}">{{$ticket->store->id}} - {{$ticket->store->name}}</a><br>
+                                                    Store: <a href="{{route('admin.stores.show_store')}}?slug={{$ticket->store->slug}}">{{$ticket->store->id}} - {{$ticket->store->name}}</a><br>
                                                     Purchase Amount: {{ currency() }}{{$ticket->claim_amount}}<br>
                                                     Claim date: {{Carbon\Carbon::parse($ticket->created_at)->isoFormat('Do MMMM YYYY')}}<br>
                                                     Click ID: {{$ticket->click_id}}<br>

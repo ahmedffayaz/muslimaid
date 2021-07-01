@@ -3,6 +3,7 @@
         table-layout: fixed;
     }
 </style>
+@if(count($reviews))
 <div class="nk-tb-item nk-tb-head">
     
     
@@ -17,22 +18,17 @@
        
     </div>
 </div><!-- .nk-tb-item -->
+
 @foreach ($reviews as $review)
 <div class="nk-tb-item">
-    
-    
-   
-  
-   
-    
     <div class="nk-tb-col">
-        <span>{{$review->reviewer}}</span>
+        <span><a href="{{route('admin.reviews.edit', $review)}}" class="review-edit text-dark" review-id={{$review->id}}>{{$review->reviewer}}</a></span>
     </div>
  
     <div class="nk-tb-col">
-        <span>{!!$review->review!!}</span>
+        <span><a href="{{route('admin.reviews.edit', $review)}}" class="review-edit" review-id={{$review->id}}>{!!$review->review!!}</a></span>
     </div>
-    <div class="nk-tb-col"><a href="{{route('admin.stores.show',$review->store)}}">
+    <div class="nk-tb-col"><a href="{{route('admin.stores.show_store')}}?slug={{$review->store->slug}}">
         <span><b>{{$review->store->id ?? ''}} - {{$review->store->name ?? ''}}</b></span><br>
         <span>{{$review->store->network->name ?? ''}}</span></a>
     </div>
@@ -48,16 +44,16 @@
                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="link-list-opt no-bdr">
-                            <li><a href="{{route('admin.reviews.edit', $review)}}"><em class="icon ni ni-edit"></em><span>Edit Review</span></a></li>
+                            <li><a href="{{route('admin.reviews.edit', $review)}}" class="review-edit" review-id={{$review->id}}><em class="icon ni ni-edit"></em><span>Edit Review</span></a></li>
                             {{-- <li><a href="{{route('admin.stores.images', $store)}}"><em class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
-                            <li><a  onclick="$('#delete-review-{{$review->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Review</span></a>
+                            {{-- <li><a  onclick="$('#delete-review-{{$review->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Review</span></a>
                                                     
                                 <form action="{{ route('admin.reviews.destroy', $review) }}" id="delete-review-{{$review->id}}" method="POST" class="m-0">
                                     @method('DELETE')
                                     @csrf
                                     
                                 </form>
-                            </li>
+                            </li> --}}
                         </ul>
                     </div>
                 </div>
@@ -67,6 +63,7 @@
 </div><!-- .nk-tb-item -->
 
 @endforeach   
+
 <div class="nk-block-between-md g-3 card-inner">
     <div class="pagination g" route="{{$route}}">
         {!! $reviews->links()!!}                             
@@ -74,5 +71,9 @@
         </div> 
     
     
-</div><!-- .nk-block-between -->                                 
-                    
+</div><!-- .nk-block-between -->
+
+
+@else 
+<h3 class="m-auto text-center py-5">No results found</h3> 
+@endif                

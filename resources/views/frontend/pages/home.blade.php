@@ -9,6 +9,8 @@
 }.block-slideshow__slide-text {
     display: block;
 }}</style>
+@include('flash::message')
+
 @auth
 @if($slider)
    <!-- .block-slideshow -->

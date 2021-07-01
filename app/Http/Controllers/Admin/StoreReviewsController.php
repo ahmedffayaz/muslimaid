@@ -81,7 +81,7 @@ class StoreReviewsController extends Controller
     {  
 
         $stores = Store::latest()->get();
-        return view('admin-dashboard.store_reviews.edit', compact('stores','review'));
+        return view('admin-dashboard.store_reviews.edit', compact('stores','review'))->render();
     }
 
     /**

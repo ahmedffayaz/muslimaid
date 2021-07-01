@@ -7,8 +7,8 @@
     <div class="nk-tb-item nk-tb-head">
         
         
+        <div class="nk-tb-col tb-col-mb pl-0"><span class="sub-text">Network Commission</span></div>
         <div class="nk-tb-col tb-col-mb pl-0"><span class="sub-text">Cashback</span></div>
-        <div class="nk-tb-col tb-col-mb pl-0"><span class="sub-text">Commission</span></div>
         <div class="nk-tb-col tb-col-mb"><span class="sub-text">Type</span></div>
         
         <div class="nk-tb-col tb-col-mb"><span class="sub-text">Detail</span></div>

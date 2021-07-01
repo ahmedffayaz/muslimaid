@@ -40,30 +40,7 @@
                 <div class="nk-block">
                     <div class="card card-stretch">
                         <div class="card-inner-group">
-                            <div class="card-inner position-relative card-tools-toggle">
-                                <div class="card-title-group">
-                                    <div class="card-tools">
-                                       </div><!-- .card-tools -->
-                                    <div class="card-tools mr-n1">
-                                        <ul class="btn-toolbar gx-1">
-                                            <li>
-                                                <a href="#" class="btn btn-icon search-toggle toggle-search" data-target="search"><em class="icon ni ni-search"></em></a>
-                                            </li><!-- li -->
-                                           
-                                        </ul><!-- .btn-toolbar -->
-                                    </div><!-- .card-tools -->
-                                </div><!-- .card-title-group -->
-                                <div class="card-search search-wrap" data-search="search">
-                                    <div class="card-body">
-                                        <div class="search-content">
-                                            <a href="#" class="search-back btn btn-icon toggle-search" data-target="search"><em class="icon ni ni-arrow-left"></em></a>
-                                            <input type="text" class="form-control border-transparent form-focus-none" placeholder="Search by user or email">
-                                            <button class="search-submit btn btn-icon"><em class="icon ni ni-search"></em></button>
-                                        </div>
-                                    </div>
-                                </div><!-- .card-search -->
-                            </div><!-- .card-inner -->
-                            <div class="card-inner p-0">
+                            <div class="card-inner px-0">
                                 <div class="nk-tb-list nk-tb-ulist" id="table-data">
                                     
                                     @include('admin-dashboard.cashouts.index_data')                                   

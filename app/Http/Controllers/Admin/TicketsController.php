@@ -133,7 +133,7 @@ class TicketsController extends Controller
 
         // Search by ticket_id
         if ($request->input('ticket_id')) {
-            $tickets->where('id', $request->input('ticket_id'));
+            $tickets->where('ticket_id', 'like', '%'.$request->input('ticket_id').'%');
         }
         // Search by user .
         if ($request->input('user_id')) {
@@ -156,11 +156,11 @@ class TicketsController extends Controller
         }
 
         // Search by priority.
-        if ($request->input('priority')!=-1) {
-            $tickets->where('priority', $request->input('priority'));
-        }
+        // if ($request->input('priority')!=-1) {
+        //     $tickets->where('priority', $request->input('priority'));
+        // }
         
-        $tickets = $tickets->latest()->paginate(30);
+        $tickets = $tickets->orderBy('new_ticket','DESC')->latest()->paginate(30);
         $route='search';
         // dd($tickets);
         return view('admin-dashboard.tickets.index_data', compact('tickets','route'))->render();

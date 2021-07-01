@@ -3,6 +3,7 @@
         table-layout: fixed;
     }
 </style>
+@if(count($tickets))
 <div class="nk-tb-item nk-tb-head">
     
     
@@ -22,7 +23,7 @@
     
    
     <div class="nk-tb-col">
-        <span><a href="{{route('admin.tickets.show',$ticket)}}"><div class="tb-lead @if(count($ticket->newReply) || $ticket->new_ticket) icon-status icon-status-info @endif">{{$ticket->id}}</div></a></span><br>
+        <span><a href="{{route('admin.tickets.show',$ticket)}}"><div class="tb-lead @if(count($ticket->newReply) || $ticket->new_ticket) icon-status icon-status-info @endif">{{$ticket->ticket_id}}</div></a></span><br>
         
     </div>
    
@@ -85,3 +86,6 @@
     
 </div><!-- .nk-block-between -->                                 
                     
+@else 
+    <h3 class="m-auto text-center py-5">No Tickets found</h3> 
+@endif 

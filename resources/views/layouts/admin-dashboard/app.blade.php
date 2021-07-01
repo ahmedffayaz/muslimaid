@@ -35,7 +35,7 @@
     <script src="https://unpkg.com/react-dom@16.8.6/umd/react-dom.production.min.js"></script>
     <script src="{{ asset('vendor/laraberg/js/laraberg.js') }}"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" rel="stylesheet">
-    
+    @livewireStyles
 </head>
     
 <style>
@@ -243,7 +243,7 @@ left: 0;
         
         </script>
      <!-- page scripts -->
-   
+     @livewireScripts
     @stack('scripts')
 </body>
 

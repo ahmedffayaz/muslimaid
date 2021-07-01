@@ -21,6 +21,7 @@ use App\Models\SiteSetting;
 use App\Models\CashbackStatusChange;
 use App\Models\Network;
 use Illuminate\Support\Facades\DB;
+use Faker\Factory as Faker;
 
 class Importer implements ShouldQueue
 {
@@ -257,14 +258,15 @@ class Importer implements ShouldQueue
                                 'network_category_id'=> $category_child->id,
                             ]);
                         }
-
-                        // $storelogo = StoreImage::create([
-                        //     'store_id'=>$store->id,
-                        //     'title' => 'logo',
-                        //     'image' =>'default.png',
-                        //     'image_type'=>'store_logo',
-                        //     'is_uploaded'=>0
-                        // ]);
+                        $faker = Faker::create();
+                        $storelogo = StoreImage::create([
+                            'store_id'=>$store->id,
+                            'title' => 'logo',
+                            'image' =>$faker->numberBetween(1,20).'.png',
+                            'image_type'=>'store_logo',
+                            'is_uploaded'=>1,
+                            'is_fake' =>1
+                        ]);
                     
                     }else{
 

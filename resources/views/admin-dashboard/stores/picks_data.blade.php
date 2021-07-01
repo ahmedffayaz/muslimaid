@@ -26,11 +26,11 @@
     
    
     <div class="nk-tb-col">
-        <span><a href="{{route('admin.stores.show',$pick)}}"><div class="tb-lead">{{$pick->id}}</div></a></span><br>
+        <span><a href="{{route('admin.stores.show_store')}}?slug={{$pick->slug}}"><div class="tb-lead">{{$pick->id}}</div></a></span><br>
         
     </div>
     <div class="nk-tb-col">
-        <span><a href="{{route('admin.stores.show',$pick)}}"><div class="tb-lead">{{$pick->name}}</div></a></span>
+        <span><a href="{{route('admin.stores.show_store')}}?slug={{$pick->slug}}"><div class="tb-lead">{{$pick->name}}</div></a></span>
         <span>{{$pick->network->name}}</span>
     </div>
    
@@ -80,7 +80,7 @@
                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="link-list-opt no-bdr">
-                            <li><a href="{{route('admin.stores.show', $pick)}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li>
+                            <li><a href="{{route('admin.stores.show_store')}}?slug={{$pick->slug}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li>
                             <li><a  onclick="$('#delete-store-{{$pick->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Store</span></a>
                                                     
                             <form action="{{ route('admin.stores.destroy', $pick) }}" id="delete-store-{{$pick->id}}" method="POST" class="m-0">

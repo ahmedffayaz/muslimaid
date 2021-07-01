@@ -50,9 +50,16 @@
                     </div>
                     <div class="col-12 col-md-12 col-lg-4">
                         <div class="site-footer__widget footer-newsletter">
-                            <h5 class="footer-newsletter__title">Follow us on social networks</h5>
+                            <h5 class="footer-newsletter__title">Newsletter</h5>
+                            <form action="{{route('newsletter.store')}}" class="footer-newsletter__form" method="POST">
+                                @csrf
+                                <label class="sr-only" for="footer-newsletter-address">Email Address</label>
+                                <input type="text"name="email" class="footer-newsletter__form-input form-control" id="footer-newsletter-address" placeholder="Email Address...">
+                                <button type="submit" class="footer-newsletter__form-button btn btn-primary">Subscribe</button>
+                            </form>
+                            <p class="newsletter-message mt-1 text-success"></p>
                             <div class="footer-newsletter__text footer-newsletter__text--social">
-                                
+                                Follow us on social networks
                             </div>
                             <!-- social-links -->
                             <div class="social-links footer-newsletter__social-links social-links--shape--circle">

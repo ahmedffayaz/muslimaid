@@ -28,7 +28,8 @@ class DatabaseSeeder extends Seeder
             CashoutSeeder::class,
             PagesSeeder::class,
             MenuSeeder::class,
-            SliderSeeder::class
+            SliderSeeder::class,
+            EmailTemplatesSeeder::class
            
         ]);
         // \App\Models\User::factory(10)->create();

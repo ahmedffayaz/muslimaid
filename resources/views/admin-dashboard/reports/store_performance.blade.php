@@ -17,12 +17,10 @@
                             <h3 class="nk-block-title page-title">Stores Performance</h3>
                         </div><!-- .nk-block-head-content -->
                         <div class="nk-block-head-content">
-                            
-                            
                         </div><!-- .nk-block-head-content -->
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
-                <div class="row mb-4">
+                {{-- <div class="row mb-4">
                     <div class="col-md-6 col-xl-3">
                         <div class="card">
                             <div class="card-body p-0">
@@ -93,66 +91,51 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
                 <div class="card card-preview mb-4">
                     <div class="card-inner">
-                        <div id="accordion-1" class="accordion accordion-s2">
-                            <div class="accordion-item">
-                                <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-1-1">
-                                    <h6 class="title">Search</h6>
-                                    <span class="accordion-icon"></span>
-                                </a>
-                                <div class="accordion-body collapse" id="accordion-item-1-1" data-parent="#accordion-1">
-                                    <div class="accordion-inner">
-                                        <div><form action="{{route('admin.reports.search_performance')}}" class="form-validate is-alter performance_search_form" method="POST">
-                                            @csrf
-                                            <div class="row g-4">
-                                            
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="default-06">Store</label>
-                                                        <div class="form-control-wrap ">
-                                                            
-                                                                <select class="form-select form-control" data-search="on" id="default-06" name="store_id">
-                                                                    <option value="0">Select store</option>
-                                                                    
-                                                                    @foreach ($stores as $store)
-                                                                    <option value="{{$store->id}}">{{$store->name}}</option>
-                                                                    @endforeach
-                                                                </select>
-                                                        
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="start_date">From</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="text" class="form-control date-picker" id="start_date" value="" name="start_date" autocomplete="off">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="end_date">To</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="text" class="form-control date-picker" id="end_date" value="" name="end_date" autocomplete="off">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                                    
-                                                <div class="col-3 align-self-end">
-                                                    <div class="form-group">
-                                                        <button type="submit" class="btn btn-success btn-block">Search</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form></div>
+                        <form action="{{route('admin.reports.search_performance')}}" class="form-validate is-alter performance_search_form" method="POST">
+                            @csrf
+                            <div class="row g-4">
+                            
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label" for="default-06">Store</label>
+                                        <div class="form-control-wrap ">
+                                            <select class="form-select form-control" data-search="on" id="default-06" name="store_id">
+                                                <option value="0">All</option>
+                                                @foreach ($stores as $store)
+                                                <option value="{{$store->id}}">{{$store->id}} - {{$store->name}}</option>
+                                                @endforeach
+                                            </select> 
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label" for="start_date">From</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control date-picker" id="start_date" value="" name="start_date" autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label" for="end_date">To</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control date-picker" id="end_date" value="" name="end_date" autocomplete="off">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                                    
+                                <div class="col-3 align-self-end">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success btn-block">Search</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
                     </div>
                 </div>
                 <div class="nk-block" id="report_data">

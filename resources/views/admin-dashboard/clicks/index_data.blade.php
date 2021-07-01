@@ -3,6 +3,7 @@
         table-layout: fixed;
     }
 </style>
+@if(count($clicks))
 <div class="nk-tb-item nk-tb-head">
     
     
@@ -83,3 +84,6 @@
     
 </div><!-- .nk-block-between -->                                 
                     
+@else 
+    <h3 class="m-auto text-center py-5">No results found</h3> 
+@endif 

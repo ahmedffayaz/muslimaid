@@ -48,11 +48,11 @@
                     <div class="form-group">
                         <label class="form-label" for="password">Confirm Password</label>
                         <div class="form-control-wrap">
-                            <a tabindex="-1" href="#" class="form-icon form-icon-right passcode-switch" data-target="password">
+                            <a tabindex="-1" href="#" class="form-icon form-icon-right passcode-switch" data-target="confirm-password">
                                 <em class="passcode-icon icon-show icon ni ni-eye"></em>
                                 <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
                             </a>
-                            <input type="password" class="form-control form-control-lg" id="password" placeholder="Re-enter your password" name="password_confirmation" required autocomplete="new-password">
+                            <input type="password" class="form-control form-control-lg" id="confirm-password" placeholder="Re-enter your password" name="password_confirmation" required autocomplete="new-password">
                         </div>
                     </div>
                     <div class="form-group">
@@ -65,77 +65,27 @@
                         <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
                     </div>
                 </form><!-- form -->
-                <div class="form-note-s2 pt-4"> Already have an account ? <a href="{{route('login')}}"><strong>Sign in instead</strong></a>
-                </div>
-                <div class="text-center pt-4 pb-3">
+                {{-- <div class="form-note-s2 pt-4"> Already have an account ? <a href="{{route('login')}}"><strong>Sign in instead</strong></a>
+                </div> --}}
+                {{-- <div class="text-center pt-4 pb-3">
                     <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
                 </div>
                 <ul class="nav justify-center gx-8">
                     <li class="nav-item"><a class="nav-link" href="#">Facebook</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Google</a></li>
-                </ul>
+                </ul> --}}
             </div><!-- .nk-block -->
             <div class="nk-block nk-auth-footer">
-                <div class="nk-block-between">
-                    <ul class="nav nav-sm">
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Terms & Condition</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Privacy Policy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Help</a>
-                        </li>
-                      
-                    </ul><!-- nav -->
-                </div>
                 <div class="mt-3">
-                    <p>&copy; 2021 Cashback. All Rights Reserved.</p>
+                    <p>Designed and Developed by <a href="https://therightsw.com">The Right Software</a></p>
                 </div>
             </div><!-- nk-block -->
         </div><!-- nk-split-content -->
-        <div class="nk-split-content nk-split-stretch bg-lighter d-flex toggle-break-lg toggle-slide toggle-slide-right" data-content="athPromo" data-toggle-screen="lg" data-toggle-overlay="true">
-            <div class="slider-wrap w-100 w-max-550px p-3 p-sm-5 m-auto">
-                <div class="slider-init" data-slick='{"dots":true, "arrows":false}'>
-                    <div class="slider-item">
-                        <div class="nk-feature nk-feature-center">
-                            <div class="nk-feature-img">
-                                <img class="round" src="{{ asset('admin-dashboard/images/slides/promo-a.png')}}" srcset="{{ asset('admin-dashboard/images/slides/promo-a2x.png')}} 2x" alt="">
-                            </div>
-                            <div class="nk-feature-content py-4 p-sm-5">
-                                <h4>Cashback Reborn</h4>
-                                <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
-                            </div>
-                        </div>
-                    </div><!-- .slider-item -->
-                    <div class="slider-item">
-                        <div class="nk-feature nk-feature-center">
-                            <div class="nk-feature-img">
-                                <img class="round" src="{{ asset('admin-dashboard/images/slides/promo-b.png')}}" srcset="{{ asset('admin-dashboard/images/slides/promo-b2x.png')}} 2x" alt="">
-                            </div>
-                            <div class="nk-feature-content py-4 p-sm-5">
-                                <h4>Cashback Reborn</h4>
-                                <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
-                            </div>
-                        </div>
-                    </div><!-- .slider-item -->
-                    <div class="slider-item">
-                        <div class="nk-feature nk-feature-center">
-                            <div class="nk-feature-img">
-                                <img class="round" src="{{ asset('admin-dashboard/images/slides/promo-c.png')}}" srcset="{{ asset('admin-dashboard/images/slides/promo-c2x.png')}} 2x" alt="">
-                            </div>
-                            <div class="nk-feature-content py-4 p-sm-5">
-                                <h4>Cashback Reborn</h4>
-                                <p>You can start to create your products easily with its user-friendly design & most completed responsive layout.</p>
-                            </div>
-                        </div>
-                    </div><!-- .slider-item -->
-                </div><!-- .slider-init -->
-                <div class="slider-dots"></div>
-                <div class="slider-arrows"></div>
-            </div><!-- .slider-wrap -->
-        </div><!-- nk-split-content -->
+        <div class="nk-split-content nk-split-stretch bg-lighter d-flex toggle-break-lg toggle-slide toggle-slide-right " data-content="athPromo" data-toggle-screen="lg" data-toggle-overlay="true">
+           
+            <img class="round m-auto" width="600px" src="{{ asset('admin-dashboard/images/browser-stats-animate.svg')}}" srcset="{{ asset('admin-dashboard/images/browser-stats-animate.svg')}} 2x" alt="">
+           
+        </div><!-- .nk-split-content -->
     </div><!-- nk-split -->
 </div>
          {{--      

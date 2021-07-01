@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Session;
 
 class LoginController extends Controller
 {
@@ -45,4 +46,13 @@ class LoginController extends Controller
     //         return redirect('/');
     //     }
     // }
+    protected function redirectTo()
+    {
+
+        if (Session::has('prvUrl')){
+            return session('prvUrl');
+          }else{
+            return '/';
+          }
+    }
 }

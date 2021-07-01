@@ -1,3 +1,4 @@
+@if(count($users))
 <div class="nk-tb-item nk-tb-head">
     
     <div class="nk-tb-col"><span class="sub-text">User</span></div>
@@ -91,3 +92,7 @@
     
 </div><!-- .nk-block-between -->                                 
                     
+
+@else 
+    <h3 class="m-auto text-center py-5">No results found</h3> 
+@endif 

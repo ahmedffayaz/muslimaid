@@ -325,8 +325,8 @@
 
                         <div class="nk-tb-col"><span class="sub-text">Reviwer</span></div>
                         <div class="nk-tb-col"><span class="sub-text">Review</span></div>
-                        <div class="nk-tb-col "><span class="sub-text">Store</span></div>
-                        <div class="nk-tb-col text-center"><span class="sub-text">Status</span></div>
+                        <div class="nk-tb-col"><span class="sub-text">Store</span></div>
+                        <div class="nk-tb-col"><span class="sub-text">Status</span></div>
                         {{-- <div class="nk-tb-col "><span class="sub-text">Status</span></div> --}}
                         <div class="nk-tb-col nk-tb-col-tools text-right">
                             <span class="sub-text">Action</span>
@@ -339,11 +339,14 @@
                         <div class="nk-tb-col">
                             <span>{{$review->reviewer}}</span>
                         </div>
-                        
                         <div class="nk-tb-col">
-                            <span>{!! Illuminate\Support\Str::limit($review->review, 40) !!}</span>
+                            <span>{{ substr(strip_tags($review->review),0,50) }}..</span>
                         </div>
-                        <div class="nk-tb-col"><a href="{{route('admin.stores.show',$review->store)}}">
+                        
+                        
+                      
+                        <div class="nk-tb-col">
+                            <a href="{{route('admin.stores.show_store')}}?slug={{$review->store->slug}}">
                             <span><b>{{$review->store->name ?? ''}}</b></span><br>
                             <span>{{$review->store->network->name ?? ''}}</span></a>
                         </div>

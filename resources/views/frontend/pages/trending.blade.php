@@ -85,7 +85,7 @@
     <div class="container">
         <div class="row">
             <div class="col-12 mt-5">
-                <h1 class="text-center">Hottest cashback deals</h1>
+                <h1 class="text-center">Trending cashback deals</h1>
                 
                 @if($stores->count())
                 <div class="block">

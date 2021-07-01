@@ -158,7 +158,7 @@
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">Store</span>
-                                                <span class="profile-ud-value"><a href="{{route('admin.stores.show',$cashback->store)}}">{{$cashback->store->name}}</a></span>
+                                                <span class="profile-ud-value"><a href="{{route('admin.stores.show_store')}}?slug={{$cashback->store->slug}}">{{$cashback->store->name}}</a></span>
                                             </div>
                                         </div>
                                        

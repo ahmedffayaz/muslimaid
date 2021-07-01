@@ -26,7 +26,7 @@
     
    
     <div class="nk-tb-col">
-        <span><a href="{{route('admin.stores.show',$store)}}"><div class="tb-lead">{{$store->id}}
+        <span><a href="{{route('admin.stores.show_store')}}?slug={{$store->slug}}"><div class="tb-lead">{{$store->id}}
             <img width="40px" class="float-right" @if($store->logo->first())
             src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
             @else
@@ -34,7 +34,7 @@
         
     </div>
     <div class="nk-tb-col">
-        <span><a href="{{route('admin.stores.show',$store)}}"><div class="tb-lead">{{$store->name}} </div></a></span>
+        <span><a href="{{route('admin.stores.show_store')}}?slug={{$store->slug}}"><div class="tb-lead">{{$store->name}} </div></a></span>
     <span>{{$store->network->name}}</span>
     </div>
    
@@ -84,7 +84,7 @@
                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="link-list-opt no-bdr">
-                            <li><a href="{{route('admin.stores.show', $store)}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li>
+                            <li><a href="{{route('admin.stores.show_store')}}?slug={{$store->slug}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li>
                             {{-- <li><a href="{{route('admin.stores.images', $store)}}"><em class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
                             <li><a  onclick="$('#delete-store-{{$store->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Store</span></a>
                                                     

@@ -28,86 +28,64 @@
                 </div><!-- .nk-block-head -->
                 <div class="card card-preview mb-4">
                     <div class="card-inner">
-                        <div id="accordion-1" class="accordion accordion-s2">
-                            <div class="accordion-item">
-                                <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-1-1">
-                                    <h6 class="title">Search</h6>
-                                    <span class="accordion-icon"></span>
-                                </a>
-                                <div class="accordion-body collapse" id="accordion-item-1-1" data-parent="#accordion-1">
-                                    <div class="accordion-inner">
-                                        <div><form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
-                                            @csrf
-                                            <div class="row g-4 justify-content-md-center">
-                                                <div class="col-lg-2">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="store_id">Store ID/Name</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="text" class="form-control" id="store" value="" name="store">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                {{-- <div class="col-lg-2">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="pay-amount-1">Store name</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="text" class="form-control" id="pay-amount-1" value="" name="store_name">
-                                                        </div>
-                                                    </div>
-                                                </div> --}}
-                                            
-                                                <div class="col-lg-2">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="network_id">Network</label>
-                                                        <div class="form-control-wrap ">
-                                                            <select class="form-select form-control" data-search="on" id="network_id" name="network_id">
-                                                                <option value="0">All</option>
-                                                                @foreach ($networks as $network)
-                                                                <option value="{{$network->id}}">{{$network->name}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="status">Status</label>
-                                                        <div class="form-control-wrap ">
-                                                            <select class="form-select form-control" data-search="on" id="status" name="status">
-                                                                <option value="-1">Any</option>
-                                                                <option value="pending review">Pending Review</option>
-                                                                <option value="active">Active</option>
-                                                                <option value="disabled">Disabled</option>
-                                                                <option value="closed">Closed at Network</option>
-                                                                <option value="error">Error</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-2">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="status">Cashback/Categories Override</label>
-                                                        <div class="form-control-wrap ">
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" id="customCheck1" name="overridden">
-                                                        <label class="custom-control-label" for="customCheck1">Overridden</label>
-                                                    </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-2 align-self-end">
-                                                    <div class="form-group">
-                                                        <button type="submit" class="btn btn-success btn-block">Search</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form></div>
+                        <form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
+                            @csrf
+                            <div class="row g-4 justify-content-md-center">
+                                <div class="col-lg-2 col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="store_id">Store ID/Name</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control" id="store" value="" name="store">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="network_id">Network</label>
+                                        <div class="form-control-wrap ">
+                                            <select class="form-select form-control" data-search="on" id="network_id" name="network_id">
+                                                <option value="0">All</option>
+                                                @foreach ($networks as $network)
+                                                <option value="{{$network->id}}">{{$network->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="status">Status</label>
+                                        <div class="form-control-wrap ">
+                                            <select class="form-select form-control" data-search="on" id="status" name="status">
+                                                <option value="-1">Any</option>
+                                                <option value="pending review">Pending Review</option>
+                                                <option value="active">Active</option>
+                                                <option value="disabled">Disabled</option>
+                                                <option value="closed">Closed at Network</option>
+                                                <option value="error">Error</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="status">Cashback/Categories Override</label>
+                                        <div class="form-control-wrap ">
+                                    <div class="custom-control custom-checkbox">
+                                        <input type="checkbox" class="custom-control-input" id="customCheck1" name="overridden">
+                                        <label class="custom-control-label" for="customCheck1">Overridden</label>
+                                    </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 align-self-end">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success btn-block">Search</button>
                                     </div>
                                 </div>
                             </div>
+                        </form>
                         
-                        
-                        </div>  
                     </div>
                
                 </div>

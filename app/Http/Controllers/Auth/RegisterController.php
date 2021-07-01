@@ -12,6 +12,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Mail;
 use App\Models\EmailTemplate;
+use Session;
 
 class RegisterController extends Controller
 {
@@ -98,5 +99,16 @@ class RegisterController extends Controller
 
         return $user;
     }
+
+    protected function redirectTo()
+    {
+        Session::flash('welcome','welcome message'); 
+        if (Session::has('prvUrl')){
+            return session('prvUrl');
+        }else{
+            return '/';
+        }
+    }
+
     
 }

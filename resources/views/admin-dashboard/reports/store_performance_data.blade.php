@@ -1,3 +1,4 @@
+@if(count($clicks))
 <div class="row g-gs">    
     <div class="col-xxl-6">
         <div class="card h-100">
@@ -21,7 +22,7 @@
                 
                 <div class="nk-tb-item">
                     <div class="nk-tb-col">
-                        <div class="icon-text"><a href="@if($click->store){{route('admin.stores.show',$click->store)}}@else # @endif">
+                        <div class="icon-text"><a href="@if($click->store){{route('admin.stores.show_store')}}?slug={{$click->store->slug}}@else # @endif">
                             
                             <span class="tb-lead"> <em class="text-primary icon ni ni-cart-fill mr-2"></em>{{$click->store->name ?? ''}}</span></a>
                         </div>
@@ -54,7 +55,9 @@
     </div><!-- .col -->
     
 </div><!-- .row -->
-               
+@else 
+<h3 class="m-auto text-center py-5">No results found</h3> 
+@endif              
 @push('scripts')
 <script>
 $(document).ready(function(){

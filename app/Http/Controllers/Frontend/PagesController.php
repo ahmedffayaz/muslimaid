@@ -144,7 +144,8 @@ class PagesController extends Controller
         return view('frontend.pages.blog',compact('blogs'));
     }
 
-    public function login(){
+    public function login(Request $request){
+        session(['prvUrl' => $request->get('prvUrl')]);
         return view('client-dashboard.login');
     }
 
@@ -157,6 +158,7 @@ class PagesController extends Controller
            
         }
         $stores = $stores->latest()->paginate(20);
+        // dd($stores);
         return view('frontend.pages.search',compact('stores','term'));
     }
 
@@ -222,5 +224,19 @@ class PagesController extends Controller
                 ->subject($email_data['subject']);
         });
         return redirect()->back();
+    }
+
+    public function allStores(){
+        $s = Store::latest()->get();
+        $groups = $s->sortBy('name')->groupBy(function ($store) {
+            return strtoupper(substr($store->name, 0, 1));
+        });
+        // dd($stores);
+        return view('frontend.pages.all_stores',compact('groups'));
+    }
+    public function allStoresLetter($letter){
+        $stores = Store::where('name','like',$letter.'%')->get();
+        // dd($stores);
+        return view('frontend.pages.stores_with_letter',compact('stores','letter'));
     }
 }

@@ -50,3 +50,32 @@
   });
 });
   </script>
+  <script>
+    $('#flash-overlay-modal').modal();
+</script>
+@if(Session::has('welcome'))
+<script>
+  $('#welcome-message').modal();
+</script>
+
+
+
+@endif
+<script>
+
+  $(document).ready( function() {
+          $(document).on('submit', '.footer-newsletter__form', function(event){
+            event.preventDefault();          
+            $.ajax({
+                  url: $(this).attr('action'),
+                  type: "POST",
+                  data: $(this).serialize(),
+                  success: function(data){
+                    $('.newsletter-message').text(data);
+                    $('.footer-newsletter__form').trigger("reset");
+                  }
+              });      
+          });
+      });
+  </script>
+@livewireScripts

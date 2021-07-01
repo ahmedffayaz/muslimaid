@@ -505,4 +505,9 @@ class StoreController extends Controller
         }
        
     }
+    public function showStore()
+    {
+      
+        return view('admin-dashboard.stores.show');
+    }
 }
