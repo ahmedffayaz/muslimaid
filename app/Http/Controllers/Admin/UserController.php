@@ -257,16 +257,21 @@ class UserController extends Controller
         // dd($request->all());
         $users = $users->newQuery();
 
-        // Search by network.
-        if ($request->input('type')!=-1) {
-            $users->where('registration_type', $request->input('type'));
-        }
+        // Search by type.
+        // if ($request->input('type')!=-1) {
+        //     $users->where('registration_type', $request->input('type'));
+        // }
 
-        // Search by store name.
+        // Search by store name/ID.
         if ($request->input('name')) {
             $users->where('first_name','like', '%'.$request->input('name').'%');
             $users->orWhere('last_name','like', '%'.$request->input('name').'%');
+            $users->orWhere('id',$request->input('name'));
            
+        }
+
+        if($request->input('email')){
+            $users->Where('email','like', '%'.$request->input('email').'%');
         }
 
         // Search by status.
@@ -295,6 +300,10 @@ class UserController extends Controller
             return view('admin-dashboard.users.clicks', compact('clicks'))->render();
         }
     }
-
+    public function showUser()
+    {
+      
+        return view('admin-dashboard.users.show');
+    }
 
 }

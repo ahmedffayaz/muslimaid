@@ -29,10 +29,12 @@
                 elseif($color==5){echo 'bg-warning';}
                 else{}
                 ?>">
-                    <span>{{$cashout->user->first_name[0]}}{{$cashout->user->last_name[0]}}</span>
+                    <span>@if($cashout->user->first_name == 'unnamed' || $cashout->user->last_name == 'unnamed') NA @else{{$cashout->user->first_name[0]}}{{$cashout->user->last_name[0]}}@endif
+                        </span>
                 </div>
                 <div class="user-info">
-                    <span class="tb-lead">{{$cashout->user->first_name}} {{$cashout->user->last_name}} <span class="dot dot-success d-md-none ml-1"></span></span>
+                    <span class="tb-lead">{{$cashout->user->id}} @if($cashout->user->first_name != 'unnamed' || $cashout->user->last_name != 'unnamed')- {{$cashout->user->first_name}} {{$cashout->user->last_name}} @endif
+                        <span class="dot dot-success d-md-none ml-1"></span></span>
                     <span>{{$cashout->user->email}}</span>
                 </div>
             </div>

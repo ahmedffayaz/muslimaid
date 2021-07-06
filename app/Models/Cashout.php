@@ -36,6 +36,9 @@ class Cashout extends Model
     public function cashbacks(){
         return $this->hasMany(UserCashback::class);
     }
+    public function bonus(){
+        return $this->hasOne(Bonus::class);
+    }
 
 }
 

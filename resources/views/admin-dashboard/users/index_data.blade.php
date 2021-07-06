@@ -15,7 +15,7 @@
 <div class="nk-tb-item">
     
     <div class="nk-tb-col">
-       <a href='{{route('admin.users.show',$user)}}'>
+       <a href="{{route('admin.users.show_user')}}?user_id={{$user->id}}">
             <div class="user-card">
                 <div class="user-avatar 
                 <?php
@@ -28,10 +28,10 @@
                 elseif($color==5){echo 'bg-warning';}
                 else{}
                 ?>">
-                    <span>{{$user->first_name[0]}}{{$user->last_name[0]}}</span>
+                    <span>@if($user->first_name == 'unnamed' || $user->last_name == 'unnamed') NA @else{{$user->first_name[0]}}{{$user->last_name[0]}}@endif</span>
                 </div>
                 <div class="user-info">
-                    <span class="tb-lead">{{$user->id}} - {{$user->first_name}} {{$user->last_name}} <span class="dot dot-success d-md-none ml-1"></span></span>
+                    <span class="tb-lead">{{$user->id}} @if($user->first_name != 'unnamed' || $user->last_name != 'unnamed')- {{$user->first_name}} {{$user->last_name}} @endif<span class="dot dot-success d-md-none ml-1"></span></span>
                     <span>{{$user->email}}</span>
                 </div>
             </div>
@@ -62,7 +62,7 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="link-list-opt no-bdr">
                             {{-- <li><a href="{{route('admin.users.password',$user)}}"><em class="icon ni ni-lock-alt-fill"></em><span>Change Password</span></a></li> --}}
-                            <li><a href="{{route('admin.users.show',$user)}}"><em class="icon ni ni-edit"></em><span>Edit user</span></a></li>
+                            <li><a href="{{route('admin.users.show_user')}}?user_id={{$user->id}}"><em class="icon ni ni-edit"></em><span>Edit user</span></a></li>
                             {{-- <li><a href="{{route('admin.users.paymentinfo',$user)}}"><em class="icon ni ni-money"></em><span>Payment Info</span></a></li> --}}
                             <li>
                                 <form action="{{ route('admin.users.destroy', $user) }}" id="delete-form-{{$user->id}}" method="POST">

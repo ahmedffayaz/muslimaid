@@ -104,17 +104,26 @@ class PaymentController extends Controller
             'payment_method'   => $request->payment_method,
         ],$request->all());
 
-        flash()->success('Payment method added successfully');
+        flash()->success('Payment method updated successfully');
         return redirect()->back();
 
     }
 
     public function cashout(Request $request){
+
+        if(array_key_exists('min_cashout_amount',SiteSetting()->toArray()))
+         $min = SiteSetting()['min_cashout_amount'];
+        else $min = 1; 
         $user = \Auth::user();
         $method = $user->paymentInfo()->where('payment_method',$request->payment_method)->first();
-        $balance = \Auth::user()->balance->sum('amount');
-        $cashbacks = \Auth::user()->balance;
-        if($balance <1){
+        if(!$method)
+        {
+            flash()->error('Payment method not found, please add your payment method information');
+            return redirect()->back();
+        }
+        $balance = $user->availableBalance();
+        $cashbacks = $user->balance;
+        if($balance <$min){
             flash()->error('You have insufficient balance for withdrawl.');
             return redirect()->back();
         }
@@ -142,6 +151,13 @@ class PaymentController extends Controller
                     'user_cashback_id'=>$cashback->id,
                     'cashback_status_id'=>$cashback->status
                 ]);
+            }
+
+            if($user->bonus->status == 'unpaid'){
+                $user->bonus->update([
+                    'status'=>'paid',
+                    'cashout_id'=>$cashback->id
+                    ]);
             }
 
             flash()->success("We're processing your withdrawal. Please allow 4 working days for ".$balance." to reach your ".$request->payment_method." account.");

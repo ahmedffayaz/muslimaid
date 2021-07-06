@@ -50,6 +50,7 @@
                             
                         </div>
                     </div>
+                    @if(count($stores))
                     <div class="products-view__list products-list  scrolling-pagination" data-layout="list" data-with-features="false" data-mobile-grid-columns="2">
                         <div class="products-list__body">
                             @foreach($stores as $store)
@@ -130,6 +131,13 @@
                         </div>
                         {!! $stores->links()!!} 
                     </div>
+                    @else 
+                    <div class="text-center">
+                        <img src="{{asset('frontend/images/item_no.png')}}" alt="">
+                        <h3 class="mt-4">No  Vouchers Available</h3>
+                    </div>
+                   
+                    @endif
                     {{-- <div class="products-view__pagination">
                         
                     </div> --}}

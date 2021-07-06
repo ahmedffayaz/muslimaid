@@ -17,7 +17,7 @@
                                     <label class="form-label" for="default-06"></label>
                                     <div class="form-control-wrap ">
                                         <div class="">
-                                            <select class="form-control" data-search="on" name="open_store" id="store_select" required wire:change="changeEvent($event.target.value)">
+                                            <select class="form-control form-select  select-2" data-search="on" name="open_store" id="store_select" required >
                                                 @foreach ($stores as $st)
                                                     <option @if($st->id == $store->id) selected @endif value="{{$st->slug}}">{{$st->id}} - {{$st->name}}</option>
                                                 @endforeach
@@ -109,7 +109,7 @@
                                                             <label class="form-label" for="tracking_url">Tracking url</label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="tracking_url" value="{{$store->tracking_url}}" name="tracking_url" required style="width: 90%">
-                                                                <span style="position: absolute; right:0; top:5px; width:10%" data-toggle="tooltip" data-placement="left" title="This parameter containing ID of the click will be concatinated with tracking url of the store ({{$store->tracking_url}}?ref=XXX)">?{{$store->network->click_ref}}=XXX</span>
+                                                                <span style="position: absolute; right:0; top:5px; width:10%" data-toggle="tooltip" data-placement="left" title="This parameter containing ID of the click will be concatenated with tracking url of the store ({{$store->tracking_url}}?ref=XXX)">?{{$store->network->click_ref}}=XXX</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -639,6 +639,7 @@
         initializeSelect2();
     })
 </script>
+
 @push('scripts')
 
 <script>
@@ -733,6 +734,16 @@
 
         });
     });
+</script>
+<script>
+    $(document).ready(function() {
+           
+            $('#store_select').on('change', function (e) {
+               livewire.emit('changeEvent',e.target.value)
+            });
+            
+
+        });
 </script>
 <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0')}}">
 <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0')}}"></script>
@@ -1308,8 +1319,5 @@
         });
     }
 </script>
-
-
-
 
 @endpush

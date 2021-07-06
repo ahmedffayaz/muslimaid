@@ -33,15 +33,23 @@
                             <div class="row g-4">
                                 <div class="col-lg-3">
                                     <div class="form-group">
-                                        <label class="form-label" for="pay-amount-1">Name</label>
+                                        <label class="form-label" for="name">Name/ID</label>
                                         <div class="form-control-wrap">
-                                            <input type="text" class="form-control" id="pay-amount-1" value="" name="name">
+                                            <input type="text" class="form-control" id="name" value="" name="name">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3">
+                                    <div class="form-group">
+                                        <label class="form-label" for="email">Email</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control" id="email" value="" name="email">
                                         </div>
                                     </div>
                                 </div>
                             
                             
-                                <div class="col-lg-3">
+                                {{-- <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-label" for="type">Regestration Type</label>
                                         <div class="form-control-wrap ">
@@ -54,7 +62,7 @@
                                         
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-label" for="status">Status</label>
@@ -148,13 +156,14 @@
             event.preventDefault(); 
               
             var _token = $("input[name=_token]").val();
-            var type = $("select[name=type]").val();
+            // var type = $("select[name=type]").val();
             var status = $("select[name=status").val();
             var name = $("input[name=name]").val();
+            var email = $("input[name=email]").val();
             $.ajax({
               url:'{{route("admin.users.search_users")}}',
               method:"POST",
-              data:{_token:_token,type:type,name:name,status:status},
+              data:{_token:_token,email:email,name:name,status:status},
               success:function(data)
               {
                $('#table-data').html(data);

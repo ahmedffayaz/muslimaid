@@ -12,6 +12,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Mail;
 use App\Models\EmailTemplate;
+use App\Models\Bonus;
 use Session;
 
 class RegisterController extends Controller
@@ -91,6 +92,14 @@ class RegisterController extends Controller
             'email_message'=>$filtered_message,
             'subject'=>$email_template->subject
         );
+
+        $bonus = array_key_exists('welcome_bonus',SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
+
+        $user_bonus = Bonus::create([
+            'user_id'=>$user->id,
+            'amount'=>$bonus,
+        ]);
+        
         
         Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
             $message->to($email_data['email'], $email_data['name'])

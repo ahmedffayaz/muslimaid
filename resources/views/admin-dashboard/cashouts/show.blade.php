@@ -55,8 +55,6 @@
                     
                     
                     <div class="nk-block nk-block-lg">
-
-                        
                         <div class="card card-preview">
                             <div class="card-inner">
                                 <div class="nk-block">
@@ -68,7 +66,7 @@
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">User</span>
-                                                <span class="profile-ud-value"><a href="{{route('admin.users.show',$cashout->user)}}">{{$cashout->user->id}} - {{$cashout->user->first_name}} {{$cashout->user->last_name}}</a></span>
+                                                <span class="profile-ud-value"><a href="{{route('admin.users.show',$cashout->user)}}">{{$cashout->user->id}} - @if($cashout->user->first_name != 'unnamed' || $cashout->user->last_name != 'unnamed') {{$cashout->user->first_name}} {{$cashout->user->last_name}} - @endif {{$cashout->user->email}}</a></span>
                                             </div>
                                         </div>
                                         <div class="profile-ud-item">
@@ -146,12 +144,14 @@
                                         @endif
                                     </div><!-- .profile-ud-list -->
                                 </div><!-- .nk-block -->
+                                @if(count($cashout->cashbacks))
                                 <div class="nk-divider divider"></div>
                                 <div class="nk-block">
                                     <div class="nk-block-head nk-block-head-line">
                                         <h6 class="title overline-title text-base">Cashback</h6>
                                     </div><!-- .nk-block-head -->
                                     <div class="profile-ud-list">
+                                        
                                         @foreach ($cashout->cashbacks as $cashback)
                                             
                                        
@@ -171,8 +171,43 @@
                                         
 
                                         @endforeach
+                                      
+                                        
                                     </div><!-- .profile-ud-list -->
                                 </div><!-- .nk-block -->
+                                @endif
+                                @if($cashout->bonus)
+                                <div class="nk-divider divider"></div>
+                                <div class="nk-block">
+                                    <div class="nk-block-head nk-block-head-line">
+                                        <h6 class="title overline-title text-base">Bonus</h6>
+                                    </div><!-- .nk-block-head -->
+                                    <div class="profile-ud-list">
+                                        
+                                       
+                                            
+                                       
+                                        <div class="profile-ud-item">
+                                            <div class="profile-ud wider">
+                                                <span class="profile-ud-label">Bonus</span>
+                                                <span class="profile-ud-value">Sign up bonus</span>
+                                            </div>
+                                        </div>
+                                       
+                                        <div class="profile-ud-item">
+                                            <div class="profile-ud wider">
+                                                <span class="profile-ud-label">Amount</span>
+                                                <span class="profile-ud-value">{{ currency() }} {{$cashout->bonus->amount}}</span>
+                                            </div>
+                                        </div>
+                                        
+
+                                       
+                                      
+                                        
+                                    </div><!-- .profile-ud-list -->
+                                </div><!-- .nk-block -->
+                                @endif
                                
                             </div><!-- .card-inner -->
                             <div class="card-inner">

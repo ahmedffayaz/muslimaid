@@ -102,6 +102,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::post('users/paymentsave', [App\Http\Controllers\Admin\UserController::class,'paymentSave'])->name('users.payment_save');
     Route::post('users/fetch',[App\Http\Controllers\Admin\UserController::class,'fetch'])->name('users.fetch');
     Route::post('users/search_users',  [App\Http\Controllers\Admin\UserController::class,'searchUsers'])->name('users.search_users');
+    Route::get('users/show', [App\Http\Controllers\Admin\UserController::class,'showUser'])->name('users.show_user');
     Route::resource('users', UserController::class);
     
     // Imorters
@@ -153,6 +154,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::post('settings/settings_save', [App\Http\Controllers\Admin\SettingsController::class,'saveSettings'])->name('settings.settings_save');
     Route::post('settings/fetch',[App\Http\Controllers\Admin\SettingsController::class,'fetch'])->name('settings.fetch');
     Route::post('settings/search_settings',  [App\Http\Controllers\Admin\SettingsController::class,'searchSettings'])->name('settings.search_settings');
+    Route::post('maintenance', [App\Http\Controllers\Admin\SettingsController::class,'maintenance'])->name('settings.maintenance');
     Route::resource('settings', SettingsController::class);
 
     Route::get('manage-menus/{id?}',[App\Http\Controllers\Admin\MenuController::class,'index']);
@@ -192,6 +194,16 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('pages', PagesController::class);
     Route::resource('blogs', BlogController::class);
     Route::resource('email_templates', EmailTemplatesController::class);
+
+    
+    
+    Route::get('site/shutdown', function(){
+        return Artisan::call('down');
+    });
+    
+    Route::get('site/live', function(){
+        return Artisan::call('up');
+    });
 
 
 

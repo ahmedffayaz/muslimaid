@@ -10,12 +10,13 @@ $menu = Harimayco\Menu\Models\Menus::where('name','Main Menu')->first();
             <div class="site-header__logo">
                 <a href="{{url('/')}}">
                     <!-- logo -->
-                    <img width="196px" src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif" alt="">
+                    <img width="100%" src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif" alt="">
                    
                     <!-- logo / end -->
                 </a>
             </div>
-            <div class="site-header__search">
+            @include('frontend.components.categories-dropdown')
+            <div class="site-header__search ml-lg-5">
                 <div class="search search--location--header ">
                     <div class="search__body bg-white">
                         @livewire('search-stores')
@@ -25,7 +26,7 @@ $menu = Harimayco\Menu\Models\Menus::where('name','Main Menu')->first();
             <div class="site-header__phone">
                 @auth
                 {{-- <div class="site-header__phone-title">Balance</div> --}}
-                <div class="site-header__phone-number"><span class="currency">{{ currency() }} </span>{{Auth::user()->balance->sum('amount')}}</div>
+                <div class="site-header__phone-number"><span class="currency">{{ currency() }} </span>{{Auth::user()->availableBalance()}}</div>
                 @endauth
                 
             </div>
@@ -35,7 +36,7 @@ $menu = Harimayco\Menu\Models\Menus::where('name','Main Menu')->first();
             <div class="nav-panel nav-panel--sticky" data-sticky-mode="pullToShow">
                 <div class="nav-panel__container container">
                     <div class="nav-panel__row">
-                        @include('frontend.components.categories-dropdown')
+                       
                         <!-- .nav-links -->
                         <div class="nav-panel__nav-links nav-links">
                             <ul class="nav-links__list">

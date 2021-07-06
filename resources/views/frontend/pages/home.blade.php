@@ -88,8 +88,8 @@
                      <h3 class="card-title">Sign up for free</h3>
                      <form method="POST" action="{{ route('register') }}">
                          @csrf
-                         <input type="hidden" class="form-control form-control-lg" id="firstname" placeholder="Enter your first name" name="firstname" value="John">
-                         <input type="hidden" class="form-control form-control-lg" id="lastname" placeholder="Enter your last name" name="lastname" value="Doe" >
+                         <input type="hidden" class="form-control form-control-lg" id="firstname" placeholder="Enter your first name" name="firstname" value="unnamed">
+                         <input type="hidden" class="form-control form-control-lg" id="lastname" placeholder="Enter your last name" name="lastname" value="unnamed" >
 
                          <div class="form-group">
                              <label>Email address</label>

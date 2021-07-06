@@ -34,7 +34,7 @@
                 @if($cashouts->count())
                 <div class="card">
                     <div class="card-header">
-                        <h5>Clicks</h5>
+                        <h5>Cashouts Statement</h5>
                     </div>
                     <div class="card-divider"></div>
                     <div class="card-table">

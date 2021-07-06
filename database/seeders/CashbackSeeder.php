@@ -22,14 +22,14 @@ class CashbackSeeder extends Seeder
         $faker = Faker::create();
         $cashback_percent = SiteSetting::where('type','cashback_percentage')->first()->value;
 
-        foreach (range(1,50) as $index) {
+        foreach (range(1,1000) as $index) {
 
             
             $order_value = $faker->numberBetween(50,200);
             $network_commission = $faker->numberBetween(1,10);
             $amount = ($network_commission/100) * $cashback_percent;
 
-            $click = ExitClick::findOrFail($faker->numberBetween(1,50));
+            $click = ExitClick::findOrFail($faker->numberBetween(1,5000));
             $commission = UserCashback::create([
             'store_id' => $click->store_id,
             'user_id'  => $click->user_id ?? 0,

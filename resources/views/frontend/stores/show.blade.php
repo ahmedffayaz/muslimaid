@@ -153,10 +153,41 @@
                             <a href="#" @guest class="btn btn-primary"
                             data-toggle="modal" data-target="#signinModal"
                             @else form_id = "form_{{$store->id}}" class="btn btn-primary store_form"
-                            @endguest >Get Cashback<a>
+                            @endguest >Get Cashback</a>
                             
                         </div>
                     </div>
+                </div>
+                <div class="row m-0 mt-5">
+                    @foreach($store->cashbacks as $cashback)
+                        
+                    
+                    <div class="col-lg-4 border text-center py-4 px-3 mt-4">
+                        <h4>@if($cashback->type=='fixed'){{$cashback->currency}} @endif
+                            @if($store->custom_cashback_percentage)
+                            {{($store->custom_cashback_percentage/100)*$cashback->sale_commission}}
+                            @else 
+                            {{(SiteSetting()['cashback_percentage']/100)*$cashback->sale_commission}}
+                            @endif
+                            @if($cashback->type=='percentage')%@endif</h4>
+                        <p>{{$cashback->detail}}</p>
+                        <form action="{{route('site.exit_click.store')}}" method="POST" id="form_{{$cashback->id}}" target="_blank" class="tracker_form">
+                            @csrf
+                            <input type="hidden" name="url" id="url" value="{{$cashback->click_url}}">
+                            <input type="hidden" name="store_id" id="store_id" value="{{$store->id}}">
+                            <input type="hidden" name="voucher_id" id="voucher_id" value="0">
+                            <input type="hidden" name="user_id" id="user_id" value="{{Auth::id() ?? 0}}">
+
+                        </form>
+                        <a href="#" @guest class="btn btn-primary"
+                        data-toggle="modal" data-target="#signinModal"
+                        @else form_id = "form_{{$cashback->id}}" class="btn btn-primary store_form"
+                        @endguest >Get Cashback</a>
+                    </div>
+                   
+                    @endforeach
+                    
+                    
                 </div>
                 <div class="product-tabs  product-tabs--layout--sidebar  product-tabs--sticky">
                     <div class="product-tabs__list d-none">

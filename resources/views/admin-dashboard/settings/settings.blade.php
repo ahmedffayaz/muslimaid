@@ -47,38 +47,16 @@ ul.categories li {
                 <div class="components-preview wide-md mx-auto">
                     <div class="nk-block-head nk-block-head-lg pb-2">
                         <div class="nk-block-between">
-                        <div class="nk-block-head-content">
-                            <h3 class="nk-block-title fw-normal">Settings</h3>
-                            <div class="nk-block-des">
-                              
+                            <div class="nk-block-head-content">
+                                <h3 class="nk-block-title fw-normal">Settings</h3>
                             </div>
                         </div>
-                        <div class="nk-block-head-content">
-                           
-                            <div class="toggle-wrap nk-block-tools-toggle">
-                                <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
-                                <div class="toggle-expand-content" data-content="pageMenu">
-                                    <ul class="nk-block-tools g-3">
-                                        {{-- <li class="nk-block-tools-opt"><a href="{{route('admin.stores.edit',$store)}}" class="btn btn-primary btn-sm"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li> --}}
-                                    
-                                        {{-- <li><a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
-                                      
-                                    </ul>
-                                </div>
-                            </div><!-- .toggle-wrap -->
-                        </div><!-- .nk-block-head-content -->
-                    </div>
                     </div>
                    
                 @include('flash::message')
-                    
-                    
                     <div class="nk-block nk-block-lg">
-
-                        
                         <div class="card card-preview">
                             <div class="card-inner">
-                               
                                 <ul class="nav nav-tabs mt-n3">
                                     <li class="nav-item">
                                         <a class="nav-link active" data-toggle="tab" href="#tabItem4"><em class="icon ni ni-setting-fill"></em><span>General</span></a>
@@ -109,7 +87,6 @@ ul.categories li {
                                         <div class="nk-block">
                                             <div class="nk-block-head">
                                                 <h5 class="title">General Settings</h5>
-                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
                                             <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
                                                 @csrf
@@ -120,7 +97,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="email">Email</label>
-                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -130,13 +106,11 @@ ul.categories li {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
                                                 </div>
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="phone_number">Phone Number</label>
-                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -158,13 +132,34 @@ ul.categories li {
                                                 </div>
                                             </form>
                                         </div>
+                                        <div class="nk-block">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">Maintenance Mode</h5>
+                                            </div><!-- .nk-block-head -->
+                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 maintenance-form" method="POST">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="maintenance">Enable Maintenance Mode</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="custom-control custom-switch">
+                                                            <input type="checkbox" class="custom-control-input" id="maintenance" name="maintenance" @if(maintenance()) checked @endif>
+                                                            <label class="custom-control-label" for="maintenance"></label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
                                       
                                     </div>
                                     <div class="tab-pane" id="tabItem5">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
                                                 <h5 class="title">Website Settings</h5>
-                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
                                             <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST" enctype="multipart/form-data">
                                                 @csrf
@@ -173,7 +168,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="website_title">Website Logo</label>
-                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
                                                         </div>
                                                         
                                                     </div>
@@ -192,7 +186,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="dashboard_title">Dashboard Logo</label>
-                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
                                                         </div>
                                                         
                                                     </div>
@@ -211,7 +204,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="favicon">Favicon</label>
-                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
                                                         </div>
                                                         
                                                     </div>
@@ -230,7 +222,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="website_title">Website Title</label>
-                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -246,7 +237,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="footer_text">Footer text</label>
-                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -274,7 +264,6 @@ ul.categories li {
                                         <div class="nk-block">
                                             <div class="nk-block-head">
                                                 <h5 class="title">Mailer Settings</h5>
-                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
                                             <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
                                                 @csrf
@@ -283,7 +272,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="mail_driver">Mail Driver</label>
-                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -298,7 +286,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="mail_host">Mail Host</label>
-                                                            {{-- <span class="form-note">Specify the email address of your website.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -313,7 +300,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="mail_port">Port</label>
-                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -331,7 +317,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label">Username</label>
-                                                            {{-- <span class="form-note">Specify the URL if your main website is external.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -346,7 +331,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label">Password</label>
-                                                            {{-- <span class="form-note">Specify the URL if your main website is external.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -361,7 +345,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="mail_email">From Email</label>
-                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -377,7 +360,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="mail_name">From Name</label>
-                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -404,7 +386,6 @@ ul.categories li {
                                         <div class="nk-block">
                                             <div class="nk-block-head">
                                                 <h5 class="title">Social Media Settings</h5>
-                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
                                             <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
                                                 @csrf
@@ -428,7 +409,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="twitter">Twitter</label>
-                                                            {{-- <span class="form-note">Specify the email address of your website.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -443,7 +423,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="instagram">Instagram</label>
-                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -459,7 +438,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="linkedin">LinkedIn</label>
-                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -469,15 +447,11 @@ ul.categories li {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
                                                 </div>
-                                                
-                                                
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label">Pinterest</label>
-                                                            {{-- <span class="form-note">Specify the URL if your main website is external.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -504,7 +478,6 @@ ul.categories li {
                                         <div class="nk-block">
                                             <div class="nk-block-head">
                                                 <h5 class="title">Scripts Integration</h5>
-                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
                                             <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
                                                 @csrf
@@ -513,7 +486,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="ga_tracking_id">Google Analytics Tracking ID</label>
-                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -542,7 +514,6 @@ ul.categories li {
                                         <div class="nk-block">
                                             <div class="nk-block-head">
                                                 <h5 class="title">Cashback Settings</h5>
-                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
                                             <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
                                                 @csrf
@@ -551,7 +522,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="currency">Currency</label>
-                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -572,7 +542,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="cashback_percentage">Cashback Percentage</label>
-                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -584,6 +553,58 @@ ul.categories li {
                                                     </div>
                                                     
                                                 </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="payment_methods">Payment Methods</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="custom-control custom-switch d-block">
+                                                            <input type="checkbox" class="custom-control-input" id="payment_method_paypal" name="payment_method_paypal" @if($settings['payment_method_paypal']) checked @endif value="1">
+                                                            <label class="custom-control-label" for="payment_method_paypal">Paypal</label>
+                                                        </div>
+                                                        <div class="custom-control custom-switch d-block mt-2">
+                                                            <input type="checkbox" class="custom-control-input" id="payment_method_bank" name="payment_method_bank" @if($settings['payment_method_bank']) checked @endif value="1">
+                                                            <label class="custom-control-label" for="payment_method_bank">Bank Transfer</label>
+                                                        </div>
+                                                        <div class="custom-control custom-switch d-block mt-2">
+                                                            <input type="checkbox" class="custom-control-input" id="payment_method_cheque" name="payment_method_cheque" @if($settings['payment_method_cheque']) checked @endif value="1">
+                                                            <label class="custom-control-label" for="payment_method_cheque">Cheque</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="min_cashout_amount">Min Cashout Amount</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="min_cashout_amount" name="min_cashout_amount" value="{{$settings['min_cashout_amount'] ?? ''}}" placeholder="Min Cashout Amount">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="welcome_bonus">Welcome Bonus</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="welcome_bonus" name="welcome_bonus" value="{{$settings['welcome_bonus'] ?? ''}}" placeholder="Welcome Bonus">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                
                                                 
                                                 <div class="row g-3">
                                                     <div class="col-lg-9 offset-lg-3">
@@ -594,13 +615,13 @@ ul.categories li {
                                                 </div>
                                             </form>
                                         </div>
+                                        
                                       
                                     </div>
                                     <div class="tab-pane" id="tabItem10">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
                                                 <h5 class="title">Appearance Settings</h5>
-                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
                                             <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
                                                 @csrf
@@ -609,7 +630,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="theme_skin">Website Theme</label>
-                                                            {{-- <span class="form-note">Copyright information of your website.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -636,7 +656,6 @@ ul.categories li {
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="theme_color">Theme Color</label>
-                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -647,11 +666,10 @@ ul.categories li {
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="row g-3 custom_color">
+                                                <div class="row g-3">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
                                                             <label class="form-label" for="theme_color">Dashbaord Menu Type</label>
-                                                            {{-- <span class="form-note">Specify the driver for mail.</span> --}}
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -760,34 +778,21 @@ $(document).ready( function() {
 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/js/bootstrap-colorpicker.min.js"></script>
-<script>$('.colorpicker').colorpicker({
-     
-customClass: 'custom-size',
- 
- sliders: {
-  
- saturation: {
-  
- maxLeft: 200,
-  
- maxTop: 200
-  
- },
-  
- hue: {
-  
- maxTop: 200
-  
- },
-  
- alpha: {
-  
- maxTop: 200
-  
- }
-  
- }
-  
+<script>
+$('.colorpicker').colorpicker({
+    customClass: 'custom-size',
+    sliders: {
+        saturation: {
+            maxLeft: 200,
+            maxTop: 200
+        },
+        hue: {
+            maxTop: 200
+        },
+        alpha: {
+            maxTop: 200
+        }
+    }
 });</script>
 
 <script>
@@ -807,6 +812,45 @@ function checkThemeType(){
 $(document.body).on("change","#theme_skin",function(){
     checkThemeType();
 });
+</script>
+
+<script>
+    $(document).ready( function() {
+        $(document).on('change', '#maintenance', function(event){
+              if(this.checked){
+              var maintenance =1; 
+              }
+              else{
+                var maintenance =0; 
+              }
+              var _token = $("input[name=_token]").val();
+        $.ajax({
+        type:'POST',
+        url: "{{route('admin.settings.maintenance')}}",
+        data: {_token:_token, maintenance:maintenance},
+        success:function(data){
+            
+            (function(NioApp, $){
+                'use strict';
+                toastr.clear();
+                NioApp.Toast(data.message, data.response);
+            })(NioApp, jQuery); 
+            
+            
+        },
+        error: function(data){
+
+            (function(NioApp, $){
+                'use strict';
+                toastr.clear();
+                NioApp.Toast(data.message, data.response);
+            })(NioApp, jQuery); 
+            
+        }
+    });
+
+        });
+    });
 </script>
 
 @endpush

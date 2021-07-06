@@ -18,6 +18,10 @@ class StoreDetails extends Component
 
     protected $queryString = ['slug'];
 
+    protected $listeners = [
+        'changeEvent',
+    ];
+
 
     public function mount()
     {

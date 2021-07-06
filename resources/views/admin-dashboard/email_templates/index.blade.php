@@ -26,7 +26,7 @@
 
                         @foreach ($templates as $template)
 
-                            <div class="nk-block">
+                            <div class="nk-block border-bottom">
                                 <h4 class="nk-block-title fw-normal mb-3">{{ $template->title }}</h4>
                                 <p class="lead">{{ $template->detail }}</p>
                                 <div class="card">
@@ -114,6 +114,7 @@
                                     </div>
                                 </div>
                             </div><!-- .nk-block -->
+                            <hr class="border border-primary my-5 w-50">
                         @endforeach
 
 

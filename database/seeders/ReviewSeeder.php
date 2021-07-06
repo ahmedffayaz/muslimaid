@@ -18,10 +18,10 @@ class ReviewSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        foreach (range(1,200) as $index) {
+        foreach (range(1,3000) as $index) {
 
 
-            $store = Store::findOrFail($faker->numberBetween(1,50));
+            $store = Store::findOrFail($faker->numberBetween(1,1000));
             $review = StoreReview::create([
             'store_id' => $store->id,
             'reviewer' => $faker->name,

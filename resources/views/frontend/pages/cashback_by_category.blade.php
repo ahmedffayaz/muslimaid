@@ -69,6 +69,39 @@
     div.bhoechie-tab div.bhoechie-tab-content:not(.active){
       display: none;
     }
+    
+.shine {
+  background: #f6f7f8;
+  background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+  background-repeat: no-repeat;
+  background-size: 800px 230px; 
+  display: inline-block;
+  position: relative; 
+  
+  -webkit-animation-duration: 1s;
+  -webkit-animation-fill-mode: forwards; 
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-name: placeholderShimmer;
+  -webkit-animation-timing-function: linear;
+  }
+
+box {
+  height: 230px;
+  /* width: calc(20% - 12px); */
+    margin: 8px 3px;
+}
+
+@-webkit-keyframes placeholderShimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  
+  100% {
+    background-position: 468px 0; 
+  }
+}
+
+
 </style>
 
 
@@ -112,6 +145,7 @@
                         @endforeach
             
                     </div>
+                    
                     <div class="col-lg-4 col-md-4 bhoechie-tab-menu align-self-center">
                         <div class="list-group">
                             @foreach ($category->picks->take(5) as $key=>$pick)
@@ -138,8 +172,6 @@
                 @if($stores->count())
                 <div class="block">
                     <div class="block-header">
-                       
-                        
                     </div>
                     <div class="products-view">
                         <div class="products-view__list products-list scrolling-pagination" data-layout="grid-5-full" data-with-features="false" data-mobile-grid-columns="2">
@@ -242,13 +274,19 @@
     $(function() {
         $('.scrolling-pagination').jscroll({
             autoTrigger: true,
-            loadingHtml: `<div class="form-group text-center mt-4">
-                                        <button class="btn btn-light text-primary btn-loading btn-xl btn-svg-icon">
-                                            <svg width="16px" height="16px">
-                                                <use xlink:href="{{asset('frontend/images/sprite.svg')}}#quickview-16"></use>
-                                            </svg>
-                                        </button>
-                                    </div>`,
+            loadingHtml: ` <div class="products-list__body"> 
+                        <box class="shine products-list__item"></box>
+                        <box class="shine products-list__item"></box>
+                        <box class="shine products-list__item"></box>
+                        <box class="shine products-list__item"></box>
+                        <box class="shine products-list__item"></box>
+                        
+                        <box class="shine products-list__item"></box>
+                        <box class="shine products-list__item"></box>
+                        <box class="shine products-list__item"></box>
+                        <box class="shine products-list__item"></box>
+                        <box class="shine products-list__item"></box>
+                        </div>`,
             padding: 0,
             nextSelector: '.pagination li.active + li a',
             contentSelector: 'div.scrolling-pagination',
