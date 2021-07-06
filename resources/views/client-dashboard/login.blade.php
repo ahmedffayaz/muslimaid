@@ -47,6 +47,13 @@
                             </div>
                             <button type="submit" class="btn btn-primary mt-4">Login</button>
                         </form>
+                        <hr/>
+                        <div class="form-group row">
+                            <a class="btn btn-primary border-0 ml-3" style="background-color: #3b5998;" href="{{ url('/login/facebook') }}" role="button">
+                                <i class="fab fa-facebook-f"> Facebook</i></a>
+                            <a class="btn btn-primary border-0 ml-2" style="background-color: #dd4b39;" href="{{ url('/login/google') }}" role="button">
+                                <i class="fab fa-google"></i> Google</a>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -73,6 +80,13 @@
                             </div>
                             <button type="submit" class="btn btn-primary mt-4">Register</button>
                         </form>
+                        <hr/>
+                        <div class="form-group row">
+                            <a class="btn btn-primary border-0 ml-3" style="background-color: #3b5998;" href="{{ url('/login/facebook') }}" role="button">
+                                <i class="fab fa-facebook-f"> Facebook</i></a>
+                            <a class="btn btn-primary border-0 ml-2" style="background-color: #dd4b39;" href="{{ url('/login/google') }}" role="button">
+                                <i class="fab fa-google"></i> Google</a>
+                        </div>
                     </div>
                 </div>
             </div>

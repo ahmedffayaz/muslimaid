@@ -251,3 +251,5 @@ Route::namespace('App\Http\Controllers\Client')
         \UniSharp\LaravelFilemanager\Lfm::routes();
     });
 
+    Route::get('login/{provider}', [App\Http\Controllers\SocialController::class, 'redirect']);
+    Route::get('login/{provider}/callback',[App\Http\Controllers\SocialController::class, 'Callback']);
