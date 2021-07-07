@@ -82,6 +82,9 @@ ul.categories li {
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem11"><em class="icon ni ni-lock-fill"></em><span>Login API's</span></a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem12"><em class="icon ni ni-emails-fill"></em><span>Newsletter</span></a>
+                                    </li>
                                     
                                 </ul>
                                 <div class="tab-content">
@@ -728,6 +731,7 @@ ul.categories li {
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
@@ -743,6 +747,23 @@ ul.categories li {
                                                         </div>
                                                     </div>
                                                 </div>
+                                                
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="facebook_url">Facebook URL</label>
+                                                            {{-- <span class="form-note">Specify the facebook url.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" secret="facebook_url" name="facebook_url" value="{{$settings['facebook_url'] ?? ''}}" placeholder="Facebook URL">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
                                             <div class="nk-block-head">
                                                 <h5 class="title">Google</h5>
                                                 {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
@@ -764,7 +785,6 @@ ul.categories li {
                                                     
                                                 </div>
                                                 
-                                                
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
@@ -776,6 +796,74 @@ ul.categories li {
                                                         <div class="form-group">
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="google_client_secret" name="google_client_secret" value="{{$settings['google_client_secret'] ?? ''}}" placeholder="Google Client Secret">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="google_url">Google URL</label>
+                                                            {{-- <span class="form-note">Specify the google url.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="google_url" name="google_url" value="{{$settings['google_url'] ?? ''}}" placeholder="Google URL">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="row g-3">
+                                                    <div class="col-lg-9 offset-lg-3">
+                                                        <div class="form-group mt-2">
+                                                            <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="tab-pane" id="tabItem12">
+                                        <div class="nk-block">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">Newsletter</h5>
+                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                            </div><!-- .nk-block-head -->
+                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="mailchimp_api_key">Mailchimp API Key</label>
+                                                            {{-- <span class="form-note">Specify the mailchimp api key.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" name="mailchimp_api_key" id="mailchimp_api_key" value="{{$settings['mailchimp_api_key'] ?? ''}}" placeholder="Mailchimp API Key">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="mailchimp_list_id">Mailchimp List ID</label>
+                                                            {{-- <span class="form-note">Specify the mailchimp list id.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" secret="mailchimp_list_id" name="mailchimp_list_id" value="{{$settings['mailchimp_list_id'] ?? ''}}" placeholder="Mailchimp List ID">
                                                             </div>
                                                         </div>
                                                     </div>

@@ -7,7 +7,7 @@
                 <div class="card-body">
                     <h3 class="card-title">Login</h3>
                     <div class="row">
-                        <div class="col-md-7 d-flex flex-column">
+                        <div class="col-md-7 d-flex flex-column mx-auto">
                             <form method="POST" action="{{ route('login') }}">
                                 @csrf
                                 <div class="form-group">
@@ -46,22 +46,31 @@
                                         <label class="form-check-label" for="login-remember">Remember Me</label>
                                     </div>
                                 </div>
-                                <button type="submit" class="btn btn-primary mt-4">Login</button>
+                                <button type="submit" class="btn btn-primary mt-1">Login</button>
                             </form>
                         </div>
-                        <div class="ml-3" style="border-left:1px solid rgba(0,0,0,0.1)">
 
-                        </div>
-                        <div class="col-md-4 d-flex flex-column">
-                            <a class="btn btn-primary border-0 ml-4 mt-4" style="background-color: #3b5998; border-radius: 2px; font-size: 14px" href="{{ url('/login/facebook') }}" role="button">
-                                <i class="fab fa-facebook-f"> Login with Facebook</i></a>
-                            <br>
-                            <a class="btn btn-primary border-0 ml-4 mt-3" style="background-color: #dd4b39; border-radius: 2px; font-size: 14px" href="{{ url('/login/google') }}" role="button">
-                                <i class="fab fa-google"></i> Login with Google</a>
-                            <br>
-                            <a class="btn btn-primary border-0 ml-4 mt-3" style="background-color: black; border-radius: 2px; font-size: 14px" href="#" role="button">
-                                <i class="fab fa-apple"></i> Login with Apple</a>
-                        </div>
+                        @if(isFacebookEnabled() || isGoogleEnabled())
+                            
+                            <div class="ml-3" style="border-left:1px solid rgba(0,0,0,0.1)"></div>
+
+                            <div class="col-md-4 d-flex flex-column">
+                            @if(isFacebookEnabled())
+                                <a class="btn btn-primary border-0 ml-4 mt-4" style="background-color: #3b5998; border-radius: 2px" href="{{ url('/login/facebook') }}" role="button">
+                                    <i class="fab fa-facebook-f"> Login with Facebook</i></a>
+                                <br>
+                            @endif
+                            @if(isGoogleEnabled())
+                                <a class="btn btn-primary border-0 ml-4 mt-3" style="background-color: #dd4b39; border-radius: 2px" href="{{ url('/login/google') }}" role="button">
+                                    <i class="fab fa-google"></i> Login with Google</a>
+                                <br>
+                            @endif
+                            {{-- @if(isAppleEnabled())
+                                <a class="btn btn-primary border-0 ml-4 mt-3" style="background-color: black; border-radius: 2px" href="#" role="button">
+                                    <i class="fab fa-apple"></i> Login with Apple</a>
+                            @endif--}}
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>

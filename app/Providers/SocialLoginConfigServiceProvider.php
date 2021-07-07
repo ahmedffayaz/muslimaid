@@ -31,13 +31,13 @@ class SocialLoginConfigServiceProvider extends ServiceProvider
                 $facebookconfig = array(
                     'client_id'         => $configServices['facebook_client_id'] ?? '',
                     'client_secret'     => $configServices['facebook_client_secret'] ?? '',
-                    'redirect'          => env('FACEBOOK_URL'),
+                    'redirect'          => $configServices['facebook_url'] ?? '',
                 );
 
                 $googleconfig = array(
                     'client_id'         => $configServices['google_client_id'] ?? '',
                     'client_secret'     => $configServices['google_client_secret'] ?? '',
-                    'redirect'          => env('GOOGLE_URL'),
+                    'redirect'          => $configServices['google_url'] ?? '',
                 );
     
                 \Config::set('services.facebook', $facebookconfig);
