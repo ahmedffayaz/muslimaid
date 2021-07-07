@@ -31,6 +31,7 @@
                 @include('client-dashboard.side-nav')
             </div>
             <div class="col-12 col-lg-9 mt-4 mt-lg-0">
+              @include('flash::message')
               <div class="row ">
                 <div class="col-lg-12">
                     <h2>Payment methods</h2>

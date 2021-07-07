@@ -50,9 +50,12 @@ class SettingSeeder extends Seeder
                             'Favicon'=>'default.png',
                             'Theme Color'=>NULL,
                             'Theme Skin'=>'blue',
-                            'Dashboard Menu Type'=>'top'
-
-
+                            'Dashboard Menu Type'=>'top',
+                            'Payment Method Paypal'=>1,
+                            'Payment Method Bank'=>1,
+                            'Payment Method Cheque'=>1,
+                            'Min Cashout Amount'=>1,
+                            'Welcome Bonus'=>2
                             );
 
         foreach ($settings as $key => $value) {

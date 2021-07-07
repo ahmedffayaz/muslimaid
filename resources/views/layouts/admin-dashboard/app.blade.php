@@ -88,7 +88,7 @@
   min-width: 225px;
   /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
   z-index: 1;
-margin-top:15px;
+margin-top:10px;
 left: 0;
 }
 
@@ -134,7 +134,20 @@ left: 0;
     flex-grow: 1;
 }
 }
-
+.dropbtn.icon-status-before::before {
+    position: absolute;
+    border-radius: 50%;
+    left: 0px;
+    top: -30%;
+    height: 10px;
+    width: 10px;
+    border: 2px solid #fff;
+    content: '';
+    background: red;
+}
+.icon-status:after {
+    background:red;
+}
 </style>
 @php $settings = App\Models\SiteSetting::latest()->get()->pluck('value','type'); @endphp
 @php $currency =  0; @endphp
@@ -238,7 +251,7 @@ left: 0;
     // Special stuff to do when this link is clicked...
 
     // Cancel the default action
-    e.preventDefault();
+    // e.preventDefault();
 });
         
         </script>

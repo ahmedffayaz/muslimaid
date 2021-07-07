@@ -168,6 +168,29 @@ class SettingsController extends Controller
                 ]);
            
             } 
+            $settings = SiteSetting::updateOrCreate([
+                'type'   => 'payment_method_paypal',
+                'title'  => 'Payment Method Paypal',
+                
+            ],[
+                'value'     =>  $request->has('payment_method_paypal') ? 1 : 0
+            ]);
+            $settings = SiteSetting::updateOrCreate([
+                'type'   => 'payment_method_bank',
+                'title'  => 'Payment Method Bank',
+                
+            ],[
+                'value'     =>  $request->has('payment_method_bank') ? 1 : 0
+            ]);
+            $settings = SiteSetting::updateOrCreate([
+                'type'   => 'payment_method_cheque',
+                'title'  => 'Payment Method Cheque',
+                
+            ],[
+                'value'     =>  $request->has('payment_method_cheque') ? 1 : 0
+            ]);
+
+
             if($request->has('dashboard_logo')){
 
                 $imageName = 'dashboard_logo_'.time().'.'.$request->dashboard_logo->extension();          
@@ -283,5 +306,28 @@ class SettingsController extends Controller
         flash()->success('Cashback status titles updated successfully');
 
         return redirect()->back();
+    }
+
+
+    public function maintenance(Request $request){
+        // dd($request->input('maintenance'));
+
+        try {
+            if($request->input('maintenance')){
+                
+            \Artisan::call('down');
+                return array('message'=>'Maintenance Mode enabled',
+                'response'=>'success');
+
+            }else{
+            \Artisan::call('up');
+                return array('message'=>'Maintenance Mode disabled',
+                'response'=>'success');
+            }
+           
+        } catch (\Throwable $th) {
+            return array('message'=>'Something went wrong!',
+                        'response'=>'error');
+        }
     }
 }

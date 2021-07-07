@@ -64,27 +64,34 @@
                             <!-- social-links -->
                             <div class="social-links footer-newsletter__social-links social-links--shape--circle">
                                 <ul class="social-links__list">
+                                    @isset(SiteSetting()['facebook'])
                                     <li class="social-links__item">
-                                        <a class="social-links__link social-links__link--type--facebook" href="" target="_blank">
+                                        <a class="social-links__link social-links__link--type--facebook" href="{{SiteSetting()['facebook']}}" target="_blank">
                                             <i class="fab fa-facebook-f"></i>
                                         </a>
                                     </li>
+                                    @endisset
+                                    @isset(SiteSetting()['twitter'])
                                     <li class="social-links__item">
-                                        <a class="social-links__link social-links__link--type--twitter" href="" target="_blank">
+                                        <a class="social-links__link social-links__link--type--twitter" href="//{{SiteSetting()['twitter']}}" target="_blank">
                                             <i class="fab fa-twitter"></i>
                                         </a>
                                     </li>
+                                    @endisset
+                                    @isset(SiteSetting()['linkedin'])
                                     <li class="social-links__item">
-                                        <a class="social-links__link social-links__link--type--linkedin" href="" target="_blank">
+                                        <a class="social-links__link social-links__link--type--linkedin" href="//{{SiteSetting()['linkedin']}}" target="_blank">
                                             <i class="fab fa-linkedin-in"></i>
                                         </a>
                                     </li>
-                                   
+                                   @endisset
+                                   @isset(SiteSetting()['instagram'])
                                     <li class="social-links__item">
-                                        <a class="social-links__link social-links__link--type--instagram" href="" target="_blank">
+                                        <a class="social-links__link social-links__link--type--instagram" href="{{SiteSetting()['instagram']}}" target="_blank">
                                             <i class="fab fa-instagram"></i>
                                         </a>
                                     </li>
+                                    @endisset
                                 </ul>
                             </div>
                             <!-- social-links / end -->

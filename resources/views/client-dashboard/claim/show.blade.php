@@ -20,7 +20,7 @@
                 
                 <div class="card mb-4">
                     <div class="order-header">
-                        <h5 class="order-header__title">Claim #{{$claim->id}}</h5>
+                        <h5 class="order-header__title">Claim {{$claim->ticket_id}}</h5>
                         <div class="order-header__subtitle">We've received your claim. Please allow up to six months to get a decision from the retailer. 
 
                         </div>
@@ -51,17 +51,12 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Claim ID: {{$claim->id}}</td>
-                                        <td></td>
-                                       
-                                    </tr>
-                                    <tr>
                                         <td>Claim date: {{Carbon\Carbon::parse($claim->promotion_end_date)->isoFormat('Do MMMM YYYY')}}</td>
                                         <td></td>
                                        
                                     </tr>
                                     <tr>
-                                        <td>Purchase Amount: {{ currency() }}{{$claim->claim_amount}}</td>
+                                        <td>Purchase amount: {{ currency() }}{{$claim->claim_amount}}</td>
                                         <td></td>
                                     </tr>
                                     <tr>

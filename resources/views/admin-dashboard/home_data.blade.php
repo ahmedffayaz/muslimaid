@@ -85,51 +85,75 @@
         
     </div>
     <div class="row g-gs">
-        <div class="col-lg-6 items-align-middle">
-            <div class="card card-full overflow-hidden">
-                <div class="nk-ecwg nk-ecwg4 h-100">
-                    <div class="card-inner flex-grow-1">
-                        <div class="card-title-group mb-4">
-                            <div class="card-title">
-                                <h6 class="title">Clicks Conversion rate @if(count($clicks)){{round((count($coms)*100)/count($clicks),0)}}% @else 0% @endif</h6>
-                            </div>
-                            <div class="card-tools">
-                                
-                            </div>
+        <div class="col-lg-6  d-table">
+            <div class="card h-100">
+                <div class="card-inner border-bottom">
+                    <div class="card-title-group">
+                        <div class="card-title">
+                            <h6 class="title">New/Pending Tickets</h6>
                         </div>
-                        <div class="data-group">
-                            <div class="nk-ecwg4-ck">
-                                <canvas class="ecommerce-doughnut-s1" id="trafficSources"></canvas>
-                            </div>
-                            <ul class="nk-ecwg4-legends">
-                                <li>
-                                    <div class="title">
-                                        <span class="dot dot-lg sq" data-bg="#9769ff"></span>
-                                        <span>Converted</span>
-                                    </div>
-                                    <div class="amount amount-xs">{{$converted}}</div>
-                                </li>
-                                <li>
-                                    <div class="title">
-                                        <span class="dot dot-lg sq" data-bg="#ff63a5"></span>
-                                        <span>Not converted</span>
-                                    </div>
-                                    <div class="amount amount-xs">{{$notconverted}}</div>
-                                </li>
-                                
-                            </ul>
+                        <div class="card-tools">
+                            <a href="{{route('admin.tickets.index')}}" class="link">All Tickets</a>
                         </div>
-                    </div><!-- .card-inner -->
-                    {{-- <div class="card-inner card-inner-md bg-light">
-                        <div class="card-note">
-                            <em class="icon ni ni-info-fill"></em>
-                            <span>Traffic channels have beed generating the most traffics over past days.</span>
-                        </div>
-                    </div> --}}
+                    </div>
                 </div>
-            </div><!-- .card -->
-        </div><!-- .col -->
-        
+                <ul class="nk-support">
+                @if(count($tickets))
+                
+                    @foreach ($tickets->take(5) as $ticket)
+                    <li class="nk-support-item">
+                        <a href="{{route('admin.tickets.show', $ticket)}}">
+                        <div class="user-avatar text-uppercase
+                                <?php
+
+                                    $color = rand(1,5);
+                                    if($color==1){echo 'bg-info-dim';}
+                                    elseif($color==2){echo 'bg-primary-dim';}
+                                    elseif($color==3){echo 'bg-danger-dim';}
+                                    elseif($color==4){echo 'bg-success-dim';}
+                                    elseif($color==5){echo 'bg-warning-dim';}
+                                    else{}
+                                    ?>">
+                                        <span>{{$ticket->user->first_name[0]}}{{$ticket->user->last_name[0]}}</span>
+                            </div>
+                        </a>
+                        <div class="nk-support-content">
+                            <a href="{{route('admin.tickets.show', $ticket)}}">
+                            <div class="title">
+                                <span>{{$ticket->user->first_name}} {{$ticket->user->last_name}}</span>
+                                @if($ticket->status =='open')
+                                <span class="badge badge-dot badge-dot-xs badge-info ml-1">Open</span>
+                            @elseif($ticket->status=='pending')
+                                @if($ticket->lastReply->reply_by =='admin')
+                                <span class="badge badge-dot badge-dot-xs badge-info ml-1">Replied</span>
+                                
+                                @endif
+                                @if($ticket->lastReply->reply_by =='client')
+                                <span class="badge badge-dot badge-dot-xs badge-warning ml-1">Awaiting your reply </span>
+                                @endif
+
+                            @elseif($ticket->status=='closed')
+                            <span class="badge badge-dot badge-dot-xs badge-success ml-1">Closed </span>
+                                
+
+                            @endif
+                                
+                            </div>
+                        </a>
+                            <p>{{$ticket->title}}</p>
+                            <span class="time">@php echo \Carbon\Carbon::createFromTimeStamp(strtotime($ticket->created_at))->diffForHumans() @endphp</span>
+                        </div>
+                    </li>
+                    @endforeach
+                    
+                
+                @else
+                <li class="nk-support-item">No New/Pending Tickets</li>
+                @endif
+            </ul>
+            </div>
+            
+        </div>
         <div class="col-lg-6">
             <div class="card h-100">
                 <div class="card-inner">
@@ -181,6 +205,52 @@
                 </div><!-- .card-inner -->
             </div><!-- .card -->
         </div><!-- .col -->
+        <div class="col-lg-6 items-align-middle">
+            <div class="card card-full overflow-hidden">
+                <div class="nk-ecwg nk-ecwg4 h-100">
+                    <div class="card-inner flex-grow-1">
+                        <div class="card-title-group mb-4">
+                            <div class="card-title">
+                                <h6 class="title">Clicks Conversion rate @if(count($clicks)){{round((count($coms)*100)/count($clicks),0)}}% @else 0% @endif</h6>
+                            </div>
+                            <div class="card-tools">
+                                
+                            </div>
+                        </div>
+                        <div class="data-group">
+                            <div class="nk-ecwg4-ck">
+                                <canvas class="ecommerce-doughnut-s1" id="trafficSources"></canvas>
+                            </div>
+                            <ul class="nk-ecwg4-legends">
+                                <li>
+                                    <div class="title">
+                                        <span class="dot dot-lg sq" data-bg="#9769ff"></span>
+                                        <span>Converted</span>
+                                    </div>
+                                    <div class="amount amount-xs">{{$converted}}</div>
+                                </li>
+                                <li>
+                                    <div class="title">
+                                        <span class="dot dot-lg sq" data-bg="#ff63a5"></span>
+                                        <span>Not converted</span>
+                                    </div>
+                                    <div class="amount amount-xs">{{$notconverted}}</div>
+                                </li>
+                                
+                            </ul>
+                        </div>
+                    </div><!-- .card-inner -->
+                    {{-- <div class="card-inner card-inner-md bg-light">
+                        <div class="card-note">
+                            <em class="icon ni ni-info-fill"></em>
+                            <span>Traffic channels have beed generating the most traffics over past days.</span>
+                        </div>
+                    </div> --}}
+                </div>
+            </div><!-- .card -->
+        </div><!-- .col -->
+        
+        
         
         
         @if(count($coms))
@@ -384,77 +454,6 @@
             </div><!-- .card -->
         </div>
         @endif
-        
-        <div class="col-lg-6  d-table">
-            <div class="card h-100">
-                <div class="card-inner border-bottom">
-                    <div class="card-title-group">
-                        <div class="card-title">
-                            <h6 class="title">New/Pending Tickets</h6>
-                        </div>
-                        <div class="card-tools">
-                            <a href="{{route('admin.tickets.index')}}" class="link">All Tickets</a>
-                        </div>
-                    </div>
-                </div>
-                <ul class="nk-support">
-                @if(count($tickets))
-                
-                    @foreach ($tickets->take(10) as $ticket)
-                    <li class="nk-support-item">
-                        <a href="{{route('admin.tickets.show', $ticket)}}">
-                        <div class="user-avatar text-uppercase
-                                <?php
-
-                                    $color = rand(1,5);
-                                    if($color==1){echo 'bg-info-dim';}
-                                    elseif($color==2){echo 'bg-primary-dim';}
-                                    elseif($color==3){echo 'bg-danger-dim';}
-                                    elseif($color==4){echo 'bg-success-dim';}
-                                    elseif($color==5){echo 'bg-warning-dim';}
-                                    else{}
-                                    ?>">
-                                        <span>{{$ticket->user->first_name[0]}}{{$ticket->user->last_name[0]}}</span>
-                            </div>
-                        </a>
-                        <div class="nk-support-content">
-                            <a href="{{route('admin.tickets.show', $ticket)}}">
-                            <div class="title">
-                                <span>{{$ticket->user->first_name}} {{$ticket->user->last_name}}</span>
-                                @if($ticket->status =='open')
-                                <span class="badge badge-dot badge-dot-xs badge-info ml-1">Open</span>
-                            @elseif($ticket->status=='pending')
-                                @if($ticket->lastReply->reply_by =='admin')
-                                <span class="badge badge-dot badge-dot-xs badge-info ml-1">Replied</span>
-                                
-                                @endif
-                                @if($ticket->lastReply->reply_by =='client')
-                                <span class="badge badge-dot badge-dot-xs badge-warning ml-1">Awaiting your reply </span>
-                                @endif
-
-                            @elseif($ticket->status=='closed')
-                            <span class="badge badge-dot badge-dot-xs badge-success ml-1">Closed </span>
-                                
-
-                            @endif
-                                
-                            </div>
-                        </a>
-                            <p>{{$ticket->title}}</p>
-                            <span class="time">@php echo \Carbon\Carbon::createFromTimeStamp(strtotime($ticket->created_at))->diffForHumans() @endphp</span>
-                        </div>
-                    </li>
-                    @endforeach
-                    
-                
-                @else
-                <li class="nk-support-item">No New/Pending Tickets</li>
-                @endif
-            </ul>
-            </div>
-            
-        </div>
-       
         
         
     </div><!-- .row -->

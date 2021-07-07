@@ -34,7 +34,7 @@
                                 <tbody>
                                     @foreach (Auth::user()->claims as $claim )
                                     <tr>
-                                        <td><a href="{{route('account.claim.show',$claim)}}">Claim #{{$claim->id}}</a></td>
+                                        <td><a href="{{route('account.claim.show',$claim->ticket_id)}}">{{$claim->ticket_id}}</a></td>
                                         <td>{{$claim->store->name}}</td>
                                         <td>{{ currency() }}{{$claim->claim_amount}}</td>
                                         <td class="text-capitalize">{{$claim->claim_type}}</td>

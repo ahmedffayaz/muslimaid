@@ -50,12 +50,12 @@ class UserSeeder extends Seeder
 
         $faker = Faker::create();
 
-    	foreach (range(1,50) as $index) {
+    	foreach (range(1,1000) as $index) {
 
             $user = new User();
             $user->first_name = $faker->firstName;
             $user->last_name = $faker->lastName;
-            $user->email = $faker->email;
+            $user->email = $faker->unique()->email;
             $user->password = bcrypt('123@#$xyz990');
             $user->registration_type = 'sign up';
             $user->avatar = 'default.png';

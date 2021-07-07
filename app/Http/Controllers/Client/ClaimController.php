@@ -52,8 +52,9 @@ class ClaimController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Ticket $claim)
+    public function show($id)
     {
+        $claim = Ticket::where('ticket_id',$id)->firstOrFail();
         return view('client-dashboard.claim.show',compact('claim'));
     }
 

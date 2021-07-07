@@ -320,3 +320,12 @@ function similarStores($store){
         ->get();
     return $similarStores;
 }
+
+
+function maintenance(){
+    if (file_exists(storage_path('framework/down'))) {
+        return true;
+    }
+    else
+     return false;
+}

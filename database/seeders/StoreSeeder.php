@@ -23,7 +23,7 @@ class StoreSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        foreach (range(1,50) as $index) {
+        foreach (range(1,1000) as $index) {
 
             $store = new Store();
             $store->network_id = 1;
@@ -47,7 +47,7 @@ class StoreSeeder extends Seeder
                 'is_fake' =>1
             ]);
 
-            foreach (range(1,3) as $i){
+            foreach (range(1,10) as $i){
                 $cashback = new StoreCashback();
                 $cashback->store_id = $store->id;
                 $cashback->type = 'percentage';
@@ -55,6 +55,7 @@ class StoreSeeder extends Seeder
                 $cashback->network_detail = $faker->text($maxNbChars = 100);
                 $cashback->sale_commission = $faker->numberBetween(1,10);
                 $cashback->default= 1;
+                $cashback->click_url = $faker->url;
                 $cashback->save();
             }
             	

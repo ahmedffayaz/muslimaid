@@ -40,7 +40,7 @@
                 <div class="block-product-columns__column">
                     <div class="block-product-columns__item">
                         <div class="product-card product-card--hidden-actions product-card--layout--horizontal d-block p-3">
-                    @foreach ($groups[$letter] as $store)
+                    @foreach ($groups[$letter]->take(15) as $store)
                         
                     
                     
@@ -146,8 +146,8 @@
         </div>
 
       
-            <h4 class="text-capitalize mt-4">Other</h4>
-            
+            <h4 class="text-capitalize mt-4 d-none">Other</h4>
+        
             
             
             <div class="row">

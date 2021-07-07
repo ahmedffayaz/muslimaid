@@ -21,7 +21,6 @@ class HomeController extends Controller
      */
     public function index()
     {
-        
         $stores = Store::where('feature_homepage',1)->latest()->get();
         $languages = Language::orderBy('id', 'desc')->get();
         $featured_categories = Category::where('feature_homepage',1)->orderBy('name', 'ASC')->latest()->get();

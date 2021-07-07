@@ -14,45 +14,28 @@
             @isset($settings['dashboard_menu_type']) @if($settings['dashboard_menu_type'] == 'top')  
             <div class="nk-header-search ml-3 ml-xl-0">
                 <div class="dropdown">
-                    <a href="#"  class="dropbtn user-name dropdown-indicator"><em class="icon ni ni-home-fill"></em> Dashboard</a>
-                    <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-content">
-                        <div class="dropdown-inner px-4">
-                            <ul class="link-list">
-                                @can('view categories')
-                                <li class="">
-                                    <a href="{{route('admin.home.index')}}" class="">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-home-fill"></em></span>
-                                        <span class="nk-menu-text">Dashboard </span>
-                                    </a>
-                                </li><!-- .nk-menu-item -->
-                                @endcan
-                              
-                            </ul>
-                        </div>
-                        
-                    </div>
-                    
+                    <a href="{{route('admin.home.index')}}"  class="dropbtn user-name"><em class="icon ni ni-home-fill"></em> Dashboard</a>                    
                 </div>
                 
                
                 <div class="dropdown">
-                    <a href="#"  class="dropbtn user-name dropdown-indicator"><em class="icon ni ni-db-fill"></em> Data</a>
+                    <a href="{{route('admin.stores.index')}}"  class="dropbtn user-name dropdown-indicator"><em class="icon ni ni-db-fill"></em> Data</a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-content">
                         <div class="dropdown-inner px-4">
                             <ul class="link-list">
-                                @can('view categories')
-                                <li class="">
-                                    <a href="{{route('admin.categories.index')}}" class="">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-grid-alt-fill"></em></span>
-                                        <span class="nk-menu-text">Categories</span>
-                                    </a>
-                                </li><!-- .nk-menu-item -->
-                                @endcan
                                 @can('view stores')
                                 <li class="">
                                     <a href="{{route('admin.stores.index')}}" class="">
                                         <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
                                         <span class="nk-menu-text">Stores</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                @endcan
+                                @can('view categories')
+                                <li class="">
+                                    <a href="{{route('admin.categories.index')}}" class="">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-grid-alt-fill"></em></span>
+                                        <span class="nk-menu-text">Categories</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endcan
@@ -78,7 +61,7 @@
                     </div>         
                 </div>
                 <div class="dropdown">
-                    <a href="#"  class="dropbtn user-name dropdown-indicator"><em class="icon ni ni-sign-gbp"></em> Sales</a>
+                    <a href="{{route('admin.commissions.index')}}"  class="dropbtn user-name dropdown-indicator"><em class="icon ni ni-sign-gbp"></em> Sales</a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-content">
                         <div class="dropdown-inner px-4">
                             <ul class="link-list">
@@ -112,25 +95,14 @@
                     </div>
                 
                 </div>
+                @can('view users')
                 <div class="dropdown">
-                    <a href="#"  class="dropbtn user-name dropdown-indicator"><em class="icon ni ni-users-fill"></em> Users</a>
-                    <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-content">
-                        <div class="dropdown-inner px-4">
-                            <ul class="link-list">
-                                @can('view users')
-                                <li class="">
-                                    <a href="{{route('admin.users.index')}}" class="">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-users-fill"></em></span>
-                                        <span class="nk-menu-text">Users</span>
-                                    </a>
-                                </li><!-- .nk-menu-item -->
-                                @endcan
-                            </ul>
-                        </div> 
-                    </div>
+                    <a href="{{route('admin.users.index')}}"  class="dropbtn user-name"><em class="icon ni ni-users-fill"></em> Users</a>
+                
                 </div>
+                @endcan
                 <div class="dropdown">
-                    <a href="#"  class="dropbtn user-name dropdown-indicator"><em class="icon ni ni-file-docs"></em> Reports</a>
+                    <a href="{{route('admin.clicks.index')}}"  class="dropbtn user-name dropdown-indicator"><em class="icon ni ni-file-docs"></em> Reports</a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-content">
                         <div class="dropdown-inner px-4">
                             <ul class="link-list">
@@ -163,29 +135,29 @@
                     </div>
                 </div>
                 <div class="dropdown">
-                    <a href="#"  class="dropbtn user-name dropdown-indicator"><em class="icon ni ni-setting-fill"></em> Settings</a>
+                    <a href="{{route('admin.settings.index')}}"  class="dropbtn user-name dropdown-indicator"><em class="icon ni ni-setting-fill"></em> Settings</a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-content">
                         <div class="dropdown-inner px-4">
                             <ul class="link-list">
+                                @can('view settings')
+                                <li class="">
+                                    <a href="{{route('admin.settings.index')}}" class="">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-setting-fill"></em></span>
+                                        <span class="nk-menu-text">System Settings</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                                @endcan
+                                <li class="">
+                                    <a href="{{route('admin.email_templates.index')}}" class="">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-emails"></em></span>
+                                        <span class="nk-menu-text">Email Templates</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
                                 @can('view networks')
                                 <li class="">
                                     <a href="{{route('admin.networks.index')}}" class="">
                                         <span class="nk-menu-icon"><em class="icon ni ni-activity-round-fill"></em></span>
                                         <span class="nk-menu-text">Networks</span>
-                                    </a>
-                                </li><!-- .nk-menu-item -->
-                                @endcan
-                                @can('view settings')
-                                <li class="">
-                                    <a href="{{route('admin.settings.index')}}" class="">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-setting-fill"></em></span>
-                                        <span class="nk-menu-text">Settings</span>
-                                    </a>
-                                </li><!-- .nk-menu-item -->
-                                <li class="">
-                                    <a href="{{route('admin.email_templates.index')}}" class="">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-emails"></em></span>
-                                        <span class="nk-menu-text">Email Templates</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
                                 @endcan
@@ -229,16 +201,17 @@
                         </div> 
                     </div>
                 </div>
+                @php
+                $new_tickets = \App\Models\Ticket::where('new_ticket',1)->get();    
+                @endphp
                 <div class="dropdown">
-                    <a href="#"  class="dropbtn user-name dropdown-indicator"><em class="icon ni ni-layout-alt-fill"></em> CMS</a>
-                    <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-content">
+                    <a href="{{route('admin.pages.index')}}"  class="dropbtn user-name dropdown-indicator @if(count($new_tickets)) icon-status-before icon-status-info-before @endif"><em class="icon ni ni-layout-alt-fill"></em> CMS</a>
+                    <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-content ">
                         <div class="dropdown-inner px-4">
                             <ul class="link-list">
                                 @can('view tickets')
                             <li class=" ">
-                                @php
-                                $new_tickets = \App\Models\Ticket::where('new_ticket',1)->get();    
-                                @endphp
+                               
                                 <a href="{{route('admin.tickets.index')}}" class=" @if(count($new_tickets)) icon-status icon-status-info @endif">
                                     <span class="nk-menu-icon "><em class="icon ni ni-chat-fill"></em></span>
                                     <span class="nk-menu-text">Tickets</span>
@@ -269,7 +242,7 @@
             
             <div class="nk-header-tools">
                 <ul class="nk-quick-nav">
-                    <li> <a href="{{url('/')}}" target="_blank"  class="btn btn-outline-primary btn-dim btn-sm d-none d-md-block"><em class="icon ni ni-external-alt mr-1"></em> Visit Site</a></li>
+                    <li> <a href="{{url('/')}}" target="_blank"  class="btn btn-outline-primary btn-dim btn-sm d-none d-md-inline-flex"><em class="icon ni ni-external-alt mr-1"></em> Visit Site</a></li>
 
                     <li class="dropdown user-dropdown">
                         <a href="#" class="dropdown-toggle mr-n1" data-toggle="dropdown">

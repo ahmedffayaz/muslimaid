@@ -13,7 +13,8 @@
                             <div class="profile-card__avatar">
                                 <img src="{{asset('frontend/images/avatars/avatar-3.jpg')}}" alt="">
                             </div>
-                            <div class="profile-card__name">{{$user->first_name}} {{$user->last_name}}</div>
+                            <div class="profile-card__name">@if($user->first_name != 'unnamed' || $user->last_name != 'unnamed'){{$user->first_name}} {{$user->last_name}} @else <a href="{{route('account.profile')}}">Set Username</a> @endif
+                                </div>
                             <div class="profile-card__email">{{$user->email}}</div>
                             <div class="profile-card__edit">
                                 <a href="{{route('account.profile')}}" class="btn btn-secondary btn-sm">Edit Profile</a>

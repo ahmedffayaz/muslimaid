@@ -26,6 +26,7 @@
         </div>
     </div>
 </div> --}}
+@php if(array_key_exists('min_cashout_amount',SiteSetting()->toArray())) $min = SiteSetting()['min_cashout_amount']; else $min = 1;  @endphp
 <div class="block mt-5">
     <div class="container">
         <div class="row">
@@ -37,15 +38,17 @@
                 <div class="row ">
                     <div class="col-lg-8">
                         <h2>Withdraw</h2>
-                        <p>You can withdraw your earned cashback in a variety of ways...</p>
+                        <p>You can withdraw your earned cashback in a variety of ways.</p>
                     </div>
                     <div class="col-lg-4 text-right" >
-                        <h3>Balance {{ currency() }} {{Auth::user()->balance->sum('amount')}}</h3>
+                        <h3>Balance {{ currency() }}{{Auth::user()->availableBalance()}}</h3>
                         </p>Select a payment method</p>
                     </div>
                 </div>
                 <div class="products-view__list products-list" data-layout="list" data-with-features="false" data-mobile-grid-columns="2">
                     <div class="products-list__body">
+
+                        @if(SiteSetting()['payment_method_paypal'])
                         <div class="products-list__item">
                             <div class="product-card product-card--hidden-actions ">
                                 <div class="product-card__image product-image pt-0 " >
@@ -56,25 +59,28 @@
                                     <div class="product-card__name ">
                                         <ul class="product-card__features-list">
                                             <li>Receive payment using an email address</li>
-                                            <li>Minimum withdrawal £1</li>                                            
+                                            <li>Minimum withdrawal £{{$min}}</li>                                            
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="product-card__actions align-self-center">
                                     <div class="product-card__buttons mt-2">
-                                        @if(Auth::user()->balance->sum('amount') < 1)
-                                        <p class="small">Your cashback balance is currently less than £1</p>
+                                        @if(Auth::user()->availableBalance() < $min)
+                                        <p class="small">Your cashback balance is currently less than £{{$min}}</p>
                                         @endif
                                         <form action="{{route('account.cashout')}}" class="m-auto" method="POST">
                                             @csrf
                                             <input type="hidden" name="payment_method" value="paypal">
-                                            <button type="subimt" class="btn btn-success @if(Auth::user()->balance->sum('amount') < 1) disabled @endif" >Withdraw</button>                                  
+                                            <button type="subimt" class="btn btn-success"   @if(Auth::user()->availableBalance() < $min) disabled @endif>Withdraw</button>                                  
                                             
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                       @endif
+                       @if(SiteSetting()['payment_method_bank'])
+
                         <div class="products-list__item">
                             <div class="product-card product-card--hidden-actions ">
                                 <div class="product-card__image product-image align-self-center" >
@@ -84,25 +90,26 @@
                                     <div class="product-card__name ">
                                         <ul class="product-card__features-list">
                                             <li>Free & secure</li>
-                                            <li>Minimum withdrawal £1</li>                                            
+                                            <li>Minimum withdrawal £{{$min}}</li>                                            
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="product-card__actions align-self-center">
                                     <div class="product-card__buttons mt-2">
-                                        @if(Auth::user()->balance->sum('amount') < 1)
-                                        <p class="small">Your cashback balance is currently less than £1</p>
+                                        @if(Auth::user()->availableBalance() < $min)
+                                        <p class="small">Your cashback balance is currently less than £{{$min}}</p>
                                         @endif
                                         <form action="{{route('account.cashout')}}" class="m-auto" method="POST">
                                             @csrf
                                             <input type="hidden" name="payment_method" value="bank">
-                                            <button type="subimt" class="btn btn-success @if(Auth::user()->balance->sum('amount') < 1) disabled @endif" >Withdraw</button>                                  
+                                            <button type="subimt" class="btn btn-success"@if(Auth::user()->availableBalance() < $min) disabled @endif >Withdraw</button>                                  
                                             
                                         </form>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        @endif
                     </div>
                 </div>
             </div>
