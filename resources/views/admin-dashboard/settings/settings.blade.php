@@ -101,6 +101,9 @@ ul.categories li {
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem10"><em class="icon ni ni-color-palette-fill"></em><span>Appearance</span></a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem11"><em class="icon ni ni-lock-fill"></em><span>Login API's</span></a>
+                                    </li>
                                     
                                 </ul>
                                 <div class="tab-content">
@@ -682,6 +685,93 @@ ul.categories li {
                                             </form>
                                         </div>
                                       
+                                    </div>
+                                    <div class="tab-pane" id="tabItem11">
+                                        <div class="nk-block">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">Facebook</h5>
+                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                            </div><!-- .nk-block-head -->
+                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="facebook_client_id">Facebook Client ID</label>
+                                                            {{-- <span class="form-note">Specify the facebook client id.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" name="facebook_client_id" id="facebook_client_id" value="{{$settings['facebook_client_id'] ?? ''}}" placeholder="Facebook Client ID">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="facebook_client_secret">Facebook Client Secret</label>
+                                                            {{-- <span class="form-note">Specify the facebook client secret.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" secret="facebook_client_secret" name="facebook_client_secret" value="{{$settings['facebook_client_secret'] ?? ''}}" placeholder="Facebook Client Secret">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <div class="nk-block-head">
+                                                <h5 class="title">Google</h5>
+                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                            </div><!-- .nk-block-head -->
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="google_client_id">Google Client ID</label>
+                                                            {{-- <span class="form-note">Specify the google client id.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="google_client_id" name="google_client_id" value="{{$settings['google_client_id'] ?? ''}}" placeholder="Google Client ID">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+                                                
+                                                
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="google_client_secret">Google Client Secret</label>
+                                                            {{-- <span class="form-note">Specify the google client secret.</span> --}}
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="google_client_secret" name="google_client_secret" value="{{$settings['google_client_secret'] ?? ''}}" placeholder="Google Client Secret">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="row g-3">
+                                                    <div class="col-lg-9 offset-lg-3">
+                                                        <div class="form-group mt-2">
+                                                            <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

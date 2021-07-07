@@ -180,6 +180,7 @@ return [
         App\Providers\RouteServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         App\Providers\MailConfigServiceProvider::class,
+        App\Providers\SocialLoginConfigServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
         ConsoleTVs\Charts\ChartsServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,

@@ -149,6 +149,11 @@ class PagesController extends Controller
         return view('client-dashboard.login');
     }
 
+    public function register(Request $request){
+        session(['prvUrl' => $request->get('prvUrl')]);
+        return view('client-dashboard.register');
+    }
+
     public function search(Request $request, Store $stores){
         $stores = $stores->newQuery();
         $term = null;
