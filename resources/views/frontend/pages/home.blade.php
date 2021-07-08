@@ -107,20 +107,16 @@
                          <button type="submit" class="btn btn-primary mt-1">Join now for free</button>
                     </form>
                     @if(isFacebookEnabled() || isGoogleEnabled())
-                        <hr/>
                         <div>
-                        @if(isFacebookEnabled())
-                            <a class="btn btn-primary border-0" style="background-color: #3b5998; border-radius: 2px" href="{{ url('/login/facebook') }}" role="button">
-                                <i class="fab fa-facebook-f"> Join with Facebook</i></a>
-                        @endif
-                        @if(isGoogleEnabled())
-                            <a class="btn btn-primary border-0 ml-2" style="background-color: #dd4b39; border-radius: 2px" href="{{ url('/login/google') }}" role="button">
-                                <i class="fab fa-google"></i> Join with Google</a>
-                        @endif
-                        {{-- @if(isAppleEnabled())
-                            <a class="btn btn-primary border-0 ml-2" style="background-color: black; border-radius: 2px" href="#" role="button">
-                                <i class="fab fa-apple"></i> Join with Apple</a>
-                        @endif--}}
+                            <hr/>
+                            @if(isFacebookEnabled())
+                                <a class="btn btn-primary border-0" style="background-color: #3b5998; border-radius: 2px" href="{{ url('/login/facebook') }}" role="button">
+                                    <i class="fab fa-facebook-f"> Join with Facebook</i></a>
+                            @endif
+                            @if(isGoogleEnabled())
+                                <a class="btn btn-primary border-0 ml-2" style="background-color: #dd4b39; border-radius: 2px" href="{{ url('/login/google') }}" role="button">
+                                    <i class="fab fa-google"></i> Join with Google</a>
+                            @endif
                         </div>
                     @endif
                 </div>
