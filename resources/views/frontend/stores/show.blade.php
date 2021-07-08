@@ -160,7 +160,16 @@
 
                                 </form>
 
-                                <h5>@if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif{{$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif Cashback</h5>
+                                <h5>@if($store->cashback->type=='fixed'){{$store->cashback->currency}}
+
+                                @endif
+                                @if($store->custom_cashback_percentage)
+                                {{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}
+                                @else
+                                {{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}
+                                @endif
+                                
+                                @if($store->cashback->type=='percentage')%@endif Cashback</h5>
 
                                 <a href="#" @guest class="btn btn-primary" data-toggle="modal" data-target="#signinModal" @else form_id="form_{{$store->id}}" class="btn btn-primary store_form" @endguest>Get Cashback</a>
 
@@ -168,8 +177,7 @@
                         </div>
                     </div>
                     <div class="row m-0 mt-5">
-                        @foreach($store->cashbacks as $cashback)
-
+                        @foreach($store->cashbacks->take(3) as $cashback)
 
                         <div class="col-lg-4 border text-center py-4 px-3 mt-4">
                             <h4>@if($cashback->type=='fixed'){{$cashback->currency}} @endif
@@ -191,11 +199,36 @@
                             </form>
                             <a href="#" @guest class="btn btn-primary" data-toggle="modal" data-target="#signinModal" @else form_id="form_{{$cashback->id}}" class="btn btn-primary store_form" @endguest>Get Cashback</a>
                         </div>
-
                         @endforeach
-
-
                     </div>
+
+                    <div class="row m-0" id="remaining_cashback" style="display: none;">
+                        @foreach($store->cashbacks->skip(3) as $cashback)
+
+                        <div class="col-lg-4 border text-center py-4 px-3 mt-4">
+                            <h4>@if($cashback->type=='fixed'){{$cashback->currency}} @endif
+                                @if($store->custom_cashback_percentage)
+                                {{($store->custom_cashback_percentage/100)*$cashback->sale_commission}}
+                                @else
+                                {{(SiteSetting()['cashback_percentage']/100)*$cashback->sale_commission}}
+                                @endif
+                                @if($cashback->type=='percentage')%@endif
+                            </h4>
+                            <p>{{$cashback->detail}}</p>
+                            <form action="{{route('site.exit_click.store')}}" method="POST" id="form_{{$cashback->id}}" target="_blank" class="tracker_form">
+                                @csrf
+                                <input type="hidden" name="url" id="url" value="{{$cashback->click_url}}">
+                                <input type="hidden" name="store_id" id="store_id" value="{{$store->id}}">
+                                <input type="hidden" name="voucher_id" id="voucher_id" value="0">
+                                <input type="hidden" name="user_id" id="user_id" value="{{Auth::id() ?? 0}}">
+
+                            </form>
+                            <a href="#" @guest class="btn btn-primary" data-toggle="modal" data-target="#signinModal" @else form_id="form_{{$cashback->id}}" class="btn btn-primary store_form" @endguest>Get Cashback</a>
+                        </div>
+                        @endforeach
+                    </div>
+                        <div class="text-right mt-2 see-all"><button class="btn btn-link">See All Cashbacks</button></div>
+
 
                     <div class="product-tabs  product-tabs--layout--sidebar  product-tabs--sticky">
                         <div class="product-tabs__list d-none">
@@ -221,11 +254,10 @@
                         </div>
                         @endif
                         <!-- Vouchers tab -->
+                        @if($store->vouchers->count())
                         <div class="product-tabs  product-tabs--layout--sidebar  product-tabs--sticky">
                             <div class="product-tabs__content">
                                 <div class="product-tabs__pane product-tabs__pane--active" id="tab-description">
-                                    @if($store->vouchers->count())
-
                                     <h4>Vouchers</h4>
                                     @foreach ($store->vouchers->unique('link_name') as $voucher)
                                     <div class="product-card mb-2 p-4">
@@ -263,15 +295,15 @@
                                         </div>
                                     </div>
                                     @endforeach
-                                    @endif
                                 </div>
                             </div>
                         </div>
+                        @endif
                         <!-- Reviews tab -->
+                        @if($store->reviews->count())
                         <div class="product-tabs  product-tabs--layout--sidebar  product-tabs--sticky">
                             <div class="product-tabs__content">
                                 <div class="product-tabs__pane product-tabs__pane--active" id="tab-description">
-                                    @if($store->reviews->count())
                                     <div class="reviews-view">
                                         <div class="reviews-view__list">
                                             <h3 class="reviews-view__header">Reviews</h3>
@@ -320,11 +352,10 @@
                                             </div>
                                         </div>
                                     </div>
-                                    @endif
                                 </div>
-
                             </div>
                         </div>
+                        @endif
                     </div>
 
                 </div>
@@ -505,5 +536,11 @@
             $('.dialog-modal__voucher-code').text(code);
             $('#' + form).submit();
         });
+
+        $('.see-all').on('click', function(){
+            $('.see-all').hide();
+            $('#remaining_cashback').show();
+        })
+
     </script>
     @endpush
