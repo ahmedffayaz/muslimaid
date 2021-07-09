@@ -32,19 +32,31 @@
                         <form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
                             @csrf
                             <div class="row g-4">
-                                <div class="col-lg-3">
+                                <div class="col-lg-2 col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label" for="user_id">User</label>
-                                        <div class="form-control-wrap ">
-                                            <select class="form-select form-control" data-search="on" id="user_id" name="user_id">
-                                                <option value="0">All</option>
-                                                @foreach ($users as $user)
-                                                <option value="{{$user->id}}">{{$user->id}} - {{$user->first_name}} {{$user->last_name}} - {{$user->email}}</option>
-                                                @endforeach
-                                            </select> 
+                                        <label class="form-label" for="click_id">Click ID</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control" id="click_id" value="" name="click_id">
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-lg-2 col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="user">User ID/Name</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control" id="user" value="" name="user">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-2 col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="store">Store ID/Name</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control" id="store" value="" name="store">
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-label" for="network_id">Network</label>
@@ -60,20 +72,7 @@
                                     </div>
                                 </div>
                             
-                                <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label class="form-label" for="store_id">Store</label>
-                                        <div class="form-control-wrap ">
-                                            <select class="form-select form-control" data-search="on" id="store_id" name="store_id">
-                                                <option value="0">All</option>
-                                                @foreach ($stores as $store)
-                                                <option value="{{$store->id}}">{{$store->id}} - {{$store->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div> 
-                                            
+                                  
                                 <div class="col-3 align-self-end ml-auto">
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-success btn-block">Search</button>
@@ -136,12 +135,13 @@
               
             var _token = $("input[name=_token]").val();
             var network_id = $("select[name=network_id]").val();
-            var store_id = $("select[name=store_id]").val();
-            var user_id = $("select[name=user_id]").val();
+            var store = $("input[name=store]").val();
+            var user = $("input[name=user]").val();
+            var click_id = $("input[name=click_id]").val();
             $.ajax({
               url:'{{route("admin.clicks.search_clicks")}}?page='+page,
               method:"POST",
-              data:{_token:_token,network_id:network_id,store_id:store_id,user_id:user_id},
+              data:{_token:_token,network_id:network_id,store:store,user:user,click_id:click_id},
               success:function(data)
               {
                $('#table-data').html(data);
@@ -160,12 +160,13 @@
               
             var _token = $("input[name=_token]").val();
             var network_id = $("select[name=network_id]").val();
-            var store_id = $("select[name=store_id]").val();
-            var user_id = $("select[name=user_id]").val();
+            var store = $("input[name=store]").val();
+            var user = $("input[name=user]").val();
+            var click_id = $("input[name=click_id]").val();
             $.ajax({
               url:'{{route("admin.clicks.search_clicks")}}',
               method:"POST",
-              data:{_token:_token,network_id:network_id,store_id:store_id,user_id:user_id},
+              data:{_token:_token,network_id:network_id,store:store,user:user,click_id:click_id},
               success:function(data)
               {
                $('#table-data').html(data);

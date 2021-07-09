@@ -1,11 +1,16 @@
+<style>
+    .nk-tb-list{
+        table-layout: fixed;
+    }
+</style>
 @if(count($users))
 <div class="nk-tb-item nk-tb-head">
     
-    <div class="nk-tb-col"><span class="sub-text">User</span></div>
-    <div class="nk-tb-col tb-col-mb"><span class="sub-text">Balance</span></div>
-    <div class="nk-tb-col tb-col-mb"><span class="sub-text">Reg Type</span></div>
+    <div class="nk-tb-col" style="width: 30%"><span class="sub-text">User</span></div>
+    <div class="nk-tb-col tb-col-lg"><span class="sub-text">Balance</span></div>
+    <div class="nk-tb-col tb-col-lg"><span class="sub-text">Reg Type</span></div>
     <div class="nk-tb-col tb-col-lg"><span class="sub-text">Reg date</span></div>
-    <div class="nk-tb-col "><span class="sub-text">Status</span></div>
+    <div class="nk-tb-col tb-col-lg text-center"><span class="sub-text">Status</span></div>
     <div class="nk-tb-col nk-tb-col-tools text-right">
         <span class="sub-text">Action</span>
        
@@ -14,7 +19,7 @@
 @foreach ($users as $user)
 <div class="nk-tb-item">
     
-    <div class="nk-tb-col">
+    <div class="nk-tb-col" style="width: 30%">
        <a href="{{route('admin.users.show_user')}}?user_id={{$user->id}}">
             <div class="user-card">
                 <div class="user-avatar 
@@ -31,26 +36,26 @@
                     <span>@if($user->first_name == 'unnamed' || $user->last_name == 'unnamed') NA @else{{$user->first_name[0]}}{{$user->last_name[0]}}@endif</span>
                 </div>
                 <div class="user-info">
-                    <span class="tb-lead">{{$user->id}} @if($user->first_name != 'unnamed' || $user->last_name != 'unnamed')- {{$user->first_name}} {{$user->last_name}} @endif<span class="dot dot-success d-md-none ml-1"></span></span>
+                    <span class="tb-lead">{{$user->id}} @if($user->first_name != 'unnamed' || $user->last_name != 'unnamed')- {{$user->first_name}} {{$user->last_name}} @endif</span>
                     <span>{{$user->email}}</span>
                 </div>
             </div>
         </a>
        
     </div>
-    <div class="nk-tb-col tb-col-mb">
+    <div class="nk-tb-col tb-col-lg">
         <span class="tb-amount"><span class="currency">{{ currency() }} </span>{{$user->balance->sum('amount')}}</span>
     </div>
-    <div class="nk-tb-col tb-col-mb">
+    <div class="nk-tb-col tb-col-lg">
         <span>{{$user->registration_type}}</span>
     </div>
     
-    <div class="nk-tb-col ">
+    <div class="nk-tb-col tb-col-lg">
         <span>{{$user->created_at}}</span>
     </div>
    
    
-    <div class="nk-tb-col ">
+    <div class="nk-tb-col tb-col-lg text-center">
        {!! $user->status ? '<span class="tb-status text-success">active</span>' : '<span class="tb-status text-danger">in-active</span>'!!}
  
     </div>
@@ -85,7 +90,7 @@
 @endforeach   
 <div class="nk-block-between-md g-3 card-inner">
     <div class="pagination g" route="{{$route}}">
-        {!!$users->links()!!}                             
+        {!!$users->onEachSide(1)->links()!!}                             
                          
         </div> 
     

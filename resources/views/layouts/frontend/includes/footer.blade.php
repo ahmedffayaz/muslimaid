@@ -57,11 +57,14 @@
                                 <input type="text"name="email" class="footer-newsletter__form-input form-control" id="footer-newsletter-address" placeholder="Email Address...">
                                 <button type="submit" class="footer-newsletter__form-button btn btn-primary">Subscribe</button>
                             </form>
+                            
                             <p class="newsletter-message mt-1 text-success"></p>
+                            @if(@isset(SiteSetting()['facebook']) || @isset(SiteSetting()['twitter']) || @isset(SiteSetting()['linkedin']) || @isset(SiteSetting()['instagram'])) 
                             <div class="footer-newsletter__text footer-newsletter__text--social">
                                 Follow us on social networks
                             </div>
                             <!-- social-links -->
+                          
                             <div class="social-links footer-newsletter__social-links social-links--shape--circle">
                                 <ul class="social-links__list">
                                     @isset(SiteSetting()['facebook'])
@@ -94,6 +97,7 @@
                                     @endisset
                                 </ul>
                             </div>
+                            @endif
                             <!-- social-links / end -->
                         </div>
                     </div>

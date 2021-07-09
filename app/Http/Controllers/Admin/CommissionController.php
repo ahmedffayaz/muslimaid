@@ -29,15 +29,12 @@ class CommissionController extends Controller
     public function index()
     {
         $route = 'index';
-        $stores = Store::latest()->get();
         $networks = Network::latest()->get();
         $clicks = ExitClick::latest()->get();
         $statuses = \DB::table('cashback_statuses')->latest()->get();
-        $users = User::role('user')->latest()->get();
-        $earning = UserCashback::all()->sum('amount');
         $coms = UserCashback::latest()->paginate(20);
         
-        return view('admin-dashboard.commissions.index', compact('coms','earning','stores','networks','clicks','statuses','users','route'));
+        return view('admin-dashboard.commissions.index', compact('coms','networks','clicks','statuses','route'));
     }
 
     /**
@@ -281,15 +278,20 @@ class CommissionController extends Controller
         //     $coms->where('network_id', $request->input('network_id'));
         // }
 
-        // Search by store.
-        if ($request->input('store_id')) {
-            $coms->where('store_id',$request->input('store_id'));
-           
+         // Search by store.
+         if ($request->input('store')) {
+            $coms->whereHas('store', function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request->store}%")
+                ->orWhere('id',$request->store);
+            });
         }
         // Search by user.
-        if ($request->input('user_id')) {
-            $coms->where('user_id',$request->input('user_id'));
-           
+        if ($request->input('user')) {
+            $coms->whereHas('user', function ($query) use ($request) {
+                $query->where('first_name', 'like', "%{$request->user}%")
+                ->orwhere('last_name', 'like', "%{$request->user}%")
+                ->orWhere('id',$request->user);
+            });
         }
         // Search by cick.
         if ($request->input('click_id')) {

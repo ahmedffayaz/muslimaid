@@ -193,10 +193,10 @@ class PagesController extends Controller
         $user_email_template = EmailTemplate::where('key','user_new_contact')->first(); 
         $admin_email_template = EmailTemplate::where('key','admin_new_contact')->first(); 
 
-        $filtered_user_message  = str_replace(['%SITE_TITLE%', '%SITE_URL%', '%NAME%', '%EMAIL%','%SUBJECT%','%MESSAGE%'],
+        $filtered_user_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}','{{SUBJECT}}','{{MESSAGE}}'],
                                             [SiteSetting()['website_title'], url('/') ,$request->input('name'),$request->input('email'),$request->input('subject'),$request->input('message')],
                                             $user_email_template->message );
-        $filtered_admin_message  = str_replace(['%SITE_TITLE%', '%SITE_URL%', '%NAME%', '%EMAIL%', '%SUBJECT%','%MESSAGE%'],
+        $filtered_admin_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}','{{MESSAGE}}'],
                                             [SiteSetting()['website_title'], url('/') ,$request->input('name'),$request->input('email'),$request->input('subject'),$request->input('message')],
                                             $admin_email_template->message );
 

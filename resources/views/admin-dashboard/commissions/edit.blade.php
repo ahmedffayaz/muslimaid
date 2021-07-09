@@ -3,22 +3,13 @@
     @csrf
     @method('PUT')
     <div class="row g-4">
-        <div class="col-lg-12">
+        {{-- <div class="col-lg-12">
             <div class="form-group">
                 <label class="form-label" for="default-06">Exit Click</label>
-               <select class="form-select select-2" data-placeholder="Select user" data-search="on" name="exit_click_id" required disabled>
-                            <option value="0" disabled selected>Select Exit Click</option>
-                            
-                            @foreach ($clicks as $click)
-
-                            <option @if($click->id == $commission->exit_click_id ) selected @endif value="{{$click->id}}">{{$click->id}} - {{$click->user->first_name}} {{$click->user->last_name}} - {{$click->store->name}}</option>
-                                
-                            @endforeach
-                        </select>
-                    
+                {{$commission->exit_click_id}} - {{$commission->exitClick->user->first_name}} {{$commission->exitClick->user->last_name}} - {{$commission->exitClick->store->name}}
                
             </div>
-        </div>
+        </div> --}}
         <div class="col-lg-6">
             <div class="form-group">
                 <label class="form-label" for="phone-no-1">Order Value</label>
