@@ -28,52 +28,41 @@
                 </div><!-- .nk-block-head -->
                 <div class="card card-preview mb-4">
                     <div class="card-inner">
-                        <div id="accordion-1" class="accordion accordion-s2">
-                            <div class="accordion-item">
-                                <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-1-1">
-                                    <h6 class="title">Search</h6>
-                                    <span class="accordion-icon"></span>
-                                </a>
-                                <div class="accordion-body collapse" id="accordion-item-1-1" data-parent="#accordion-1">
-                                    <div class="accordion-inner">
-                                        <div><form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
-                                            @csrf
-                                            <div class="row g-4">
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <div class="form-control-wrap ">
-                                                            <label class="form-label" for="name">Country Name</label>
-                                                            <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="name" value="" name="name">
-                                                            </div>
-                                                                
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-4">
-                                                    <div class="form-group">
-                                                        <div class="form-control-wrap ">
-                                                            <label class="form-label" for="code">Code</label>
-                                                            <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="code" value="" name="code">
-                                                            </div>
-                                                                
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            
-                                                                
-                                                <div class="col-4 align-self-end">
-                                                    <div class="form-group">
-                                                        <button type="submit" class="btn btn-success btn-block">Search</button>
-                                                    </div>
-                                                </div>
+                        <form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
+                            @csrf
+                            <div class="row g-4">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <div class="form-control-wrap ">
+                                            <label class="form-label" for="name">Name</label>
+                                            <div class="form-control-wrap">
+                                                <input type="text" class="form-control" id="name" value="" name="name">
                                             </div>
-                                        </form></div>
+                                                
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <div class="form-control-wrap ">
+                                            <label class="form-label" for="code">Code</label>
+                                            <div class="form-control-wrap">
+                                                <input type="text" class="form-control" id="code" value="" name="code">
+                                            </div>
+                                                
+                                        </div>
+                                    </div>
+                                </div>
+                            
+                                                
+                                <div class="col-4 align-self-end">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success btn-block">Search</button>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </form>
+                        
                     </div>
                 </div>
                 @include('flash::message')

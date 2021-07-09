@@ -34,7 +34,7 @@
                     <span>{{$imported_category->name[0]}}</span>
                 </div>
                 <div class="user-info">
-                    <span class="tb-lead">{{$imported_category->name}}<span class="dot dot-success d-md-none ml-1"></span></span>
+                    <span class="tb-lead">{{$imported_category->name}}</span>
                    
                 </div>
             </div>

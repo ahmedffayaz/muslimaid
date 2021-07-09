@@ -45,10 +45,10 @@ class TicketsController extends Controller
             $user_email_template = EmailTemplate::where('key','user_new_ticket')->first(); 
             $admin_email_template = EmailTemplate::where('key','admin_new_ticket')->first(); 
 
-            $filtered_user_message  = str_replace(['%SITE_TITLE%', '%SITE_URL%', '%NAME%', '%EMAIL%','%TICKET_ID%', '%CATEGORY%','%MESSAGE%'],
+            $filtered_user_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}','{{TICKET_ID}}', '{{CATEGORY}}','{{MESSAGE}}'],
                                         [SiteSetting()['website_title'], url('/') ,$ticket->user->first_name.' '.$ticket->user->last_name,$ticket->user->email,$ticket->ticket_id,$ticket->category->name ?? '',$ticket->message],
                                         $user_email_template->message );
-            $filtered_admin_message  = str_replace(['%SITE_TITLE%', '%SITE_URL%', '%NAME%', '%EMAIL%','%TICKET_ID%', '%CATEGORY%','%MESSAGE%'],
+            $filtered_admin_message  = str_replace(['{{SITE_TITLE}}', '[{SITE_URL}}', '{{NAME}}', '{{EMAIL}}','{{TICKET_ID}}', '{{CATEGORY}}','{{MESSAGE}}'],
                                         [SiteSetting()['website_title'], url('/') ,$ticket->user->first_name.' '.$ticket->user->last_name,$ticket->user->email,$ticket->ticket_id,$ticket->category->name ?? '',$ticket->message],
                                         $admin_email_template->message );
 

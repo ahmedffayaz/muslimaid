@@ -179,10 +179,10 @@ class ClaimController extends Controller
         $user_email_template = EmailTemplate::where('key','user_new_claim')->first(); 
         $admin_email_template = EmailTemplate::where('key','admin_new_claim')->first(); 
 
-        $filtered_user_message  = str_replace(['%SITE_TITLE%', '%SITE_URL%', '%NAME%', '%EMAIL%','%TICKET_ID%', '%CLAIMTYPE%','%MESSAGE%'],
+        $filtered_user_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}','{{TICKET_ID}}', '{{CLAIMTYPE}}','{{MESSAGE}}'],
                                     [SiteSetting()['website_title'], url('/') ,$ticket->user->first_name.' '.$ticket->user->last_name,$ticket->user->email,$ticket->ticket_id,$ticket->claim_type,$ticket->message],
                                     $user_email_template->message );
-        $filtered_admin_message  = str_replace(['%SITE_TITLE%', '%SITE_URL%', '%NAME%', '%EMAIL%','%TICKET_ID%', '%CLAIMTYPE%','%MESSAGE%'],
+        $filtered_admin_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}','{{TICKET_ID}}', '{{CLAIMTYPE}}','{{MESSAGE}}'],
                                     [SiteSetting()['website_title'], url('/') ,$ticket->user->first_name.' '.$ticket->user->last_name,$ticket->user->email,$ticket->ticket_id,$ticket->claim_type,$ticket->message],
                                     $admin_email_template->message );
 

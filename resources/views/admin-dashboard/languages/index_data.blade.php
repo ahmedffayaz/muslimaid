@@ -32,7 +32,7 @@
                     <span>{{$language->code}}</span>
                 </div>
                 <div class="user-info">
-                    <span class="tb-lead">{{$language->name}}<span class="dot dot-success d-md-none ml-1"></span></span>
+                    <span class="tb-lead">{{$language->name}}</span>
                    
                 </div>
             </div>
@@ -45,12 +45,12 @@
         <span>{{$language->code?? ''}}</span>
     </div>
     
-   
+  
    
     
     <div class="nk-tb-col nk-tb-col-tools">
         <ul class="nk-tb-actions gx-1">
-        
+            @if($language->code!='en')
             <li>
                 <div class="drodown">
                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
@@ -71,8 +71,10 @@
                     </div>
                 </div>
             </li>
+            @endif
         </ul>
     </div>
+    
 </div><!-- .nk-tb-item -->
 
 @endforeach   

@@ -46,7 +46,7 @@
                     <span>{{$click->user->first_name[0] ?? 'N'}}{{$click->user->last_name[0] ?? 'A'}}</span>
                 </div>
                 <div class="user-info">
-                    <span class="tb-lead">{{$click->user->first_name ?? ''}} {{$click->user->last_name ?? ''}}<span class="dot dot-success d-md-none ml-1"></span></span>
+                    <span class="tb-lead">{{$click->user->id ?? ''}} @if($click->user->first_name != 'unnamed' || $click->user->last_name != 'unnamed')- {{$click->user->first_name ?? ''}} {{$click->user->last_name ?? ''}}@endif</span>
                     <span>{{$click->user->email ?? ''}}</span>
                 </div>
             </div>
@@ -55,7 +55,7 @@
         
     </div>
     <div class="nk-tb-col text-center">
-        <span><b>{{$click->store->name ?? ''}}</b></span>
+        <span><b>{{$click->store->id}} - {{$click->store->name ?? ''}}</b></span>
         
     </div>
     

@@ -34,7 +34,7 @@
                 </div>
                 <div class="user-info">
                     <span class="tb-lead">{{$cashout->user->id}} @if($cashout->user->first_name != 'unnamed' || $cashout->user->last_name != 'unnamed')- {{$cashout->user->first_name}} {{$cashout->user->last_name}} @endif
-                        <span class="dot dot-success d-md-none ml-1"></span></span>
+                        </span>
                     <span>{{$cashout->user->email}}</span>
                 </div>
             </div>
