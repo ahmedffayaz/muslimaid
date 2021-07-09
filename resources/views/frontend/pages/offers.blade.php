@@ -105,7 +105,14 @@
                                
                                 <div class="product-card__prices">
                                     @if($store->cashback)
-                                    @if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif{{$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif Cashback
+                                        @if($store->cashback->type=='fixed'){{$store->cashback->currency}}
+                                        @endif
+                                        @if($store->custom_cashback_percentage)
+                                        {{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}
+                                        @else
+                                        {{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}
+                                        @endif
+                                        @if($store->cashback->type=='percentage')%@endif Cashback
                                     @endif
                                 </div>
                              

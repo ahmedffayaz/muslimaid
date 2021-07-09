@@ -96,7 +96,16 @@
                                 {{$item->name}}
                             </div>
                             <div class="widget-products__prices">
-                                @if($item->cashback->type=='fixed'){{$item->cashback->currency}} @endif{{$item->cashback->sale_commission}}@if($item->cashback->type=='percentage')%@endif Cashback
+                                @if($item->cashback->type=='fixed'){{$item->cashback->currency}}
+
+                                @endif
+                                @if($item->custom_cashback_percentage)
+                                {{($item->custom_cashback_percentage/100)*$item->cashback->sale_commission}}
+                                @else
+                                {{(SiteSetting()['cashback_percentage']/100)*$item->cashback->sale_commission}}
+                                @endif
+                                
+                                @if($item->cashback->type=='percentage')%@endif Cashback
                             </div>
                         </div>
                     </a>
@@ -135,7 +144,16 @@
                                 {{$item->name}}
                             </div>
                             <div class="widget-products__prices">
-                                @if($item->cashback->type=='fixed'){{$item->cashback->currency}} @endif{{$item->cashback->sale_commission}}@if($item->cashback->type=='percentage')%@endif Cashback
+                                @if($item->cashback->type=='fixed'){{$item->cashback->currency}}
+
+                                @endif
+                                @if($item->custom_cashback_percentage)
+                                {{($item->custom_cashback_percentage/100)*$item->cashback->sale_commission}}
+                                @else
+                                {{(SiteSetting()['cashback_percentage']/100)*$item->cashback->sale_commission}}
+                                @endif
+
+                                @if($item->cashback->type=='percentage')%@endif Cashback
                             </div>
                         </div>
                     </a>

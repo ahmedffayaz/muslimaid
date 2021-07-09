@@ -31,6 +31,8 @@ class User extends Authenticatable
         'intro',
         'avatar',
         'status',
+        'provider',
+        'provider_id',
     ];
 
     /**

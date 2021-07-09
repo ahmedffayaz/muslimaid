@@ -47,7 +47,7 @@
     z-index: 1;
 }
 .nav-panel{
-    background: seashell;
+    background: #f0f8ff;
     color: black
 
 }
