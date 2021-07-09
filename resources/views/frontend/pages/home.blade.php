@@ -21,6 +21,7 @@
                 <div class="block-slideshow__body">
                     <div class="owl-carousel">
                         @foreach ($slider->slides as $slide)
+                        @if($slide->store)
                         <a class="block-slideshow__slide" href="{{route('store.show',$slide->store->slug)}}">
                             
                             @if($slide->banner == 'default1.png' || $slide->banner == 'default2.png' || $slide->banner == 'default3.png')
@@ -57,6 +58,7 @@
                                
                             </div>
                         </a>
+                        @endif
                         @endforeach
                         
                         
@@ -165,7 +167,7 @@
 </div>
 @endguest
 <!-- Cashbacks -->
-@isset($stores)
+@if(count($stores))
 <div class="block">
     <div class="container">
         <div class="row">
@@ -265,7 +267,7 @@
         
     </div>
 </div>
-@endisset
+@endif
 <!-- .block-brands -->
 {{-- <div class="block block-brands">
     <div class="container">

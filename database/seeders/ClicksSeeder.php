@@ -21,7 +21,7 @@ class ClicksSeeder extends Seeder
         foreach (range(1,5000) as $index) {
 
             $click = ExitClick::create([
-                'store_id'=>$faker->numberBetween(1,1000),
+                'store_id'=>$faker->numberBetween(1,40),
                 'user_id'=>$faker->numberBetween(1,1000),
                 'status'=>'pending',
                 'exit_url'=>'#',
