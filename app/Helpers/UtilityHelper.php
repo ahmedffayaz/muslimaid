@@ -331,7 +331,7 @@ function maintenance(){
 }
 
 function isFacebookEnabled(){
-    if(SiteSetting()['facebook_client_id'] && SiteSetting()['facebook_client_secret'] && SiteSetting()['facebook_url']){
+    if(isset(SiteSetting()['facebook_client_id']) && isset(SiteSetting()['facebook_client_secret']) && isset(SiteSetting()['facebook_url'])){
         return true;
     }else{
         return false;
@@ -339,7 +339,7 @@ function isFacebookEnabled(){
 }
 
 function isGoogleEnabled(){
-    if(SiteSetting()['google_client_id'] && SiteSetting()['google_client_secret'] && SiteSetting()['google_url']){
+    if(isset(SiteSetting()['google_client_id']) && isset(SiteSetting()['google_client_secret']) && isset(SiteSetting()['google_url'])){
         return true;
     }else{
         return false;
