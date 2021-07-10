@@ -84,6 +84,14 @@ $menu = Harimayco\Menu\Models\Menus::where('name','Main Menu')->first();
                    
                 </li>
                 @endif
+                @if(!Auth::check())
+                    <li class="mobile-links__item" data-collapse-item>
+                        <div class="mobile-links__item-title">
+                            <a href="{{route('account.login')}}" class="mobile-links__item-link">Login</a>
+                        </div>
+                    </li>
+                @endif
+
                 @foreach($menu->items as $item)
                 <li class="mobile-links__item" data-collapse-item>
                     <div class="mobile-links__item-title">

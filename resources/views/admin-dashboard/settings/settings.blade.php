@@ -983,7 +983,7 @@ function checkThemeType(){
     }
     else{
         $('.custom_color').hide();      
-        $('#theme_color').removeAttr('required').val('');
+        $('#theme_color').removeAttr('required').val($('#theme_skin').val());
     }
 
 }
