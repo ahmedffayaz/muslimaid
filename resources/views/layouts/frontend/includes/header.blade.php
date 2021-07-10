@@ -23,61 +23,14 @@ $menu = Harimayco\Menu\Models\Menus::where('name','Main Menu')->first();
                     </div>
                 </div>
             </div>
-            <div class="site-header__phone">
-                @auth
-                {{-- <div class="site-header__phone-title">Balance</div> --}}
-                <div class="site-header__phone-number"><span class="currency">{{ currency() }} </span>{{Auth::user()->availableBalance()}}</div>
-                @endauth
-
-            </div>
-        </div>
-        <div class="site-header__nav-panel">
-            <!-- data-sticky-mode - one of [pullToShow, alwaysOnTop] -->
-            <div class="nav-panel nav-panel--sticky" data-sticky-mode="pullToShow">
-                <div class="nav-panel__container container">
-                    <div class="nav-panel__row">
-                       
-                        <!-- .nav-links -->
-                        <div class="nav-panel__nav-links nav-links">
-                            <ul class="nav-links__list">
-                                @foreach($menu->items as $item)
-
-                                <li class="nav-links__item  nav-links__item--has-submenu ">
-                                    <a class="nav-links__item-link" href="{{$item->link}}">
-                                        <div class="nav-links__item-body">{{$item->label}}</div>
-                                    </a>
-                                    @if( $item['child']->count() )
-
-                                    <div class="nav-links__submenu nav-links__submenu--type--menu">
-                                        <!-- .menu -->
-                                        <div class="menu menu--layout--classic ">
-                                            <div class="menu__submenus-container"></div>
-                                            <ul class="menu__list">
-                                                @foreach( $item['child'] as $child )
-                                                <li class="menu__item">
-                                                    <!-- This is a synthetic element that allows to adjust the vertical offset of the submenu using CSS. -->
-                                                    <div class="menu__item-submenu-offset"></div>
-                                                    <a class="menu__item-link" href="{{ $child['link'] }}">
-                                                        {{ $child['label'] }}
-                                                    </a>
-                                                </li>
-                                                @endforeach
-                                            </ul>
-                                        </div>
-                                        <!-- .menu / end -->
-                                    </div>
-
-                                    @endif
-                                </li>
-                                @endforeach
-
-                            </ul>
-                        </div>
-                        <!-- .nav-links / end -->
-                        <div class="nav-panel__indicators">
+            <div class="nav-panel__indicators">
 
                             @if(Auth::check())
-                            <div class="indicator indicator--trigger--hover">
+                            <div class="indicator indicator--trigger--hover ml-5">
+                                @auth
+                                {{-- <div class="site-header__phone-title">Balance</div> --}}
+                                <div class="site-header__phone-number"><span class="currency">{{ currency() }} </span>{{Auth::user()->availableBalance()}}</div>
+                                @endauth
                                 <a href="@if(Auth::user()->hasRole('user')){{route('account.dashboard')}}@elseif(Auth::user()->hasRole('admin')){{route('admin.home.index')}}@endif" class="indicator__button">
                                     <span class="indicator__area">
                                         <svg width="20px" height="20px">
@@ -135,6 +88,51 @@ $menu = Harimayco\Menu\Models\Menus::where('name','Main Menu')->first();
 
 
                         </div>
+        </div>
+        <div class="site-header__nav-panel">
+            <!-- data-sticky-mode - one of [pullToShow, alwaysOnTop] -->
+            <div class="nav-panel nav-panel--sticky" data-sticky-mode="pullToShow">
+                <div class="nav-panel__container container">
+                    <div class="nav-panel__row">
+                       
+                        <!-- .nav-links -->
+                        <div class="nav-panel__nav-links nav-links">
+                            <ul class="nav-links__list">
+                                @foreach($menu->items as $item)
+
+                                <li class="nav-links__item  nav-links__item--has-submenu ">
+                                    <a class="nav-links__item-link" href="{{$item->link}}">
+                                        <div class="nav-links__item-body">{{$item->label}}</div>
+                                    </a>
+                                    @if( $item['child']->count() )
+
+                                    <div class="nav-links__submenu nav-links__submenu--type--menu">
+                                        <!-- .menu -->
+                                        <div class="menu menu--layout--classic ">
+                                            <div class="menu__submenus-container"></div>
+                                            <ul class="menu__list">
+                                                @foreach( $item['child'] as $child )
+                                                <li class="menu__item">
+                                                    <!-- This is a synthetic element that allows to adjust the vertical offset of the submenu using CSS. -->
+                                                    <div class="menu__item-submenu-offset"></div>
+                                                    <a class="menu__item-link" href="{{ $child['link'] }}">
+                                                        {{ $child['label'] }}
+                                                    </a>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                        <!-- .menu / end -->
+                                    </div>
+
+                                    @endif
+                                </li>
+                                @endforeach
+
+                            </ul>
+                        </div>
+                        <!-- .nav-links / end -->
+                        
 
                     </div>
                 </div>

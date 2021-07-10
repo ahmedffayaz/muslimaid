@@ -227,8 +227,9 @@
                         </div>
                         @endforeach
                     </div>
-                        <div class="text-right mt-2 see-all"><button class="btn btn-link">See All Cashbacks</button></div>
-
+                    @if($count>3)
+                    <div class="text-right mt-2 see-all"><button class="btn btn-link">See All Cashbacks</button></div>
+                    @endif
 
                     <div class="product-tabs  product-tabs--layout--sidebar  product-tabs--sticky">
                         <div class="product-tabs__list d-none">
