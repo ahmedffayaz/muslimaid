@@ -9,6 +9,7 @@ use App\Models\StoreCashback;
 use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
 use App\Models\StoreImage;
+use App\Models\StoreReview;
 
 
 
@@ -23,7 +24,7 @@ class StoreSeeder extends Seeder
     {
         $faker = Faker::create();
 
-        foreach (range(1,1000) as $index) {
+        foreach (range(1,100) as $index) {
 
             $store = new Store();
             $store->network_id = 1;
@@ -64,6 +65,15 @@ class StoreSeeder extends Seeder
 	           'store_id'=>$store->id,
                'category_id'=> $faker->numberBetween(1,5)
 	        ]);
+
+            $review = StoreReview::create([
+                'store_id' => $store->id,
+                'reviewer' => $faker->name,
+                'review' => $faker->paragraph($nbSentences = 3, $variableNbSentences = true),
+                'rating' =>  $faker->numberBetween(1,5)
+               
+                
+            ]); 
            
 	}
     }

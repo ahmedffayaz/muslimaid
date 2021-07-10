@@ -26,7 +26,7 @@ class SlidesController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -37,6 +37,7 @@ class SlidesController extends Controller
      */
     public function store(Request $request)
     {
+        
         $slide = Slide::create($request->all());
         if($request->has('logo')){
             $imageName = \Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo->extension();          
@@ -54,6 +55,8 @@ class SlidesController extends Controller
             $slide->update();
         }
 
+        $order = Slide::max('order');
+        $slide->update(['order'=>$order+1]);
 
         flash()->success('Slide created successfully');
         return redirect()->back();

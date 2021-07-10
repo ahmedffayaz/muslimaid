@@ -19,7 +19,7 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li class="nk-block-tools-opt"><a href="#cashback-add-modal" data-toggle="modal" class="btn btn-primary btn-sm"><em class="icon ni ni-plus"></em><span>Add Cashback</span></a></li>
+                                        <li class="nk-block-tools-opt"><a href="{{route('admin.commissions.create')}}" class="btn btn-primary btn-sm add-commission"><em class="icon ni ni-plus"></em><span>Add Cashback</span></a></li>
                                         {{-- <li class="nk-block-tools-opt"><a href="#"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAlert"><em class="icon ni ni-download"></em><span>Import Cashbacks</span></a></li> --}}
                                         <li><a href="{{route('admin.commissions.export')}}" data-toggle="tooltip" data-placement="top" title="Export cashbacks to CSV" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
                                      
@@ -34,20 +34,33 @@
                         <form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
                             @csrf
                             <div class="row g-4">
-                                <div class="col-lg-2">
+                                <div class="col-lg-2 col-md-6">
                                     <div class="form-group">
-                                        <label class="form-label" for="user_id">User</label>
-                                        <div class="form-control-wrap ">
-                                            <select class="form-select form-control" data-search="on" id="user_id" name="user_id">
-                                                <option value="0">All</option>
-                                                @foreach ($users as $user)
-                                                <option value="{{$user->id}}">{{$user->first_name}} {{$user->last_name}}</option>
-                                                @endforeach
-                                            </select> 
+                                        <label class="form-label" for="user">User ID/Name</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control" id="user" value="" name="user">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-lg-2 col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="store">Store ID/Name</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control" id="store" value="" name="store">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            
+                                <div class="col-lg-2 col-md-6">
+                                    <div class="form-group">
+                                        <label class="form-label" for="click_id">Click ID</label>
+                                        <div class="form-control-wrap">
+                                            <input type="text" class="form-control" id="click_id" value="" name="click_id">
+                                        </div>
+                                    </div>
+                                </div> 
+                                <div class="col-lg-2 col-md-6">
                                     <div class="form-group">
                                         <label class="form-label" for="network_id">Network</label>
                                         <div class="form-control-wrap ">
@@ -60,35 +73,8 @@
                                         
                                         </div>
                                     </div>
-                                </div>
-                            
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label class="form-label" for="store_id">Store</label>
-                                        <div class="form-control-wrap ">
-                                            <select class="form-select form-control" data-search="on" id="store_id" name="store_id">
-                                                <option value="0">All</option>
-                                                @foreach ($stores as $store)
-                                                <option value="{{$store->id}}">{{$store->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div> 
-                                <div class="col-lg-2">
-                                    <div class="form-group">
-                                        <label class="form-label" for="click_id">Exit Click</label>
-                                        <div class="form-control-wrap ">
-                                            <select class="form-select form-control" data-search="on" id="click_id" name="click_id">
-                                                <option value="0">All</option>
-                                                @foreach ($clicks as $click)
-                                                <option value="{{$click->id}}">{{$click->id}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>      
-                                <div class="col-lg-2">
+                                </div>     
+                                <div class="col-lg-2 col-md-6">
                                     <div class="form-group">
                                         <label class="form-label" for="status">Status</label>
                                         <div class="form-control-wrap ">
@@ -101,7 +87,7 @@
                                         </div>
                                     </div>
                                 </div>                  
-                                <div class="col-2 align-self-end">
+                                <div class="col-lg-2 align-self-end col-md-12">
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-success btn-block">Search</button>
                                     </div>
@@ -190,72 +176,8 @@
                 </div>
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
-            <div id="" class=" p-4">
-                <form action="{{route('admin.commissions.store')}}" class="gy-3 form-validate is-alter" method="POST">
-                    @csrf
-                    @method('POST')
-                    <div class="row g-4">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="form-label" for="default-06">Exit Click</label>
-                                <select class="form-select" data-placeholder="Select user" data-search="on" name="exit_click_id" required>
-                                    <option value="0" disabled selected>Select Exit Click</option>
-                                    
-                                    @foreach ($clicks as $click)
-                                        @if($click->user && $click->store)
-                                            <option value="{{$click->id}}">{{$click->id}} - {{$click->user->first_name ?? ''}} {{$click->user->last_name ?? ''}} - {{$click->store->name ?? ''}}</option>
-                                        @endif 
-                                    @endforeach
-                                </select>
-                                    
-                            </div>
-                        </div>
-                 
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="phone-no-1">Order Value</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="phone-no-1" value="" name="order_value">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="phone-no-1">Network Commission</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="phone-no-1" value="" name="network_commission" >
-                                </div>
-                            </div>
-                        </div>
-                        {{-- <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="phone-no-1">Cashback Amount</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="phone-no-1" value="" name="amount" >
-                                </div>
-                            </div>
-                        </div> --}}
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="default-06">Status</label>
-                                <select class="form-control form-select" name="status" required>
-                                    @foreach ($statuses as $status)
-                                    <option value="{{$status->id}}">{{$status->status}}</option>
-                                        
-                                    @endforeach
-                                </select>
-                                   
-                            </div>
-                        </div>
-                    
-                       
-                        <div class="col-12">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+            <div id="cashback-add" class=" p-4">
+                
 
             </div>
         </div><!-- .modal-content -->
@@ -327,14 +249,14 @@ $(document).ready(function(){
     var _token = $("input[name=_token]").val();
     var name = $("input[name=name]").val();
     var network_id = $("select[name=network_id]").val();
-    var store_id = $("select[name=store_id]").val();
-    var click_id = $("select[name=click_id]").val();
+    var store = $("input[name=store]").val();
+    var click_id = $("input[name=click_id]").val();
     var status_id = $("select[name=status_id]").val();
-    var user_id = $("select[name=user_id]").val();
+    var user = $("input[name=user]").val();
     $.ajax({
         url:'{{route("admin.commissions.search_commissions")}}',
         method:"POST",
-        data:{_token:_token,name:name,network_id:network_id,store_id:store_id,click_id:click_id,status_id:status_id,user_id:user_id},
+        data:{_token:_token,name:name,network_id:network_id,store:store,click_id:click_id,status_id:status_id,user:user},
         success:function(data)
         {
         $('#table-data').html(data);
@@ -364,6 +286,23 @@ $(document).ready(function(){
             }
             });
     });
+    // $(document).on('click', '.add-commission', function(event){
+    //     event.preventDefault(); 
+    //     var pageurl = $(this).attr('href');
+    //     var _token = $("input[name=_token]").val();
+    //     $.ajax({
+
+    //         url:pageurl,
+    //         method:"GET",
+    //         data:{_token:_token},
+    //         success:function(data)
+    //         {
+    //             $('#cashback-add-modal').modal('show');
+    //             $('#cashback-add').html(data);
+    //             initializeSelect2()
+    //         }
+    //         });
+    // });
     $(document).on('click', '.cashback-history', function(event){
         event.preventDefault(); 
         var pageurl = $(this).attr('href');

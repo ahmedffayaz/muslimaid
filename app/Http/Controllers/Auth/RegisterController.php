@@ -84,7 +84,7 @@ class RegisterController extends Controller
 
         $email_template = EmailTemplate::where('key','user_welcome')->first(); 
 
-        $filtered_message  = str_replace(['%SITE_TITLE%', '%SITE_URL%', '%NAME%', '%EMAIL%'],[SiteSetting()['website_title'], url('/') ,$user->first_name,$user->email],$email_template->message );
+        $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}'],[SiteSetting()['website_title'], url('/') ,$user->first_name,$user->email],$email_template->message );
         
         $email_data = array(
             'name' =>  $data['firstname'],

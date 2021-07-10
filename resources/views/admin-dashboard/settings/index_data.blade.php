@@ -33,7 +33,7 @@
                     <span>{{$setting->title[0]}}</span>
                 </div>
                 <div class="user-info">
-                    <span class="tb-lead">{{$setting->title}}<span class="dot dot-success d-md-none ml-1"></span></span>
+                    <span class="tb-lead">{{$setting->title}}</span>
                    
                 </div>
             </div>

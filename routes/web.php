@@ -189,6 +189,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::put('profile/passwordsave/{profile}', [App\Http\Controllers\Admin\ProfileController::class,'savePassword'])->name('profile.save_password');
     Route::resource('profile', ProfileController::class);
 
+    Route::post('sliders/sort_slides',[App\Http\Controllers\Admin\SliderController::class, 'sortSlides'])->name('sort_slides');
     Route::resource('sliders', SliderController::class);
     Route::resource('slides', SlidesController::class);
     Route::resource('pages', PagesController::class);

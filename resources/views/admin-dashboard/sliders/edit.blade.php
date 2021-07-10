@@ -26,14 +26,14 @@
                 </div><!-- .nk-block-head -->
                 @include('flash::message')
                 <div class="nk-block">
-                    <div class="row g-gs">
+                    <div class="row g-gs"  id="sortable">
                        @foreach ($slider->slides as $slide)
-                       <div class="col-sm-6 col-lg-4 col-xxl-3">
+                       <div class="col-sm-6 col-lg-4 col-xxl-3" id="slide_{{$slide->id}}" style="    cursor: move;">
                         <div class="card h-100">
                             @if($slide->banner == 'default1.png' || $slide->banner == 'default2.png' || $slide->banner == 'default3.png')
-                            <img src="{{asset('frontend/images/slides/'.$slide->banner)}}" class="card-img-top" alt="">
+                            <img src="{{asset('frontend/images/slides/'.$slide->banner)}}" class="card-img-top" alt="" style="height:200px">
                             @else
-                            <img src="{{asset('storage/slider/slides/images/'.$slide->banner)}}" class="card-img-top" alt="">
+                            <img src="{{asset('storage/slider/slides/images/'.$slide->banner)}}" class="card-img-top" alt="" style="height:200px">
 
                             @endif
                             <div class="card-inner">
@@ -59,12 +59,14 @@
                                         <div class="project-progress-task"><a href="{{route('admin.stores.show_store')}}?slug={{$slide->store->slug}}"><em class="icon ni ni-cart-fill"></em><span>{{$slide->store->id}} - {{$slide->store->name}}</span></a></div>
                                         <div class="float-right">
                                             <a class="btn btn-primary btn-sm edit-slide"  href="{{route('admin.slides.edit',$slide)}}"><em class="icon ni ni-edit"></em></a>
+                                            @If(count($slider->slides)>1)
                                             <a class="btn btn-danger btn-sm text-white"   onclick="$('#delete-slide-{{$slide->id}}').submit();"  style="cursor: pointer"><em class="icon ni ni-trash"></em></a>
                                             <form action="{{ route('admin.slides.destroy', $slide) }}" id="delete-slide-{{$slide->id}}" method="POST" class="m-0">
                                                 @method('DELETE')
                                                 @csrf
                                                 
                                             </form>
+                                            @endif
                                         </div>
                                         
                                     </div>
@@ -228,4 +230,33 @@
         });
     }
    </script>   
+   <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+   <script>
+   $( function() {
+     $( "#sortable" ).sortable({
+    update: function (event, ui) {
+        var data = $(this).sortable('serialize');
+        console.log(data);
+
+
+        // POST to server using $.post or $.ajax
+        $.ajax({
+            data: data,
+            type: 'POST',
+            url: '{{route("admin.sort_slides")}}',
+            success:function(data)
+              {
+                    (function(NioApp, $){
+                    'use strict';
+                    toastr.clear();
+                    NioApp.Toast(data.message, data.updated);
+                })(NioApp, jQuery);
+                  
+            },
+        });
+    }
+});
+     $( "#sortable" ).disableSelection();
+   } );
+   </script>
 @endpush

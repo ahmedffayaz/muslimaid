@@ -44,6 +44,7 @@ class Importer implements ShouldQueue
      */
     public function handle()
     {
+        ini_set('max_execution_time', 900);
         //fetching importer settings
         $network = Network::where('id',1)->first();
         $setting = ImporterSetting::where('network_id',1)->first();

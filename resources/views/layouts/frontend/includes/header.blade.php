@@ -43,7 +43,8 @@ $menu = Harimayco\Menu\Models\Menus::where('name','Main Menu')->first();
                                         <div class="account-menu__divider"></div>
                                         <a onclick="" class="account-menu__user">
                                             <div class="account-menu__user-avatar">
-                                                <img src="{{asset('frontend/images/avatars/avatar-3.jpg')}}" alt="">
+                                                <img src="{{asset('admin-dashboard/images/avatar.png')}}"
+                                     alt="store logo" class="" style="max-width:50px;max-height:50px"/>
                                             </div>
                                             <div class="account-menu__user-info">
                                                 <div class="account-menu__user-name">{{\Auth::user()->first_name}} {{\Auth::user()->last_name}}</div>
