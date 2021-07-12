@@ -11,8 +11,8 @@
         <div class="search__border"></div>
         </form>
 
-    <div class="suggestions--location--header">
-        <ul class="suggestions__list">
+    <div class="suggestions--location--header search_box_div">
+        <ul class="suggestions__list sugesstion_dropdown_list">
             @if(count($stores))
             @foreach($stores->take(8) as $key=>$store)
             <li class="suggestions__item @if($key==0) selected @endif"  >
@@ -24,16 +24,25 @@
                         @else
                             src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
                         @endif
-                    @else
-                        src="{{asset('frontend/images/products/product-16.jpg')}}" 
-                    @endif alt="">
+                        @else
+                            src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                        @endif alt="">
                     </div>
                 </div>
                 <div class="suggestions__item-info">
                     <a href="{{route('store.show',$store->slug)}}" class="suggestions__item-name">{!!$store->name!!}</a>
                 </div>
                 <div class="suggestions__item-price">
-                    @if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif{{$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif Cashback
+                    @if($store->cashback->type=='fixed'){{$store->cashback->currency}}
+
+                    @endif
+                    @if($store->custom_cashback_percentage)
+                    {{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}
+                    @else
+                    {{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}
+                    @endif
+
+                    @if($store->cashback->type=='percentage')%@endif Cashback
                 </div>
             </li>
             @endforeach
@@ -57,3 +66,14 @@
     </div>
     
 </div>
+
+@push('scripts')
+    <script>
+        $(document).on("click", function(event){
+            var $trigger = $(".search_box_div");
+            if($trigger !== event.target && !$trigger.has(event.target).length){
+                $(".sugesstion_dropdown_list").slideUp("fast");
+            }         
+        });
+    </script>
+@endpush

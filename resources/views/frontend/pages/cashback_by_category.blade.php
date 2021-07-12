@@ -109,7 +109,7 @@ box {
     
     <div class="container">
         <div class="row">
-            <div class="col-12 mt-5">
+            <div class="col-12">
                 <h1 class="text-center">{{$category->name}}</h1>
                 <p  class="text-center">{!!$category->description!!}</p>
                 @if($category->picks->count())

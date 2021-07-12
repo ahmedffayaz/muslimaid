@@ -5976,8 +5976,9 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
 
 .indicator__dropdown {
   display: none;
-  top: 100%;
+  top: 56%;
   position: absolute;
+  margin-right: 8.8%;
   visibility: hidden;
   -webkit-transform-origin: top;
           transform-origin: top;
@@ -7870,7 +7871,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
 
 .site-header__phone-title {
   font-size: 14px;
-  color: #99bbff;
+  color: #000;
   margin-bottom: 6px;
 }
 

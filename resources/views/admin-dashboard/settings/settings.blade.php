@@ -499,7 +499,7 @@ ul.categories li {
                                                 </div>
                                                 
                                                 <div class="nk-block-head mt-5">
-                                                    <h5 class="title">Facebook Login</h5>
+                                                    <h5 class="title">Facebook Login <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Provide credencials for facebook login OR leave blank to disable facebook login."></em></h5>
                                                     {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                                 </div><!-- .nk-block-head -->
                                                 <div class="row g-3 align-center">
@@ -552,7 +552,7 @@ ul.categories li {
                                                 </div>
                                               
                                                 <div class="nk-block-head mt-5">
-                                                    <h5 class="title">Google Login</h5>
+                                                    <h5 class="title">Google Login <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Provide credencials for google login OR leave blank to disable google login."></em></h5>
                                                     {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                                 </div><!-- .nk-block-head -->
                                                     <div class="row g-3 align-center">
@@ -604,7 +604,7 @@ ul.categories li {
                                                         </div>
                                                     </div>
                                                     <div class="nk-block-head mt-5">
-                                                        <h5 class="title">Mailchimp</h5>
+                                                        <h5 class="title">Mailchimp <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Mailchimp is used for newsletters leave blank if you want to disable Newsletter."></em></h5>
                                                         {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                                     </div><!-- .nk-block-head -->
 
@@ -784,10 +784,10 @@ ul.categories li {
                                                                     <select class="form-control form-select" id="theme_skin" name="theme_skin" required>
                                                                         
                                                                         <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'blue') selected  @endif @endisset value="blue">Blue</option>
-                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'black') selected @endif @endisset value="black">Black</option>
+{{--                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'black') selected @endif @endisset value="black">Black</option>
                                                                         <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'green') selected @endif @endisset value="green">Green</option>
                                                                         <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'red') selected @endif @endisset value="red">Red</option>
-                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'yellow') selected @endif @endisset value="yellow">Yellow</option>
+                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'yellow') selected @endif @endisset value="yellow">Yellow</option> --}}
                                                                         <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'custom') selected @endif @endisset value="custom">Custom</option>
                                                                     </select>
                                                                 </div>
@@ -952,7 +952,7 @@ function checkThemeType(){
     }
     else{
         $('.custom_color').hide();      
-        $('#theme_color').removeAttr('required').val($('#theme_skin').val());
+        $('#theme_color').removeAttr('required').val('');
     }
 
 }

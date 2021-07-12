@@ -47,7 +47,7 @@
     z-index: 1;
 }
 .nav-panel{
-    background: #f0f8ff;
+    background: rgba(299, 299, 299, 0.97);
     color: black
 
 }
@@ -57,7 +57,7 @@
     padding-bottom: 20px;
 }
 .nav-links__item--hover .nav-links__item-body {
-    background: rgb(253, 236, 223);
+    background: #EDEEEE;
 }
     </style>
     <!-- site -->
