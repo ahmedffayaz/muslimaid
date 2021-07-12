@@ -148,13 +148,25 @@ class ClickController extends Controller
         //     $clicks->where('network_id', $request->input('network_id'));
         // }
 
+        // Search by click id.
+        if ($request->input('click_id')) {
+            $clicks->where('id', $request->input('click_id'));
+        }
+
         // Search by store.
-        if ($request->input('store_id')) {
-            $clicks->where('store_id', $request->input('store_id'));
+        if ($request->input('store')) {
+            $clicks->whereHas('store', function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request->store}%")
+                ->orWhere('id',$request->store);
+            });
         }
         // Search by user.
-        if ($request->input('user_id')) {
-            $clicks->where('user_id', $request->input('user_id'));
+        if ($request->input('user')) {
+            $clicks->whereHas('user', function ($query) use ($request) {
+                $query->where('first_name', 'like', "%{$request->user}%")
+                ->orwhere('last_name', 'like', "%{$request->user}%")
+                ->orWhere('id',$request->user);
+            });
         }
 
 

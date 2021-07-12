@@ -1,11 +1,13 @@
 <style>
-   
+    .nk-tb-list{
+        table-layout: fixed;
+    }
 </style>
 <div class="nk-tb-item nk-tb-head">
     
     
-    <div class="nk-tb-col "><span class="sub-text">User</span></div>
-    <div class="nk-tb-col"><span class="sub-text">Store</span></div>
+    <div class="nk-tb-col " style="width: 25%"><span class="sub-text" >User</span></div>
+    <div class="nk-tb-col" style="width: 20%"><span class="sub-text">Store</span></div>
     {{-- <div class="nk-tb-col text-center"><span class="sub-text">Order Value ({{ currency() }})</span></div> --}}
     {{-- <div class="nk-tb-col text-center"><span class="sub-text">Network Commission ({{ currency() }})</span></div> --}}
     <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Network Commission ({{ currency() }})</span></div>
@@ -24,7 +26,7 @@
     
    
   
-    <div class="nk-tb-col ">
+    <div class="nk-tb-col "style="width: 25%">
        
         <div class="user-card">
             <div class="user-avatar
@@ -43,14 +45,14 @@
                 <span>{{$commission->exitClick->user->first_name[0] ?? 'N'}}{{$commission->exitClick->user->last_name[0] ?? 'A'}}</span>
             </div>
             <div class="user-info">
-                <span class="tb-lead">{{$commission->exitClick->user->id ?? ''}} - {{$commission->exitClick->user->first_name ?? ''}} {{$commission->exitClick->user->last_name ?? ''}}<span class="dot dot-success d-md-none ml-1"></span></span>
+                <span class="tb-lead">{{$commission->exitClick->user->id ?? ''}} @if($commission->user->first_name != 'unnamed' || $commission->user->last_name != 'unnamed')- {{$commission->user->first_name}} {{$commission->user->last_name}} @endif{{$commission->exitClick->user->first_name ?? ''}}</span>
                 <span>{{$commission->exitClick->user->email ?? ''}}</span>
             </div>
         </div>
         
     </div>
-    <div class="nk-tb-col">
-        <span><b>{{$commission->store->name ?? ''}}</b></span>
+    <div class="nk-tb-col" style="width: 20%">
+        <span><b>{{$commission->store->id ?? ''}} - {{$commission->store->name ?? ''}}</b></span>
         
     </div>
     
@@ -101,7 +103,7 @@
 @endforeach   
 <div class="nk-block-between-md g-3 card-inner">
     <div class="pagination g" route="{{$route}}">
-        {!! $coms->links()!!}                             
+        {!! $coms->onEachSide(1)->links()!!}                             
                          
         </div> 
     

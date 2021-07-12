@@ -329,3 +329,27 @@ function maintenance(){
     else
      return false;
 }
+
+function isFacebookEnabled(){
+    if(isset(SiteSetting()['facebook_client_id']) && isset(SiteSetting()['facebook_client_secret']) && isset(SiteSetting()['facebook_url'])){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+function isGoogleEnabled(){
+    if(isset(SiteSetting()['google_client_id']) && isset(SiteSetting()['google_client_secret']) && isset(SiteSetting()['google_url'])){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+// function isAppleEnabled(){
+//     if(SiteSetting()['apple_client_id'] && SiteSetting()['apple_client_secret'] && SiteSetting()['apple_url']){
+//         return true;
+//     }else{
+//         return false;
+//     }
+// }

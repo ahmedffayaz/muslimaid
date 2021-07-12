@@ -21,6 +21,7 @@
                 <div class="block-slideshow__body">
                     <div class="owl-carousel">
                         @foreach ($slider->slides as $slide)
+                        @if($slide->store)
                         <a class="block-slideshow__slide" href="{{route('store.show',$slide->store->slug)}}">
                             
                             @if($slide->banner == 'default1.png' || $slide->banner == 'default2.png' || $slide->banner == 'default3.png')
@@ -57,6 +58,7 @@
                                
                             </div>
                         </a>
+                        @endif
                         @endforeach
                         
                         
@@ -72,21 +74,22 @@
 @endauth
 @guest
 <!-- .block-slideshow -->
- <div class="block home-header block--highlighted pt-5">
+ <div class="block home-header block--highlighted pt-5" style="background: linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.4)),
+    url('{{asset('frontend/images/home_background.jpg')}}'); z-index:-1; background-repeat: no-repeat; background-size: 100% 100%;">
     <div class="container">
         <div class="row">
             {{-- <div class="col-lg-3 d-none d-lg-block"></div> --}}
         @guest
-        <div class="col-md-6 align-self-center">
+        <div class="col-md-6 align-self-center" style="z-index:1; color:white">
             <h1>Get cashback shopping at 4,500+ popular brands</h1>
             <p>Join for free with over 15 million members saving hundreds of pounds each year from all the top 5,000 online retailers.</p>
         </div>
         <div class="col-md-1"></div>
         <div class="col-md-5 d-flex flex-column mt-4">
-             <div class="card flex-grow-1 mb-0  shadow">
-                 <div class="card-body">
-                     <h3 class="card-title">Sign up for free</h3>
-                     <form method="POST" action="{{ route('register') }}">
+            <div class="card flex-grow-1 mb-0  shadow">
+                <div class="card-body">
+                    <h3 class="card-title">Sign up for free</h3>
+                    <form method="POST" action="{{ route('register') }}">
                          @csrf
                          <input type="hidden" class="form-control form-control-lg" id="firstname" placeholder="Enter your first name" name="firstname" value="unnamed">
                          <input type="hidden" class="form-control form-control-lg" id="lastname" placeholder="Enter your last name" name="lastname" value="unnamed" >
@@ -103,11 +106,24 @@
                              <label>Repeat Password</label>
                              <input type="password" class="form-control" placeholder="Password" name="password_confirmation" >
                          </div>
-                         <button type="submit" class="btn btn-primary mt-4">Join now for free</button>
-                     </form>
-                 </div>
-             </div>
-         </div>
+                         <button type="submit" class="btn btn-primary mt-1">Join now for free</button>
+                    </form>
+                    @if(isFacebookEnabled() || isGoogleEnabled())
+                        <div>
+                            <hr/>
+                            @if(isFacebookEnabled())
+                                <a class="btn btn-primary border-0" style="background-color: #3b5998; border-radius: 2px" href="{{ url('/login/facebook') }}" role="button">
+                                    <i class="fab fa-facebook-f"> Join with Facebook</i></a>
+                            @endif
+                            @if(isGoogleEnabled())
+                                <a class="btn btn-primary border-0 ml-2" style="background-color: #dd4b39; border-radius: 2px" href="{{ url('/login/google') }}" role="button">
+                                    <i class="fab fa-google"></i> Join with Google</a>
+                            @endif
+                        </div>
+                    @endif
+                </div>
+            </div>
+        </div>
         @else 
         <div class="col-md-12 align-self-center text-center" style="padding:100px 0px">
             <h1>Get cashback shopping at 4,500+ popular brands</h1>
@@ -151,7 +167,7 @@
 </div>
 @endguest
 <!-- Cashbacks -->
-@isset($stores)
+@if(count($stores))
 <div class="block">
     <div class="container">
         <div class="row">
@@ -221,7 +237,16 @@
                                         
                                         <div class="product-card__actions">
                                             <div class="product-card__prices">
-                                                @if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif{{$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif Cashback
+                                                @if($store->cashback->type=='fixed'){{$store->cashback->currency}}
+
+                                                @endif
+                                                @if($store->custom_cashback_percentage)
+                                                {{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}
+                                                @else
+                                                {{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}
+                                                @endif
+
+                                                @if($store->cashback->type=='percentage')%@endif Cashback
                                             </div>
                                             
                                         </div>
@@ -242,7 +267,7 @@
         
     </div>
 </div>
-@endisset
+@endif
 <!-- .block-brands -->
 {{-- <div class="block block-brands">
     <div class="container">

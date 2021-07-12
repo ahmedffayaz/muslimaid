@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Slider;
+use App\Models\Slide;
 use App\Models\Store;
 
 class SliderController extends Controller
@@ -76,7 +77,7 @@ class SliderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
     }
 
     /**
@@ -88,5 +89,22 @@ class SliderController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function sortSlides(Request $request){
+
+        try {
+            foreach($request->input('slide') as $order=>$slide){
+            
+                $slidex = Slide::where('id',$slide)->first();
+                $slidex->update(['order'=>$order]);
+            }
+            return array('message'=>'Slides order updated',
+                'updated'=>'success');
+        } catch (\Throwable $th) {
+            return array('message'=>'Something went wrong!',
+                        'updated'=>'error');
+        }
+       
     }
 }

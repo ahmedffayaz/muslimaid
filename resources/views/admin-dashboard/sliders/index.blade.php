@@ -12,7 +12,7 @@
                                 {{-- <p>You have total 95 projects.</p> --}}
                             </div>
                         </div><!-- .nk-block-head-content -->
-                        <div class="nk-block-head-content">
+                        {{-- <div class="nk-block-head-content">
                             <div class="toggle-wrap nk-block-tools-toggle">
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
@@ -21,11 +21,11 @@
                                     </ul>
                                 </div>
                             </div><!-- .toggle-wrap -->
-                        </div><!-- .nk-block-head-content -->
+                        </div><!-- .nk-block-head-content --> --}}
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
                 <div class="nk-block">
-                    <div class="row g-gs">
+                    <div class="row g-gs ">
                         @foreach ($sliders as $slider)
                         <div class="col-sm-6 col-lg-4 col-xxl-3">
                             <div class="card h-100">
@@ -84,3 +84,4 @@
     </div>
 </div>
 @endsection
+

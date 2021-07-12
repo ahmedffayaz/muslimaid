@@ -189,6 +189,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::put('profile/passwordsave/{profile}', [App\Http\Controllers\Admin\ProfileController::class,'savePassword'])->name('profile.save_password');
     Route::resource('profile', ProfileController::class);
 
+    Route::post('sliders/sort_slides',[App\Http\Controllers\Admin\SliderController::class, 'sortSlides'])->name('sort_slides');
     Route::resource('sliders', SliderController::class);
     Route::resource('slides', SlidesController::class);
     Route::resource('pages', PagesController::class);
@@ -225,6 +226,7 @@ Route::get('top-cashback',[App\Http\Controllers\Frontend\PagesController::class,
 Route::get('trending',[App\Http\Controllers\Frontend\PagesController::class, 'trending'])->name('trending');
 Route::get('cashback/{slug}',[App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
 Route::get('account/login',[App\Http\Controllers\Frontend\PagesController::class, 'login'])->name('account.login');
+Route::get('account/register',[App\Http\Controllers\Frontend\PagesController::class, 'register'])->name('account.register');
 Route::get('search_suggestions',[App\Http\Controllers\Frontend\PagesController::class, 'searchSuggestions'])->name('search_suggestions');
 Route::get('pages/{page}',[App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('page');
 Route::get('post/{blog}',[App\Http\Controllers\Frontend\PagesController::class, 'blogPost'])->name('post');
@@ -263,3 +265,5 @@ Route::namespace('App\Http\Controllers\Client')
         \UniSharp\LaravelFilemanager\Lfm::routes();
     });
 
+    Route::get('login/{provider}', [App\Http\Controllers\SocialController::class, 'redirect']);
+    Route::get('login/{provider}/callback',[App\Http\Controllers\SocialController::class, 'Callback']);

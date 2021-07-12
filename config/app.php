@@ -164,6 +164,7 @@ return [
         Spatie\TranslationLoader\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
 
         /*
          * Package Service Providers...
@@ -179,6 +180,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
         App\Providers\MailConfigServiceProvider::class,
+        App\Providers\SocialLoginConfigServiceProvider::class,
+        App\Providers\MailchimpConfigServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
         ConsoleTVs\Charts\ChartsServiceProvider::class,
         Intervention\Image\ImageServiceProvider::class,
@@ -238,6 +241,7 @@ return [
         'Charts' => ConsoleTVs\Charts\Facades\Charts::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Menu' => Harimayco\Menu\Facades\Menu::class,
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 
