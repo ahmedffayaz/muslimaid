@@ -50,9 +50,16 @@
                                     <span class="slider-store-name">{{$slide->store->name}}</span>
                                 </div>
                                 <div class="block-slideshow__slide-title" style="padding:30px 20px 0px 20px; margin:0">
-                                    @if($slide->store->cashback->type=='fixed'){{$slide->store->cashback->currency}}@endif
-                                    {{$slide->store->cashback->sale_commission}}@if($slide->store->cashback->type=='percentage')%@endif Cashback 
-                                 
+                                    @if($slide->store->cashback->type=='fixed'){{$slide->store->cashback->currency}}
+
+                                    @endif
+                                    @if($slide->store->custom_cashback_percentage)
+                                    {{($slide->store->custom_cashback_percentage/100)*$slide->store->cashback->sale_commission}}
+                                    @else
+                                    {{(SiteSetting()['cashback_percentage']/100)*$slide->store->cashback->sale_commission}}
+                                    @endif
+
+                                    @if($slide->store->cashback->type=='percentage')%@endif Cashback
                                 </div>
                                 <div class="block-slideshow__slide-text" style="padding:10px 20px 30px 20px; ">{{$slide->description}}</div>
                                
@@ -113,10 +120,10 @@
                             <hr/>
                             @if(isFacebookEnabled())
                                 <a class="btn btn-primary border-0" style="background-color: #3b5998; border-radius: 2px" href="{{ url('/login/facebook') }}" role="button">
-                                    <i class="fab fa-facebook-f"> Join with Facebook</i></a>
+                                    <i class="fab fa-facebook-f"></i> Join with Facebook</a>
                             @endif
                             @if(isGoogleEnabled())
-                                <a class="btn btn-primary border-0 ml-2" style="background-color: #dd4b39; border-radius: 2px" href="{{ url('/login/google') }}" role="button">
+                                <a class="btn btn-primary border-0 ml-0" style="background-color: #dd4b39; border-radius: 2px" href="{{ url('/login/google') }}" role="button">
                                     <i class="fab fa-google"></i> Join with Google</a>
                             @endif
                         </div>

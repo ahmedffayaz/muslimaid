@@ -187,8 +187,6 @@ a:hover {
 }
 .nav-panel {
   height: 54px;
-  background: {{$primarycolor}};
-  color: #fff;
 }
 .nav-panel__logo svg {
   fill: #fff;

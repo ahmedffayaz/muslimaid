@@ -11,6 +11,7 @@
 @php $categories = getCategories(); @endphp
 @isset($categories)
 <!-- .block-product-columns -->
+@if($page->lb_content)
 <div class="block block-product-columns mt-5">
     <div class="container">
         <div class="row">
@@ -23,6 +24,7 @@
         </div>
     </div>
 </div>
+@endif
 <div class="block block-product-columns">
     <div class="container">
         <div class="row">

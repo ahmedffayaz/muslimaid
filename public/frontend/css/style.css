@@ -5976,7 +5976,8 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
 
 .indicator__dropdown {
   display: none;
-  top: 100%;
+  top: 56%;
+  margin-right: 8.8%;
   position: absolute;
   visibility: hidden;
   -webkit-transform-origin: top;
