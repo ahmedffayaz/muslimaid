@@ -24,9 +24,11 @@ Route::post('/auth/register', [API\AuthController::class, 'register']);
 Route::post('/auth/login', [API\AuthController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/me', function(Request $request) {
-        return auth()->user();
-    });
+    Route::get('/me', [API\AuthController::class, 'userData']);
 
     Route::post('/auth/logout', [API\AuthController::class, 'logout']);
 });
+
+Route::apiResource('categories', API\CategoryController::class);
+Route::apiResource('stores', API\StoreController::class);
+Route::get('featured_cashback',[API\StoreController::class,'featuredCashback']);

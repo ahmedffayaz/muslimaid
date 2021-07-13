@@ -67,7 +67,11 @@ class AuthController extends Controller
                 ->subject($email_data['subject']);
         });
         return $this->success([
-            'token' => $user->createToken('API Token')->plainTextToken
+            'token' => $user->createToken('API Token')->plainTextToken,
+            "first_name" => $user->first_name,
+            "last_name" => $user->last_name,
+            "email" => $user->email,
+            "registration_type" => $user->registration_type,
         ]);
     }
 
@@ -94,5 +98,16 @@ class AuthController extends Controller
         return $this->success([
             'message' => 'User logged out'
         ]);
+    }
+
+    public function userData(Request $request){
+        $user = auth()->user();
+        return [
+            "first_name" => $user->first_name,
+            "last_name" => $user->last_name,
+            "email" => $user->email,
+            "registration_type" => $user->registration_type,
+        ];
+
     }
 }
