@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Traits\ApiResponser;
 use App\Models\Store;
+use App\Models\Slider;
 use App\Http\Resources\StoreResource;
+use App\Http\Resources\SliderResource;
 
 class StoreController extends Controller
 {
@@ -92,4 +94,8 @@ class StoreController extends Controller
         return StoreResource::collection(Store::where('feature_homepage',1)->latest()->get());
 
     }
+    public function slider(){
+        return SliderResource::collection(Slider::where('name','Home')->first()->slides);
+    }
+
 }

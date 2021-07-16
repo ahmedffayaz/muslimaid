@@ -20,11 +20,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/auth/register', [API\AuthController::class, 'register']);
+Route::post('/auth/social', [API\AuthController::class, 'socialLogin']);
 
 Route::post('/auth/login', [API\AuthController::class, 'login']);
 
+Route::post('password/email', [API\AuthController::class, 'forgotPassword']);
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/me', [API\AuthController::class, 'userData']);
+    Route::post('/change_password', [API\AuthController::class, 'changePassword']);
 
     Route::post('/auth/logout', [API\AuthController::class, 'logout']);
 });
@@ -32,3 +36,4 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 Route::apiResource('categories', API\CategoryController::class);
 Route::apiResource('stores', API\StoreController::class);
 Route::get('featured_cashback',[API\StoreController::class,'featuredCashback']);
+Route::get('slider',[API\StoreController::class,'slider']);

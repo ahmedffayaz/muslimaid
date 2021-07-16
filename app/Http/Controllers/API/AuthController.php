@@ -45,7 +45,7 @@ class AuthController extends Controller
         $user->assignRole('user');
         $email_template = EmailTemplate::where('key','user_welcome')->first(); 
 
-        $filtered_message  = str_replace(['%SITE_TITLE%', '%SITE_URL%', '%NAME%', '%EMAIL%'],[SiteSetting()['website_title'], url('/') ,$user->first_name,$user->email],$email_template->message );
+        $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}'],[SiteSetting()['website_title'], url('/') ,$user->first_name,$user->email],$email_template->message );
         
         $email_data = array(
             'name' =>  $user->firstname,
@@ -110,4 +110,133 @@ class AuthController extends Controller
         ];
 
     }
+    public function forgotPassword(Request $request) {
+
+        $input = $request->all();
+        $rules = array(
+        'email' => "required|email",
+        );
+        $validator = \Validator::make($input, $rules);
+        if ($validator->fails()) {
+            return $this->error($validator->errors()->first(),401);
+        }
+        else{
+            try {
+                $response = \Password::sendResetLink($request->only('email'));
+                switch ($response) {
+                    case \Password::RESET_LINK_SENT:
+                        return $this->success([],trans($response));
+                    case \Password::INVALID_USER:
+                        return $this->error(trans($response),401);
+                }
+            } catch (\Swift_TransportException $ex) {
+                return $this->error($ex->getMessage(),400);
+            } catch (\Exception $ex) {
+                return $this->error($ex->getMessage(),400);
+
+            }
+        }
+    }
+
+    public function changePassword(Request $request){
+        $user = auth()->user();
+        $input = $request->all();
+        $userid = $user->id;
+        $rules = array(
+            'old_password' => 'required',
+            'new_password' => 'required|min:8',
+            'confirm_password' => 'required|same:new_password',
+        );
+        $validator = Validator::make($input, $rules);
+        if ($validator->fails()) {
+            $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
+        } else {
+            try {
+                if ((Hash::check(request('old_password'), Auth::user()->password)) == false) {
+                    $arr = array("status" => 400, "message" => "Check your old password.", "data" => array());
+                } else if ((Hash::check(request('new_password'), Auth::user()->password)) == true) {
+                    $arr = array("status" => 400, "message" => "Please enter a password which is not similar then current password.", "data" => array());
+                } else {
+                    User::where('id', $userid)->update(['password' => Hash::make($input['new_password'])]);
+                    $arr = array("status" => 200, "message" => "Password updated successfully.", "data" => array());
+                }
+            } catch (\Exception $ex) {
+                if (isset($ex->errorInfo[2])) {
+                    $msg = $ex->errorInfo[2];
+                } else {
+                    $msg = $ex->getMessage();
+                }
+                $arr = array("status" => 400, "message" => $msg, "data" => array());
+            }
+        }
+        return \Response::json($arr);
+
+    }
+    public function socialLogin(Request $request)
+    {
+        $provider_id = $request->input('provider_id');
+        $email = $request->input('email');
+        $userExists = User::where(['provider_id'=>$provider_id,'email'=>$email])->first();
+        if($userExists){
+            return $this->success([
+                'token' => $userExists->createToken('API Token')->plainTextToken
+            ], 'User Logged In Successfully');
+
+        }
+        $validator = Validator::make($request->all(),[
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'provider' => ['required'],
+            'provider_id' => ['required', 'unique:users'],
+        ]);
+        if ($validator->fails()) {
+            return $this->error($validator->errors()->first(), 401);
+        }
+
+        
+        $user = User::create([
+            'first_name' => $request->input('firstname'),
+            'last_name' => $request->input('lastname'),
+            'email' => $request->input('email'),
+            'password' => Hash::make(time().$request->input('email').'_'.\Str::random(12)),
+            'provider_id'=>$request->input('provider_id'),
+            'provider'=>$request->input('provider'),
+            'registration_type'=>'social',
+        ]);
+
+        $user->assignRole('user');
+        $email_template = EmailTemplate::where('key','user_welcome')->first(); 
+
+        $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}'],[SiteSetting()['website_title'], url('/') ,$user->first_name,$user->email],$email_template->message );
+        
+        $email_data = array(
+            'name' =>  $user->firstname,
+            'email' => $user->email,
+            'email_message'=>$filtered_message,
+            'subject'=>$email_template->subject
+        );
+
+        $bonus = array_key_exists('welcome_bonus',SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
+
+        $user_bonus = Bonus::create([
+            'user_id'=>$user->id,
+            'amount'=>$bonus,
+        ]);
+        
+        
+        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
+            $message->to($email_data['email'], $email_data['name'])
+                ->subject($email_data['subject']);
+        });
+        return $this->success([
+            'token' => $user->createToken('API Token')->plainTextToken,
+            "first_name" => $user->first_name,
+            "last_name" => $user->last_name,
+            "email" => $user->email,
+            "registration_type" => $user->registration_type,
+        ], 'User Registered Successfully');
+    }
+
+    
 }
