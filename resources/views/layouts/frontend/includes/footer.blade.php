@@ -1,3 +1,12 @@
+@php
+
+$footer_menu_column_1 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-column 1')->first();
+$footer_menu_column_2 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-column 2')->first();
+$footer_menu_column_3 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-column 3')->first();
+$footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-column 4')->first();
+
+@endphp
+
 <footer class="site__footer">
     <div class="site-footer mt-0">
         <div class="container">
@@ -7,9 +16,9 @@
                         <div class="site-footer__widget footer-links">
                             <h5 class="footer-links__title">About</h5>
                             <ul class="footer-links__list">
-                                <li class="footer-links__item"><a href="{{route('page','about')}}" class="footer-links__link">About us</a></li>
-                                <li class="footer-links__item"><a href="{{route('page','advertising-partnerships')}}" class="footer-links__link">Advertising & Partnerships</a></li>
-                                <li class="footer-links__item"><a href="{{route('page','careers')}}" class="footer-links__link">Careers</a></li>
+                                @foreach($footer_menu_column_1->items as $item)
+                                    <li class="footer-links__item"><a href="{{$item->link}}" class="footer-links__link">{{$item->label}}</a></li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -17,11 +26,9 @@
                         <div class="site-footer__widget footer-links">
                             <h5 class="footer-links__title">Here to help</h5>
                             <ul class="footer-links__list">
-                                <li class="footer-links__item"><a href="{{route('page','getting-started')}}" class="footer-links__link">Getting Started</a></li>
-                                <li class="footer-links__item"><a href="{{route('page','customer-service')}}" class="footer-links__link">Customer Service</a></li>
-                                <li class="footer-links__item"><a href="{{route('page','donate-to-charity')}}" class="footer-links__link">Donate to Charity</a></li>
-                                <li class="footer-links__item"><a href="{{route('page','faqs')}}" class="footer-links__link">FAQs</a></li>
-                                
+                                @foreach($footer_menu_column_2->items as $item)
+                                    <li class="footer-links__item"><a href="{{$item->link}}" class="footer-links__link">{{$item->label}}</a></li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -29,10 +36,9 @@
                         <div class="site-footer__widget footer-links">
                             <h5 class="footer-links__title">Hot offers</h5>
                             <ul class="footer-links__list">
-                                <li class="footer-links__item"><a href="{{route('trending')}}" class="footer-links__link">Hottest</a></li>
-                                <li class="footer-links__item"><a href="#" class="footer-links__link">Top cashback deals</a></li>
-                                <li class="footer-links__item"><a href="#" class="footer-links__link">Top voucher codes</a></li>
-                               
+                                @foreach($footer_menu_column_3->items as $item)
+                                    <li class="footer-links__item"><a href="{{$item->link}}" class="footer-links__link">{{$item->label}}</a></li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>
@@ -41,10 +47,9 @@
                         <div class="site-footer__widget footer-links">
                             <h5 class="footer-links__title">Policies</h5>
                             <ul class="footer-links__list">
-                                <li class="footer-links__item"><a href="{{route('page','privacy-policy')}}" class="footer-links__link">Privacy Policy</a></li>
-                                <li class="footer-links__item"><a href="{{route('page','cookie-policy')}}" class="footer-links__link">Cookies Policy</a></li>
-                                <li class="footer-links__item"><a href="{{route('page','terms-and-conditions')}}" class="footer-links__link">Terms and Conditions</a></li>
-                             
+                                @foreach($footer_menu_column_4->items as $item)
+                                    <li class="footer-links__item"><a href="{{$item->link}}" class="footer-links__link">{{$item->label}}</a></li>
+                                @endforeach
                             </ul>
                         </div>
                     </div>

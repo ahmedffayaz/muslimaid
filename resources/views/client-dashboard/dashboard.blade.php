@@ -11,7 +11,7 @@
                     <div class="dashboard__profile card profile-card">
                         <div class="card-body profile-card__body">
                             <div class="profile-card__avatar">
-                                <img src="{{asset('frontend/images/avatars/avatar-3.jpg')}}" alt="">
+                                <img src="{{asset('admin-dashboard/images/avatar.png')}}" alt="">
                             </div>
                             <div class="profile-card__name">@if($user->first_name != 'unnamed' || $user->last_name != 'unnamed'){{$user->first_name}} {{$user->last_name}} @else <a href="{{route('account.profile')}}">Set Username</a> @endif
                                 </div>
@@ -22,22 +22,14 @@
                         </div>
                     </div>
                     <div class="dashboard__address card address-card address-card--featured">
-                        {{-- <div class="address-card__body">
-                            <div class="address-card__name">Cashback<span class="text-md-right">Total Earned <br> 0$ </span></div>
-                            <div class="address-card__row">
-                                
-                                
-                            </div>
-                            <div class="address-card__row">
-                                <div class="address-card__row-title">Paid</div>
-                                <div class="address-card__row-content">0$</div>
-                            </div>
-                            <div class="address-card__row">
-                                <div class="address-card__row-title">Total</div>
-                                <div class="address-card__row-content">0$</div>
-                            </div>
-                           
-                        </div> --}}
+                        <div class="address-card__body mt-4">
+                            <div class="address-card__name">Availabel Balance:<span class="text-md-right address-card__name2"><br> {{ currency()}}{{number_format((float)Auth::user()->availableBalance(), 2, '.', '')}}</span></div>
+                            
+                            <div class="address-card__name">Pending Balance:<span class="text-md-right address-card__name2"><br> {{ currency()}}{{number_format((float)Auth::user()->availableBalance(), 2, '.', '')}}</span></div>
+                            
+                            <div class="address-card__name">Tracked Balance:<span class="text-md-right address-card__name2"><br> {{ currency()}}{{number_format((float)Auth::user()->availableBalance(), 2, '.', '')}}</span></div>
+
+                        </div> 
                     </div>
                     @if($user->cashbacks->count())
                     <div class="dashboard__orders card">
@@ -66,8 +58,8 @@
                                             <tr>
                                                 
                                                 <td><a href="{{route('store.show',$item->store->slug)}}" target="_blank">{{$item->store->name}}</a></td>
-                                                <td>{{ currency() }} {{$item->order_value}}</td>
-                                                <td>{{ currency() }} {{$item->amount}}</td>
+                                                <td>{{ currency() }}{{number_format((float)$item->order_value, 2, '.', '')}}</td>
+                                                <td>{{ currency() }}{{number_format((float)$item->amount, 2, '.', '')}}</td>
                                                 <td>{{Carbon\Carbon::parse($item->event_date)->isoFormat('Do MMMM YYYY')}}</td>
                                                 <td>{{$item->statusMap->status}}</td>
                                             </tr>

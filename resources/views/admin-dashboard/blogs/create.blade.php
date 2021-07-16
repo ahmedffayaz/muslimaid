@@ -63,7 +63,7 @@
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <button class="btn btn-primary" type="submit">Save</button>
+                                                <button onclock="remobe_bug()" class="btn btn-primary add-blog" type="submit">Save</button>
                                                 
                                             </div>
                                         </div>
@@ -86,7 +86,10 @@
 <script>
     window.addEventListener('DOMContentLoaded', () => {
         Laraberg.init('content', { height: '600px', laravelFilemanager: true, sidebar: true })
-    })
+    });
+    window.onbeforeunload = function() {
+       return null;
+      };
 </script> 
 <script>
     var route_prefix = "/filemanager";

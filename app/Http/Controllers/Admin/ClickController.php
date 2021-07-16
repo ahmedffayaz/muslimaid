@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\CashbackStatusChange;
 use App\Models\Store;
 use App\Models\Network;
+use Illuminate\Support\Facades\DB;
 
 class ClickController extends Controller
 {
@@ -150,25 +151,19 @@ class ClickController extends Controller
 
         // Search by click id.
         if ($request->input('click_id')) {
-            $clicks->where('id', $request->input('click_id'));
+            $clicks->where('id', $request->click_id)
+            ->orWhere('user_id',$request->click_id)
+            ->orWhere('store_id',$request->click_id);
         }
-
-        // Search by store.
-        if ($request->input('store')) {
-            $clicks->whereHas('store', function ($query) use ($request) {
-                $query->where('name', 'like', "%{$request->store}%")
-                ->orWhere('id',$request->store);
-            });
-        }
+        
         // Search by user.
         if ($request->input('user')) {
             $clicks->whereHas('user', function ($query) use ($request) {
-                $query->where('first_name', 'like', "%{$request->user}%")
-                ->orwhere('last_name', 'like', "%{$request->user}%")
-                ->orWhere('id',$request->user);
+                $query->where(DB::raw("CONCAT(first_name,' ',last_name)"), 'like', "%{$request->user}%");})
+            ->orwhereHas('store', function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request->user}%");
             });
         }
-
 
         $clicks = $clicks->latest()->paginate(20);
         $route = 'search';

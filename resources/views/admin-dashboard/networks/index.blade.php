@@ -89,7 +89,7 @@
                                                 </div>
                                                 <div class="custom-control custom-control-sm custom-checkbox mr-2">
                                                     <input @if(@$network->importerSetting->import_vouchers) checked @endif type="checkbox" class="custom-control-input" id="vouchers" name="vouchers">
-                                                    <label class="custom-control-label" for="vouchers">Vocuhers</label>
+                                                    <label class="custom-control-label" for="vouchers">Vouchers</label>
                                                 </div>
                                                 <div class="custom-control custom-control-sm custom-checkbox mr-2">
                                                     <input @if(@$network->importerSetting->import_cashbacks) checked @endif type="checkbox" class="custom-control-input" id="cashback" name="cashback">
@@ -179,7 +179,7 @@
                     <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-check bg-success"></em>
                     <h4 class="nk-modal-title">Importing data</h4>
                     <div class="nk-modal-text">
-                        <div class="caption-text">Importer is running on background and it will import all the data,</div>
+                        <div class="caption-text">Importer is running in background and it will import all the data,</div>
                         <span class="sub-text-sm">You can still use the application while the importer is running in background</a></span>
                     </div>
                     <div class="nk-modal-action">

@@ -29,7 +29,8 @@
             <a href="{{route('account.change_password')}}">Change Password</a>
         </li>
         <li class="account-nav__item ">
-            <a href="account-login.html">Logout</a>
+            <a href="#" onclick="event.preventDefault();document.getElementById('logout-form').submit();">Logout</a>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">@csrf</form>
         </li>
     </ul>
 </div>

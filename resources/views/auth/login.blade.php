@@ -1,81 +1,86 @@
-@extends('layouts.auth.app')
-
+@extends('layouts.frontend.app')
 @section('content')
-<div class="nk-content ">
-    <div class="nk-split nk-split-page nk-split-md">
-        <div class="nk-split-content nk-block-area nk-block-area-column nk-auth-container bg-white">
-            <div class="absolute-top-right d-lg-none p-3 p-sm-5">
-                <a href="#" class="toggle btn-white btn btn-icon btn-light" data-target="athPromo"><em class="icon ni ni-info"></em></a>
-            </div>
-            <div class="nk-block nk-block-middle nk-auth-body">
-                <div class="brand-logo pb-5">
-                    <a href="html/index.html" class="logo-link">
-                        <img class="logo-light logo-img logo-img-lg" src="{{ asset('admin-dashboard/images/logo.png')}}" srcset="./images/logo2x.png 2x" alt="logo">
-                        <img class="logo-dark logo-img logo-img-lg" src="{{ asset('admin-dashboard/images/logo-dark.png')}}" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
-                    </a>
-                </div>
-                <div class="nk-block-head">
-                    <div class="nk-block-head-content">
-                        <h5 class="nk-block-title">Sign-In</h5>
-                        <div class="nk-block-des">
-                            <p>Access the cashback admin panel using your email and passcode.</p>
-                        </div>
-                    </div>
-                </div><!-- .nk-block-head -->
-                <form  method="POST" action="{{ route('login') }}">
-                    @csrf
-                    <div class="form-group">
-                        <div class="form-label-group">
-                            <label class="form-label" for="default-01">Email</label>
-                        </div>
-                        <input  class="form-control form-control-lg" id="default-01" placeholder="Enter your email address"
-                        
-                            type="email"  name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
-                            @error('email')
-                            <span class="invalid-feedback d-block" role="alert">
-                                <strong>{{ $message }}</strong>
-                            </span>
-                        @enderror
-                        </div><!-- .foem-group -->
-                    <div class="form-group">
-                        <div class="form-label-group">
-                            <label class="form-label" for="password">Password</label>
-                            <a class="link link-primary link-sm" tabindex="-1" href="{{ route('password.request') }}">Forgot Password?</a>
-                        </div>
-                        <div class="form-control-wrap">
-                            <a tabindex="-1" href="#" class="form-icon form-icon-right passcode-switch" data-target="password">
-                                <em class="passcode-icon icon-show icon ni ni-eye"></em>
-                                <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
-                            </a>
-                            <input type="password" class="form-control form-control-lg" id="password" placeholder="Enter your password"
+<div class="block mt-5">
+    <div class="container">
+        <div class="col-md-10 d-flex flex-column mx-auto">
+            <div class="card flex-grow-1 mb-md-0">
+                <div class="card-body">
+                    <h3 class="card-title">Login</h3>
+                    <div class="row">
+                        <div class="col-md-6 d-flex flex-column">
+                            <form method="POST" action="{{ route('login') }}">
+                                @csrf
+                                <div class="form-group">
+                                    <label>Email address</label>
+                                    <input type="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="Enter email" required autocomplete="email" autofocus>
+                                    @error('email')
+                                    <span class="invalid-feedback d-block" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" name="password" required class="form-control" placeholder="Password">
+                                    @error('password')
+                                    <span class="invalid-feedback d-block" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                    <small class="form-text text-muted">
+                                        <a href="">Forgotten Password</a>
+                                    </small>
+
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <span class="form-check-input input-check">
+                                            <span class="input-check__body">
+                                                <input class="input-check__input" type="checkbox" id="login-remember">
+                                                <span class="input-check__box"></span>
+                                                <svg class="input-check__icon" width="9px" height="7px">
+                                                    <use xlink:href="{{asset('frontend/images/sprite.svg')}}#check-9x7"></use>
+                                                </svg>
+                                            </span>
+                                        </span>
+                                        <label class="form-check-label" for="login-remember">Remember Me</label>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-1">Login</button>
+                            </form>
+                            @if(isFacebookEnabled() || isGoogleEnabled())
+                                <div>
+                                    <hr>
+                                    @if(isFacebookEnabled())
+                                        <a class="btn btn-primary border-0 fb-button" style="background-color: #3b5998; border-radius: 2px" href="{{ url('/login/facebook') }}" role="button">
+                                            <i class="fab fa-facebook-f"></i> Join with Facebook</a>
+                                    @endif
+                                    @if(isGoogleEnabled())
+                                        <a class="btn btn-primary border-0 ml-2 g-button" style="background-color: #dd4b39; border-radius: 2px" href="{{ url('/login/google') }}" role="button">
+                                            <i class="fab fa-google"></i> Join with Google</a>
+                                    @endif
+                                </div>
+                            @endif
+                            </div>
                             
-                                name="password" required autocomplete="current-password">
-                                @error('password')
-                                <span class="invalid-feedback d-block" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
+                            <div class="mt-4 mx-auto d-none d-md-block" style="border-left:1px solid rgba(0,0,0,0.1); height: 220px;"></div>
+
+                            <div class="col-md-5 d-flex flex-column">
+                            
+                                <h4 class="mb-3">
+                                    Save money on your favourite brands
+                                </h4>
+                                <p><span class="mr-3" style="font-family: wingdings; font-size: 120%; color:green;">&#10004;</span>A few clicks to get cashback</p>
+                                <p><span class="mr-3" style="font-family: wingdings; font-size: 120%; color:green;">&#10004;</span>Completely free</p>
+                                <p><span class="mr-3" style="font-family: wingdings; font-size: 120%; color:green;">&#10004;</span>Get cashback and/or discount codes</p>
+                                <p><span class="mr-3" style="font-family: wingdings; font-size: 120%; color:green;">&#10004;</span>Join the thousands of people who are saving money when they buy from 500+ popular brands</p>
+
+                            </div>
                         </div>
-                    </div><!-- .foem-group -->
-                    <div class="form-group">
-                        <button class="btn btn-lg btn-primary btn-block" type="submit" >Sign in</button>
                     </div>
-                </form><!-- form -->
-                
-                
-            </div><!-- .nk-block -->
-            <div class="nk-block nk-auth-footer">
-                
-                <div class="mt-3">
-                    <p>Designed and Developed by <a href="https://therightsw.com">The Right Software</a></p>
                 </div>
-            </div><!-- .nk-block -->
-        </div><!-- .nk-split-content -->
-        <div class="nk-split-content nk-split-stretch bg-lighter d-flex toggle-break-lg toggle-slide toggle-slide-right " data-content="athPromo" data-toggle-screen="lg" data-toggle-overlay="true">
-           
-            <img class="round m-auto" width="600px" src="{{ asset('admin-dashboard/images/browser-stats-animate.svg')}}" srcset="{{ asset('admin-dashboard/images/browser-stats-animate.svg')}} 2x" alt="">
-           
-        </div><!-- .nk-split-content -->
-    </div><!-- .nk-split -->
+            </div>
+        </div>
+    </div>
 </div>
 @endsection

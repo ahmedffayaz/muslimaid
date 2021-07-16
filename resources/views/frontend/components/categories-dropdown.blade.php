@@ -6,7 +6,7 @@
                 <div class="departments__submenus-container"></div>
                 <ul class="departments__links">
                     @php $categories = getCategories(); @endphp
-                   @foreach ($categories as $category)
+                    @foreach ($categories as $category)
                        
                   
                     <li class="departments__item">

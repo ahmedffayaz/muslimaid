@@ -44,7 +44,7 @@
        
     </div>
     <div class="nk-tb-col tb-col-lg">
-        <span class="tb-amount"><span class="currency">{{ currency() }} </span>{{$user->balance->sum('amount')}}</span>
+        <span class="tb-amount"><span class="currency">{{ currency() }}</span>{{number_format((float)$user->balance->sum('amount'), 2, '.', '')}}</span>
     </div>
     <div class="nk-tb-col tb-col-lg">
         <span>{{$user->registration_type}}</span>
@@ -56,7 +56,7 @@
    
    
     <div class="nk-tb-col tb-col-lg text-center">
-       {!! $user->status ? '<span class="tb-status text-success">active</span>' : '<span class="tb-status text-danger">in-active</span>'!!}
+       {!! $user->status ? '<span class="tb-status badge badge-success">active</span>' : '<span class="tb-status badge badge-danger">in-active</span>'!!}
  
     </div>
     <div class="nk-tb-col nk-tb-col-tools">

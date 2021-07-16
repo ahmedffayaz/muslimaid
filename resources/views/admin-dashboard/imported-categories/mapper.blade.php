@@ -23,7 +23,7 @@
                             <option value="{{$site_category->id}}" @if($importedcategory->mapped_to == $site_category->id) selected @endif >
                                  {{$site_category->name}}</option>
                                  @if(count($site_category->childs))
-                                 @include('admin-dashboard.imported-categories.child_input',['childs' => $site_category->childs,'isEdit'=> 1 ,'category'=>$importedcategory,'dashes'=>'~'])
+                                 @include('admin-dashboard.imported-categories.child_input',['childs' => $site_category->childs,'isEdit'=> 1 ,'category'=>$importedcategory,'dashes'=>'-'])
                              @endif
                                 
                             @endforeach

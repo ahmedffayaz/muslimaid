@@ -3,6 +3,8 @@
         table-layout: fixed;
     }
 </style>
+
+@if(count($coms))
 <div class="nk-tb-item nk-tb-head">
     
     
@@ -45,7 +47,7 @@
                 <span>{{$commission->exitClick->user->first_name[0] ?? 'N'}}{{$commission->exitClick->user->last_name[0] ?? 'A'}}</span>
             </div>
             <div class="user-info">
-                <span class="tb-lead">{{$commission->exitClick->user->id ?? ''}} @if($commission->user->first_name != 'unnamed' || $commission->user->last_name != 'unnamed')- {{$commission->user->first_name}} {{$commission->user->last_name}} @endif{{$commission->exitClick->user->first_name ?? ''}}</span>
+                <span class="tb-lead">{{$commission->exitClick->user->id ?? ''}} @if($commission->user->first_name != 'unnamed' || $commission->user->last_name != 'unnamed')- {{$commission->user->first_name}} {{$commission->user->last_name}} @endif</span>
                 <span>{{$commission->exitClick->user->email ?? ''}}</span>
             </div>
         </div>
@@ -57,10 +59,10 @@
     </div>
     
     <div class="nk-tb-col  text-center">
-        <span><span class="currency">{{ currency() }} </span>{{$commission->network_commission}}</span>
+        <span><span class="currency">{{ currency() }}</span>{{number_format((float)$commission->network_commission, 2, '.', '')}}</span>
     </div>
     <div class="nk-tb-col  text-center">
-        <span><span class="currency">{{ currency() }} </span>{{$commission->amount}}</span>
+        <span><span class="currency">{{ currency() }}</span>{{number_format((float)$commission->amount, 2, '.', '')}}</span>
     </div>
     <div class="nk-tb-col  text-center">
         <span>{{$commission->exit_click_id}}</span>
@@ -69,7 +71,15 @@
         <span>{{$commission->event_date}}</span>
     </div>
     <div class="nk-tb-col  text-right">
-        <span class="tb-status text-info"> {{ $commission->statusMap->status ?? $commission->status}}</span>
+        @if(($commission->statusMap->status ?? $commission->status) == "confirmed")
+            <span class="tb-status badge badge-success">{{ $commission->statusMap->status ?? $commission->status}}</span>
+        @elseif(($commission->statusMap->status ?? $commission->status) == "paid")
+            <span class="tb-status badge badge-success">{{ $commission->statusMap->status ?? $commission->status}}</span>
+        @elseif(($commission->statusMap->status ?? $commission->status) == "failed")
+            <span class="tb-status badge badge-danger">{{ $commission->statusMap->status ?? $commission->status}}</span>
+        @elseif(($commission->statusMap->status ?? $commission->status) == "pending")
+            <span class="tb-status badge badge-info">{{ $commission->statusMap->status ?? $commission->status}}</span>
+        @endif
     </div>
     
    
@@ -110,3 +120,7 @@
     
 </div><!-- .nk-block-between -->                                 
                     
+
+@else 
+    <h3 class="m-auto text-center py-5">No results found</h3> 
+@endif                     

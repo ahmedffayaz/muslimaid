@@ -32,27 +32,19 @@
                         <form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
                             @csrf
                             <div class="row g-4">
-                                <div class="col-lg-2 col-md-6">
+                                <div class="col-lg-3 col-md-9">
                                     <div class="form-group">
-                                        <label class="form-label" for="click_id">Click ID</label>
+                                        <label class="form-label" for="click_id">Click ID/ User ID/ Store ID</label>
                                         <div class="form-control-wrap">
                                             <input type="text" class="form-control" id="click_id" value="" name="click_id">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-2 col-md-6">
+                                <div class="col-lg-3 col-md-9">
                                     <div class="form-group">
-                                        <label class="form-label" for="user">User ID/Name</label>
+                                        <label class="form-label" for="user">User Name/ Store Name</label>
                                         <div class="form-control-wrap">
                                             <input type="text" class="form-control" id="user" value="" name="user">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-lg-2 col-md-6">
-                                    <div class="form-group">
-                                        <label class="form-label" for="store">Store ID/Name</label>
-                                        <div class="form-control-wrap">
-                                            <input type="text" class="form-control" id="store" value="" name="store">
                                         </div>
                                     </div>
                                 </div>
@@ -160,13 +152,12 @@
               
             var _token = $("input[name=_token]").val();
             var network_id = $("select[name=network_id]").val();
-            var store = $("input[name=store]").val();
             var user = $("input[name=user]").val();
             var click_id = $("input[name=click_id]").val();
             $.ajax({
               url:'{{route("admin.clicks.search_clicks")}}',
               method:"POST",
-              data:{_token:_token,network_id:network_id,store:store,user:user,click_id:click_id},
+              data:{_token:_token,network_id:network_id,user:user,click_id:click_id},
               success:function(data)
               {
                $('#table-data').html(data);
