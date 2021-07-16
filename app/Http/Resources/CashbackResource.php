@@ -14,14 +14,18 @@ class CashbackResource extends JsonResource
      */
     public function toArray($request)
     {
+        $currency = ($this->type=='fixed') ? $this->currency :null;
+
+        $cashback_value = $this->store->custom_cashback_percentage ? ($this->store->custom_cashback_percentage/100)*$this->sale_commission :(SiteSetting()['cashback_percentage']/100)*$this->sale_commission;
+
+        $cashback = $currency ? $currency.$cashback_value: $cashback_value.'%';
+        
         return [
                 
-                "cashback_name"=>$this->cashback_name,
-                "click_url"=>$this->click_url,
-                "type"=>$this->type,
-                "sale_commission"=>$this->sale_commission,
-                "currency"=>$this->currency,
-                "detail"=>$this->detail,
+            "cashback_name"=>$this->cashback_name,
+            "click_url"=>$this->click_url,
+            "sale_commission"=>$cashback,
+            "detail"=>$this->detail,
         ];
     }
 }

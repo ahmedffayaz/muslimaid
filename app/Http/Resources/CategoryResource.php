@@ -14,16 +14,27 @@ class CategoryResource extends JsonResource
      */
     public function toArray($request)
     {
+        $logo_url= null;
+        $banner_url= null;
+
+        if($this->logo_type == 'upload'){
+            $logo_url = ($this->logo_upload =="category_default_logo.png") ? url('frontend/images/categories/images/category_default_logo.png') :url('storage/categories/images/'.$this->logo_upload);
+        }elseif($this->logo_type =='link'){
+           $logo_url = $this->logo_link;
+        }
+
+        if($this->banner_type == 'upload'){
+            $banner_url =($this->banner_upload =="category_default_banner.png") ? url('frontend/images/categories/images/category_default_banner.png') :url('storage/categories/images/'.$this->banner_upload);
+        }elseif($this->banner_type =='link'){
+           $banner_url = $this->banner_link;
+        }
+
         return [ 
         "name"=> $this->name,
         "slug"=> $this->slug,
         "description"=> $this->description,
-        "logo_type"=> $this->logo_type,
-        "logo_upload"=> $this->logo_upload,
-        "logo_link"=> $this->logo_link,
-        "banner_type"=> $this->banner_type,
-        "banner_upload"=> $this->banner_upload,
-        "banner_link"=> $this->banner_link,
+        "logo"=>$logo_url,
+        "banner"=> $banner_url,
         "parent_id"=> $this->parent_id,
     ];
     }
