@@ -16,9 +16,11 @@ $footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-c
                         <div class="site-footer__widget footer-links">
                             <h5 class="footer-links__title">About</h5>
                             <ul class="footer-links__list">
-                                @foreach($footer_menu_column_1->items as $item)
-                                    <li class="footer-links__item"><a href="{{$item->link}}" class="footer-links__link">{{$item->label}}</a></li>
-                                @endforeach
+                                @isset($footer_menu_column_1)
+                                    @foreach($footer_menu_column_1->items as $item)
+                                        <li class="footer-links__item"><a href="{{$item->link}}" class="footer-links__link">{{$item->label}}</a></li>
+                                    @endforeach
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -26,9 +28,11 @@ $footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-c
                         <div class="site-footer__widget footer-links">
                             <h5 class="footer-links__title">Here to help</h5>
                             <ul class="footer-links__list">
-                                @foreach($footer_menu_column_2->items as $item)
-                                    <li class="footer-links__item"><a href="{{$item->link}}" class="footer-links__link">{{$item->label}}</a></li>
-                                @endforeach
+                                @isset($footer_menu_column_2)
+                                    @foreach($footer_menu_column_2->items as $item)
+                                        <li class="footer-links__item"><a href="{{$item->link}}" class="footer-links__link">{{$item->label}}</a></li>
+                                    @endforeach
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -36,9 +40,11 @@ $footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-c
                         <div class="site-footer__widget footer-links">
                             <h5 class="footer-links__title">Hot offers</h5>
                             <ul class="footer-links__list">
-                                @foreach($footer_menu_column_3->items as $item)
-                                    <li class="footer-links__item"><a href="{{$item->link}}" class="footer-links__link">{{$item->label}}</a></li>
-                                @endforeach
+                                @isset($footer_menu_column_3)
+                                    @foreach($footer_menu_column_3->items as $item)
+                                        <li class="footer-links__item"><a href="{{$item->link}}" class="footer-links__link">{{$item->label}}</a></li>
+                                    @endforeach
+                                @endif
                             </ul>
                         </div>
                     </div>
@@ -47,9 +53,11 @@ $footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-c
                         <div class="site-footer__widget footer-links">
                             <h5 class="footer-links__title">Policies</h5>
                             <ul class="footer-links__list">
-                                @foreach($footer_menu_column_4->items as $item)
-                                    <li class="footer-links__item"><a href="{{$item->link}}" class="footer-links__link">{{$item->label}}</a></li>
-                                @endforeach
+                                @isset($footer_menu_column_4)
+                                    @foreach($footer_menu_column_4->items as $item)
+                                        <li class="footer-links__item"><a href="{{$item->link}}" class="footer-links__link">{{$item->label}}</a></li>
+                                    @endforeach
+                                @endif
                             </ul>
                         </div>
                     </div>
