@@ -1,166 +1,74 @@
-@extends('layouts.auth.app')
+@extends('layouts.frontend.app')
 @section('content')
-<div class="nk-content ">
-    <div class="nk-split nk-split-page nk-split-md">
-        <div class="nk-split-content nk-block-area nk-block-area-column nk-auth-container bg-white w-lg-45">
-            <div class="absolute-top-right d-lg-none p-3 p-sm-5">
-                <a href="#" class="toggle btn btn-white btn-icon btn-light" data-target="athPromo"><em class="icon ni ni-info"></em></a>
-            </div>
-            <div class="nk-block nk-block-middle nk-auth-body">
-                <div class="brand-logo pb-5">
-                    <a href="html/index.html" class="logo-link">
-                        <img class="logo-light logo-img logo-img-lg" src="{{ asset('admin-dashboard/images/logo.png')}}" srcset="./images/logo2x.png 2x" alt="logo">
-                        <img class="logo-dark logo-img logo-img-lg" src="{{ asset('admin-dashboard/images/logo-dark.png')}}" srcset="./images/logo-dark2x.png 2x" alt="logo-dark">
-                    </a>
-                </div>
-                <div class="nk-block-head">
-                    <div class="nk-block-head-content">
-                        <h5 class="nk-block-title">Register</h5>
-                        <div class="nk-block-des">
-                            <p>Create New Cashback Reborn Account</p>
-                        </div>
-                    </div>
-                </div><!-- .nk-block-head -->
-                <form method="POST" action="{{ route('register') }}">
-                    @csrf
-                    <div class="form-group">
-                        <label class="form-label" for="firstame">First Name</label>
-                        <input type="text" class="form-control form-control-lg" id="firstname" placeholder="Enter your first name" name="firstname" value="{{ old('firstname') }}" required autocomplete="firstname" autofocus>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="lastname">Last Name</label>
-                        <input type="text" class="form-control form-control-lg" id="lastname" placeholder="Enter your last name" name="lastname" value="{{ old('lastname') }}" required autocomplete="lastname" autofocus>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="email">Email</label>
-                        <input type="text" class="form-control form-control-lg" id="email" placeholder="Enter your email address" name="email" value="{{ old('email') }}" required autocomplete="email">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="password">Password</label>
-                        <div class="form-control-wrap">
-                            <a tabindex="-1" href="#" class="form-icon form-icon-right passcode-switch" data-target="password">
-                                <em class="passcode-icon icon-show icon ni ni-eye"></em>
-                                <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
-                            </a>
-                            <input type="password" class="form-control form-control-lg" id="password" placeholder="Enter your password" name="password" required autocomplete="new-password">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label" for="password">Confirm Password</label>
-                        <div class="form-control-wrap">
-                            <a tabindex="-1" href="#" class="form-icon form-icon-right passcode-switch" data-target="confirm-password">
-                                <em class="passcode-icon icon-show icon ni ni-eye"></em>
-                                <em class="passcode-icon icon-hide icon ni ni-eye-off"></em>
-                            </a>
-                            <input type="password" class="form-control form-control-lg" id="confirm-password" placeholder="Re-enter your password" name="password_confirmation" required autocomplete="new-password">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="custom-control custom-control-xs custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="checkbox">
-                            <label class="custom-control-label" for="checkbox">I agree to Cashback <a tabindex="-1" href="#">Privacy Policy</a> &amp; <a tabindex="-1" href="#"> Terms.</a></label>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
-                    </div>
-                </form><!-- form -->
-                {{-- <div class="form-note-s2 pt-4"> Already have an account ? <a href="{{route('login')}}"><strong>Sign in instead</strong></a>
-                </div> --}}
-                {{-- <div class="text-center pt-4 pb-3">
-                    <h6 class="overline-title overline-title-sap"><span>OR</span></h6>
-                </div>
-                <ul class="nav justify-center gx-8">
-                    <li class="nav-item"><a class="nav-link" href="#">Facebook</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#">Google</a></li>
-                </ul> --}}
-            </div><!-- .nk-block -->
-            <div class="nk-block nk-auth-footer">
-                <div class="mt-3">
-                    <p>Designed and Developed by <a href="https://therightsw.com">The Right Software</a></p>
-                </div>
-            </div><!-- nk-block -->
-        </div><!-- nk-split-content -->
-        <div class="nk-split-content nk-split-stretch bg-lighter d-flex toggle-break-lg toggle-slide toggle-slide-right " data-content="athPromo" data-toggle-screen="lg" data-toggle-overlay="true">
-           
-            <img class="round m-auto" width="600px" src="{{ asset('admin-dashboard/images/browser-stats-animate.svg')}}" srcset="{{ asset('admin-dashboard/images/browser-stats-animate.svg')}} 2x" alt="">
-           
-        </div><!-- .nk-split-content -->
-    </div><!-- nk-split -->
-</div>
-         {{--      
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Register') }}</div>
-
+<div class="block mt-5">
+    <div class="container">
+        <div class="col-md-10 d-flex flex-column mx-auto">
+            <div class="card flex-grow-1 mb-md-0">
                 <div class="card-body">
-                    <form method="POST" action="{{ route('register') }}">
-                        @csrf
+                    <h3 class="card-title">Register</h3>
+                    <div class="row">
+                        <div class="col-md-6 d-flex flex-column">
+                            <form method="POST" action="{{ route('register') }}">
+                                @csrf
+                                <input type="hidden" class="form-control form-control-lg" id="lastname" placeholder="Enter your last name" name="lastname" value="Doe">
+                                <input type="hidden" class="form-control form-control-lg" id="firstname" placeholder="Enter your first name" name="firstname" value="john">
 
-                        <div class="form-group row">
-                            <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Name') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
-
-                                @error('name')
-                                    <span class="invalid-feedback" role="alert">
+                                <div class="form-group">
+                                    <label>Email address</label>
+                                    <input type="email" name="email" class="form-control" placeholder="Enter email" required>
+                                    @error('email')
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="email" class="col-md-4 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
-
-                                @error('email')
-                                    <span class="invalid-feedback" role="alert">
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label>Password</label>
+                                    <input type="password" class="form-control" name="password" required placeholder="Password">
+                                    @error('password')
+                                    <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
-                                @enderror
-                            </div>
+                                    @enderror
+                                </div>
+                                <div class="form-group">
+                                    <label>Repeat Password</label>
+                                    <input type="password" class="form-control" placeholder="Confirm Password" name="password_confirmation" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary mt-1">Register</button>
+                            </form>
+                            @if(isFacebookEnabled() || isGoogleEnabled())
+                                <div>
+                                    <hr>
+                                    @if(isFacebookEnabled())
+                                        <a class="btn btn-primary border-0 fb-button" style="background-color: #3b5998; border-radius: 2px" href="{{ url('/login/facebook') }}" role="button">
+                                            <i class="fab fa-facebook-f"></i> Join with Facebook</a>
+                                    @endif
+                                    @if(isGoogleEnabled())
+                                        <a class="btn btn-primary border-0 ml-2 g-button" style="background-color: #dd4b39; border-radius: 2px" href="{{ url('/login/google') }}" role="button">
+                                            <i class="fab fa-google"></i> Join with Google</a>
+                                    @endif
+                                </div>
+                             @endif
                         </div>
 
-                        <div class="form-group row">
-                            <label for="password" class="col-md-4 col-form-label text-md-right">{{ __('Password') }}</label>
+                        <div class="mt-4 mx-auto d-none d-md-block" style="border-left:1px solid rgba(0,0,0,0.1); height: 220px;"></div>
 
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                        <div class="col-md-5 d-flex flex-column">
+                            <h4 class="mb-3">
+                                Save money on your favourite brands
+                            </h4>
+                                <p><span class="mr-3" style="font-family: wingdings; font-size: 120%; color:green;">&#10004;</span>A few clicks to get cashback</p>
+                                <p><span class="mr-3" style="font-family: wingdings; font-size: 120%; color:green;">&#10004;</span>Completely free</p>
+                                <p><span class="mr-3" style="font-family: wingdings; font-size: 120%; color:green;">&#10004;</span>Get cashback and/or discount codes</p>
+                                <p><span class="mr-3" style="font-family: wingdings; font-size: 120%; color:green;">&#10004;</span>Join the thousands of people who are saving money when they buy from 500+ popular brands</p>
+                        
                             </div>
                         </div>
-
-                        <div class="form-group row">
-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
-                            </div>
-                        </div>
-
-                        <div class="form-group row mb-0">
-                            <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Register') }}
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
---}}
 @endsection

@@ -36,7 +36,7 @@
                                     <tr>
                                         <td><a href="{{route('account.claim.show',$claim->ticket_id)}}">{{$claim->ticket_id}}</a></td>
                                         <td>{{$claim->store->name}}</td>
-                                        <td>{{ currency() }}{{$claim->claim_amount}}</td>
+                                        <td>{{ currency() }}{{number_format((float)$claim->claim_amount, 2, '.', '')}}</td>
                                         <td class="text-capitalize">{{$claim->claim_type}}</td>
                                         <td>{{Carbon\Carbon::parse($claim->created_at)->isoFormat('Do MMMM YYYY')}}</td>
                                         <td>@if($claim->status =='open')

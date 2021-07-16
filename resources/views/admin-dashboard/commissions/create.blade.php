@@ -34,7 +34,7 @@
                                                             <option value="0" disabled selected>Select Exit Click</option>
                                                            
                                                             @foreach ($clicks as $click)
-                                                            <option value="{{$click->id}}">({{$click->id}}) ({{$click->user->first_name}} {{$click->user->last_name}}) ({{$click->store->name}})</option>
+                                                            <option value="{{$click->id}}">({{$click->id}}) ({{@$click->user->first_name}} {{@$click->user->last_name}}) ({{$click->store->name}})</option>
                                                                 
                                                             @endforeach
                                                         </select>

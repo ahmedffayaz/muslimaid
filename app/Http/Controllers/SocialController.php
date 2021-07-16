@@ -26,7 +26,6 @@ class SocialController extends Controller
         $users       =   User::where(['email' => $userSocial->getEmail()])->first();
     if($users){
             Auth::login($users);
-            Session::flash('welcome','welcome message'); 
         if (Session::has('prvUrl')){
             return redirect(session('prvUrl'));
         }else{

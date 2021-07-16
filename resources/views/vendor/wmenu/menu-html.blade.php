@@ -244,3 +244,10 @@ $currentUrl = url()->current();
 		</div>
 	</div>
 </div>
+
+@push('scripts')
+<script>
+	$('.add-new-menu-action').hide();
+	$('#nav-menu-footer').hide();
+</script>
+@endpush

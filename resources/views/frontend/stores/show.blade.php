@@ -156,7 +156,7 @@
                                     <input type="hidden" name="url" id="url" value="{{$store->tracking_url}}">
                                     <input type="hidden" name="store_id" id="store_id" value="{{$store->id}}">
                                     <input type="hidden" name="voucher_id" id="voucher_id" value="0">
-                                    <input type="hidden" name="user_id" id="user_id" value="{{Auth::id() ?? 0}}">
+                                    <input type="hidden" name="user_id" id="user_id" value="{{Auth::id() ?? 1}}">
 
                                 </form>
 
@@ -376,22 +376,29 @@
                 <div class="modal-body text-center">
                     <h4>Do you want to receive a cashback at<br> <span class="color-primary">{{$store->name}}?</span></h4>
 
-                    <img style="max-width: 100px;" class="mx-auto my-4 d-block" @if($store->logo->count())
-                    @if($store->logo->first())
-                    src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
-                    @else
-                    src="{{asset('frontend/images/products/product-16.jpg')}}" alt=""
-                    @endif
+                    <img style="max-width: 100px;" class="mx-auto my-4 d-block" @if($store->logo->first())
+                                    @if($store->logo->first()->is_fake)
+                                    src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
+                                    @else
+                                    src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                                    @endif
+                                    @else
+                                    src="{{asset('frontend/images/products/product-16.jpg')}}"
+                                    @endif alt="">
 
-                    @else
-                    src="{{asset('frontend/images/products/product-16.jpg')}}" alt=""
-                    @endif
-                    >
+                    <h5>Get upto @if($store->cashback->type=='fixed'){{$store->cashback->currency}}
 
-                    <h5>Get upto @if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif{{$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif Cashback</h5>
+                                @endif
+                                @if($store->custom_cashback_percentage)
+                                {{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}
+                                @else
+                                {{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}
+                                @endif
+                                
+                                @if($store->cashback->type=='percentage')%@endif Cashback</h5>
                 </div>
                 <div class="modal-footer">
-                    <a href="{{route('account.login')}}?prvUrl={{ request()->fullUrl() }}" class="btn btn-primary">Yes, Ofcourse</a>
+                    <a href="{{route('login')}}?prvUrl={{ request()->fullUrl() }}" class="btn btn-primary">Yes, Ofcourse</a>
                     <a href="#" onclick="document.getElementById('form_{{$store->id}}').submit()" class="btn btn-warning btn-dim">No, Continue without cashback</a>
                 </div>
 
@@ -411,22 +418,29 @@
                 <div class="modal-body text-center">
                     <h4>Do you want to receive a cashback at<br> <span class="color-primary">{{$store->name}}?</span></h4>
 
-                    <img style="max-width: 100px;" class="mx-auto my-4 d-block" @if($store->logo->count())
-                    @if($store->logo->first())
-                    src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
-                    @else
-                    src="{{asset('frontend/images/products/product-16.jpg')}}" alt=""
-                    @endif
+                    <img style="max-width: 100px;" class="mx-auto my-4 d-block" @if($store->logo->first())
+                                    @if($store->logo->first()->is_fake)
+                                    src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
+                                    @else
+                                    src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                                    @endif
+                                    @else
+                                    src="{{asset('frontend/images/products/product-16.jpg')}}"
+                                    @endif alt="">
 
-                    @else
-                    src="{{asset('frontend/images/products/product-16.jpg')}}" alt=""
-                    @endif
-                    >
+                    <h5>Get upto @if($store->cashback->type=='fixed'){{$store->cashback->currency}}
 
-                    <h5>Get upto @if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif{{$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif Cashback</h5>
+                                @endif
+                                @if($store->custom_cashback_percentage)
+                                {{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}
+                                @else
+                                {{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}
+                                @endif
+                                
+                                @if($store->cashback->type=='percentage')%@endif Cashback</h5>
                 </div>
                 <div class="modal-footer">
-                    <a href="{{route('account.login')}}?prvUrl={{ request()->fullUrl() }}" class="btn btn-primary">Yes, Ofcourse</a>
+                    <a href="{{route('login')}}?prvUrl={{ request()->fullUrl() }}" class="btn btn-primary">Yes, Ofcourse</a>
                     <a href="" form_id="" target="_blank" class="btn btn-warning btn-dim discard-btn" data-code="">No, Continue without cashback</a>
                 </div>
 

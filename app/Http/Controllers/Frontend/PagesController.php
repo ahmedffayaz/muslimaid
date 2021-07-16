@@ -146,12 +146,12 @@ class PagesController extends Controller
 
     public function login(Request $request){
         session(['prvUrl' => $request->get('prvUrl')]);
-        return view('client-dashboard.login');
+        return view('auth.login');
     }
 
     public function register(Request $request){
         session(['prvUrl' => $request->get('prvUrl')]);
-        return view('client-dashboard.register');
+        return view('auth.register');
     }
 
     public function search(Request $request, Store $stores){

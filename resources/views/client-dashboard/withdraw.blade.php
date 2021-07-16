@@ -41,7 +41,7 @@
                         <p>You can withdraw your earned cashback in a variety of ways.</p>
                     </div>
                     <div class="col-lg-4 text-right" >
-                        <h3>Balance {{ currency() }}{{Auth::user()->availableBalance()}}</h3>
+                        <h3>Balance {{ currency() }}{{number_format((float)Auth::user()->availableBalance(), 2, '.', '')}}</h3>
                         </p>Select a payment method</p>
                     </div>
                 </div>

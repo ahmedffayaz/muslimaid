@@ -8,6 +8,11 @@
                 <use xlink:href="{{asset('frontend/images/sprite.svg')}}#search-20"></use>
             </svg>
         </button>
+        <button class="search__button search__button--type--close min-search-icon" type="button">
+            <svg width="20px" height="20px">
+                <use xlink:href="{{asset('frontend/images/sprite.svg')}}#cross-20"></use>
+            </svg>
+        </button>
         <div class="search__border"></div>
         </form>
 
