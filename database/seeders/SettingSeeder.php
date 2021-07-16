@@ -56,14 +56,14 @@ class SettingSeeder extends Seeder
                             'Payment Method Cheque'=>1,
                             'Min Cashout Amount'=>1,
                             'Welcome Bonus'=>2,
-                            'facebook_client_id'=>'3200039003655128',
-                            'facebook_client_secret'=>'74f27da5a9219d4e98a072b2cda3a465',
-                            'facebook_url'=>'http://localhost:8000/login/facebook/callback',
-                            'google_client_id'=>'7625208194-mukofel1nlmurbguafeffdbh91amothm.apps.googleusercontent.com',
-                            'google_client_secret'=>'tZBziwUoyKgzbioTPKGTfYeL',
-                            'google_url'=>'http://localhost:8000/login/google/callback',
-                            'mailchimp_api_key'=>'d648b62b49e2fb3c5b58c5c2f83f52a5-us6',
-                            'mailchimp_list_id'=>'23961d753f'
+                            'Facebook client id'=>'3200039003655128',
+                            'Facebook client Secret'=>'74f27da5a9219d4e98a072b2cda3a465',
+                            'Facebook Url'=>'http://localhost:8000/login/facebook/callback',
+                            'Google Client Id'=>'7625208194-mukofel1nlmurbguafeffdbh91amothm.apps.googleusercontent.com',
+                            'Google Client Secret'=>'tZBziwUoyKgzbioTPKGTfYeL',
+                            'Google Url'=>'http://localhost:8000/login/google/callback',
+                            'Mailchimp Api Key'=>'d648b62b49e2fb3c5b58c5c2f83f52a5-us6',
+                            'Mailchimp List Id'=>'23961d753f'
                             );
 
         foreach ($settings as $key => $value) {
