@@ -41,7 +41,7 @@
        
     </div>
     <div class="nk-tb-col tb-col-mb">
-        <span class="tb-amount"><span class="currency">{{ currency() }}</span> {{$cashout->amount}}</span>
+        <span class="tb-amount"><span class="currency">{{ currency()}}</span>{{number_format((float)$cashout->amount, 2, '.', '')}}</span>
     </div>
     <div class="nk-tb-col tb-col-mb">
         <span>{{$cashout->payment_method}}</span>
@@ -52,7 +52,9 @@
     </div> 
    
     <div class="nk-tb-col ">
-        <span class="tb-status text-success">{{ $cashout->status}}</span>
+        <span>
+            {!! $cashout->status =='paid'  ? '<span class="tb-status badge badge-success">paid</span>' : '<span class="tb-status badge badge-danger">pending</span>'!!}
+        </span>
     </div>
     <div class="nk-tb-col nk-tb-col-tools">
         <ul class="nk-tb-actions gx-1">
@@ -61,8 +63,6 @@
                     <em class="icon ni ni-eye-fill"></em>
                 </a>
             </li>
-            
-           
         </ul>
     </div>
 </div><!-- .nk-tb-item -->

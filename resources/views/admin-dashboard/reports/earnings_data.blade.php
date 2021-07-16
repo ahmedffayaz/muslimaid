@@ -43,20 +43,28 @@
                     
                 
                     <div class="nk-tb-col ">
-                        <span><span class="currency">{{ currency() }} </span>{{$com->network_commission}}</span>
+                        <span><span class="currency">{{ currency() }}</span>{{number_format((float)$com->network_commission, 2, '.', '')}}</span>
                     </div>
                     <div class="nk-tb-col ">
-                        <span><span class="currency">{{ currency() }} </span>{{$com->amount}}</span>
+                        <span><span class="currency">{{ currency() }}</span>{{number_format((float)$com->amount, 2, '.', '')}}</span>
                     </div>
                     <div class="nk-tb-col ">
-                        <span><span class="currency">{{ currency() }} </span>{{$com->network_commission - $com->amount}}</span>
+                        <span><span class="currency">{{ currency() }}</span>{{number_format((float)$com->network_commission - $com->amount, 2, '.', '')}}</span>
                     </div>
                     <div class="nk-tb-col ">
                         <span>{{$com->event_date}}</span>
                     </div>
                     
                     <div class="nk-tb-col  text-right">
-                        <span class="tb-status text-info"> {{ $com->statusMap->status ?? $com->status}}</span>
+                        @if(($com->statusMap->status ?? $com->status) == "confirmed")
+                            <span class="tb-status badge badge-success">{{ $com->statusMap->status ?? $com->status}}</span>
+                        @elseif(($com->statusMap->status ?? $com->status) == "paid")
+                            <span class="tb-status badge badge-success">{{ $com->statusMap->status ?? $com->status}}</span>
+                        @elseif(($com->statusMap->status ?? $com->status) == "failed")
+                            <span class="tb-status badge badge-danger">{{ $com->statusMap->status ?? $com->status}}</span>
+                        @elseif(($com->statusMap->status ?? $com->status) == "pending")
+                            <span class="tb-status badge badge-info">{{ $com->statusMap->status ?? $com->status}}</span>
+                        @endif
                     </div>
                 </div><!-- .nk-tb-item -->
                 @endforeach

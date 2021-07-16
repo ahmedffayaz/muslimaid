@@ -36,7 +36,7 @@
 <div style="margin-top:200px; text-align:center">
 <h5>we're just tracking your visit so you can earn cashback with our partner.</h5>
     <h2 class="mb-5 color-primary">Simply complete your purchase and we'll do the rest.</h2>
-    <img class="mr-5"  src="@isset($settings['dashboard_logo']){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/logo-dark.png')}}@endif" alt="logo">
+    <img class="mr-5"  src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif" alt="logo">
     <img class="" src="{{asset('frontend/images/pages/redirecting.gif')}}" alt="logo">
 
     <img class="ml-5"

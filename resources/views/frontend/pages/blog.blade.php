@@ -6,18 +6,12 @@
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
-                        <a href="index.html">Home</a>
+                        <a href="{{url('/')}}">Home</a>
                         <svg class="breadcrumb-arrow" width="6px" height="9px">              
                             <use xlink:href="{{asset('frontend/images/sprite.svg')}}#arrow-rounded-right-6x9"></use>
                         </svg>
                     </li>
-                    <li class="breadcrumb-item">
-                        <a href="">Breadcrumb</a>
-                        <svg class="breadcrumb-arrow" width="6px" height="9px">
-                            <use xlink:href="{{asset('frontend/images/sprite.svg')}}#arrow-rounded-right-6x9"></use>
-                        </svg>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">Latest News</li>
+                    <li class="breadcrumb-item active" aria-current="page">Blog</li>
                 </ol>
             </nav>
         </div>
@@ -41,7 +35,7 @@
                                             <img @if($blog->featured_image)
                                             src="{{$blog->featured_image}}"
                                             @else
-                                            src="{{asset('frontend/images/posts/post-featured.jpg')}}" @endif  alt="">
+                                            src="{{asset('frontend/images/posts/post-featured.jpg')}}" @endif  alt="" height="200px" width="100%">
                                         </a>
                                     </div>
                                     <div class="post-card__info">
@@ -144,7 +138,7 @@
                         <!-- social-links / end -->
                     </div>
                 </div> --}}
-                <div class="block-sidebar__item">
+                {{--<div class="block-sidebar__item">
                     <div class="widget-categories widget-categories--location--blog widget">
                         <h4 class="widget__title">Categories</h4>
                         <ul class="widget-categories__list" data-collapse data-collapse-opened-class="widget-categories__item--open">
@@ -240,7 +234,7 @@
                             </li>
                         </ul>
                     </div>
-                </div>
+                </div>--}}
                 <div class="block-sidebar__item">
                     <div class="widget-posts widget">
                         <h4 class="widget__title">Latest Posts</h4>
@@ -287,7 +281,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="block-sidebar__item">
+                {{-- <div class="block-sidebar__item">
                     <div class="widget-newsletter widget">
                         <h4 class="widget-newsletter__title">Our Newsletter</h4>
                         <div class="widget-newsletter__text">
@@ -300,7 +294,7 @@
                         </form>
                     </div>
                 </div>
-                {{-- <div class="block-sidebar__item">
+                <div class="block-sidebar__item">
                     <div class="widget-comments widget">
                         <h4 class="widget__title">Latest Comments</h4>
                         <ul class="widget-comments__list">

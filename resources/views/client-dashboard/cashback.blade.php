@@ -58,8 +58,8 @@
                                     @foreach ($cashbacks as $cashback)
                                     <tr>
                                         <td><a href="{{route('store.show',$cashback->store->slug)}}" target="_blank">{{$cashback->store->name}}</a></td>
-                                        <td>{{ currency() }} {{$cashback->order_value}}</td>
-                                        <td>{{ currency() }} {{$cashback->amount}}</td>
+                                        <td>{{ currency() }}{{number_format((float)$cashback->order_value, 2, '.', '')}}</td>
+                                        <td>{{ currency() }}{{number_format((float)$cashback->amount, 2, '.', '')}}</td>
                                         <td>{{Carbon\Carbon::parse($cashback->event_date)->isoFormat('Do MMMM YYYY')}}</td>
                                         <td>{{$cashback->statusMap->status}}</td>
                                     </tr> 

@@ -11,6 +11,7 @@ use App\Models\CashbackStatusChange;
 use App\Models\Store;
 use App\Models\Network;
 use App\Models\SiteSetting;
+use Illuminate\Support\Facades\DB;
 
 class CommissionController extends Controller
 {
@@ -277,25 +278,22 @@ class CommissionController extends Controller
         // if ($request->input('network_id')) {
         //     $coms->where('network_id', $request->input('network_id'));
         // }
-
-         // Search by store.
-         if ($request->input('store')) {
-            $coms->whereHas('store', function ($query) use ($request) {
-                $query->where('name', 'like', "%{$request->store}%")
-                ->orWhere('id',$request->store);
-            });
-        }
+        
         // Search by user.
         if ($request->input('user')) {
             $coms->whereHas('user', function ($query) use ($request) {
-                $query->where('first_name', 'like', "%{$request->user}%")
-                ->orwhere('last_name', 'like', "%{$request->user}%")
-                ->orWhere('id',$request->user);
+                $query->where(DB::raw("CONCAT(first_name,' ',last_name)"), 'like', "%{$request->user}%");
+            })
+            ->orwhereHas('store', function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request->user}%");
             });
         }
+
         // Search by cick.
         if ($request->input('click_id')) {
-            $coms->where('exit_click_id',$request->input('click_id'));
+            $coms->where('exit_click_id',$request->click_id)
+            ->orwhere('user_id',$request->click_id)
+            ->orwhere('store_id',$request->click_id);
            
         }
 

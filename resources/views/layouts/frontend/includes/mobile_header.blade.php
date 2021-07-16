@@ -17,20 +17,7 @@
                     </a>
                     <div class="search search--location--mobile-header mobile-header__search">
                         <div class="search__body">
-                            <form class="search__form" action="{{route('search')}}">
-                                <input class="search__input" name="search" placeholder="Search over 10,000 stores" aria-label="Site search" type="text" autocomplete="off">
-                                <button class="search__button search__button--type--submit" type="submit">
-                                    <svg width="20px" height="20px">
-                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#search-20"></use>
-                                    </svg>
-                                </button>
-                                <button class="search__button search__button--type--close" type="button">
-                                    <svg width="20px" height="20px">
-                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#cross-20"></use>
-                                    </svg>
-                                </button>
-                                <div class="search__border"></div>
-                            </form>
+                            @livewire('search-stores')
                             <div class="search__suggestions suggestions suggestions--location--mobile-header"></div>
                         </div>
                     </div>
@@ -44,6 +31,58 @@
                                 </span>
                             </button>
                         </div>
+                    <div class="nav-panel__row">
+
+                        @if(Auth::check())
+                <div class="indicator indicator--trigger--hover">
+
+                    <a href="@if(Auth::user()->hasRole('user')){{route('account.dashboard')}}@elseif(Auth::user()->hasRole('admin')){{route('admin.home.index')}}@endif" class="indicator__button">
+                        <span class="indicator__area">
+                            
+                            <svg width="20px" height="20px">
+                                <use xlink:href="{{asset('frontend/images/sprite.svg')}}#person-20"></use>
+                            </svg>
+                        </span>
+                    </a>
+                        <div class="indicator__dropdown mt-2">
+                            <div class="account-menu">
+                                <div class="account-menu__divider"></div>
+                                <a onclick="" class="account-menu__user">
+                                    <div class="account-menu__user-avatar">
+                                        <img src="{{asset('admin-dashboard/images/avatar.png')}}" alt="store logo" class="" style="max-width:50px;max-height:50px" />
+                                    </div>
+                                    <div class="account-menu__user-info">
+                                        <div class="account-menu__user-name">{{\Auth::user()->first_name}} {{\Auth::user()->last_name}}</div>
+                                        <div class="account-menu__user-email">{{\Auth::user()->email}}</div>
+                                            @auth
+                                            <div class="account-menu__user-email">Balance: {{ currency() }}</span>{{number_format((float)Auth::user()->availableBalance(), 2, '.', '')}}</div>
+                                            @endauth
+                                    </div>
+                                </a>
+                                <div class="account-menu__divider"></div>
+                                <ul class="account-menu__links">
+                                    @if(Auth::user()->hasRole('user'))
+                                    <li><a href="{{route('account.dashboard')}}">Account</a></li>
+                                    @endif
+                                    @if(Auth::user()->hasRole('admin'))
+                                    <li><a href="{{route('admin.home.index')}}">Admin Dashboard</a></li>
+                                    @endif
+
+                                </ul>
+                                <div class="account-menu__divider"></div>
+                                <ul class="account-menu__links">
+                                    <li><a href="#" onclick="event.preventDefault();
+                                                    document.getElementById('logout-form').submit();">Logout</a>
+                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                            @csrf
+                                        </form>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+                </div>
                         {{-- <div class="indicator indicator--mobile d-sm-flex d-none">
                             <a href="wishlist.html" class="indicator__button">
                                 <span class="indicator__area">

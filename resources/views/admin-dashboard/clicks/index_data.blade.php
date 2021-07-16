@@ -46,7 +46,7 @@
                     <span>{{$click->user->first_name[0] ?? 'N'}}{{$click->user->last_name[0] ?? 'A'}}</span>
                 </div>
                 <div class="user-info">
-                    <span class="tb-lead">{{$click->user->id ?? ''}} @if($click->user->first_name != 'unnamed' || $click->user->last_name != 'unnamed')- {{$click->user->first_name ?? ''}} {{$click->user->last_name ?? ''}}@endif</span>
+                    <span class="tb-lead">{{$click->user->id ?? ''}} @if(@$click->user->first_name != 'unnamed' || @$click->user->last_name != 'unnamed')- {{$click->user->first_name ?? ''}} {{$click->user->last_name ?? ''}}@endif</span>
                     <span>{{$click->user->email ?? ''}}</span>
                 </div>
             </div>
@@ -68,7 +68,7 @@
         <span>{{$click->created_at}}</span>
     </div>
     <div class="nk-tb-col text-right">
-        {!! $click->cashback ? '<span class="tb-status text-success">converted</span>' : '<span class="tb-status text-danger">Not converted</span>'!!}
+        {!! $click->cashback ? '<span class="tb-status badge badge-success">converted</span>' : '<span class="tb-status badge badge-danger">Not converted</span>'!!}
 
     </div>
     

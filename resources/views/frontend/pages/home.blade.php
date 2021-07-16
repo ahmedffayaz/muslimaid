@@ -14,6 +14,7 @@
 @auth
 @if($slider)
    <!-- .block-slideshow -->
+   <!-- <div class="block-header__title text-center"><span>Welcome back to Cashback</span></div> -->
    <div class="block-slideshow block-slideshow--layout--full block mt-5">
     <div class="container">
         <div class="row">
@@ -88,7 +89,7 @@
             {{-- <div class="col-lg-3 d-none d-lg-block"></div> --}}
         @guest
         <div class="col-md-6 align-self-center" style="z-index:1; color:white">
-            <h1>Get cashback shopping at 4,500+ popular brands</h1>
+            <h1>Get cashback shopping at 500+ popular brands</h1>
             <p>Join for free with over 15 million members saving hundreds of pounds each year from all the top 5,000 online retailers.</p>
         </div>
         <div class="col-md-1"></div>
@@ -119,11 +120,11 @@
                         <div>
                             <hr/>
                             @if(isFacebookEnabled())
-                                <a class="btn btn-primary border-0" style="background-color: #3b5998; border-radius: 2px" href="{{ url('/login/facebook') }}" role="button">
+                                <a class="btn btn-primary border-0 fb-button" style="background-color: #3b5998; border-radius: 2px" href="{{ url('/login/facebook') }}" role="button">
                                     <i class="fab fa-facebook-f"></i> Join with Facebook</a>
                             @endif
                             @if(isGoogleEnabled())
-                                <a class="btn btn-primary border-0 ml-0" style="background-color: #dd4b39; border-radius: 2px" href="{{ url('/login/google') }}" role="button">
+                                <a class="btn btn-primary border-0 ml-0 g-button" style="background-color: #dd4b39; border-radius: 2px" href="{{ url('/login/google') }}" role="button">
                                     <i class="fab fa-google"></i> Join with Google</a>
                             @endif
                         </div>

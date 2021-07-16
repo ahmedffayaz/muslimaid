@@ -225,8 +225,6 @@ Route::get('category/{slug}',[App\Http\Controllers\Frontend\PagesController::cla
 Route::get('top-cashback',[App\Http\Controllers\Frontend\PagesController::class, 'topStores'])->name('top_stores');
 Route::get('trending',[App\Http\Controllers\Frontend\PagesController::class, 'trending'])->name('trending');
 Route::get('cashback/{slug}',[App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
-Route::get('account/login',[App\Http\Controllers\Frontend\PagesController::class, 'login'])->name('account.login');
-Route::get('account/register',[App\Http\Controllers\Frontend\PagesController::class, 'register'])->name('account.register');
 Route::get('search_suggestions',[App\Http\Controllers\Frontend\PagesController::class, 'searchSuggestions'])->name('search_suggestions');
 Route::get('pages/{page}',[App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('page');
 Route::get('post/{blog}',[App\Http\Controllers\Frontend\PagesController::class, 'blogPost'])->name('post');

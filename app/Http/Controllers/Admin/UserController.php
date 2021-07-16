@@ -11,6 +11,7 @@ use App\Models\UserCashback;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 
 
@@ -264,8 +265,7 @@ class UserController extends Controller
 
         // Search by store name/ID.
         if ($request->input('name')) {
-            $users->where('first_name','like', '%'.$request->input('name').'%');
-            $users->orWhere('last_name','like', '%'.$request->input('name').'%');
+            $users->where(DB::raw("CONCAT(first_name,' ',last_name)"), 'like', '%'.$request->input('name').'%');
             $users->orWhere('id',$request->input('name'));
            
         }

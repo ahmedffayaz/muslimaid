@@ -5976,8 +5976,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
 
 .indicator__dropdown {
   display: none;
-  top: 56%;
-  margin-right: 8.8%;
+  top: 100%;
   position: absolute;
   visibility: hidden;
   -webkit-transform-origin: top;
@@ -17424,4 +17423,17 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
 .fill-primary{
   fill:#3366cc;
 }
+
+.address-card__name2 {
+  font-size: 16px;
+  font-weight: normal;
+  margin-bottom: 1.125rem;
+}
+
+@media (min-width: 992px){
+  .min-search-icon {
+  display: none!important;
+  }
+}
+
 /*# sourceMappingURL=style.css.map */

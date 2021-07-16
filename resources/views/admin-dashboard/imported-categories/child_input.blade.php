@@ -6,7 +6,7 @@
         </option>
 
         @if(count($child->childs))
-        @php $newdashes = $dashes.'~'; @endphp
+        @php $newdashes = $dashes.'-'; @endphp
                 @if($isEdit)
                         @include('admin-dashboard.imported-categories.child_input',['childs' => $child->childs, 'category'=>$category,'dashes'=>$newdashes])
                 @else
