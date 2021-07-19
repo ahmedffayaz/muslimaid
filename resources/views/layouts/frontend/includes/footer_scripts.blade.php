@@ -53,14 +53,19 @@
   <script>
     $('#flash-overlay-modal').modal();
 </script>
+
 @if(Session::has('welcome'))
 <script>
   $('#welcome-message').modal();
 </script>
-
-
-
 @endif
+
+{{--@if(Session::has('login-welcome'))
+<script>
+  $('#login-message').modal();
+</script>
+@endif
+--}}
 <script>
 
   $(document).ready( function() {

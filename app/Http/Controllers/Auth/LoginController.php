@@ -48,10 +48,10 @@ class LoginController extends Controller
     // }
     protected function redirectTo()
     {
-        // Session::flash('welcome','welcome message');
         if (Session::has('prvUrl')){
             return session('prvUrl');
           }else{
+            Session::flash('login-welcome');
             return '/';
           }
     }
