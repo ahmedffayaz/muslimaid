@@ -123,6 +123,9 @@
         var page = $(this).attr('href').split('page=')[1];
         
          if(route=='index'){
+            $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+            </div></div>`);
             
              pageurl = "{{route('admin.stores.fetch')}}?page="
              var _token = $("input[name=_token]").val();
@@ -140,6 +143,10 @@
          } 
 
          if(route=='search'){
+            $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+            </div></div>`);
+            
             var _token = $("input[name=_token]").val();
             var network_id = $("select[name=network_id]").val();
             var store_id = $("input[name=store_id]").val();
@@ -163,8 +170,11 @@
         $(document).ready(function(){
         
          $(document).on('submit', '.search_form', function(event){
+            $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+            </div></div>`);
             event.preventDefault(); 
-              
+            
             var _token = $("input[name=_token]").val();
             var store = $("input[name=store]").val();
             var network_id = $("select[name=network_id]").val();
