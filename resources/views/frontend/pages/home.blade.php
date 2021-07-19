@@ -51,8 +51,13 @@
                                     <span class="slider-store-name">{{$slide->store->name}}</span>
                                 </div>
                                 <div class="block-slideshow__slide-title" style="padding:30px 20px 0px 20px; margin:0">
-                                    @if($slide->store->cashback->type=='fixed'){{$slide->store->cashback->currency}}@endif @if($slide->store->custom_cashback_percentage)@else
-                                    {{(SiteSetting()['cashback_percentage']/100)*$slide->store->cashback->sale_commission}}@endif @if($slide->store->cashback->type=='percentage')%@endif Cashback
+                                    
+                                    @if($slide->store->custom_cashback_percentage)
+                                    @if($slide->store->cashback->type=='fixed'){{$slide->store->cashback->currency}}@endif{{($slide->store->custom_cashback_percentage/100)*$slide->store->cashback->sale_commission}}@if($slide->store->cashback->type=='percentage')%@endif
+                                    @else
+                                    @if($slide->store->cashback->type=='fixed'){{$slide->store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$slide->store->cashback->sale_commission}}@if($slide->store->cashback->type=='percentage')%@endif
+                                    @endif
+                                      Cashback
                                 </div>
                                 <div class="block-slideshow__slide-text" style="padding:10px 20px 30px 20px; ">{{$slide->description}}</div>
                                
@@ -237,16 +242,13 @@
                                         
                                         <div class="product-card__actions">
                                             <div class="product-card__prices">
-                                                @if($store->cashback->type=='fixed'){{$store->cashback->currency}}
-
-                                                @endif
+                                               
                                                 @if($store->custom_cashback_percentage)
-                                                {{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}
+                                                    @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                                 @else
-                                                {{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}
+                                                    @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                                 @endif
-
-                                                @if($store->cashback->type=='percentage')%@endif Cashback
+                                                Cashback
                                             </div>
                                             
                                         </div>

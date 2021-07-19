@@ -19,7 +19,12 @@
             <a href="{{route('store.show',$store->slug)}}" class="suggestions__item-name">{!!textHighlight($store->name,$term)!!}</a>
         </div>
         <div class="suggestions__item-price">
-            @if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif{{$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif Cashback
+            @if($store->custom_cashback_percentage)
+                @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
+            @else
+                @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
+            @endif
+             Cashback
         </div>
     </li>
     @endforeach

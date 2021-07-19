@@ -160,16 +160,14 @@
 
                                 </form>
 
-                                <h5>@if($store->cashback->type=='fixed'){{$store->cashback->currency}}
-
-                                @endif
+                                <h5>
                                 @if($store->custom_cashback_percentage)
-                                {{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}
+                                    @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @else
-                                {{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}
+                                    @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @endif
                                 
-                                @if($store->cashback->type=='percentage')%@endif Cashback</h5>
+                                 Cashback</h5>
 
                                 <a href="#" @guest class="btn btn-primary" data-toggle="modal" data-target="#signinModal" @else form_id="form_{{$store->id}}" class="btn btn-primary store_form" @endguest>Get Cashback</a>
 
@@ -180,13 +178,13 @@
                         @foreach($store->cashbacks->take(3) as $cashback)
 
                         <div class="col-lg-4 border text-center py-4 px-3 mt-4">
-                            <h4>@if($cashback->type=='fixed'){{$cashback->currency}} @endif
+                            <h4>
                                 @if($store->custom_cashback_percentage)
-                                {{($store->custom_cashback_percentage/100)*$cashback->sale_commission}}
+                                    @if($cashback->type=='fixed'){{$cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$cashback->sale_commission}}@if($cashback->type=='percentage')%@endif
                                 @else
-                                {{(SiteSetting()['cashback_percentage']/100)*$cashback->sale_commission}}
+                                    @if($cashback->type=='fixed'){{$cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$cashback->sale_commission}}@if($cashback->type=='percentage')%@endif
                                 @endif
-                                @if($cashback->type=='percentage')%@endif
+                                
                             </h4>
                             <p>{{$cashback->detail}}</p>
                             <form action="{{route('site.exit_click.store')}}" method="POST" id="form_{{$cashback->id}}" target="_blank" class="tracker_form">
@@ -206,13 +204,13 @@
                         @foreach($store->cashbacks->skip(3) as $cashback)
 
                         <div class="col-lg-4 border text-center py-4 px-3 mt-4">
-                            <h4>@if($cashback->type=='fixed'){{$cashback->currency}} @endif
+                            <h4>
                                 @if($store->custom_cashback_percentage)
-                                {{($store->custom_cashback_percentage/100)*$cashback->sale_commission}}
+                                @if($cashback->type=='fixed'){{$cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$cashback->sale_commission}}@if($cashback->type=='percentage')%@endif
                                 @else
-                                {{(SiteSetting()['cashback_percentage']/100)*$cashback->sale_commission}}
+                                @if($cashback->type=='fixed'){{$cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$cashback->sale_commission}}@if($cashback->type=='percentage')%@endif
                                 @endif
-                                @if($cashback->type=='percentage')%@endif
+                                
                             </h4>
                             <p>{{$cashback->detail}}</p>
                             <form action="{{route('site.exit_click.store')}}" method="POST" id="form_{{$cashback->id}}" target="_blank" class="tracker_form">
@@ -231,7 +229,7 @@
                     <div class="text-right mt-2 see-all"><button class="btn btn-link">See All Cashbacks</button></div>
                     @endif
 
-                    <div class="product-tabs  product-tabs--layout--sidebar  product-tabs--sticky">
+                    <div class="product-tabs  product-tabs--layout--sidebar">
                         <div class="product-tabs__list d-none">
                             <div class="product-tabs__list-body">
                                 <div class="product-tabs__list-container container">
@@ -256,7 +254,7 @@
                         @endif
                         <!-- Vouchers tab -->
                         @if($store->vouchers->count())
-                        <div class="product-tabs  product-tabs--layout--sidebar  product-tabs--sticky">
+                        <div class="product-tabs  product-tabs--layout--sidebar ">
                             <div class="product-tabs__content">
                                 <div class="product-tabs__pane product-tabs__pane--active" id="tab-description">
                                     <h4>Vouchers</h4>
@@ -302,7 +300,7 @@
                         @endif
                         <!-- Reviews tab -->
                         @if($store->reviews->count())
-                        <div class="product-tabs  product-tabs--layout--sidebar  product-tabs--sticky">
+                        <div class="product-tabs  product-tabs--layout--sidebar">
                             <div class="product-tabs__content">
                                 <div class="product-tabs__pane product-tabs__pane--active" id="tab-description">
                                     <div class="reviews-view">
@@ -386,16 +384,13 @@
                                     src="{{asset('frontend/images/products/product-16.jpg')}}"
                                     @endif alt="">
 
-                    <h5>Get upto @if($store->cashback->type=='fixed'){{$store->cashback->currency}}
-
-                                @endif
+                    <h5>Get upto 
                                 @if($store->custom_cashback_percentage)
-                                {{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}
+                                @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @else
-                                {{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}
+                                @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @endif
-                                
-                                @if($store->cashback->type=='percentage')%@endif Cashback</h5>
+                                 Cashback</h5>
                 </div>
                 <div class="modal-footer">
                     <a href="{{route('login')}}?prvUrl={{ request()->fullUrl() }}" class="btn btn-primary">Yes, Ofcourse</a>
@@ -428,16 +423,14 @@
                                     src="{{asset('frontend/images/products/product-16.jpg')}}"
                                     @endif alt="">
 
-                    <h5>Get upto @if($store->cashback->type=='fixed'){{$store->cashback->currency}}
-
-                                @endif
+                    <h5>Get upto 
                                 @if($store->custom_cashback_percentage)
-                                {{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}
+                                    @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @else
-                                {{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}
+                                @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @endif
                                 
-                                @if($store->cashback->type=='percentage')%@endif Cashback</h5>
+                                 Cashback</h5>
                 </div>
                 <div class="modal-footer">
                     <a href="{{route('login')}}?prvUrl={{ request()->fullUrl() }}" class="btn btn-primary">Yes, Ofcourse</a>
