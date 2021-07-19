@@ -85,7 +85,7 @@
                         </div>
                     </div> --}}
                 </div>
-                <section class="post__section">
+                {{--<section class="post__section">
                     <h4 class="post__section-title">Related Posts</h4>
                     <div class="related-posts">
                         <div class="related-posts__list">
@@ -117,7 +117,7 @@
                             </div>
                         </div>
                     </div>
-                </section>
+                </section>--}}
                 {{-- <section class="post__section">
                     <h4 class="post__section-title">Comments (4)</h4>
                     <ol class="comments-list comments-list--level--0">
@@ -386,45 +386,26 @@
                     <div class="widget-posts widget">
                         <h4 class="widget__title">Latest Posts</h4>
                         <div class="widget-posts__list">
-                            <div class="widget-posts__item">
-                                <div class="widget-posts__image">
-                                    <a href="">
-                                        <img src="{{asset('frontend/images/posts/post-1-thumbnail.jpg')}}" alt="">
-                                    </a>
-                                </div>
-                                <div class="widget-posts__info">
-                                    <div class="widget-posts__name">
-                                        <a href="">Philosophy That Addresses Topics Such As Goodness</a>
+                            @foreach($blogs->take(3) as $related_blog)
+                                @if($related_blog->id != $blog->id)
+                                    <div class="widget-posts__item">
+                                        <div class="widget-posts__image">
+                                            <a href="{{route('post',$blog->slug)}}">
+                                                <img @if($related_blog->featured_image)
+                                                src="{{$related_blog->featured_image}}"
+                                                @else
+                                                src="{{asset('frontend/images/posts/post-featured.jpg')}}" @endif  alt="" height="90px" width="90px">
+                                            </a>
+                                        </div>
+                                        <div class="widget-posts__info">
+                                            <div class="widget-posts__name">
+                                            <a href="{{route('post',$related_blog->slug)}}">{{$related_blog->title}}</a>
+                                            </div>
+                                            <div class="widget-posts__date">{{Carbon\Carbon::parse($related_blog->created_at)->isoFormat('Do MMMM YYYY')}}</div>
+                                        </div>
                                     </div>
-                                    <div class="widget-posts__date">October 19, 2019</div>
-                                </div>
-                            </div>
-                            <div class="widget-posts__item">
-                                <div class="widget-posts__image">
-                                    <a href="">
-                                        <img src="{{asset('frontend/images/posts/post-2-thumbnail.jpg')}}" alt="">
-                                    </a>
-                                </div>
-                                <div class="widget-posts__info">
-                                    <div class="widget-posts__name">
-                                        <a href="">Logic Is The Study Of Reasoning And Argument Part 2</a>
-                                    </div>
-                                    <div class="widget-posts__date">September 5, 2019</div>
-                                </div>
-                            </div>
-                            <div class="widget-posts__item">
-                                <div class="widget-posts__image">
-                                    <a href="">
-                                        <img src="{{asset('frontend/images/posts/post-3-thumbnail.jpg')}}" alt="">
-                                    </a>
-                                </div>
-                                <div class="widget-posts__info">
-                                    <div class="widget-posts__name">
-                                        <a href="">Some Philosophers Specialize In One Or More Historical Periods</a>
-                                    </div>
-                                    <div class="widget-posts__date">August 12, 2019</div>
-                                </div>
-                            </div>
+                                @endif
+                            @endforeach
                         </div>
                     </div>
                 </div>
