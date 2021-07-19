@@ -128,9 +128,15 @@
                                         <div class="product-card__actions align-self-center">
                                             
                                             <div class="product-card__prices">
+                                                
                                                 @if($store->cashback)
-                                                @if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif{{$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif Cashback
-                                           @endif
+                                                    @if($store->custom_cashback_percentage)
+                                                        @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
+                                                    @else
+                                                        @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
+                                                    @endif
+                                                    cashback
+                                                @endif
                                             </div>
                                             <div class="product-card__buttons mt-2">
                                                 {{-- <button class="btn btn-primary product-card__addtocart" type="button">Shop Now</button> --}}
