@@ -239,45 +239,24 @@
                     <div class="widget-posts widget">
                         <h4 class="widget__title">Latest Posts</h4>
                         <div class="widget-posts__list">
+                            @foreach($blogs->take(3) as $blog)
                             <div class="widget-posts__item">
                                 <div class="widget-posts__image">
-                                    <a href="">
-                                        <img src="{{asset('frontend/images/posts/post-1-thumbnail.jpg')}}" alt="">
-                                    </a>
+                                    <a href="{{route('post',$blog->slug)}}">
+                                        <img @if($blog->featured_image)
+                                        src="{{$blog->featured_image}}"
+                                        @else
+                                        src="{{asset('frontend/images/posts/post-featured.jpg')}}" @endif  alt="" height="90px" width="90px">
+                                     </a>
                                 </div>
                                 <div class="widget-posts__info">
                                     <div class="widget-posts__name">
-                                        <a href="">Philosophy That Addresses Topics Such As Goodness</a>
+                                    <a href="{{route('post',$blog->slug)}}">{{$blog->title}}</a>
                                     </div>
-                                    <div class="widget-posts__date">October 19, 2019</div>
+                                    <div class="widget-posts__date">{{Carbon\Carbon::parse($blog->created_at)->isoFormat('Do MMMM YYYY')}}</div>
                                 </div>
                             </div>
-                            <div class="widget-posts__item">
-                                <div class="widget-posts__image">
-                                    <a href="">
-                                        <img src="{{asset('frontend/images/posts/post-2-thumbnail.jpg')}}" alt="">
-                                    </a>
-                                </div>
-                                <div class="widget-posts__info">
-                                    <div class="widget-posts__name">
-                                        <a href="">Logic Is The Study Of Reasoning And Argument Part 2</a>
-                                    </div>
-                                    <div class="widget-posts__date">September 5, 2019</div>
-                                </div>
-                            </div>
-                            <div class="widget-posts__item">
-                                <div class="widget-posts__image">
-                                    <a href="">
-                                        <img src="{{asset('frontend/images/posts/post-3-thumbnail.jpg')}}" alt="">
-                                    </a>
-                                </div>
-                                <div class="widget-posts__info">
-                                    <div class="widget-posts__name">
-                                        <a href="">Some Philosophers Specialize In One Or More Historical Periods</a>
-                                    </div>
-                                    <div class="widget-posts__date">August 12, 2019</div>
-                                </div>
-                            </div>
+                            @endforeach
                         </div>
                     </div>
                 </div>

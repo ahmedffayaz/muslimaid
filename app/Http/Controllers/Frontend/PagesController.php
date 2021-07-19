@@ -187,8 +187,9 @@ class PagesController extends Controller
 
     public function blogPost($slug){
         $blog = Blog::where('slug', $slug)->first();
+        $blogs = Blog::latest()->get();
 
-        return view('frontend.pages.single_blog',compact('blog'));
+        return view('frontend.pages.single_blog',compact('blog','blogs'));
     }
 
 
