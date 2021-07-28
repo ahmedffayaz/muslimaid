@@ -27,6 +27,7 @@ class Cashout extends Model
         'bank_sort_code',
         'bic',
         'payment_method', 
+        'new_cashout', 
         'status'];
 
     public function user(){

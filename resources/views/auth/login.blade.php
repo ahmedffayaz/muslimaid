@@ -4,6 +4,16 @@
     <div class="container">
         <div class="col-md-10 d-flex flex-column mx-auto">
             <div class="card flex-grow-1 mb-md-0">
+   
+            @if(Session::has('login-expired'))
+                    <div class = "container alert alert-danger alert-dismissible fade show alert-important" role = "alert">
+                    Your Session has expired! Please login again.
+                    <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close">
+                        <span aria-hidden = "true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
                 <div class="card-body">
                     <h3 class="card-title">Login</h3>
                     <div class="row">

@@ -17,7 +17,7 @@
     
     <div class="nk-tb-col">
      
-            <div class="user-card">
+            <div class="user-card @if($cashout->new_cashout) icon-status icon-status-info @endif ">
                 <div class="user-avatar 
                 <?php
        

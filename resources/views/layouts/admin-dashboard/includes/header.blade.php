@@ -60,8 +60,11 @@
                         
                     </div>         
                 </div>
+                @php
+                $new_cashouts = \App\Models\Cashout::where('new_cashout',1)->get();    
+                @endphp
                 <div class="dropdown">
-                    <a href="{{route('admin.commissions.index')}}"  class="dropbtn user-name dropdown-indicator"><em class="icon ni ni-sign-gbp"></em> Sales</a>
+                    <a href="{{route('admin.commissions.index')}}"  class="dropbtn user-name dropdown-indicator  @if(count($new_cashouts)) icon-status-before icon-status-info-before @endif"><em class="icon ni ni-sign-gbp"></em> Sales</a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-content">
                         <div class="dropdown-inner px-4">
                             <ul class="link-list">
@@ -83,7 +86,7 @@
                             @endcan
                             @can('view cashbouts')
                             <li class="">
-                                <a href="{{route('admin.cashouts.index')}}" class="">
+                                <a href="{{route('admin.cashouts.index')}}" class="@if(count($new_cashouts)) icon-status icon-status-info @endif">
                                     <span class="nk-menu-icon"><em class="icon ni ni-cc-alt2-fill"></em></span>
                                     <span class="nk-menu-text">Cashouts</span>
                                 </a>
