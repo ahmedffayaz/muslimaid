@@ -19,6 +19,7 @@
 </script>
 <script>
     $('div.alert').not('.alert-important').delay(2000).fadeOut(350);
+    $('div.alert.alert-important').delay(8000).fadeOut(350);
     
 </script>
 <script>$(".search__input").keydown(function(e) {

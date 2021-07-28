@@ -17,7 +17,7 @@
     
     <div class="nk-tb-col">
      
-            <div class="user-card">
+            <div class="user-card @if($cashout->new_cashout) icon-status icon-status-info @endif ">
                 <div class="user-avatar 
                 <?php
        
@@ -53,7 +53,7 @@
    
     <div class="nk-tb-col ">
         <span>
-            {!! $cashout->status =='paid'  ? '<span class="tb-status badge badge-success">paid</span>' : '<span class="tb-status badge badge-danger">pending</span>'!!}
+            {!! $cashout->status =='paid'  ? '<span class="tb-status badge badge-success">paid</span>' : '<span class="tb-status badge badge-info">pending</span>'!!}
         </span>
     </div>
     <div class="nk-tb-col nk-tb-col-tools">

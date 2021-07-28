@@ -110,6 +110,10 @@
         
             if(route=='index'){
             
+        $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+            </div></div>`);
+
                 pageurl = "{{route('admin.reviews.fetch')}}?page="
                 var _token = $("input[name=_token]").val();
             $.ajax({
@@ -128,6 +132,10 @@
             if(route=='search'){
                 
                 
+        $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+            </div></div>`);
+
             var _token = $("input[name=_token]").val();
             var reviewer = $("input[name=reviewer]").val();
             var store_id = $("select[name=store_id]").val();
@@ -152,6 +160,10 @@
         $(document).on('submit', '.search_form', function(event){
         event.preventDefault(); 
             
+        $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+            </div></div>`);
+
         var _token = $("input[name=_token]").val();
         var reviewer = $("input[name=reviewer]").val();
         var store_id = $("select[name=store_id]").val();

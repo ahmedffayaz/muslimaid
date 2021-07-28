@@ -195,6 +195,10 @@ $(document).ready(function(){
     
         if(route=='index'){
         
+            $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+            </div></div>`);
+
             pageurl = "{{route('admin.commissions.fetch')}}?page="
             var _token = $("input[name=_token]").val();
         $.ajax({
@@ -211,6 +215,10 @@ $(document).ready(function(){
         } 
 
         if(route=='search'){
+            $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+            </div></div>`);
+
         var _token = $("input[name=_token]").val();
         var name = $("input[name=name]").val();
         var network_id = $("select[name=network_id]").val();
@@ -237,6 +245,9 @@ $(document).ready(function(){
 
     $(document).on('submit', '.search_form', function(event){
     event.preventDefault(); 
+            $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+            </div></div>`);
         
     var _token = $("input[name=_token]").val();
     var name = $("input[name=name]").val();
@@ -260,7 +271,11 @@ $(document).ready(function(){
 });
 $(document).ready(function(){
     $(document).on('click', '.cashback-edit', function(event){
-        event.preventDefault(); 
+        event.preventDefault();  
+            $('#cashback').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+            </div></div>`);
+            
         var id = $(this).attr('cashback-id');
         var pageurl = $(this).attr('href');
         var _token = $("input[name=_token]").val();
@@ -295,7 +310,7 @@ $(document).ready(function(){
     //         });
     // });
     $(document).on('click', '.cashback-history', function(event){
-        event.preventDefault(); 
+        event.preventDefault();
         var pageurl = $(this).attr('href');
         var _token = $("input[name=_token]").val();
         $.ajax({

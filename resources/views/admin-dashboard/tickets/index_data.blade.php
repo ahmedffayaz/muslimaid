@@ -46,7 +46,7 @@
    
     <div class="nk-tb-col text-center">
         @if($ticket->status =='open')
-            <span class="badge badge-primary">Open</span>
+            <span class="badge badge-info">Open</span>
         @elseif($ticket->status=='pending')
             @if($ticket->lastReply->reply_by =='admin') <span class="badge badge-info">Replied </span>@endif
             @if($ticket->lastReply->reply_by =='client') <span class="badge badge-warning">Awaiting your reply </span>@endif

@@ -140,6 +140,7 @@ class PaymentController extends Controller
             'bank_title'=>$method->bank_title,
             'account_number'=>$method->account_number,
             'bank_sort_code'=>$method->bank_sort_code,
+            'new_cashout'=>'1',
             'bic'=>$method->bic,
             'payment_method'=>$method->payment_method, 
             'status'=>'pending']);
@@ -153,10 +154,10 @@ class PaymentController extends Controller
                 ]);
             }
 
-            if($user->bonus->status == 'unpaid'){
+            if($user->bonus && $user->bonus->status == 'unpaid'){
                 $user->bonus->update([
                     'status'=>'paid',
-                    'cashout_id'=>$cashback->id
+                    'cashout_id'=> $cashout->id
                     ]);
             }
 

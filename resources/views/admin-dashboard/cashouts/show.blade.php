@@ -66,7 +66,7 @@
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">User</span>
-                                                <span class="profile-ud-value"><a href="{{route('admin.users.show',$cashout->user)}}">{{$cashout->user->id}} - @if($cashout->user->first_name != 'unnamed' || $cashout->user->last_name != 'unnamed') {{$cashout->user->first_name}} {{$cashout->user->last_name}} - @endif {{$cashout->user->email}}</a></span>
+                                                <span class="profile-ud-value"><a href="{{route('admin.users.show_user')}}?user_id={{$cashout->user->id}}">{{$cashout->user->id}} - @if($cashout->user->first_name != 'unnamed' || $cashout->user->last_name != 'unnamed') {{$cashout->user->first_name}} {{$cashout->user->last_name}} - @endif {{$cashout->user->email}}</a></span>
                                             </div>
                                         </div>
                                         <div class="profile-ud-item">

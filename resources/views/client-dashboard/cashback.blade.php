@@ -61,7 +61,17 @@
                                         <td>{{ currency() }}{{number_format((float)$cashback->order_value, 2, '.', '')}}</td>
                                         <td>{{ currency() }}{{number_format((float)$cashback->amount, 2, '.', '')}}</td>
                                         <td>{{Carbon\Carbon::parse($cashback->event_date)->isoFormat('Do MMMM YYYY')}}</td>
-                                        <td>{{$cashback->statusMap->status}}</td>
+                                        <td>
+                                            @if($cashback->statusMap->status == "confirmed")
+                                                <span class="badge badge-success">{{ $cashback->statusMap->status}}</span>
+                                            @elseif($cashback->statusMap->status == "paid")
+                                                <span class="badge badge-success">{{ $cashback->statusMap->status}}</span>
+                                            @elseif($cashback->statusMap->status == "failed")
+                                                <span class="badge badge-danger">{{ $cashback->statusMap->status}}</span>
+                                            @elseif($cashback->statusMap->status == "pending")
+                                                <span class="badge badge-info">{{ $cashback->statusMap->status}}</span>
+                                            @endif
+                                        </td>
                                     </tr> 
                                     @endforeach
                                     

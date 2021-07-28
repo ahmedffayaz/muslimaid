@@ -51,6 +51,7 @@ class CashoutController extends Controller
      */
     public function show(Cashout $cashout)
     {
+        $cashout->update(['new_cashout'=>0]);
         $users  = User::latest()->get();
         $statuses = CashbackStatus::all();
         return view('admin-dashboard.cashouts.show',compact('cashout','users','statuses'));

@@ -3,6 +3,7 @@
         table-layout: fixed;
     }
 </style>
+@if(count($languages))
 <div class="nk-tb-item nk-tb-head">
     
     <div class="nk-tb-col"><span class="sub-text">Name</span></div>
@@ -85,5 +86,9 @@
         </div> 
     
     
-</div><!-- .nk-block-between -->                                 
+</div><!-- .nk-block-between -->      
+                    
+@else 
+    <h3 class="m-auto text-center py-5">No results found</h3> 
+@endif  
                     
