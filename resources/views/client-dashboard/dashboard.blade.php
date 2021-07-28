@@ -61,7 +61,17 @@
                                                 <td>{{ currency() }}{{number_format((float)$item->order_value, 2, '.', '')}}</td>
                                                 <td>{{ currency() }}{{number_format((float)$item->amount, 2, '.', '')}}</td>
                                                 <td>{{Carbon\Carbon::parse($item->event_date)->isoFormat('Do MMMM YYYY')}}</td>
-                                                <td>{{$item->statusMap->status}}</td>
+                                                <td>
+                                                    @if($item->statusMap->status == "confirmed")
+                                                        <span class="badge badge-success">{{ $item->statusMap->status}}</span>
+                                                    @elseif($item->statusMap->status == "paid")
+                                                        <span class="badge badge-success">{{ $item->statusMap->status}}</span>
+                                                    @elseif($item->statusMap->status == "failed")
+                                                        <span class="badge badge-danger">{{ $item->statusMap->status}}</span>
+                                                    @elseif($item->statusMap->status == "pending")
+                                                        <span class="badge badge-info">{{ $item->statusMap->status}}</span>
+                                                    @endif
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>

@@ -53,7 +53,7 @@
    
     <div class="nk-tb-col ">
         <span>
-            {!! $cashout->status =='paid'  ? '<span class="tb-status badge badge-success">paid</span>' : '<span class="tb-status badge badge-danger">pending</span>'!!}
+            {!! $cashout->status =='paid'  ? '<span class="tb-status badge badge-success">paid</span>' : '<span class="tb-status badge badge-info">pending</span>'!!}
         </span>
     </div>
     <div class="nk-tb-col nk-tb-col-tools">

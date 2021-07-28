@@ -40,7 +40,7 @@
                                         <td class="text-capitalize">{{$claim->claim_type}}</td>
                                         <td>{{Carbon\Carbon::parse($claim->created_at)->isoFormat('Do MMMM YYYY')}}</td>
                                         <td>@if($claim->status =='open')
-                                            <span class="badge badge-primary">Pending</span>
+                                            <span class="badge badge-info">Pending</span>
                                         @elseif($claim->status=='pending')
                                             @if($claim->lastReply->user_id ==Auth::user()->id) <span class="badge badge-info">Replied </span>
                                             @else <span class="badge badge-warning">Awaiting your reply </span>@endif

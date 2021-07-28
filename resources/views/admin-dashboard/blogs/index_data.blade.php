@@ -32,7 +32,7 @@
  
     
     {{-- <div class="nk-tb-col text-center">
-        <span>        {!! $review->status =='active'  ? '<span class="tb-status badge badge-success">active</span>' : '<span class="tb-status badge badge-danger">pending</span>'!!}
+        <span>        {!! $review->status =='active'  ? '<span class="tb-status badge badge-success">active</span>' : '<span class="tb-status badge badge-warning">pending</span>'!!}
     </span>
     </div> --}}
     <div class="nk-tb-col nk-tb-col-tools">
