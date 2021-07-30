@@ -23,12 +23,10 @@
                     </div>
                     <div class="dashboard__address card address-card address-card--featured">
                         <div class="address-card__body mt-4">
-                            <div class="address-card__name">Availabel Balance:<span class="text-md-right address-card__name2"><br> {{ currency()}}{{number_format((float)Auth::user()->availableBalance(), 2, '.', '')}}</span></div>
+                            <div class="address-card__name">Available Balance:<span class="text-md-right address-card__name2 float-right"> {{ currency()}}{{number_format((float)Auth::user()->availableBalance(), 2, '.', '')}}</span></div>
+                            <br>
+                            <div class="address-card__name">Pending Balance:<span class="text-md-right address-card__name2 float-right"> {{ currency()}}{{number_format((float)Auth::user()->availableBalance(), 2, '.', '')}}</span></div>
                             
-                            <div class="address-card__name">Pending Balance:<span class="text-md-right address-card__name2"><br> {{ currency()}}{{number_format((float)Auth::user()->availableBalance(), 2, '.', '')}}</span></div>
-                            
-                            <div class="address-card__name">Tracked Balance:<span class="text-md-right address-card__name2"><br> {{ currency()}}{{number_format((float)Auth::user()->availableBalance(), 2, '.', '')}}</span></div>
-
                         </div> 
                     </div>
                     @if($user->cashbacks->count())

@@ -73,13 +73,13 @@ function fetchData(period){
         success:function(data)
         {
             $('#home_data').html(data);
+           
             var updatedperiod = $('.period').text(); 
             if(updatedperiod==1){
                 $('#period').text('24 hours');
             }else{
                 $('#period').text(updatedperiod+' days');
             }
-            
             
         }
         });

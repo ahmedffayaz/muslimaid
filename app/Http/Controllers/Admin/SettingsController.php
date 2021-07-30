@@ -198,7 +198,7 @@ class SettingsController extends Controller
 
                 $settings = SiteSetting::updateOrCreate([
                     'type'   => 'dashboard_logo',
-                    'title'  => 'Dashboare Logo',
+                    'title'  => 'Dashboard Logo',
                     
                 ],[
                     'value'     =>  $imageName  

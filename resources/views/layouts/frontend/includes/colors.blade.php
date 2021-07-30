@@ -371,4 +371,14 @@ a:hover {
   fill: {{$primarycolor}};
 }
 
+.coupon-button-type .coupon-code .get-code {
+        background: {{$primarycolor}};
+    }
+    .coupon-button-type .coupon-code .get-code:after {
+        border-left: 45px solid {{$primarycolor}};
+    }
+    .coupon-button-type .coupon-code .get-code:after {
+        border-left-color: {{$primarycolor}};
+    }
+
 </style>

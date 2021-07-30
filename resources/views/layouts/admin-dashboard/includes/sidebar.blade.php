@@ -80,11 +80,14 @@ data-content="sidebarMenu">
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
                     @endcanany
+                @php
+                $new_cashouts = \App\Models\Cashout::where('new_cashout',1)->get();    
+                @endphp
                     @canany(['view cashbacks','add cashbacks','view cashbouts'])
 
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
-                            <span class="nk-menu-icon"><em class="icon ni ni-sign-gbp"></em></span>
+                            <span class="nk-menu-icon @if(count($new_cashouts)) icon-status icon-status-info @endif"> <em class="icon ni ni-sign-gbp"></em></span>
                             <span class="nk-menu-text">Sales</span>
                         </a>
                         <ul class="nk-menu-sub">
@@ -92,7 +95,7 @@ data-content="sidebarMenu">
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.commissions.index')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-sign-gbp"></em></span>
-                                    <span class="nk-menu-text">Manage Cashbacks</span>
+                                    <span class="nk-menu-text">Cashbacks</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan
@@ -107,7 +110,7 @@ data-content="sidebarMenu">
                             @can('view cashbouts')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.cashouts.index')}}" class="nk-menu-link">
-                                    <span class="nk-menu-icon"><em class="icon ni ni-cc-alt2-fill"></em></span>
+                                    <span class="nk-menu-icon @if(count($new_cashouts)) icon-status icon-status-info @endif"> <em class="icon ni ni-cc-alt2-fill"></em></span>
                                     <span class="nk-menu-text">Cashouts</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
