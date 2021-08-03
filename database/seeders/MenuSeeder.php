@@ -16,17 +16,18 @@ class MenuSeeder extends Seeder
     public function run()
     {
         $menus = array(
-            array('id' => '1','name' => 'Main Menu','created_at' => '2021-06-10 13:52:11','updated_at' => '2021-06-10 13:52:11'),
-            array('id' => '2','name' => 'Footer Menu-column 1','created_at' => '2021-07-14 05:07:05','updated_at' => '2021-07-14 05:07:05'),
-            array('id' => '3','name' => 'Footer Menu-column 2','created_at' => '2021-07-14 05:10:43','updated_at' => '2021-07-14 05:10:43'),
-            array('id' => '4','name' => 'Footer Menu-column 3','created_at' => '2021-07-14 05:10:54','updated_at' => '2021-07-14 05:10:54'),
-            array('id' => '5','name' => 'Footer Menu-column 4','created_at' => '2021-07-14 05:11:06','updated_at' => '2021-07-14 05:11:06')
+            array('id' => '1','name' => 'Main Menu','title' => 'Main Menu','created_at' => '2021-06-10 13:52:11','updated_at' => '2021-06-10 13:52:11'),
+            array('id' => '2','name' => 'Footer Menu-column 1','title' => 'About','created_at' => '2021-07-14 05:07:05','updated_at' => '2021-07-14 05:07:05'),
+            array('id' => '3','name' => 'Footer Menu-column 2','title' => 'Here to help','created_at' => '2021-07-14 05:10:43','updated_at' => '2021-07-14 05:10:43'),
+            array('id' => '4','name' => 'Footer Menu-column 3','title' => 'Hot offers','created_at' => '2021-07-14 05:10:54','updated_at' => '2021-07-14 05:10:54'),
+            array('id' => '5','name' => 'Footer Menu-column 4','title' => 'Policies','created_at' => '2021-07-14 05:11:06','updated_at' => '2021-07-14 05:11:06')
           );
 
 
         foreach ($menus as $menu) {
             DB::table('admin_menus')->insert([
                 'name'=>$menu['name'],
+                'title'=>$menu['title'],
              ]);
         }
 

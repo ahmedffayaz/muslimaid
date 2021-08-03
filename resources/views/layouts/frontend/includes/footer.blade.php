@@ -1,9 +1,9 @@
 @php
 
-$footer_menu_column_1 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-column 1')->first();
-$footer_menu_column_2 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-column 2')->first();
-$footer_menu_column_3 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-column 3')->first();
-$footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-column 4')->first();
+$footer_menu_column_1 = Harimayco\Menu\Models\Menus::where('id','2')->first();
+$footer_menu_column_2 = Harimayco\Menu\Models\Menus::where('id','3')->first();
+$footer_menu_column_3 = Harimayco\Menu\Models\Menus::where('id','4')->first();
+$footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('id','5')->first();
 
 @endphp
 
@@ -14,7 +14,7 @@ $footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-c
                 <div class="row">
                     <div class="col-6 col-md-6 col-lg-2">
                         <div class="site-footer__widget footer-links">
-                            <h5 class="footer-links__title">About</h5>
+                            <h5 class="footer-links__title">{{$footer_menu_column_1->title}}</h5>
                             <ul class="footer-links__list">
                                 @isset($footer_menu_column_1)
                                     @foreach($footer_menu_column_1->items as $item)
@@ -26,7 +26,7 @@ $footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-c
                     </div>
                     <div class="col-6 col-md-6 col-lg-2">
                         <div class="site-footer__widget footer-links">
-                            <h5 class="footer-links__title">Here to help</h5>
+                            <h5 class="footer-links__title">{{$footer_menu_column_2->title}}</h5>
                             <ul class="footer-links__list">
                                 @isset($footer_menu_column_2)
                                     @foreach($footer_menu_column_2->items as $item)
@@ -38,7 +38,7 @@ $footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-c
                     </div>
                     <div class="col-6 col-md-3 col-lg-2">
                         <div class="site-footer__widget footer-links">
-                            <h5 class="footer-links__title">Hot offers</h5>
+                            <h5 class="footer-links__title">{{$footer_menu_column_3->title}}</h5>
                             <ul class="footer-links__list">
                                 @isset($footer_menu_column_3)
                                     @foreach($footer_menu_column_3->items as $item)
@@ -51,7 +51,7 @@ $footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('name','Footer Menu-c
                    
                     <div class="col-6 col-md-3 col-lg-2">
                         <div class="site-footer__widget footer-links">
-                            <h5 class="footer-links__title">Policies</h5>
+                            <h5 class="footer-links__title">{{$footer_menu_column_4->title}}</h5>
                             <ul class="footer-links__list">
                                 @isset($footer_menu_column_4)
                                     @foreach($footer_menu_column_4->items as $item)

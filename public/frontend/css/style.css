@@ -16609,9 +16609,6 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
   .block-slideshow--layout--full .block-slideshow__slide-image--desktop {
     background-position: -190px top;
   }
-  .block-slideshow--layout--full .block-slideshow__slide-content {
-    bottom: 56px;
-  }
   [dir=ltr] .block-slideshow--layout--full .block-slideshow__slide-content {
     left: 48px;
   }

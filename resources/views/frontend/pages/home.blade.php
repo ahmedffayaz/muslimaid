@@ -3,9 +3,16 @@
 <style>.category-card__image {
     width: 100px;
 }
+
 @media (max-width: 767px){
 [dir=ltr] .block-slideshow__slide-content {
     width: 350px!important;
+}.block-slideshow__slide-text {
+    display: block;
+}
+@media (max-width: 416px){
+[dir=ltr] .block-slideshow__slide-content {
+    width: 290px !important;
 }.block-slideshow__slide-text {
     display: block;
 }}</style>

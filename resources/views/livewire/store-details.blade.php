@@ -3,7 +3,12 @@
     <div class="container-fluid">
         <div class="nk-content-inner">
             <div class="nk-content-body">
-                <div class="components-preview wide-md mx-auto">
+                <div wire:loading class="centered">
+                    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div wire:loading.remove class="components-preview wide-md mx-auto">
                     <div class="nk-block-head nk-block-head-lg pb-2">
                         <div class="nk-block-between d-block d-md-flex">
                             <div class="nk-block-head-content">

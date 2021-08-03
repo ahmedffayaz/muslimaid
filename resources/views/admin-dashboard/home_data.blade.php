@@ -5,12 +5,11 @@
                 <div class="col-lg-3 mb-3">
                     <div class="card">
                         <div class="card-body p-0">
-                            
                             <div class="media p-3">
                                 <a href="{{route('admin.reports.earnings')}}" class="media-body" style="display: contents;">
                                 <div class="media-body">
                                     <h6 class="title">Revenue</h6>
-                                    <h3 class="mb-0 mt-2"> {{ currency() }} {{$total_revenue}}</h3>
+                                    <h3 class="mb-0 mt-2"> {{ currency() }}{{number_format((float)$total_revenue, 2, '.', '')}}</h3>
                                     
                                 </div>
                                 <div class="align-self-center text-center analytics-icon" >
@@ -30,7 +29,7 @@
                                 <a href="{{route('admin.reports.earnings')}}" class="media-body" style="display: contents;">
                                 <div class="media-body">
                                     <h6 class="title">Pending Revenue</h6>
-                                    <h3 class="mb-0 mt-2">{{ currency() }} {{$pending_total_revenue}}</h3>
+                                    <h3 class="mb-0 mt-2">{{ currency() }}{{number_format((float)$pending_total_revenue, 2, '.', '')}}</h3>
                                 </div>
                                 <div class="align-self-center text-center analytics-icon">
                                     <em class="icon ni ni-coins text-info"></em>
@@ -85,6 +84,7 @@
         
     </div>
     <div class="row g-gs">
+        @if(count($tickets))
         <div class="col-lg-6  d-table">
             <div class="card h-100">
                 <div class="card-inner border-bottom">
@@ -154,6 +154,8 @@
             </div>
             
         </div>
+        @endif
+
         <div class="col-lg-6">
             <div class="card h-100">
                 <div class="card-inner">
@@ -289,7 +291,7 @@
                             </div>
                             <div class="user-action nk-top-products">
                                 <div class="total">
-                                    <div class="amount"> {{ currency() }} {{$com->amount}}</div>
+                                    <div class="amount"> {{ currency() }}{{$com->amount}}</div>
                                     <div class="count">
                                         @php echo \Carbon\Carbon::createFromTimeStamp(strtotime($com->event_date))->diffForHumans() @endphp
                                         </div>
@@ -552,7 +554,11 @@
       NioApp.coms.docReady.push(function () {
         ecommerceDoughnutS1();
       });
-    }(NioApp, jQuery);</script> 
+    }(NioApp, jQuery);
+    
+    </script> 
+    
     {{-- {!! $chart1->renderChartJsLibrary() !!}
     {!! $chart1->renderJs() !!}   --}}
+
 @endpush

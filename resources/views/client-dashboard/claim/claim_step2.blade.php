@@ -21,7 +21,7 @@
                                             <thead>
                                             <tr>
                                                 <th data-field="state" data-radio="true"></th>
-                                                <th data-field="name">Date</th>
+                                                <th data-field="name">Date/Time</th>
                                                 <th data-field="starts">Order Amount</th>
                                                 <th data-field="forks">Cashback Amount</th>
                                                 {{-- <th data-field="description">Description</th> --}}
@@ -34,7 +34,7 @@
                                             <tr>
                                                 <td><input type="radio" name="click_id" value="{{$click->id}}"></td>
                                                 <td>
-                                                    {{Carbon\Carbon::parse($click->created_at)->isoFormat('Do MMMM YYYY')}}
+                                                    {{Carbon\Carbon::parse($click->created_at)->isoFormat('Do MMMM YYYY hh:mm:ss')}}
                                                 </td>
                                                 <td></td>
                                                 <td></td>

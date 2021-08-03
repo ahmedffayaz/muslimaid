@@ -76,11 +76,7 @@ ul.categories li {
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-code"></em><span>APIs Integration</span></a>
                                     </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#tabItem10"><em class="icon ni ni-color-palette-fill"></em><span>Appearance</span></a>
-                                    </li>
-                                   
-                                    
+
                                 </ul>
                                 <div class="tab-content">
                                    
@@ -176,7 +172,7 @@ ul.categories li {
                                                         <div class="form-group">
                                                             <div class=" logo">
                                                                 <label for="website-logo-input">
-                                                                <img id="website-logo" src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
+                                                                <img id="website-logo" src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
                                                                 <input id="website-logo-input" preview="#website-logo" name="website_logo" class="d-none" type='file' onchange="readURL(this);" />
                                                                 </label>
                                                             </div>
@@ -194,7 +190,7 @@ ul.categories li {
                                                         <div class="form-group">
                                                             <div class=" logo">
                                                                 <label for="logo-input">
-                                                                <img id="logo" src="@if(isset($settings['dashboard_logo']) && $settings['dashboard_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
+                                                                <img id="logo" src="@if(isset($settings['dashboard_logo']) && $settings['dashboard_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/logo-dark.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
                                                                 <input id="logo-input" preview="#logo" name="dashboard_logo" class="d-none" type='file' onchange="readURL(this);" />
                                                                 </label>
                                                             </div>
@@ -212,7 +208,7 @@ ul.categories li {
                                                         <div class="form-group">
                                                             <div class=" logo">
                                                                 <label for="favicon-input">
-                                                                <img id="favicon" src="@if(isset($settings['favicon']) && $settings['favicon']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
+                                                                <img id="favicon" src="@if(isset($settings['favicon']) && $settings['favicon']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}@else{{asset('admin-dashboard/images/favicon.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
                                                                 <input id="favicon-input" preview="#favicon"  name="favicon" class="d-none" type='file' onchange="readURL(this);" />
                                                                 </label>
                                                             </div>
@@ -233,22 +229,87 @@ ul.categories li {
                                                         </div>
                                                     </div>
                                                 </div>
-                                               
+                                                
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="footer_text">Footer text</label>
+                                                            <label class="form-label" for="theme_skin">Website Theme</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="">
+                                                                <div class="">
+                                                                    <select class="form-control form-select" id="theme_skin" name="theme_skin" required>
+                                                                        
+                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'blue') selected  @endif @endisset value="blue">Blue</option>
+                                                                    {{-- <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'black') selected @endif @endisset value="black">Black</option>
+                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'green') selected @endif @endisset value="green">Green</option>
+                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'red') selected @endif @endisset value="red">Red</option>
+                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'yellow') selected @endif @endisset value="yellow">Yellow</option> --}}
+                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'custom') selected @endif @endisset value="custom">Custom</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                    </div>
+                                                    
+                                                </div>
+
+                                                <div class="row g-3 custom_color" @isset($settings['theme_skin']) @if($settings['theme_skin'] != 'custom') style="display: none" @endif @endisset>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="theme_color">Theme Color</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
                                                         <div class="form-group">
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="footer_text" name="footer_text" value="{{$settings['footer_text'] ?? ''}}" placeholder="Email">
+                                                                <input type="text" class="form-control colorpicker" name="theme_color" id="theme_color" value="{{$settings['theme_color'] ?? ''}}" placeholder="Theme Color">
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
                                                 </div>
+
+                                                <div class="row g-3">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="theme_color">Dashbaord Menu Type <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Change admin dashboard menu appearance."></em></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class=" ">
+                                                                <div class="">
+                                                                    <select class="form-control form-select" id="dashboard_menu_type" name="dashboard_menu_type" required>
+                                                                        
+                                                                        <option @isset($settings['dashboard_menu_type']) @if($settings['dashboard_menu_type'] == 'top') selected  @endif @endisset value="top">Top Menu</option>
+                                                                        <option @isset($settings['dashboard_menu_type']) @if($settings['dashboard_menu_type'] == 'sidebar') selected  @endif @endisset value="sidebar">Sidebar Menu</option>
+                                                                        
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                    </div>
+                                                </div>
+                                               
+                                               <div class="row g-3 align-center">
+                                                   <div class="col-lg-3">
+                                                       <div class="form-group">
+                                                           <label class="form-label" for="footer_text">Footer text</label>
+                                                       </div>
+                                                   </div>
+                                                   <div class="col-lg-9">
+                                                       <div class="form-group">
+                                                           <div class="form-control-wrap">
+                                                               <input type="text" class="form-control" id="footer_text" name="footer_text" value="{{$settings['footer_text'] ?? ''}}" placeholder="Email">
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                                   
+                                               </div>
                                                                                              
                                                 <div class="row g-3">
                                                     <div class="col-lg-9 offset-lg-3">
@@ -300,7 +361,7 @@ ul.categories li {
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="mail_port">Port</label>
+                                                            <label class="form-label" for="mail_port">Port <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Enter port number for use by mail service."></em></label>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -317,7 +378,7 @@ ul.categories li {
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
-                                                            <label class="form-label">Username</label>
+                                                            <label class="form-label">Username <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Enter username of mail service."></em></label>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -331,7 +392,7 @@ ul.categories li {
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
-                                                            <label class="form-label">Password</label>
+                                                            <label class="form-label">Password <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Enter password of mail service."></em></label>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -386,7 +447,7 @@ ul.categories li {
                                     <div class="tab-pane" id="tabItem7">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
-                                                <h5 class="title">Social Media Settings</h5>
+                                                <h5 class="title">Social Media Settings <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Provide social account links to display social media options to user for follow you on social networks."></em></h5>
                                             </div><!-- .nk-block-head -->
                                             <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
                                                 @csrf
@@ -686,7 +747,7 @@ ul.categories li {
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="cashback_percentage">Cashback Percentage</label>
+                                                            <label class="form-label" for="cashback_percentage">Cashback Percentage <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Enter cashback percentage which will be given to user."></em></label>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -760,94 +821,9 @@ ul.categories li {
                                                 </div>
                                             </form>
                                         </div>
-                                        
                                       
                                     </div>
-                                    <div class="tab-pane" id="tabItem10">
-                                        <div class="nk-block">
-                                            <div class="nk-block-head">
-                                                <h5 class="title">Appearance Settings</h5>
-                                            </div><!-- .nk-block-head -->
-                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
-                                                @csrf
-                                                @method('POST')
-                                                <div class="row g-3 align-center">
-                                                    <div class="col-lg-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="theme_skin">Website Theme</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-9">
-                                                        <div class="form-group">
-                                                            <div class="">
-                                                                <div class="">
-                                                                    <select class="form-control form-select" id="theme_skin" name="theme_skin" required>
-                                                                        
-                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'blue') selected  @endif @endisset value="blue">Blue</option>
-{{--                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'black') selected @endif @endisset value="black">Black</option>
-                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'green') selected @endif @endisset value="green">Green</option>
-                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'red') selected @endif @endisset value="red">Red</option>
-                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'yellow') selected @endif @endisset value="yellow">Yellow</option> --}}
-                                                                        <option @isset($settings['theme_skin']) @if($settings['theme_skin'] == 'custom') selected @endif @endisset value="custom">Custom</option>
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                       
-                                                    </div>
-                                                    
-                                                </div>
-                                                <div class="row g-3 custom_color" @isset($settings['theme_skin']) @if($settings['theme_skin'] != 'custom') style="display: none" @endif @endisset>
-                                                    <div class="col-lg-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="theme_color">Theme Color</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-9">
-                                                        <div class="form-group">
-                                                            <div class="form-control-wrap">
-                                                                <input type="text" class="form-control colorpicker" name="theme_color" id="theme_color" value="{{$settings['theme_color'] ?? ''}}" placeholder="Theme Color">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="row g-3">
-                                                    <div class="col-lg-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="theme_color">Dashbaord Menu Type</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-9">
-                                                        <div class="form-group">
-                                                            <div class=" ">
-                                                                <div class="">
-                                                                    <select class="form-control form-select" id="dashboard_menu_type" name="dashboard_menu_type" required>
-                                                                        
-                                                                        <option @isset($settings['dashboard_menu_type']) @if($settings['dashboard_menu_type'] == 'top') selected  @endif @endisset value="top">Top Menu</option>
-                                                                        <option @isset($settings['dashboard_menu_type']) @if($settings['dashboard_menu_type'] == 'sidebar') selected  @endif @endisset value="sidebar">Sidebar Menu</option>
-                                                                        
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                       
-                                                    </div>
-                                                </div>
-                                               
-                                                
-                                                <div class="row g-3">
-                                                    <div class="col-lg-9 offset-lg-3">
-                                                        <div class="form-group mt-2">
-                                                            <button type="submit" class="btn btn-lg btn-primary">Update</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                      
-                                    </div>
-                                   
-                                   
+                                    
                                 </div>
                             </div>
                         </div><!-- .card-preview -->

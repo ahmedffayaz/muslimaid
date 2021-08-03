@@ -235,6 +235,7 @@
                         </ul>
                     </div>
                 </div>--}}
+                @if(count($blogs))
                 <div class="block-sidebar__item">
                     <div class="widget-posts widget">
                         <h4 class="widget__title">Latest Posts</h4>
@@ -260,6 +261,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
                 {{-- <div class="block-sidebar__item">
                     <div class="widget-newsletter widget">
                         <h4 class="widget-newsletter__title">Our Newsletter</h4>

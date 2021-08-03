@@ -80,7 +80,6 @@
         position: absolute;
         left: -2px;
         top: -2px;
-        background: #3366cc;
         color: #FFF;
         font-size: 14px;
         padding: 10px 10px 10px 10px;
@@ -97,14 +96,9 @@
         width: 0;
         height: 0;
         border-top: 33.8px solid transparent;
-        border-left: 45px solid #3366cc;
         position: absolute;
         right: -44px;
         top: 0;
-    }
-
-    .coupon-button-type .coupon-code .get-code:after {
-        border-left-color: #3366cc;
     }
 
     .dialog-modal__voucher-code {

@@ -130,6 +130,7 @@ function actualizarmenu() {
     data: {
       arraydata: arraydata,
       menuname: $('#menu-name').val(),
+      menutitle: $('#menu-title').val(),
       idmenu: $('#idmenu').val()
     },
 

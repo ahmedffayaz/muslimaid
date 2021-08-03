@@ -6,8 +6,8 @@
             </div>
             <div class="nk-header-brand @isset($settings['dashboard_menu_type']) @if($settings['dashboard_menu_type'] != 'top') d-xl-none  @endif @endisset  ">
                 <a href="{{route('admin.home.index')}}" class="logo-link">
-                    <img class="logo-light logo-img" src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif"  alt="logo">
-                <img class="logo-dark logo-img" src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/logo-dark.png')}}@endif" alt="logo-dark">
+                    <img class="logo-light logo-img" src="@if(isset($settings['dashboard_logo']) && $settings['dashboard_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif"  alt="logo">
+                <img class="logo-dark logo-img" src="@if(isset($settings['dashboard_logo']) && $settings['dashboard_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['dashboard_logo'])}}@else{{asset('admin-dashboard/images/logo-dark.png')}}@endif" alt="logo-dark">
 
                 </a>
             </div><!-- .nk-header-brand -->
@@ -72,7 +72,7 @@
                             <li class="">
                                 <a href="{{route('admin.commissions.index')}}" class="">
                                     <span class="nk-menu-icon"><em class="icon ni ni-sign-gbp"></em></span>
-                                    <span class="nk-menu-text">Manage Cashbacks</span>
+                                    <span class="nk-menu-text">Cashbacks</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan
