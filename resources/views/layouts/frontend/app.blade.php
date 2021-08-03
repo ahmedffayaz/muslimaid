@@ -13,11 +13,21 @@
         padding: 6px 0;
         
     }
-    .slider-store-name{
+    
+    @media(min-width: 768px){
+        .slider-store-name{
         position: absolute;
         right: 20px;
         top: 20px;
         font-size: 18px;
+        }
+    }
+    @media(max-width: 767px){
+        .slider-store-name {
+        text-align: center;
+        position: relative;
+        font-size: 18px !important;
+        }
     }
     .suggestions__item.selected{background-color:#faf2e2}
     

@@ -14,7 +14,7 @@ class AddTitleTable extends Migration
     public function up()
     {
         Schema::table('admin_menus', function (Blueprint $table) {
-            $table->string('title')->after('name')->default(NULL);
+            $table->string('title')->after('name')->nullable();
         });
     }
 
