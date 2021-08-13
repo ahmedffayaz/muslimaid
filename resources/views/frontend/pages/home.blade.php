@@ -25,15 +25,6 @@
    <div class="block-slideshow block-slideshow--layout--full block mt-5">
     <div class="container">
    
-    @if(Session::has('login-welcome'))
-       <div class = "container alert alert-success alert-dismissible fade show" role = "alert">
-           Welcome back {{Auth::user()->first_name}} {{Auth::user()->last_name}}.
-           <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close">
-               <span aria-hidden = "true">&times;</span>
-           </button>
-       </div>
-    @endif
-
         <div class="row">
             <div class="col-12">
                 <div class="block-slideshow__body">
@@ -60,7 +51,7 @@
                                    
                                     @if($slide->logo == 'default1.png' || $slide->logo == 'default2.png' || $slide->logo == 'default3.png')
                                         <img style="height: auto; width: 100px; border: 1px solid #dfdfdf;border-radius: 2px;" 
-                                        src="{{asset('frontend/images/slides/logo/'.$slide->logo)}}" alt="">
+                                        src="{{asset('frontend/images/slides/logo/'.$slide->logo)}}" alt="" class="slider_pic">
                                     @else
                                         <img style="height: auto; width: 100px; border: 1px solid #dfdfdf;border-radius: 2px;" 
                                         src="{{asset('storage/slider/slides/images/'.$slide->logo)}}" alt="">

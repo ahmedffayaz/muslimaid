@@ -1,13 +1,5 @@
 @extends('layouts.admin-dashboard.app')
-<style>
-    @media (min-width: 768px){
-        .nk-download .thumb {
-    width: 4.5rem!important;
-    margin-right: .8rem!important;
-}
-    }
 
-</style>
 @section('content')
 
 <div class="nk-content ">
@@ -197,7 +189,14 @@
     </div>
 </div>
 
-
+<style>
+    @media (min-width: 768px) {
+        .nk-download .thumb {
+            width: 4.5rem !important;
+            margin-right: .8rem !important;
+        }
+    }
+</style>
 
  
 @endsection

@@ -180,7 +180,10 @@
                                 @endif
                                 
                             </h4>
-                            <p>{{$cashback->detail}}</p>
+                            @php
+                                $substr = explode (",", $cashback->detail);
+                            @endphp
+                            <p>{{$substr[0]}}</p>
                             <form action="{{route('site.exit_click.store')}}" method="POST" id="form_{{$cashback->id}}" target="_blank" class="tracker_form">
                                 @csrf
                                 <input type="hidden" name="url" id="url" value="{{$cashback->click_url}}">
@@ -206,7 +209,10 @@
                                 @endif
                                 
                             </h4>
-                            <p>{{$cashback->detail}}</p>
+                            @php
+                            $substr = explode (",", $cashback->detail);
+                            @endphp
+                            <p>{{$substr[0]}}</p>
                             <form action="{{route('site.exit_click.store')}}" method="POST" id="form_{{$cashback->id}}" target="_blank" class="tracker_form">
                                 @csrf
                                 <input type="hidden" name="url" id="url" value="{{$cashback->click_url}}">
@@ -220,7 +226,7 @@
                         @endforeach
                     </div>
                     @if($count>3)
-                    <div class="text-right mt-2 see-all"><button class="btn btn-link">See All Cashbacks</button></div>
+                    <div class="text-right mt-2 see-all"><button class="btn btn-link see-all-cashback">See All Cashbacks</button></div>
                     @endif
 
                     <div class="product-tabs  product-tabs--layout--sidebar">
@@ -252,7 +258,7 @@
                             <div class="product-tabs__content">
                                 <div class="product-tabs__pane product-tabs__pane--active" id="tab-description">
                                     <h4>Vouchers</h4>
-                                    @foreach ($store->vouchers->unique('link_name') as $voucher)
+                                    @foreach ($store->vouchers->unique('link_name')->take(3) as $voucher)
                                     <div class="product-card mb-2 p-4">
                                         <div class="row">
                                             <div class="col-md-8 align-items-center align-self-center">
@@ -288,6 +294,54 @@
                                         </div>
                                     </div>
                                     @endforeach
+                                    
+                                    <div class="remaining_voucher" style="display: none;">
+                                    @foreach ($store->vouchers->unique('link_name')->skip(3) as $voucher)
+                                    <div class="product-card mb-2 p-4">
+                                        <div class="row">
+                                            <div class="col-md-8 align-items-center align-self-center">
+                                                <h6 class="mt-0 align-self-center">{{str_replace($voucher->coupon_code,'',$voucher->link_name)}}</h6>
+                                            </div>
+                                            <form action="{{route('site.exit_click.store')}}" method="POST" id="form_voucher_{{$voucher->id}}" target="_blank">
+                                                @csrf
+                                                <input type="hidden" name="url" id="url" value="{{$voucher->click_url}}">
+                                                <input type="hidden" name="store_id" id="store_id" value="{{$store->id}}">
+                                                <input type="hidden" name="voucher_id" id="voucher_id" value="{{$voucher->id}}">
+                                                <input type="hidden" name="user_id" id="user_id" value="{{Auth::id() ?? 0}}">
+
+                                            </form>
+
+                                            <div class="col-md-4 text-md-right">
+                                                @if($voucher->promotion_type == 'Coupon' && $voucher->coupon_code)
+                                                <div class="coupon-detail coupon-button-type">
+                                                    <a form_id="form_voucher_{{$voucher->id}}" url="{{$voucher->click_url}}" rel="nofollow" data-type="code" class="coupon-button coupon-code @guest voucher_form_guest @else voucher_form @endguest" data-code="{{$voucher->coupon_code}}">
+                                                        <span class="code-text" rel="nofollow">{{$voucher->coupon_code}}</span>
+                                                        <span class="get-code">Get Code</span>
+                                                    </a>
+                                                </div>
+                                                @else
+                                                <a style="width: 145px" href="#" @guest class="btn btn-primary btn-sm" data-toggle="modal" data-target="#signinModal" @else form_id="form_voucher_{{$voucher->id}}" class="btn btn-primary btn-sm store_form" @endguest target="_blank">Get Deal <i class="fas fa-external-link-alt ml-2"></i>
+                                                </a>
+
+                                                @endif
+
+                                                <div>
+                                                    <small>Valid until: {{Carbon\Carbon::parse($voucher->promotion_end_date)->isoFormat('Do MMMM YYYY')}}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+                                    </div>
+                                    
+                                    @if($store->vouchers->count() > 3)
+                                        <div class="mt-2 voucher_footer">
+                                            
+                                            <small class="ml-3 my-auto">Total vouchers count: {{$store->vouchers->count()}}</small>
+                                            
+                                            <button class="btn btn-link float-right my-auto see-all-vouchers">See All Vouchers</button>
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -539,9 +593,14 @@
             $('#' + form).submit();
         });
 
-        $('.see-all').on('click', function(){
+        $('.see-all-cashback').on('click', function(){
             $('.see-all').hide();
             $('#remaining_cashback').show();
+        })
+
+        $('.see-all-vouchers').on('click', function(){
+            $('.voucher_footer').hide();
+            $('.remaining_voucher').show();
         })
 
     </script>

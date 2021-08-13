@@ -76,14 +76,14 @@
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan
-                            @can('add cashbacks')
+                            {{--@can('add cashbacks')
                             <li class="">
                                 <a href="{{route('admin.commissions.create_multiple')}}" class="">
                                     <span class="nk-menu-icon"><em class="icon ni ni-sign-gbp"></em></span>
                                     <span class="nk-menu-text">Add Multiple Cashbacks</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
-                            @endcan
+                            @endcan--}}
                             @can('view cashbouts')
                             <li class="">
                                 <a href="{{route('admin.cashouts.index')}}" class="@if(count($new_cashouts)) icon-status icon-status-info @endif">
@@ -247,8 +247,8 @@
                 <ul class="nk-quick-nav">
                     <li> <a href="{{url('/')}}" target="_blank"  class="btn btn-outline-primary btn-dim btn-sm d-none d-md-inline-flex"><em class="icon ni ni-external-alt mr-1"></em> Visit Site</a></li>
 
-                    <li class="dropdown user-dropdown">
-                        <a href="#" class="dropdown-toggle mr-n1" data-toggle="dropdown">
+                    <li class="dropdown user-dropdown" style="display: inherit!important">
+                        <a class="dropdown-toggle mr-n1">
                             <div class="user-toggle">
                                 <div class="user-avatar sm">
                                     @if(Auth::user()->avatar == 'default.png')   
@@ -265,7 +265,7 @@
                                 </div>
                             </div>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
+                        <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-content2">
                             <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                                 <div class="user-card">
                                     <div class="user-avatar">

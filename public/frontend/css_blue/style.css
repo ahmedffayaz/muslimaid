@@ -6415,6 +6415,8 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
 }
 
 .mobile-header__panel {
+  padding-top: 5px;
+  padding-bottom: 5px;
   z-index: 10;
   position: relative;
   background: #3366cc;
@@ -17447,6 +17449,16 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
     margin-left: 0px!important;
   }
 
+}
+
+.coupon-button-type .coupon-code .get-code {
+  background: #3366cc;
+}
+.coupon-button-type .coupon-code .get-code:after {
+  border-left: 45px solid #3366cc;
+}
+.coupon-button-type .coupon-code .get-code:after {
+  border-left-color: #3366cc;
 }
 
 /*# sourceMappingURL=style.css.map */

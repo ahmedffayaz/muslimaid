@@ -15299,4 +15299,20 @@ body.dark-mode.ui-shady, body.dark-mode.ui-clean, body.dark-mode.bg-lighter, bod
 
 @media (max-width: 576px) { .dark-mode .nk-block-tools-toggle .toggle-expand-content { background-color: #212d3d; } }
 
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content2 {
+  display: none;
+  position: absolute;
+  /* box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2); */
+  z-index: 1;
+}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content2 {display: block;}
+
+.analytics-icon{
+        font-size:70px;
+    }
+
 /*! END @iO */

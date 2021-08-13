@@ -19,7 +19,20 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li class="nk-block-tools-opt"><a href="{{route('admin.commissions.create')}}" class="btn btn-primary btn-sm add-commission"><em class="icon ni ni-plus"></em><span>Add Cashback</span></a></li>
+                                        {{--<li class="nk-block-tools-opt"><a href="{{route('admin.commissions.create')}}" class="btn btn-primary btn-sm add-commission"><em class="icon ni ni-plus"></em><span>Add Cashback</span></a></li>--}}
+                                        <li class="nk-block-tools-opt">
+                                            <div class="drodown d-inline">
+                                                <a href="#" class="dropdown-toggle btn  btn-primary btn-sm" data-toggle="dropdown"><em class="icon ni ni-plus mr-1"></em><span>Add Cashback</span></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <ul class="link-list-opt no-bdr d-block">
+                                                        <a href="{{route('admin.commissions.create')}}"><em class="icon ni ni-sign-gbp"></em><span>Add Cashback</span></a>
+                                                        
+                                                        <a href="{{route('admin.commissions.create_multiple')}}"><em class="icon ni ni-sign-gbp"></em><span>Add Multiple Cashback</span></a>
+                                                    </ul>
+                                                </div>
+                                            </div> 
+                                        </li>
+
                                         {{-- <li class="nk-block-tools-opt"><a href="#"  class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAlert"><em class="icon ni ni-download"></em><span>Import Cashbacks</span></a></li> --}}
                                         <li><a href="{{route('admin.commissions.export')}}" data-toggle="tooltip" data-placement="top" title="Export cashbacks to CSV" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
                                      

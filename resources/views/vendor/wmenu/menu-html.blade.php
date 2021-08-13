@@ -89,8 +89,8 @@ $currentUrl = url()->current();
 												<div id="nav-menu-header">
 													<div class="major-publishing-actions">
 														<label class="menu-name-label howto open-label" for="menu-name"> <span>Name</span>
-															<input readonly = "readonly" name="menu-name" id="menu-name" type="text" class="menu-name regular-text menu-item-textbox" title="Enter menu name" value="@if(isset($indmenu)){{$indmenu->name}}@endif">
-															<input name="menu-title" id="menu-title" type="text" class="menu-title regular-text menu-item-textbox" title="Enter menu title" placeholder="Enter menu title" value="@if(isset($indmenu)){{$indmenu->title}}@endif">
+															<input readonly = "readonly" name="menu-name" id="menu-name" type="text" class="menu-name regular-text menu-item-textbox" title="Enter menu name" value="@if(isset($indmenu)){{$indmenu->name}}@endif" style="width: 200px!important;">
+															<input name="menu-title" id="menu-title" type="text" class="menu-title regular-text menu-item-textbox" title="Enter menu title" placeholder="Enter menu title" value="@if(isset($indmenu)){{$indmenu->title}}@endif" style="width: 200px;">
 															<input type="hidden" id="idmenu" value="@if(isset($indmenu)){{$indmenu->id}}@endif" />
 														</label>
 

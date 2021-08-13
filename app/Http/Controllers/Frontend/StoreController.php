@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Store;
+use App\Models\Voucher;
 use App\Models\Category;
 
 class StoreController extends Controller
@@ -19,6 +20,8 @@ class StoreController extends Controller
     public function show($slug)
     {
         $store = Store::where('slug', $slug)->first();
+        
+        // $vouchers = Voucher::where('store_id', $store->id)->latest()->paginate(5);
         $count = count($store->cashbacks);
         return view('frontend.stores.show',compact('store','count'));
     }

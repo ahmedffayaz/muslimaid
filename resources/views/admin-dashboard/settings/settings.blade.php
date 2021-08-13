@@ -1,45 +1,8 @@
 @extends('layouts.admin-dashboard.app')
-<style>
-    .nk-tb-list{
-        table-layout: fixed;
-    }
-    .nk-files-view-grid .nk-file-icon-type {
-    width: 150px;
-    padding: 2rem 0 .5rem 0;
-}
-@media (min-width: 1200px){
-    .nk-files-view-grid .nk-file {
-    width: calc(25% - 16px)!important;
-}
-}
-.nk-files-view-grid .nk-file {
-    background-color:#f5f6fa7a!important;
-}
-.stores .select2{
-    width: 300px!important;
-}
-ul.categories { 
-  list-style: none;
-  margin: 5px 5x;
-}
-ul.categories li {
-  margin: 10px 0;
-} 
-.custom-size .colorpicker-saturation { 
-    width: 200px;
-    height: 200px;
-}    
-.custom-size .colorpicker-hue, .custom-size .colorpicker-alpha {
-    width: 30px;
-    height: 200px;
-}
-.custom-size .colorpicker-color, .custom-size .colorpicker-color div {
-    height: 30px;
-}
-     
-</style>
+
 
 @section('content')
+
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
@@ -73,9 +36,9 @@ ul.categories li {
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem7"><em class="icon ni ni-share-fill"></em><span>Social</span></a>
                                     </li>
-                                    <li class="nav-item">
+                                    {{--<li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-code"></em><span>APIs Integration</span></a>
-                                    </li>
+                                    </li>--}}
 
                                 </ul>
                                 <div class="tab-content">
@@ -215,6 +178,7 @@ ul.categories li {
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <hr>
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
@@ -308,8 +272,22 @@ ul.categories li {
                                                            </div>
                                                        </div>
                                                    </div>
-                                                   
-                                               </div>
+                                                </div>
+                                                
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="ga_tracking_id">Google Analytics Tracking ID</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" name="ga_tracking_id" id="ga_tracking_id" value="{{$settings['ga_tracking_id'] ?? ''}}" placeholder="UA-1XXXXXXXX-X">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                                                              
                                                 <div class="row g-3">
                                                     <div class="col-lg-9 offset-lg-3">
@@ -434,6 +412,43 @@ ul.categories li {
                                                     
                                                 </div>
                                                 
+                                                <div class="nk-block-head mt-5">
+                                                        <h5 class="title">Mailchimp <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Mailchimp is used for newsletters leave blank if you want to disable Newsletter."></em></h5>
+                                                        {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                                    </div><!-- .nk-block-head -->
+
+                                                    <div class="row g-3 align-center">
+                                                        <div class="col-lg-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="mailchimp_api_key">API Key</label>
+                                                                {{-- <span class="form-note">Specify the mailchimp api key.</span> --}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <div class="form-group">
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="mailchimp_api_key" id="mailchimp_api_key" value="{{$settings['mailchimp_api_key'] ?? ''}}" placeholder="Mailchimp API Key">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+    
+                                                    <div class="row g-3 align-center">
+                                                        <div class="col-lg-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="mailchimp_list_id">List ID</label>
+                                                                {{-- <span class="form-note">Specify the mailchimp list id.</span> --}}
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <div class="form-group">
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" secret="mailchimp_list_id" name="mailchimp_list_id" value="{{$settings['mailchimp_list_id'] ?? ''}}" placeholder="Mailchimp List ID">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                
                                                 <div class="row g-3">
                                                     <div class="col-lg-9 offset-lg-3">
                                                         <div class="form-group mt-2">
@@ -447,7 +462,7 @@ ul.categories li {
                                     <div class="tab-pane" id="tabItem7">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
-                                                <h5 class="title">Social Media Settings <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Provide social account links to display social media options to user for follow you on social networks."></em></h5>
+                                                <h5 class="title">Social Media Settings <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Provide social account links to display social media options for user to follow you on social networks."></em></h5>
                                             </div><!-- .nk-block-head -->
                                             <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
                                                 @csrf
@@ -524,43 +539,9 @@ ul.categories li {
                                                         </div>
                                                     </div>
                                                 </div>
-                                              
-                                                
-                                                <div class="row g-3">
-                                                    <div class="col-lg-9 offset-lg-3">
-                                                        <div class="form-group mt-2">
-                                                            <button type="submit" class="btn btn-lg btn-primary">Update</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="tabItem8">
-                                        <div class="nk-block">
-                                            <div class="nk-block-head">
-                                                <h5 class="title">APIs Integration</h5>
-                                            </div><!-- .nk-block-head -->
-                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
-                                                @csrf
-                                                @method('POST')
-                                                <div class="row g-3 align-center">
-                                                    <div class="col-lg-3">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="ga_tracking_id">Google Analytics Tracking ID</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-9">
-                                                        <div class="form-group">
-                                                            <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" name="ga_tracking_id" id="ga_tracking_id" value="{{$settings['ga_tracking_id'] ?? ''}}" placeholder="UA-1XXXXXXXX-X">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                                 
                                                 <div class="nk-block-head mt-5">
-                                                    <h5 class="title">Facebook Login <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Provide credencials for facebook login OR leave blank to disable facebook login."></em></h5>
+                                                    <h5 class="title">Facebook Login <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Provide credencials for facebook login OR leave blank, to disable facebook login."></em></h5>
                                                     {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                                 </div><!-- .nk-block-head -->
                                                 <div class="row g-3 align-center">
@@ -579,7 +560,6 @@ ul.categories li {
                                                     </div>
                                                 </div>
                                                 
-
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
@@ -613,7 +593,7 @@ ul.categories li {
                                                 </div>
                                               
                                                 <div class="nk-block-head mt-5">
-                                                    <h5 class="title">Google Login <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Provide credencials for google login OR leave blank to disable google login."></em></h5>
+                                                    <h5 class="title">Google Login <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Provide credencials for google login OR leave blank, to disable google login."></em></h5>
                                                     {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                                 </div><!-- .nk-block-head -->
                                                     <div class="row g-3 align-center">
@@ -664,47 +644,7 @@ ul.categories li {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="nk-block-head mt-5">
-                                                        <h5 class="title">Mailchimp <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Mailchimp is used for newsletters leave blank if you want to disable Newsletter."></em></h5>
-                                                        {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
-                                                    </div><!-- .nk-block-head -->
 
-                                                    <div class="row g-3 align-center">
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="mailchimp_api_key">API Key</label>
-                                                                {{-- <span class="form-note">Specify the mailchimp api key.</span> --}}
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-9">
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="mailchimp_api_key" id="mailchimp_api_key" value="{{$settings['mailchimp_api_key'] ?? ''}}" placeholder="Mailchimp API Key">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-    
-                                                    <div class="row g-3 align-center">
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="mailchimp_list_id">List ID</label>
-                                                                {{-- <span class="form-note">Specify the mailchimp list id.</span> --}}
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-9">
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" secret="mailchimp_list_id" name="mailchimp_list_id" value="{{$settings['mailchimp_list_id'] ?? ''}}" placeholder="Mailchimp List ID">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                
-                                               
-                                              
-                                                
                                                 <div class="row g-3">
                                                     <div class="col-lg-9 offset-lg-3">
                                                         <div class="form-group mt-2">
@@ -713,9 +653,16 @@ ul.categories li {
                                                     </div>
                                                 </div>
                                             </form>
-                                           
                                         </div>
                                     </div>
+                                    {{--<div class="tab-pane" id="tabItem8">
+                                        <div class="nk-block">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">APIs Integration</h5>
+                                            </div><!-- .nk-block-head -->
+                                            
+                                        </div>
+                                    </div>--}}
                                     <div class="tab-pane" id="tabItem9">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
@@ -837,7 +784,55 @@ ul.categories li {
 </div>
 
 
+<style>
+    .nk-tb-list {
+        table-layout: fixed;
+    }
 
+    .nk-files-view-grid .nk-file-icon-type {
+        width: 150px;
+        padding: 2rem 0 .5rem 0;
+    }
+
+    @media (min-width: 1200px) {
+        .nk-files-view-grid .nk-file {
+            width: calc(25% - 16px) !important;
+        }
+    }
+
+    .nk-files-view-grid .nk-file {
+        background-color: #f5f6fa7a !important;
+    }
+
+    .stores .select2 {
+        width: 300px !important;
+    }
+
+    ul.categories {
+        list-style: none;
+        margin: 5px 5x;
+    }
+
+    ul.categories li {
+        margin: 10px 0;
+    }
+
+    .custom-size .colorpicker-saturation {
+        width: 200px;
+        height: 200px;
+    }
+
+    .custom-size .colorpicker-hue,
+    .custom-size .colorpicker-alpha {
+        width: 30px;
+        height: 200px;
+    }
+
+    .custom-size .colorpicker-color,
+    .custom-size .colorpicker-color div {
+        height: 30px;
+    }
+</style>
 @endsection
 @push('scripts')
 

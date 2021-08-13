@@ -1,10 +1,5 @@
 @extends('layouts.admin-dashboard.app')
-<style>
-    .analytics-icon{
-        font-size:70px;
-    }
-        
-    </style>
+
 @section('content')
 
 <div class="nk-content ">

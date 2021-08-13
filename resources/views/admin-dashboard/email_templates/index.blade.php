@@ -1,15 +1,5 @@
 @extends('layouts.admin-dashboard.app')
-<link rel="stylesheet" href="{{ asset('admin-dashboard//css/style-email.css') }}">
-<style>
-    ul.email-social li .icon {
-        font-size: 20px;
-    }
 
-    ul.email-social li a {
-        padding: 7px
-    }
-
-</style>
 @section('content')
 
     <div class="nk-content ">
@@ -145,6 +135,17 @@
             </div><!-- .modal-content -->
         </div><!-- .modla-dialog -->
     </div><!-- .modal -->
+
+    <link rel="stylesheet" href="{{ asset('admin-dashboard//css/style-email.css') }}">
+    <style>
+        ul.email-social li .icon {
+            font-size: 20px;
+        }
+    
+        ul.email-social li a {
+            padding: 7px
+        }
+    </style>
 @endsection
 
 @push('scripts')
