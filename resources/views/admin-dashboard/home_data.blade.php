@@ -97,12 +97,15 @@
                         </div>
                     </div>
                 </div>
+                @php
+                $new_tickets = \App\Models\Ticket::where('new_ticket',1)->get();    
+                @endphp
                 <ul class="nk-support">
                 @if(count($tickets))
                 
                     @foreach ($tickets->take(5) as $ticket)
                     <li class="nk-support-item">
-                        <a href="{{route('admin.tickets.show', $ticket)}}">
+                        <a href="{{route('admin.tickets.show', $ticket)}}" class=" @if(count($new_tickets)) icon-status icon-status-info @endif">
                         <div class="user-avatar text-uppercase
                                 <?php
 

@@ -99,14 +99,14 @@ data-content="sidebarMenu">
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan
-                            @can('add cashbacks')
+                            {{--@can('add cashbacks')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.commissions.create_multiple')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-sign-gbp"></em></span>
                                     <span class="nk-menu-text">Add Multiple Cashbacks</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
-                            @endcan
+                            @endcan--}}
                             @can('view cashbouts')
                             <li class="nk-menu-item">
                                 <a href="{{route('admin.cashouts.index')}}" class="nk-menu-link">

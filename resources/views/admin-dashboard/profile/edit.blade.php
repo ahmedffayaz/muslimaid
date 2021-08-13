@@ -1,31 +1,5 @@
 @extends('layouts.admin-dashboard.app')
-<style>
-    .nk-tb-list{
-        table-layout: fixed;
-    }
-    .nk-files-view-grid .nk-file-icon-type {
-    width: 150px;
-    padding: 2rem 0 .5rem 0;
-}
-@media (min-width: 1200px){
-    .nk-files-view-grid .nk-file {
-    width: calc(25% - 16px)!important;
-}
-}
-.nk-files-view-grid .nk-file {
-    background-color:#f5f6fa7a!important;
-}
-.stores .select2{
-    width: 300px!important;
-}
-ul.categories { 
-  list-style: none;
-  margin: 5px 5x;
-}
-ul.categories li {
-  margin: 10px 0;
-}
-</style>
+
 
 @section('content')
 <div class="nk-content ">
@@ -99,7 +73,7 @@ ul.categories li {
                                                         <div class="form-group">
                                                             <div class=" logo">
                                                                 <label for="logo-input">
-                                                                <img id="logo" src="@isset($profile->avatar){{asset('storage/users/images/avatar/'.$profile->avatar)}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
+                                                                <img id="logo" src="@if($profile->avatar != 'default.png'){{asset('storage/users/images/avatar/'.$profile->avatar)}}@else{{asset('admin-dashboard/images/avatar.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
                                                                 <input id="logo-input" preview="#logo" name="avatar" class="d-none" type='file' onchange="readURL(this);" />
                                                                 </label>
                                                             </div>
@@ -250,7 +224,39 @@ ul.categories li {
     </div>
 </div>
 
+<style>
+    .nk-tb-list {
+        table-layout: fixed;
+    }
 
+    .nk-files-view-grid .nk-file-icon-type {
+        width: 150px;
+        padding: 2rem 0 .5rem 0;
+    }
+
+    @media (min-width: 1200px) {
+        .nk-files-view-grid .nk-file {
+            width: calc(25% - 16px) !important;
+        }
+    }
+
+    .nk-files-view-grid .nk-file {
+        background-color: #f5f6fa7a !important;
+    }
+
+    .stores .select2 {
+        width: 300px !important;
+    }
+
+    ul.categories {
+        list-style: none;
+        margin: 5px 5x;
+    }
+
+    ul.categories li {
+        margin: 10px 0;
+    }
+</style>
 
 @endsection
 @push('scripts')

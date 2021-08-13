@@ -381,4 +381,7 @@ a:hover {
         border-left-color: {{$primarycolor}};
     }
 
+.see-all-vouchers, .see-all-vouchers:hover, .see-all-cashback, .see-all-cashback:hover{
+  color: {{$primarycolor}};
+}
 </style>

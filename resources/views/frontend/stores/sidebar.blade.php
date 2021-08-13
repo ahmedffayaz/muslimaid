@@ -112,12 +112,15 @@
             </div>
         </div>
         @endif
-        @else 
+        @else
         <div class="block-sidebar__item">
             <div class="widget-products widget">
                 <h4 class="widget__title">Featured Stores</h4>
                 <div class="widget-products__list">
                     @php $sidebar_stores = sidebarStores(); @endphp
+                    @if($sidebar_stores->count() == 0)
+                    <p>Not enough data</p>
+                    @endif
                     @foreach ($sidebar_stores->take(5) as $item)
                
                     <a href="{{route('store.show',$item->slug)}}" class="widget-products__item">

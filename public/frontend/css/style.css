@@ -6415,6 +6415,8 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
 }
 
 .mobile-header__panel {
+  padding-top: 5px;
+  padding-bottom: 5px;
   z-index: 10;
   position: relative;
   background: #3366cc;
@@ -10607,9 +10609,6 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
   display: none;
 }
 
-.product__name {
-  margin-bottom: 22px;
-}
 
 .product__rating {
   display: -webkit-box;
@@ -10815,7 +10814,6 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
 @media (min-width: 992px) and (max-width: 1199px) {
   .product__name {
     font-size: 24px;
-    margin-bottom: 18px;
   }
 }
 
@@ -10839,7 +10837,6 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
 @media (min-width: 768px) and (max-width: 991px) {
   .product__name {
     font-size: 24px;
-    margin-bottom: 18px;
   }
   .product__footer {
     display: block;
@@ -10859,7 +10856,6 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
   }
   .product__name {
     font-size: 24px;
-    margin-bottom: 18px;
   }
 }
 
@@ -11088,7 +11084,6 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
 @media (min-width: 992px) {
   .product--layout--sidebar .product__name {
     font-size: 24px;
-    margin-bottom: 12px;
   }
   .product--layout--sidebar .product__footer {
     display: block;
