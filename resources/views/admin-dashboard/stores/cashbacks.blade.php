@@ -45,7 +45,7 @@
        
         <div class="nk-tb-col nk-tb-col-tools pr-2 text-right">
             @if($store->override_cashback)
-            <a href="" cashback-id='{{$cashback->id}}' class='cashback-edit'><em class="icon ni ni-edit"></em></a>
+            <a href="" cashback-id='{{$cashback->id}}' class='cashback-edit a_link'><em class="icon ni ni-edit"></em></a>
             @endif
         </div>
     </div><!-- .nk-tb-item -->

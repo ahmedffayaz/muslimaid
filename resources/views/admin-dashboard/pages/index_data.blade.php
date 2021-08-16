@@ -26,13 +26,13 @@
    
     
     <div class="nk-tb-col">
-        <div class="tb-lead"><span><a href="{{route('admin.pages.edit', $page)}}">{{$page->title}}</a></span></div>
+        <div class="tb-lead"><span><a href="{{route('admin.pages.edit', $page)}}" class="a_link">{{$page->title}}</a></span></div>
     </div>
     <div class="nk-tb-col">
         <span>{{$page->slug}}</span>
     </div>
     <div class="nk-tb-col">
-        <span><a href="{{route('page',$page->slug)}}" target="_blank"><em class="icon ni ni-link-alt"></em></a></span>
+        <span><a href="{{route('page',$page->slug)}}" target="_blank" class="a_link"><em class="icon ni ni-link-alt"></em></a></span>
     </div>
  
     

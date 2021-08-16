@@ -30,7 +30,7 @@
     
         <div class="nk-tb-col ">
         <h5><a href='{{$voucher->click_url ?? "#"}}' target="_blank" data-toggle = 'tooltip'
-            data-placement='top' title='{{$voucher->click_url ?? "#"}}'><em class="icon ni ni-link-alt"></em></a></h5>
+            data-placement='top' title='{{$voucher->click_url ?? "#"}}' class="a_link"><em class="icon ni ni-link-alt"></em></a></h5>
 
         </div>
         <div class="nk-tb-col ">
@@ -42,7 +42,7 @@
         </div>
     
         <div class="nk-tb-col nk-tb-col-tools pr-0">
-            <a href="" voucher-id='{{$voucher->id}}' class='voucher-edit'><em class="icon ni ni-edit"></em></a>
+            <a href="" voucher-id='{{$voucher->id}}' class='voucher-edit a_link'><em class="icon ni ni-edit"></em></a>
             
         </div>
     </div><!-- .nk-tb-item -->

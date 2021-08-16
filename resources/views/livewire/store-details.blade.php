@@ -12,7 +12,7 @@
                     <div class="nk-block-head nk-block-head-lg pb-2">
                         <div class="nk-block-between d-block d-md-flex">
                             <div class="nk-block-head-content">
-                                <h3 class="nk-block-title fw-normal"><a href="{{route('store.show',$store->slug)}}" target="_blank">{{$store->name}}</a> <span class="badge badge-dim badge-pill badge-outline-primary">{{$store->network->name}}</span></h3>
+                                <h3 class="nk-block-title fw-normal"><a href="{{route('store.show',$store->slug)}}" target="_blank" class="a_link">{{$store->name}}</a> <span class="badge badge-dim badge-pill badge-outline-primary">{{$store->network->name}}</span></h3>
                                 <div class="store_id_checker d-none">{{$store->id}}</div>
                                 <div class="nk-block-des">
                                 </div>

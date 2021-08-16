@@ -123,7 +123,7 @@ $footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('id','5')->first();
                     <!-- copyright / end -->
                 </div>
                 <div class="site-footer__payments">
-                    Designed and Developed by <a href="https://therightsw.com" target="_blank">The Right Software</a>
+                    Designed and Developed by <a href="https://therightsw.com" target="_blank" class="a_link">The Right Software</a>
                 </div>
             </div>
         </div>

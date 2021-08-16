@@ -26,9 +26,9 @@
     </div>
  
     <div class="nk-tb-col">
-        <span><a href="{{route('admin.reviews.edit', $review)}}" class="review-edit" review-id={{$review->id}}>{!!$review->review!!}</a></span>
+        <span><a href="{{route('admin.reviews.edit', $review)}}" class="review-edit a_link" review-id={{$review->id}}>{!!$review->review!!}</a></span>
     </div>
-    <div class="nk-tb-col"><a href="{{route('admin.stores.show_store')}}?slug={{$review->store->slug}}">
+    <div class="nk-tb-col"><a href="{{route('admin.stores.show_store')}}?slug={{$review->store->slug}}" class="a_link">
         <span><b>{{$review->store->id ?? ''}} - {{$review->store->name ?? ''}}</b></span><br>
         <span>{{$review->store->network->name ?? ''}}</span></a>
     </div>

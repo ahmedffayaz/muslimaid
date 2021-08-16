@@ -41,7 +41,7 @@
     
     
     <div class="nk-tb-col">
-        <h5><a href='{{$store->store_url}}' target="_blank"><em class="icon ni ni-link-alt"></em></a></h5>
+        <h5><a href='{{$store->store_url}}' target="_blank" class="a_link"><em class="icon ni ni-link-alt"></em></a></h5>
     </div>
     
     
