@@ -10,7 +10,11 @@
             <div class="nk-file-info">
                 <div class="nk-file-title">
                     <div class="nk-file-icon">
-                        <a class="nk-file-icon-link" href="{{asset('storage/stores/images/'.$item->image)}}" target="_blank">
+                        <a class="nk-file-icon-link" @if($item->is_fake)
+                                   href="{{asset('frontend/images/logos/'.$item->image)}}"
+                               @else
+                                   href="{{asset('storage/stores/images/'.$item->image)}}"
+                               @endif target="_blank">
                             <span class="nk-file-icon-type">
                                <img  
                                @if($item->is_fake)
@@ -35,7 +39,12 @@
                     <a href="" class="dropdown-toggle btn btn-sm btn-icon btn-trigger" data-toggle="dropdown" aria-expanded="false"><em class="icon ni ni-more-h"></em></a>
                     <div class="dropdown-menu dropdown-menu-right" style="">
                         <ul class="link-list-plain no-bdr">
-                            <li><a href="{{asset('storage/stores/images/'.$item->image)}}" target="_blank"><em class="icon ni ni-eye"></em><span>View</span></a></li>
+                            <li><a @if($item->is_fake)
+                                   href="{{asset('frontend/images/logos/'.$item->image)}}"
+                               @else
+                                   href="{{asset('storage/stores/images/'.$item->image)}}"
+                               @endif target="_blank">
+                               <em class="icon ni ni-eye"></em><span>View</span></a></li>
                             <li><a href="" image-id={{$item->id}} class="delete-img"><em class="icon ni ni-trash"></em><span>Delete</span></a></li>
                         </ul>
                     </div>

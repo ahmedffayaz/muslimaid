@@ -4013,7 +4013,7 @@ svg { height: 100%; max-width: 100%; }
 
 .text-indigo { color: #2c3782 !important; }
 
-.bg-purple { background-color: #816bff !important; }
+.bg-purple { background-color: #816bff ; }
 
 .text-purple { color: #816bff !important; }
 

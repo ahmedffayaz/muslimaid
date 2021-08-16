@@ -60,7 +60,7 @@
     </div>
     
     <div class="nk-tb-col text-right">
-        <h5><a href='{{$click->exit_url ?? '#'}}' target="_blank"><em class="icon ni ni-link-alt"></em></a></h5>
+        <h5><a href='{{$click->exit_url ?? '#'}}' target="_blank" class="a_link"><em class="icon ni ni-link-alt"></em></a></h5>
 
         <span></span>
     </div>

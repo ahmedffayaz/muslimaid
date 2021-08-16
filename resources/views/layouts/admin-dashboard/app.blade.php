@@ -149,8 +149,16 @@ left: 0;
     background:red;
 }
 </style>
+
 @php $settings = App\Models\SiteSetting::latest()->get()->pluck('value','type'); @endphp
 @php $currency =  0; @endphp
+<!-- site -->
+@isset($settings['theme_skin'])
+    @if($settings['theme_skin']=='custom')
+        @include('layouts.admin-dashboard.includes.admin_colors')
+    @endif
+@endisset
+
 <body class="nk-body bg-lighter npc-default has-sidebar ">
     <div class="nk-app-root">
         <!-- main @s -->

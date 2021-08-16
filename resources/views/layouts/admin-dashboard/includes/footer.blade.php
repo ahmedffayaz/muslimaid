@@ -6,7 +6,7 @@
                 </div>
             <div class="nk-footer-links">
                 <ul class="nav nav-sm m-0">
-                    <li class="nav-item">Designed and Developed by <a class="nav-link pl-0" href="https://therightsw.com">The Right Software</a></li>
+                    <li class="nav-item">Designed and Developed by <a class="nav-link pl-0 a_link" href="https://therightsw.com">The Right Software</a></li>
                 </ul>
             </div>
         </div>

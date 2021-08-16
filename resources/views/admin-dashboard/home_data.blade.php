@@ -268,7 +268,7 @@
                                 <h6 class="title">Latest Cashback</h6>
                             </div>
                             <div class="card-tools">
-                              <a href="{{route('admin.commissions.index')}}" class="link ml-2">View All</a>
+                              <a href="{{route('admin.commissions.index')}}" class="link ml-2 a_link">View All</a>
                             </div>
                         </div>
                     </div>
@@ -308,7 +308,7 @@
                     @endforeach
                     @if($coms->count() > 10)
                     <span class="p-3 text-center d-block">
-                        +{{$coms->count()-10}} More  <a href="{{route('admin.commissions.index')}}" class="link ml-1">View All</a>
+                        +{{$coms->count()-10}} More  <a href="{{route('admin.commissions.index')}}" class="link ml-1 a_link">View All</a>
                     
                     </span>
                    @endif
@@ -329,7 +329,7 @@
                                 <h6 class="title">New Users</h6>
                             </div>
                             <div class="card-tools">
-                                <a href="{{route('admin.users.index')}}" class="link">View All</a>
+                                <a href="{{route('admin.users.index')}}" class="link a_link">View All</a>
                             </div>
                         </div>
                     </div>
@@ -369,7 +369,7 @@
                     @endforeach
                     @if($users->count() > 10)
                     <span class="p-3 text-center d-block">
-                        +{{$users->count()-10}} More  <a href="{{route('admin.commissions.index')}}" class="link ml-1">View All</a>
+                        +{{$users->count()-10}} More  <a href="{{route('admin.commissions.index')}}" class="link ml-1 a_link">View All</a>
                     
                     </span>
                    @endif
@@ -388,7 +388,7 @@
                             <h6 class="title">Pending Reviews</span></h6>
                         </div>
                         <div class="card-tools">
-                            <a  href="{{route('admin.reviews.index')}}">View All</a>
+                            <a  href="{{route('admin.reviews.index')}}" class="a_link">View All</a>
                             
                         </div>
                     </div>

@@ -21,13 +21,13 @@
 <div class="nk-tb-item">
     
     <div class="nk-tb-col">
-        <div class="tb-lead"><span><a href="{{route('admin.blogs.edit', $blog)}}">{{$blog->title}}</a></span></div>
+        <div class="tb-lead"><span><a href="{{route('admin.blogs.edit', $blog)}}" class="a_link">{{$blog->title}}</a></span></div>
     </div>
     <div class="nk-tb-col">
         <span>{{$blog->slug}}</span>
     </div>
     <div class="nk-tb-col">
-        <span><a href="{{route('post',$blog->slug)}}" target="_blank"><em class="icon ni ni-link-alt"></em></a></span>
+        <span><a href="{{route('post',$blog->slug)}}" target="_blank" class="a_link"><em class="icon ni ni-link-alt"></em></a></span>
     </div>
  
     

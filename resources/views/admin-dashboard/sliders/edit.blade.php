@@ -56,7 +56,7 @@
                                     </div>
                                    
                                     <div class="project-meta">
-                                        <div class="project-progress-task"><a href="{{route('admin.stores.show_store')}}?slug={{$slide->store->slug}}"><em class="icon ni ni-cart-fill"></em><span>{{$slide->store->id}} - {{$slide->store->name}}</span></a></div>
+                                        <div class="project-progress-task"><a href="{{route('admin.stores.show_store')}}?slug={{$slide->store->slug}}" class="a_link"><em class="icon ni ni-cart-fill"></em><span>{{$slide->store->id}} - {{$slide->store->name}}</span></a></div>
                                         <div class="float-right">
                                             <a class="btn btn-primary btn-sm edit-slide"  href="{{route('admin.slides.edit',$slide)}}"><em class="icon ni ni-edit"></em></a>
                                             @If(count($slider->slides)>1)
