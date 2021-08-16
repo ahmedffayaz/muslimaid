@@ -289,7 +289,7 @@
                                         <span>{{$com->user->first_name[0]}}{{$com->user->last_name[0]}}</span>
                             </div>
                             <div class="user-info">
-                                <a href="{{route('admin.users.show',$com->user)}}"><span class="lead-text">{{$com->user->first_name}} {{$com->user->last_name}}</span></a>
+                                <a href="{{route('admin.commissions.show',$com)}}"><span class="lead-text">{{$com->user->first_name}} {{$com->user->last_name}}</span></a>
                                 <span class="sub-text">{{$com->store->name}} <span class="badge badge-dim badge-pill badge-outline-primary ml-1">{{$com->store->network->name}}</span></span>
                             </div>
                             <div class="user-action nk-top-products">
@@ -350,7 +350,7 @@
                                         <span>{{$user->first_name[0]}}{{$user->last_name[0]}}</span>
                             </div>
                             <div class="user-info">
-                                <a href="{{route('admin.users.show',$user)}}"><span class="lead-text">{{$user->first_name}} {{$user->last_name}}</span></a>
+                                <a href="{{route('admin.users.show_user')}}?user_id={{$user->id}}"><span class="lead-text">{{$user->first_name}} {{$user->last_name}}</span></a>
                                 <span class="sub-text">{{$user->email}}</span>
                             </div>
                             <div class="user-action">
@@ -358,7 +358,7 @@
                                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger mr-n1" data-toggle="dropdown" aria-expanded="false"><em class="icon ni ni-more-h"></em></a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <ul class="link-list-opt no-bdr">
-                                            <li><a href="{{route('admin.users.show',$user)}}"><em class="icon ni ni-eye"></em><span>View user</span></a></li>
+                                            <li><a href="{{route('admin.users.show_user')}}?user_id={{$user->id}}"><em class="icon ni ni-eye"></em><span>View user</span></a></li>
 
                                         </ul>
                                     </div>
