@@ -40,7 +40,17 @@
             <span>{{$commission->event_date}}</span>
         </div>
         <div class="nk-tb-col  text-right">
-            <span class="tb-status text-info"> {{ $commission->statusMap->status ?? $commission->status}}</span>
+            <span class="tb-status text-info"> 
+                @if($commission->statusMap->status == "confirmed")
+                    <span class="badge badge-success">{{ $commission->statusMap->status}}</span>
+                @elseif($commission->statusMap->status == "paid")
+                    <span class="badge badge-success">{{ $commission->statusMap->status}}</span>
+                @elseif($commission->statusMap->status == "failed")
+                    <span class="badge badge-danger">{{ $commission->statusMap->status}}</span>
+                @elseif($commission->statusMap->status == "pending")
+                    <span class="badge badge-info">{{ $commission->statusMap->status}}</span>
+                @endif
+            </span>
         </div>
         
        
@@ -53,7 +63,8 @@
                         <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <ul class="link-list-opt no-bdr">
-                                <li><a href="{{route('admin.commissions.edit', $commission)}}"><em class="icon ni ni-edit"></em><span>Edit</span></a></li>
+                                <li><a href="{{route('admin.commissions.edit', $commission)}}" cashback-id='{{$commission->id}}' class='cashback-edit'><em
+                                        class="icon ni ni-edit"></em><span>Edit</span></a></li>
       
                             </ul>
                         </div>
@@ -79,3 +90,53 @@
     <p>No cashbacks found</p>
 @endif
 </div>
+
+<!-- @@ Cashback Modal @e -->
+<div class="modal fade" tabindex="-1" role="dialog" id="cashback-modal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+
+
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Edit Cashback</span></div>
+                        {{-- <div class="nk-file-name-sub">Project</div> --}}
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="cashback" class=" p-4">
+
+            </div>
+        </div><!-- .modal-content -->
+    </div><!-- .modla-dialog -->
+</div><!-- .modal -->
+
+<script>
+    $(document).ready(function(){
+        $(document).on('click', '.cashback-edit', function(event){
+            event.preventDefault();
+            $('#cashback').html(`<div class="text-center">
+                <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>`);
+            
+            var id = $(this).attr('cashback-id');
+            var pageurl = $(this).attr('href');
+            var _token = $("input[name=_token]").val();
+            $.ajax({
+                
+                url:pageurl,
+                method:"GET",
+                data:{_token:_token},
+                success:function(data)
+                {
+                    $('#cashback-modal').modal('show');
+                    $('#cashback').html(data);
+                }
+            });
+        });
+    });
+</script>

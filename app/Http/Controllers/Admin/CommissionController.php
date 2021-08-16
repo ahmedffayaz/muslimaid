@@ -107,9 +107,11 @@ class CommissionController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(UserCashback $commission)
     {
-        //
+        $history = $commission->statusHistory;
+        $statuses = \DB::table('cashback_statuses')->latest()->get();
+        return view('admin-dashboard.commissions.show', compact('commission','history','statuses'))->render();
     }
 
     /**
