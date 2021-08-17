@@ -154,7 +154,13 @@
                 contentType: false,
                 success:function(data){
                     $('#cashback-modal').modal('hide');
-                    location.reload()
+                    
+                    (function(NioApp, $){
+                    'use strict';
+                    toastr.clear();
+                    NioApp.Toast(data.message, data.updated);
+                    })(NioApp, jQuery);
+                    fetchCashbacks();
                 }
             });
         });

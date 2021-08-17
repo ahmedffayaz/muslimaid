@@ -75,6 +75,8 @@
             <span class="tb-status badge badge-success">{{ $commission->statusMap->status ?? $commission->status}}</span>
         @elseif(($commission->statusMap->status ?? $commission->status) == "paid")
             <span class="tb-status badge badge-success">{{ $commission->statusMap->status ?? $commission->status}}</span>
+        @elseif(($commission->statusMap->status ?? $commission->status) == "processing")
+            <span class="tb-status badge badge-info">{{ $commission->statusMap->status ?? $commission->status}}</span>
         @elseif(($commission->statusMap->status ?? $commission->status) == "failed")
             <span class="tb-status badge badge-danger">{{ $commission->statusMap->status ?? $commission->status}}</span>
         @elseif(($commission->statusMap->status ?? $commission->status) == "pending")
