@@ -1,5 +1,5 @@
 <!doctype html>
-<title>Site Maintenance</title>
+<title>Error 404</title>
 <style>
   body { text-align: center; padding: 40px; }
   h1 { font-size: 50px; margin-block-start: 0%}

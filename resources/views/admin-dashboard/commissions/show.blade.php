@@ -78,7 +78,7 @@
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">Store</span>
-                                                <span class="profile-ud-value"><a href="{{route('admin.users.show_user')}}?user_id={{$commission->user->id}}" class="a_link">{{$commission->store->id}} - @if($commission->store->name != 'unnamed') {{$commission->store->name}} @endif </a></span>
+                                                <span class="profile-ud-value"><a href="{{route('admin.stores.show_store')}}?slug={{$commission->store->slug}}" class="a_link">{{$commission->store->id}} - @if($commission->store->name != 'unnamed') {{$commission->store->name}} @endif </a></span>
                                             </div>
                                         </div>
                                         <div class="profile-ud-item">

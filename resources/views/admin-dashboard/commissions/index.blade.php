@@ -102,7 +102,6 @@
                     </div>
                 </div>
                 
-                @include('flash::message')
                 <div class="nk-block">
                     <div class="card card-stretch">
                         <div class="card-inner-group">
@@ -340,5 +339,42 @@ $(document).ready(function(){
             });
     });
 });
-</script>  
+</script> 
+<script>
+    $(document).ready(function(){
+        $(document).on('submit', '.update_cashback_form',function(e){
+            e.preventDefault();
+            var page = $('.pagination li.active span').html();
+            var pageurl = "{{route('admin.commissions.fetch')}}?page="
+            var _token = $("input[name=_token]").val();
+            var form_action = $(this).attr('action');
+            var formdata = new FormData(this);
+            $.ajax({
+                url:form_action,
+                method:"POST",
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success:function(data){
+                    $('#cashback-modal').modal('hide');
+                    (function(NioApp, $){
+                    'use strict';
+                    toastr.clear();
+                    NioApp.Toast(data.message, data.updated);
+                    })(NioApp, jQuery);
+                    
+                    $.ajax({
+                        url:pageurl+page,
+                        method:"POST",
+                        data:{_token:_token, page:page},
+                        success:function(data){
+                            $('#table-data').html(data);
+                            $('html, body').animate({ scrollTop: 0 }, 'slow');
+                        }
+                    });
+                }
+            });
+        });
+    });
+</script>
 @endpush

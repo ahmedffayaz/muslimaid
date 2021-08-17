@@ -155,13 +155,12 @@ class CommissionController extends Controller
                 'status' => $request->status,
                 
             ]); 
-            flash()->success('Cashback updated');
-            return redirect()->route('admin.commissions.index');
+            return array('message'=>'Cashback updated',
+                'updated'=>'success');  
 
         } catch (\Throwable $th) {
-            flash()->error($th->getMessage());
-            // flash()->error('Error while updating the cashback');
-            return redirect()->route('admin.commissions.index');
+            return array('message'=>'Something went wrong!',
+                        'updated'=>'error');
 
         }
        
