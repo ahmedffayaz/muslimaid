@@ -1,5 +1,5 @@
 
-<form action="{{route('admin.commissions.update', $commission)}}" class="gy-3 form-validate is-alter" method="POST">
+<form action="{{route('admin.commissions.update', $commission)}}" class="gy-3 form-validate is-alter update_cashback_form" method="POST">
     @csrf
     @method('PUT')
     <div class="row g-4">
@@ -52,7 +52,7 @@
         
         <div class="col-12">
             <div class="form-group">
-                <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                <button type="submit" class="btn btn-lg btn-primary c_update">Update</button>
             </div>
         </div>
     </div>

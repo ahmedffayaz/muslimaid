@@ -1,6 +1,6 @@
 @extends('layouts.frontend.app')
 @section('content')
-
+@if(!isset($page->title)){{abort(404)}} @endif
 <div class="block block-product-columns mt-5">
     <div class="container">
         <div class="row">

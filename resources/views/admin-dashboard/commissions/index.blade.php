@@ -340,5 +340,26 @@ $(document).ready(function(){
             });
     });
 });
-</script>  
+</script> 
+
+<script>
+    $(document).ready(function(){
+        $(document).on('submit', '.update_cashback_form',function(e){
+            e.preventDefault();
+            var form_action = $(this).attr('action');
+            var formdata = new FormData(this);
+            $.ajax({
+                url:form_action,
+                method:"POST",
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success:function(data){
+                    $('#cashback-modal').modal('hide');
+                    location.reload()
+                }
+            });
+        });
+    });
+</script>
 @endpush
