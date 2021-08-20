@@ -52,7 +52,9 @@
                                     </div>
                                     <div class="project-details">
                                         <p>{{$slide->description}}</p>
+                                        @if($slide->store->cashback)
                                         <p>@if($slide->store->cashback->type=='fixed'){{$slide->store->cashback->currency}} @endif{{$slide->store->cashback->sale_commission}}@if($slide->store->cashback->type=='percentage')%@endif Cashback</p>
+                                    @endif
                                     </div>
                                    
                                     <div class="project-meta">
