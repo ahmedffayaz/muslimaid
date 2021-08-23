@@ -289,7 +289,7 @@
                                         <span>{{$com->user->first_name[0]}}{{$com->user->last_name[0]}}</span>
                             </div>
                             <div class="user-info">
-                                <a href="{{route('admin.commissions.show',$com)}}"><span class="lead-text">{{$com->user->first_name}} {{$com->user->last_name}}</span></a>
+                                <span class="lead-text">{{$com->user->first_name}} {{$com->user->last_name}}</span>
                                 <span class="sub-text">{{$com->store->name}} <span class="badge badge-dim badge-pill badge-outline-primary ml-1">{{$com->store->network->name}}</span></span>
                             </div>
                             <div class="user-action nk-top-products">

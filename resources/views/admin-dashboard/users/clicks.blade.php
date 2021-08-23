@@ -26,7 +26,7 @@
             <span>{{$click->created_at}}</span>
         </div>
         <div class="nk-tb-col text-right pr-1">
-            {!! $click->cashback ? '<span class="tb-status text-success">converted</span>' : '<span class="tb-status text-danger">Not converted</span>'!!}
+            {!! $click->cashback ? '<span class="tb-status badge badge-success">converted</span>' : '<span class="tb-status badge badge-danger">Not converted</span>'!!}
     
         </div>
         
