@@ -16,7 +16,7 @@
             </nav>
         </div>
         <div class="page-header__title">
-            <h1>Latest News</h1>
+            <h1>Blog</h1>
         </div>
     </div>
 </div>
