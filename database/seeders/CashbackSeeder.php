@@ -46,7 +46,6 @@ class CashbackSeeder extends Seeder
         $change_status = CashbackStatusChange::create([
             'user_cashback_id'=>$commission->id,
             'cashback_status_id'=>$commission->status
-
         ]);
         }
     }
