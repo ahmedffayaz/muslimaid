@@ -14,6 +14,8 @@ use App\Models\ExitClick;
 use App\Models\ImporterSetting;
 use Illuminate\Support\Facades\DB;
 use App\Jobs\Importer;
+use App\Models\SiteSetting;
+use App\Jobs\WebgainsImporter;
 
 class ImporterController extends Controller
 {
@@ -44,8 +46,13 @@ class ImporterController extends Controller
             'last_import_at'   => \Carbon\Carbon::now()->toDateTimeString()
           
         ]);
-       
-        $importer = new Importer();
+
+        if($request->network_name == "CJ"){
+            $importer = new Importer();
+        }else if($request->network_name == "Webgains"){
+            $importer = new WebgainsImporter();
+        }
+        
         dispatch($importer);
         // flash()->success('Importer running in background');
         // return redirect()->route('admin.stores.index');
@@ -665,6 +672,12 @@ class ImporterController extends Controller
         return 'Settings saved';
 
 
+    }
+
+    public function importerSettingForm($id){
+        $network = Network::where('id',$id)->first();
+        $settings = SiteSetting::latest()->get()->pluck('value','type');
+        return view('admin-dashboard.networks.importer_setting_form', compact('network','settings'));
     }
    
 }

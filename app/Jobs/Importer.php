@@ -48,6 +48,7 @@ class Importer implements ShouldQueue
         //fetching importer settings
         $network = Network::where('id',1)->first();
         $setting = ImporterSetting::where('network_id',1)->first();
+        $settings = SiteSetting::latest()->get()->pluck('value','type');
         
 
         //importing advertisers/stores/merchents
@@ -61,12 +62,12 @@ class Importer implements ShouldQueue
 
                 $ch = curl_init();
 
-                curl_setopt($ch, CURLOPT_URL, 'https://advertiser-lookup.api.cj.com/v2/advertiser-lookup?requestor-cid='.$network->requestor_cid.'&advertiser-ids=joined&records-per-page=100&page-number='.$page);
+                curl_setopt($ch, CURLOPT_URL, 'https://advertiser-lookup.api.cj.com/v2/advertiser-lookup?requestor-cid='.$settings['cj_requestor_id'].'&advertiser-ids=joined&records-per-page=100&page-number='.$page);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 
                 $headers = array();
-                $headers[] = 'Authorization: Bearer '.$network->token;
+                $headers[] = 'Authorization: Bearer '.$settings['cj_authorization_token'];
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
                 $result = curl_exec($ch);
@@ -101,13 +102,13 @@ class Importer implements ShouldQueue
                         
                         $ch = curl_init();
 
-                        curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id='.$network->website_id.'&link-type=banner&advertiser-ids='.$advertiser->{'advertiser-id'});
+                        curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id='.$settings['cj_website_id'].'&link-type=banner&advertiser-ids='.$advertiser->{'advertiser-id'});
                         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
 
 
                         $headers = array();
-                        $headers[] = 'Authorization: Bearer '.$network->token;
+                        $headers[] = 'Authorization: Bearer '.$settings['cj_authorization_token'];
                         curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 
                         $link_result = curl_exec($ch);
@@ -404,9 +405,8 @@ class Importer implements ShouldQueue
                         }
 
                         if(!$store->override_categories){
-                            if(count($store->categories)){
-                                $store->categories()->delete();
-                            }
+
+                            DB::table('category_store')->where('store_id', $store->id)->delete();
 
                             if(!empty($advertiser->{'primary-category'}->{'parent'})){
 
@@ -506,9 +506,9 @@ class Importer implements ShouldQueue
             CURLOPT_FOLLOWLOCATION => true,
             CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
             CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS =>'{ publisherCommissions(forPublishers: ["'.$network->requestor_cid.'"], sincePostingDate:"'.$sincePostingDate.'",beforePostingDate:"'.$beforePostingDate.'"){count payloadComplete records {actionTrackerName websiteName advertiserName advertiserId pubCommissionAmountPubCurrency postingDate pubCommissionAmountUsd saleAmountPubCurrency actionStatus validationStatus clickDate eventDate shopperId   items { quantity perItemSaleAmountPubCurrency totalCommissionPubCurrency  }}}}',
+            CURLOPT_POSTFIELDS =>'{ publisherCommissions(forPublishers: ["'.$settings['cj_requestor_id'].'"], sincePostingDate:"'.$sincePostingDate.'",beforePostingDate:"'.$beforePostingDate.'"){count payloadComplete records {actionTrackerName websiteName advertiserName advertiserId pubCommissionAmountPubCurrency postingDate pubCommissionAmountUsd saleAmountPubCurrency actionStatus validationStatus clickDate eventDate shopperId   items { quantity perItemSaleAmountPubCurrency totalCommissionPubCurrency  }}}}',
             CURLOPT_HTTPHEADER => array(
-                'Authorization: Bearer '.$network->token,
+                'Authorization: Bearer '.$settings['cj_authorization_token'],
                 'Content-Type: application/json'
             ),
             ));
@@ -557,7 +557,7 @@ class Importer implements ShouldQueue
                     
                         $commission = UserCashback::create([
                             'store_id'=>$store->id,
-                            'user_id'=> $click->user_id ?? 01,
+                            'user_id'=> $click->user_id ?? 1,
                             'exit_click_id'=>$click_id,
                             'amount'=>round($cashback_amount_for_user,2),
                             'network_commission'=>$cashback['pubCommissionAmountPubCurrency'],
@@ -588,7 +588,7 @@ class Importer implements ShouldQueue
                             'store_id'=>$store->id,
                             'user_id'=> $click->user_id ?? 1,
                             'exit_click_id'=>$click_id,
-                            'amount'=>round($cashback_amount_for_user,3),
+                            'amount'=>round($cashback_amount_for_user,2),
                             'network_commission'=>$cashback['pubCommissionAmountPubCurrency'],
                             'order_value'=>$cashback['saleAmountPubCurrency'],
                             'status'=>$status,
@@ -612,11 +612,11 @@ class Importer implements ShouldQueue
             while($fetched_records < $total_records){ 
             
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id='.$network->website_id.'&promotion-type=coupon&advertiser-ids=joined&records-per-page=100&page-number='.$page);
+                curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id='.$settings['cj_website_id'].'&promotion-type=coupon&advertiser-ids=joined&records-per-page=100&page-number='.$page);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
                 $headers = array();
-                $headers[] = 'Authorization: Bearer '.$network->token;
+                $headers[] = 'Authorization: Bearer '.$settings['cj_authorization_token'];
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
                 
                 $link_result = curl_exec($ch);
@@ -714,11 +714,11 @@ class Importer implements ShouldQueue
             while($fetched_records < $total_records){ 
 
                 $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id='.$network->website_id.'&promotion-type=sale/discount&advertiser-ids=joined&records-per-page=100&page-number='.$page);
+                curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id='.$settings['cj_website_id'].'&promotion-type=sale/discount&advertiser-ids=joined&records-per-page=100&page-number='.$page);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
                 $headers = array();
-                $headers[] = 'Authorization: Bearer '.$network->token;
+                $headers[] = 'Authorization: Bearer '.$settings['cj_authorization_token'];
                 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
                 
                 $link_result = curl_exec($ch);

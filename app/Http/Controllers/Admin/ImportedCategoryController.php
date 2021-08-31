@@ -125,10 +125,10 @@ class ImportedCategoryController extends Controller
                 ->update([
                     'category_id' => $importedcategory->mapped_to,
                     ]);
-                    $stores = DB::table('category_store')
-                    ->where('network_category_id',$importedcategory->id)->get();
-                    $this->assignChildCategories($mapped_category,$importedcategory,$stores); 
-                    $this->assignParentCategories($mapped_category,$importedcategory,$stores);
+                    // $stores = DB::table('category_store')
+                    // ->where('network_category_id',$importedcategory->id)->get();
+                    // $this->assignChildCategories($mapped_category,$importedcategory,$stores); 
+                    // $this->assignParentCategories($mapped_category,$importedcategory,$stores);
 
              }   
              flash()->success('Category updated');
