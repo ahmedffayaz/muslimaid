@@ -65,9 +65,14 @@ class ClickController extends Controller
 
         ]);
 
-        $click->exit_url=$request->input('url').'?'.$store->network->click_ref.'='.$click->id;
+        if($store->network->id == 1){
+            $click->exit_url=$request->input('url').'?'.$store->network->click_ref.'='.$click->id;
         $click->update();
-
+        }else if($store->network->id == 2){
+            $click->exit_url=$request->input('url').'&'.$store->network->click_ref.'='.$click->id;
+        $click->update();
+        }
+        
         $url = $click->exit_url;
 
         if($request->input('voucher_id')){
@@ -76,8 +81,6 @@ class ClickController extends Controller
                 'voucher_id'=>$request->input('voucher_id'),
             ]);
         }
-
-
         return view('frontend.pages.exit', compact('store','url'));
 
         // return redirect($click->exit_url);

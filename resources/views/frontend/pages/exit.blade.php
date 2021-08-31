@@ -56,7 +56,7 @@
 <script type="text/javascript">
     
     var delay = 3000; 
-    var url = '{{$url}}'
+    var url = '{!!$url!!}'
     setTimeout(function(){ window.location = url; }, delay);
 
     

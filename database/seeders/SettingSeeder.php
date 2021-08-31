@@ -63,7 +63,14 @@ class SettingSeeder extends Seeder
                             'Google Client Secret'=>'tZBziwUoyKgzbioTPKGTfYeL',
                             'Google Url'=>'http://localhost:8000/login/google/callback',
                             'Mailchimp Api Key'=>'d648b62b49e2fb3c5b58c5c2f83f52a5-us6',
-                            'Mailchimp List Id'=>'23961d753f'
+                            'Mailchimp List Id'=>'23961d753f',
+                            'CJ Website ID'=>'100424737',
+                            'CJ Requestor ID'=>'5835313',
+                            'CJ Authorization Token' => '7v15dz0jk80tj3wwp5kmbvyx91',
+                            'Webgains API Key' => 'ef13cee1a4c5ec9ee5864d0e2d535604',
+                            'Webgains campaignId' => '1462945',
+                            'Webgains User Name' => 'khuramj',
+                            'Webgains Password' => 'p9bXV7w2e@nqhQ2',
                             );
 
         foreach ($settings as $key => $value) {

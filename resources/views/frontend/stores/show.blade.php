@@ -258,7 +258,7 @@
                             <div class="product-tabs__content">
                                 <div class="product-tabs__pane product-tabs__pane--active" id="tab-description">
                                     <h4>Vouchers</h4>
-                                    @foreach ($store->vouchers->unique('link_name')->take(3) as $voucher)
+                                    @foreach ($store->vouchers->take(3) as $voucher)
                                     <div class="product-card mb-2 p-4">
                                         <div class="row">
                                             <div class="col-md-8 align-items-center align-self-center">
@@ -296,7 +296,7 @@
                                     @endforeach
                                     
                                     <div class="remaining_voucher" style="display: none;">
-                                    @foreach ($store->vouchers->unique('link_name')->skip(3) as $voucher)
+                                    @foreach ($store->vouchers->skip(3) as $voucher)
                                     <div class="product-card mb-2 p-4">
                                         <div class="row">
                                             <div class="col-md-8 align-items-center align-self-center">

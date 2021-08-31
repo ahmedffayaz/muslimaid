@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Network;
+use App\Models\SiteSetting;
 use App\Models\ImportedCategory;
 use App\Models\Category;
 use Exception;
@@ -31,7 +32,8 @@ class NetworkController extends Controller
     {
         $queue = \DB::table('jobs')->get();
         $networks = Network::all();
-        return view('admin-dashboard.networks.index', compact('networks','queue'));
+        $settings = SiteSetting::latest()->get()->pluck('value','type');
+        return view('admin-dashboard.networks.index', compact('networks','queue','settings'));
     }
 
     /**
@@ -105,27 +107,27 @@ class NetworkController extends Controller
      */
     public function update(Request $request, Network $network)
     {
-        try {
-            $network->update([
-                // 'name'=>$request->input('network_name'),
-                // 'click_ref'=>$request->input('click_ref'),
-                // 'description'=>$request->input('network_name'),
-                'token'=>$request->input('token'),
-                'website_id'=>$request->input('website_id'),
-                'requestor_cid'=>$request->input('requestor_cid'),
-            ]);
+        // try {
+        //     $network->update([
+        //         // 'name'=>$request->input('network_name'),
+        //         // 'click_ref'=>$request->input('click_ref'),
+        //         // 'description'=>$request->input('network_name'),
+        //         'token'=>$request->input('token'),
+        //         'website_id'=>$request->input('website_id'),
+        //         'requestor_cid'=>$request->input('requestor_cid'),
+        //     ]);
 
-            flash()->success('Network updated');
-            return redirect()->route('admin.networks.index');
+        //     flash()->success('Network updated');
+        //     return redirect()->route('admin.networks.index');
            
             
-        } catch (Exception $exception) {
+        // } catch (Exception $exception) {
 
-            flash()->error('Error while updating the network');
-            return redirect()->route('admin.networks.index');
+        //     flash()->error('Error while updating the network');
+        //     return redirect()->route('admin.networks.index');
 
             
-        }
+        // }
     }
 
     /**
@@ -144,17 +146,16 @@ class NetworkController extends Controller
         $categories = ImportedCategory::where('network_id',$network->id)->latest()->get();
         $network_categories = ImportedCategory::where('network_id',$network->id)->latest()->get();
         $store_categories = Category::latest()->get();
-    
         return view('admin-dashboard.imported-categories.categories', compact('categories','network','network_categories','store_categories','route'));
     }
 
 
     function fetch(Request $request)
     {
-        if($request->ajax()){
-            $categories = ImportedCategory::where('network_id',1)->latest()->paginate(30);
-            return view('admin-dashboard.imported-categories.index_data', compact('categories'))->render();
-        }
+        // if($request->ajax()){
+        //     $categories = ImportedCategory::where('network_id',1)->latest()->paginate(30);
+        //     return view('admin-dashboard.imported-categories.index_data', compact('categories'))->render();
+        // }
     }
 
     public function exportCsv(Network $network)
