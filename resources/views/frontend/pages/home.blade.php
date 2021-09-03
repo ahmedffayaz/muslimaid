@@ -117,15 +117,25 @@
 
                          <div class="form-group">
                              <label>Email address</label>
-                             <input type="email" class="form-control" placeholder="Enter email" name="email">
+                             <input type="email" class="form-control" placeholder="Enter email" name="email" required>
+                             @error('email')
+                            <span class="invalid-feedback d-block" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                          </div>
                          <div class="form-group">
                              <label>Password</label>
-                             <input type="password" class="form-control" placeholder="Password" name="password">
+                             <input type="password" class="form-control" placeholder="Password" name="password" required>
+                             @error('password')
+                            <span class="invalid-feedback d-block" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror
                          </div>
                          <div class="form-group">
                              <label>Repeat Password</label>
-                             <input type="password" class="form-control" placeholder="Password" name="password_confirmation" >
+                             <input type="password" class="form-control" placeholder="Password" name="password_confirmation" required>
                          </div>
                          <button type="submit" class="btn btn-primary mt-1">Join now for free</button>
                     </form>

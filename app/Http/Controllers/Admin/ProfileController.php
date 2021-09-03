@@ -75,6 +75,15 @@ class ProfileController extends Controller
      */
     public function update(Request $request, User $profile)
     {
+        $validated = $request->validate([
+            'first_name' => 'required|regex:/^[A-Za-z ]+$/',
+            'last_name' => 'required|regex:/^[A-Za-z ]+$/',
+            // 'phone' => 'min:10|numeric|max:15',
+            // 'address' => 'min:10'
+        ],$messages = [
+            'first_name.required' => 'First name is required.',
+            'last_name.required' => 'Last name is required.'
+        ]);
         $profile->update($request->input());
 
         if($request->has('avatar')){

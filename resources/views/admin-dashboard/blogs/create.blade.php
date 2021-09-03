@@ -16,12 +16,21 @@
                                 </div>
                             </div>
                         </div>
+                        @if ($errors->any())
+                        <div class="alert alert-danger">
+                          <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                          </ul>
+                        </div>
+                        @endif
                         <div class="card">
                             <div class="card-inner">
                                 <div class="card-head">
                                     {{-- <h5 class="card-title">Blog</h5> --}}
                                 </div>
-                                <form action="{{route('admin.blogs.store')}}" class="" method="POST">
+                                <form action="{{route('admin.blogs.store')}}" class="form-validate is-alter" method="POST">
                                     @csrf
                                     <div class="row g-4">
                                         <div class="col-lg-12">
@@ -226,5 +235,21 @@
         }
       })
     });
-  </script> 
+  </script>
+  
+  <script>
+        jQuery.validator.addMethod("regex", function(value, element) {
+          return this.optional(element) || /^[\w. ]+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+        
+        $('.form-validate').validate({
+          rules: {
+            title: {
+              required: true,
+              regex: true
+            }
+          }
+        });
+  </script>
+
 @endpush

@@ -7,6 +7,15 @@
         <div class="nk-content-inner">
             <div class="nk-content-body">
                 <div class="components-preview wide-md mx-auto">
+                    @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                    @endif
                     <div class="nk-block-head nk-block-head-lg pb-2">
                         <div class="nk-block-between">
                         <div class="nk-block-head-content">
@@ -58,7 +67,7 @@
                                                 <h5 class="title">Profile Settings</h5>
                                                 {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
-                                            <form action="{{route('admin.profile.update', $profile)}}" class="gy-3 form-settings" method="POST" enctype="multipart/form-data">
+                                            <form action="{{route('admin.profile.update', $profile)}}" class="gy-3 form-settings form-validate is-alter" method="POST" enctype="multipart/form-data">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="row g-3 align-center">
@@ -91,14 +100,14 @@
                                                     <div class="col-lg-4">
                                                         <div class="form-group">
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" name="first_name" value="{{$profile->first_name}}" placeholder="First name">
+                                                                <input type="text" class="form-control" name="first_name" value="{{$profile->first_name}}" placeholder="First name" required>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-4">
                                                         <div class="form-group">
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" name="last_name" value="{{$profile->last_name}}" placeholder="Last name">
+                                                                <input type="text" class="form-control" name="last_name" value="{{$profile->last_name}}" placeholder="Last name" required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -113,7 +122,7 @@
                                                     <div class="col-lg-8">
                                                         <div class="form-group">
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="email" disabled name="email" value="{{$profile->email}}" placeholder="Email">
+                                                                <input type="text" class="form-control" id="email" disabled name="email" value="{{$profile->email}}" placeholder="Email" required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -317,6 +326,33 @@ $(document).ready( function() {
       reader.readAsDataURL(input.files[0]);
   }
 }
+</script>
+
+<script>
+    jQuery.validator.addMethod("regex", function(value, element) {
+          return this.optional(element) || /^[A-Za-z ]+$/i.test(value);
+        }, "Only alphabetic name is allow");
+        
+        $('.form-validate').validate({
+          rules: {
+            first_name: {
+                required: true,
+                regex: true
+            },
+            last_name: {
+                required: true,
+                regex: true
+            },
+            email: {
+                required: true,
+                email: true
+            },
+            phone: {
+                number: true,
+                maxlength: 15
+            },
+          }
+        });
 </script>
 
 @endpush
