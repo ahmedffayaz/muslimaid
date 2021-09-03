@@ -35,6 +35,15 @@
             </div>
             <div class="col-12 col-lg-9 mt-4 mt-lg-0">
                 @include('flash::message')
+                @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
 
                 <div class="card">
                     <div class="card-header">
@@ -92,3 +101,40 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+    
+<script>
+    jQuery.validator.addMethod("regex", function(value, element) {
+          return this.optional(element) || /^[A-Za-z ]+$/i.test(value);
+        }, "Only alphabetic name is allow");
+        
+        $('.form-validate').validate({
+            errorClass: 'invalid-feedback d-block',
+            rules: {
+                firstname: {
+                    required: true,
+                    regex: true
+                },
+                lastname: {
+                required: true,
+                regex: true
+                },
+                email: {
+                    required: true,
+                    email: true
+                },
+                phone: {
+                    number: true,
+                    maxlength: 15
+                },
+            },
+            submitHandler: function(form) {
+                if ($(form).valid())
+                form.submit();
+                return false;
+            }
+        });
+</script>
+
+@endpush

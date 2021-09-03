@@ -38,7 +38,7 @@
                                     </span>
                                     @enderror
                                     <small class="form-text text-muted">
-                                        <a href="">Forgotten Password</a>
+                                        <a href="{{route('password.request')}}">Forgotten Password</a>
                                     </small>
 
                                 </div>

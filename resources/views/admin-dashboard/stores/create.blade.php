@@ -1,7 +1,6 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
     
-
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
@@ -10,6 +9,15 @@
                     <div class="nk-block nk-block-lg">
                         <div class="nk-block-head">
                             <div class="nk-block-head-content">
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
                                 <h4 class="title nk-block-title">Add Store</h4>
                                 <div class="nk-block-des">
                                     {{-- <p>You can make style out your....</p> --}}
@@ -143,5 +151,30 @@
         desc.value = quill.root.innerHTML;
        
         
-      });</script>
+      });
+      </script>
+
+      <script>
+            $('.form-validate').validate({
+                errorClass: 'invalid-feedback d-block',
+                rules: {
+                    store_name: {
+                        required: true,
+                    },
+                    store_url: {
+                        required: true,
+                        url: true
+                    },
+                    tracking_url: {
+                        required: true,
+                        url: true
+                    }
+                },
+                submitHandler: function(form) {
+                    if ($(form).valid())
+                    form.submit();
+                    return false;
+                }
+            });
+    </script>
 @endpush

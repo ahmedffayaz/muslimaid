@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Blog;
+use Illuminate\Support\Facades\DB;
 
 class BlogController extends Controller
 {
@@ -39,13 +40,35 @@ class BlogController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'title' => 'required|regex:/^[\w. ]+$/',
+            'filepath' => 'required',
+        ],$messages = [
+            'title.required' => 'The Title field is required.',
+            'filepath.required' => 'The Featured Image is required.',
+        ]);
         $blog = new Blog;
         $blog->title = $request->title;
-        $blog->slug = \Str::slug($request->title);
+        $blog->slug = \Str::slug($request->title,'_');
         $blog->excerpt = $request->excerpt;
         $blog->lb_content = $request->content;
         $blog->featured_image = $request->filepath;
         $blog->save();
+
+        $inserted_blog = Blog::where('title', $request->title)->get();
+        $counter = count($inserted_blog);
+        
+        if($counter>1){
+            if($blog->slug == ''){
+                $blog->slug = $blog->id;
+                $blog->save();
+            }else{
+                $blog->slug = $blog->slug."_".$counter;
+                $blog->save();
+            }
+        }
+        
+
         flash()->success('New blog post created successfully');
         return redirect()->route('admin.blogs.index');
     }

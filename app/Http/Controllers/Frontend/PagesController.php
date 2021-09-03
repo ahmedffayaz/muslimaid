@@ -8,7 +8,7 @@ use App\Models\Store;
 use App\Models\Category;
 use App\Models\Page;
 use App\Models\Blog;
-use App\Models\contactForm;
+use App\Models\ContactForm;
 use Harimayco\Menu\Models\Menus;
 use Harimayco\Menu\Models\MenuItems;
 use Illuminate\Support\Facades\Mail;
@@ -194,7 +194,7 @@ class PagesController extends Controller
 
 
     public function contactForm(Request $request){
-        $contact = contactForm::create($request->all());
+        $contact = ContactForm::create($request->all());
 
         $user_email_template = EmailTemplate::where('key','user_new_contact')->first(); 
         $admin_email_template = EmailTemplate::where('key','admin_new_contact')->first(); 
@@ -229,7 +229,7 @@ class PagesController extends Controller
             $message->to($email_data['email'], $email_data['name'])
                 ->subject($email_data['subject']);
         });
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Thanks for contact us.');
     }
 
     public function allStores(){

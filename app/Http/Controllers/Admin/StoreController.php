@@ -67,12 +67,12 @@ class StoreController extends Controller
             'store_name' => 'required|max:255',
             'network_id' => 'required',
             // 'category_id' => 'required',
-            // 'tracking_url' => 'required',
-            'store_url' => 'required',
+            'tracking_url' => 'required|url',
+            'store_url' => 'required|url',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('admin.stores.index')
+            return redirect()->back()
                         ->withErrors($validator)
                         ->withInput();
         }
@@ -381,6 +381,10 @@ class StoreController extends Controller
     public function createCashback(Request $request)
     {
         $cashback = StoreCashback::create($request->all());
+        $existing_cashbacks = StoreCashback::where('store_id', $request->store_id)->get();
+        if(count($existing_cashbacks) == 1){
+            $cashback->update(['default' => '1']);
+        }
         return true;
     }
     function fetchImages(Request $request)
