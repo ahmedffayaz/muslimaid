@@ -83,7 +83,7 @@ class AuthController extends Controller
         ]);
 
         if (!Auth::attempt($attr)) {
-            return $this->error('Credentials not match', 401);
+            return $this->error('Credentials did not match', 401);
         }
 
         return $this->success([
