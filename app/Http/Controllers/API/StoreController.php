@@ -9,6 +9,7 @@ use App\Models\Store;
 use App\Models\Slider;
 use App\Http\Resources\StoreResource;
 use App\Http\Resources\SliderResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
 
 class StoreController extends Controller
 {
@@ -52,9 +53,22 @@ class StoreController extends Controller
      */
     public function show($slug)
     {
-        $store = Store::where('slug',$slug)->first();
+        try{
+            $store = Store::where('slug',$slug)->firstOrFail();
+            
+            
+        } catch (ModelNotFoundException $ex) { // Store not found
 
+            $arr = array("status" => 404, "message" => 'Store not found', "data" => array());
+
+            return \Response::json($arr);
+        } catch (Exception $ex) { // Anything that went wrong
+            $arr = array("status" => 500, "message" => 'Something went wrong!', "data" => array());
+
+            return \Response::json($arr);
+        }
         return new StoreResource($store);
+
     }
 
     /**
