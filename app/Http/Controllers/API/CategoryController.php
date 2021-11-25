@@ -16,7 +16,7 @@ class CategoryController extends Controller
 
 
     public function index(){
-        return CategoryResource::collection(Category::latest()->get());
+        return CategoryResource::collection(Category::where('parent_id',0)->latest()->get());
     }
     public function show($slug){
 
@@ -25,5 +25,9 @@ class CategoryController extends Controller
 
         return StoreResource::collection($stores);
 
+    }
+    public function childCategories($slug){
+        $parent_category = Category::with('stores')->where('slug',$slug)->first();
+        return CategoryResource::collection(Category::where('parent_id',$parent_category->id)->latest()->get());
     }
 }
