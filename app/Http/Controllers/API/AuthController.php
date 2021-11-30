@@ -68,11 +68,12 @@ class AuthController extends Controller
         });
         return $this->success([
             'token' => $user->createToken('API Token')->plainTextToken,
+            'id'=>$user->id,
             "first_name" => $user->first_name,
             "last_name" => $user->last_name,
             "email" => $user->email,
             "registration_type" => $user->registration_type,
-        ]);
+        ],'User registered successfully');
     }
 
     public function login(Request $request)
@@ -87,13 +88,14 @@ class AuthController extends Controller
         }
 
         return $this->success([
-            'token' => auth()->user()->createToken('API Token')->plainTextToken,
+            'token'      => auth()->user()->createToken('API Token')->plainTextToken,
+            'id'         => auth()->user()->id,
             'first_name' => auth()->user()->first_name,
-            'last_name' => auth()->user()->last_name,
-            'email' => auth()->user()->email,
-            'phone' => auth()->user()->phone,
-            'intro' => auth()->user()->intro,
-        ]);
+            'last_name'  => auth()->user()->last_name,
+            'email'      => auth()->user()->email,
+            'phone'      => auth()->user()->phone,
+            'intro'      => auth()->user()->intro,
+        ],'User logged in successfully', 200);
     }
 
     public function logout()
