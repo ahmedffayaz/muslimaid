@@ -112,4 +112,9 @@ class StoreController extends Controller
         return SliderResource::collection(Slider::where('name','Home')->first()->slides);
     }
 
+    public function vouchers(){
+
+        return StoreResource::collection(Store::has('vouchers')->latest()->get());
+    }
+
 }

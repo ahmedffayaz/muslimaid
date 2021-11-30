@@ -47,3 +47,5 @@ Route::get('child_categories/{slug}', [API\CategoryController::class,'childCateg
 Route::apiResource('stores', API\StoreController::class);
 Route::get('featured_cashback',[API\StoreController::class,'featuredCashback']);
 Route::get('slider',[API\StoreController::class,'slider']);
+Route::get('vouchers',[API\StoreController::class,'vouchers']);
+Route::post('click/track', [API\ClickController::class, 'track']);
