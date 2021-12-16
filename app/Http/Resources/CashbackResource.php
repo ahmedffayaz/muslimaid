@@ -23,7 +23,7 @@ class CashbackResource extends JsonResource
         return [
                 
             "cashback_name"=>$this->cashback_name,
-            "click_url"=>$this->click_url,
+            "click_url"=>$this->click_url!='#' ? $this->click_url: $this->store->tracking_url,
             "sale_commission"=>$cashback,
             "detail"=>$this->detail,
         ];
