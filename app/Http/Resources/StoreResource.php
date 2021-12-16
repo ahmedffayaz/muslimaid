@@ -34,6 +34,7 @@ class StoreResource extends JsonResource
                 "default_cashback"=>$cashback,
                 "tracking_url"=> $this->tracking_url,
                 "store_url"=> $this->store_url,
+                "updated_at"=> \Carbon\Carbon::parse($this->updated_at)->isoFormat('DD-MM-YYYY'),
                 "logo"=> $this->logo->first() ? ($this->logo->first()->is_fake ? url('frontend/images/logos/'.$this->logo->first()->image) :url('storage/stores/images/'.$this->logo->first()->image)) :url('frontend/images/products/product-16.jpg'),
                 "cashbacks"=>CashbackResource::collection($this->cashbacks),
                 "vouchers"=>VoucherResource::collection($this->vouchers),

@@ -27,8 +27,8 @@ class VoucherResource extends JsonResource
             "coupon_code"=>$this->coupon_code,
             "click_url"=>$this->click_url,
             // "sale_commission"=>$this->sale_commission,
-            "promotion_end_date"=>$this->promotion_end_date,
-            "promotion_start_date"=>$this->promotion_start_date,
+            "promotion_end_date"=>\Carbon\Carbon::parse($this->promotion_end_date)->isoFormat('DD-MM-YYYY'),
+            "promotion_start_date"=>\Carbon\Carbon::parse($this->promotion_start_date)->isoFormat('DD-MM-YYYY'),
         ];
     }
 }
