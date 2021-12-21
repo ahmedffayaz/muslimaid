@@ -18,9 +18,23 @@ class StoreController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return StoreResource::collection(Store::latest()->get());
+        $stores = Store::select('stores.*');
+        if($request->get('search')){
+            $stores = $stores->where('name','like','%'.$request->get('search').'%');
+        }
+        if($request->get('name_sort')){
+            $order = $request->get('name_sort') == 'desc' ? 'desc' :'asc';
+            $stores = $stores->orderBy('name',$order);
+        }else{
+            $stores = $stores->orderBy('id','DESC');
+        }
+        $limit = $request->has('per_page') ? $request->get('per_page') : 10;
+        $stores = $stores->paginate($limit);
+        $stores->appends(['search' => $request->get('search'), 'per_page'=>$limit,'name_sort' => $request->get('name_sort')]);
+
+        return StoreResource::collection($stores);
 
     }
 
@@ -112,9 +126,26 @@ class StoreController extends Controller
         return SliderResource::collection(Slider::where('name','Home')->first()->slides);
     }
 
-    public function vouchers(){
-
-        return StoreResource::collection(Store::has('vouchers')->latest()->get());
+    public function vouchers(Request $request)
+    {
+        $stores = Store::has('vouchers')->select('stores.*');
+        if($request->get('search')){
+            $stores = $stores->where('name','like','%'.$request->get('search').'%');
+        }
+        if($request->get('name_sort')){
+            $order = $request->get('name_sort') == 'desc' ? 'desc' :'asc';
+            $stores = $stores->orderBy('name',$order);
+        }else{
+            $stores = $stores->orderBy('id','DESC');
+        }
+        $limit = $request->has('per_page') ? $request->get('per_page') : 10;
+        $stores = $stores->paginate($limit);
+        $stores->appends(
+                        ['search'   => $request->get('search'), 
+                        'per_page'  => $limit, 
+                        'name_sort' => $request->get('name_sort')
+                        ]);
+        return StoreResource::collection($stores);
     }
 
 }
