@@ -186,7 +186,14 @@ class AuthController extends Controller
         $userExists = User::where(['provider_id'=>$provider_id,'email'=>$email])->first();
         if($userExists){
             return $this->success([
-                'token' => $userExists->createToken('API Token')->plainTextToken
+                'token' => $userExists->createToken('API Token')->plainTextToken,
+                'id'=>$userExists->id,
+                "first_name" => $userExists->first_name,
+                "last_name" => $userExists->last_name,
+                "email" => $userExists->email,
+                'phone'      => $userExists->phone,
+                'intro'      => $userExists->intro,
+                "registration_type" => $userExists->registration_type,
             ], 'User Logged In Successfully');
 
         }
