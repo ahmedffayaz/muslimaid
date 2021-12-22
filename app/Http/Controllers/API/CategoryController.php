@@ -22,6 +22,7 @@ class CategoryController extends Controller
         $category = Category::with('stores')->where('slug',$slug)->first();
         $stores = $category->stores();
         $limit = request()->has('per_page') ? request()->get('per_page') : 10;
+        
         if(request()->get('search')){
             $stores = $stores->where('name','like','%'.request()->get('search').'%');
         }
@@ -32,7 +33,7 @@ class CategoryController extends Controller
             $stores = $stores->orderBy('id','DESC');
         }
         $stores = $stores->paginate($limit);
-        $stores->appends(['search' => $request->get('search'), 'per_page'=>$limit,'name_sort' => $request->get('name_sort')]);
+        $stores->appends(['search' => request()->get('search'), 'per_page'=>$limit,'name_sort' => request()->get('name_sort')]);
     
         return StoreResource::collection($stores);
 
