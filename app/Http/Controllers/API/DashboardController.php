@@ -72,11 +72,11 @@ class DashboardController extends Controller
     {
         $user = \Auth::user();
         return [
-            'first_name'=>$user->first_name,
-            'last_name'=>$user->last_name,
-            'email'=>$user->email,
-            'phone'=>$user->phone,
-            'intro'=>$user->intro,
+            'first_name' => $user->first_name,
+            'last_name'  => $user->last_name,
+            'email'      => $user->email,
+            'phone'      => $user->phone,
+            'intro'      => $user->intro,
         ];
     }
 
@@ -87,29 +87,9 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request)
     {
-        // dd($request->all());
-        
-        $validated = $request->validate([
-            'firstname' => 'required|regex:/^[A-Za-z ]+$/',
-            'lastname' => 'required|regex:/^[A-Za-z ]+$/',
-            // 'phone' => 'min:10|numeric|max:15',
-            // 'address' => 'min:10'
-        ],$messages = [
-            'firstname.required' => 'First name is required.',
-            'lastname.required' => 'Last name is required.'
-        ]);
-        
-        $user->update([
-            'first_name' => $request->firstname,
-            'last_name' => $request->lastname,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'intro' => $request->intro,
-        ]);
-        flash()->success('User updated successfully');
-        return redirect()->back();   
+         
     }
 
     /**

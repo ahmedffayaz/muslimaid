@@ -29,12 +29,13 @@ Route::post('password/email', [API\AuthController::class, 'forgotPassword']);
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/me', [API\AuthController::class, 'userData']);
     Route::get('/user/profile',[API\DashboardController::class, 'edit'])->name('profile');
-    Route::put('/user/profile/update',[API\DashboardController::class, 'update'])->name('profile.update');
+    Route::put('/user/profile/update',[API\AuthController::class, 'updateProfile'])->name('update_profile');
     Route::get('/user/cashback',[API\DashboardController::class, 'cashback'])->name('cashback');
     Route::get('/user/clicks',[API\DashboardController::class, 'clicks'])->name('clicks');
     Route::get('/user/payment_methods',[API\PaymentController::class, 'paymentMethods']);
     Route::post('/user/payment_methods_save',[API\PaymentController::class, 'paymentSave'])->name('payment_save');
     Route::get('/user/cashouts',[API\PaymentController::class, 'cashouts']);
+    Route::post('/user/withdraw',[API\PaymentController::class, 'withdraw']);
 
         
     Route::post('/change_password', [API\AuthController::class, 'changePassword']);

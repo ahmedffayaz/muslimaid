@@ -30,12 +30,13 @@ class CategoryResource extends JsonResource
         }
 
         return [ 
-        "name"=> $this->name,
-        "slug"=> $this->slug,
-        "description"=> $this->description,
-        "logo"=>$logo_url,
-        "banner"=> $banner_url,
-        "parent_id"=> $this->parent_id,
+            "name"        => $this->name,
+            "slug"        => $this->slug,
+            "description" => $this->description,
+            "logo"        => $logo_url,
+            "banner"      => $banner_url,
+            "parent_id"   => $this->parent_id,
+            "child_categories" => count($this->childs)
     ];
     }
 }

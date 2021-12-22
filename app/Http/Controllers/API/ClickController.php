@@ -46,10 +46,10 @@ class ClickController extends Controller
             }
                 
         $click = ExitClick::create([
-            'store_id'=>$store->id,
-            'user_id'=>$request->input('user_id'),
-            'status'=>'pending',
-            'exit_url'=>'#',
+            'store_id'  => $store->id,
+            'user_id'   => $request->input('user_id'),
+            'status'    => 'pending',
+            'exit_url'  => '#',
             'current_cashback_percentage' => $cashback_percent
 
         ]);
@@ -66,12 +66,12 @@ class ClickController extends Controller
 
         if($request->input('voucher_id')){
             $redeemed = RedeemedVoucher::create([
-                'user_id'=>$request->input('user_id'),
-                'voucher_id'=>$request->input('voucher_id'),
+                'user_id'    => $request->input('user_id'),
+                'voucher_id' => $request->input('voucher_id'),
             ]);
         }
         return $this->success([
-            'url'=>$url
+            'url' => $url
         ], 'click tracked succesfully', 200);
     }
 }

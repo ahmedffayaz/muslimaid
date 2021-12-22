@@ -35,11 +35,11 @@ class AuthController extends Controller
 
         
         $user = User::create([
-            'first_name' => $request->input('firstname'),
-            'last_name' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-            'registration_type'=>'sign up',
+            'first_name'        => $request->input('firstname'),
+            'last_name'         => $request->input('lastname'),
+            'email'             => $request->input('email'),
+            'password'          => Hash::make($request->input('password')),
+            'registration_type' => 'sign up',
         ]);
 
         $user->assignRole('user');
@@ -48,17 +48,17 @@ class AuthController extends Controller
         $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}'],[SiteSetting()['website_title'], url('/') ,$user->first_name,$user->email],$email_template->message );
         
         $email_data = array(
-            'name' =>  $user->firstname,
-            'email' => $user->email,
-            'email_message'=>$filtered_message,
-            'subject'=>$email_template->subject
+            'name'          => $user->firstname,
+            'email'         => $user->email,
+            'email_message' => $filtered_message,
+            'subject'       => $email_template->subject
         );
 
         $bonus = array_key_exists('welcome_bonus',SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
 
         $user_bonus = Bonus::create([
-            'user_id'=>$user->id,
-            'amount'=>$bonus,
+            'user_id' => $user->id,
+            'amount'  => $bonus,
         ]);
         
         
@@ -67,11 +67,11 @@ class AuthController extends Controller
                 ->subject($email_data['subject']);
         });
         return $this->success([
-            'token' => $user->createToken('API Token')->plainTextToken,
-            'id'=>$user->id,
-            "first_name" => $user->first_name,
-            "last_name" => $user->last_name,
-            "email" => $user->email,
+            'token'             => $user->createToken('API Token')->plainTextToken,
+            'id'                => $user->id,
+            "first_name"        => $user->first_name,
+            "last_name"         => $user->last_name,
+            "email"             => $user->email,
             "registration_type" => $user->registration_type,
         ],'User registered successfully');
     }
@@ -187,69 +187,101 @@ class AuthController extends Controller
         if($userExists){
             return $this->success([
                 'token' => $userExists->createToken('API Token')->plainTextToken,
-                'id'=>$userExists->id,
-                "first_name" => $userExists->first_name,
-                "last_name" => $userExists->last_name,
-                "email" => $userExists->email,
-                'phone'      => $userExists->phone,
-                'intro'      => $userExists->intro,
+                'id'                =>$userExists->id,
+                "first_name"        => $userExists->first_name,
+                "last_name"         => $userExists->last_name,
+                "email"             => $userExists->email,
+                'phone'             => $userExists->phone,
+                'intro'             => $userExists->intro,
                 "registration_type" => $userExists->registration_type,
             ], 'User Logged In Successfully');
 
         }
         $validator = Validator::make($request->all(),[
-            'firstname' => ['required', 'string', 'max:255'],
-            'lastname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'provider' => ['required'],
+            'firstname'   => ['required', 'string', 'max:255'],
+            'lastname'    => ['required', 'string', 'max:255'],
+            'email'       => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'provider'    => ['required'],
             'provider_id' => ['required', 'unique:users'],
         ]);
         if ($validator->fails()) {
             return $this->error($validator->errors()->first(), 401);
         }
-
-        
         $user = User::create([
-            'first_name' => $request->input('firstname'),
-            'last_name' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'password' => Hash::make(time().$request->input('email').'_'.\Str::random(12)),
-            'provider_id'=>$request->input('provider_id'),
-            'provider'=>$request->input('provider'),
-            'registration_type'=>'social',
+            'first_name'        => $request->input('firstname'),
+            'last_name'         => $request->input('lastname'),
+            'email'             => $request->input('email'),
+            'password'          => Hash::make(time().$request->input('email').'_'.\Str::random(12)),
+            'provider_id'       => $request->input('provider_id'),
+            'provider'          => $request->input('provider'),
+            'registration_type' => 'social',
         ]);
 
         $user->assignRole('user');
         $email_template = EmailTemplate::where('key','user_welcome')->first(); 
 
-        $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}'],[SiteSetting()['website_title'], url('/') ,$user->first_name,$user->email],$email_template->message );
+        $filtered_message = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}'],[SiteSetting()['website_title'], url('/') ,$user->first_name,$user->email],$email_template->message );
         
         $email_data = array(
-            'name' =>  $user->firstname,
-            'email' => $user->email,
-            'email_message'=>$filtered_message,
-            'subject'=>$email_template->subject
+            'name'          => $user->firstname,
+            'email'         => $user->email,
+            'email_message' => $filtered_message,
+            'subject'       => $email_template->subject
         );
 
         $bonus = array_key_exists('welcome_bonus',SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
 
         $user_bonus = Bonus::create([
-            'user_id'=>$user->id,
-            'amount'=>$bonus,
+            'user_id' => $user->id,
+            'amount'  => $bonus,
         ]);
-        
-        
         Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
             $message->to($email_data['email'], $email_data['name'])
                 ->subject($email_data['subject']);
         });
         return $this->success([
-            'token' => $user->createToken('API Token')->plainTextToken,
-            "first_name" => $user->first_name,
-            "last_name" => $user->last_name,
-            "email" => $user->email,
+            'token'             => $user->createToken('API Token')->plainTextToken,
+            "first_name"        => $user->first_name,
+            "last_name"         => $user->last_name,
+            "email"             => $user->email,
             "registration_type" => $user->registration_type,
         ], 'User Registered Successfully');
+    }
+    public function updateProfile(Request $request){
+        $user = auth()->user();
+        $input = $request->all();
+        $userid = $user->id;
+        $rules = array(
+            'firstname' => 'required|regex:/^[A-Za-z ]+$/',
+            'lastname' => 'required|regex:/^[A-Za-z ]+$/',
+        );
+        $validator = Validator::make($input, $rules);
+        if ($validator->fails()) {
+            $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
+        }else {
+            try {
+                $user->update([
+                    'first_name' => $request->firstname,
+                    'last_name'  => $request->lastname,
+                    'phone'      => $request->phone,
+                    'address'    => $request->address,
+                    'intro'      => $request->intro,
+                ]);
+                $data = [
+                    'id'         => auth()->user()->id,
+                    'first_name' => auth()->user()->first_name,
+                    'last_name'  => auth()->user()->last_name,
+                    'email'      => auth()->user()->email,
+                    'phone'      => auth()->user()->phone,
+                    'intro'      => auth()->user()->intro,
+                ];
+                $arr = array("status" => 200, "message" => "Profile updated successfully.", "data" => $data);
+
+            } catch (\Exception $ex) {
+               $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => array());
+            }
+        }
+        return \Response::json($arr);
     }
 
     
