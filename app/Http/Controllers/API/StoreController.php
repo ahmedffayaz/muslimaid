@@ -25,7 +25,7 @@ class StoreController extends Controller
             $stores = $stores->where('name','like','%'.$request->get('search').'%');
         }
         if($request->get('name_sort')){
-            $order = $request->get('name_sort') == 'desc' ? 'desc' :'asc';
+            $order = $request->get('name_sort') == 'descending' ? 'desc' :'asc';
             $stores = $stores->orderBy('name',$order);
         }else{
             $stores = $stores->orderBy('id','DESC');
@@ -133,7 +133,7 @@ class StoreController extends Controller
             $stores = $stores->where('name','like','%'.$request->get('search').'%');
         }
         if($request->get('name_sort')){
-            $order = $request->get('name_sort') == 'desc' ? 'desc' :'asc';
+            $order = $request->get('name_sort') == 'descending' ? 'desc' :'asc';
             $stores = $stores->orderBy('name',$order);
         }else{
             $stores = $stores->orderBy('id','DESC');
