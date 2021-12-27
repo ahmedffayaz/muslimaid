@@ -30,7 +30,7 @@ class StoreResource extends JsonResource
                 "network"=> $this->network->name,
                 "name" => $this->name,
                 "slug"=> $this->slug,
-                "description"=> $this->description,
+                "description"=> strip_tags($this->description),
                 "default_cashback"=>$cashback,
                 "tracking_url"=> $this->tracking_url,
                 "store_url"=> $this->store_url,

@@ -27,7 +27,7 @@ class CategoryController extends Controller
             $stores = $stores->where('name','like','%'.request()->get('search').'%');
         }
         if(request()->get('name_sort')){
-            $order = request()->get('name_sort') == 'desc' ? 'desc' :'asc';
+            $order = request()->get('name_sort') == 'descending' ? 'desc' :'asc';
             $stores = $stores->orderBy('name',$order);
         }else{
             $stores = $stores->orderBy('id','DESC');
@@ -44,6 +44,12 @@ class CategoryController extends Controller
         $categories = Category::select('*')->where('parent_id',$parent_category->id);
         if(request()->get('search')){
             $categories = $categories->where('name','like','%'.request()->get('search').'%');
+        }
+        if(request()->get('name_sort')){
+            $order = request()->get('name_sort') == 'descending' ? 'desc' :'asc';
+            $categories = $categories->orderBy('name',$order);
+        }else{
+            $categories = $categories->orderBy('id','DESC');
         }
         $categories = $categories->latest()->get();
         return CategoryResource::collection($categories);
