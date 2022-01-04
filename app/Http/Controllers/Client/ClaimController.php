@@ -114,7 +114,7 @@ class ClaimController extends Controller
                 'user_id'=>$user->id,
             ])->where('status',2)->get();
 
-            if($cashback){
+            if(count($cashback)){
                 return view('client-dashboard.claim.claim_step2',compact('store_id','claim','clicks','cashback'));
 
             }else{
@@ -131,7 +131,7 @@ class ClaimController extends Controller
                 'user_id'=>$user->id,
             ])->whereIn('status',[1,4,3])->get();
 
-            if($cashback){
+            if(count($cashback)){
                 return view('client-dashboard.claim.claim_step2',compact('store_id','claim','clicks','cashback'));
 
             }else{
