@@ -48,7 +48,8 @@ class ClaimController extends Controller
     public function step1()
     {
         $user = \Auth::user();
-        $clicks = $user->clicks->unique('store_id');
+        $clicks = ExitClick::where('user_id',$user->id)->distinct('store_id')->get();
+        
         
         $clicks = $clicks->transform(function ($click, $key) {
             return [
