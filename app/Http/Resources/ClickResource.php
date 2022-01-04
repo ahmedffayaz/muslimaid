@@ -16,6 +16,7 @@ class ClickResource extends JsonResource
     {
         return [
             'Store'=>$this->store->name,
+            'store_id'=>$this->store->id,
             'Date'=>\Carbon\Carbon::parse($this->created_at)->isoFormat('Do MMMM YYYY'),
             
         ];

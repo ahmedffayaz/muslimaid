@@ -36,6 +36,11 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/user/payment_methods_save',[API\PaymentController::class, 'paymentSave'])->name('payment_save');
     Route::get('/user/cashouts',[API\PaymentController::class, 'cashouts']);
     Route::post('/user/withdraw',[API\PaymentController::class, 'withdraw']);
+    Route::get('/user/claims',[API\ClaimController::class, 'claims']);
+    Route::get('/user/show-retailers',[API\ClaimController::class, 'step1']);
+    Route::post('/user/claim-step-2',[API\ClaimController::class, 'step2']);
+    Route::post('/user/claim-step-3',[API\ClaimController::class, 'step3']);
+    Route::get('/user/user-balance',[API\DashboardController::class, 'userBalance']);
 
         
     Route::post('/change_password', [API\AuthController::class, 'changePassword']);
@@ -50,3 +55,4 @@ Route::get('featured_cashback',[API\StoreController::class,'featuredCashback']);
 Route::get('slider',[API\StoreController::class,'slider']);
 Route::get('vouchers',[API\StoreController::class,'vouchers']);
 Route::post('click/track', [API\ClickController::class, 'track']);
+

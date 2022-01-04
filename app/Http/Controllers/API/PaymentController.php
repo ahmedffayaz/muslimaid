@@ -48,7 +48,7 @@ class PaymentController extends Controller
             }
         }
         
-        return \Response::json($arr);;
+        return \Response::json($arr);
     }
     
     public function cashouts(){

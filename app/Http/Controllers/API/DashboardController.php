@@ -134,4 +134,11 @@ class DashboardController extends Controller
         flash()->success('Password changed successfully');
         return redirect()->back();
     }
+
+    public function userBalance(){
+        $user = \Auth::user();
+        $balance = number_format((float)\Auth::user()->availableBalance(), 2, '.', '');
+        $arr = array("status" => 200, "message" =>"User Balance", "data" => ['available_balance' => $balance]);
+        return \Response::json($arr);
+    }
 }
