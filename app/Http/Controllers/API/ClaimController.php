@@ -30,12 +30,12 @@ class ClaimController extends Controller
             $status =  'Closed';
 
             return [
-                'id'=>$claim->ticket_id,
-                'store_name'=>$claim->store->name,
-                'order_amount'=>$claim->claim_amount,
-                'claim_type'=>$claim->claim_type,
-                'date'=>\Carbon\Carbon::parse($claim->created_at)->isoFormat('Do MMMM YYYY'),
-                'status'=>$status
+                'id'            => $claim->ticket_id,
+                'store_name'    => $claim->store->name,
+                'order_amount'  => $claim->claim_amount,
+                'claim_type'    => $claim->claim_type,
+                'date'          => \Carbon\Carbon::parse($claim->created_at)->isoFormat('Do MMMM YYYY'),
+                'status'        => $status
                 ];
         });
 
@@ -48,26 +48,26 @@ class ClaimController extends Controller
     public function step1()
     {
         $user = \Auth::user();
-        $clicks = ExitClick::where('user_id',$user->id)->distinct('store_id')->get();
+        $clicks = ExitClick::select('store_id')->where('user_id',$user->id)->distinct()->get();
         
         
         $clicks = $clicks->transform(function ($click, $key) {
             return [
-                'store_id'=>$click->store_id,
-                'store_name'=>$click->store->name,
+                'store_id'   => $click->store_id,
+                'store_name' => $click->store->name,
                 ];
         });
         
-        $arr = array("status" => 200, "message" =>"Select Store", "data" => $clicks);
+        $arr = array("status" => 200, "message" => "Select Store", "data" => $clicks);
         return \Response::json($arr);
    
     }
     public function step2(Request $request)
     {
         $store_id = $request->input('store_id');
-        $claim = $request->input('claim_type');
-        $user = \Auth::user();
-        $clicks = $user->clicks->where('store_id', $store_id);       
+        $claim    = $request->input('claim_type');
+        $user     = \Auth::user();
+        $clicks   = $user->clicks->where('store_id', $store_id);       
         if($claim  =='missing cashback'){
 
             $data = [
@@ -147,17 +147,18 @@ class ClaimController extends Controller
         $click_id = $request->input('click_id');
         $click = ExitClick::where('id',$click_id)->first();
         $claim_type = $request->input('claim_type');
+
         $claim = new Ticket;
-        $claim->store_id=$click->store_id;
-        $claim->user_id=$click->user_id;
-        $claim->click_id=$click->id;
-        $claim->ticket_id = strtoupper(\Str::random(12));
-        $claim->cashback_id=$click->cashback->id ?? NULL;
-        $claim->claim_amount=$click->cashback->order_value ?? NULL;
-        $claim->title = 'Claim: '.$claim_type;
-        $claim->claim_type = $claim_type;
+        $claim->store_id    = $click->store_id;
+        $claim->user_id     = $click->user_id;
+        $claim->click_id    = $click->id;
+        $claim->ticket_id   = strtoupper(\Str::random(12));
+        $claim->cashback_id = $click->cashback->id ?? NULL;
+        $claim->claim_amount = $click->cashback->order_value ?? NULL;
+        $claim->title       = 'Claim: '.$claim_type;
+        $claim->claim_type  = $claim_type;
         $claim->ticket_type = 'claim';
-        $claim->status = 'open';
+        $claim->status      = 'open';
         $claim->save();
 
 
@@ -197,8 +198,8 @@ class ClaimController extends Controller
         $email_data = array(
             'name' =>  $ticket->user->first_name.' '.$ticket->user->last_name,
             'email' => $ticket->user->email,
-            'email_message'=>$filtered_user_message,
-            'subject'=>$user_email_template->subject
+            'email_message'=> $filtered_user_message,
+            'subject' => $user_email_template->subject
         );
         Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
             $message->to($email_data['email'], $email_data['name'])
@@ -208,8 +209,8 @@ class ClaimController extends Controller
         $email_data = array(
             'name' =>  $ticket->user->first_name.' '.$ticket->user->last_name,
             'email' => $ticket->user->email,
-            'email_message'=>$filtered_admin_message,
-            'subject'=>$admin_email_template->subject
+            'email_message' => $filtered_admin_message,
+            'subject' => $admin_email_template->subject
         );
         Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
             $message->to('admin@trs.com', $email_data['name'])
