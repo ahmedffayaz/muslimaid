@@ -67,7 +67,7 @@ class ClaimController extends Controller
         $store_id = $request->input('store_id');
         $claim    = $request->input('claim_type');
         $user     = \Auth::user();
-        $clicks   = $user->clicks->where('store_id', $store_id);       
+        $clicks   = ExitClick::where('user_id',$user->id)->where('store_id', $store_id)->get();       
         if($claim  =='missing cashback'){
 
             $data = [
