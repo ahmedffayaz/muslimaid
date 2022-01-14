@@ -105,7 +105,14 @@ class DashboardController extends Controller
     public function cashback(){
 
         $user = auth()->user();
-        return UserCashbackResource::collection(UserCashback::where('user_id',$user->id)->latest()->get()); 
+        $cashbacks = UserCashback::select('*'); 
+        if(request()->get('status')){
+           
+            $status = \DB::table('cashback_statuses')->where('status',request()->get('status'))->first();
+            $cashbacks = $cashbacks->where('status',$status->id);
+        } 
+        
+        return UserCashbackResource::collection($cashbacks->where('user_id',$user->id)->latest()->get()); 
     }
     public function clicks(){
 
