@@ -77,6 +77,7 @@ class DashboardController extends Controller
             'email'      => $user->email,
             'phone'      => $user->phone,
             'intro'      => $user->intro,
+            'profile_image' => $user->avatar ? url('storage/users/images/avatar/'.$user->avatar) : ''
         ];
     }
 
