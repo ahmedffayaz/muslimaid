@@ -52,7 +52,8 @@ $menu = Harimayco\Menu\Models\Menus::where('name','Main Menu')->first();
                                 <div class="account-menu__divider"></div>
                                 <ul class="account-menu__links">
                                     @if(Auth::user()->hasRole('user'))
-                                    <li><a href="{{route('account.dashboard')}}">Account</a></li>
+                                    <li><a href="{{route('account.dashboard')}}">Accounts</a></li>
+                                    <li><a href="{{route('account.referral.index')}}">Refer a Friend</a></li>
                                     @endif
                                     @if(Auth::user()->hasRole('admin'))
                                     <li><a href="{{route('admin.home.index')}}">Admin Dashboard</a></li>

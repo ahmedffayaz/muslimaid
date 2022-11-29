@@ -757,6 +757,22 @@
                                                     </div>
                                                     
                                                 </div>
+
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="welcome_bonus">Referral Bonus</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="referral_bonus" name="referral_bonus" value="{{$settings['referral_bonus'] ?? ''}}" placeholder="Referral Bonus">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
                                                 
                                                 
                                                 <div class="row g-3">

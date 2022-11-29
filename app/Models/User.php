@@ -34,6 +34,8 @@ class User extends Authenticatable
         'status',
         'provider',
         'provider_id',
+        'referred_by',
+        'referred_at'
     ];
 
     /**
@@ -80,7 +82,8 @@ class User extends Authenticatable
         $cashback = $this->cashbacks()->where('status','=','3')->sum('amount');
 
         $bonus = $this->bonus()->where('status','unpaid')->first() ?$this->bonus()->where('status','unpaid')->first()->amount :0;
-
+       // $bonus = $bonus->sum('amount');
+       
         return $cashback+$bonus;
     }
     public function clicks(){

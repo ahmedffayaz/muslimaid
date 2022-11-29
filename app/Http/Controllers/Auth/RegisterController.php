@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -12,7 +13,9 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Mail;
 use App\Models\EmailTemplate;
+use Carbon\Carbon;
 use App\Models\Bonus;
+use App\Models\UserCashback;
 use Session;
 
 class RegisterController extends Controller
@@ -63,6 +66,11 @@ class RegisterController extends Controller
         ]);
     }
 
+    public function showRegistrationForm(Request $request)
+    {
+        $refCode = $request->referby;
+        return view('auth.register',compact('refCode'));
+    }
     /**
      * Create a new user instance after a valid registration.
      *
@@ -71,12 +79,15 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $today = Carbon::today()->toDateString();
         $user =  User::create([
             'first_name' => $data['firstname'],
             'last_name' => $data['lastname'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'registration_type'=>'sign up'
+            'registration_type'=>empty($data['referral_code']) ? 'sign up' : 'refer',
+            'referred_by'=>empty($data['referral_code']) ? '' : base64_decode($data['referral_code']),
+            'referred_at'=>empty($data['referral_code']) ? '' : $today,
         ]);
         // $role = Role::create(['name' => 'user']);
 
@@ -94,11 +105,23 @@ class RegisterController extends Controller
         );
 
         $bonus = array_key_exists('welcome_bonus',SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
+      
 
         $user_bonus = Bonus::create([
             'user_id'=>$user->id,
             'amount'=>$bonus,
         ]);
+     
+        if(!empty($data['referral_code']))
+        {
+            $referralBonus = array_key_exists('referral_bonus',SiteSetting()->toArray()) ? SiteSetting()['referral_bonus'] : 0;
+            $id =  base64_decode($data['referral_code']);
+            $referral_bonus = UserCashback::create([
+                'user_id'=>$id,
+                'amount'=>$referralBonus,
+                'status'=>'1',
+            ]);
+        }
         
         
         Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {

@@ -233,6 +233,12 @@
                                     <span class="nk-menu-text">Blog</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            <li class=" ">
+                                <a href="{{route('admin.testimonials.index')}}" class="">
+                                    <span class="nk-menu-icon "><em class="icon ni ni-star-fill"></em></em></span>
+                                    <span class="nk-menu-text">Testimonial</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
                             </ul>
                         </div> 
                     </div>

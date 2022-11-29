@@ -15,7 +15,7 @@ class CreateUserCashbacksTable extends Migration
     {
         Schema::create('user_cashbacks', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('store_id');
+            $table->unsignedBigInteger('store_id')->nullable();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('exit_click_id')->nullable();
             $table->unsignedBigInteger('network_order_id')->nullable();

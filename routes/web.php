@@ -195,6 +195,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('slides', SlidesController::class);
     Route::resource('pages', PagesController::class);
     Route::resource('blogs', BlogController::class);
+    Route::resource('testimonials', TestimonialController::class);
     Route::resource('email_templates', EmailTemplatesController::class);
 
     
@@ -236,6 +237,7 @@ Route::get('all_stores',[App\Http\Controllers\Frontend\PagesController::class, '
 Route::resource('newsletter',App\Http\Controllers\Frontend\NewsletterController::class);
 
 
+
 //CLient Dashboard routes
 Route::namespace('App\Http\Controllers\Client')
     ->middleware(['auth','role:user'])
@@ -257,6 +259,9 @@ Route::namespace('App\Http\Controllers\Client')
         Route::post('claim/step2',[App\Http\Controllers\Client\ClaimController::class,'step2'])->name('claim.step2');
         Route::post('claim/step3',[App\Http\Controllers\Client\ClaimController::class,'step3'])->name('claim.step3');
         Route::resource('claim', ClaimController::class);
+        Route::resource('referral',ReferController::class);
+        Route::post('send-referral-link',[App\Http\Controllers\Client\ReferController::class, 'sendReferralLink'])->name('send-referral-link');
+        
     });
 
 
@@ -266,3 +271,4 @@ Route::namespace('App\Http\Controllers\Client')
 
     Route::get('login/{provider}', [App\Http\Controllers\SocialController::class, 'redirect']);
     Route::get('login/{provider}/callback',[App\Http\Controllers\SocialController::class, 'Callback']);
+    Route::get('register-form',[App\Http\Controllers\Auth\registerController::class,'showRegistrationForm'])->name('register-form');

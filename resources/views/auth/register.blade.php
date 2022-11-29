@@ -12,7 +12,7 @@
                                 @csrf
                                 <input type="hidden" class="form-control form-control-lg" id="lastname" placeholder="Enter your last name" name="lastname" value="Doe">
                                 <input type="hidden" class="form-control form-control-lg" id="firstname" placeholder="Enter your first name" name="firstname" value="john">
-
+                                <input type="hidden" class="form-control form-control-lg" name="referral_code" value="{{ $refCode }}">
                                 <div class="form-group">
                                     <label>Email address</label>
                                     <input type="email" name="email" class="form-control" placeholder="Enter email" required>

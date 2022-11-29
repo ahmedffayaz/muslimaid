@@ -25,6 +25,8 @@ class CreateUsersTable extends Migration
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
             $table->boolean('status')->default(1);
+            $table->string('referred_by')->nullable();
+            $table->string('referred_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

@@ -26,7 +26,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    'env' => env('APP_ENV', 'local'),
 
     /*
     |--------------------------------------------------------------------------
@@ -184,8 +184,9 @@ return [
         App\Providers\MailchimpConfigServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
         ConsoleTVs\Charts\ChartsServiceProvider::class,
+        //ConsoleTVs\Charts\Registrar::class,
         Intervention\Image\ImageServiceProvider::class,
-        Harimayco\Menu\MenuServiceProvider::class,
+        Harimayco\Menu\MenuServiceProvider::class
 
     ],
 
