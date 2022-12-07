@@ -109,6 +109,7 @@ $menu = Harimayco\Menu\Models\Menus::where('name','Main Menu')->first();
                                             <ul class="menu__list">
                                                 @foreach( $item['child'] as $child )
                                                 <li class="menu__item">
+                                                  
                                                     <!-- This is a synthetic element that allows to adjust the vertical offset of the submenu using CSS. -->
                                                     <div class="menu__item-submenu-offset"></div>
                                                     <a class="menu__item-link" href="{{ $child['link'] }}">

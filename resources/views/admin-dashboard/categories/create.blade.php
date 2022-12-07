@@ -159,6 +159,19 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                                <label class="form-label" for="reviewer">Meta Keywords</label>
+                                                <div class="form-control-wrap">
+                                                    <input id="blog-title" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword" value="" > 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                            <label class="form-label" for="reviewer">Meta Description</label>
+                                            <textarea  class="form-control " name="meta_description" placeholder="Meta Description" value="" ></textarea>
+                                        </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <button type="submit" class="btn btn-lg btn-primary">Save</button>

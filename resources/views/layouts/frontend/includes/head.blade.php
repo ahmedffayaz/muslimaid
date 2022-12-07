@@ -1,7 +1,41 @@
+@php
+$current_url = url()->full();
+
+$rule = App\Models\Seo_rule::where('url',$current_url)->first();
+if(!empty($rule))
+{
+  $meta_keywords = $rule->ruleData()->first()->where('type','meta_keyword')->get();
+  $meta_description = $rule->ruleData()->first()->where('type','meta_Description')->get();
+  
+  $keyword = metaKeyword($meta_keywords);
+  $description = metaDescription($meta_description);
+ 
+}else{
+ 
+  $static_rule =  checkStaticpageRule($current_url);
+ 
+  if( $static_rule != null)
+  {
+    $keyword = $static_rule['meta_keyword'];
+    $description = $static_rule['meta_description'];
+  }
+
+
+}
+
+
+
+@endphp
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="format-detection" content="telephone=no">
+    @if($rule != null || $static_rule != null)
+    <meta name="keywords" content='{{ $keyword }}'/>
+    <meta name="description" content='{{ $description }}'/>
+    
+    @endif
+
     <title>{{$settings['website_title']}}</title>
     <link rel="icon" type="image/png" href="@if(isset($settings['favicon']) && $settings['favicon']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}@else{{asset('admin-dashboard/images/favicon.png')}}@endif">
     <!-- fonts -->

@@ -68,6 +68,9 @@ class CategoryController extends Controller
                 'banner_link' => $request->input('banner_link'), 
                 'sort' => $request->input('sort'), 
                 'status' => $request->input('status'), 
+                'meta_keyword' => $request->input('meta_keyword'),
+                'meta_description' => $request->input('meta_description')
+
             ]);
 
         if($request->input('logo_type')=='upload'){
@@ -163,6 +166,8 @@ class CategoryController extends Controller
                 'status' => $request->input('status'), 
                 'feature_homepage' =>0,
                 'feature_sidebar' =>0,
+                'meta_keyword' => $request->input('meta_keyword'),
+                'meta_description' => $request->input('meta_description')
     
             ]); 
             // if($category->picks->count()){

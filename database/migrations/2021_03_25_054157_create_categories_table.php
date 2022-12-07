@@ -27,6 +27,9 @@ class CreateCategoriesTable extends Migration
             $table->string('banner_link')->nullable();
             $table->unsignedBigInteger('parent_id')->default(0);
             $table->boolean('status')->default(1);
+            $table->string('url')->nullable();
+            $table->string('meta_keyword')->nullable();
+            $table->longText('meta_description')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

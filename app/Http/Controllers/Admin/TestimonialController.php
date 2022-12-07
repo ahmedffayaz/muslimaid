@@ -77,7 +77,7 @@ class TestimonialController extends Controller
             $testimonial->save();
 
             flash()->success('Testimonial added successfully.');
-            return redirect()->back();
+            return redirect()->route('admin.testimonials.index');;
     }
 
     /**
@@ -148,7 +148,7 @@ class TestimonialController extends Controller
         $testimonial->meta_description = $request->meta_description;
         $testimonial->save();
         flash()->success('Testimonial updated successfully');
-        return redirect()->back();
+        return redirect()->route('admin.testimonials.index');
     }
 
     /**

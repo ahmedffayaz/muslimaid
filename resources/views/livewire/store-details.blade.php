@@ -57,6 +57,12 @@
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem9"><em class="icon ni ni-img-fill"></em><span>Images</span></a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem10"><em class="icon ni ni-map-pin"></em><span>Address</span></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem11"><em class="icon ni ni-external"></em><span>Seo</span></a>
+                                    </li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="tabItem4">
@@ -248,6 +254,12 @@
                                     </div>
                                     <div class="tab-pane" id="tabItem9">
                                         <span id="images-data"></span>
+                                    </div>
+                                    <div class="tab-pane" id="tabItem10">
+                                        <span id="address-data"></span>
+                                    </div>
+                                    <div class="tab-pane" id="tabItem11">
+                                        <span id="seo-data"></span>
                                     </div>
                                 </div>
                             </div>
@@ -634,13 +646,60 @@
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
+
+
+<div class="modal fade" tabindex="-1" id="add-seorule-modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Add Seo rule</span></div>
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="add-seorule-form" class=" p-4">
+                <form action="{{route('admin.stores.save_seo_rule')}}" class="gy-3 form-validate is-alter add_seo_form" method="POST">
+                    @csrf
+                    <input type="hidden" name="store_id" value="{{$store->id}}">
+                    <div class="row g-4">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="form-label" for="full-name-1">Meta Keyword</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="keyword" name="meta_keyword" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="form-label" for="vsale_commission">Meta Description</label>
+                                <div class="form-control-wrap">
+                                    <textarea class="form-control" id="meta_description" value="" name="meta_description" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     document.addEventListener('livewire:load', function () {
-
+        
+        fetchSeoRules();
         fetchVouchers();
         fetchCashbacks();
         fetchReviews();
         fetchImages();
+        fetchAddress();
         initializeSelect2();
     })
 </script>
@@ -649,7 +708,6 @@
 
 <script>
     function fetchVouchers(){
-        
         pageurl = "{{route('admin.stores.vouchers')}}"
         var _token = $("input[name=_token]").val();
         var store = $('.store_id_checker').text(); 
@@ -660,6 +718,7 @@
         data:{_token:_token,store:store},
         success:function(data)
         {
+           
             $('#vouchers-data').html(data);
             
         }
@@ -713,6 +772,40 @@
         }
         });
     }
+    function fetchAddress(){
+        pageurl = "{{route('admin.stores.storeaddress')}}"
+        var _token = $("input[name=_token]").val();
+        var store = $('.store_id_checker').text(); 
+        $.ajax({
+
+        url:pageurl,
+        method:"POST",
+        data:{_token:_token,store:store},
+        success:function(data)
+        {
+            $('#address-data').html(data);
+            
+        }
+        });
+    }
+    function fetchSeoRules(){
+       
+        pageurl = "{{route('admin.stores.fetchseorules')}}"
+        var _token = $("input[name=_token]").val();
+        var store = $('.store_id_checker').text(); 
+        $.ajax({
+
+        url:pageurl,
+        method:"POST",
+        data:{_token:_token,store:store},
+        success:function(data)
+        {
+           
+            $('#seo-data').html(data);
+            
+        }
+        });
+    }
 </script>
 
 
@@ -724,6 +817,8 @@
         fetchCashbacks();
         fetchReviews();
         fetchImages();
+        fetchAddress();
+        fetchSeoRules();
         initializeSelect2();
         var quill = new Quill('#editor-container', {
         modules: {
@@ -862,7 +957,7 @@
                     (function(NioApp, $){
                     'use strict';
                     toastr.clear();
-                    NioApp.Toast('Voucher Added Successfully.', 'success');
+                    NioApp.Toast('Voucher Added Successfullys.', 'success');
                     
                 })(NioApp, jQuery);
                     fetchVouchers();

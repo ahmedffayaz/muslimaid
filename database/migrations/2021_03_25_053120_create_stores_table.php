@@ -30,6 +30,11 @@ class CreateStoresTable extends Migration
             $table->string('override_categories')->default(0);
             $table->string('status')->default(1);
             $table->string('is_fake')->default(0);
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('postal_code')->nullable();
+            $table->decimal('latitude', 10,8)->nullable();
+            $table->decimal('longitude', 10,8)->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

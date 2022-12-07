@@ -346,6 +346,53 @@ function isGoogleEnabled(){
     }
 }
 
+function metaKeyword($keywords)
+{
+    $meta_keywords = [];
+    foreach($keywords as $keyword)
+    {
+        //$meta_keywords =  array_push($keyword['value'] ,  $meta_keywords);
+
+        $meta_keywords[] = $keyword['value'];
+         
+    }
+    return implode( ',' , $meta_keywords );
+}
+function metaDescription($descriptions)
+{
+    $meta_description = [];
+    foreach($descriptions as $description)
+    {
+       $meta_description[] = $description['value'];
+    }
+    return implode( ',' , $meta_description );;
+}
+
+function checkStaticpageRule($url)
+{
+    $store_rule = App\Models\Store_seo_data::where('url',$url)->first();
+    
+    $blog = App\Models\Blog::where('url',$url)->first();
+    $categories = App\Models\Category::where('url',$url)->first();
+   if(!empty($store_rule))
+   {
+        return  $store_rule;
+
+   }elseif(!empty($blog)){
+
+    return $blog;
+
+   }elseif(!empty($categories)){
+
+    return $categories;
+
+   }else{
+
+    return null;
+
+   }
+}
+
 // function isAppleEnabled(){
 //     if(SiteSetting()['apple_client_id'] && SiteSetting()['apple_client_secret'] && SiteSetting()['apple_url']){
 //         return true;

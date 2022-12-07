@@ -13,6 +13,7 @@ use App\Models\Category;
 use App\Models\StoreReview;
 use App\Models\EditorPick;
 use App\Models\Slider;
+use App\Models\Store_seo_data;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -68,7 +69,7 @@ class StoreController extends Controller
             'network_id' => 'required',
             // 'category_id' => 'required',
             'tracking_url' => 'required|url',
-            'store_url' => 'required|url',
+            'store_url' => 'required|url'
         ]);
 
         if ($validator->fails()) {
@@ -513,5 +514,100 @@ class StoreController extends Controller
     {
       
         return view('admin-dashboard.stores.show');
+    }
+
+    function fetchAddress(Request $request)
+    {
+        if($request->ajax())
+        {
+           $store = Store::where('id',$request->store)->first();
+            return view('admin-dashboard.stores.store_address', compact('store'))->render();
+        }
+    }
+
+    function fetchSeoRules(Request $request)
+    {
+        if($request->ajax())
+        {
+           $store = Store::with('storeRuleData')->where('id',$request->store)->first();
+          
+            return view('admin-dashboard.stores.store_seo_rule', compact('store'))->render();
+        }
+    }
+
+    public function storeSeoRule(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'meta_keyword' => 'required',
+            'meta_description' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+
+        try {
+            
+            $url = url('/');
+            $store = Store::whereId($request->input('store_id'))->first();
+            
+            $url = $url.'/cashback/'. $store['name'] ;
+            
+            $store = Store_seo_data::create([
+                'store_id'         => $request->input('store_id'),
+                'url'   =>  $url,
+                'meta_keyword'   => $request->input('meta_keyword'),
+                'meta_description' => $request->input('meta_description'),
+            ]);
+
+            
+
+            
+            flash()->success('New store Seo rule added');
+            return redirect()->back();
+           
+            
+        } catch (Exception $exception) {
+
+            flash()->error('Error while adding new Seo rule');
+            return redirect()->back();            
+        }
+    }
+
+    public function addStoreAddress(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'city' => 'required',
+            'address' => 'required',
+            'postal_code' => 'required',
+            'latitude' => 'required',
+            'longitude' => 'required',
+        ]);
+    
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+      
+        try {
+            $store = store::where('id',$request->input('store_id'))->update([
+                'address'         => $request->input('address'),
+                'city'   => $request->input('city'),
+                'postal_code' => $request->input('postal_code'),
+                'latitude'=>$request->input('latitude'),
+                'longitude'=>$request->input('longitude'),
+            ]);
+            flash()->success('store address added');
+            return redirect()->back();
+           
+            
+        } catch (Exception $exception) {
+
+            flash()->error('Error while adding store address.');
+            return redirect()->back();            
+        }
     }
 }

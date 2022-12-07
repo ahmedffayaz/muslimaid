@@ -22,9 +22,10 @@ class CreateTestimonialsTable extends Migration
             $table->string('position');
             $table->string('company');
             $table->string('status');
-            $table->string('meta_title');
+            $table->string('url')->nullable();
+            $table->string('meta_title')->nullable();
+            $table->longText('meta_description')->nullable();
             $table->integer('order_no');
-            $table->longText('meta_description');
             $table->timestamps();
         });
     }
