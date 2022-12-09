@@ -556,8 +556,7 @@ class StoreController extends Controller
             $url = url('/');
             $store = Store::whereId($request->input('store_id'))->first();
             
-            $url = $url.'/cashback/'. $store['name'] ;
-            
+            $url = $url.'/cashback/'. $store['slug'] ;
             $store = Store_seo_data::create([
                 'store_id'         => $request->input('store_id'),
                 'url'   =>  $url,

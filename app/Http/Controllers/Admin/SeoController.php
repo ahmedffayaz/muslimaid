@@ -39,7 +39,7 @@ class SeoController extends Controller
      */
     public function store(Request $request)
     {
-       
+      
         $validated = $request->validate([
             'url' => 'required',
             'title' => 'required',
@@ -100,7 +100,7 @@ class SeoController extends Controller
      */
     public function update(Request $request,  Seo_rule $seo)
     {
-      
+      dd($request->all());
         $validated = $request->validate([
             'url' => 'required|url',
             'title' => 'required',
@@ -114,7 +114,7 @@ class SeoController extends Controller
         $seo_rule->url = $request->url;
         $seo_rule->title = $request->title;
         $seo_rule->save();
-
+        
         foreach($request->type as $type)
         {
         $seo_rule_data = new Seo_rule_data;
