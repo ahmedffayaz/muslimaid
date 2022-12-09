@@ -87,6 +87,7 @@ class VouchersController extends Controller
      */
     public function edit(Request $request, Voucher $voucher )
     {
+       
         $stores = Store::latest()->get();
 
         if($request->input('store_editor')){

@@ -373,6 +373,7 @@ function checkStaticpageRule($url)
     $store_rule = App\Models\Store_seo_data::where('url',$url)->first();
     
     $blog = App\Models\Blog::where('url',$url)->first();
+   
     $categories = App\Models\Category::where('url',$url)->first();
    if(!empty($store_rule))
    {

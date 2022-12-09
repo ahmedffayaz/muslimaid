@@ -33,6 +33,21 @@
                                     <div class="row g-4">
                                         <div class="col-lg-6">
                                             <div class="form-group">
+                                                <label class="form-label" for="reviewer">User</label>
+                                                <div class="form-control-wrap ">
+                                                    <div class="form-control-select">
+                                                        <select class="form-control select-user" id="user" name="user"  required>
+                                                            <option value="" disabled selected>Select user</option>
+                                                            @foreach($users as $user)
+                                                            <option value="{{$user->id}}">{{ $user->first_name }} {{ $user->last_name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
                                                 <label class="form-label" for="reviewer">Title</label>
                                                 <div class="form-control-wrap">
                                                     <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="" required> 
@@ -46,13 +61,6 @@
                                                 <input id="logo-input"  name="user_image" class="form-control" type="file" onchange="readURL(this);" />
                                             </div>
                                         </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                            <label class="form-label" for="reviewer">Description</label>
-                                            <textarea  class="form-control " name="description" placeholder="Description" value="" required></textarea>
-                                        </div>
-                                        </div>
-                                        <hr>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">User Name</label>
@@ -61,6 +69,14 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                            <label class="form-label" for="reviewer">Description</label>
+                                            <textarea  class="form-control " name="description" placeholder="Description" value="" required></textarea>
+                                        </div>
+                                        </div>
+                                        <hr>
+                                        
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">Job Position</label>
@@ -98,22 +114,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="reviewer">Meta Title</label>
-                                                <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="meta_title" placeholder="Meta Title" value="" required> 
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label class="form-label" for="reviewer">Meta Description</label>
-                                                <div class="form-control-wrap">
-                                                    <textarea  class="form-control " name="meta_description" placeholder="Meta Description" value="" required></textarea>
-                                                </div>
-                                            </div>
-                                        </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <button onclock="remobe_bug()" class="btn btn-primary add-blog" type="submit">Save</button>
@@ -136,6 +136,21 @@
 
 @endsection
 @push('scripts')
-
-
+<script>
+       $(document).ready(function(){
+            $(document).on('change', '.select-user', function() {
+            
+            var id = $(this).val();
+            event.preventDefault();            
+                        $.ajax({
+                        method:"GET",
+                        url: "get/user/"+id+"",
+                        success:function(data){
+                        console.log(data['data']['first_name']);
+                        $('#user-name').val(data['data']['first_name']+' '+data['data']['last_name']);
+                    }
+            });
+        });
+    });
+</script>
 @endpush

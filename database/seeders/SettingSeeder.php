@@ -71,6 +71,7 @@ class SettingSeeder extends Seeder
                             'Webgains campaignId' => '1462945',
                             'Webgains User Name' => 'khuramj',
                             'Webgains Password' => 'p9bXV7w2e@nqhQ2',
+                            'Map Key' => 'AIzaSyAOxeH_CSvIYJQL8UCa9LnkUUi5AmVcI-c',
                             );
 
         foreach ($settings as $key => $value) {

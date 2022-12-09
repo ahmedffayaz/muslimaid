@@ -96,109 +96,89 @@
             <div class="col-12">
                 @if($locations->count())
                 <div class="block">
-                    <div class="block-header">
-                    </div>
-                    <div class="products-view">
-                        <div class="products-view__list products-list scrolling-pagination" data-layout="grid-5-full" data-with-features="false" data-mobile-grid-columns="2">
-                            <div class="products-list__body ">
-                                @foreach ($locations as $store)
-
-                                {{-- <div class="products-list__item text-center">
-                                    <div class="product-card ">
-                                        
-                                        <div class="product-card__image product-image">
-                                            <a href="{{route('store.show',$store->slug)}}" class="product-image__body" style="padding-bottom:100px">
-                                                <img class="product-image__img"  @if($store->logo->first())
-                                                @if($store->logo->first()->is_fake)
-                                                    src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
+                    <div class="block">
+                        <div class="block-header">
+                        </div>
+                        <div class="products-view">
+                            <div class="products-view__list products-list scrolling-pagination" data-layout="grid-5-full" data-with-features="false" data-mobile-grid-columns="2">
+                                <div class="products-list__body ">
+                                    @foreach ($locations as $store)
+                                    <div class="products-list__item text-center">
+                                        <div class="product-card ">
+                                            <div class="product-card__image product-image">
+                                                <a href="{{route('store.show',$store->slug)}}" class="product-image__body" style="padding-bottom:100px">
+                                                    <img class="product-image__img"  @if($store->logo->first())
+                                                    @if($store->logo->first()->is_fake)
+                                                        src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
+                                                    @else
+                                                        src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                                                    @endif
                                                 @else
-                                                    src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
-                                                @endif
-                                            @else
-                                                src="{{asset('frontend/images/products/product-16.jpg')}}" 
-                                            @endif alt="">
-                                            </a>
-                                        </div>
-                                        <div class="product-card__info">
-                                            <div class="product-card__name">
-                                                <a href="{{route('store.show',$store->slug)}}">{{$store->name}}</a>
+                                                    src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                                                @endif alt="">
+                                                </a>
                                             </div>
-                                            @if($store->reviews->count())
-                                            <div class="product-card__rating mx-auto">
-                                                <div class="product-card__rating-stars">
-                                                    <div class="rating">
-                                                        <div class="rating__body">
-                                                            @foreach (range(1,5) as $index)
-                                                            <svg class="rating__star @if($index <= $store->reviews->avg('rating')) rating__star--active @endif" width="13px" height="12px">
-                                                                <g class="rating__fill">
-                                                                    <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal"></use>
-                                                                </g>
-                                                                <g class="rating__stroke">
-                                                                    <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal-stroke"></use>
-                                                                </g>
-                                                            </svg>
-                                                            <div class="rating__star rating__star--only-edge @if($index <= $store->reviews->avg('rating')) rating__star--active @endif">
-                                                                <div class="rating__fill">
-                                                                    <div class="fake-svg-icon"></div>
+                                            <div class="product-card__info">
+                                                <div class="product-card__name">
+                                                    <a href="{{route('store.show',$store->slug)}}">{{$store->name}}</a>
+                                                </div>
+                                                @if($store->reviews->count())
+                                                <div class="product-card__rating mx-auto">
+                                                    <div class="product-card__rating-stars">
+                                                        <div class="rating">
+                                                            <div class="rating__body">
+                                                                @foreach (range(1,5) as $index)
+                                                                <svg class="rating__star @if($index <= $store->reviews->avg('rating')) rating__star--active @endif" width="13px" height="12px">
+                                                                    <g class="rating__fill">
+                                                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal"></use>
+                                                                    </g>
+                                                                    <g class="rating__stroke">
+                                                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal-stroke"></use>
+                                                                    </g>
+                                                                </svg>
+                                                                
+                                                                <div class="rating__star rating__star--only-edge @if($index <= $store->reviews->avg('rating')) rating__star--active @endif">
+                                                                    <div class="rating__fill">
+                                                                        <div class="fake-svg-icon"></div>
+                                                                    </div>
+                                                                    <div class="rating__stroke">
+                                                                        <div class="fake-svg-icon"></div>
+                                                                    </div>
                                                                 </div>
-                                                                <div class="rating__stroke">
-                                                                    <div class="fake-svg-icon"></div>
-                                                                </div>
+                                                                @endforeach
                                                             </div>
-                                                            @endforeach
                                                         </div>
                                                     </div>
+                                                    <div class="product-card__rating-legend">{{$store->reviews->count()}} Reviews</div>
                                                 </div>
-                                                <div class="product-card__rating-legend">{{$store->reviews->count()}} Reviews</div>
-                                            </div>
-                                            @endif
-                                          
-                                        </div>
-                                        <div class="distance calculatedDistance" id="distance-<?=$store->id;?>">1.4 miles away</div>
-                                    </div>
-                                        <div class="product-card__actions">
-                                            <div class="product-card__prices">
-                                               
-                                            
-                                        </div>
-                                    </div>
-                                </div> --}}
-        
-                                <div class="col-xxl-3 col-lg-4 col-sm-6">
-                                    <div class="card card-bordered product-card">
-                                        <div class="product-thumb">
-                                            <a href="{{route('store.show',$store->slug)}}">
-                                                {{-- <img class="card-img-top" src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}" alt=""> --}}
-                                                <img class="card-img-top"  style="height:336px;" @if($store->logo->first())
-                                                @if($store->logo->first()->is_fake)
-                                                    src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
-                                                @else
-                                                    src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
                                                 @endif
-                                            @else
-                                                src="{{asset('frontend/images/products/product-16.jpg')}}" 
-                                            @endif alt="">
-                                            </a>
-{{--                                             
-                                            <ul class="product-actions">
-                                                <li><a href="#"><em class="icon ni ni-cart"></em></a></li>
-                                                <li><a href="#"><em class="icon ni ni-heart"></em></a></li>
-                                            </ul> --}}
-                                        </div>
-                                        <div class="card-inner text-center">
-                                            <h5 class="product-title"></h5>
-                                           <p class="product-title"> <span><em class="icon ni ni-covid">{{$store->name}}</em></span></p>
-                                           <h6  class="product-title">{{ $store->address }}</h6>
-                                            <div class="distance calculatedDistance" id="distance-<?=$store->id;?>">1.4 miles away</div>
+                                                
+                                            </div>
+                                            <div class="product-card__actions">
+                                                <div class="product-card__prices">
+                                                    
+                                                    @if($store->custom_cashback_percentage)
+                                                        @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
+                                                    @else
+                                                        @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
+                                                    @endif
+                                                        Cashback
+                                                </div>
+                                                <div class="product-card__prices">
+                                                    <div class="distance calculatedDistance" id="distance-<?=$store->id;?>">1.4 miles away</div>
+                                                </div>
+                                                
+                                            </div>
                                         </div>
                                     </div>
-                                </div><!-- .col -->
-        @endforeach
-                               
+                                    @endforeach
+                                    {{-- {!! $locations->links()!!}  --}}
+                                </div>
                             </div>
+                            
                         </div>
-                       
                     </div>
+                            
                 </div>
                 @else
                 <h2>No Cashback Found</h2>
@@ -226,8 +206,8 @@
         var service;
         let myLat = "";
         let myLng = "";
+       
         var locations = <?php print_r(json_encode($locations)) ?>;
-
     function getLocation() { 
         if (navigator.geolocation) {
           
@@ -280,6 +260,7 @@
     }
 
         function initMap() {
+          
             directionsService = new google.maps.DirectionsService();
             directionsRenderer = new google.maps.DirectionsRenderer();
             getLocation(); 
@@ -432,32 +413,33 @@
      var destinations = [];
      
      for (i = 0; i < locations.length; i++) {
-    
+       
+        for(j = 0; j < locations[i]['store_address'].length; j++){
+          
          origins.push(new google.maps.LatLng(myLat, myLng));
-         destinations.push(new google.maps.LatLng(locations[i]['latitude'],locations[i]['longitude']));
+         destinations.push(new google.maps.LatLng(locations[i]['store_address'][j]['latitude'],locations[i]['store_address'][j]['longitude']));
 
          marker = new google.maps.Marker({
-             position: new google.maps.LatLng(locations[i]['latitude'], locations[i]['longitude']),
+             position: new google.maps.LatLng(locations[i]['store_address'][j]['latitude'], locations[i]['store_address'][j]['longitude']),
              map: map,
              icon:'<?=url('');?>/frontend/images/resturant.png'
          });
-         //console.log('sss',locations[i]['logo'][i]['image']);
          var origin   = window.location.origin;
          const contentString =
                '<div id="content">' +
                '<div id="siteNotice">' +
                "</div>" +
                '<div id="mapPopupHeader">'+
-               '<div id="headerImg"><a href="ABC"><img src="'+origin+'/storage/stores/images/'+locations[i]['logo']['image']+'"></a></div>' +
+            //    '<div id="headerImg"><a href="ABC"><img src="'+origin+'/storage/stores/images/'+locations[i]['logo']['image']+'"></a></div>' +
                '<a href="'+origin+'/cashback/silk-center'+'"><div id="headerTitleAddress"><h4 id="firstHeading" class="firstHeading">'+locations[i]['name']+'</h4></a>' +
                "</div></div>"+
                '<div id="bodyContent">' +
-               '<p><span class="addressIcon"><i class="ion-location mr2" aria-hidden="true"></i></span>'+locations[i]['address']+'</p>' +
+               '<p><span class="addressIcon"><i class="ion-location mr2" aria-hidden="true"></i></span>'+locations[i]['store_address'][j]['address']+'</p>' +
                '<div class="storeTimings d-none">'+
                '<h4><span><i class="ion-clock mr2" aria-hidden="true"></i></i></span>Timings</h4>'+
                '<ul>12PM</ul>'+
                '</div>'+
-               '<p id="directionBtn"><button class="btn btn-primary" onclick="calculateAndDisplayRoute('+locations[i]['latitude']+','+locations[i]['longitude']+')">GET DIRECTION</button></p>' +
+               '<p id="directionBtn"><button class="btn btn-primary" onclick="calculateAndDisplayRoute('+locations[i]['store_address'][j]['latitude']+','+locations[i]['store_address'][j]['longitude']+')">GET DIRECTION</button></p>' +
                "</div>" +
                "</div>";
 
@@ -468,7 +450,7 @@
                }
            })(marker, i));
      }
-
+    }
      service = new google.maps.DistanceMatrixService();
      
      var request = {
@@ -680,5 +662,5 @@
   
 
     </script>
-    <script type="text/javascript"src="https://maps.google.com/maps/api/js?key=AIzaSyAOxeH_CSvIYJQL8UCa9LnkUUi5AmVcI-c&callback=initMap&libraries=places&v=weekly" async></script>
+    <script type="text/javascript"src="https://maps.google.com/maps/api/js?key={{ SiteSetting()['map_key'] }}&callback=initMap&libraries=places&v=weekly" async></script>
     @endpush

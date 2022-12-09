@@ -28,7 +28,7 @@ class StoreController extends Controller
 
     public function storeLocation()
     {
-        $locations = Store::with('logo')->get();
+        $locations = Store::with('logo','storeAddress')->get();
         return view('frontend.stores.location',compact('locations'));
     }
    

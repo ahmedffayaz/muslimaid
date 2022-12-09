@@ -96,7 +96,6 @@
 
 function appendTypeField( )
 {   
-
     var counter = Number($('.rule-type-container').attr('data-count'));
     counter++;
     let html = `
@@ -111,11 +110,10 @@ function appendTypeField( )
                         </select>   
                     </div>
                 </div>
-               
                 <span>
                     <em class="icon ni ni-minus-circle removebtn" data-type_counter="${counter}"></em>
                 </span>
-            </div>`;
+            `;
        // counter++;
         $('.rule-type-container').append(html);
         $('.rule-type-container').attr('data-count', counter);
@@ -150,11 +148,7 @@ $(document).on('change', '.rule_type', function() {
 
 $(document).on('click', '.removebtn', function() {
    
-//     let counter = $(this).attr('data-type_counter');
-//     alert(counter);
-//     counter--;
-//    // $('.rule-type-container').remove();
-    console.log($(this).parents('.form-group').remove());
+    $(this).parents('.form-group').remove();
   
 });
 

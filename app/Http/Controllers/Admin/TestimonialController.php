@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Testimonial;
+use App\Models\User;
+use Response;
 
 class TestimonialController extends Controller
 {
@@ -27,7 +29,8 @@ class TestimonialController extends Controller
      */
     public function create()
     {
-        return view('admin-dashboard.testimonials.create');
+        $users = User::role('user')->get();
+        return view('admin-dashboard.testimonials.create',compact('users'));
     }
 
     /**
@@ -44,7 +47,6 @@ class TestimonialController extends Controller
             'name' =>'required',
             'company_name'=>'required',
             'order_no'=>'required|integer',
-            'meta_title'=>'required',
             'position'=>'required'
         ],$messages = [
             'title.required' => 'The Title field is required.',
@@ -71,9 +73,7 @@ class TestimonialController extends Controller
             $testimonial->position = $request->position;
             $testimonial->company = $request->company_name;
             $testimonial->status = $request->status;
-            $testimonial->meta_title = $request->meta_title;
             $testimonial->order_no = $request->order_no;
-            $testimonial->meta_description = $request->meta_description;
             $testimonial->save();
 
             flash()->success('Testimonial added successfully.');
@@ -116,7 +116,6 @@ class TestimonialController extends Controller
             'name' =>'required',
             'company_name'=>'required',
             'order_no'=>'required|integer',
-            'meta_title'=>'required',
             'position'=>'required'
         ],$messages = [
             'title.required' => 'The Title field is required.',
@@ -143,9 +142,7 @@ class TestimonialController extends Controller
         $testimonial->position = $request->position;
         $testimonial->company = $request->company_name;
         $testimonial->status = $request->status;
-        $testimonial->meta_title = $request->meta_title;
         $testimonial->order_no = $request->order_no;
-        $testimonial->meta_description = $request->meta_description;
         $testimonial->save();
         flash()->success('Testimonial updated successfully');
         return redirect()->route('admin.testimonials.index');
@@ -162,5 +159,11 @@ class TestimonialController extends Controller
         $testimonial->delete();
         flash()->success('Testimonial deleted successfully');
         return redirect()->route('admin.testimonials.index');
+    }
+
+    public function userDetails($id)
+    {
+        $user = User::where('id',$id)->first();
+        return Response::json(['data'=>$user]);
     }
 }

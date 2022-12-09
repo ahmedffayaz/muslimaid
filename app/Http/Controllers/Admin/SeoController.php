@@ -41,7 +41,7 @@ class SeoController extends Controller
     {
        
         $validated = $request->validate([
-            'url' => 'required|url',
+            'url' => 'required',
             'title' => 'required',
 
         ],$messages = [
@@ -51,7 +51,7 @@ class SeoController extends Controller
         ]);
 
         $seo_rule = new Seo_rule;
-        $seo_rule->url = $request->url;
+        $seo_rule->url =url('/').$request->url;
         $seo_rule->title = $request->title;
         $seo_rule->save();
 
@@ -138,6 +138,7 @@ class SeoController extends Controller
      */
     public function destroy(Seo_rule $seo)
     {
+        Seo_rule_data::where('seo_rule_id',$seo['id'])->delete();
         $seo->delete();
         flash()->success('Seo rule deleted successfully');
         return redirect()->route('admin.seo.index');

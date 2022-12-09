@@ -86,4 +86,9 @@ class Store extends Model
         return $this->hasMany(Store_seo_data::class,'store_id','id');
     }
 
+    public function storeAddress()
+    {
+        return $this->hasMany(StoreAddress::class,'store_id','id');
+    }
+
 }

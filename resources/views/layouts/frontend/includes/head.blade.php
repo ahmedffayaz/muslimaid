@@ -2,11 +2,12 @@
 $current_url = url()->full();
 
 $rule = App\Models\Seo_rule::where('url',$current_url)->first();
+
 if(!empty($rule))
 {
   $meta_keywords = $rule->ruleData()->first()->where('type','meta_keyword')->get();
   $meta_description = $rule->ruleData()->first()->where('type','meta_Description')->get();
-  
+ 
   $keyword = metaKeyword($meta_keywords);
   $description = metaDescription($meta_description);
  

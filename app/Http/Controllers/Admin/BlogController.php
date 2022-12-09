@@ -53,7 +53,7 @@ class BlogController extends Controller
         $blog->excerpt = $request->excerpt;
         $blog->lb_content = $request->content;
         $blog->featured_image = $request->filepath;
-        $blog->url = ' http://127.0.0.1:8000/post/'. $request->title;
+        $blog->url = 'http://127.0.0.1:8000/post/'.\Str::slug($request->title,'_');
         $blog->meta_keyword = $request->meta_keyword;
         $blog->meta_description = $request->meta_description;
         $blog->save();

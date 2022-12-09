@@ -14,6 +14,7 @@ use App\Models\StoreReview;
 use App\Models\EditorPick;
 use App\Models\Slider;
 use App\Models\Store_seo_data;
+use App\Models\StoreAddress;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
@@ -126,6 +127,7 @@ class StoreController extends Controller
      */
     public function show(Store $store)
     {
+        
         $networks = Network::all();
         $categories = Category::where('parent_id',0)->get();
         $stores = Store::latest()->get();
@@ -520,7 +522,8 @@ class StoreController extends Controller
     {
         if($request->ajax())
         {
-           $store = Store::where('id',$request->store)->first();
+           $store = Store::with('storeAddress')->where('id',$request->store)->first();
+           
             return view('admin-dashboard.stores.store_address', compact('store'))->render();
         }
     }
@@ -562,9 +565,6 @@ class StoreController extends Controller
                 'meta_description' => $request->input('meta_description'),
             ]);
 
-            
-
-            
             flash()->success('New store Seo rule added');
             return redirect()->back();
            
@@ -578,12 +578,10 @@ class StoreController extends Controller
 
     public function addStoreAddress(Request $request)
     {
+       
         $validator = Validator::make($request->all(), [
             'city' => 'required',
-            'address' => 'required',
             'postal_code' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
         ]);
     
         if ($validator->fails()) {
@@ -594,12 +592,21 @@ class StoreController extends Controller
       
         try {
             $store = store::where('id',$request->input('store_id'))->update([
-                'address'         => $request->input('address'),
                 'city'   => $request->input('city'),
                 'postal_code' => $request->input('postal_code'),
-                'latitude'=>$request->input('latitude'),
-                'longitude'=>$request->input('longitude'),
             ]);
+
+            StoreAddress::where('store_id',$request->input('store_id'))->delete();
+            foreach($request->input('address') as $address)
+            {
+                $storeaddresses = StoreAddress::create([
+                    'store_id'  => $request->input('store_id'),
+                    'address'   => $address['address'],
+                    'latitude'  => $address['latitude'],
+                    'longitude' => $address['longitude'],
+                ]);
+            }
+
             flash()->success('store address added');
             return redirect()->back();
            
@@ -609,5 +616,43 @@ class StoreController extends Controller
             flash()->error('Error while adding store address.');
             return redirect()->back();            
         }
+    }
+
+    public function editStoreSeoRule($id)
+    {
+        $storeSeoRule = Store_seo_data::where('id',$id)->first();
+        return view('admin-dashboard.stores.store_seo_edit_modal', compact('storeSeoRule'))->render();
+    }
+
+    public function updateStoreSeoRule( Request $request , Store_seo_data $Store_seo_data)
+    {
+        $validator = Validator::make($request->all(), [
+            'meta_keyword' => 'required',
+            'meta_description' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
+        }
+    
+        Store_seo_data::where('id',$request->input('seo_id'))->update([
+            'meta_keyword' => $request->input('meta_keyword'),
+            'meta_description' => $request->input('meta_description')
+        ]);
+        if(!$request->ajax())
+        { 
+             flash()->success('Seo rule updated successfully');
+             return redirect()->back();
+
+        }
+    }
+
+    public function deleteStoreSeoRule($id)
+    {
+        Store_seo_data::where('id',$id)->delete();
+        flash()->success('Seo rule deleted');
+
     }
 }

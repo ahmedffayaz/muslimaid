@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSeoRuleDatasTable extends Migration
+class CreateStoreAddressesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,12 @@ class CreateSeoRuleDatasTable extends Migration
      */
     public function up()
     {
-        Schema::create('seo_rule_datas', function (Blueprint $table) {
+        Schema::create('store_addresses', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('seo_rule_id')->constrained('seo_rules')->cascadeOnDelete();
-            $table->string('type');
-            $table->longText('value');
+            $table->unsignedBigInteger('store_id');
+            $table->string('latitude');
+            $table->string('longitude');
+            $table->longText('address');
             $table->timestamps();
         });
     }
@@ -29,6 +30,6 @@ class CreateSeoRuleDatasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('seo_rule_datas');
+        Schema::dropIfExists('store_addresses');
     }
 }

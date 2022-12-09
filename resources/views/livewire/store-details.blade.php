@@ -691,6 +691,27 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="seo-modal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+              
+                   
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Edit Seo rule</span></div>
+                        {{-- <div class="nk-file-name-sub">Project</div> --}}
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="seo" class=" p-4">
+
+            </div>
+        </div><!-- .modal-content -->
+    </div><!-- .modla-dialog -->
+</div><!-- .modal -->
 <script>
     document.addEventListener('livewire:load', function () {
         
@@ -918,12 +939,32 @@
                     });
                
         });
+
+        $(document).on('click', '.seo-edit', function(event){
+            event.preventDefault(); 
+            
+            var id = $(this).attr('seo-id');
+            pageurl = "stores/seo/"+id+""
+            store_editor = 1;
+            var _token = $("input[name=_token]").val();
+                $.ajax({
+
+                    url:pageurl,
+                    method:"GET",
+                    data:{_token:_token,store_editor:store_editor},
+                    success:function(data)
+                    {
+                        $('#seo-modal').modal('show');
+                        $('#seo').html(data);
+                    }
+                    });
+               
+        });
     });
 
     // Voucher update
     $(document).ready( function() {
         $(document).on('submit', '.voucher_form', function(event){
-   
           event.preventDefault();          
           $.ajax({
                 url: $(this).attr('action'),
@@ -938,6 +979,27 @@
                     
                 })(NioApp, jQuery);
                     fetchVouchers();
+                }
+            });      
+        });
+    });
+
+    $(document).ready( function() {
+        $(document).on('submit', '.seo_form', function(event){
+          event.preventDefault();          
+          $.ajax({
+                url: $(this).attr('action'),
+                type: "PUT",
+                data: $(this).serialize(),
+                success: function(data){
+                    $('#seo-modal').modal('hide');
+                    (function(NioApp, $){
+                    'use strict';
+                    toastr.clear();
+                    NioApp.Toast('Seo rule Updated Successfully.', 'success');
+                    
+                })(NioApp, jQuery);
+                    fetchSeoRules();
                 }
             });      
         });
@@ -1187,6 +1249,37 @@
             event.preventDefault(); 
         });
     });
+    //delete seo rule for store
+    $(document).ready(function(){
+       
+       $(document).on('click', '.delete-seo', function(event){
+           var seoid = $(this).attr('seo_delete-id');
+           Swal.fire({
+           title: 'Are you sure?',
+           text: "You won't be able to revert this!",
+           icon: 'warning',
+           showCancelButton: true,
+           confirmButtonText: 'Yes, delete it!'
+           }).then(function (result) {
+           if (result.value) {
+               pageurl = 'stores/seo/delete/'+seoid;
+               var _token = $("input[name=_token]").val();
+               $.ajax({
+
+                   url:pageurl,
+                   method:"GET",
+                   data:{_token:_token},
+                   success:function(data)
+                   {
+                       fetchSeoRules();
+                   }
+               });
+               Swal.fire('Deleted!', 'Seo rule has been deleted.', 'success');
+           }
+           });
+           event.preventDefault(); 
+       });
+   });
 
 
     //Update Store 
@@ -1418,6 +1511,55 @@
             }
         });
     }
+
+// function for adding multi locations
+    $(document).on('click', '.addBtn', function() {
+        var counter = Number($('.address-fields').attr('data-count'));
+       
+        let html = ` <div class="row g-4">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="latitude">Latitude</label>
+                                    <div class="form-control-wrap">
+                                        <input type="text" class="form-control" id="latitude" name="address[${counter}][latitude]" value="" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="longitude">Longitude</label>
+                                    <div class="form-control-wrap">
+                                    <input type="text"  class="form-control" id="longitude" name="address[${counter}][longitude]" value="" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="vsale_commission">Address</label>
+                                    <div class="form-control-wrap">
+                                        <textarea class="form-control" id="address" value="" name="address[${counter}][address]" required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-1" style="margin-left: 817px;margin-top: -96px;">
+                            <em class="icon ni ni-minus-c removeBtn" ></em>
+                            </div>
+                        </div>
+                        `;
+                        counter++;
+        $('.append-fields').append(html);
+        $('.address-fields').attr('data-count', counter);
+    });
+
+
+    $(document).on('click', '.removeBtn', function() {
+        $(this).parent().parent().remove();
+    });
+    // $(document).on('click', '.removeBtnEdit', function() {
+    //     alert('sd');
+    //     $(this).parent().childrens('form0group').remove();
+    // });
+    
 </script>
 
 @endpush

@@ -100,18 +100,21 @@ class ReferController extends Controller
                         ->withErrors($validator)
                         ->withInput();
         }
-   
+        
+        $email_template = EmailTemplate::where('key','referral_link')->first(); 
         $link = url('').'/register-form?referby='.base64_encode($user =\Auth::user()->id);
+        $button = '<a href="'.$link.'" target="_blank"><input type="button" class="btn btn-success" value="Register"></a>';
+        $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{BUTTON}}'],[SiteSetting()['website_title'], url('/'), $button],$email_template->message );
        
-        $data = array(
-            'link'=>$link,
-            'subject'=>"Referral link",
+        $email_data = array(
+            'subject'=>$email_template->subject,
+            'email_message'=>$filtered_message,
             'email'=>$request->referral_email
         );
       
-        Mail::send('emails.referral_email', $data, function ($message) use ($data) {
-            $message->to($data['email'])
-                ->subject($data['subject']);
+        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
+            $message->to($email_data['email'])
+                ->subject($email_data['subject']);
         });
 
         flash()->success('Email sent.');

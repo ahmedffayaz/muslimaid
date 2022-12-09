@@ -26,6 +26,7 @@ class SettingsController extends Controller
     {
         $route='index';
         $settings = SiteSetting::latest()->get()->pluck('value','type');
+       
         $currencies = Currency::all();
         $sc = Currency::where('id',$settings['currency'])->pluck('symbol')->first();
         return view('admin-dashboard.settings.settings',compact('settings','route','currencies','sc'));

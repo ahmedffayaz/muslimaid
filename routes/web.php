@@ -74,6 +74,9 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::get('stores/show', [App\Http\Controllers\Admin\StoreController::class,'showStore'])->name('stores.show_store');
     Route::post('stores/store_seo_rule',  [App\Http\Controllers\Admin\StoreController::class,'storeSeoRule'])->name('stores.save_seo_rule');
     Route::post('stores/store_address',  [App\Http\Controllers\Admin\StoreController::class,'addStoreAddress'])->name('stores.save_address');
+    Route::get('stores/seo/{id}',  [App\Http\Controllers\Admin\StoreController::class,'editStoreSeoRule'])->name('stores.edit_seo');
+    Route::put('stores/seo/update',  [App\Http\Controllers\Admin\StoreController::class,'updateStoreSeoRule'])->name('stores.update_seo');
+    Route::get('stores/seo/delete/{id}', [App\Http\Controllers\Admin\StoreController::class,'deleteStoreSeoRule'])->name('stores.seo.delete');
     Route::resource('stores', StoreController::class);
     Route::resource('storecashbacks', StoreCashbackController::class);
 
@@ -180,7 +183,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('translations', Translations\TranslationController::class);
     Route::resource('lines', Translations\LanguageLineController::class);
 
-
+    Route::get('get/user/{id}', [App\Http\Controllers\Admin\TestimonialController::class,'userDetails'])->name('users.fetch');
 
     Route::post('tickets/fetch',[App\Http\Controllers\Admin\TicketsController::class,'fetch'])->name('tickets.fetch');
     Route::post('tickets/search',  [App\Http\Controllers\Admin\TicketsController::class,'searchTickets'])->name('tickets.search');
@@ -231,7 +234,7 @@ Route::get('category/{slug}',[App\Http\Controllers\Frontend\PagesController::cla
 Route::get('top-cashback',[App\Http\Controllers\Frontend\PagesController::class, 'topStores'])->name('top_stores');
 Route::get('trending',[App\Http\Controllers\Frontend\PagesController::class, 'trending'])->name('trending');
 Route::get('cashback/{slug}',[App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
-Route::get('stores-locations',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
+Route::get('stores/cashback-to-door',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
 Route::get('search_suggestions',[App\Http\Controllers\Frontend\PagesController::class, 'searchSuggestions'])->name('search_suggestions');
 Route::get('pages/{page}',[App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('page');
 Route::get('post/{blog}',[App\Http\Controllers\Frontend\PagesController::class, 'blogPost'])->name('post');

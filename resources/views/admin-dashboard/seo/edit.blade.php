@@ -124,10 +124,7 @@
                         </select>   
                     </div>
                 </div>
-                <div class="col-lg-1">
-                    <span><em class="icon ni ni-minus-circle removebtn" data-type_counter="${counter}" onclick="removeFields();"></em></span>
-                </div>
-            </div>`;
+                    <span><em class="icon ni ni-minus-circle removebtn" data-type_counter="${counter}" onclick="removeFields();"></em></span>`;
        // counter++;
         $('.rule-type-container').append(html);
         $('.rule-type-container').attr('data-count', counter);
@@ -138,9 +135,9 @@ $(document).on('change', '.rule_type', function() {
     let val = $(this).val();
     let counter = $(this).attr('data-type_count');
     let html = '';
-    $(this).parents('.form-group').siblings('.remove').html('');
+    console.log($(this).parents('.form-group').siblings('.remove').html(''));
     if (val == 'meta_keyword') {
-         html = `<div class="col-lg-12" >
+         html = `<div class="remove" >
                         <div class="form-group">
                             <label class="form-label" for="reviewer">Meta Keywords</label>
                             <div class="form-control-wrap">
@@ -150,20 +147,21 @@ $(document).on('change', '.rule_type', function() {
                     </div>`;
         
     } else {
-         html = `<div class="col-lg-12">
+         html = `<div class="remove">
                         <div class="form-group">
                             <label class="form-label" for="reviewer">Meta Description</label>
                             <textarea  class="form-control " name="type[${counter}][value]"  placeholder="Meta Description" value="" required></textarea>
                         </div>
-                    </div>`;
+                    </div>
+                </div>`;
     }   
     $(this).parent().append(html);
 });
 
 $(document).on('click', '.removebtn', function() {
    
-   let counter = $(this).attr('data-type_counter');
-   alert(counter);
+//    let counter = $(this).attr('data-type_counter');
+//    alert(counter);
   // $('.rule-type-container').remove();
  $(this).parents('form-group').remove();
  
