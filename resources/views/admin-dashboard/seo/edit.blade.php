@@ -112,8 +112,8 @@
 {   
     var counter = Number($('.rule-type-container').attr('data-count'));
     counter++;
-    let html = `
-                 <div class="form-group">
+    let html = `<div>
+    <div class="form-group">
                   <label class="form-label" for="default-06">Type</label>
                     <div class="form-control-wrap ">
                       <div class="form-control-select">
@@ -124,7 +124,8 @@
                         </select>   
                     </div>
                 </div>
-                    <span><em class="icon ni ni-minus-circle removebtn" data-type_counter="${counter}" onclick="removeFields();"></em></span>`;
+                    <span><em class="icon ni ni-minus-circle removebtn" data-type_counter="${counter}" onclick="removeFields();"></em></span>
+                    </div>`;
        // counter++;
         $('.rule-type-container').append(html);
         $('.rule-type-container').attr('data-count', counter);
@@ -135,9 +136,10 @@ $(document).on('change', '.rule_type', function() {
     let val = $(this).val();
     let counter = $(this).attr('data-type_count');
     let html = '';
-    console.log($(this).parents('.form-group').siblings('.remove').html(''));
+    //$(this).parents('.form-group').siblings('.remove').html(''));
+    $(this).siblings().html('');
     if (val == 'meta_keyword') {
-         html = `<div class="remove" >
+         html = `  <div class="remove" >
                         <div class="form-group">
                             <label class="form-label" for="reviewer">Meta Keywords</label>
                             <div class="form-control-wrap">
@@ -159,11 +161,8 @@ $(document).on('change', '.rule_type', function() {
 });
 
 $(document).on('click', '.removebtn', function() {
-   
-//    let counter = $(this).attr('data-type_counter');
-//    alert(counter);
-  // $('.rule-type-container').remove();
- $(this).parents('form-group').remove();
+
+    $(this).parent().siblings('.remove').remove();
  
 });
 </script>

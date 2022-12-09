@@ -66,6 +66,7 @@ class TestimonialController extends Controller
         }
 
             $testimonial = new Testimonial;
+            $testimonial->user_id = $request->user;
             $testimonial->title = $request->title;
             $testimonial->description = $request->description;
             $testimonial->image = $imageName;

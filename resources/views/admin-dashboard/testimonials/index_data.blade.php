@@ -5,6 +5,7 @@
 </style>
 <div class="nk-tb-item nk-tb-head">
     <div class="nk-tb-col"><span class="sub-text">Title</span></div>
+    <div class="nk-tb-col"><span class="sub-text">User name</span></div>
     <div class="nk-tb-col"><span class="sub-text">Description</span></div>
     <div class="nk-tb-col"><span class="sub-text">Status</span></div>
     <div class="nk-tb-col nk-tb-col-tools text-right">
@@ -16,6 +17,9 @@
     
     <div class="nk-tb-col">
         <div class="tb-lead"><span><a href="{{route('admin.testimonials.edit', $testimonial)}}" class="a_link">{{$testimonial->title}}</a></span></div>
+    </div>
+    <div class="nk-tb-col">
+        <span>{{$testimonial->name}}</span>
     </div>
     <div class="nk-tb-col">
         <span>{{$testimonial->description}}</span>

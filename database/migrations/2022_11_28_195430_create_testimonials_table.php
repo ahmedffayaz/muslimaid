@@ -16,6 +16,7 @@ class CreateTestimonialsTable extends Migration
         Schema::create('testimonials', function (Blueprint $table) {
             $table->id();
             $table->string('title');
+            $table->unsignedBigInteger('user_id');
             $table->longText('description');
             $table->string('image');
             $table->string('name');
@@ -23,8 +24,6 @@ class CreateTestimonialsTable extends Migration
             $table->string('company');
             $table->string('status');
             $table->string('url')->nullable();
-            $table->string('meta_title')->nullable();
-            $table->longText('meta_description')->nullable();
             $table->integer('order_no');
             $table->timestamps();
         });

@@ -51,7 +51,7 @@ class SeoController extends Controller
         ]);
 
         $seo_rule = new Seo_rule;
-        $seo_rule->url =url('/').$request->url;
+        $seo_rule->url =$request->url;
         $seo_rule->title = $request->title;
         $seo_rule->save();
 
@@ -100,7 +100,7 @@ class SeoController extends Controller
      */
     public function update(Request $request,  Seo_rule $seo)
     {
-      dd($request->all());
+      
         $validated = $request->validate([
             'url' => 'required|url',
             'title' => 'required',
@@ -111,7 +111,7 @@ class SeoController extends Controller
         $seo->delete();
         
         $seo_rule = new Seo_rule;
-        $seo_rule->url = $request->url;
+        $seo_rule->url =$request->url;
         $seo_rule->title = $request->title;
         $seo_rule->save();
         

@@ -1514,7 +1514,7 @@
 
 // function for adding multi locations
     $(document).on('click', '.addBtn', function() {
-        var counter = Number($('.address-fields').attr('data-count'));
+        var counter = Number($('.address-fields').data('count'));
        
         let html = ` <div class="row g-4">
                             <div class="col-lg-6">
@@ -1542,7 +1542,7 @@
                                 </div>
                             </div>
                             <div class="col-lg-1" style="margin-left: 817px;margin-top: -96px;">
-                            <em class="icon ni ni-minus-c removeBtn" ></em>
+                            <em class="icon ni ni-minus-c delBtn" id="removeBtn[${counter}]"></em>
                             </div>
                         </div>
                         `;
@@ -1555,10 +1555,62 @@
     $(document).on('click', '.removeBtn', function() {
         $(this).parent().parent().remove();
     });
-    // $(document).on('click', '.removeBtnEdit', function() {
-    //     alert('sd');
-    //     $(this).parent().childrens('form0group').remove();
-    // });
+
+    $('#editremoveBtnid').on('click', '.editremoveBtn', function() {
+        
+        $(this).parent().remove();
+    });
+
+
+    //test
+
+
+   
+    $(document).on('click', '#append_fields', function() {
+         var counter = Number($('.address-fields').attr('data-count'));
+        
+        let html = ` <div class="row g-4">
+                            <div class="col-lg-5">
+                                <div class="form-group">
+                                    <label class="form-label" for="latitude">Latitude</label>
+                                    <div class="form-control-wrap">
+                                        <input type="text" class="form-control" id="latitude" name="address[${counter}][latitude]" value="" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-5">
+                                <div class="form-group">
+                                    <label class="form-label" for="longitude">Longitude</label>
+                                    <div class="form-control-wrap">
+                                    <input type="text"  class="form-control" id="longitude" name="address[${counter}][longitude]" value="" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-11">
+                                <div class="form-group">
+                                    <label class="form-label" for="vsale_commission">Address</label>
+                                    <div class="form-control-wrap">
+                                        <textarea class="form-control" id="address" value="" name="address[${counter}][address]" required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-1" style="margin-left: 817px;margin-top: -96px;">
+                              <em class="icon ni ni-minus-c delBtn" id="removeBtn[${counter}]"></em>
+                            </div>
+                        </div>
+                        `;
+       
+        counter++;
+        $('#corsi').append(html);
+        $('.address-fields').attr('data-count', counter);
+    });
+
+    $(document).on('click', '.delBtn', function() {
+console.log('this :'+$(this));
+  //counter --;
+
+  $(this).parent().parent().remove();
+    });
     
 </script>
 

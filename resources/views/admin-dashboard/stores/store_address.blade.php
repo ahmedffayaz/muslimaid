@@ -23,82 +23,55 @@
                     </div>
                 </div>
             </div>
-            @if($store->storeAddress()->count() == 0)
-                <div class="col-lg-11  address-fields" data-count="{{$isEdit ? $store->count() : 1}}">
-                    <div class="row g-4">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="latitude">Latitude</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="latitude" name="address[0][latitude]" value="" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="longitude">Longitude</label>
-                                <div class="form-control-wrap">
-                                <input type="text"  class="form-control" id="longitude" name="address[0][longitude]" value="" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="form-label" for="vsale_commission">Address</label>
-                                <div class="form-control-wrap">
-                                    <textarea class="form-control" id="address" value="" name="address[0][address]" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            @else
+            {{-- Add Button --}}
+            <div class="col-lg-1" style="margin-left: 817px;">
+                <em class="icon ni ni-plus-c editremoveBtn" id="append_fields"></em>
+            </div>
+            {{-- End --}}
+             <div class="address-fields"  data-count="{{$store->storeAddress()->get()!=null ? $store->storeAddress()->count() : 1}}">
+           
             @foreach ($store->storeAddress()->get() as $key => $val)
-                <div class="col-lg-11">
-                    <div class=" address-fields" data-count="{{$isEdit ? $store->storeAddress()->count() : 1}}">
-                        <div class="row g-4">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label class="form-label" for="latitude">Latitude</label>
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control" id="latitude" name="address[{{$key}}][latitude]" value="{{ $val->latitude }}" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label class="form-label" for="longitude">Longitude</label>
-                                    <div class="form-control-wrap">
-                                    <input type="text"  class="form-control" id="longitude" name="address[{{$key}}][longitude]" value="{{ $val->longitude }}" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="form-label" for="vsale_commission">Address</label>
-                                    <div class="form-control-wrap">
-                                        <textarea class="form-control" id="address" value="" name="address[{{$key}}][address]" required>{{ $val->address }}</textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- <div class="col-lg-1" style="margin-left: 817px;margin-top: -96px;">
-                                <em class="icon ni ni-minus-c removeBtn" ></em>
-                            </div> --}}
+            <div class="row g-4 ">
+                <div class="col-lg-5">
+                    <div class="form-group">
+                        <label class="form-label" for="latitude">Latitude</label>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control" id="latitude" name="address[{{$key}}][latitude]" value="{{ $val->latitude }}" required>
                         </div>
                     </div>
                 </div>
-        @endforeach
-        @endif
-        <div class="col-lg-1" style="margin-top: 41px">
-            <span><em class="icon ni ni-plus-c addBtn" ></em></span>
-        </div>
-        <div class="col-lg-11 append-fields">
-        </div>
+                <div class="col-lg-5">
+                    <div class="form-group">
+                        <label class="form-label" for="longitude">Longitude</label>
+                        <div class="form-control-wrap">
+                        <input type="text"  class="form-control" id="longitude" name="address[{{$key}}][longitude]" value="{{ $val->longitude }}" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-11">
+                    <div class="form-group">
+                        <label class="form-label" for="vsale_commission">Address</label>
+                        <div class="form-control-wrap">
+                            <textarea class="form-control" id="address" value="" name="address[{{$key}}][address]" required>{{ $val->address }}</textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-1" style="margin-left: 817px;margin-top: -96px;">
+                  <em class="icon ni ni-minus-c delBtn" id="removeBtn"></em>
+                </div>
+            </div>
+            @endforeach
+        
+    </div>
+            <div id="corsi"></div>
+
             <div class="col-12">
                 <div class="form-group">
                     <button type="submit" class="btn btn-lg btn-primary">Save</button>
                 </div>
             </div>
         </div>
+        
+       
     </form>
 </div>

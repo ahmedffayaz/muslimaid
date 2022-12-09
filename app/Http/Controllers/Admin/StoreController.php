@@ -596,6 +596,8 @@ class StoreController extends Controller
             ]);
 
             StoreAddress::where('store_id',$request->input('store_id'))->delete();
+            if($request->input('address') != null)
+            {
             foreach($request->input('address') as $address)
             {
                 $storeaddresses = StoreAddress::create([
@@ -605,7 +607,7 @@ class StoreController extends Controller
                     'longitude' => $address['longitude'],
                 ]);
             }
-
+        }
             flash()->success('store address added');
             return redirect()->back();
            
