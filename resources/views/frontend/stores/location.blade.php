@@ -108,7 +108,6 @@
     <div id="map"></div>
 </div>
 </div>
-
 <div class="block mt-5">
     <div class="container">
         <div class="row">
