@@ -6,11 +6,9 @@ $rule = App\Models\Seo_rule::with('ruleData')->where('url',$current_url)->first(
 
 if(!empty($rule))
 {
-  $meta_keywords = $rule->ruleData()->where('type','meta_keyword')->get();
-  $meta_description = $rule->ruleData()->where('type','meta_description')->get();
- 
-  $keyword = metaKeyword($meta_keywords);
-  $description = metaDescription($meta_description);
+  $meta_data = $rule->ruleData()->get();
+  $keyword = metaKeyword($meta_data);
+  $description = metaDescription($meta_data);
  
 }else{
  

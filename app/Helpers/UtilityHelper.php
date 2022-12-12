@@ -353,7 +353,7 @@ function metaKeyword($keywords)
     {
         //$meta_keywords =  array_push($keyword['value'] ,  $meta_keywords);
 
-        $meta_keywords[] = $keyword['value'];
+        $meta_keywords[] = $keyword['meta_keyword'];
          
     }
     return implode( ',' , $meta_keywords );
@@ -363,21 +363,28 @@ function metaDescription($descriptions)
     $meta_description = [];
     foreach($descriptions as $description)
     {
-       $meta_description[] = $description['value'];
+       $meta_description[] = $description['meta_description'];
     }
-    return implode( ',' , $meta_description );;
+    return implode( ',' , $meta_description );
 }
 
 function checkStaticpageRule($url)
-{
-    $store_rule = App\Models\Store_seo_data::where('url',$url)->first();
+{   
+    $store_rules = App\Models\Store_seo_data::where('url',$url)->get();
     
     $blog = App\Models\Blog::where('url',$url)->first();
    
     $categories = App\Models\Category::where('url',$url)->first();
-   if(!empty($store_rule))
+   if($store_rules != null)
    {
-        return  $store_rule;
+        $meta_description = [];
+        $meta_keyword = [];
+        foreach($store_rules as $rule)
+        {
+        $meta_description[] = $rule['meta_description'];
+        $meta_keyword[] = $rule['meta_keyword'];
+        }
+        return  ['meta_description' =>implode( ',' , $meta_description ) , 'meta_keyword'=>implode( ',' , $meta_keyword ) ];
 
    }elseif(!empty($blog)){
 

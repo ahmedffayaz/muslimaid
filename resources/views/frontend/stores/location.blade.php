@@ -28,8 +28,27 @@
     text-decoration:none
 }
 </style>
+<div class="page-header">
+    <div class="page-header__container container">
+        <div class="page-header__breadcrumb">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="{{url('/')}}">Home</a>
+                        <svg class="breadcrumb-arrow" width="6px" height="9px">              
+                            <use xlink:href="{{asset('frontend/images/sprite.svg')}}#arrow-rounded-right-6x9"></use>
+                        </svg>
+                    </li>
+                    <li class="breadcrumb-item active" aria-current="page">cashback to door</li>
+                </ol>
+            </nav>
+        </div>
+        <div class="page-header__title">
+            <h1>Cashback to door</h1>
+        </div>
+    </div>
+</div>
 <div class="container ">
-    <h2>Stores</h2>
     <div class="map-search">
     <button href="javascript:;" class="d-sm-block current" onclick="getCurrentLocation();"><img src="{{asset('frontend/images/map-pointer.png')}}" alt="" style="width: 55%;"/></button>
     <div class="search-wrap">
@@ -389,7 +408,6 @@
              service.getDistanceMatrix(request).then((response) => {
                 
                  var element = response.rows[0].elements[0];
-                 //console.log(element);
                  infowindow.setContent('<i class="'+travelModeIcon+'" aria-hidden="true"></i> '+element.distance.text+'<br><i class="fa fa-clock-o" aria-hidden="true"></i> '+element.duration.text);
                  infowindow.open({map,shouldFocus: false,});
                  //document.getElementById("response").innerText = JSON.stringify(response,null,2)
@@ -415,12 +433,12 @@
      for (i = 0; i < locations.length; i++) {
        
         for(j = 0; j < locations[i]['store_address'].length; j++){
-          
+          var address = locations[i]['store_address'];
          origins.push(new google.maps.LatLng(myLat, myLng));
-         destinations.push(new google.maps.LatLng(locations[i]['store_address'][j]['latitude'],locations[i]['store_address'][j]['longitude']));
+         destinations.push(new google.maps.LatLng(address[j]['latitude'],address[j]['longitude']));
 
          marker = new google.maps.Marker({
-             position: new google.maps.LatLng(locations[i]['store_address'][j]['latitude'], locations[i]['store_address'][j]['longitude']),
+             position: new google.maps.LatLng(address[j]['latitude'], address[j]['longitude']),
              map: map,
              icon:'<?=url('');?>/frontend/images/resturant.png'
          });

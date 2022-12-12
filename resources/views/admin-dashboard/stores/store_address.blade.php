@@ -1,77 +1,52 @@
-@php
-    $isEdit = isset($store) ? true : false;
-    // $url = $isEdit ? route('job-safety.update', $job_safety) : route('job-safety.store');
-@endphp
-<div id="add-seorule-form" class=" p-4">
-    <form action="{{route('admin.stores.save_address')}}" class="gy-3 form-validate is-alter add_seo_form" method="POST">
-        @csrf
-        <input type="hidden" name="store_id" value="{{$store->id}}">
-        <div class="row g-4">
-            <div class="col-lg-6">
-                <div class="form-group">
-                    <label class="form-label" for="full-name-1">City</label>
-                    <div class="form-control-wrap">
-                        <input type="text" class="form-control" id="city" name="city" value="{{!empty($store->city) ? $store->city : ''}}">
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="form-group">
-                    <label class="form-label" for="vsale_commission">Postal code</label>
-                    <div class="form-control-wrap">
-                        <input type="text" class="form-control" id="postal_code" name="postal_code" value="{{!empty($store->postal_code) ? $store->postal_code : ''}}">
-                    </div>
-                </div>
-            </div>
-            {{-- Add Button --}}
-            <div class="col-lg-1" style="margin-left: 817px;">
-                <em class="icon ni ni-plus-c editremoveBtn" id="append_fields"></em>
-            </div>
-            {{-- End --}}
-             <div class="address-fields"  data-count="{{$store->storeAddress()->get()!=null ? $store->storeAddress()->count() : 1}}">
-           
-            @foreach ($store->storeAddress()->get() as $key => $val)
-            <div class="row g-4 ">
-                <div class="col-lg-5">
-                    <div class="form-group">
-                        <label class="form-label" for="latitude">Latitude</label>
-                        <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="latitude" name="address[{{$key}}][latitude]" value="{{ $val->latitude }}" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-5">
-                    <div class="form-group">
-                        <label class="form-label" for="longitude">Longitude</label>
-                        <div class="form-control-wrap">
-                        <input type="text"  class="form-control" id="longitude" name="address[{{$key}}][longitude]" value="{{ $val->longitude }}" required>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-11">
-                    <div class="form-group">
-                        <label class="form-label" for="vsale_commission">Address</label>
-                        <div class="form-control-wrap">
-                            <textarea class="form-control" id="address" value="" name="address[{{$key}}][address]" required>{{ $val->address }}</textarea>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-1" style="margin-left: 817px;margin-top: -96px;">
-                  <em class="icon ni ni-minus-c delBtn" id="removeBtn"></em>
-                </div>
-            </div>
-            @endforeach
-        
-    </div>
-            <div id="corsi"></div>
+@if($store->storeAddress()->count() == 0)
+<a href="#add-address-modal" class="btn btn-primary float-right btn-sm" data-toggle="modal"><em class="icon ni ni-plus"></em> <span>Add Address</span></a>
+@endif
+<div class="nk-tb-list nk-tb-ulist mt-3" style="table-layout: auto">
 
-            <div class="col-12">
-                <div class="form-group">
-                    <button type="submit" class="btn btn-lg btn-primary">Save</button>
-                </div>
-            </div>
-        </div>
+    @if(count($store->storeAddress))
+    <div class="nk-tb-item nk-tb-head">
         
-       
-    </form>
+        
+        <div class="nk-tb-col pl-0"><span class="sub-text">City</span></div>
+        <div class="nk-tb-col"><span class="sub-text">Postal Code</span></div>
+        <div class="nk-tb-col"><span class="sub-text">Latitude</span></div>
+        <div class="nk-tb-col"><span class="sub-text">Longitude</span></div>
+        <div class="nk-tb-col "><span class="sub-text">Address</span></div>
+        <div class="nk-tb-col nk-tb-col-tools pr-0">
+            <span class="sub-text">Edit</span>
+        
+        </div>
+    </div><!-- .nk-tb-item -->
+    @foreach ($store->storeAddress->take(20) as $address)
+    <div class="nk-tb-item" >
+        <div class="nk-tb-col  pl-1">
+            <span>{{$address->city}}</span>
+        </div>
+    
+        <div class="nk-tb-col ">
+            <span>{{$address->postal_code}}</span>
+        </div>
+        <div class="nk-tb-col ">
+            <span>{{$address->latitude}}</span>
+        </div>
+        <div class="nk-tb-col ">
+            <span>{{$address->longitude}}</span>
+        </div>
+        <div class="nk-tb-col ">
+            <span>{{$address->address}}</span>
+        </div>
+    
+        <div class="nk-tb-col nk-tb-col-tools pr-0">
+            <a href="" address-id='{{$address->id}}' class='address-edit a_link'><em class="icon ni ni-edit"></em></a>
+            <a href="" address-delete-id={{$address->id}} class="delete-address"><em class="icon ni ni-trash"></em><span></span></a>
+        </div>
+    </div><!-- .nk-tb-item -->
+    
+    @endforeach   
+                                
+                        
+
+@else
+    <p>No address found</p>
+@endif
 </div>

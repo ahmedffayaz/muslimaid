@@ -16,6 +16,8 @@ class CreateStoreAddressesTable extends Migration
         Schema::create('store_addresses', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('store_id');
+            $table->string('city');
+            $table->string('postal_code');
             $table->string('latitude');
             $table->string('longitude');
             $table->longText('address');

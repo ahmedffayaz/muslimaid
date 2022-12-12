@@ -23,7 +23,7 @@
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                                                <button type="submit" class="btn btn-lg btn-primary">update</button>
                                             </div>
                                         </div>
                                     </div>

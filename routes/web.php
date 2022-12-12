@@ -77,6 +77,9 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::get('stores/seo/{id}',  [App\Http\Controllers\Admin\StoreController::class,'editStoreSeoRule'])->name('stores.edit_seo');
     Route::put('stores/seo/update',  [App\Http\Controllers\Admin\StoreController::class,'updateStoreSeoRule'])->name('stores.update_seo');
     Route::get('stores/seo/delete/{id}', [App\Http\Controllers\Admin\StoreController::class,'deleteStoreSeoRule'])->name('stores.seo.delete');
+    Route::get('stores/address/{id}',  [App\Http\Controllers\Admin\StoreController::class,'editStoreAddress'])->name('stores.edit_address');
+    Route::put('stores/address/update',  [App\Http\Controllers\Admin\StoreController::class,'updateStoreAddress'])->name('stores.update_address');
+    Route::get('stores/address/delete/{id}', [App\Http\Controllers\Admin\StoreController::class,'deleteStoreAddress'])->name('stores.address.delete');
     Route::resource('stores', StoreController::class);
     Route::resource('storecashbacks', StoreCashbackController::class);
 

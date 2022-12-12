@@ -39,28 +39,25 @@ class SeoController extends Controller
      */
     public function store(Request $request)
     {
-      
         $validated = $request->validate([
             'url' => 'required',
             'title' => 'required',
 
         ],$messages = [
             'url.required' => 'The url field is required.',
-            'meta_description.required' =>'The description field is required.',
-            'meta_keyword.required' =>'The user keyword field is required.',
         ]);
-
+        
         $seo_rule = new Seo_rule;
         $seo_rule->url =$request->url;
         $seo_rule->title = $request->title;
         $seo_rule->save();
-
-        foreach($request->type as $type)
+       
+        foreach($request->value as $val)
         {
         $seo_rule_data = new Seo_rule_data;
         $seo_rule_data->seo_rule_id =$seo_rule->id;
-        $seo_rule_data->type =  $type['rule_type'];
-        $seo_rule_data->value = $type['value'];
+        $seo_rule_data->meta_keyword =  $val['keyword'];
+        $seo_rule_data->meta_description = $val['meta_description'];
         $seo_rule_data->save();
     }
 
@@ -87,8 +84,10 @@ class SeoController extends Controller
      */
     public function edit(Seo_rule $seo)
     {
-        $seo = $seo->with('ruleData')->first();
-        return view('admin-dashboard.seo.edit',compact('seo'));
+        //$seo = $seo->with('ruleData')->first();
+        $seoData = Seo_rule::with('ruleData')->where('id',$seo['id'])->first();
+      
+        return view('admin-dashboard.seo.create',compact('seoData'));
     }
 
     /**
@@ -115,14 +114,17 @@ class SeoController extends Controller
         $seo_rule->title = $request->title;
         $seo_rule->save();
         
-        foreach($request->type as $type)
+        if($request->input('value') != null)
+            {
+        foreach($request->value as $val)
         {
         $seo_rule_data = new Seo_rule_data;
         $seo_rule_data->seo_rule_id =$seo_rule->id;
-        $seo_rule_data->type =  $type['rule_type'];
-        $seo_rule_data->value = $type['value'];
+        $seo_rule_data->meta_keyword =  $val['keyword'];
+        $seo_rule_data->meta_description = $val['meta_description'];
         $seo_rule_data->save();
     }
+}
 
     
 

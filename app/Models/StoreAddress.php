@@ -10,6 +10,8 @@ class StoreAddress extends Model
     use HasFactory;
     protected $fillable = [
      'store_id',
+     'city',
+     'postal_code',
      'address',
      'latitude',
      'longitude' 

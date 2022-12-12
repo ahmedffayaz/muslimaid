@@ -16,9 +16,10 @@ class CreateStoreSeoDatasTable extends Migration
         Schema::create('store_seo_datas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('store_id');
-            $table->string('url')->nullable();
-            $table->string('meta_keyword')->nullable();
-            $table->string('meta_description')->nullable();
+            $table->string('url');
+            $table->string('type');
+            $table->string('key');
+            $table->string('value');
             $table->timestamps();
         });
     }
