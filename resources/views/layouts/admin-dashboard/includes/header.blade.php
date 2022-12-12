@@ -200,6 +200,7 @@
                                         <span class="nk-menu-text">Menu</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
+                                
                             </ul>
                         </div> 
                     </div>
@@ -231,6 +232,18 @@
                                 <a href="{{route('admin.blogs.index')}}" class="">
                                     <span class="nk-menu-icon "><em class="icon ni ni-article"></em></span>
                                     <span class="nk-menu-text">Blog</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class=" ">
+                                <a href="{{route('admin.testimonials.index')}}" class="">
+                                    <span class="nk-menu-icon "><em class="icon ni ni-star-fill"></em></em></span>
+                                    <span class="nk-menu-text">Testimonials</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="">
+                                <a href="{{route('admin.seo.index')}}" class="">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-menu"></em></span>
+                                    <span class="nk-menu-text">Seo rules</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
                             </ul>

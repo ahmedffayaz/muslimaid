@@ -57,6 +57,12 @@
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem9"><em class="icon ni ni-img-fill"></em><span>Images</span></a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem10"><em class="icon ni ni-map-pin"></em><span>Address</span></a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem11"><em class="icon ni ni-external"></em><span>Seo</span></a>
+                                    </li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="tabItem4">
@@ -248,6 +254,14 @@
                                     </div>
                                     <div class="tab-pane" id="tabItem9">
                                         <span id="images-data"></span>
+                                    </div>
+                                    <div class="tab-pane" id="tabItem10">
+                                        <h5 class="title mb-4  d-inline-block">Address</h5>
+                                        <span id="address-data" class="mt-4"></span>
+                                    </div>
+                                    <div class="tab-pane" id="tabItem11">
+                                        <h5 class="title mb-4  d-inline-block">Seo Rule</h5>
+                                        <span id="seo-data" class="mt-4"></span>
                                     </div>
                                 </div>
                             </div>
@@ -634,13 +648,172 @@
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
+
+
+<div class="modal fade" tabindex="-1" id="add-seorule-modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Add Seo rule</span></div>
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="add-seorule-form" class=" p-4">
+                <form action="{{route('admin.stores.save_seo_rule')}}" class="gy-3 form-validate is-alter add_seo_form" method="POST">
+                    @csrf
+                    <input type="hidden" name="store_id" value="{{$store->id}}">
+                    <div class="row g-4">
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="form-label" for="full-name-1">Meta Keyword</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="keyword" name="meta_keyword" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="form-label" for="vsale_commission">Meta Description</label>
+                                <div class="form-control-wrap">
+                                    <textarea class="form-control" id="meta_description" value="" name="meta_description" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="seo-modal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+              
+                   
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Edit Seo rule</span></div>
+                        {{-- <div class="nk-file-name-sub">Project</div> --}}
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="seo" class=" p-4">
+
+            </div>
+        </div><!-- .modal-content -->
+    </div><!-- .modla-dialog -->
+</div><!-- .modal -->
+
+{{-- Add Address --}}
+<div class="modal fade" tabindex="-1" id="add-address-modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Add Address</span></div>
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="add-address-form" class=" p-4">
+                <form action="{{route('admin.stores.save_address')}}" class="gy-3 form-validate is-alter add_address_form" method="POST">
+                    @csrf
+                    <input type="hidden" name="store_id" value="{{$store->id}}">
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="full-name-1">City</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="city" name="city" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="vsale_commission">Postal code</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="postal_code" name="postal_code" value="">
+                                </div>
+                            </div>
+                        </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="latitude">Latitude</label>
+                                    <div class="form-control-wrap">
+                                        <input type="number" class="form-control" id="latitude" name="latitude" value="" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label class="form-label" for="longitude">Longitude</label>
+                                    <div class="form-control-wrap">
+                                    <input type="number"  class="form-control" id="longitude" name="longitude" value="" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="vsale_commission">Address</label>
+                                    <div class="form-control-wrap">
+                                        <textarea class="form-control" id="address" value="" name="address" required></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" role="dialog" id="edit-address-modal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Edit Address</span></div>
+                        {{-- <div class="nk-file-name-sub">Project</div> --}}
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="edit_address" class=" p-4">
+
+            </div>
+        </div><!-- .modal-content -->
+    </div><!-- .modla-dialog -->
+</div><!-- .modal -->
+
+
 <script>
     document.addEventListener('livewire:load', function () {
-
+        
+        fetchSeoRules();
         fetchVouchers();
         fetchCashbacks();
         fetchReviews();
         fetchImages();
+        fetchAddress();
         initializeSelect2();
     })
 </script>
@@ -649,7 +822,6 @@
 
 <script>
     function fetchVouchers(){
-        
         pageurl = "{{route('admin.stores.vouchers')}}"
         var _token = $("input[name=_token]").val();
         var store = $('.store_id_checker').text(); 
@@ -660,6 +832,7 @@
         data:{_token:_token,store:store},
         success:function(data)
         {
+           
             $('#vouchers-data').html(data);
             
         }
@@ -713,6 +886,39 @@
         }
         });
     }
+    function fetchAddress(){
+        pageurl = "{{route('admin.stores.storeaddress')}}"
+        var _token = $("input[name=_token]").val();
+        var store = $('.store_id_checker').text(); 
+        $.ajax({
+
+        url:pageurl,
+        method:"POST",
+        data:{_token:_token,store:store},
+        success:function(data)
+        {
+            $('#address-data').html(data);
+            
+        }
+        });
+    }
+    function fetchSeoRules(){
+       
+        pageurl = "{{route('admin.stores.fetchseorules')}}"
+        var _token = $("input[name=_token]").val();
+        var store = $('.store_id_checker').text(); 
+        $.ajax({
+
+        url:pageurl,
+        method:"POST",
+        data:{_token:_token,store:store},
+        success:function(data)
+        {
+            $('#seo-data').html(data);
+            
+        }
+        });
+    }
 </script>
 
 
@@ -720,10 +926,12 @@
     document.addEventListener('DOMContentLoaded', function () {
         window.livewire.on('storeChange', () => {
            
-            fetchVouchers();
+        fetchVouchers();
         fetchCashbacks();
         fetchReviews();
         fetchImages();
+        fetchAddress();
+        fetchSeoRules();
         initializeSelect2();
         var quill = new Quill('#editor-container', {
         modules: {
@@ -823,12 +1031,34 @@
                     });
                
         });
+
+        $(document).on('click', '.seo-edit', function(event){
+            event.preventDefault(); 
+            
+            var id = $(this).attr('seo-id');
+            pageurl = "stores/seo/"+id+""
+            store_editor = 1;
+            var _token = $("input[name=_token]").val();
+                $.ajax({
+
+                    url:pageurl,
+                    method:"GET",
+                    data:{_token:_token,store_editor:store_editor},
+                    success:function(data)
+                    {
+                        $('#seo-modal').modal('show');
+                        $('#seo').html(data);
+                    }
+                    });
+               
+        });
     });
+
+
 
     // Voucher update
     $(document).ready( function() {
         $(document).on('submit', '.voucher_form', function(event){
-   
           event.preventDefault();          
           $.ajax({
                 url: $(this).attr('action'),
@@ -848,6 +1078,69 @@
         });
     });
 
+    $(document).ready( function() {
+        $(document).on('submit', '.seo_form', function(event){
+          event.preventDefault();          
+          $.ajax({
+                url: $(this).attr('action'),
+                type: "PUT",
+                data: $(this).serialize(),
+                success: function(data){
+                    $('#seo-modal').modal('hide');
+                    (function(NioApp, $){
+                    'use strict';
+                    toastr.clear();
+                    NioApp.Toast('Seo rule Updated Successfully.', 'success');
+                    
+                })(NioApp, jQuery);
+                    fetchSeoRules();
+                }
+            });      
+        });
+    });
+
+    $(document).on('click', '.address-edit', function(event){
+            event.preventDefault(); 
+            
+            var id = $(this).attr('address-id');
+            pageurl = "stores/address/"+id+""
+            store_editor = 1;
+            var _token = $("input[name=_token]").val();
+                $.ajax({
+
+                    url:pageurl,
+                    method:"GET",
+                    data:{_token:_token,store_editor:store_editor},
+                    success:function(data)
+                    {
+                        $('#edit-address-modal').modal('show');
+                        $('#edit_address').html(data);
+                    }
+                    });
+               
+        });
+
+        $(document).ready( function() {
+        $(document).on('submit', '.address_form', function(event){
+          event.preventDefault();          
+          $.ajax({
+                url: $(this).attr('action'),
+                type: "PUT",
+                data: $(this).serialize(),
+                success: function(data){
+                    $('#edit-address-modal').modal('hide');
+                    (function(NioApp, $){
+                    'use strict';
+                    toastr.clear();
+                    NioApp.Toast('Address Updated Successfully.', 'success');
+                    
+                })(NioApp, jQuery);
+                    fetchAddress();
+                }
+            });      
+        });
+    });
+
     // Add Voucher
     $(document).ready( function() {
         $(document).on('submit', '.add_voucher_form', function(event){
@@ -862,7 +1155,7 @@
                     (function(NioApp, $){
                     'use strict';
                     toastr.clear();
-                    NioApp.Toast('Voucher Added Successfully.', 'success');
+                    NioApp.Toast('Voucher Added Successfullys.', 'success');
                     
                 })(NioApp, jQuery);
                     fetchVouchers();
@@ -1092,7 +1385,70 @@
             event.preventDefault(); 
         });
     });
+    //delete seo rule for store
+    $(document).ready(function(){
+       
+       $(document).on('click', '.delete-seo', function(event){
+           var seoid = $(this).attr('seo_delete-id');
+           Swal.fire({
+           title: 'Are you sure?',
+           text: "You won't be able to revert this!",
+           icon: 'warning',
+           showCancelButton: true,
+           confirmButtonText: 'Yes, delete it!'
+           }).then(function (result) {
+           if (result.value) {
+               pageurl = 'stores/seo/delete/'+seoid;
+               var _token = $("input[name=_token]").val();
+               $.ajax({
 
+                   url:pageurl,
+                   method:"GET",
+                   data:{_token:_token},
+                   success:function(data)
+                   {
+                       fetchSeoRules();
+                   }
+               });
+               Swal.fire('Deleted!', 'Seo rule has been deleted.', 'success');
+           }
+           });
+           event.preventDefault(); 
+       });
+   });
+
+   //delete Store Address
+   //delete seo rule for store
+   $(document).ready(function(){
+       
+       $(document).on('click', '.delete-address', function(event){
+           var addressid = $(this).attr('address-delete-id');
+           Swal.fire({
+           title: 'Are you sure?',
+           text: "You won't be able to revert this!",
+           icon: 'warning',
+           showCancelButton: true,
+           confirmButtonText: 'Yes, delete it!'
+           }).then(function (result) {
+           if (result.value) {
+               pageurl = 'stores/address/delete/'+addressid;
+               var _token = $("input[name=_token]").val();
+               $.ajax({
+
+                   url:pageurl,
+                   method:"GET",
+                   data:{_token:_token},
+                   success:function(data)
+                   {
+                       fetchAddress();
+                   }
+               });
+               Swal.fire('Deleted!', 'Address has been deleted.', 'success');
+           }
+           });
+           event.preventDefault(); 
+       });
+   });
 
     //Update Store 
     $(document).ready( function() {
@@ -1144,6 +1500,31 @@
             }
         });
 
+        });
+    });
+
+    //add address form
+
+    $(document).ready( function() {
+        $(document).on('submit', '.add_address_form', function(event){
+   
+          event.preventDefault();          
+          $.ajax({
+                url: $(this).attr('action'),
+                type: "POST",
+                data: $(this).serialize(),
+                success: function(data){
+                    
+                    $('#add-address-modal').modal('hide');
+                    (function(NioApp, $){
+                    'use strict';
+                    toastr.clear();
+                    NioApp.Toast('Address Added Successfullys.', 'success');
+                    
+                })(NioApp, jQuery);
+                    fetchAddress();
+                }
+            });      
         });
     });
 
@@ -1323,6 +1704,8 @@
             }
         });
     }
+
+    
 </script>
 
 @endpush

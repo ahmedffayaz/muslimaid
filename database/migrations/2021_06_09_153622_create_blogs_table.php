@@ -19,6 +19,9 @@ class CreateBlogsTable extends Migration
             $table->text('slug');
             $table->text('featured_image');
             $table->text('excerpt')->nullable();
+            $table->string('url');
+            $table->string('meta_keyword');
+            $table->longText('meta_description');
             $table->timestamps();
         });
     }

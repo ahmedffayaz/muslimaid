@@ -52,7 +52,8 @@ $menu = Harimayco\Menu\Models\Menus::where('name','Main Menu')->first();
                                 <div class="account-menu__divider"></div>
                                 <ul class="account-menu__links">
                                     @if(Auth::user()->hasRole('user'))
-                                    <li><a href="{{route('account.dashboard')}}">Account</a></li>
+                                    <li><a href="{{route('account.dashboard')}}">Accounts</a></li>
+                                    <li><a href="{{route('account.referral.index')}}">Refer a Friend</a></li>
                                     @endif
                                     @if(Auth::user()->hasRole('admin'))
                                     <li><a href="{{route('admin.home.index')}}">Admin Dashboard</a></li>
@@ -108,6 +109,7 @@ $menu = Harimayco\Menu\Models\Menus::where('name','Main Menu')->first();
                                             <ul class="menu__list">
                                                 @foreach( $item['child'] as $child )
                                                 <li class="menu__item">
+                                                  
                                                     <!-- This is a synthetic element that allows to adjust the vertical offset of the submenu using CSS. -->
                                                     <div class="menu__item-submenu-offset"></div>
                                                     <a class="menu__item-link" href="{{ $child['link'] }}">

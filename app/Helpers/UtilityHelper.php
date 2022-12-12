@@ -346,6 +346,61 @@ function isGoogleEnabled(){
     }
 }
 
+function metaKeyword($keywords)
+{
+    $meta_keywords = [];
+    foreach($keywords as $keyword)
+    {
+        //$meta_keywords =  array_push($keyword['value'] ,  $meta_keywords);
+
+        $meta_keywords[] = $keyword['meta_keyword'];
+         
+    }
+    return implode( ',' , $meta_keywords );
+}
+function metaDescription($descriptions)
+{
+    $meta_description = [];
+    foreach($descriptions as $description)
+    {
+       $meta_description[] = $description['meta_description'];
+    }
+    return implode( ',' , $meta_description );
+}
+
+function checkStaticpageRule($url)
+{   
+    $store_rules = App\Models\Store_seo_data::where('url',$url)->get();
+    
+    $blog = App\Models\Blog::where('url',$url)->first();
+   
+    $categories = App\Models\Category::where('url',$url)->first();
+   if($store_rules != null)
+   {
+        $meta_description = [];
+        $meta_keyword = [];
+        foreach($store_rules as $rule)
+        {
+        $meta_description[] = $rule['meta_description'];
+        $meta_keyword[] = $rule['meta_keyword'];
+        }
+        return  ['meta_description' =>implode( ',' , $meta_description ) , 'meta_keyword'=>implode( ',' , $meta_keyword ) ];
+
+   }elseif(!empty($blog)){
+
+    return $blog;
+
+   }elseif(!empty($categories)){
+
+    return $categories;
+
+   }else{
+
+    return null;
+
+   }
+}
+
 // function isAppleEnabled(){
 //     if(SiteSetting()['apple_client_id'] && SiteSetting()['apple_client_secret'] && SiteSetting()['apple_url']){
 //         return true;

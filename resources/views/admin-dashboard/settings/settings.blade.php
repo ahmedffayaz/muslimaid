@@ -36,6 +36,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem7"><em class="icon ni ni-share-fill"></em><span>Social</span></a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-map"></em><span>Map</span></a>
+                                    </li>
                                     {{--<li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-code"></em><span>APIs Integration</span></a>
                                     </li>--}}
@@ -655,6 +658,39 @@
                                             </form>
                                         </div>
                                     </div>
+                                    <div class="tab-pane" id="tabItem8">
+                                        <div class="nk-block">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">Google map key Settings</h5>
+                                            </div><!-- .nk-block-head -->
+                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Map Key <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Enter google map API key."></em></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" name="map_key" value="{{$settings['map_key']}}" placeholder="Google map Key">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="row g-3">
+                                                    <div class="col-lg-9 offset-lg-3">
+                                                        <div class="form-group mt-2">
+                                                            <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
                                     {{--<div class="tab-pane" id="tabItem8">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
@@ -752,6 +788,22 @@
                                                         <div class="form-group">
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="welcome_bonus" name="welcome_bonus" value="{{$settings['welcome_bonus'] ?? ''}}" placeholder="Welcome Bonus">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </div>
+
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="welcome_bonus">Referral Bonus</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="referral_bonus" name="referral_bonus" value="{{$settings['referral_bonus'] ?? ''}}" placeholder="Referral Bonus">
                                                             </div>
                                                         </div>
                                                     </div>

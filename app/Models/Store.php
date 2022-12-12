@@ -31,6 +31,11 @@ class Store extends Model
      'custom_cashback_percentage',
      'status',
      'is_fake',
+     'address',
+     'city',
+     'postal_code',
+     'latitude',
+     'longitude' 
     ];
 
     public function network(){
@@ -74,6 +79,16 @@ class Store extends Model
     }
     public function clicks(){
         return $this->hasMany(ExitClick::class);
+    }
+
+    public function storeRuleData()
+    {
+        return $this->hasMany(Store_seo_data::class,'store_id','id');
+    }
+
+    public function storeAddress()
+    {
+        return $this->hasMany(StoreAddress::class,'store_id','id');
     }
 
 }

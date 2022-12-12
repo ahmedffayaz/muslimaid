@@ -181,7 +181,6 @@ box {
                                
                                 <div class="products-list__item text-center">
                                     <div class="product-card ">
-                                        
                                         <div class="product-card__image product-image">
                                             <a href="{{route('store.show',$store->slug)}}" class="product-image__body" style="padding-bottom:100px">
                                                 <img class="product-image__img"  @if($store->logo->first())

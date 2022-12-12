@@ -25,6 +25,12 @@ class StoreController extends Controller
         $count = count($store->cashbacks);
         return view('frontend.stores.show',compact('store','count'));
     }
+
+    public function storeLocation()
+    {
+        $locations = Store::with('logo','storeAddress')->get();
+        return view('frontend.stores.location',compact('locations'));
+    }
    
 
 }

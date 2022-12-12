@@ -53,6 +53,8 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::post('stores/cashbacks', [App\Http\Controllers\Admin\StoreController::class,'fetchCashbacks'])->name('stores.cashbacks');
     Route::post('stores/reviews', [App\Http\Controllers\Admin\StoreController::class,'fetchReviews'])->name('stores.reviews');
     Route::post('stores/storeimages', [App\Http\Controllers\Admin\StoreController::class,'fetchImages'])->name('stores.fetchimages');
+    Route::post('stores/storeaddress', [App\Http\Controllers\Admin\StoreController::class,'fetchAddress'])->name('stores.storeaddress');
+    Route::post('stores/fetchseorules', [App\Http\Controllers\Admin\StoreController::class,'fetchSeoRules'])->name('stores.fetchseorules');
     Route::get('stores/reviews/{review}/edit', [App\Http\Controllers\Admin\StoreController::class,'editReview'])->name('stores.reviews.edit');
     Route::get('stores/cashbacks/{cashback}/edit', [App\Http\Controllers\Admin\StoreController::class,'editCashback'])->name('stores.cashbacks.edit');
     Route::post('stores/categories/update', [App\Http\Controllers\Admin\StoreController::class,'updateCategories'])->name('stores.categories.update');
@@ -70,7 +72,14 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::put('stores/override_categories/{store}/update', [App\Http\Controllers\Admin\StoreController::class,'overrideCategories'])->name('stores.override_categories');
     Route::put('stores/override_cashback/{store}/update', [App\Http\Controllers\Admin\StoreController::class,'overrideCashback'])->name('stores.override_cashback');
     Route::get('stores/show', [App\Http\Controllers\Admin\StoreController::class,'showStore'])->name('stores.show_store');
-    
+    Route::post('stores/store_seo_rule',  [App\Http\Controllers\Admin\StoreController::class,'storeSeoRule'])->name('stores.save_seo_rule');
+    Route::post('stores/store_address',  [App\Http\Controllers\Admin\StoreController::class,'addStoreAddress'])->name('stores.save_address');
+    Route::get('stores/seo/{id}',  [App\Http\Controllers\Admin\StoreController::class,'editStoreSeoRule'])->name('stores.edit_seo');
+    Route::put('stores/seo/update',  [App\Http\Controllers\Admin\StoreController::class,'updateStoreSeoRule'])->name('stores.update_seo');
+    Route::get('stores/seo/delete/{id}', [App\Http\Controllers\Admin\StoreController::class,'deleteStoreSeoRule'])->name('stores.seo.delete');
+    Route::get('stores/address/{id}',  [App\Http\Controllers\Admin\StoreController::class,'editStoreAddress'])->name('stores.edit_address');
+    Route::put('stores/address/update',  [App\Http\Controllers\Admin\StoreController::class,'updateStoreAddress'])->name('stores.update_address');
+    Route::get('stores/address/delete/{id}', [App\Http\Controllers\Admin\StoreController::class,'deleteStoreAddress'])->name('stores.address.delete');
     Route::resource('stores', StoreController::class);
     Route::resource('storecashbacks', StoreCashbackController::class);
 
@@ -177,7 +186,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('translations', Translations\TranslationController::class);
     Route::resource('lines', Translations\LanguageLineController::class);
 
-
+    Route::get('get/user/{id}', [App\Http\Controllers\Admin\TestimonialController::class,'userDetails'])->name('users.fetch');
 
     Route::post('tickets/fetch',[App\Http\Controllers\Admin\TicketsController::class,'fetch'])->name('tickets.fetch');
     Route::post('tickets/search',  [App\Http\Controllers\Admin\TicketsController::class,'searchTickets'])->name('tickets.search');
@@ -195,6 +204,8 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('slides', SlidesController::class);
     Route::resource('pages', PagesController::class);
     Route::resource('blogs', BlogController::class);
+    Route::resource('testimonials', TestimonialController::class);
+    Route::resource('seo', SeoController::class);
     Route::resource('email_templates', EmailTemplatesController::class);
 
     
@@ -226,6 +237,7 @@ Route::get('category/{slug}',[App\Http\Controllers\Frontend\PagesController::cla
 Route::get('top-cashback',[App\Http\Controllers\Frontend\PagesController::class, 'topStores'])->name('top_stores');
 Route::get('trending',[App\Http\Controllers\Frontend\PagesController::class, 'trending'])->name('trending');
 Route::get('cashback/{slug}',[App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
+Route::get('stores/cashback-to-door',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
 Route::get('search_suggestions',[App\Http\Controllers\Frontend\PagesController::class, 'searchSuggestions'])->name('search_suggestions');
 Route::get('pages/{page}',[App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('page');
 Route::get('post/{blog}',[App\Http\Controllers\Frontend\PagesController::class, 'blogPost'])->name('post');
@@ -234,6 +246,7 @@ Route::get('all_stores/{letter}',[App\Http\Controllers\Frontend\PagesController:
 Route::get('all_stores',[App\Http\Controllers\Frontend\PagesController::class, 'allStores'])->name('all_stores');
 
 Route::resource('newsletter',App\Http\Controllers\Frontend\NewsletterController::class);
+
 
 
 //CLient Dashboard routes
@@ -257,6 +270,9 @@ Route::namespace('App\Http\Controllers\Client')
         Route::post('claim/step2',[App\Http\Controllers\Client\ClaimController::class,'step2'])->name('claim.step2');
         Route::post('claim/step3',[App\Http\Controllers\Client\ClaimController::class,'step3'])->name('claim.step3');
         Route::resource('claim', ClaimController::class);
+        Route::resource('referral',ReferController::class);
+        Route::post('send-referral-link',[App\Http\Controllers\Client\ReferController::class, 'sendReferralLink'])->name('send-referral-link');
+        
     });
 
 
@@ -266,3 +282,4 @@ Route::namespace('App\Http\Controllers\Client')
 
     Route::get('login/{provider}', [App\Http\Controllers\SocialController::class, 'redirect']);
     Route::get('login/{provider}/callback',[App\Http\Controllers\SocialController::class, 'Callback']);
+    Route::get('register-form',[App\Http\Controllers\Auth\registerController::class,'showRegistrationForm'])->name('register-form');

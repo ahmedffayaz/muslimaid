@@ -50,8 +50,9 @@ class MenuSeeder extends Seeder
             array('id' => '18','label' => 'Terms and Conditions','link' => '/pages/terms-and-conditions','parent' => '0','sort' => '2','class' => NULL,'menu' => '5','depth' => '0','created_at' => '2021-07-14 05:16:09','updated_at' => '2021-07-14 05:16:13'),
             array('id' => '19','label' => 'Trending','link' => '/trending','parent' => '0','sort' => '0','class' => NULL,'menu' => '4','depth' => '0','created_at' => '2021-07-14 05:20:48','updated_at' => '2021-07-14 05:22:26'),
             array('id' => '20','label' => 'Top cashback deals','link' => '#','parent' => '0','sort' => '1','class' => NULL,'menu' => '4','depth' => '0','created_at' => '2021-07-14 05:22:25','updated_at' => '2021-07-14 05:22:56'),
-            array('id' => '21','label' => 'Top voucher codes','link' => '#','parent' => '0','sort' => '3','class' => NULL,'menu' => '4','depth' => '0','created_at' => '2021-07-14 05:22:55','updated_at' => '2021-07-14 05:22:55')
-          );
+            array('id' => '21','label' => 'Top voucher codes','link' => '#','parent' => '0','sort' => '3','class' => NULL,'menu' => '4','depth' => '0','created_at' => '2021-07-14 05:22:55','updated_at' => '2021-07-14 05:22:55'),
+            array('id' => '2','label' => 'Stores','link' => '/stores/cashback-to-door','parent' => '0','sort' => '7','class' => NULL,'menu' => '1','depth' => '0','created_at' => '2021-06-10 13:52:30','updated_at' => '2021-06-15 13:11:23')
+        );
 
           foreach ($admin_menu_items as $item) {
             DB::table('admin_menu_items')->insert([
