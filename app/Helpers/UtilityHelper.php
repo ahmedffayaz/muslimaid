@@ -381,8 +381,8 @@ function checkStaticpageRule($url)
         $meta_keyword = [];
         foreach($store_rules as $rule)
         {
-        $meta_description[] = $rule['meta_description'];
-        $meta_keyword[] = $rule['meta_keyword'];
+            $rule['key'] == 'meta:description'?  $meta_description[] =$rule['value'] : '';
+            $rule['key'] == 'meta:keywords'?  $meta_keyword[] =$rule['value'] : '';
         }
         return  ['meta_description' =>implode( ',' , $meta_description ) , 'meta_keyword'=>implode( ',' , $meta_keyword ) ];
 
