@@ -10,9 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
     <!-- Fav Icon  -->
-    
+
     <link rel="shortcut icon"
-    
+
     @isset($settings['favicon'])
         @if($settings['favicon'] == 'default.png')
             href="{{asset('admin-dashboard/images/favicon.png')}}"
@@ -20,11 +20,11 @@
             href="{{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}"
         @endif
 
-        @else  
+        @else
         href="{{asset('admin-dashboard/images/favicon.png')}}"
-        
+
     @endisset>
-    
+
     <!-- Page Title  -->
     <title>{{$settings['website_title']}} | Admin Panel</title>
     <!-- StyleSheets  -->
@@ -37,14 +37,14 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" rel="stylesheet">
     @livewireStyles
 </head>
-    
+
 <style>
     .logo:hover .edit {
 	display: block;
 }
 
 .edit {
-	padding-top: 7px;	
+	padding-top: 7px;
 	padding-right: 7px;
 	position: absolute;
 	right: 0;
@@ -148,6 +148,11 @@ left: 0;
 .icon-status:after {
     background:red;
 }
+
+.modal-corsi {
+    height: 260px;
+    overflow-y: auto;
+}
 </style>
 
 @php $settings = App\Models\SiteSetting::latest()->get()->pluck('value','type'); @endphp
@@ -163,17 +168,17 @@ left: 0;
     <div class="nk-app-root">
         <!-- main @s -->
         <div class="nk-main ">
-            
+
             <!-- sidebar -->
             @include('layouts.admin-dashboard.includes.sidebar')
             <!-- /sidebar-->
-          
+
             <!-- wrap @s -->
             <div class="nk-wrap ">
                 <!-- header -->
                 @include('layouts.admin-dashboard.includes.header')
                 <!-- /header -->
-                
+
                 <!-- content @s -->
                 @yield('content')
                 <!-- content @e -->
@@ -182,7 +187,7 @@ left: 0;
                 @include('layouts.admin-dashboard.includes.footer')
 
                 <!-- /footer -->
-               
+
             </div>
             <!-- wrap @e -->
         </div>
@@ -192,20 +197,20 @@ left: 0;
     <!-- JavaScript -->
     <script src="{{ asset('admin-dashboard/js/bundle.js?ver=2.2.0')}}"></script>
     <script src="{{ asset('admin-dashboard/js/scripts.js?ver=2.2.0')}}"></script>
-    
+
 
     {{-- <script src="{{ asset('admin-dashboard/js/charts/chart-ecommerce.js?ver=2.2.0')}}"></script> --}}
-    
+
 {{-- <script>
     $(document).ready(function(){
-    
+
      $(document).on('click', '.pagination a', function(event){
-        event.preventDefault(); 
+        event.preventDefault();
         var route = $('.pagination').attr('route');
         var page = $(this).attr('href').split('page=')[1];
         fetch_data(page,route);
      });
-    
+
      function fetch_data(page,route)
      {
          if(route=='users'){
@@ -243,7 +248,7 @@ left: 0;
           }
         });
      }
-    
+
     });
     </script>  --}}
     <script>
@@ -261,7 +266,7 @@ left: 0;
     // Cancel the default action
     // e.preventDefault();
 });
-        
+
         </script>
      <!-- page scripts -->
      @livewireScripts
