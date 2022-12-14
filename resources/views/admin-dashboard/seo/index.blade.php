@@ -16,7 +16,7 @@
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
                                             <li class="nk-block-tools-opt">
-                                                <a href="#" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalForm">
+                                                <a href="#" class="btn btn-primary btn-sm" id="show-modal">
                                                     <em class="icon ni ni-plus"></em>
                                                     <span>Add SEO Rule</span>
                                                 </a>
@@ -64,8 +64,16 @@
 
         $(document).ready(function() {
             var counter = 0;
-            seo_fields();
 
+            // Show modal
+            $('#show-modal').on('click', function (event) {
+                event.preventDefault();
+                seo_fields();
+                $('#modal').modal('show');
+                store();
+            });
+
+            // SEO fields
             function seo_fields() {
                 counter++;
                 html = `<div>
@@ -124,32 +132,35 @@
                 $(this).parent().parent().parent().remove();
             });
 
-            $('#save_modal_form').on('submit', function (event) {
-                event.preventDefault();
-                let save_btn = $('#add-btn');
-                save_btn.attr('disabled', 'disabled').button('refresh');
+            // Store record
+            function store() {
+                $('#save_modal_form').on('submit', function (event) {
+                    event.preventDefault();
+                    let save_btn = $('#add-btn');
+                    save_btn.attr('disabled', 'disabled').button('refresh');
 
-                let method = "POST";
-                let url = "{{ route('admin.seo.store') }}";
-                let fd = new FormData(this);
-                console.log(this);
-                $.ajax({
-                    url: url,
-                    type: method,
-                    processData: false,
-                    contentType: false,
-                    data: fd,
-                    success: function (response) {
-                        $('#modalForm').modal('hide');
-                        $("#table-data").load(location.href + " #table-data");
-                        console.log(response);
-                    },
-                    error: function (error) {
-                        save_btn.removeAttr('disabled', 'disabled').button('resfresh')
-                        console.log(error.responseJSON.message);
-                    }
+                    let method = "POST";
+                    let url = "{{ route('admin.seo.store') }}";
+                    let fd = new FormData(this);
+                    console.log(this);
+                    $.ajax({
+                        url: url,
+                        type: method,
+                        processData: false,
+                        contentType: false,
+                        data: fd,
+                        success: function (response) {
+                            $('#modal').modal('hide');
+                            $("#table-data").load(location.href + " #table-data");
+                            console.log(response);
+                        },
+                        error: function (error) {
+                            save_btn.removeAttr('disabled', 'disabled').button('resfresh')
+                            console.log(error.responseJSON.message);
+                        }
+                    });
                 });
-            });
+            }
 
             // Delete table record
             $(document).on('click', '.delete', function(event) {

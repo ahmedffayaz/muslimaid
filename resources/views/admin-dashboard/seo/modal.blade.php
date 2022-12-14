@@ -3,7 +3,7 @@
     // $url = $isEdit ? route('admin.seo.update', $seoData) : route('admin.seo.store');
 @endphp
 <!-- Modal Form -->
-<div class="modal fade show" tabindex="-1" id="modalForm">
+<div class="modal fade show" tabindex="-1" id="modal">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -40,12 +40,13 @@
                         {{-- End --}}
                     </div>
                     <div class="modal-corsi">
-                    <div class="col-lg-11" id="corsi"></div>
+                        <div class="col-lg-11" id="corsi"></div>
                     </div>
-                </div>
-                <div class="modal-footer bg-light">
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary" id='add-btn'>Add</button>
+
+                    <div class="col-12 mt-3">
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary" id='add-btn'>Add</button>
+                        </div>
                     </div>
                 </div>
             </form>
