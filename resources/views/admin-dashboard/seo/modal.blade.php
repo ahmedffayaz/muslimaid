@@ -45,7 +45,7 @@
 
                     <div class="col-12 mt-3">
                         <div class="form-group">
-                            <button type="submit" class="btn btn-primary" id='add-btn'>Add</button>
+                            <button type="submit" class="btn btn-primary" id='save-btn'></button>
                         </div>
                     </div>
                 </div>

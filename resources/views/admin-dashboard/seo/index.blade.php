@@ -69,6 +69,7 @@
             $('#show-modal').on('click', function (event) {
                 event.preventDefault();
                 seo_fields();
+                $('#save-btn').text('Create');
                 $('#modal').modal('show');
                 store();
             });
