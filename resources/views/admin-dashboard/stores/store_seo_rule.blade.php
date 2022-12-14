@@ -12,7 +12,6 @@
             <div class="nk-tb-col  pl-1">
                 <span>{{ $seo->key }}</span>
             </div>
-        
             <div class="nk-tb-col ">
                 <span>{{ $seo->value }}</span>
             </div>  
