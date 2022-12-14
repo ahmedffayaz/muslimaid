@@ -44,10 +44,10 @@
                                         <label class="form-label" for="key-{{ $loop->index + 1 }}">Choose Key</label>
                                         <div class="form-control-wrap">
                                             <select class="form-select form-control" id="key-{{ $loop->index + 1 }}}" name="type[{{ $loop->index + 1 }}}][key]">
-                                                <option Selected disabled>Choose key</option>
-                                                <option value="meta_title" {{ $rule_data == 'meta_title' ? 'selected' : '' }}>Meta: Title</option>
-                                                <option value="meta_description" {{ $rule_data == 'meta_descrription' ? 'selected' : '' }}>Meta: Description</option>
-                                                <option value="meta_keyword" {{ $rule_data == 'meta_keyword' ? 'selected' : '' }}>Meta: Keyword</option>
+                                                <option selected disabled>Choose key</option>
+                                                <option value="meta_title" {{ $rule_data->key == 'meta_title' ? 'selected' : '' }}>Meta: Title</option>
+                                                <option value="meta_description" {{ $rule_data->key == 'meta_description' ? 'selected' : '' }}>Meta: Description</option>
+                                                <option value="meta_keyword" {{ $rule_data->key == 'meta_keyword' ? 'selected' : '' }}>Meta: Keyword</option>
                                             </select>
                                         </div>
                                     </div>
@@ -74,8 +74,6 @@
             @endif
             <div class="col-lg-11" id="corsi"></div>
         </div>
-        {{-- <div class="modal-corsi">
-        </div> --}}
 
         <div class="col-12 mt-3">
             <div class="form-group">
