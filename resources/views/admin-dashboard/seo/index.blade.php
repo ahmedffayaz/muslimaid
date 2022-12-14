@@ -157,11 +157,12 @@
                     success: function (response) {
                         $('.modal-title').text('Edit SEO');
                         $('.modal-body').html(response);
-                        $('save-btn').text('Update');
+                        $('#save-btn').text('Update');
                         $('#modal').modal('show');
                         $('.form-select').select2({
                             minimumResultsForSearch: -1
                         });
+                        store();
                     }
                 });
             });
@@ -175,8 +176,18 @@
 
                     let method = "POST";
                     let url = "{{ route('admin.seo.store') }}";
+                    let id = $('#id').val()
                     let fd = new FormData(this);
-                    console.log(this);
+                    let base_url = window.location.origin;
+                    let append_url_val = base_url + $('#seo-url').val();
+                        fd.set('url', append_url_val)
+
+                    if(id){
+                        url = "{{ route('admin.seo.update', ':id') }}";
+                        url = url.replace(':id', id);
+                        fd.append('_method', 'PUT');
+                    }
+
                     $.ajax({
                         url: url,
                         type: method,

@@ -8,7 +8,7 @@
     @if($isEdit)
         @method('put')
     @endif
-    <input type="hidden" value="" id="id">
+    <input type="hidden" value="{{ $isEdit ? $seoData->id : '' }}" id="id">
     <div class="modal-body">
         <div class="row g-4">
             <div class="col-lg-12">
@@ -19,7 +19,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon3">{{ url('/') }}</span>
                             </div>
-                            <input type="text" class="form-control" id="blog-title" name="url" placeholder="URL" value="{{ $isEdit ? str_replace(url('/'), '', $seoData->url) :  '/' }}" required>
+                            <input type="text" class="form-control" id="seo-url" name="url" placeholder="URL" value="{{ $isEdit ? str_replace(url('/'), '', $seoData->url) :  '/' }}" required>
                         </div>
                     </div>
                 </div>
@@ -43,7 +43,7 @@
                                     <div class="form-group">
                                         <label class="form-label" for="key-{{ $loop->index + 1 }}">Choose Key</label>
                                         <div class="form-control-wrap">
-                                            <select class="form-select form-control" id="key-{{ $loop->index + 1 }}}" name="type[{{ $loop->index + 1 }}}][key]">
+                                            <select class="form-select form-control" id="key-{{ $loop->index + 1 }}" name="type[{{ $loop->index + 1 }}][key]">
                                                 <option selected disabled>Choose key</option>
                                                 <option value="meta_title" {{ $rule_data->key == 'meta_title' ? 'selected' : '' }}>Meta: Title</option>
                                                 <option value="meta_description" {{ $rule_data->key == 'meta_description' ? 'selected' : '' }}>Meta: Description</option>
@@ -57,7 +57,7 @@
                                     <div class="form-group">
                                         <label class="form-label" for="default-01">Value</label>
                                         <div class="form-control-wrap">
-                                            <textarea class="form-control" id="default-01" name="type[{{ $loop->index + 1 }}}][value]" rows="3" placeholder="Value" required>{{$rule_data->value}}</textarea>
+                                            <textarea class="form-control" id="default-01" name="type[{{ $loop->index + 1 }}][value]" rows="3" placeholder="Value" required>{{$rule_data->value}}</textarea>
                                         </div>
                                     </div>
                                 </div>

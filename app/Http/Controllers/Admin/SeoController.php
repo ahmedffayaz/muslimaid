@@ -41,14 +41,14 @@ class SeoController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'url' => 'required',
+            'url' => 'required|url',
 
         ],$messages = [
             'url.required' => 'The url field is required.',
         ]);
 
         $seo_rule = Seo_rule::create([
-            'url' => url('/') . $request->url
+            'url' => $request->url
         ]);
 
         foreach($request->type as $type)
@@ -86,7 +86,7 @@ class SeoController extends Controller
     public function edit(Seo_rule $seo)
     {
         //$seo = $seo->with('ruleData')->first();
-        $seoData = Seo_rule::with('ruleData')->where('id',$seo['id'])->first();
+        $seoData = Seo_rule::withCount('ruleData')->with('ruleData')->where('id',$seo['id'])->first();
 
         return view('admin-dashboard.seo.form',compact('seoData'));
     }
@@ -100,34 +100,26 @@ class SeoController extends Controller
      */
     public function update(Request $request,  Seo_rule $seo)
     {
-
         $validated = $request->validate([
             'url' => 'required|url',
-            'title' => 'required',
         ],$messages = [
             'url.required' => 'The url field is required.',
         ]);
-        Seo_rule_data::where('seo_rule_id',$seo['id'])->delete();
-        $seo->delete();
 
-        $seo_rule = new Seo_rule;
-        $seo_rule->url =$request->url;
-        $seo_rule->title = $request->title;
-        $seo_rule->save();
+        $seo->ruleData()->delete();
 
-        if($request->input('value') != null)
-            {
-        foreach($request->value as $val)
+        $seo->update([
+            'url' => $request->url
+        ]);
+        dd($request->type);
+        if($request->type)
         {
-        $seo_rule_data = new Seo_rule_data;
-        $seo_rule_data->seo_rule_id =$seo_rule->id;
-        $seo_rule_data->meta_keyword =  $val['keyword'];
-        $seo_rule_data->meta_description = $val['meta_description'];
-        $seo_rule_data->save();
-    }
-}
-
-
+            foreach($request->type as $val)
+            {
+                $val['type'] = "meta";
+                $seo->ruleData()->create($val);
+            }
+        }
 
         flash()->success('Seo rule updated successfully.');
         return redirect()->route('admin.seo.index');
