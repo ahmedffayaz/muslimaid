@@ -8,9 +8,11 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+         /* font-weight: 900;
+        font-size: 2rem; */
     }
     .map-search .search-wrap {
-    margin-left: 15px;
+    /* margin-left: 15px; */
     margin-right: 15px
     }
     .map-search .search-wrap input[type=text] {
@@ -18,19 +20,59 @@
     height: 100%;
     border: 1;
     box-shadow: none;
-}
-
-.current{
-    border:none;
-    z-index:24; 
-    background:none;
-    color:#000;
-    text-decoration:none
-}
+   }
+        .fa-map-marker{
+        position: relative;
+        top: -48px;
+        left: 30px;
+        font-size: 23px;
+       }
+    .searchbox{   
+       padding: 1.5rem 1rem 1.5rem 1rem;
+       position: relative;
+       flex-grow: 1 !important;"
+    }
+   .border{
+    border: 2px solid #000 !important;
+       border-radius: 1.75rem;
+   }
+   
+    .current{
+        border:none;
+        z-index:24; 
+        background:none;
+        color:#000;
+        text-decoration:none;
+        outline:none !important;
+    }
+    .gm-ui-hover-effect{
+        outline:none !important;
+    }
+    .view-btn.grid-view {
+    background-image: url({{asset('frontend/images/grid-view-icon.png')}});
+    }
+    .view-btn.list-view {
+    background-image: url({{asset('frontend/images/list-view-icon.png')}});
+    }
+    .view-btn.active {
+    background-position: 0 -42px;
+    }
+     .view-btn {
+    display: inline-block;
+    width: 50px;
+    height: 34px;
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    margin-left: 16px;
+    }
+    .width{
+    width: 60% !important;
+    border-radius: 1.75rem;  
+    }
 </style>
 <div class="page-header">
     <div class="page-header__container container">
-        <div class="page-header__breadcrumb">
+        <div class="page-header__breadcrumb pb-3">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
@@ -43,15 +85,32 @@
                 </ol>
             </nav>
         </div>
+        {{-- <div class="page-header__title">
+            <h1 class="">Cashback to door</h1>
+        </div> --}}
         <div class="page-header__title">
-            <h1>Cashback to door</h1>
+            <div class="row">
+                <div class="col-md-12 pl-0">
+                        <h1 class="col-md-5 float-left">Cashback To Your Door</h1>
+                            <div class="col-md-5 float-right  d-flex flex-justify-between">
+                                    <select class="form-control width store select2-container select2-selection--multiple" data-placeholder="Select Multiple options">
+                                        <option value="default_option">All</option>
+                                        @foreach($locations as $store)
+                                        <option value="{{$store->slug}}">{{$store->name}}</option>
+                                        @endforeach
+                                    </select>
+                                   <a href="javascript:;" id="gridview" class="grid-view view-btn active"></a>
+                                   <a href="javascript:;" id="listview" class="list-view view-btn "></a> 
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 <div class="container ">
     <div class="map-search">
-    <button href="javascript:;" class="d-sm-block current" onclick="getCurrentLocation();"><img src="{{asset('frontend/images/map-pointer.png')}}" alt="" style="width: 55%;"/></button>
-    <div class="search-wrap">
+    <button href="javascript:;" class="d-sm-block current  mb-3" style="outline:0 !important" onclick="getCurrentLocation();"><img src="{{asset('frontend/images/map-pointer.png')}}" alt="" style="width: 85%;"/></button>
+    <div class="search-wrap searchbox">
         <div>
             <div class="d-none">
                 <div id="title">Autocomplete search</div>
@@ -84,7 +143,9 @@
                 </div>
             </div>
             <div>
-                <input id="pac-input" name="user_address" class="form-control" type="text" placeholder="Enter a locations" value="" />
+                
+                <input id="pac-input" style="padding-left: 50px; " name="user_address" class="form-control searchbox border" type="text" placeholder="Enter a locations" value="" />
+                <span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
             </div>
         </div>
     </div>
@@ -119,10 +180,10 @@
                         </div>
                         <div class="products-view">
                             <div class="products-view__list products-list scrolling-pagination" data-layout="grid-5-full" data-with-features="false" data-mobile-grid-columns="2">
-                                <div class="products-list__body ">
+                                <div class="products-list__body  store_block">
                                     @foreach ($locations as $store)
-                                    <div class="products-list__item text-center">
-                                        <div class="product-card ">
+                                    <div class="products-list__item text-center all_stores {{$store->name}}_store">
+                                        <div class="product-card">
                                             <div class="product-card__image product-image">
                                                 <a href="{{route('store.show',$store->slug)}}" class="product-image__body" style="padding-bottom:100px">
                                                     <img class="product-image__img"  @if($store->logo->first())
@@ -132,7 +193,7 @@
                                                         src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
                                                     @endif
                                                 @else
-                                                    src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                                                    src="{{asset('frontend/images/grid-view-icon.png')}}" 
                                                 @endif alt="">
                                                 </a>
                                             </div>
@@ -175,11 +236,11 @@
                                             <div class="product-card__actions">
                                                 <div class="product-card__prices">
                                                     
-                                                    @if($store->custom_cashback_percentage)
+                                                    {{-- @if($store->custom_cashback_percentage)
                                                         @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                                     @else
                                                         @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
-                                                    @endif
+                                                    @endif --}}
                                                         Cashback
                                                 </div>
                                                 <div class="product-card__prices">
@@ -216,6 +277,30 @@
 @endsection
     @push('scripts')
       <script type="text/javascript">   
+      
+      $(document).ready(function () {
+        $('#listview').on('click', function(){
+        $('#gridview.active').removeClass('active');
+         $(this).addClass('active');
+       });
+      $('#gridview').on('click', function(){
+        $('#listview.active').removeClass('active');
+         $(this).addClass('active');
+      });
+      $(".store").change (function () {  
+        var selectedStore = $(this).children("option:selected").val();  
+        if(selectedStore != "default_option"){
+         $(".all_stores").css("display","none");
+        $("."+selectedStore+"_store").css("display","block");
+        }else{
+            $(".all_stores").css("display","block");
+        }
+
+       
+
+    });  
+
+      })
         var map;
         var center;
         var infowindow;
@@ -638,8 +723,7 @@
         }
         return "";
     }
-   
-  function orderByDistanceRendering(arrs) {
+  function orderByDistanceRendering(arrs) {infoWindow
        
        $("#storesListN").empty();
        var storesHtml = "";
