@@ -29,7 +29,7 @@ class SeoController extends Controller
      */
     public function create()
     {
-        // return view('admin-dashboard.seo.create');
+        return view('admin-dashboard.seo.form');
     }
 
     /**
@@ -88,7 +88,7 @@ class SeoController extends Controller
         //$seo = $seo->with('ruleData')->first();
         $seoData = Seo_rule::with('ruleData')->where('id',$seo['id'])->first();
 
-        return view('admin-dashboard.seo.index',compact('seoData'));
+        return view('admin-dashboard.seo.form',compact('seoData'));
     }
 
     /**

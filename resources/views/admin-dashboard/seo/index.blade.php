@@ -48,7 +48,7 @@
             </div>
         </div>
     </div>
-    @include('admin-dashboard.seo.modal')
+    @include('layouts.admin-dashboard.includes.modal_lg')
 @endsection
 @push('scripts')
     <script>
@@ -68,10 +68,20 @@
             // Show modal
             $('#show-modal').on('click', function (event) {
                 event.preventDefault();
-                seo_fields();
-                $('#save-btn').text('Create');
-                $('#modal').modal('show');
-                store();
+                let url = "{{ route('admin.seo.create') }}";
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (response) {
+                        $('.modal-title').text('Add SEO');
+                        $('.modal-body').html(response);
+                        seo_fields();
+                        $('#save-btn').text('Create');
+                        $('#modal').modal('show');
+                        store();
+                    }
+                });
+                // seo_fields();
             });
 
             // SEO fields
@@ -84,6 +94,7 @@
                                         <label class="form-label" for="key-${counter}">Choose Key</label>
                                         <div class="form-control-wrap">
                                             <select class="form-select form-control" id="key-${counter}" name="type[${counter}][key]">
+                                                <option Selected disabled>Choose key</option>
                                                 <option value="meta_title">Meta: Title</option>
                                                 <option value="meta_description">Meta: Description</option>
                                                 <option value="meta_keyword">Meta: Keyword</option>
@@ -96,16 +107,16 @@
                                     <div class="form-group">
                                         <label class="form-label" for="default-01">Value</label>
                                         <div class="form-control-wrap">
-                                            <textarea class="form-control" id="default-01" name="type[${counter}][value]" rows="3" placeholder="Value"></textarea>
+                                            <textarea class="form-control" id="default-01" name="type[${counter}][value]" rows="3" placeholder="Value" required></textarea>
                                         </div>
                                     </div>
                                 </div>
 
                             </div>
                             <div class="col-sm-12" style="margin-left: 50px;">
-                                <span>
-                                    <em class="icon ni ni-minus-circle delBtn" style="float: right;" data-type_counter="${counter}"></em>
-                                </span>
+                                <a href="javascript:void(0)" class="btn btn-icon btn-sm btn-danger delBtn" style="float: right;" data-type_counter="${counter}">
+                                    <em class="icon ni ni-minus"></em>
+                                </a>
                             </div>
                         </div>`;
 
@@ -130,7 +141,29 @@
 
             // Delete appenended fields
             $(document).on('click', '.delBtn', function() {
-                $(this).parent().parent().parent().remove();
+                $(this).parent().parent().remove();
+            });
+
+            // Show edit modal
+            $('.edit-form').on('click', function (event) {
+                event.preventDefault();
+                let id = $(this).data('id');
+                let url = "{{ route('admin.seo.edit', ':id') }}";
+                // Replace id
+                url = url.replace(':id', id);
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (response) {
+                        $('.modal-title').text('Edit SEO');
+                        $('.modal-body').html(response);
+                        $('save-btn').text('Update');
+                        $('#modal').modal('show');
+                        $('.form-select').select2({
+                            minimumResultsForSearch: -1
+                        });
+                    }
+                });
             });
 
             // Store record

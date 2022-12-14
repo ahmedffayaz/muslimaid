@@ -18,7 +18,7 @@ class RemoveSeoRuleDataMetaKeywrod extends Migration
             $table->dropColumn('meta_description');
             $table->string('type')->after('seo_rule_id');
             $table->string('key')->after('type');
-            $table->string('value')->after('key');
+            $table->longText('value')->after('key');
         });
     }
 

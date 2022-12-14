@@ -35,11 +35,7 @@
                         <div class="dropdown-menu dropdown-menu-right">
                             <ul class="link-list-opt no-bdr">
                                 <li>
-                                    {{-- <a href="{{route('admin.seo.edit', $seo)}}">
-                                        <em class="icon ni ni-edit"></em>
-                                        <span>Edit</span>
-                                    </a> --}}
-                                    <a href="#" class="edit-form">
+                                    <a href="#" class="edit-form" data-id="{{ $seo->id }}">
                                         <em class="icon ni ni-edit"></em>
                                         <span>Edit</span>
                                     </a>
