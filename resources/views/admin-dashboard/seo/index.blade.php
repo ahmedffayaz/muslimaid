@@ -81,11 +81,11 @@
                         store();
                     }
                 });
-                // seo_fields();
             });
 
             // SEO fields
             function seo_fields() {
+                counter = Number($('.rule-type-container').attr('data-count'));
                 counter++;
                 html = `<div>
                             <div class="row gy-4">
@@ -124,19 +124,17 @@
                     $(`#key-${counter}`).select2({
                         minimumResultsForSearch: -1
                     });
-                    $('.seo-fields').attr('data-count', counter);
+                    $('.rule-type-container').attr('data-count', counter);
             }
 
             // Appened SEO fields in modal form
             $(document).on('click', '#append_fields', function() {
-                // let counter = $('.seo-fields').attr('data-count');
+                // SEO fields
                 html = seo_fields();
-
-                    $('#corsi').append(html);
-                    $(`#key-${counter}`).select2({
-                        minimumResultsForSearch: -1
-                    });
-                    $('.seo-fields').attr('data-count', counter);
+                $('#corsi').append(html);
+                $(`#key-${counter}`).select2({
+                    minimumResultsForSearch: -1
+                });
             });
 
             // Delete appenended fields
@@ -167,6 +165,9 @@
                 });
             });
 
+            console.log(window.location.origin + ' origin')
+            console.log(window.location.host + ' host')
+            console.log(window.location.href + ' href')
             // Store record
             function store() {
                 $('#save_modal_form').on('submit', function (event) {
@@ -196,7 +197,7 @@
                         data: fd,
                         success: function (response) {
                             $('#modal').modal('hide');
-                            $("#table-data").load(location.href + " #table-data");
+                            $("#table-data").load(window.location.href + " #table-data");
                             console.log(response);
                         },
                         error: function (error) {

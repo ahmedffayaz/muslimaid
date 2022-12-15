@@ -85,7 +85,6 @@ class SeoController extends Controller
      */
     public function edit(Seo_rule $seo)
     {
-        //$seo = $seo->with('ruleData')->first();
         $seoData = Seo_rule::withCount('ruleData')->with('ruleData')->where('id',$seo['id'])->first();
 
         return view('admin-dashboard.seo.form',compact('seoData'));
@@ -111,7 +110,7 @@ class SeoController extends Controller
         $seo->update([
             'url' => $request->url
         ]);
-        dd($request->type);
+
         if($request->type)
         {
             foreach($request->type as $val)
