@@ -59,10 +59,13 @@ class SeoController extends Controller
                 'url' => $request->url
             ]);
 
-            foreach($request->type as $type)
+            if($request->type)
             {
-                $type['type'] = "meta";
-                $seo_rule->ruleData()->create($type);
+                foreach($request->type as $type)
+                {
+                    $type['type'] = "meta";
+                    $seo_rule->ruleData()->create($type);
+                }
             }
 
             DB::commit();
