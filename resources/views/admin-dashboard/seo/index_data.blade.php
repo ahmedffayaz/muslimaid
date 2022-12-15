@@ -21,7 +21,6 @@
             </div>
         </div>
         <div class="nk-tb-col">
-            {{-- {{ dd($seo->ruleData) }} --}}
             @foreach ($seo->ruleData as $key => $rule)
                 <span><b>{{ ucfirst(str_replace('_', ' ', $rule->key)) }}:</b> </span><span>{{ $rule->value }}</span><br>
             @endforeach
@@ -35,7 +34,7 @@
                         <div class="dropdown-menu dropdown-menu-right">
                             <ul class="link-list-opt no-bdr">
                                 <li>
-                                    <a href="#" class="edit-form" data-id="{{ $seo->id }}">
+                                    <a href="javascript:void(0)" class="edit-form" data-id="{{ $seo->id }}">
                                         <em class="icon ni ni-edit"></em>
                                         <span>Edit</span>
                                     </a>

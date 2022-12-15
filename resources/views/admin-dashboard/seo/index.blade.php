@@ -142,8 +142,7 @@
                 $(this).parent().parent().remove();
             });
 
-            // Show edit modal
-            $('.edit-form').on('click', function (event) {
+            $(document).on('click', '.edit-form',function (event) {
                 event.preventDefault();
                 let id = $(this).data('id');
                 let url = "{{ route('admin.seo.edit', ':id') }}";
@@ -156,7 +155,7 @@
                         $('.modal-title').text('Edit SEO');
                         $('.modal-body').html(response);
                         $('#save-btn').text('Update');
-                        $('#modal').modal('show');
+                        $('.modal').modal('show');
                         $('.form-select').select2({
                             minimumResultsForSearch: -1
                         });
@@ -165,9 +164,6 @@
                 });
             });
 
-            console.log(window.location.origin + ' origin')
-            console.log(window.location.host + ' host')
-            console.log(window.location.href + ' href')
             // Store record
             function store() {
                 $('#save_modal_form').on('submit', function (event) {
@@ -197,8 +193,7 @@
                         data: fd,
                         success: function (response) {
                             $('#modal').modal('hide');
-                            $("#table-data").load(window.location.href + " #table-data");
-                            console.log(response);
+                            $('#table-data').load(location.href + ' #table-data');
                         },
                         error: function (error) {
                             save_btn.removeAttr('disabled', 'disabled').button('resfresh')

@@ -19,7 +19,7 @@ class SeoController extends Controller
     {
         $seo_rules = Seo_rule::with('ruleData')->get();
 
-       return view('admin-dashboard.seo.index',compact('seo_rules'));
+        return view('admin-dashboard.seo.index',compact('seo_rules'));
     }
 
     /**
@@ -120,8 +120,10 @@ class SeoController extends Controller
             }
         }
 
-        flash()->success('Seo rule updated successfully.');
-        return redirect()->route('admin.seo.index');
+        return response()->json([
+            'status' => JsonResponse::HTTP_OK,
+            'success' => 'SEO rule updated successfully.'
+        ]);
     }
 
     /**
