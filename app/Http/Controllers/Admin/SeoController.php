@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Exception;
 use App\Models\Seo_rule;
+use Illuminate\Http\Request;
 use App\Models\Seo_rule_data;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SeoController extends Controller
 {
@@ -40,29 +43,47 @@ class SeoController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $validated = $request->validate([
             'url' => 'required|url',
             'type.*.key' => 'required',
 
         ],$messages = [
             'url.required' => 'The url field is required.',
+            'type.*.key.required' => 'key field is required.',
         ]);
 
-        $seo_rule = Seo_rule::create([
-            'url' => $request->url
-        ]);
+        try {
+            DB::beginTransaction();
 
-        foreach($request->type as $type)
-        {
-            $type['type'] = "meta";
-            $seo_rule->ruleData()->create($type);
+            $seo_rule = Seo_rule::create([
+                'url' => $request->url
+            ]);
+
+            foreach($request->type as $type)
+            {
+                $type['type'] = "meta";
+                $seo_rule->ruleData()->create($type);
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'success' => 'SEO rule added successfully.'
+            ], JsonResponse::HTTP_OK);
+        } catch (ModelNotFoundException $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'error' => 'Some thing went wrong'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $exception->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return response()->json([
-            'status' => JsonResponse::HTTP_OK,
-            'success' => 'SEO rule added successfully.'
-        ]);
     }
 
     /**
@@ -100,29 +121,49 @@ class SeoController extends Controller
     {
         $validated = $request->validate([
             'url' => 'required|url',
+            'type.*.key' => 'required',
         ],$messages = [
             'url.required' => 'The url field is required.',
+            'type.*.key.required' => 'key field is required.',
         ]);
 
-        $seo->ruleData()->delete();
+        try {
+            DB::beginTransaction();
 
-        $seo->update([
-            'url' => $request->url
-        ]);
+            $seo->ruleData()->delete();
 
-        if($request->type)
-        {
-            foreach($request->type as $val)
+            $seo->update([
+                'url' => $request->url
+            ]);
+
+            if($request->type)
             {
-                $val['type'] = "meta";
-                $seo->ruleData()->create($val);
+                foreach($request->type as $val)
+                {
+                    $val['type'] = "meta";
+                    $seo->ruleData()->create($val);
+                }
             }
-        }
 
-        return response()->json([
-            'status' => JsonResponse::HTTP_OK,
-            'success' => 'SEO rule updated successfully.'
-        ]);
+            DB::commit();
+
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'success' => 'SEO rule updated successfully.'
+            ], JsonResponse::HTTP_OK);
+        } catch (ModelNotFoundException $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'error' => 'Some thing went wrong'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $exception->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**

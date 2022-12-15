@@ -192,7 +192,6 @@
                         contentType: false,
                         data: fd,
                         success: function (response) {
-                            console.log(response)
                             $('#modal').modal('hide');
                             $('#table-data').load(location.href + ' #table-data');
                             (function(NioApp, $){
@@ -203,13 +202,21 @@
                             })(NioApp, jQuery);
                         },
                         error: function (error) {
+                            if (error.responseJSON.error) {
+                                (function(NioApp, $){
+                                    'use strict';
+                                    toastr.clear();
+                                    NioApp.Toast(error.responseJSON.error, 'error');
 
-                            (function(NioApp, $){
-                                'use strict';
-                                toastr.clear();
-                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                                })(NioApp, jQuery);
+                            } else {
+                                (function(NioApp, $){
+                                    'use strict';
+                                    toastr.clear();
+                                    NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
 
-                            })(NioApp, jQuery);
+                                })(NioApp, jQuery);
+                            }
                         }
                     });
                 });
