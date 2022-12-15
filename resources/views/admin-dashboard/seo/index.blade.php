@@ -93,7 +93,7 @@
                                     <div class="form-group">
                                         <label class="form-label" for="key-${counter}">Choose Key</label>
                                         <div class="form-control-wrap">
-                                            <select class="form-select form-control" id="key-${counter}" name="type[${counter}][key]">
+                                            <select class="form-select form-control" id="key-${counter}" name="type[${counter}][key]" required>
                                                 <option Selected disabled>Choose key</option>
                                                 <option value="meta_title">Meta: Title</option>
                                                 <option value="meta_description">Meta: Description</option>
@@ -192,12 +192,24 @@
                         contentType: false,
                         data: fd,
                         success: function (response) {
+                            console.log(response)
                             $('#modal').modal('hide');
                             $('#table-data').load(location.href + ' #table-data');
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(response.success, 'success');
+
+                            })(NioApp, jQuery);
                         },
                         error: function (error) {
-                            save_btn.removeAttr('disabled', 'disabled').button('resfresh')
-                            console.log(error.responseJSON.message);
+
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+
+                            })(NioApp, jQuery);
                         }
                     });
                 });

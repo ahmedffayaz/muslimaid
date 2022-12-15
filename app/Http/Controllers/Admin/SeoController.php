@@ -40,8 +40,10 @@ class SeoController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $validated = $request->validate([
             'url' => 'required|url',
+            'type.*.key' => 'required',
 
         ],$messages = [
             'url.required' => 'The url field is required.',
@@ -59,11 +61,8 @@ class SeoController extends Controller
 
         return response()->json([
             'status' => JsonResponse::HTTP_OK,
-            'result' => 'Submit successfully'
+            'success' => 'SEO rule added successfully.'
         ]);
-
-        // flash()->success('Seo rule added successfully.');
-        // return redirect()->route('admin.seo.index');
     }
 
     /**
