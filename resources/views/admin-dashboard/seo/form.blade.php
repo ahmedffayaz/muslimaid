@@ -18,7 +18,7 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="basic-addon3">{{ url('/') }}</span>
                             </div>
-                            <input type="text" class="form-control" id="seo-url" name="url" placeholder="URL" value="{{ $isEdit ? str_replace(url('/'), '', $seoData->url) :  '/' }}" required>
+                            <input type="text" class="form-control" id="seo-url" name="url" placeholder="URL" value="{{ $isEdit ? $seoData->url ==  url('/') ? '/' : str_replace(url('/'), '', $seoData->url) : '/' }}" required>
                         </div>
                     </div>
                 </div>

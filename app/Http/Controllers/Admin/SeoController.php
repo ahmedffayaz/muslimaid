@@ -57,8 +57,11 @@ class SeoController extends Controller
         try {
             DB::beginTransaction();
 
+            // Removing / from URL
+            $final_string = rtrim($request->url, '/');
+
             $seo_rule = Seo_rule::create([
-                'url' => $request->url
+                'url' => $final_string
             ]);
 
             if($request->type)
@@ -139,8 +142,11 @@ class SeoController extends Controller
 
             $seo->ruleData()->delete();
 
+            // Removing / from URL
+            $final_string = rtrim($request->url, '/');
+
             $seo->update([
-                'url' => $request->url
+                'url' => $final_string
             ]);
 
             if($request->type)
