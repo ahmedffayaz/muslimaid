@@ -69,6 +69,9 @@
     width: 60% !important;
     border-radius: 1.75rem;  
     }
+    .categorylist{
+        display: none;
+    }
 </style>
 <div class="page-header">
     <div class="page-header__container container">
@@ -95,8 +98,8 @@
                             <div class="col-md-5 float-right  d-flex flex-justify-between">
                                     <select class="form-control width store select2-container select2-selection--multiple" data-placeholder="Select Multiple options">
                                         <option value="default_option">All</option>
-                                        @foreach($locations as $store)
-                                        <option value="{{$store->slug}}">{{$store->name}}</option>
+                                        @foreach($categories as $category)
+                                        <option value="{{$category->name}}">{{$category->name}}</option>
                                         @endforeach
                                     </select>
                                    <a href="javascript:;" id="gridview" class="grid-view view-btn active"></a>
@@ -169,111 +172,371 @@
     <div id="map"></div>
 </div>
 </div>
-<div class="block mt-5">
+
+<div class="block block--highlighted block-categories block-categories--layout--classic categorygrid">
     <div class="container">
-        <div class="row">
-            <div class="col-12">
-                @if($locations->count())
-                <div class="block">
-                    <div class="block">
-                        <div class="block-header">
+       
+        <div class="block-categories__list  ">
+           
+                        @foreach($categories as $category)
+                        @foreach($category->childs as $child)
+                        <div class="block-categories__item all_stores {{$category->name}}_store category-card category-card--layout--classic">
+                            <div class="category-card__body ">
+                                <div class="category-card__image ">
+                                    {{-- <img src="{{asset('storage/categories/images/'.$category->logo_upload)}}" style="max-height: 60px;max-width:60px" alt=""> --}}
+                <img src="{{asset('admin-dashboard/images/avatar/d-sm.jpg')}}" alt=" nno">
+      
                         </div>
-                        <div class="products-view">
-                            <div class="products-view__list products-list scrolling-pagination" data-layout="grid-5-full" data-with-features="false" data-mobile-grid-columns="2">
-                                <div class="products-list__body  store_block">
-                                    @foreach ($locations as $store)
-                                    <div class="products-list__item text-center all_stores {{$store->name}}_store">
-                                        <div class="product-card">
-                                            <div class="product-card__image product-image">
-                                                <a href="{{route('store.show',$store->slug)}}" class="product-image__body" style="padding-bottom:100px">
-                                                    <img class="product-image__img"  @if($store->logo->first())
-                                                    @if($store->logo->first()->is_fake)
-                                                        src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
-                                                    @else
-                                                        src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
-                                                    @endif
-                                                @else
-                                                    src="{{asset('frontend/images/grid-view-icon.png')}}" 
-                                                @endif alt="">
-                                                </a>
-                                            </div>
-                                            <div class="product-card__info">
-                                                <div class="product-card__name">
-                                                    <a href="{{route('store.show',$store->slug)}}">{{$store->name}}</a>
-                                                </div>
-                                                @if($store->reviews->count())
-                                                <div class="product-card__rating mx-auto">
-                                                    <div class="product-card__rating-stars">
-                                                        <div class="rating">
-                                                            <div class="rating__body">
-                                                                @foreach (range(1,5) as $index)
-                                                                <svg class="rating__star @if($index <= $store->reviews->avg('rating')) rating__star--active @endif" width="13px" height="12px">
-                                                                    <g class="rating__fill">
-                                                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal"></use>
-                                                                    </g>
-                                                                    <g class="rating__stroke">
-                                                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal-stroke"></use>
-                                                                    </g>
-                                                                </svg>
-                                                                
-                                                                <div class="rating__star rating__star--only-edge @if($index <= $store->reviews->avg('rating')) rating__star--active @endif">
-                                                                    <div class="rating__fill">
-                                                                        <div class="fake-svg-icon"></div>
-                                                                    </div>
-                                                                    <div class="rating__stroke">
-                                                                        <div class="fake-svg-icon"></div>
-                                                                    </div>
-                                                                </div>
-                                                                @endforeach
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product-card__rating-legend">{{$store->reviews->count()}} Reviews</div>
-                                                </div>
-                                                @endif
-                                                
-                                            </div>
-                                            <div class="product-card__actions">
-                                                <div class="product-card__prices">
-                                                    
-                                                    {{-- @if($store->custom_cashback_percentage)
-                                                        @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
-                                                    @else
-                                                        @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
-                                                    @endif --}}
-                                                        Cashback
-                                                </div>
-                                                <div class="product-card__prices">
-                                                    <div class="distance calculatedDistance" id="distance-<?=$store->id;?>">1.4 miles away</div>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                    {{-- {!! $locations->links()!!}  --}}
-                                </div>
-                            </div>
-                            
+                    <div class="category-card__content">
+                        <div class="category-card__name">
+                            <a href="">{{$category->name}}</a>
                         </div>
+                        
+                        <div class="category-card__links">
+                           
+                            <a href="">{{$child->name}}</a>
+
+                        </div>
+                        
                     </div>
-                            
+                   
+                    
                 </div>
-                @else
-                <h2>No Cashback Found</h2>
-                @endif
-                <input type="hidden" id="destinationLat" value="">
-                <input type="hidden" id="destinationLng" value="">
+              
             </div>
+            @endforeach
+            
+            @endforeach
+           
+            
+
         </div>
     </div>
 </div>
 
-    <?php
+<div class="container pt-5">
+    <div class="row">
+        <div class="col-12 col-lg-12">
+            <div class="block ">
+                <div class="posts-view">
+                    
+                    <div class="posts-view__list posts-list posts-list--layout--grid2 categorylist">
+                       
+                        <div class="posts-list__body  ">
+                            @foreach ($categories as $category)
+                            @foreach($category->childs as $child)
+                            <div class="posts-list__item all_stores {{$category->name}}_store ">
+                                
+                                <div class="post-card post-card--layout--grid  post-card--size--nl">
+                                    <div class="post-card__image">
+                                        <a href="">
+                                            <img src="{{asset('admin-dashboard/images/slides/slide-a.jpg')}}" alt="mnjnj"> 
+                                        </a>
+                                    </div>
+                                    <div class="post-card__info">
+                                        <div class="post-card__category">
+                                            <a href="">{{$category->name}}</a>
+                                        </div>
+                                        <div class="post-card__name">
+                                            <a href="">{{$child->name}}</a>
+                                        </div>
+                                        <div class="post-card__date">{{$category->name}}</div>
+                                        <div class="post-card__content">
+                                           <a href="">{{$category->storeAddress}}</a>
+                                        </div>
+                                        <div class="post-card__read-more">
+                                            <a href="" class="btn btn-secondary btn-sm">Read More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                           
+                            @endforeach
+                            {{-- {!! $categories->links() !!} --}}
+                         @endforeach
+                        </div>
+                       
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+        {{-- <div class="block-categories__list">
+            {{-- @foreach($categories as $category)
+            <div class="block-categories__item category-card category-card--layout--classic">
+                <div class="category-card__body">
+                    
+
+                    <div class="category-card__image">
+                       
+                        </div>
+                    <div class="category-card__content">
+                        <div class="category-card__name">
+                            <a href="{{$category->id)}}">{{$category->name}}</a>
+                        </div>
+                        <ul class="category-card__links">
+                            @if(count($category->childs))
+                            @foreach($category->childs as $child)
+                            <a href="{{route($child->logo_upload)}}" class="product-image__body" style="padding-bottom:100px">
+                                @if($child->logo_type == 'upload')
+            
+                                <img src="{{asset('storage/categories/images/'.$child->logo_upload)}}" style="max-height: 60px;max-width:60px" alt="">
+                              
+                                @elseif($child->logo_type == 'link')
+                                
+                                <img src="{{$child->logo_link}}" style="max-height: 60px;max-width:60px" alt="">
+                             
+                                @endif
+                            <li><a href="">{{$child->name}}</a></li>
+                            @endforeach
+                            @endif
+                        </ul>
+                        <div class="category-card__all">
+                            <a href="">Show All</a>
+                        </div>
+                        <div class="category-card__products">
+                            572 Products
+                        </div>
+                    </div>
+                   
+                   
+                </div>
+              
+            </div>
+            @endforeach --}}
+            {{-- <div class="block-categories__item category-card category-card--layout--classic">
+                <div class="category-card__body">
+                    <div class="category-card__image">
+                        <a href=""><img src="images/categories/category-2.jpg" alt=""></a>
+                    </div>
+                    <div class="category-card__content">
+                        <div class="category-card__name">
+                            <a href="">Hand Tools</a>
+                        </div>
+                        <ul class="category-card__links">
+                            <li><a href="">Screwdrivers</a></li>
+                            <li><a href="">Hammers</a></li>
+                            <li><a href="">Spanners</a></li>
+                            <li><a href="">Handsaws</a></li>
+                            <li><a href="">Paint Tools</a></li>
+                        </ul>
+                        <div class="category-card__all">
+                            <a href="">Show All</a>
+                        </div>
+                        <div class="category-card__products">
+                            134 Products
+                        </div>
+                    </div>
+                </div>
+            </div> --}}
+            {{-- <div class="block-categories__item category-card category-card--layout--classic">
+                <div class="category-card__body">
+                    <div class="category-card__image">
+                        <a href=""><img src="images/categories/category-4.jpg" alt=""></a>
+                    </div>
+                    <div class="category-card__content">
+                        <div class="category-card__name">
+                            <a href="">Machine Tools</a>
+                        </div>
+                        <ul class="category-card__links">
+                            <li><a href="">Lathes</a></li>
+                            <li><a href="">Milling Machines</a></li>
+                            <li><a href="">Grinding Machines</a></li>
+                            <li><a href="">CNC Machines</a></li>
+                            <li><a href="">Sharpening Machines</a></li>
+                        </ul>
+                        <div class="category-card__all">
+                            <a href="">Show All</a>
+                        </div>
+                        <div class="category-card__products">
+                            301 Products
+                        </div>
+                    </div>
+                </div>
+            </div> --}}
+            {{-- <div class="block-categories__item category-card category-card--layout--classic">
+                <div class="category-card__body">
+                    <div class="category-card__image">
+                        <a href=""><img src="images/categories/category-3.jpg" alt=""></a>
+                    </div>
+                    <div class="category-card__content">
+                        <div class="category-card__name">
+                            <a href="">Power Machinery</a>
+                        </div>
+                        <ul class="category-card__links">
+                            <li><a href="">Generators</a></li>
+                            <li><a href="">Compressors</a></li>
+                            <li><a href="">Winches</a></li>
+                            <li><a href="">Plasma Cutting</a></li>
+                            <li><a href="">Electric Motors</a></li>
+                        </ul>
+                        <div class="category-card__all">
+                            <a href="">Show All</a>
+                        </div>
+                        <div class="category-card__products">
+                            79 Products
+                        </div>
+                    </div>
+                </div>
+            </div> --}}
+            {{-- <div class="block-categories__item category-card category-card--layout--classic">
+                    <div class="category-card__body">
+                        <div class="category-card__image">
+                            <a href=""><img src="images/categories/category-5.jpg" alt=""></a>
+                        </div>
+                        <div class="category-card__content">
+                            <div class="category-card__name">
+                                <a href="">Measurement</a>
+                            </div>
+                            <ul class="category-card__links">
+                                <li><a href="">Tape Measure</a></li>
+                                <li><a href="">Theodolites</a></li>
+                                <li><a href="">Thermal Imagers</a></li>
+                                <li><a href="">Calipers</a></li>
+                                <li><a href="">Levels</a></li>
+                            </ul>
+                            <div class="category-card__all">
+                                <a href="">Show All</a>
+                            </div>
+                            <div class="category-card__products">
+                                366 Products
+                            </div>
+                        </div>
+                    </div>
+            </div> --}}
+            {{-- <div class="block-categories__item category-card category-card--layout--classic">
+                <div class="category-card__body">
+                    <div class="category-card__image">
+                        <a href=""><img src="images/categories/category-6.jpg" alt=""></a>
+                    </div>
+                    <div class="category-card__content">
+                        <div class="category-card__name">
+                            <a href="">Clothes and PPE</a>
+                        </div>
+                        <ul class="category-card__links">
+                            <li><a href="">Winter Workwear</a></li>
+                            <li><a href="">Summer Workwear</a></li>
+                            <li><a href="">Helmets</a></li>
+                            <li><a href="">Belts and Bags</a></li>
+                            <li><a href="">Work Shoes</a></li>
+                        </ul>
+                        <div class="category-card__all">
+                            <a href="">Show All</a>
+                        </div>
+                        <div class="category-card__products">
+                            81 Products
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div> --}}
+    <
+
+
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   <?php
     $radius = "";
     $user_lat = "";
     $user_lng = "";
     ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 @endsection
     @push('scripts')
       <script type="text/javascript">   
@@ -282,25 +545,26 @@
         $('#listview').on('click', function(){
         $('#gridview.active').removeClass('active');
          $(this).addClass('active');
+         $('.categorylist').css("display","block");
+         $('.categorygrid').css("display","none");
        });
       $('#gridview').on('click', function(){
         $('#listview.active').removeClass('active');
          $(this).addClass('active');
+         $('.categorygrid').css("display","block");
+         $('.categorylist').css("display","none");
       });
-      $(".store").change (function () {  
+      $("select.store").change (function () {  
         var selectedStore = $(this).children("option:selected").val();  
         if(selectedStore != "default_option"){
+           
          $(".all_stores").css("display","none");
         $("."+selectedStore+"_store").css("display","block");
         }else{
             $(".all_stores").css("display","block");
-        }
-
-       
-
+        }   
     });  
-
-      })
+      });
         var map;
         var center;
         var infowindow;

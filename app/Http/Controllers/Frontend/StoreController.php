@@ -22,15 +22,23 @@ class StoreController extends Controller
         $store = Store::where('slug', $slug)->first();
         
         // $vouchers = Voucher::where('store_id', $store->id)->latest()->paginate(5);
-        $count = count($store->cashbacks);
-        return view('frontend.stores.show',compact('store','count'));
+       // $count = count($store->cashbacks);
+        //return view('frontend.stores.show',compact('store','count'));
+        return view('frontend.stores.show',compact('store'));
     }
 
     public function storeLocation()
     {
         $locations = Store::with('logo','storeAddress')->get();
-        return view('frontend.stores.location',compact('locations'));
+        $categories = Category::with(['stores.storeAddress'])->where('parent_id', '=', 0)->orderBy('name', 'ASC')->get();
+        foreach($categories as $category){
+             foreach($category->stores as $store){
+                foreach ($store->storeAddress as $address) {
+                    $array['lat'][] =$address->latitude;
+                    $array['long'][] =$address->longitude;
+                }
+             }
+        }
+        return view('frontend.stores.location', compact('locations','categories'));
     }
-   
-
 }
