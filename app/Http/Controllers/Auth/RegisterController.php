@@ -119,7 +119,7 @@ class RegisterController extends Controller
             $referral_bonus = UserCashback::create([
                 'user_id'=>$id,
                 'amount'=>$referralBonus,
-                'status'=>'1',
+                'status'=>'3',
             ]);
         }
         

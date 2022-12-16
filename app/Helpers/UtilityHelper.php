@@ -351,10 +351,7 @@ function metaKeyword($keywords)
     $meta_keywords = [];
     foreach($keywords as $keyword)
     {
-        //$meta_keywords =  array_push($keyword['value'] ,  $meta_keywords);
-
         $meta_keywords[] = $keyword['meta_keyword'];
-         
     }
     return implode( ',' , $meta_keywords );
 }
