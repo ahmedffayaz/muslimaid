@@ -173,7 +173,60 @@
 </div>
 </div>
 
-<div class="block block--highlighted block-categories block-categories--layout--classic categorygrid">
+
+<div class="container pt-5">
+    <div class="row">
+        <div class="col-12 col-lg-12">
+            <div class="block ">
+                <div class="posts-view">
+                    
+                    <div class="posts-view__list posts-list posts-list--layout--grid2 categorygrid">
+                       
+                        <div class="posts-list__body  ">
+                            @foreach ($categories as $category)
+                            @foreach($category->childs as $child)
+                            <div class="posts-list__item all_stores {{$category->name}}_store ">
+                                
+                                <div class="post-card post-card--layout--grid  post-card--size--nl">
+                                    <div class="post-card__image">
+                                        <a href="">
+                                            <img src="{{asset('admin-dashboard/images/slides/slide-a.jpg')}}" alt="mnjnj"> 
+                                        </a>
+                                    </div>
+                                    <div class="post-card__info">
+                                        <div class="post-card__category">
+                                            <a href="">{{$category->name}}</a>
+                                        </div>
+                                        <div class="post-card__name">
+                                            <a href="">{{$child->name}}</a>
+                                        </div>
+                                        <div class="post-card__date">{{$category->name}}</div>
+                                        <div class="post-card__content">
+                                           <a href="">{{$category->address}}</a>
+                                        </div>
+                                        <div class="post-card__read-more">
+                                            <a href="" class="btn btn-secondary btn-sm">Read More</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                           
+                            @endforeach
+                            {{-- {!! $categories->links() !!} --}}
+                         @endforeach
+                        </div>
+                       
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+        
+    </div>
+</div>
+
+<div class="block block--highlighted block-categories block-categories--layout--classic categorylist">
     <div class="container">
        
         <div class="block-categories__list  ">
@@ -214,357 +267,43 @@
     </div>
 </div>
 
-<div class="container pt-5">
-    <div class="row">
-        <div class="col-12 col-lg-12">
-            <div class="block ">
-                <div class="posts-view">
-                    
-                    <div class="posts-view__list posts-list posts-list--layout--grid2 categorylist">
-                       
-                        <div class="posts-list__body  ">
-                            @foreach ($categories as $category)
-                            @foreach($category->childs as $child)
-                            <div class="posts-list__item all_stores {{$category->name}}_store ">
-                                
-                                <div class="post-card post-card--layout--grid  post-card--size--nl">
-                                    <div class="post-card__image">
-                                        <a href="">
-                                            <img src="{{asset('admin-dashboard/images/slides/slide-a.jpg')}}" alt="mnjnj"> 
-                                        </a>
-                                    </div>
-                                    <div class="post-card__info">
-                                        <div class="post-card__category">
-                                            <a href="">{{$category->name}}</a>
-                                        </div>
-                                        <div class="post-card__name">
-                                            <a href="">{{$child->name}}</a>
-                                        </div>
-                                        <div class="post-card__date">{{$category->name}}</div>
-                                        <div class="post-card__content">
-                                           <a href="">{{$category->storeAddress}}</a>
-                                        </div>
-                                        <div class="post-card__read-more">
-                                            <a href="" class="btn btn-secondary btn-sm">Read More</a>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                            </div>
-                           
-                            @endforeach
-                            {{-- {!! $categories->links() !!} --}}
-                         @endforeach
-                        </div>
-                       
-                    </div>
-                    
-                </div>
-            </div>
-        </div>
-        
-    </div>
-</div>
-        {{-- <div class="block-categories__list">
-            {{-- @foreach($categories as $category)
-            <div class="block-categories__item category-card category-card--layout--classic">
-                <div class="category-card__body">
-                    
 
-                    <div class="category-card__image">
-                       
-                        </div>
-                    <div class="category-card__content">
-                        <div class="category-card__name">
-                            <a href="{{$category->id)}}">{{$category->name}}</a>
-                        </div>
-                        <ul class="category-card__links">
-                            @if(count($category->childs))
-                            @foreach($category->childs as $child)
-                            <a href="{{route($child->logo_upload)}}" class="product-image__body" style="padding-bottom:100px">
-                                @if($child->logo_type == 'upload')
-            
-                                <img src="{{asset('storage/categories/images/'.$child->logo_upload)}}" style="max-height: 60px;max-width:60px" alt="">
-                              
-                                @elseif($child->logo_type == 'link')
-                                
-                                <img src="{{$child->logo_link}}" style="max-height: 60px;max-width:60px" alt="">
-                             
-                                @endif
-                            <li><a href="">{{$child->name}}</a></li>
-                            @endforeach
-                            @endif
-                        </ul>
-                        <div class="category-card__all">
-                            <a href="">Show All</a>
-                        </div>
-                        <div class="category-card__products">
-                            572 Products
-                        </div>
-                    </div>
-                   
-                   
-                </div>
-              
-            </div>
-            @endforeach --}}
-            {{-- <div class="block-categories__item category-card category-card--layout--classic">
-                <div class="category-card__body">
-                    <div class="category-card__image">
-                        <a href=""><img src="images/categories/category-2.jpg" alt=""></a>
-                    </div>
-                    <div class="category-card__content">
-                        <div class="category-card__name">
-                            <a href="">Hand Tools</a>
-                        </div>
-                        <ul class="category-card__links">
-                            <li><a href="">Screwdrivers</a></li>
-                            <li><a href="">Hammers</a></li>
-                            <li><a href="">Spanners</a></li>
-                            <li><a href="">Handsaws</a></li>
-                            <li><a href="">Paint Tools</a></li>
-                        </ul>
-                        <div class="category-card__all">
-                            <a href="">Show All</a>
-                        </div>
-                        <div class="category-card__products">
-                            134 Products
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
-            {{-- <div class="block-categories__item category-card category-card--layout--classic">
-                <div class="category-card__body">
-                    <div class="category-card__image">
-                        <a href=""><img src="images/categories/category-4.jpg" alt=""></a>
-                    </div>
-                    <div class="category-card__content">
-                        <div class="category-card__name">
-                            <a href="">Machine Tools</a>
-                        </div>
-                        <ul class="category-card__links">
-                            <li><a href="">Lathes</a></li>
-                            <li><a href="">Milling Machines</a></li>
-                            <li><a href="">Grinding Machines</a></li>
-                            <li><a href="">CNC Machines</a></li>
-                            <li><a href="">Sharpening Machines</a></li>
-                        </ul>
-                        <div class="category-card__all">
-                            <a href="">Show All</a>
-                        </div>
-                        <div class="category-card__products">
-                            301 Products
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
-            {{-- <div class="block-categories__item category-card category-card--layout--classic">
-                <div class="category-card__body">
-                    <div class="category-card__image">
-                        <a href=""><img src="images/categories/category-3.jpg" alt=""></a>
-                    </div>
-                    <div class="category-card__content">
-                        <div class="category-card__name">
-                            <a href="">Power Machinery</a>
-                        </div>
-                        <ul class="category-card__links">
-                            <li><a href="">Generators</a></li>
-                            <li><a href="">Compressors</a></li>
-                            <li><a href="">Winches</a></li>
-                            <li><a href="">Plasma Cutting</a></li>
-                            <li><a href="">Electric Motors</a></li>
-                        </ul>
-                        <div class="category-card__all">
-                            <a href="">Show All</a>
-                        </div>
-                        <div class="category-card__products">
-                            79 Products
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
-            {{-- <div class="block-categories__item category-card category-card--layout--classic">
-                    <div class="category-card__body">
-                        <div class="category-card__image">
-                            <a href=""><img src="images/categories/category-5.jpg" alt=""></a>
-                        </div>
-                        <div class="category-card__content">
-                            <div class="category-card__name">
-                                <a href="">Measurement</a>
-                            </div>
-                            <ul class="category-card__links">
-                                <li><a href="">Tape Measure</a></li>
-                                <li><a href="">Theodolites</a></li>
-                                <li><a href="">Thermal Imagers</a></li>
-                                <li><a href="">Calipers</a></li>
-                                <li><a href="">Levels</a></li>
-                            </ul>
-                            <div class="category-card__all">
-                                <a href="">Show All</a>
-                            </div>
-                            <div class="category-card__products">
-                                366 Products
-                            </div>
-                        </div>
-                    </div>
-            </div> --}}
-            {{-- <div class="block-categories__item category-card category-card--layout--classic">
-                <div class="category-card__body">
-                    <div class="category-card__image">
-                        <a href=""><img src="images/categories/category-6.jpg" alt=""></a>
-                    </div>
-                    <div class="category-card__content">
-                        <div class="category-card__name">
-                            <a href="">Clothes and PPE</a>
-                        </div>
-                        <ul class="category-card__links">
-                            <li><a href="">Winter Workwear</a></li>
-                            <li><a href="">Summer Workwear</a></li>
-                            <li><a href="">Helmets</a></li>
-                            <li><a href="">Belts and Bags</a></li>
-                            <li><a href="">Work Shoes</a></li>
-                        </ul>
-                        <div class="category-card__all">
-                            <a href="">Show All</a>
-                        </div>
-                        <div class="category-card__products">
-                            81 Products
-                        </div>
-                    </div>
-                </div>
-            </div> 
-        </div> --}}
-    <
-
-
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
+   {{-- for maping variables --}}
    <?php
     $radius = "";
     $user_lat = "";
     $user_lng = "";
     ?>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 @endsection
-    @push('scripts')
-      <script type="text/javascript">   
+@push('scripts')
+    <script type="text/javascript">   
       
-      $(document).ready(function () {
-        $('#listview').on('click', function(){
-        $('#gridview.active').removeClass('active');
-         $(this).addClass('active');
-         $('.categorylist').css("display","block");
-         $('.categorygrid').css("display","none");
-       });
-      $('#gridview').on('click', function(){
-        $('#listview.active').removeClass('active');
-         $(this).addClass('active');
-         $('.categorygrid').css("display","block");
-         $('.categorylist').css("display","none");
-      });
-      $("select.store").change (function () {  
-        var selectedStore = $(this).children("option:selected").val();  
-        if(selectedStore != "default_option"){
-           
-         $(".all_stores").css("display","none");
-        $("."+selectedStore+"_store").css("display","block");
-        }else{
-            $(".all_stores").css("display","block");
-        }   
-    });  
-      });
+        $(document).ready(function () {
+            $('#listview').on('click', function(){
+                $('#gridview.active').removeClass('active');
+                $(this).addClass('active');
+                $('.categorylist').css("display","block");
+                $('.categorygrid').css("display","none");
+            });
+
+            $('#gridview').on('click', function(){
+                $('#listview.active').removeClass('active');
+                $(this).addClass('active');
+                $('.categorygrid').css("display","block");
+                $('.categorylist').css("display","none");
+            });
+
+            $("select.store").change (function () {  
+                var selectedStore = $(this).children("option:selected").val();  
+                if(selectedStore != "default_option"){
+                    $(".all_stores").css("display","none");
+                    $("."+selectedStore+"_store").css("display","block");
+                }else{
+                    $(".all_stores").css("display","block");
+                }   
+            });  
+        });
         var map;
         var center;
         var infowindow;
@@ -631,7 +370,7 @@
             directionsService = new google.maps.DirectionsService();
             directionsRenderer = new google.maps.DirectionsRenderer();
             getLocation(); 
-        setTimeout(function(){
+            setTimeout(function(){
             
             center = new google.maps.LatLng(myLat, myLng);
           //  directionsRenderer.setMap(map);
@@ -653,9 +392,7 @@
                 directionRenderFn();
             }, markerTime);
         }, 1000);
-       
-
-        //   for (i = 0; i < locations.length; i++) {
+       //   for (i = 0; i < locations.length; i++) {
         //   //  origins.push(new google.maps.LatLng(myLat, myLng));
         //   destinations.push(new google.maps.LatLng(locations[i]['latitude'], locations[i]['longitude']));
 
