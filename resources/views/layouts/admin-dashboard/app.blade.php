@@ -150,7 +150,7 @@ left: 0;
 }
 
 .modal-corsi {
-    height: 280px;
+    height: 335px;
     overflow-y: auto;
 }
 </style>

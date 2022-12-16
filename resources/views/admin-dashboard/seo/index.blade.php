@@ -37,6 +37,11 @@
                                     <div class="nk-tb-list nk-tb-ulist" id="table-data">
 
                                         @include('admin-dashboard.seo.index_data')
+                                        <div class="col-sm-12">
+                                            <div class="progress">
+                                                <div class="progress-bar bg-primary" data-progress="25"></div>
+                                            </div>
+                                        </div>
 
                                     </div><!-- .nk-tb-list -->
                                 </div><!-- .card-inner -->
@@ -113,17 +118,22 @@
                                 </div>
 
                             </div>
-                            <div class="col-sm-12" style="margin-left: 50px;">
-                                <a href="javascript:void(0)" class="btn btn-icon btn-sm btn-danger delBtn" style="float: right;" data-type_counter="${counter}">
-                                    <em class="icon ni ni-minus"></em>
-                                </a>
+                            <div class="row mt-2">
+                                <div class="col-sm-12">
+                                    <a href="javascript:void(0)" class="btn btn-sm btn-danger delBtn" style="float: right;" data-type_counter="${counter}">
+                                        <em class="icon ni ni-minus"></em>
+                                        <span>Remove</span>
+                                    </a>
+                                </div>
                             </div>
+                            <div class="row mb-3"><div class="col-sm-12"><hr></div></div>
                         </div>`;
 
                     $('#corsi').append(html);
                     $(`#key-${counter}`).select2({
                         minimumResultsForSearch: -1
                     });
+                    NioApp.BS.progress('[data-progress]');
                     $('.rule-type-container').attr('data-count', counter);
             }
 
@@ -142,6 +152,7 @@
                 $(this).parent().parent().remove();
             });
 
+            // Open edit modal
             $(document).on('click', '.edit-form',function (event) {
                 event.preventDefault();
                 let id = $(this).data('id');
@@ -159,6 +170,7 @@
                         $('.form-select').select2({
                             minimumResultsForSearch: -1
                         });
+                        NioApp.BS.progress('[data-progress]');
                         store();
                     }
                 });

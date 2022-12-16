@@ -43,12 +43,12 @@ class SeoController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'url' => 'required|url',
             'type' => 'required',
             'type.*.key' => 'required',
 
-        ],$messages = [
+        ], [
             'url.required' => 'The url field is required.',
             'type.required' => 'At least one SEO rule must be select.',
             'type.*.key.required' => 'key field is required.',
@@ -127,11 +127,11 @@ class SeoController extends Controller
      */
     public function update(Request $request,  Seo_rule $seo)
     {
-        $validated = $request->validate([
+        $request->validate([
             'url' => 'required|url',
             'type' => 'required',
             'type.*.key' => 'required',
-        ],$messages = [
+        ], [
             'url.required' => 'The url field is required.',
             'type.required' => 'At least one SEO rule must be select.',
             'type.*.key.required' => 'key field is required.',

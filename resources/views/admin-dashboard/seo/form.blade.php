@@ -26,15 +26,16 @@
 
             {{-- Add Button --}}
             <div class="col-lg-12" style="margin-bottom: 20px;">
-                <a href="javascript:void(0)" class="btn btn-icon btn-sm btn-primary" style="float: right;" id="append_fields">
+                <a href="javascript:void(0)" class="btn btn-sm btn-primary" style="float: right;" id="append_fields">
                     <em class="icon ni ni-plus"></em>
+                    <span>Add</span>
                 </a>
             </div>
             {{-- End --}}
         </div>
         <div class="modal-corsi">
             @if ($isEdit)
-                <div class="col-lg-11">
+                <div class="col-lg-12">
                     <div class="rule-type-container remove" data-count="{{ $seoData->rule_data_count }}">
                         @foreach ($seoData->ruleData as $key => $rule_data)
                             <div>
@@ -63,11 +64,15 @@
                                     </div>
 
                                 </div>
-                                <div class="col-sm-12" style="margin-left: 50px;">
-                                    <a href="javascript:void(0)" class="btn btn-icon btn-sm btn-danger delBtn" style="float: right;" data-type_counter="{{ $loop->index + 1 }}">
-                                        <em class="icon ni ni-minus"></em>
-                                    </a>
+                                <div class="row mt-2">
+                                    <div class="col-sm-12">
+                                        <a href="javascript:void(0)" class="btn btn-sm btn-danger delBtn" style="float: right;" data-type_counter="{{ $loop->index + 1 }}">
+                                            <em class="icon ni ni-minus"></em>
+                                            <span>Remove</span>
+                                        </a>
+                                    </div>
                                 </div>
+                                <div class="row mb-3"><div class="col-sm-12"><hr></div></div>
                             </div>
                         @endforeach
                     </div>
@@ -75,7 +80,7 @@
             @else
                 <div class="rule-type-container remove" data-count="0"></div>
             @endif
-            <div class="col-lg-11" id="corsi"></div>
+            <div class="col-lg-12" id="corsi"></div>
         </div>
 
         <div class="col-12 mt-3">
