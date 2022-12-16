@@ -133,7 +133,6 @@
                     $(`#key-${counter}`).select2({
                         minimumResultsForSearch: -1
                     });
-                    NioApp.BS.progress('[data-progress]');
                     $('.rule-type-container').attr('data-count', counter);
             }
 
@@ -170,7 +169,6 @@
                         $('.form-select').select2({
                             minimumResultsForSearch: -1
                         });
-                        NioApp.BS.progress('[data-progress]');
                         store();
                     }
                 });
