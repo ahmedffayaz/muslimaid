@@ -17,6 +17,8 @@ use Carbon\Carbon;
 use App\Models\Bonus;
 use App\Models\UserCashback;
 use Session;
+use Illuminate\Support\Str;
+use App\Jobs\SendEmailJob;
 
 class RegisterController extends Controller
 {
@@ -128,9 +130,22 @@ class RegisterController extends Controller
             $message->to($email_data['email'], $email_data['name'])
                 ->subject($email_data['subject']);
         });
+        
+        //send email to user to verify email address
+         dispatch(new \App\Jobs\SendEmailJob($user));
+         return $user;
 
-        return $user;
+       
     }
+
+    // public function dashboard()
+    // {
+    //     if(Auth::check()){
+    //         return view('dashboard');
+    //     }
+  
+    //     return redirect("login")->withSuccess('Opps! You do not have access');
+    // }
 
     protected function redirectTo()
     {

@@ -44,7 +44,7 @@ class TestimonialController extends Controller
         
         $validated = $request->validate([
             'title' => 'required|regex:/^[\w. ]+$/',
-            'user_image' => 'required',
+            'user_image' => 'required|file|mimes:jpg,png|max:' . 1 * 1024, // 1024 KB = 1 MB',
             'name' =>'required',
             'company_name'=>'required',
             'order_no'=>'required|integer',

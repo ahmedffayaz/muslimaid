@@ -283,3 +283,6 @@ Route::namespace('App\Http\Controllers\Client')
     Route::get('login/{provider}', [App\Http\Controllers\SocialController::class, 'redirect']);
     Route::get('login/{provider}/callback',[App\Http\Controllers\SocialController::class, 'Callback']);
     Route::get('register-form',[App\Http\Controllers\Auth\registerController::class,'showRegistrationForm'])->name('register-form');
+
+   
+     Route::get('account/verify/{token}', [App\Http\Controllers\Auth\VerificationController::class, 'verifyAccount'])->name('user.verify'); 
