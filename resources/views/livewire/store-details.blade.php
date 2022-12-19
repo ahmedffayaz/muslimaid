@@ -61,7 +61,7 @@
                                         <a class="nav-link" data-toggle="tab" href="#tabItem10"><em class="icon ni ni-map-pin"></em><span>Address</span></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#tabItem11"><em class="icon ni ni-external"></em><span>Seo</span></a>
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem11"><em class="icon ni ni-external"></em><span>SEO</span></a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
@@ -260,7 +260,7 @@
                                         <span id="address-data" class="mt-4"></span>
                                     </div>
                                     <div class="tab-pane" id="tabItem11">
-                                        <h5 class="title mb-4  d-inline-block">Seo Rule</h5>
+                                        <h5 class="title mb-4  d-inline-block">SEO Rules</h5>
                                         <span id="seo-data" class="mt-4"></span>
                                     </div>
                                 </div>
@@ -656,29 +656,33 @@
             <div class="modal-header align-center">
                 <div class="nk-file-title">
                     <div class="nk-file-name">
-                        <div class="nk-file-name-text"><span class="title">Add Seo rule</span></div>
+                        <div class="nk-file-name-text"><span class="title">Add SEO Rule</span></div>
                     </div>
                 </div>
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="add-seorule-form" class=" p-4">
-                <form action="{{route('admin.stores.save_seo_rule')}}" class="gy-3 form-validate is-alter add_seo_form" method="POST">
+                <form action="{{route('admin.stores.save_seo_rule')}}" class="gy-3 form-validate is-alter add_seorule_form" method="POST">
                     @csrf
                     <input type="hidden" name="store_id" value="{{$store->id}}">
                     <div class="row g-4">
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label class="form-label" for="full-name-1">Meta Keyword</label>
+                                <label class="form-label" for="full-name-1">Key</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="keyword" name="meta_keyword" required>
+                                    <select class="form-control key" id="key" name="key" required>
+                                        <option selected disabled>Select Key</option>
+                                        <option value="meta:keywords">Meta:keywords</option>
+                                        <option value="meta:description">Meta:description</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12">
+                        <div class="col-lg-12 key_value" >
                             <div class="form-group">
-                                <label class="form-label" for="vsale_commission">Meta Description</label>
+                                <label class="form-label" for="vsale_commission">Value</label>
                                 <div class="form-control-wrap">
-                                    <textarea class="form-control" id="meta_description" value="" name="meta_description" required></textarea>
+                                    <textarea class="form-control" id="value" value="" name="value" required></textarea>
                                 </div>
                             </div>
                         </div>
@@ -702,7 +706,7 @@
               
                    
                     <div class="nk-file-name">
-                        <div class="nk-file-name-text"><span class="title">Edit Seo rule</span></div>
+                        <div class="nk-file-name-text"><span class="title">Edit SEO Rule</span></div>
                         {{-- <div class="nk-file-name-sub">Project</div> --}}
                     </div>
                 </div>
@@ -1090,7 +1094,7 @@
                     (function(NioApp, $){
                     'use strict';
                     toastr.clear();
-                    NioApp.Toast('Seo rule Updated Successfully.', 'success');
+                    NioApp.Toast('SEO rule Updated Successfully.', 'success');
                     
                 })(NioApp, jQuery);
                     fetchSeoRules();
@@ -1410,7 +1414,7 @@
                        fetchSeoRules();
                    }
                });
-               Swal.fire('Deleted!', 'Seo rule has been deleted.', 'success');
+               Swal.fire('Deleted!', 'SEO rule has been deleted.', 'success');
            }
            });
            event.preventDefault(); 
@@ -1519,7 +1523,7 @@
                     (function(NioApp, $){
                     'use strict';
                     toastr.clear();
-                    NioApp.Toast('Address Added Successfullys.', 'success');
+                    NioApp.Toast('Address Added Successfully.', 'success');
                     
                 })(NioApp, jQuery);
                     fetchAddress();
@@ -1528,6 +1532,29 @@
         });
     });
 
+
+    $(document).ready( function() {
+        $(document).on('submit', '.add_seorule_form', function(event){
+   
+          event.preventDefault();          
+          $.ajax({
+                url: $(this).attr('action'),
+                type: "POST",
+                data: $(this).serialize(),
+                success: function(data){
+                    
+                    $('#add-seorule-modal').modal('hide');
+                    (function(NioApp, $){
+                    'use strict';
+                    toastr.clear();
+                    NioApp.Toast('SEO rule Added Successfully.', 'success');
+                    
+                })(NioApp, jQuery);
+                fetchSeoRules();
+                }
+            });      
+        });
+    });
     // Change Store
     // $(function(){
     //   // bind change event to select
@@ -1704,6 +1731,19 @@
             }
         });
     }
+
+    $(document.body).on("change",".key",function(){
+     let html='';
+     $('.key_value').html('');
+        html=`<div class="form-group">
+                    <label class="form-label" for="vsale_commission">Value</label>
+                    <div class="form-control-wrap">
+                        <textarea class="form-control" id="value" value="" name="value" required></textarea>
+                    </div>
+                </div>`;
+
+     $('.key_value').append(html);
+    });
 
     
 </script>

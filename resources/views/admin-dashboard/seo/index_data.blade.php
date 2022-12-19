@@ -3,6 +3,7 @@
         table-layout: fixed;
     }
 </style>
+@if(count($seo_rules))
 <div class="nk-tb-item nk-tb-head">
     <div class="nk-tb-col"><span class="sub-text">URL</span></div>
     <div class="nk-tb-col"><span class="sub-text">Values</span></div>
@@ -66,3 +67,7 @@
 
 
 </div><!-- .nk-block-between -->                                  --}}
+
+@else
+<h3 class="m-auto text-center py-5">No record found</h3> 
+@endif

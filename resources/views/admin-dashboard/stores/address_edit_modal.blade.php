@@ -16,7 +16,7 @@
             <div class="form-group">
                 <label class="form-label" for="vsale_commission">Postal code</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="postal_code" name="postal_code" value="{{ $address->postal_code }}">
+                    <input type="text" step="any" class="form-control" id="postal_code" name="postal_code" value="{{ $address->postal_code }}">
                 </div>
             </div>
         </div>
@@ -24,7 +24,7 @@
                 <div class="form-group">
                     <label class="form-label" for="latitude">Latitude</label>
                     <div class="form-control-wrap">
-                        <input type="number" class="form-control" id="latitude" name="latitude" value="{{ $address->latitude }}" required>
+                        <input type="number" step="any" class="form-control" id="latitude" name="latitude" value="{{ $address->latitude }}" required>
                     </div>
                 </div>
             </div>
