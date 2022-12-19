@@ -29,8 +29,9 @@ class StoreController extends Controller
 
     public function storeLocation()
     {
-        $locations = Store::with('logo','storeAddress')->get();
+        $locations = Store::with('logo','storeAddress')->paginate(10);
         $categories = Category::with(['stores.storeAddress'])->where('parent_id', '=', 0)->orderBy('name', 'ASC')->get();
+        $array = array();
         foreach($categories as $category){
              foreach($category->stores as $store){
                 foreach ($store->storeAddress as $address) {
@@ -39,6 +40,6 @@ class StoreController extends Controller
                 }
              }
         }
-        return view('frontend.stores.location', compact('locations','categories'));
+        return view('frontend.stores.location', compact('locations','categories', 'array'));
     }
 }

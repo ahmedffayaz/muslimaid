@@ -65,13 +65,19 @@
     background-position: 0 0;
     margin-left: 16px;
     }
-    .width{
-    width: 60% !important;
-    border-radius: 1.75rem;  
-    }
+  
     .categorylist{
         display: none;
     }
+   
+   /* .hh{
+    /* padding-top: 20px;
+    margin-right: 24px;
+   } */
+    .select2-container--default .select2-selection--multiple {
+   
+   border-radius: 1.75rem !important;
+   }
 </style>
 <div class="page-header">
     <div class="page-header__container container">
@@ -88,24 +94,21 @@
                 </ol>
             </nav>
         </div>
-        {{-- <div class="page-header__title">
-            <h1 class="">Cashback to door</h1>
-        </div> --}}
         <div class="page-header__title">
-            <div class="row">
-                <div class="col-md-12 pl-0">
-                        <h1 class="col-md-5 float-left">Cashback To Your Door</h1>
-                            <div class="col-md-5 float-right  d-flex flex-justify-between">
-                                    <select class="form-control width store select2-container select2-selection--multiple" data-placeholder="Select Multiple options">
-                                        <option value="default_option">All</option>
-                                        @foreach($categories as $category)
-                                        <option value="{{$category->name}}">{{$category->name}}</option>
-                                        @endforeach
-                                    </select>
-                                   <a href="javascript:;" id="gridview" class="grid-view view-btn active"></a>
-                                   <a href="javascript:;" id="listview" class="list-view view-btn "></a> 
-                    </div>
-                </div>
+            <div class="row"> 
+                         <div class="col-md-12 pl-0">
+                            <h1 class="col-md-5 float-left">Cashback To Your Door</h1>
+                                    <div class="col-md-5 float-right  d-flex flex-justify-between">
+                                            <select class="form-control width store form-control-select2" multiple data-placeholder="Select Stores" id="show-stores">
+                                                <option value="default_option">All</option>
+                                                @foreach($categories as $category)
+                                                <option value="{{$category->id}}">{{$category->name}}</option>
+                                                @endforeach
+                                            </select>
+                                        <a href="javascript:;" id="gridview" class="grid-view view-btn mt-1 active"></a>
+                                        <a href="javascript:;" id="listview" class="list-view view-btn mt-1"></a> 
+                                    </div>
+                          </div>
             </div>
         </div>
     </div>
@@ -174,99 +177,182 @@
 </div>
 
 
-<div class="container pt-5">
-    <div class="row">
-        <div class="col-12 col-lg-12">
-            <div class="block ">
-                <div class="posts-view">
-                    
-                    <div class="posts-view__list posts-list posts-list--layout--grid2 categorygrid">
-                       
-                        <div class="posts-list__body  ">
-                            @foreach ($categories as $category)
-                            @foreach($category->childs as $child)
-                            <div class="posts-list__item all_stores {{$category->name}}_store ">
-                                
-                                <div class="post-card post-card--layout--grid  post-card--size--nl">
-                                    <div class="post-card__image">
-                                        <a href="">
-                                            <img src="{{asset('admin-dashboard/images/slides/slide-a.jpg')}}" alt="mnjnj"> 
-                                        </a>
+<div class="container mt-4">
+    @if($locations->count())
+    <div class="block categorygrid ">
+        <div class="block-header">
+           
+            
+        </div>
+        <div class="products-view">
+            <div class="products-view__list products-list scrolling-pagination" data-layout="grid-5-full" data-with-features="false" data-mobile-grid-columns="2">
+                <div class="products-list__body ">
+                    @foreach ($locations as $store)
+                        
+                   
+                    <div class="products-list__item text-center">
+                        <div class="product-card ">
+                            
+                            <div class="product-card__image product-image" >
+                                <a href="{{route('store.show',$store->slug)}}" class="product-image__body">
+                                    <img class="product-image__img" @if($store->logo->first())
+                                        @if($store->logo->first()->is_fake)
+                                            src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
+                                        @else
+                                            src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                                        @endif
+                                    @else
+                                        src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                                    @endif alt="" >
+                                </a>
+                            </div>
+                            <div class="product-card__info">
+                                <div class="product-card__name">
+                                    <a href="{{route('store.show',$store->slug)}}">{{$store->name}}</a>
+                                </div>
+                                @if($store->reviews->count())
+                                <div class="product-card__rating mx-auto">
+                                    <div class="product-card__rating-stars">
+                                        <div class="rating">
+                                            <div class="rating__body">
+                                                @foreach (range(1,5) as $index)
+                                                <svg class="rating__star @if($index <= $store->reviews->avg('rating')) rating__star--active @endif" width="13px" height="12px">
+                                                    <g class="rating__fill">
+                                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal"></use>
+                                                    </g>
+                                                    <g class="rating__stroke">
+                                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal-stroke"></use>
+                                                    </g>
+                                                </svg>
+                                                <div class="rating__star rating__star--only-edge @if($index <= $store->reviews->avg('rating')) rating__star--active @endif">
+                                                    <div class="rating__fill">
+                                                        <div class="fake-svg-icon"></div>
+                                                    </div>
+                                                    <div class="rating__stroke">
+                                                        <div class="fake-svg-icon"></div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="post-card__info">
-                                        <div class="post-card__category">
-                                            <a href="">{{$category->name}}</a>
-                                        </div>
-                                        <div class="post-card__name">
-                                            <a href="">{{$child->name}}</a>
-                                        </div>
-                                        <div class="post-card__date">{{$category->name}}</div>
-                                        <div class="post-card__content">
-                                           <a href="">{{$category->address}}</a>
-                                        </div>
-                                        <div class="post-card__read-more">
-                                            <a href="" class="btn btn-secondary btn-sm">Read More</a>
-                                        </div>
-                                    </div>
+                                    <div class="product-card__rating-legend">{{$store->reviews->count()}} Reviews</div>
+                                </div>
+                                @endif
+                              
+                            </div>
+                            <div class="product-card__actions">
+                                <div class="product-card__prices">
+                                    
+                                    @if($store->custom_cashback_percentage)
+                                        @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
+                                    @else
+                                        {{-- @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif --}}
+                                    @endif
+                                     Cashback
                                 </div>
                                 
                             </div>
-                           
-                            @endforeach
-                            {{-- {!! $categories->links() !!} --}}
-                         @endforeach
                         </div>
-                       
                     </div>
-                    
+                    @endforeach
+                    {!! $locations->links()!!} 
                 </div>
             </div>
+           
         </div>
-        
     </div>
+    @else
+    <h2>No Cashback Found</h2>
+    @endif
 </div>
 
-<div class="block block--highlighted block-categories block-categories--layout--classic categorylist">
-    <div class="container">
+
+<div class="container mt-4">
+
+ <div class="block  block-categories block-categories--layout--classic categorylist">
+   
        
-        <div class="block-categories__list  ">
-           
-                        @foreach($categories as $category)
-                        @foreach($category->childs as $child)
-                        <div class="block-categories__item all_stores {{$category->name}}_store category-card category-card--layout--classic">
-                            <div class="category-card__body ">
-                                <div class="category-card__image ">
-                                    {{-- <img src="{{asset('storage/categories/images/'.$category->logo_upload)}}" style="max-height: 60px;max-width:60px" alt=""> --}}
-                <img src="{{asset('admin-dashboard/images/avatar/d-sm.jpg')}}" alt=" nno">
-      
-                        </div>
-                    <div class="category-card__content">
-                        <div class="category-card__name">
-                            <a href="">{{$category->name}}</a>
-                        </div>
-                        
-                        <div class="category-card__links">
-                           
-                            <a href="">{{$child->name}}</a>
+        <div class="block-categories__list ">
+            @if($locations->count())
+            @foreach ($locations as $store)
+                    <div  class="block-categories__item all_stores {{ $category->name }}_store category-card category-card--layout--classic">
+                        <div class="product-card  p-2 m-2">
+                        <div class="category-card__body ">
+                            <div class="category-card__image hh">
+                                <a href="{{route('store.show',$store->slug)}}" class="category-image__body">
+                                    <img class="category-image__img" @if($store->logo->first())
+                                        @if($store->logo->first()->is_fake)
+                                            src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
+                                        @else
+                                            src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                                        @endif
+                                    @else
+                                        src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                                    @endif alt="" >
+                                </a>
+                            </div>
+                            <div class="category-card__content">
+                                <div class="category-card__name" style=" padding-top: 13px;">
+                                    <a href="{{route('store.show',$store->slug)}}">{{$store->name}}</a>
+                                </div>
+                                @if($store->reviews->count())
+                                <div class="product-card__rating mx-auto">
+                                    <div class="product-card__rating-stars">
+                                        <div class="rating">
+                                            <div class="rating__body">
+                                                @foreach (range(1,5) as $index)
+                                                <svg class="rating__star @if($index <= $store->reviews->avg('rating')) rating__star--active @endif" width="13px" height="12px">
+                                                    <g class="rating__fill">
+                                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal"></use>
+                                                    </g>
+                                                    <g class="rating__stroke">
+                                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal-stroke"></use>
+                                                    </g>
+                                                </svg>
+                                                <div class="rating__star rating__star--only-edge @if($index <= $store->reviews->avg('rating')) rating__star--active @endif">
+                                                    <div class="rating__fill">
+                                                        <div class="fake-svg-icon"></div>
+                                                    </div>
+                                                    <div class="rating__stroke">
+                                                        <div class="fake-svg-icon"></div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product-card__rating-legend">{{$store->reviews->count()}} Reviews</div>
+                                </div>
+                              @endif 
+                                <div class="category-card__actions">
+                                    <div class="category-card__prices">
+                                        
+                                        @if($store->custom_cashback_percentage)
+                                            @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
+                                        @else
+                                            {{-- @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif --}}
+                                        @endif
+                                        Cashback
+                                    </div>
+        
+                                </div> 
+                            </div>
+                            {!! $locations->links()!!}
 
                         </div>
-                        
                     </div>
-                   
-                    
-                </div>
-              
-            </div>
-            @endforeach
-            
-            @endforeach
-           
-            
 
-        </div>
-    </div>
+                        </div>
+                        @endforeach
+                        @else
+                            <h2>No Cashback Found</h2>
+                        @endif
+       
+        </div> 
+       
 </div>
-
+</div>
 
    {{-- for maping variables --}}
    <?php
@@ -298,7 +384,7 @@
                 var selectedStore = $(this).children("option:selected").val();  
                 if(selectedStore != "default_option"){
                     $(".all_stores").css("display","none");
-                    $("."+selectedStore+"_store").css("display","block");
+                    $(selectedStore+"_store").css("display","block");
                 }else{
                     $(".all_stores").css("display","block");
                 }   
