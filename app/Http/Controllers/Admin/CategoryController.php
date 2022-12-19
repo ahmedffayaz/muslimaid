@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Category;
+use Exception;
 use App\Models\Store;
+use App\Models\Category;
 use App\Models\EditorPick;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
 
 
 class CategoryController extends Controller
@@ -76,7 +79,7 @@ class CategoryController extends Controller
         if($request->input('logo_type')=='upload'){
             if($request->has('logo_upload')){
                 
-                $imageName = \Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo_upload->extension();          
+                $imageName = Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo_upload->extension();          
                 $request->logo_upload->storeAs('public/categories/images',$imageName);
                 
                 $category->logo_upload = $imageName;
@@ -92,7 +95,7 @@ class CategoryController extends Controller
 
             if($request->has('banner_upload')){
                 
-                $imageName = \Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner_upload->extension();          
+                $imageName = Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner_upload->extension();          
                 $request->banner_upload->storeAs('public/categories/images',$imageName);
                 
                 $category->banner_upload = $imageName;
@@ -193,7 +196,7 @@ class CategoryController extends Controller
 
                     // Storage::delete(['public/categories/images/'. $category->logo_upload]);
                     
-                    $imageName = \Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo_upload->extension();          
+                    $imageName = Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo_upload->extension();          
                     $request->logo_upload->storeAs('public/categories/images',$imageName);
                     
                     $category->logo_upload = $imageName;
@@ -207,7 +210,7 @@ class CategoryController extends Controller
 
                 // Storage::delete(['public/categories/images/'. $category->banner_upload]);
 
-                $imageName = \Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner_upload->extension();          
+                $imageName = Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner_upload->extension();          
                 $request->logo_upload->storeAs('public/categories/images',$imageName);
                 
                 $category->banner_upload = $imageName;
@@ -282,7 +285,7 @@ class CategoryController extends Controller
                 'Content-Type' => 'text/csv',
             );
 
-            return \Response::download($filename, 'categories.csv', $headers);
+            return Response::download($filename, 'categories.csv', $headers);
         } catch (\Throwable $th) {
             
             flash()->error('Error while exporting categories');
