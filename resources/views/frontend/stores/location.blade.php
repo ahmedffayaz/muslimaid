@@ -22,7 +22,7 @@
 
 .current{
     border:none;
-    z-index:24; 
+    z-index:24;
     background:none;
     color:#000;
     text-decoration:none
@@ -35,7 +35,7 @@
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
                         <a href="{{url('/')}}">Home</a>
-                        <svg class="breadcrumb-arrow" width="6px" height="9px">              
+                        <svg class="breadcrumb-arrow" width="6px" height="9px">
                             <use xlink:href="{{asset('frontend/images/sprite.svg')}}#arrow-rounded-right-6x9"></use>
                         </svg>
                     </li>
@@ -86,6 +86,11 @@
             <div>
                 <input id="pac-input" name="user_address" class="form-control" type="text" placeholder="Enter a locations" value="" />
             </div>
+            <select id="select-categories" class="form-control form-control-select2" multiple onchange="showStores()">
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
         </div>
     </div>
 </div>
@@ -108,104 +113,8 @@
     <div id="map"></div>
 </div>
 </div>
-<div class="block mt-5">
-    <div class="container">
-        <div class="row">
-            <div class="col-12">
-                @if($locations->count())
-                <div class="block">
-                    <div class="block">
-                        <div class="block-header">
-                        </div>
-                        <div class="products-view">
-                            <div class="products-view__list products-list scrolling-pagination" data-layout="grid-5-full" data-with-features="false" data-mobile-grid-columns="2">
-                                <div class="products-list__body ">
-                                    @foreach ($locations as $store)
-                                    <div class="products-list__item text-center">
-                                        <div class="product-card ">
-                                            <div class="product-card__image product-image">
-                                                <a href="{{route('store.show',$store->slug)}}" class="product-image__body" style="padding-bottom:100px">
-                                                    <img class="product-image__img"  @if($store->logo->first())
-                                                    @if($store->logo->first()->is_fake)
-                                                        src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
-                                                    @else
-                                                        src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
-                                                    @endif
-                                                @else
-                                                    src="{{asset('frontend/images/products/product-16.jpg')}}" 
-                                                @endif alt="">
-                                                </a>
-                                            </div>
-                                            <div class="product-card__info">
-                                                <div class="product-card__name">
-                                                    <a href="{{route('store.show',$store->slug)}}">{{$store->name}}</a>
-                                                </div>
-                                                @if($store->reviews->count())
-                                                <div class="product-card__rating mx-auto">
-                                                    <div class="product-card__rating-stars">
-                                                        <div class="rating">
-                                                            <div class="rating__body">
-                                                                @foreach (range(1,5) as $index)
-                                                                <svg class="rating__star @if($index <= $store->reviews->avg('rating')) rating__star--active @endif" width="13px" height="12px">
-                                                                    <g class="rating__fill">
-                                                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal"></use>
-                                                                    </g>
-                                                                    <g class="rating__stroke">
-                                                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal-stroke"></use>
-                                                                    </g>
-                                                                </svg>
-                                                                
-                                                                <div class="rating__star rating__star--only-edge @if($index <= $store->reviews->avg('rating')) rating__star--active @endif">
-                                                                    <div class="rating__fill">
-                                                                        <div class="fake-svg-icon"></div>
-                                                                    </div>
-                                                                    <div class="rating__stroke">
-                                                                        <div class="fake-svg-icon"></div>
-                                                                    </div>
-                                                                </div>
-                                                                @endforeach
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="product-card__rating-legend">{{$store->reviews->count()}} Reviews</div>
-                                                </div>
-                                                @endif
-                                                
-                                            </div>
-                                            <div class="product-card__actions">
-                                                <div class="product-card__prices">
-                                                    
-                                                    @if($store->custom_cashback_percentage)
-                                                        @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
-                                                    @else
-                                                        @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
-                                                    @endif
-                                                        Cashback
-                                                </div>
-                                                <div class="product-card__prices">
-                                                    <div class="distance calculatedDistance" id="distance-<?=$store->id;?>">1.4 miles away</div>
-                                                </div>
-                                                
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @endforeach
-                                    {{-- {!! $locations->links()!!}  --}}
-                                </div>
-                            </div>
-                            
-                        </div>
-                    </div>
-                            
-                </div>
-                @else
-                <h2>No Cashback Found</h2>
-                @endif
-                <input type="hidden" id="destinationLat" value="">
-                <input type="hidden" id="destinationLng" value="">
-            </div>
-        </div>
-    </div>
+<div id="get-stores">
+    @include('frontend.stores.stores')
 </div>
 
     <?php
@@ -215,7 +124,7 @@
     ?>
 @endsection
     @push('scripts')
-      <script type="text/javascript">   
+      <script type="text/javascript">
         var map;
         var center;
         var infowindow;
@@ -224,42 +133,62 @@
         var service;
         let myLat = "";
         let myLng = "";
-       
+
         var locations = <?php print_r(json_encode($locations)) ?>;
-    function getLocation() { 
+    function getLocation() {
         if (navigator.geolocation) {
-          
+
             navigator.geolocation.getCurrentPosition(showPosition,errorCashback);
         } else {
             console.log("Geolocation is not supported by this browser.");
         }
     }
+
+    // Show stores on select categories
+    function showStores() {
+        let storeValue = $('#select-categories').val();
+        let url = "{{ route('store.location') }}";
+        $.ajax({
+            url: url,
+            type: 'GET',
+            data: {
+                id: storeValue,
+            },
+            success: function (response) {
+                let html = $('#get-stores').html(response);
+            },
+            error: function (errors) {
+                console.log(errors)
+            }
+        });
+    }
+
     function showPosition(position) {
-      
-      //    if($user_lat != "" && $user_lng != ""){ 
+
+      //    if($user_lat != "" && $user_lng != ""){
       //     myLat =  $user_lat;
       //     myLng =$user_lng;
-      //     } else { 
+      //     } else {
            myLat = position.coords.latitude;
            myLng = position.coords.longitude;
-           
+
         //   myLat = 51.509865;
         //   myLng = -0.118092;
-        
+
         // myLat = 33.70772806;
         // myLng = 73.04979190;
 
        //   }
-      
+
           if (getCookie('position_latitude') && getCookie('position_longitude')){
           } else {
-           
+
               setCookie("position_latitude",myLat);
               setCookie("position_longitude",myLng);
               window.location.reload();
           }
-  
-  
+
+
       }
 
     function errorCashback(error) { //console.log("User Rejected geolocation");
@@ -278,12 +207,12 @@
     }
 
         function initMap() {
-          
+
             directionsService = new google.maps.DirectionsService();
             directionsRenderer = new google.maps.DirectionsRenderer();
-            getLocation(); 
+            getLocation();
         setTimeout(function(){
-            
+
             center = new google.maps.LatLng(myLat, myLng);
           //  directionsRenderer.setMap(map);
             infowindow = new google.maps.InfoWindow();
@@ -304,7 +233,7 @@
                 directionRenderFn();
             }, markerTime);
         }, 1000);
-       
+
 
         //   for (i = 0; i < locations.length; i++) {
         //   //  origins.push(new google.maps.LatLng(myLat, myLng));
@@ -323,11 +252,11 @@
         });
 
         }
-  
+
         window.initMap = initMap;
 
         function getCurrentLocation() {
-           
+
         infoWindow = new google.maps.InfoWindow({
             content: "<img src=<?=url('');?>/frontend/images/human1.png>"
         });
@@ -342,11 +271,11 @@
                     myLat = position.coords.latitude;
                     myLng = position.coords.longitude;
                     center = new google.maps.LatLng(myLat, myLng);
-                   
+
                     infoWindow.setPosition(pos);
                   //  infoWindow.setContent("Location found.");
                     infoWindow.open(map);
-                  
+
                     map.setCenter(pos);
                 },
                 () => {
@@ -360,7 +289,7 @@
     }
 
     function calculateAndDisplayRoute(dLat=null, dLng=null) {
-     
+
      if (dLat!=null && dLng!=null){
          $("#destinationLat").val(dLat);
          $("#destinationLng").val(dLng);
@@ -371,7 +300,7 @@
      }
      var pointA = center;
      var pointB = new google.maps.LatLng(dLat, dLng);
-     
+
      service = new google.maps.DistanceMatrixService();
      const selectedMode = document.getElementById("mode").value;
 
@@ -392,7 +321,7 @@
          var travelModeIcon = "fa fa-male";
      }
      directionsService.route(request, function(result, status) {
-       
+
          if (status == 'OK') {
              directionsRenderer.setDirections(result);
              var request = {
@@ -405,7 +334,7 @@
 
              };
              service.getDistanceMatrix(request).then((response) => {
-                
+
                  var element = response.rows[0].elements[0];
                  infowindow.setContent('<i class="'+travelModeIcon+'" aria-hidden="true"></i> '+element.distance.text+'<br><i class="fa fa-clock-o" aria-hidden="true"></i> '+element.duration.text);
                  infowindow.open({map,shouldFocus: false,});
@@ -418,19 +347,19 @@
      });
  }
 
-  
+
  //new
  function directionRenderFn() {
-     
+
      directionsRenderer.setMap(map);
      infowindow = new google.maps.InfoWindow();
-   
+
      var marker, i;
      var origins = [];
      var destinations = [];
-     
+
      for (i = 0; i < locations.length; i++) {
-       
+
         for(j = 0; j < locations[i]['store_address'].length; j++){
           var address = locations[i]['store_address'];
          origins.push(new google.maps.LatLng(myLat, myLng));
@@ -469,7 +398,7 @@
      }
     }
      service = new google.maps.DistanceMatrixService();
-     
+
      var request = {
          origins: origins,
          destinations: destinations,
@@ -480,11 +409,11 @@
      };
 
      service.getDistanceMatrix(request).then((response) => {
-        
+
          var elementRows = response.rows;
          $(".calculatedDistance").each(function( index ) {
              locations.push(parseFloat(elementRows[index].elements[index].distance.text.replace ( /[^\d.]/g, '' )));
-            
+
              $(this).html(elementRows[index].elements[index].distance.text+"les away");
          });
      });
@@ -501,7 +430,7 @@
     //serach location on field
     function addressLocationSearch() {
         /*****For Address Search input field Starts*****/
-      
+
         const card = document.getElementById("pac-card");
         const input = document.getElementById("pac-input");
         const biasInputElement = document.getElementById("use-location-bias");
@@ -512,7 +441,7 @@
             types: ["establishment"],
         };
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(card);
-        
+
         const autocomplete = new google.maps.places.Autocomplete(input, options);
 
         // Bind the map's bounds (viewport) property to the autocomplete object,
@@ -616,7 +545,7 @@
         /*****For Address Search input field End********/
     }
 
-    
+
     function setCookie(cname, cvalue, exdays) {
         const d = new Date();
         d.setTime(d.getTime() + (exdays*24*60*60*1000));
@@ -638,9 +567,9 @@
         }
         return "";
     }
-   
+
   function orderByDistanceRendering(arrs) {
-       
+
        $("#storesListN").empty();
        var storesHtml = "";
        $.each(arrs, function(index, location){
@@ -676,7 +605,7 @@
 
 
   //new fn
-  
+
 
     </script>
     <script type="text/javascript"src="https://maps.google.com/maps/api/js?key={{ SiteSetting()['map_key'] }}&callback=initMap&libraries=places&v=weekly" async></script>
