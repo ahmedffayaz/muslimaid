@@ -526,9 +526,10 @@ class StoreController extends Controller
 
     public function storeSeoRule(Request $request)
     {
+       
         $validator = Validator::make($request->all(), [
-            'meta_keyword' => 'required',
-            'meta_description' => 'required',
+            'key' => 'required',
+            'value' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -546,11 +547,12 @@ class StoreController extends Controller
             $store = Store_seo_data::create([
                 'store_id' => $request->input('store_id'),
                 'url' => $url,
-                'meta_keyword' => $request->input('meta_keyword'),
-                'meta_description' => $request->input('meta_description'),
+                'type' => 'meta',
+                'key' => $request->input('key'),
+                'value' => $request->input('value'),
             ]);
 
-            flash()->success('New store Seo rule added');
+            flash()->success('Store Seo rule added');
             return redirect()->back();
 
         } catch (Exception $exception) {
@@ -648,8 +650,8 @@ class StoreController extends Controller
     public function updateStoreSeoRule(Request $request, Store_seo_data $Store_seo_data)
     {
         $validator = Validator::make($request->all(), [
-            'meta_keyword' => 'required',
-            'meta_description' => 'required',
+            'key' => 'required',
+            'value' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -659,8 +661,8 @@ class StoreController extends Controller
         }
 
         Store_seo_data::where('id', $request->input('seo_id'))->update([
-            'meta_keyword' => $request->input('meta_keyword'),
-            'meta_description' => $request->input('meta_description'),
+            'key' => $request->input('key'),
+            'value' => $request->input('value'),
         ]);
         if (!$request->ajax()) {
             flash()->success('Seo rule updated successfully');
