@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Store;
-use App\Models\Voucher;
 use App\Models\Category;
 
 class StoreController extends Controller
@@ -48,7 +47,7 @@ class StoreController extends Controller
                 }
              }
         }
-        // dd($array);
+
         return view('frontend.stores.location', compact('locations','categories', 'array'));
     }
 }

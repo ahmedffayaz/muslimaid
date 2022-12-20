@@ -283,7 +283,7 @@
 
         }
 
-        function errorCashback(error) { //console.log("User Rejected geolocation");
+        function errorCashback(error) {
             if (error.code == error.PERMISSION_DENIED) {
                 myLat = 51.509865;
                 myLng = -0.118092;
@@ -510,7 +510,7 @@
             setTimeout(function() {
                 var arrs = [];
                 var arrs = locations;
-                // arrs.sort(GetSortOrder(16)); //Pass the attribute to be sorted on
+
                 orderByDistanceRendering(arrs);
             }, 700);
         }
