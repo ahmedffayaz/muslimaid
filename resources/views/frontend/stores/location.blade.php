@@ -84,6 +84,10 @@
 
             border-radius: 1.75rem !important;
         }
+
+        .pagination {
+            justify-content: center;
+        }
     </style>
     <div class="page-header">
         <div class="page-header__container container">
