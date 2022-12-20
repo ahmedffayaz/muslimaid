@@ -225,6 +225,8 @@
         let myLng = "";
 
         var locations = <?php print_r(json_encode($locations)) ?>;
+        locations = locations.data;
+
     function getLocation() {
         if (navigator.geolocation) {
 

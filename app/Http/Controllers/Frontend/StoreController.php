@@ -35,7 +35,7 @@ class StoreController extends Controller
                     $query->whereIn('category_id', $request->id);
                 });
             })
-            ->with('logo', 'storeAddress')->get();
+            ->with('logo', 'storeAddress')->paginate(10);
             return view('frontend.stores.stores',compact('locations'));
         }
 
@@ -50,6 +50,7 @@ class StoreController extends Controller
                 }
              }
         }
+        // dd($array);
         return view('frontend.stores.location', compact('locations','categories', 'array'));
     }
 }
