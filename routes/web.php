@@ -189,7 +189,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('translations', Translations\TranslationController::class);
     Route::resource('lines', Translations\LanguageLineController::class);
 
-    Route::get('get/user/{id}', [App\Http\Controllers\Admin\TestimonialController::class,'userDetails'])->name('users.fetch');
+    // Route::get('get/user/{id}', [App\Http\Controllers\Admin\TestimonialController::class,'userDetails'])->name('users.fetch');
 
     Route::post('tickets/fetch',[App\Http\Controllers\Admin\TicketsController::class,'fetch'])->name('tickets.fetch');
     Route::post('tickets/search',  [App\Http\Controllers\Admin\TicketsController::class,'searchTickets'])->name('tickets.search');
