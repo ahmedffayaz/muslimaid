@@ -20,13 +20,13 @@ class StoreController extends Controller
     public function show($slug)
     {
         $store = Store::where('slug', $slug)->first();
-        
+
         // $vouchers = Voucher::where('store_id', $store->id)->latest()->paginate(5);
-         $count = count($store->cashbacks);
+        // $count = count($store->cashbacks);
         return view('frontend.stores.show',compact('store','count'));
     }
 
-    public function storeLocation()
+    public function storeLocation(Request $request)
     {
         $locations = Store::with('logo','storeAddress')->get();
         $categories = Category::with(['stores.storeAddress'])->where('parent_id', '=', 0)->orderBy('name', 'ASC')->get();
@@ -39,6 +39,7 @@ class StoreController extends Controller
                 }
              }
         }
+        // dd($array);
         return view('frontend.stores.location', compact('locations','categories', 'array'));
     }
 }
