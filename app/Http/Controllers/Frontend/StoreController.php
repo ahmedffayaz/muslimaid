@@ -22,9 +22,9 @@ class StoreController extends Controller
         $store = Store::where('slug', $slug)->first();
 
         // $vouchers = Voucher::where('store_id', $store->id)->latest()->paginate(5);
-       // $count = count($store->cashbacks);
-        //return view('frontend.stores.show',compact('store','count'));
-        return view('frontend.stores.show',compact('store'));
+        $count = count($store->cashbacks);
+        return view('frontend.stores.show',compact('store','count'));
+        // return view('frontend.stores.show',compact('store'));
     }
 
     public function storeLocation(Request $request)
