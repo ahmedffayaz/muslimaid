@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Exception;
 use App\Models\Seo_rule;
+use Illuminate\Http\Request;
 use App\Models\Seo_rule_data;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SeoController extends Controller
 {
@@ -17,8 +21,8 @@ class SeoController extends Controller
     public function index()
     {
         $seo_rules = Seo_rule::with('ruleData')->get();
-        
-       return view('admin-dashboard.seo.index',compact('seo_rules'));
+
+        return view('admin-dashboard.seo.index',compact('seo_rules'));
     }
 
     /**
@@ -28,7 +32,7 @@ class SeoController extends Controller
      */
     public function create()
     {
-        return view('admin-dashboard.seo.create');
+        return view('admin-dashboard.seo.form');
     }
 
     /**
@@ -39,30 +43,55 @@ class SeoController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'url' => 'required',
-            'title' => 'required',
+        $request->validate([
+            'url' => 'required|url',
+            'type' => 'required',
+            'type.*.key' => 'required',
 
-        ],$messages = [
+        ], [
             'url.required' => 'The url field is required.',
+            'type.required' => 'At least one SEO rule must be select.',
+            'type.*.key.required' => 'key field is required.',
         ]);
-        
-        $seo_rule = new Seo_rule;
-        $seo_rule->url =$request->url;
-        $seo_rule->title = $request->title;
-        $seo_rule->save();
-       
-        foreach($request->value as $val)
-        {
-        $seo_rule_data = new Seo_rule_data;
-        $seo_rule_data->seo_rule_id =$seo_rule->id;
-        $seo_rule_data->meta_keyword =  $val['keyword'];
-        $seo_rule_data->meta_description = $val['meta_description'];
-        $seo_rule_data->save();
-    }
 
-        flash()->success('Seo rule added successfully.');
-        return redirect()->route('admin.seo.index');
+        try {
+            DB::beginTransaction();
+
+            // Removing / from URL
+            $final_string = rtrim($request->url, '/');
+
+            $seo_rule = Seo_rule::create([
+                'url' => $final_string
+            ]);
+
+            if($request->type)
+            {
+                foreach($request->type as $type)
+                {
+                    $type['type'] = "meta";
+                    $seo_rule->ruleData()->create($type);
+                }
+            }
+
+            DB::commit();
+
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'success' => 'SEO rule added successfully.'
+            ], JsonResponse::HTTP_OK);
+        } catch (ModelNotFoundException $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'error' => 'Some thing went wrong'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $exception->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -84,10 +113,9 @@ class SeoController extends Controller
      */
     public function edit(Seo_rule $seo)
     {
-        //$seo = $seo->with('ruleData')->first();
-        $seoData = Seo_rule::with('ruleData')->where('id',$seo['id'])->first();
-      
-        return view('admin-dashboard.seo.create',compact('seoData'));
+        $seoData = Seo_rule::withCount('ruleData')->with('ruleData')->where('id',$seo['id'])->first();
+
+        return view('admin-dashboard.seo.form',compact('seoData'));
     }
 
     /**
@@ -99,37 +127,56 @@ class SeoController extends Controller
      */
     public function update(Request $request,  Seo_rule $seo)
     {
-      
-        $validated = $request->validate([
+        $request->validate([
             'url' => 'required|url',
-            'title' => 'required',
-        ],$messages = [
+            'type' => 'required',
+            'type.*.key' => 'required',
+        ], [
             'url.required' => 'The url field is required.',
+            'type.required' => 'At least one SEO rule must be select.',
+            'type.*.key.required' => 'key field is required.',
         ]);
-        Seo_rule_data::where('seo_rule_id',$seo['id'])->delete();
-        $seo->delete();
-        
-        $seo_rule = new Seo_rule;
-        $seo_rule->url =$request->url;
-        $seo_rule->title = $request->title;
-        $seo_rule->save();
-        
-        if($request->input('value') != null)
+
+        try {
+            DB::beginTransaction();
+
+            $seo->ruleData()->delete();
+
+            // Removing / from URL
+            $final_string = rtrim($request->url, '/');
+
+            $seo->update([
+                'url' => $final_string
+            ]);
+
+            if($request->type)
             {
-        foreach($request->value as $val)
-        {
-        $seo_rule_data = new Seo_rule_data;
-        $seo_rule_data->seo_rule_id =$seo_rule->id;
-        $seo_rule_data->meta_keyword =  $val['keyword'];
-        $seo_rule_data->meta_description = $val['meta_description'];
-        $seo_rule_data->save();
-    }
-}
+                foreach($request->type as $val)
+                {
+                    $val['type'] = "meta";
+                    $seo->ruleData()->create($val);
+                }
+            }
 
-    
+            DB::commit();
 
-        flash()->success('Seo rule updated successfully.');
-        return redirect()->route('admin.seo.index');
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'success' => 'SEO rule updated successfully.'
+            ], JsonResponse::HTTP_OK);
+        } catch (ModelNotFoundException $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'error' => 'Some thing went wrong'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $exception->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**

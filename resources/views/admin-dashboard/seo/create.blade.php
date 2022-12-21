@@ -66,15 +66,15 @@
                                                     <div class="col-lg-11">
                                                         <div class="form-group">
                                                             <label class="form-label" for="reviewer">Meta Keywords</label>
-                                                        
-                                                                <input id="blog-title" type="text" class="form-control " name="value[{{$key}}][keyword]" placeholder="Meta keyword" value="{{ $val->meta_keyword }}" required> 
-                                                        
+
+                                                                <input id="blog-title" type="text" class="form-control " name="value[{{$key}}][keyword]" placeholder="Meta keyword" value="{{ $val->meta_keyword }}" required>
+
                                                         </div>
                                                         <div class="form-group">
                                                                 <label class="form-label" for="reviewer">Meta Description</label>
                                                                 <textarea  class="form-control " name="value[{{$key}}][meta_description]"  placeholder="Meta Description" value="" required>{{ $val->meta_description }}</textarea>
                                                         </div>
-                                                        
+
                                                         <div class="col-lg-1" style="margin-left: 817px;color: red;">
                                                             <span>
                                                                 <em class="icon ni ni-minus-circle delBtn" data-type_counter="${counter}"></em>
@@ -108,19 +108,19 @@
         $(document).on('click', '#append_fields', function() {
             let counter = $('.seo-fields').attr('data-count');
            // alert(counter);
-           
+
             html = `<div>
             <div class="form-group">
                         <label class="form-label" for="reviewer">Meta Keywords</label>
-                       
-                            <input id="blog-title" type="text" class="form-control " name="value[${counter}][keyword]" placeholder="Meta keyword" value="" required> 
-                       
+
+                            <input id="blog-title" type="text" class="form-control " name="value[${counter}][keyword]" placeholder="Meta keyword" value="" required>
+
                     </div>
                     <div class="form-group">
                             <label class="form-label" for="reviewer">Meta Description</label>
                             <textarea  class="form-control " name="value[${counter}][meta_description]"  placeholder="Meta Description" value="" required></textarea>
                     </div>
-                    
+
                     <div class="col-lg-1" style="margin-left: 817px;">
                         <span>
                             <em class="icon ni ni-minus-circle delBtn" data-type_counter="${counter}"></em>
@@ -142,9 +142,9 @@
                 html = `
                     <div class="form-group">
                         <label class="form-label" for="reviewer">Meta Keywords</label>
-                       
-                            <input id="blog-title" type="text" class="form-control " name="type[${counter}][value]" placeholder="Meta keyword" value="" required> 
-                       
+
+                            <input id="blog-title" type="text" class="form-control " name="type[${counter}][value]" placeholder="Meta keyword" value="" required>
+
                     </div>`;
             } else {
                 html = `
@@ -154,7 +154,7 @@
                         </div>`;
             }
             $(this).parent().append(html);
-            
+
         });
 
         $(document).on('click', '.delBtn', function() {
