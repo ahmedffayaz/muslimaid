@@ -44,6 +44,7 @@ class StoreController extends Controller
         $array = array();
         foreach($categories as $category){
              foreach($category->stores as $store){
+                $array['des'][] =$store->description;
                 foreach ($store->storeAddress as $address) {
                     $array['lat'][] =$address->latitude;
                     $array['long'][] =$address->longitude;

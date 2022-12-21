@@ -66,6 +66,14 @@
         .view-btn.active {
             background-position: 0 -42px;
         }
+          .panel {
+          padding: 1.2rem;
+          background-color: #fff;
+          }
+          .rounded-border {
+          border: 1px solid #d9d9d9;
+          border-radius: 10px;
+          }
 
         .view-btn {
             display: inline-block;
@@ -96,9 +104,14 @@
                                 <use xlink:href="{{ asset('frontend/images/sprite.svg') }}#arrow-rounded-right-6x9"></use>
                             </svg>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">cashback to door</li>
+                        <li class="breadcrumb-item active" aria-current="page">Cashback To Your Door</li>
                     </ol>
                 </nav>
+            </div>
+            <div class="category-text panel rounded-border mb-4 mt-2">
+               <p>With Cashblack To Your Door, you can discover local restaurants and grocery stores to order African, Caribbean or from any other authentic Black-owned vendors and earn cashback through our partnerships with your favourite delivery apps such as Deliveroo and Uber Eats. Whether there’s rice at home or not, you can be sure that through Cashblack To Your Door, you’ll always be able to find local Black-owned retailers for your next order.
+                You can go to  <span class="text-bold text-success"> Grocery Stores</span> or <span class="text-bold text-success">Restaurants.</span>
+                 </p>
             </div>
             <div class="page-header__title">
                 <div class="row">
@@ -449,7 +462,7 @@
                     marker = new google.maps.Marker({
                         position: new google.maps.LatLng(address[j]['latitude'], address[j]['longitude']),
                         map: map,
-                        icon: '<?= url('') ?>/frontend/images/resturant.png'
+                        icon: '<?= url('') ?>/frontend/images/map-cart.png'
                     });
                     var origin = window.location.origin;
                     const contentString =
