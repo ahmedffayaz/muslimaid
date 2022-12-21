@@ -40,10 +40,11 @@ class TestimonialController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
+    {   
+        
         $validated = $request->validate([
             'title' => 'required|regex:/^[\w. ]+$/',
-            'user_image' => 'required',
+            'user_image' => 'required|file|mimes:jpg,png|max:' . 1 * 1024, // 1024 KB = 1 MB',
             'name' =>'required',
             'company_name'=>'required',
             'order_no'=>'required|integer',
@@ -100,7 +101,8 @@ class TestimonialController extends Controller
      */
     public function edit(Testimonial $testimonial)
     {
-        return view('admin-dashboard.testimonials.edit',compact('testimonial'));
+        $users = User::role('user')->get();
+        return view('admin-dashboard.testimonials.edit',compact('testimonial','users'));
     }
 
     /**

@@ -108,6 +108,13 @@ $footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('id','5')->first();
                                         </a>
                                     </li>
                                     @endisset
+                                    @isset(SiteSetting()['pinterest'])
+                                    <li class="social-links__item">
+                                        <a class="social-links__link social-links__link--type--instagram" href="{{SiteSetting()['pinterest']}}" target="_blank">
+                                            <i class="fab fa-pinterest"></i>
+                                        </a>
+                                    </li>
+                                    @endisset
                                 </ul>
                             </div>
                             @endif

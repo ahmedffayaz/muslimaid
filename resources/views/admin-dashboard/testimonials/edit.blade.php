@@ -1,7 +1,30 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
-    
-
+<style>
+    .btn-choose{
+        padding:7px 10px;
+        background:#8ba7d7;
+        border:1px solid #854fff;
+        position:relative;
+        color:#fff;
+        border-radius:8px;
+        text-align:center;
+        float:left;
+        cursor:pointer
+      }
+      .hide_file {
+          position: absolute;
+          z-index: 1000;
+          opacity: 0;
+          cursor: pointer;
+          right: 0;
+          top: 0;
+          height: 100%;
+          font-size: 24px;
+          width: 100%;
+          
+      }
+    </style>
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
@@ -36,26 +59,15 @@
                                     <div class="row g-4">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Title</label>
-                                                <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="{{ $testimonial->title }}" required> 
-                                                </div>
-                                            </div>
+                                                <label class="form-label" for="reviewer">User</label>
+                                                <select class=" select-user" id="user" name="user"  required>
+                                                    @foreach($users as $user)
+                                                    <option {{ $user->id == $testimonial->user_id ? 'selected' : '' }} value="{{$user->id}}">{{ $user->first_name }} {{ $user->last_name }}</option>
+                                                    @endforeach
+                                                </select>
+                                             </div>
                                         </div>
                                         
-                                        <div class="col-lg-6">
-                                            <div class="form-group">
-                                                <label class="form-label" for="reviewer">User Image</label>
-                                                <input id="logo-input"  name="user_image" class="form-control" type="file" onchange="readURL(this);" />
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                            <label class="form-label" for="reviewer">Description</label>
-                                            <textarea  class="form-control " name="description" placeholder="Description" value="" required>{{ $testimonial->description }}</textarea>
-                                        </div>
-                                        </div>
-                                        <hr>
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">User Name</label>
@@ -66,9 +78,9 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Job Position</label>
+                                                <label class="form-label" for="reviewer">Title</label>
                                                 <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="position" placeholder="Job Position" value="{{ $testimonial->position }}" required> 
+                                                    <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="{{ $testimonial->title }}" required> 
                                                 </div>
                                             </div>
                                         </div>
@@ -80,6 +92,23 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        
+                                        
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                            <label class="form-label" for="reviewer">Description</label>
+                                            <textarea  class="form-control " name="description" placeholder="Description" value="" required>{{ $testimonial->description }}</textarea>
+                                        </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                <label class="form-label" for="reviewer">Job Position</label>
+                                                <div class="form-control-wrap">
+                                                    <input id="blog-title" type="text" class="form-control " name="position" placeholder="Job Position" value="{{ $testimonial->position }}" required> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">Order No</label>
@@ -104,19 +133,27 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-6">
+                                        {{-- <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Meta Title</label>
-                                                <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="meta_title" placeholder="Meta Title" value="{{ $testimonial->meta_title }}" required> 
-                                                </div>
+                                                <label class="form-label" for="reviewer">User Image</label>
+                                                <input id="logo-input"  name="user_image" class="form-control" type="file" onchange="readURL(this);" />
+                                            </div>
+                                        </div> --}}
+                                        <div class="col-lg-2">
+                                            <div class="form-group">
+                                                <div class=" logo">
+                                                <label class="form-label" for="reviewer">User Image</label>
+                                                <div class="btn-choose form-control">
+                                                    Choose Image
+                                                   <input preview="#logo" type="file" name="user_image" class="hide_file form-control" onchange="readURL(this);">
+                                                  </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-12">
+                                    </div>
+                                        <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Meta Description</label>
-                                                <div class="form-control-wrap">
-                                                    <textarea  class="form-control " name="meta_description" placeholder="Meta Description" value="" required>{{ $testimonial->meta_description }}</textarea>
+                                                <div class=" logo">
+                                                  <img id="logo" src="" alt="store logo" class="d-none" style="max-width:80px;max-height:120px"/> 
                                                 </div>
                                             </div>
                                         </div>
@@ -131,9 +168,6 @@
                             </div>
                         </div>
                     </div><!-- .nk-block -->
-                    
-                  
-                    
                 </div><!-- .components-preview -->
             </div>
         </div>
@@ -142,6 +176,44 @@
 
 @endsection
 @push('scripts')
+<script>
+    $(document).ready(function () {
+        $('.select-user').select2();
+    });
 
+    $(document).ready(function(){
+            $(document).on('change', '.select-user', function() {
+            
+            var id = $(this).val();
+            event.preventDefault();            
+                        $.ajax({
+                        method:"GET",
+                        url: "get/user/"+id+"",
+                        success:function(data){
+                        console.log(data['data']['first_name']);
+                        $('#user-name').val(data['data']['first_name']+''+data['data']['last_name']);
+                    }
+            });
+        });
+    });
+
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                var preview = $(input).attr('preview');
+                $('#logo').removeClass('d-none');
+                //$('#logo-input').addClass('d-none');
+                
+                $(preview)
+                    .attr('src', e.target.result)
+                    .css('max-width',80).css('max-height',120);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+        }
+</script>    
 
 @endpush

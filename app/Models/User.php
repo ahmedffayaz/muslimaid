@@ -13,6 +13,7 @@ use Laravel\Sanctum\HasApiTokens;
 
 
 class User extends Authenticatable
+
 {
     use HasFactory, Notifiable, HasRoles , SoftDeletes, HasApiTokens;
 
@@ -35,7 +36,8 @@ class User extends Authenticatable
         'provider',
         'provider_id',
         'referred_by',
-        'referred_at'
+        'referred_at',
+        'is_email_verified'
     ];
 
     /**

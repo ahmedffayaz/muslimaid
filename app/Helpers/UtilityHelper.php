@@ -5,9 +5,12 @@ use App\Models\Store;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Intervention\Image\Image;
-
 use Harimayco\Menu\Models\Menus;
 use Harimayco\Menu\Models\MenuItems;
+use App\Models\UserVerify;
+use App\Models\EmailTemplate;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
@@ -58,7 +61,7 @@ function convertDate($date, $format=true)
     if ($date !== null) {
         if($format)
             return Carbon::parse($date)->format('d M, Y');
-        
+
         return Carbon::parse($date);
     }
 }
@@ -297,7 +300,7 @@ return $currency;
 // config()->set('settings',$settings);
 // $currency = \App\Models\Currency::where('id',$settings['currency'])->pluck('symbol')->first();
 // config()->set('currency',$currency);
-    
+
 function sidebarCategories(){
     $sidebar_categories = Category::where('feature_sidebar',1)->orderBy('name', 'ASC')->get();
     return $sidebar_categories;
@@ -350,32 +353,20 @@ function isGoogleEnabled(){
 
 function metaKeyword($keywords)
 {
-    $meta_keywords = [];
-    foreach($keywords as $keyword)
-    {
-        //$meta_keywords =  array_push($keyword['value'] ,  $meta_keywords);
-
-        $meta_keywords[] = $keyword['meta_keyword'];
-         
-    }
-    return implode( ',' , $meta_keywords );
+    return implode( ',' , $keywords->where('type', 'meta')->where('key', 'meta_keyword')->pluck('value')->toArray());
 }
+
 function metaDescription($descriptions)
 {
-    $meta_description = [];
-    foreach($descriptions as $description)
-    {
-       $meta_description[] = $description['meta_description'];
-    }
-    return implode( ',' , $meta_description );
+    return implode( ',' , $descriptions->where('type', 'meta')->where('key', 'meta_description')->pluck('value')->toArray());
 }
 
 function checkStaticpageRule($url)
-{   
+{
     $store_rules = App\Models\Store_seo_data::where('url',$url)->get();
-    
+
     $blog = App\Models\Blog::where('url',$url)->first();
-   
+
     $categories = App\Models\Category::where('url',$url)->first();
    if($store_rules != null)
    {
@@ -383,8 +374,8 @@ function checkStaticpageRule($url)
         $meta_keyword = [];
         foreach($store_rules as $rule)
         {
-        $meta_description[] = $rule['meta_description'];
-        $meta_keyword[] = $rule['meta_keyword'];
+            $rule['key'] == 'meta:description'?  $meta_description[] =$rule['value'] : '';
+            $rule['key'] == 'meta:keywords'?  $meta_keyword[] =$rule['value'] : '';
         }
         return  ['meta_description' =>implode( ',' , $meta_description ) , 'meta_keyword'=>implode( ',' , $meta_keyword ) ];
 
@@ -402,6 +393,31 @@ function checkStaticpageRule($url)
 
    }
 }
+
+   function sendVerificationEmail($user)
+   {
+    $verification_email_temp = EmailTemplate::where('key','email_verification')->first();
+
+    $token = Str::random(64);
+
+    UserVerify::create([
+          'user_id' => $user->id, 
+          'token' => $token
+        ]);
+
+    $link = url('').'/account/verify/'.$token;
+    $button = '<a href="'.$link.'" target="_blank"><input type="button" class="btn btn-success" value="Verify"></a>';
+    $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{BUTTON}}'],[SiteSetting()['website_title'], url('/'), $button],$verification_email_temp->message );
+    $data = array(
+        'email'=> $user->email,
+        'email_message'=>$filtered_message,
+        'subject'=>$verification_email_temp->subject
+    );
+    Mail::send('emails.email_template', $data, function ($message) use ($data) {
+        $message->to($data['email'])
+            ->subject($data['subject']);
+    });
+   }
 
 // function isAppleEnabled(){
 //     if(SiteSetting()['apple_client_id'] && SiteSetting()['apple_client_secret'] && SiteSetting()['apple_url']){

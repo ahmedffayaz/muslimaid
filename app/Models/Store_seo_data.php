@@ -12,8 +12,9 @@ class Store_seo_data extends Model
     protected $fillable = [
      'store_id',
      'url',
-     'meta_description', 
-     'meta_keyword', 
+     'type',
+     'key', 
+     'value', 
     
     ];
 
