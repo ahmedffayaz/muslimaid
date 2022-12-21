@@ -14,6 +14,24 @@
                 </div>
             @endif
 
+            @if(Session::has('email-not-verified'))
+                    <div class = "container alert alert-danger alert-dismissible fade show alert-important" role = "alert">
+                        You need to confirm your account.please check your email.
+                    <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close">
+                        <span aria-hidden = "true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
+            @if(session()->has('message'))
+                    <div class = "container alert {{ session('alert-class') }} alert-dismissible fade show alert-important" role = "alert">
+                        {{ session('message') }}.
+                    <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close">
+                        <span aria-hidden = "true">&times;</span>
+                    </button>
+                </div>
+            @endif
+
                 <div class="card-body">
                     <h3 class="card-title">Login</h3>
                     <div class="row">

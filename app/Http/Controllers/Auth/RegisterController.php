@@ -17,6 +17,8 @@ use Carbon\Carbon;
 use App\Models\Bonus;
 use App\Models\UserCashback;
 use Session;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 use App\Jobs\SendEmailJob;
 
@@ -112,18 +114,18 @@ class RegisterController extends Controller
         $user_bonus = Bonus::create([
             'user_id'=>$user->id,
             'amount'=>$bonus,
-        ]);
+         ]);
      
-        if(!empty($data['referral_code']))
-        {
-            $referralBonus = array_key_exists('referral_bonus',SiteSetting()->toArray()) ? SiteSetting()['referral_bonus'] : 0;
-            $id =  base64_decode($data['referral_code']);
-            $referral_bonus = UserCashback::create([
-                'user_id'=>$id,
-                'amount'=>$referralBonus,
-                'status'=>'3',
-            ]);
-        }
+        // if(!empty($data['referral_code']))
+        // {
+        //     $referralBonus = array_key_exists('referral_bonus',SiteSetting()->toArray()) ? SiteSetting()['referral_bonus'] : 0;
+        //     $id =  base64_decode($data['referral_code']);
+        //     $referral_bonus = UserCashback::create([
+        //         'user_id'=>$id,
+        //         'amount'=>$referralBonus,
+        //         'status'=>'3',
+        //     ]);
+        // }
         
         
         Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
@@ -133,22 +135,39 @@ class RegisterController extends Controller
         
         //send email to user to verify email address
          dispatch(new \App\Jobs\SendEmailJob($user));
-         return $user;
+        // return $user;
+        return redirect()->route('login');
 
        
     }
 
-    // public function dashboard()
-    // {
-    //     if(Auth::check()){
-    //         return view('dashboard');
-    //     }
-  
-    //     return redirect("login")->withSuccess('Opps! You do not have access');
-    // }
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
+        public function register(Request $request)
+        {
+            $this->validator($request->all())->validate();
+
+            event(new Registered($user = $this->create($request->all())));
+
+           //$this->guard()->login($user);
+
+            if ($response = $this->registered($request, $user)) {
+                return $response;
+            }
+
+            return $request->wantsJson()
+                        ? new JsonResponse([], 201)
+                        : redirect($this->redirectPath());
+        }
+
 
     protected function redirectTo()
     {
+      
         Session::flash('welcome','welcome message'); 
         if (Session::has('prvUrl')){
             return session('prvUrl');

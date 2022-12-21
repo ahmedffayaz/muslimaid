@@ -55,6 +55,12 @@ class LoginController extends Controller
         if (Session::has('prvUrl')){
             return session('prvUrl');
           }else{
+            
+            if (!Auth::user()->is_email_verified) {
+              auth()->logout();
+              Session::flash('email-not-verified');
+              return route('login');
+            }
             Session::flash('login-welcome');
             return '/';
           }

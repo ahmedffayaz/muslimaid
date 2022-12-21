@@ -108,7 +108,7 @@ class EmailTemplatesSeeder extends Seeder
             array('title' => 'Email verification to user',
                         'detail' => 'Sent to new user to verify his/her account',
                         'key'    => 'email_verification',
-                        'subject' => 'verify',
+                        'subject' => 'Email verification',
                         'message' => "<p>Hello,</p><p> You registered an account on Cashback, before being able to use your account you need to verify that this is your email address by clicking here:</p>{{BUTTON}}<p>Regards</p><p>{{SITE_TITLE}} Team</p>",
                         'keywords'=>'{{SITE_TITLE}}, {{SITE_URL}} , {{BUTTON}}'
 

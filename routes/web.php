@@ -285,4 +285,4 @@ Route::namespace('App\Http\Controllers\Client')
     Route::get('register-form',[App\Http\Controllers\Auth\registerController::class,'showRegistrationForm'])->name('register-form');
 
    
-     Route::get('account/verify/{token}', [App\Http\Controllers\Auth\VerificationController::class, 'verifyAccount'])->name('user.verify'); 
+     Route::get('account/verify/{token}', [App\Http\Controllers\Auth\VerifyController::class, 'verifyAccount'])->name('user.verify'); 
