@@ -56,7 +56,7 @@ return [
 
     'asset_url' => env('ASSET_URL', null),
 
-    'cashback_percent'=>'50',
+    'cashback_percent' => '50',
 
     /*
     |--------------------------------------------------------------------------
@@ -183,8 +183,6 @@ return [
         App\Providers\SocialLoginConfigServiceProvider::class,
         App\Providers\MailchimpConfigServiceProvider::class,
         App\Providers\SettingsServiceProvider::class,
-        ConsoleTVs\Charts\ChartsServiceProvider::class,
-        //ConsoleTVs\Charts\Registrar::class,
         Intervention\Image\ImageServiceProvider::class,
         Harimayco\Menu\MenuServiceProvider::class
 
@@ -239,7 +237,6 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
-        'Charts' => ConsoleTVs\Charts\Facades\Charts::class,
         'Image' => Intervention\Image\Facades\Image::class,
         'Menu' => Harimayco\Menu\Facades\Menu::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
