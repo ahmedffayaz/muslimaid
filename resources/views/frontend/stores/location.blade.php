@@ -712,9 +712,7 @@
                 e.preventDefault();
                 form = $(this);
                 var url = $(this).attr('href');
-                console.log(url)
                 $.get(url, form.serialize(), function(data){
-                    console.log(data)
                     $('#get-stores').html(data);
                     ajaxPagination()
                 });
