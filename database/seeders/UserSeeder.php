@@ -24,6 +24,7 @@ class UserSeeder extends Seeder
 		$admin->password = bcrypt('123@#$xyz990');
 		$admin->registration_type = 'sign up';
         $admin->avatar = 'default.png';
+        $admin->is_email_verified = '1';
 		$admin->save();
         $admin->assignRole('admin');
         $admin->assignRole('user');
@@ -35,6 +36,7 @@ class UserSeeder extends Seeder
 		$data->password = bcrypt('123@#$xyz990');
 		$data->registration_type = 'sign up';
         $data->avatar = 'default.png';
+        $admin->is_email_verified = '1';
 		$data->save();
         $data->assignRole('data');
 
@@ -45,6 +47,7 @@ class UserSeeder extends Seeder
 		$finance->password = bcrypt('123@#$xyz990');
 		$finance->registration_type = 'sign up';
         $finance->avatar = 'default.png';
+        $admin->is_email_verified = '1';
 		$finance->save();
         $finance->assignRole('finance');
 
@@ -59,6 +62,7 @@ class UserSeeder extends Seeder
             $user->password = bcrypt('123@#$xyz990');
             $user->registration_type = 'sign up';
             $user->avatar = 'default.png';
+            $admin->is_email_verified = '1';
             $user->save();	     
             $user->assignRole('user');
 	}

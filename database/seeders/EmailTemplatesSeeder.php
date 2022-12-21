@@ -97,15 +97,24 @@ class EmailTemplatesSeeder extends Seeder
             ),
 
             array('title' => 'Referral link email',
-                        'detail' => 'Sent to referral user',
+                        'detail' => 'Sent to referred user',
                         'key'    => 'referral_link',
                         'subject' => 'Referral link',
-                        'message' => "<p>Join me at Cashback where you can earn money when you shop online.</p><p>Click my referral link below to sign up so you can browse, shop and earn while supporting Black-owned businesses with Cashback!</p>{{BUTTON}}",
+                        'message' => "<p>Hello,</p><p>Join me at Cashback where you can earn money when you shop online.</p><p>Click my referral link below to sign up so you can browse, shop and earn while supporting Black-owned businesses with Cashback!</p>{{BUTTON}}<p>Regards</p><p>{{SITE_TITLE}} Team</p>",
                         'keywords'=>'{{SITE_TITLE}}, {{SITE_URL}}, {{REFERRAL_LINK}} , {{BUTTON}}'
 
             ),
-        );
 
+            array('title' => 'Email verification to user',
+                        'detail' => 'Sent to new user to verify his/her account',
+                        'key'    => 'email_verification',
+                        'subject' => 'Email verification',
+                        'message' => "<p>Hello,</p><p> You registered an account on Cashback, before being able to use your account you need to verify that this is your email address by clicking here:</p>{{BUTTON}}<p>Regards</p><p>{{SITE_TITLE}} Team</p>",
+                        'keywords'=>'{{SITE_TITLE}}, {{SITE_URL}} , {{BUTTON}}'
+
+            ),
+        );
+       
         foreach ($templates as $template) {
             EmailTemplate::create($template);
         }

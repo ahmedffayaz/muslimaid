@@ -5,7 +5,9 @@ use App\Models\Category;
 use App\Models\Store;
 use Harimayco\Menu\Models\Menus;
 use Harimayco\Menu\Models\MenuItems;
-
+use App\Models\UserVerify;
+use App\Models\EmailTemplate;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -388,6 +390,31 @@ function checkStaticpageRule($url)
 
    }
 }
+
+   function sendVerificationEmail($user)
+   {
+    $verification_email_temp = EmailTemplate::where('key','email_verification')->first();
+
+    $token = Str::random(64);
+
+    UserVerify::create([
+          'user_id' => $user->id, 
+          'token' => $token
+        ]);
+
+    $link = url('').'/account/verify/'.$token;
+    $button = '<a href="'.$link.'" target="_blank"><input type="button" class="btn btn-success" value="Verify"></a>';
+    $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{BUTTON}}'],[SiteSetting()['website_title'], url('/'), $button],$verification_email_temp->message );
+    $data = array(
+        'email'=> $user->email,
+        'email_message'=>$filtered_message,
+        'subject'=>$verification_email_temp->subject
+    );
+    Mail::send('emails.email_template', $data, function ($message) use ($data) {
+        $message->to($data['email'])
+            ->subject($data['subject']);
+    });
+   }
 
 // function isAppleEnabled(){
 //     if(SiteSetting()['apple_client_id'] && SiteSetting()['apple_client_secret'] && SiteSetting()['apple_url']){
