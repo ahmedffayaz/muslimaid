@@ -29,4 +29,8 @@ class AppServiceProvider extends ServiceProvider
     //         \App\Charts\ClicksChart::class
     //     ]);
     // }
+    public function boot()
+    {
+        Paginator::useBootstrap();
+    }
 }

@@ -1,8 +1,10 @@
 <?php
 
 use Carbon\Carbon;
-use App\Models\Category;
 use App\Models\Store;
+use App\Models\Category;
+use Illuminate\Support\Str;
+use Intervention\Image\Image;
 use Harimayco\Menu\Models\Menus;
 use Harimayco\Menu\Models\MenuItems;
 use App\Models\UserVerify;
@@ -10,6 +12,7 @@ use App\Models\EmailTemplate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 
 // function ccEmails() {
@@ -113,7 +116,7 @@ function saveResizeImage($file, $directory, $width, $type = 'jpg')
     $is_preview = strpos($directory, 'previews') !== false;
     $filename = Str::random() . time() . '.' . $type;
     $path = "$directory/$filename";
-    $img = \Image::make($file)->orientate()->encode($type, $is_preview ? 40 : 85)->resize($width, null, function ($constraint) {
+    $img = Image::make($file)->orientate()->encode($type, $is_preview ? 40 : 85)->resize($width, null, function ($constraint) {
         $constraint->aspectRatio();
         $constraint->upsize();
     });
