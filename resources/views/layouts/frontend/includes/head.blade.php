@@ -9,11 +9,11 @@ if(!empty($rule))
   $meta_data = $rule->ruleData()->get();
   $keyword = metaKeyword($meta_data);
   $description = metaDescription($meta_data);
- 
+
 }else{
- 
+
   $static_rule =  checkStaticpageRule($current_url);
- 
+
   if( $static_rule != null)
   {
     $keyword = $static_rule['meta_keyword'];
@@ -33,7 +33,7 @@ if(!empty($rule))
     @if($rule != null || $static_rule != null)
     <meta name="keywords" content='{{ $keyword }}'/>
     <meta name="description" content='{{ $description }}'/>
-    
+
     @endif
 
     <title>{{$settings['website_title']}}</title>
@@ -62,6 +62,7 @@ if(!empty($rule))
     <script src="https://unpkg.com/react-dom@16.8.6/umd/react-dom.production.min.js"></script>
     <script src="{{ asset('vendor/laraberg/js/laraberg.js') }}"></script>
     @livewireStyles
+    @stack('styles')
 
 @if(isset($settings['ga_tracking_id']))
     <!-- Global site tag (gtag.js) - Google Analytics -->

@@ -1,31 +1,132 @@
 @extends('layouts.frontend.app')
-@section('content')
-<style>.category-card__image {
-    width: 100px;
-}
 
-@media (max-width: 767px){
-[dir=ltr] .block-slideshow__slide-content {
-    width: 350px!important;
-}.block-slideshow__slide-text {
-    display: block;
-}}
-@media (max-width: 416px){
-[dir=ltr] .block-slideshow__slide-content {
-    width: 290px !important;
-}.block-slideshow__slide-text {
-    display: block;
-}}
-
-@media(min-width: 768px){
-        .testimonial-store-name{
-        right: 20px;
-        top: 20px;
-        font-size: 18px;
+@push('styles')
+    <style>
+        .category-card__image {
+            width: 100px;
         }
-    }
 
-</style>
+        @media (max-width: 767px){
+        [dir=ltr] .block-slideshow__slide-content {
+            width: 350px!important;
+        }.block-slideshow__slide-text {
+            display: block;
+        }}
+        @media (max-width: 416px){
+        [dir=ltr] .block-slideshow__slide-content {
+            width: 290px !important;
+        }.block-slideshow__slide-text {
+            display: block;
+        }}
+
+        @media(min-width: 768px){
+                .testimonial-store-name{
+                right: 20px;
+                top: 20px;
+                font-size: 18px;
+                }
+            }
+
+        /*
+        // .testimonial
+        */
+        .testimonial {
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+        }
+
+        .testimonial__avatar {
+            -ms-flex-negative: 0;
+            flex-shrink: 0;
+        }
+
+        [dir=ltr] .testimonial__avatar {
+            margin-left: 16px;
+            margin-right: 24px;
+        }
+
+        [dir=rtl] .testimonial__avatar {
+            margin-right: 16px;
+            margin-left: 24px;
+        }
+
+        .testimonial__avatar img {
+            width: 70px;
+            border-radius: 1000px;
+        }
+
+        .testimonial__author {
+            margin-top: -4px;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .testimonial__position {
+            margin-top: 3px;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .testimonial__text {
+            font-size: 16px;
+            margin-top: 12px;
+        }
+
+        @media (min-width: 576px) and (max-width: 767px) {
+            [dir=ltr] .testimonial__avatar {
+                margin-right: 18px;
+            }
+            [dir=rtl] .testimonial__avatar {
+                margin-left: 18px;
+            }
+            .testimonial__avatar img {
+                width: 60px;
+            }
+        }
+
+        @media (max-width: 575px) {
+            .testimonial__avatar {
+                display: none;
+            }
+        }
+
+        /*
+        // .testimonials-list
+        */
+        .testimonials-list__content {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .testimonials-list__item {
+            border-bottom: 1px solid #ebebeb;
+            padding-top: 28px;
+            padding-bottom: 24px;
+        }
+
+        .testimonials-list__item:first-child {
+            padding-top: 0;
+        }
+
+        .testimonials-list__pagination {
+            margin-top: 36px;
+        }
+
+        @media (max-width: 767px) {
+            .testimonials-list__pagination {
+                margin-top: 30px;
+            }
+        }
+
+        .pagination {
+            justify-content: center!important;
+        }
+    </style>
+@endpush
+
+@section('content')
 @include('flash::message')
 
 @auth
@@ -104,143 +205,39 @@
 
 @if($testimonials)
     @if (count($testimonials) > 0)
-        <!-- .block-testimonial -->
-        <div class="block-slideshow block-slideshow--layout--full block mt-5">
+        <!-- testimonial -->
+        <div class="mt-2 mb-5">
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <div class="block-slideshow__body">
-                            <div class="owl-carousel">
-                                @foreach ($testimonials as $testimonial)
-                                    <a class="block-slideshow__slide" href="@if ($testimonial->url != null) {{ $testimonial->url }} @else # @endif">
-                                        <div class="block-slideshow__slide-image block-slideshow__slide-image--desktop" style="background-image: url({{asset('storage/users/images/avatar/'. $testimonial->image)}})"></div>
-
-                                        <div class="block-slideshow__slide-image block-slideshow__slide-image--mobile" style="background-image: url({{asset('storage/users/images/avatar/'. $testimonial->image)}})"></div>
-
-                                        <div class="block-slideshow__slide-content" style="background-color:hsla(0,0%,100%,.92); width:450px">
-                                            <div class="block-slideshow__slide-title" style="padding:20px; background-color:white; margin:0">
-                                                <span class="testimonial-store-name">{{ $testimonial->title }}</span>
-                                            </div>
-                                            <div class="block-slideshow__slide-title" style="padding:30px 20px 0px 20px; margin:0">{{ $testimonial->company }}</div>
-                                            <div class="block-slideshow__slide-text" style="padding:10px 20px 30px 20px; ">{{ $testimonial->description }}</div>
-                                        </div>
-                                    </a>
-                                @endforeach
+                        <div class="testimonials-view">
+                            <div class="testimonials-view__list">
+                                <div class="testimonials-list">
+                                    <ol class="testimonials-list__content">
+                                        @foreach ($testimonials as $testimonial)
+                                            <li class="testimonials-list__item">
+                                                <div class="testimonial">
+                                                    <div class="testimonial__avatar"><img src="{{asset('storage/users/images/avatar/' . $testimonial->image )}}"></div>
+                                                    <div class="testimonial__content">
+                                                        <div class="testimonial__author">{{ $testimonial->name }}</div>
+                                                        <div class="testimonial__position">{{ $testimonial->position . ', ' . $testimonial->company }}</div>
+                                                        <div class="testimonial__text">{{ $testimonial->description }}</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ol>
+                                    <div class="testimonials-list__pagination">
+                                    {{ $testimonials->links() }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- .block-testimonial / end -->
-    @endif
-@endif
-
-@if($testimonials)
-    @if (count($testimonials) > 0)
-        <!-- .block-posts -->
-        <div class="block block-posts" data-layout="list" data-mobile-columns="1">
-            <div class="container">
-                <div class="block-header">
-                    <h3 class="block-header__title">Testimonials</h3>
-                    <div class="block-header__divider"></div>
-                    <div class="block-header__arrows-list">
-                        <button class="block-header__arrow block-header__arrow--left" type="button">
-                            <svg width="7px" height="11px">
-                                <use xlink:href="images/sprite.svg#arrow-rounded-left-7x11"></use>
-                            </svg>
-                        </button>
-                        <button class="block-header__arrow block-header__arrow--right" type="button">
-                            <svg width="7px" height="11px">
-                                <use xlink:href="images/sprite.svg#arrow-rounded-right-7x11"></use>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="block-posts__slider">
-                    <div class="owl-carousel">
-                        @foreach ($testimonials as $testimonial)
-                            <div class="post-card  ">
-                                <div class="post-card__image">
-                                    <a href="@if ($testimonial->url != null) {{ $testimonial->url }} @else # @endif">
-                                        <img src="{{asset('storage/users/images/avatar/'. $testimonial->image)}}" alt="">
-                                    </a>
-                                </div>
-                                <div class="post-card__info">
-                                    <div class="post-card__category">
-                                        <a href="">Special Offers</a>
-                                    </div>
-                                    <div class="post-card__name">
-                                        <a href="">{{ $testimonial->title }}</a>
-                                    </div>
-                                    {{-- <div class="post-card__date">October 19, 2019</div> --}}
-                                    <div class="post-card__content">
-                                        {{ $testimonial->description }}
-                                    </div>
-                                    <div class="post-card__read-more">
-                                        <a href="" class="btn btn-secondary btn-sm">Read More</a>
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- .block-posts / end -->
-    @endif
-@endif
-
-@if($testimonials)
-    @if (count($testimonials) > 0)
-        <div class="block block-posts" data-layout="grid-3" data-mobile-columns="1">
-            <div class="container">
-                <div class="block-header">
-                    <h3 class="block-header__title">Testimonials</h3>
-                    <div class="block-header__divider"></div>
-                    <div class="block-header__arrows-list">
-                        <button class="block-header__arrow block-header__arrow--left" type="button">
-                            <svg width="7px" height="11px">
-                                <use xlink:href="images/sprite.svg#arrow-rounded-left-7x11"></use>
-                            </svg>
-                        </button>
-                        <button class="block-header__arrow block-header__arrow--right" type="button">
-                            <svg width="7px" height="11px">
-                                <use xlink:href="images/sprite.svg#arrow-rounded-right-7x11"></use>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-                <div class="block-posts__slider">
-                    <div class="owl-carousel">
-                        @foreach ($testimonials as $testimonial)
-                        <div class="post-card  ">
-                            <div class="post-card__image">
-                                <a href="@if ($testimonial->url != null) {{ $testimonial->url }} @else # @endif">
-                                    <img src="{{asset('storage/users/images/avatar/'. $testimonial->image)}}" alt="">
-                                </a>
-                            </div>
-                            <div class="post-card__info">
-                                <div class="post-card__category">
-                                    <a href="">Special Offers</a>
-                                </div>
-                                <div class="post-card__name">
-                                    <a href="">{{ $testimonial->title }}</a>
-                                </div>
-                                <div class="post-card__date">October 19, 2019</div>
-                                <div class="post-card__content">
-                                    {{ $testimonial->description }}
-                                </div>
-                                <div class="post-card__read-more">
-                                    <a href="" class="btn btn-secondary btn-sm">Read More</a>
-                                </div>
-                            </div>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- testimonial / end -->
     @endif
 @endif
 
