@@ -228,6 +228,8 @@
                 }
             });
         });
+        ajaxPagination();
+
         var map;
         var center;
         var infowindow;
@@ -704,7 +706,20 @@
         }
 
 
-        //new fn
+        // Ajax pagination
+        function ajaxPagination () {
+            $('.pagination a').on('click', function(e){
+                e.preventDefault();
+                form = $(this);
+                var url = $(this).attr('href');
+                console.log(url)
+                $.get(url, form.serialize(), function(data){
+                    console.log(data)
+                    $('#get-stores').html(data);
+                    ajaxPagination()
+                });
+            });
+        }
     </script>
     <script type="text/javascript"
         src="https://maps.google.com/maps/api/js?key={{ SiteSetting()['map_key'] }}&callback=initMap&libraries=places&v=weekly"
