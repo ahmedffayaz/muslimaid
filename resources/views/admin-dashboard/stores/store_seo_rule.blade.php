@@ -1,7 +1,7 @@
 <a href="#add-seorule-modal" class="btn btn-primary float-right btn-sm" data-toggle="modal"><em class="icon ni ni-plus"></em> <span>Add SEO Rule</span></a>
 
 <div class="nk-tb-list nk-tb-ulist mt-3" style="table-layout: auto">
-    @if($store)
+    @if(count($store->storeRuleData))
     <div class="nk-tb-item nk-tb-head"> 
         <div class="nk-tb-col pl-0"><span class="sub-text">Key</span></div>
         <div class="nk-tb-col"><span class="sub-text">Value</span></div>

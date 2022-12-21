@@ -803,7 +803,7 @@
                                                     <div class="col-lg-9">
                                                         <div class="form-group">
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="referral_bonus" name="referral_bonus" value="{{$settings['referral_bonus'] ?? ''}}" placeholder="Referral Bonus">
+                                                                <input type="number" class="form-control" id="referral_bonus" name="referral_bonus" value="{{$settings['referral_bonus'] ?? ''}}" placeholder="Referral Bonus">
                                                             </div>
                                                         </div>
                                                     </div>
