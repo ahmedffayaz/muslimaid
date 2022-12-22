@@ -31,7 +31,6 @@
                                 <div class="block-finder__subtitle"></div>
                             </div>
                     </div>
-                    
                 </div>
             </div>
         </div>

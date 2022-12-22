@@ -125,28 +125,21 @@
     background-position: 468px 0; 
   }
 }
-
-
-
 </style>
 
 <div class="container p-2 my-2 mt-2">
     <div class="row">
         <div class="col-12">
-            <div class="block-finder__body">
-                    <img class="banner__size" src="{{asset('storage/categories/images/'.$category->banner_upload)}}" alt="">
-                    {{-- <img src="{{url('storage/photos/1/del.png')}}" alt="bjh"> --}}
-                    <div class="block-finder__header">
-                        <div class="block-finder__title">{{$category->name}}</div>
-                        <div class="block-finder__subtitle"></div>
-                    </div>
-                    <div class="panel  mb-4 my-2">
-                        <p>{{$category->description}}</p>
-                     </div>
-            </div>
-                    
-               
-                
+          <div class="block-finder__body">
+             <img class="banner__size" src="{{asset('storage/categories/images/'.$category->banner_upload)}}" alt="">
+                <div class="block-finder__header">
+                   <div class="block-finder__title">{{$category->name}}</div>
+                   <div class="block-finder__subtitle"></div>
+                </div>
+                <div class="panel  mb-4 my-2">
+                    <p>{{$category->description}}</p>
+                </div>
+         </div>    
         </div>
     </div>
 </div>

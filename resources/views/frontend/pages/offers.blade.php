@@ -46,11 +46,11 @@
     <div class="row">
         <div class="col-12">
             <div class="block-finder__body">
-                    <img class="banner__size" src="{{url('storage/photos/1/bulbb.jpg')}}" alt="bjh">
-                    <div class="block-finder__header">
-                        <div class="block-finder__title">Offers</div>
-                        <div class="block-finder__subtitle"></div>
-                    </div>
+               <img class="banner__size" src="{{url('storage/photos/1/bulbb.jpg')}}" alt="bjh">
+                 <div class="block-finder__header">
+                    <div class="block-finder__title">Offers</div>
+                    <div class="block-finder__subtitle"></div>
+                 </div>
             </div>
             <div class="category-text panel  mb-4 mt-2">
                 <p class="mt-1">
