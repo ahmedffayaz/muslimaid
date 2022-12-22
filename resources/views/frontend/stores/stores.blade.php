@@ -195,6 +195,6 @@
                 </div>
             </div>
         </div>
-        {!! $locations->links() !!}
+        {{-- {!! $locations->links() !!} --}}
     </div>
 </div>
