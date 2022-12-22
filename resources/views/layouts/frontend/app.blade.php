@@ -84,6 +84,11 @@
         transform: translateY(-50%);
         font-size: 1.5rem;
     }
+    .panel {
+        padding: 1.2rem;
+        border: 1px solid #d9d9d9;
+    }
+    
     </style>
     <!-- site -->
     @isset($settings['theme_skin'])
