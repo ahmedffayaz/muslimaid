@@ -9,7 +9,6 @@ use Harimayco\Menu\Models\MenuItems;
 use App\Models\UserVerify;
 use App\Models\EmailTemplate;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;

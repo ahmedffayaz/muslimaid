@@ -1,39 +1,43 @@
 @extends('layouts.admin-dashboard.app')
-@section('content')
-<style>
-    .btn-choose{
-        padding:7px 10px;
-        background:#8ba7d7;
-        border:1px solid #854fff;
-        position:relative;
-        color:#fff;
-        border-radius:8px;
-        text-align:center;
-        float:left;
-        cursor:pointer
-      }
-      .hide_file {
-          position: absolute;
-          z-index: 1000;
-          opacity: 0;
-          cursor: pointer;
-          right: 0;
-          top: 0;
-          height: 100%;
-          font-size: 24px;
-          width: 100%;
-          
-      }
+
+@push('styles')
+    <style>
+        .btn-choose{
+            padding:7px 10px;
+            background:#8ba7d7;
+            border:1px solid #854fff;
+            position:relative;
+            color:#fff;
+            border-radius:8px;
+            text-align:center;
+            float:left;
+            cursor:pointer
+        }
+        .hide_file {
+            position: absolute;
+            z-index: 1000;
+            opacity: 0;
+            cursor: pointer;
+            right: 0;
+            top: 0;
+            height: 100%;
+            font-size: 24px;
+            width: 100%;
+
+        }
     </style>
+@endpush
+
+@section('content')
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
             <div class="nk-content-body">
-                <div class="components-preview mx-auto">
+                <div class="components-preview wide-md mx-auto">
                     <div class="nk-block nk-block-lg">
                         <div class="nk-block-head">
                             <div class="nk-block-head-content">
-                                {{-- <h4 class="title nk-block-title">Create Blog</h4> --}}
+                                <h4 class="title nk-block-title">Edit Testimonial</h4>
                                 <div class="nk-block-des">
                                     {{-- <p>You can make style out your....</p> --}}
                                 </div>
@@ -51,7 +55,7 @@
                         <div class="card">
                             <div class="card-inner">
                                 <div class="card-head">
-                                    {{-- <h5 class="card-title">Blog</h5> --}}
+                                    <h5 class="card-title">Testimonial Info</h5>
                                 </div>
                                 <form action="{{route('admin.testimonials.update',$testimonial)}}" class="form-validate is-alter" method="POST" enctype="multipart/form-data">
                                     @csrf
@@ -67,12 +71,12 @@
                                                 </select>
                                              </div>
                                         </div>
-                                        
+
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">User Name</label>
                                                 <div class="form-control-wrap">
-                                                    <input id="user-name" type="text" class="form-control " name="name" placeholder="User Name" value="{{ $testimonial->name }}" required> 
+                                                    <input id="user-name" type="text" class="form-control " name="name" placeholder="User Name" value="{{ $testimonial->name }}" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -80,7 +84,7 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">Title</label>
                                                 <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="{{ $testimonial->title }}" required> 
+                                                    <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="{{ $testimonial->title }}" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -88,12 +92,12 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">Company Name</label>
                                                 <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="company_name" placeholder="Company Name" value="{{ $testimonial->company }}" required> 
+                                                    <input id="blog-title" type="text" class="form-control " name="company_name" placeholder="Company Name" value="{{ $testimonial->company }}" required>
                                                 </div>
                                             </div>
                                         </div>
-                                        
-                                        
+
+
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                             <label class="form-label" for="reviewer">Description</label>
@@ -104,16 +108,16 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">Job Position</label>
                                                 <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="position" placeholder="Job Position" value="{{ $testimonial->position }}" required> 
+                                                    <input id="blog-title" type="text" class="form-control " name="position" placeholder="Job Position" value="{{ $testimonial->position }}" required>
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">Order No</label>
                                                 <div class="form-control-wrap">
-                                                    <input id="blog-title" type="number" class="form-control " name="order_no" placeholder="Order No" value="{{ $testimonial->order_no }}" required> 
+                                                    <input id="blog-title" type="number" class="form-control " name="order_no" placeholder="Order No" value="{{ $testimonial->order_no }}" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -126,7 +130,7 @@
                                                                 <select class="form-control" id="default-06" name="status" required>
                                                                     <option @if($testimonial->status == 'active') selected @endif value="active">Active</option>
                                                                     <option @if($testimonial->status == 'in-active') selected @endif value="in-active">In-Active</option>
-                                                                      
+
                                                                 </select>
                                                         </div>
                                                     </div>
@@ -153,14 +157,14 @@
                                         <div class="col-lg-3">
                                             <div class="form-group">
                                                 <div class=" logo">
-                                                  <img id="logo" src="" alt="store logo" class="d-none" style="max-width:80px;max-height:120px"/> 
+                                                  <img id="logo" src="" alt="store logo" class="d-none" style="max-width:80px;max-height:120px"/>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <button onclock="remobe_bug()" class="btn btn-primary add-blog" type="submit">Save</button>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -183,9 +187,9 @@
 
     $(document).ready(function(){
             $(document).on('change', '.select-user', function() {
-            
+
             var id = $(this).val();
-            event.preventDefault();            
+            event.preventDefault();
                         $.ajax({
                         method:"GET",
                         url: "get/user/"+id+"",
@@ -205,7 +209,7 @@
                 var preview = $(input).attr('preview');
                 $('#logo').removeClass('d-none');
                 //$('#logo-input').addClass('d-none');
-                
+
                 $(preview)
                     .attr('src', e.target.result)
                     .css('max-width',80).css('max-height',120);
@@ -214,6 +218,6 @@
             reader.readAsDataURL(input.files[0]);
         }
         }
-</script>    
+</script>
 
 @endpush

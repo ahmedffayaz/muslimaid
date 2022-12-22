@@ -88,18 +88,14 @@
                                                             <div class="distance calculatedDistance"
                                                                 id="distance-<?= $store->id ?>">1.4 miles away</div>
                                                         </div>
-
                                                     </div>
                                                 </div>
                                             </div>
                                         @endforeach
-                                        {{-- {{ $locations->links() }} --}}
                                     </div>
                                 </div>
-
                             </div>
                         </div>
-
                     </div>
                 @else
                     <h2>No Cashback Found</h2>
@@ -183,13 +179,11 @@
                                                         Cashback
                                                     </div>
                                                     <div class="product-card__prices">
-                                                        <div class="distance calculatedDistancelist"
+                                                        <div class="distance calculatedDistance"
                                                             id="distance-<?= $store->id ?>">1.4 miles away</div>
                                                     </div>
-
                                                 </div>
                                             </div>
-                                            {{-- {{ $locations->links() }} --}}
                                         </div>
                                     </div>
                                 </div>
@@ -201,5 +195,6 @@
                 </div>
             </div>
         </div>
+        {!! $locations->links() !!}
     </div>
 </div>
