@@ -1,5 +1,35 @@
 @extends('layouts.frontend.app')
 @section('content')
+<div class="container">
+    <div class="page-header__breadcrumb">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{url('/')}}">Home</a>
+                    <svg class="breadcrumb-arrow" width="6px" height="9px">              
+                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#arrow-rounded-right-6x9"></use>
+                    </svg>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">About Us</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="container p-2 my-2">
+    <div class="row">
+        <div class="col-12">
+            <div class="block-finder__body">
+                <div class="">
+                    <img src="{{url('storage/photos/1/eyes.png')}}" alt="bjh">
+                    <div class="block-finder__header">
+                        <div class="block-finder__title">About Us</div>
+                        <div class="block-finder__subtitle"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="block about-us">
     <div class="about-us__image"></div>
     <div class="container">

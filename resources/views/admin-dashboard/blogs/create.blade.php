@@ -54,7 +54,7 @@
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Featured Image</label>
+                                                <label class="form-label" for="reviewer">Banner Image</label>
                                                
                                                     <div class="input-group">
                                                       <span class="input-group-btn">

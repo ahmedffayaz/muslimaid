@@ -70,27 +70,52 @@
       display: none;
     }
     
-.shine {
-  background: #f6f7f8;
-  background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
-  background-repeat: no-repeat;
-  background-size: 800px 230px; 
-  display: inline-block;
-  position: relative; 
-  
-  -webkit-animation-duration: 1s;
-  -webkit-animation-fill-mode: forwards; 
-  -webkit-animation-iteration-count: infinite;
-  -webkit-animation-name: placeholderShimmer;
-  -webkit-animation-timing-function: linear;
-  }
-
-box {
-  height: 230px;
-  /* width: calc(20% - 12px); */
-    margin: 8px 3px;
+    .shine {
+    background: #f6f7f8;
+    background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+    background-repeat: no-repeat;
+    background-size: 800px 230px; 
+    display: inline-block;
+    position: relative; 
+    
+    -webkit-animation-duration: 1s;
+    -webkit-animation-fill-mode: forwards; 
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-name: placeholderShimmer;
+    -webkit-animation-timing-function: linear;
+    }
+    .block-finder__body {
+        background: none no-repeat;
+        /* background-image: url('storage/photos/1/del.png'); */
+    }
+    .block-finder__title{
+    background-color: #fff;
+    padding: 0.5rem 1rem;
+    position: absolute;
+    left: 3rem;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    }
+    .box {
+    height: 230px;
+    /* width: calc(20% - 12px); */
+        margin: 8px 3px;
+    }
+    .panel {
+    padding: 1.2rem;
+    background-color: #fff;
+    text-align: left;
 }
-
+.rounded-border {
+    border: 1px solid #d9d9d9;
+}
+.block-finder__header{
+    padding: 1px;
+}
+.size{
+    width: 1110px;
+}
 @-webkit-keyframes placeholderShimmer {
   0% {
     background-position: -468px 0;
@@ -102,10 +127,33 @@ box {
 }
 
 
+
 </style>
 
+<div class="container p-2 my-2 mt-2">
+    <div class="row">
+        <div class="col-12">
+            <div class="block-finder__body">
+                <div class="">
+                    <img class="size" src="{{asset('storage/categories/images/'.$category->banner_upload)}}" alt="">
+                    {{-- <img src="{{url('storage/photos/1/del.png')}}" alt="bjh"> --}}
+                    <div class="block-finder__header">
+                        <div class="block-finder__title">{{$category->name}}</div>
+                        <div class="block-finder__subtitle"></div>
+                    </div>
+                    <div class="panel rounded-border mb-4 my-2">
+                        <p>{{$category->description}}</p>
+                     </div>
+                </div>
+            </div>
+                    
+               
+                
+        </div>
+    </div>
+</div>
 
-<div class="block mt-5">
+<div class="block mt-5 pt-5">
     
     <div class="container">
         <div class="row">
