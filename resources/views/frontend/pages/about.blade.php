@@ -1,5 +1,13 @@
 @extends('layouts.frontend.app')
 @section('content')
+<style>
+    .about-us__image{
+        background-image: url(../storage/photos/1/eyes.png) !important;
+        background-size: cover;
+    background-position: bottom center;
+    height: 500px;
+    }
+</style>
 <div class="container">
     <div class="page-header__breadcrumb">
         <nav aria-label="breadcrumb">
@@ -15,7 +23,7 @@
         </nav>
     </div>
 </div>
-<div class="container p-2 my-2">
+{{-- <div class="container p-2 my-2">
     <div class="row">
         <div class="col-12">
             <div class="block-finder__body">
@@ -29,9 +37,11 @@
             </div>
         </div>
     </div>
-</div>
+</div> --}}
 <div class="block about-us">
-    <div class="about-us__image"></div>
+    <div class="about-us__image">
+
+    </div>
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-12 col-xl-10">

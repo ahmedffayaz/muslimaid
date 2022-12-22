@@ -75,6 +75,10 @@
    .block-finder__body {
         background: none no-repeat;
     }
+    .banner__size{
+        width: 1110px;
+        height: 400px;
+    }
     .block-finder__title{
         background-color: #fff;
         padding: 0.5rem 1rem;

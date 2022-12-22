@@ -114,7 +114,7 @@
     padding: 1px;
 }
 .size{
-    width: 1110px;
+   
 }
 @-webkit-keyframes placeholderShimmer {
   0% {
@@ -134,17 +134,15 @@
     <div class="row">
         <div class="col-12">
             <div class="block-finder__body">
-                <div class="">
-                    <img class="size" src="{{asset('storage/categories/images/'.$category->banner_upload)}}" alt="">
+                    <img class="banner__size" src="{{asset('storage/categories/images/'.$category->banner_upload)}}" alt="">
                     {{-- <img src="{{url('storage/photos/1/del.png')}}" alt="bjh"> --}}
                     <div class="block-finder__header">
                         <div class="block-finder__title">{{$category->name}}</div>
                         <div class="block-finder__subtitle"></div>
                     </div>
-                    <div class="panel rounded-border mb-4 my-2">
+                    <div class="panel  mb-4 my-2">
                         <p>{{$category->description}}</p>
                      </div>
-                </div>
             </div>
                     
                
