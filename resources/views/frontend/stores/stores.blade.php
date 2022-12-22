@@ -93,7 +93,7 @@
                                                 </div>
                                             </div>
                                         @endforeach
-                                        {{ $locations->links() }}
+                                        {{-- {{ $locations->links() }} --}}
                                     </div>
                                 </div>
 
@@ -183,13 +183,13 @@
                                                         Cashback
                                                     </div>
                                                     <div class="product-card__prices">
-                                                        <div class="distance calculatedDistance"
+                                                        <div class="distance calculatedDistancelist"
                                                             id="distance-<?= $store->id ?>">1.4 miles away</div>
                                                     </div>
 
                                                 </div>
                                             </div>
-                                            {{ $locations->links() }}
+                                            {{-- {{ $locations->links() }} --}}
                                         </div>
                                     </div>
                                 </div>

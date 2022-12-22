@@ -66,14 +66,16 @@
         .view-btn.active {
             background-position: 0 -42px;
         }
-          .panel {
-          padding: 1.2rem;
-          background-color: #fff;
-          }
-          .rounded-border {
-          border: 1px solid #d9d9d9;
-          border-radius: 10px;
-          }
+
+        .panel {
+            padding: 1.2rem;
+            background-color: #fff;
+        }
+
+        .rounded-border {
+            border: 1px solid #d9d9d9;
+            border-radius: 10px;
+        }
 
         .view-btn {
             display: inline-block;
@@ -109,9 +111,14 @@
                 </nav>
             </div>
             <div class="category-text panel rounded-border mb-4 mt-2">
-               <p>With Cashblack To Your Door, you can discover local restaurants and grocery stores to order African, Caribbean or from any other authentic Black-owned vendors and earn cashback through our partnerships with your favourite delivery apps such as Deliveroo and Uber Eats. Whether there’s rice at home or not, you can be sure that through Cashblack To Your Door, you’ll always be able to find local Black-owned retailers for your next order.
-                You can go to  <span class="text-bold text-success"> Grocery Stores</span> or <span class="text-bold text-success">Restaurants.</span>
-                 </p>
+                <p>With Cashblack To Your Door, you can discover local restaurants and grocery stores to order African,
+                    Caribbean or from any other authentic Black-owned vendors and earn cashback through our partnerships
+                    with your favourite delivery apps such as Deliveroo and Uber Eats. Whether there’s rice at home or not,
+                    you can be sure that through Cashblack To Your Door, you’ll always be able to find local Black-owned
+                    retailers for your next order.
+                    You can go to <span class="text-bold text-success"> Grocery Stores</span> or <span
+                        class="text-bold text-success">Restaurants.</span>
+                </p>
             </div>
             <div class="page-header__title">
                 <div class="row">
@@ -218,6 +225,12 @@
                 $(this).addClass('active');
                 $('.categorylist').css("display", "block");
                 $('.categorygrid').css("display", "none");
+                var markerTime = 500;
+
+    setTimeout(function() {
+        directionRenderFn2();
+    }, markerTime);
+              
             });
 
             $('#gridview').on('click', function() {
@@ -381,7 +394,7 @@
             if (dLat != null && dLng != null) {
                 $("#destinationLat").val(dLat);
                 $("#destinationLng").val(dLng);
-            }
+            }   
             if ((dLat == null && $("#destinationLat").val() == "") && (dLng == null && $("#destinationLng").val() == "")) {
                 window.alert('Please Select Destination First ');
                 return false;
@@ -444,6 +457,8 @@
 
         //new
         function directionRenderFn() {
+            var locations = <?php print_r(json_encode($locations)); ?>;
+            locations = locations.data;
 
             directionsRenderer.setMap(map);
             infowindow = new google.maps.InfoWindow();
@@ -451,8 +466,9 @@
             var marker, i;
             var origins = [];
             var destinations = [];
-
+            console.log('len',locations.length);
             for (i = 0; i < locations.length; i++) {
+              //  console.log('ac',locations[i]['store_address']);
 
                 for (j = 0; j < locations[i]['store_address'].length; j++) {
                     var address = locations[i]['store_address'];
@@ -462,7 +478,7 @@
                     marker = new google.maps.Marker({
                         position: new google.maps.LatLng(address[j]['latitude'], address[j]['longitude']),
                         map: map,
-                        icon: '<?= url('') ?>/frontend/images/map-cart.png'
+                        icon: '<?= url('') ?>/frontend/images/location-icon.png'
                     });
                     var origin = window.location.origin;
                     const contentString =
@@ -472,7 +488,8 @@
                         '<div id="mapPopupHeader">' +
                         '<a href="' + origin + '/cashback/silk-center' +
                         '"><div id="headerTitleAddress"><h4 id="firstHeading" class="firstHeading">' + locations[i][
-                        'name'] + '</h4></a>' +
+                            'name'
+                        ] + '</h4></a>' +
                         "</div></div>" +
                         '<div id="bodyContent">' +
                         '<p><span class="addressIcon"><i class="ion-location mr2" aria-hidden="true"></i></span>' +
@@ -512,19 +529,104 @@
                 $(".calculatedDistance").each(function(index) {
                     locations.push(parseFloat(elementRows[index].elements[index].distance.text.replace(
                         /[^\d.]/g, '')));
-
+                        console.log(this);
                     $(this).html(elementRows[index].elements[index].distance.text + "les away");
                 });
             });
-            setTimeout(function() {
-                var arrs = [];
-                var arrs = locations;
-                // arrs.sort(GetSortOrder(16)); //Pass the attribute to be sorted on
-                orderByDistanceRendering(arrs);
-            }, 700);
+            // setTimeout(function() {
+            //     var arrs = [];
+            //     var arrs = locations;
+            //     // arrs.sort(GetSortOrder(16)); //Pass the attribute to be sorted on
+            //   //  orderByDistanceRendering(arrs);
+            // }, 700);
         }
 
+       
+        function directionRenderFn2() {
+            var location = <?php print_r(json_encode($locations)); ?>;
+            location = location.data;
+            
+            directionsRenderer.setMap(map);
+            infowindow = new google.maps.InfoWindow();
+            console.log('len',location.length);
+            var marker, i;
+            var origins = [];
+            var destinations = [];
+            
+            for (i = 0; i < location.length; i++) {
+              //  console.log('ac',locations[i]['store_address']);
 
+                for (j = 0; j < location[i]['store_address'].length; j++) {
+                    var address = location[i]['store_address'];
+                    origins.push(new google.maps.LatLng(myLat, myLng));
+                    destinations.push(new google.maps.LatLng(address[j]['latitude'], address[j]['longitude']));
+
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(address[j]['latitude'], address[j]['longitude']),
+                        map: map,
+                        icon: '<?= url('') ?>/frontend/images/map-cart.png'
+                    });
+                    var origin = window.location.origin;
+                    const contentString =
+                        '<div id="content">' +
+                        '<div id="siteNotice">' +
+                        "</div>" +
+                        '<div id="mapPopupHeader">' +
+                        '<a href="' + origin + '/cashback/silk-center' +
+                        '"><div id="headerTitleAddress"><h4 id="firstHeading" class="firstHeading">' + location[i][
+                            'name'
+                        ] + '</h4></a>' +
+                        "</div></div>" +
+                        '<div id="bodyContent">' +
+                        '<p><span class="addressIcon"><i class="ion-location mr2" aria-hidden="true"></i></span>' +
+                            location[i]['store_address'][j]['address'] + '</p>' +
+                        '<div class="storeTimings d-none">' +
+                        '<h4><span><i class="ion-clock mr2" aria-hidden="true"></i></i></span>Timings</h4>' +
+                        '<ul>12PM</ul>' +
+                        '</div>' +
+                        '<p id="directionBtn"><button class="btn btn-primary" onclick="calculateAndDisplayRoute(' +
+                            location[i]['store_address'][j]['latitude'] + ',' + location[i]['store_address'][j]['longitude'] +
+                        ')">GET DIRECTION</button></p>' +
+                        "</div>" +
+                        "</div>";
+
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                            infowindow.setContent(contentString);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                }
+            }
+            
+            service = new google.maps.DistanceMatrixService();
+
+            var request = {
+                origins: origins,
+                destinations: destinations,
+                travelMode: 'DRIVING',
+                unitSystem: google.maps.UnitSystem.IMPERIAL,
+                avoidHighways: false,
+                avoidTolls: false,
+            };
+
+            service.getDistanceMatrix(request).then((response) => {
+
+                var elementRows = response.rows;
+                $(".calculatedDistancelist").each(function(index) {
+                    locations.push(parseFloat(elementRows[index].elements[index].distance.text.replace(
+                        /[^\d.]/g, '')));
+                   
+                    $(this).html(elementRows[index].elements[index].distance.text + "les away");
+                });
+            });
+            // setTimeout(function() {
+            //     var arrs = [];
+            //     var arrs = locations;
+            //     // arrs.sort(GetSortOrder(16)); //Pass the attribute to be sorted on
+            //   //  orderByDistanceRendering(arrs);
+            // }, 700);
+        }
 
         //serach location on field
         function addressLocationSearch() {
@@ -673,44 +775,44 @@
             return "";
         }
 
-        function orderByDistanceRendering(arrs) {
+        // function orderByDistanceRendering(arrs) {
 
-            $("#storesListN").empty();
-            var storesHtml = "";
-            $.each(arrs, function(index, location) {
-                var tags = '<ul class="tags">';
-                if (location[14] != "" && location[14] != null) {
-                    var menus = location[14].split(",");
-                    $.each(menus, function(index, menu) {
-                        tags += '<li><a href="' + location[13] + '/' + menu + '">' + location[15][menu] +
-                            '</a></li>';
-                    })
-                }
-                tags += '</ul>';
-                storesHtml += '<li class="list-item col">\n' +
-                    '                            <a href="' + location[5] + '">\n' +
-                    '                                <div class="takeaway-item__logo">\n' +
-                    '                                    <img src="' + location[12] +
-                    '" alt="" class="img-fluid">\n' +
-                    '                                    <span class="logo-wrap">\n' +
-                    '                                        <img src="' + location[4] + '" alt="" class="">\n' +
-                    '                                    </span>\n' +
-                    '                                </div>\n' +
-                    '                            </a>\n' +
-                    '                            <div class="category-item__detail">\n' +
-                    '                                <div class="item-name-tags">\n' +
-                    '                                    <h5 class="store-name">' + location[0] + '</h5>\n' +
-                    '                                    ' + tags + '\n' +
-                    '                                <p class="address">' + location[6].replace("-", "'") +
-                    '</p>\n' +
-                    '                                <div class="distance calculatedDistance" id="distance">' +
-                    location[16] + ' miles away</div>\n' +
-                    '                            </div>\n' +
-                    '                        </li>';
-            });
+        //     $("#storesListN").empty();
+        //     var storesHtml = "";
+        //     $.each(arrs, function(index, location) {
+        //         var tags = '<ul class="tags">';
+        //         if (location[14] != "" && location[14] != null) {
+        //             var menus = location[14].split(",");
+        //             $.each(menus, function(index, menu) {
+        //                 tags += '<li><a href="' + location[13] + '/' + menu + '">' + location[15][menu] +
+        //                     '</a></li>';
+        //             })
+        //         }
+        //         tags += '</ul>';
+        //         storesHtml += '<li class="list-item col">\n' +
+        //             '                            <a href="' + location[5] + '">\n' +
+        //             '                                <div class="takeaway-item__logo">\n' +
+        //             '                                    <img src="' + location[12] +
+        //             '" alt="" class="img-fluid">\n' +
+        //             '                                    <span class="logo-wrap">\n' +
+        //             '                                        <img src="' + location[4] + '" alt="" class="">\n' +
+        //             '                                    </span>\n' +
+        //             '                                </div>\n' +
+        //             '                            </a>\n' +
+        //             '                            <div class="category-item__detail">\n' +
+        //             '                                <div class="item-name-tags">\n' +
+        //             '                                    <h5 class="store-name">' + location[0] + '</h5>\n' +
+        //             '                                    ' + tags + '\n' +
+        //             '                                <p class="address">' + location[6].replace("-", "'") +
+        //             '</p>\n' +
+        //             '                                <div class="distance calculatedDistance" id="distance">' +
+        //             location[16] + ' miles away</div>\n' +
+        //             '                            </div>\n' +
+        //             '                        </li>';
+        //     });
 
-            $("#storesListN").html(storesHtml);
-        }
+        //     $("#storesListN").html(storesHtml);
+        // }
 
 
         //new fn
