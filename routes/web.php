@@ -1,7 +1,10 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Models\StoreCashback;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Redirect;
 
 
 /*
@@ -186,7 +189,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('translations', Translations\TranslationController::class);
     Route::resource('lines', Translations\LanguageLineController::class);
 
-    Route::get('get/user/{id}', [App\Http\Controllers\Admin\TestimonialController::class,'userDetails'])->name('users.fetch');
+    // Route::get('get/user/{id}', [App\Http\Controllers\Admin\TestimonialController::class,'userDetails'])->name('users.fetch');
 
     Route::post('tickets/fetch',[App\Http\Controllers\Admin\TicketsController::class,'fetch'])->name('tickets.fetch');
     Route::post('tickets/search',  [App\Http\Controllers\Admin\TicketsController::class,'searchTickets'])->name('tickets.search');
@@ -283,3 +286,6 @@ Route::namespace('App\Http\Controllers\Client')
     Route::get('login/{provider}', [App\Http\Controllers\SocialController::class, 'redirect']);
     Route::get('login/{provider}/callback',[App\Http\Controllers\SocialController::class, 'Callback']);
     Route::get('register-form',[App\Http\Controllers\Auth\registerController::class,'showRegistrationForm'])->name('register-form');
+
+   
+     Route::get('account/verify/{token}', [App\Http\Controllers\Auth\VerifyController::class, 'verifyAccount'])->name('user.verify'); 

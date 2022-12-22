@@ -155,11 +155,11 @@
                                 </form>
 
                                 <h5>
-                                @if($store->custom_cashback_percentage)
+                                {{-- @if($store->custom_cashback_percentage)
                                     @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @else
                                     @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
-                                @endif
+                                @endif --}}
                                 
                                  Cashback</h5>
 
@@ -433,12 +433,12 @@
                                     @endif alt="">
 
                     <h5>Get upto 
-                                @if($store->custom_cashback_percentage)
+                                {{-- @if($store->custom_cashback_percentage)
                                 @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @else
                                 @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @endif
-                                 Cashback</h5>
+                                 Cashback</h5> --}}
                 </div>
                 <div class="modal-footer">
                     <a href="{{route('login')}}?prvUrl={{ request()->fullUrl() }}" class="btn btn-primary">Yes, Ofcourse</a>
@@ -472,11 +472,11 @@
                                     @endif alt="">
 
                     <h5>Get upto 
-                                @if($store->custom_cashback_percentage)
+                                {{-- @if($store->custom_cashback_percentage)
                                     @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @else
                                 @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
-                                @endif
+                                @endif --}}
                                 
                                  Cashback</h5>
                 </div>

@@ -5,7 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 use Session;
+use Auth;
 
 class LoginController extends Controller
 {
@@ -46,11 +48,19 @@ class LoginController extends Controller
     //         return redirect('/');
     //     }
     // }
+
+
     protected function redirectTo()
     {
         if (Session::has('prvUrl')){
             return session('prvUrl');
           }else{
+            
+            if (!Auth::user()->is_email_verified) {
+              auth()->logout();
+              Session::flash('email-not-verified');
+              return route('login');
+            }
             Session::flash('login-welcome');
             return '/';
           }

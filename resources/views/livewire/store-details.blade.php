@@ -662,7 +662,7 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="add-seorule-form" class=" p-4">
-                <form action="{{route('admin.stores.save_seo_rule')}}" class="gy-3 form-validate is-alter add_seorule_form" method="POST">
+                <form action="{{route('admin.stores.save_seo_rule')}}" class="gy-3 form-validate is-alter add_seorule_form" id="theform"  method="POST">
                     @csrf
                     <input type="hidden" name="store_id" value="{{$store->id}}">
                     <div class="row g-4">
@@ -703,8 +703,6 @@
         <div class="modal-content">
             <div class="modal-header align-center">
                 <div class="nk-file-title">
-              
-                   
                     <div class="nk-file-name">
                         <div class="nk-file-name-text"><span class="title">Edit SEO Rule</span></div>
                         {{-- <div class="nk-file-name-sub">Project</div> --}}
@@ -1532,8 +1530,10 @@
         });
     });
 
+  
 
     $(document).ready( function() {
+        const form = document.getElementById('theForm');
         $(document).on('submit', '.add_seorule_form', function(event){
    
           event.preventDefault();          
@@ -1542,8 +1542,9 @@
                 type: "POST",
                 data: $(this).serialize(),
                 success: function(data){
-                    
+                 
                     $('#add-seorule-modal').modal('hide');
+                  
                     (function(NioApp, $){
                     'use strict';
                     toastr.clear();

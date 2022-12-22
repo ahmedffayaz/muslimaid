@@ -1,13 +1,17 @@
 <?php
 
 use Carbon\Carbon;
-use App\Models\Category;
 use App\Models\Store;
+use App\Models\Category;
+use Illuminate\Support\Str;
+use Intervention\Image\Image;
 use Harimayco\Menu\Models\Menus;
 use Harimayco\Menu\Models\MenuItems;
-
-use Illuminate\Support\Str;
+use App\Models\UserVerify;
+use App\Models\EmailTemplate;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
 
 // function ccEmails() {
@@ -111,7 +115,7 @@ function saveResizeImage($file, $directory, $width, $type = 'jpg')
     $is_preview = strpos($directory, 'previews') !== false;
     $filename = Str::random() . time() . '.' . $type;
     $path = "$directory/$filename";
-    $img = \Image::make($file)->orientate()->encode($type, $is_preview ? 40 : 85)->resize($width, null, function ($constraint) {
+    $img = Image::make($file)->orientate()->encode($type, $is_preview ? 40 : 85)->resize($width, null, function ($constraint) {
         $constraint->aspectRatio();
         $constraint->upsize();
     });
@@ -388,6 +392,31 @@ function checkStaticpageRule($url)
 
    }
 }
+
+   function sendVerificationEmail($user)
+   {
+    $verification_email_temp = EmailTemplate::where('key','email_verification')->first();
+
+    $token = Str::random(64);
+
+    UserVerify::create([
+          'user_id' => $user->id, 
+          'token' => $token
+        ]);
+
+    $link = url('').'/account/verify/'.$token;
+    $button = '<a href="'.$link.'" target="_blank"><input type="button" class="btn btn-success" value="Verify"></a>';
+    $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{BUTTON}}'],[SiteSetting()['website_title'], url('/'), $button],$verification_email_temp->message );
+    $data = array(
+        'email'=> $user->email,
+        'email_message'=>$filtered_message,
+        'subject'=>$verification_email_temp->subject
+    );
+    Mail::send('emails.email_template', $data, function ($message) use ($data) {
+        $message->to($data['email'])
+            ->subject($data['subject']);
+    });
+   }
 
 // function isAppleEnabled(){
 //     if(SiteSetting()['apple_client_id'] && SiteSetting()['apple_client_secret'] && SiteSetting()['apple_url']){

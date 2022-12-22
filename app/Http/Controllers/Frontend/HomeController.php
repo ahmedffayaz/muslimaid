@@ -10,7 +10,7 @@ use App\Models\Category;
 use App\Models\Store;
 use Illuminate\Support\Facades\App;
 use App\Models\Slider;
-
+use App\Models\Testimonial;
 
 class HomeController extends Controller
 {
@@ -25,8 +25,9 @@ class HomeController extends Controller
         $languages = Language::orderBy('id', 'desc')->get();
         $featured_categories = Category::where('feature_homepage',1)->orderBy('name', 'ASC')->latest()->get();
         $slider = Slider::where('name','Home')->first();
-        
-        return view('frontend.pages.home',compact('stores','languages','featured_categories','slider'));
+        $testimonials = Testimonial::where('status', 'active')->paginate(5);
+
+        return view('frontend.pages.home',compact('stores','languages','featured_categories','slider', 'testimonials'));
     }
 
     /**

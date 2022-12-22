@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Store;
-use App\Models\Voucher;
 use App\Models\Category;
 
 class StoreController extends Controller
@@ -20,17 +19,27 @@ class StoreController extends Controller
     public function show($slug)
     {
         $store = Store::where('slug', $slug)->first();
-        
+
         // $vouchers = Voucher::where('store_id', $store->id)->latest()->paginate(5);
-        $count = count($store->cashbacks);
+        // $count = count($store->cashbacks);
         return view('frontend.stores.show',compact('store','count'));
     }
 
-    public function storeLocation()
+    public function storeLocation(Request $request)
     {
         $locations = Store::with('logo','storeAddress')->get();
-        return view('frontend.stores.location',compact('locations'));
-    }
-   
+        $categories = Category::with(['stores.storeAddress'])->where('parent_id', '=', 0)->orderBy('name', 'ASC')->get();
+        $array = array();
+        foreach($categories as $category){
+             foreach($category->stores as $store){
+                $array['des'][] =$store->description;
+                foreach ($store->storeAddress as $address) {
+                    $array['lat'][] =$address->latitude;
+                    $array['long'][] =$address->longitude;
+                }
+             }
+        }
 
+        return view('frontend.stores.location', compact('locations','categories', 'array'));
+    }
 }
