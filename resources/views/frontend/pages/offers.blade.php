@@ -32,7 +32,7 @@
             @foreach ($categories as $category)
                @if($category->stores->count()) 
             
-            <div class="col-lg-4 mt-5">
+            <div class="col-lg-4 mt-5 ">
                 <div class="block-header">
                     <h3 class="block-header__title"> @if($category->logo_type == 'upload')
         
@@ -54,7 +54,7 @@
                         
                     
                     <div class="block-product-columns__item">
-                        <div class="product-card product-card--hidden-actions product-card--layout--horizontal">
+                        <div class="product-card product-card--hidden-actions product-card--layout--horizontal mb-3">
                             <div class="product-card__image product-image">
                                 <a href="{{route('store.show',$store->slug)}}" class="product-image__body">
                                     <img class="product-image__img"   @if($store->logo->first())
@@ -69,7 +69,7 @@
                                 </a>
                             </div>
                             <div class="product-card__info">
-                                <div class="product-card__name">
+                                <div class="product-card__name text-center">
                                     <a href="{{route('store.show',$store->slug)}}">{{$store->name}}</a>
                                 </div>
                                 @if($store->reviews->count())

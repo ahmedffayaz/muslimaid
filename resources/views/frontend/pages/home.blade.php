@@ -347,11 +347,11 @@
 @endguest
 <!-- Cashbacks -->
 @if(count($stores))
-<div class="block">
+<div class="block block--highlighted">
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <div class="block">
+                <div class="block ">
                     <div class="block-header">
                         <h3 class="block-header__title">Featured Stores</h3>
                         <div class="block-header__divider"></div>
@@ -417,12 +417,12 @@
                                         <div class="product-card__actions">
                                             <div class="product-card__prices">
 
-                                                @if($store->custom_cashback_percentage)
+                                                {{-- @if($store->custom_cashback_percentage)
 
                                                     @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                                 @else
                                                     @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
-                                                @endif
+                                                @endif --}}
                                                 Cashback
                                             </div>
 
@@ -478,7 +478,7 @@
 <!-- .block-brands / end -->
 
 <!-- .block-categories -->
-<div class="block block--highlighted block-categories block-categories--layout--classic mb-0">
+<div class="block block--highlighted block-categories block-categories--layout--classic mb-5">
     <div class="container">
         <div class="block-header">
             <h3 class="block-header__title">Featured Categories</h3>

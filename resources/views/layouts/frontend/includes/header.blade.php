@@ -127,7 +127,7 @@ $menu = Harimayco\Menu\Models\Menus::where('name','Main Menu')->first();
                                 @endforeach
 
                             </ul>
-                        </div>
+                        </div> 
                         <!-- .nav-links / end -->
                     </div>
                 </div>
