@@ -1,5 +1,43 @@
 @extends('layouts.frontend.app')
 @section('content')
+<div class="container">
+    <div class="page-header__breadcrumb">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="{{url('/')}}">Home</a>
+                    <svg class="breadcrumb-arrow" width="6px" height="9px">              
+                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#arrow-rounded-right-6x9"></use>
+                    </svg>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Contact Us</li>
+            </ol>
+        </nav>
+    </div>
+</div>
+<div class="container p-1 my-1">
+    <div class="row">
+        <div class="col-12">
+            <div class="block-finder__body">
+               <img  class="banner__size" src="{{url('storage/photos/1/del.png')}}" alt="bjh">
+                <div class="block-finder__header">
+                   <div class="block-finder__title">Contact Us</div>
+                   <div class="block-finder__subtitle"></div>
+                </div>
+            </div>
+            <div class="category-text panel  mb-4 mt-1">
+                <p class="mt-1">
+                    With Cashblack To Your Door, you can discover local restaurants and grocery stores to order African, Caribbean or 
+                    from any other authentic Black-owned vendors and earn cashback through our partnerships with your favourite 
+                    delivery apps such as Deliveroo and Uber Eats. Whether there’s rice at home or not, you can be sure that through 
+                    Cashblack To Your Door, you’ll always be able to find local Black-owned retailers for your next order.
+                    You can go to <span class="text-bold text-success"> Grocery Stores</span> or 
+                    <span class="text-bold text-success">Restaurants.</span>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
 
 @if(Session::has('success'))
 <div class="toast bg-success m-2" role="alert" aria-live="assertive" aria-atomic="true"

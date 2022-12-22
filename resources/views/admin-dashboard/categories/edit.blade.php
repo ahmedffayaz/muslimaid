@@ -193,14 +193,14 @@
             <div class="form-group">
                 <label class="form-label" for="reviewer">Meta Keywords</label>
                 <div class="form-control-wrap">
-                    <input id="blog-title" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword" value="{{ $blog->meta_keyword }}" > 
+                    {{-- <input id="blog-title" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword" value="{{ $blog->meta_keyword }}" >  --}}
                 </div>
             </div>
         </div>
         <div class="col-lg-12">
             <div class="form-group">
             <label class="form-label" for="reviewer">Meta Description</label>
-            <textarea  class="form-control " name="meta_description" placeholder="Meta Description" value="{{ $blog->meta_description }}" ></textarea>
+            {{-- <textarea  class="form-control " name="meta_description" placeholder="Meta Description" value="{{ $blog->meta_description }}" ></textarea> --}}
         </div>
         <div class="col-12">
             <div class="form-group">

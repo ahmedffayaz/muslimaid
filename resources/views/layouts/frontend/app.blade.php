@@ -36,42 +36,63 @@
     
     #accordion .btn.focus, .btn:focus {
     box-shadow: none;
-}
-[dir=ltr] .nav-links__item--has-submenu .nav-links__item-body {
-    padding-right: 20px;
-    padding-left: 20px;
-}
-.site-header__logo {
-    -ms-flex-negative: 0;
-    flex-shrink: 0;
-    width: 150px;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -webkit-box-align: left;
-    -ms-flex-align: left;
-    align-items: left;
-    -webkit-box-pack: left;
-    -ms-flex-pack: left;
-    justify-content: left;
-    color: inherit;
-}
-.departments__body{
-    z-index: 1;
-}
-.nav-panel{
-    background: rgba(299, 299, 299, 0.97);
-    color: black
+    }
+    [dir=ltr] .nav-links__item--has-submenu .nav-links__item-body {
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+    .site-header__logo {
+        -ms-flex-negative: 0;
+        flex-shrink: 0;
+        width: 150px;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: left;
+        -ms-flex-align: left;
+        align-items: left;
+        -webkit-box-pack: left;
+        -ms-flex-pack: left;
+        justify-content: left;
+        color: inherit;
+    }
+    .departments__body{
+        z-index: 1;
+    }
+    .nav-panel{
+        background: rgba(299, 299, 299, 0.97);
+        color: black
 
-}
-.site-header__middle {
-    height: 70px;
-    padding-top: 25px;
-    padding-bottom: 20px;
-}
-.nav-links__item--hover .nav-links__item-body {
-    background: #EDEEEE;
-}
+    }
+    .site-header__middle {
+        height: 70px;
+        padding-top: 25px;
+        padding-bottom: 20px;
+    }
+    .nav-links__item--hover .nav-links__item-body {
+        background: #EDEEEE;
+    }
+   .block-finder__body {
+        background: none no-repeat;
+    }
+    .banner__size{
+        width: 1110px;
+        height: 400px;
+    }
+    .block-finder__title{
+        background-color: #fff;
+        padding: 0.5rem 1rem;
+        position: absolute;
+        left: 3rem;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.5rem;
+    }
+    .panel {
+        padding: 1.2rem;
+        border: 1px solid #d9d9d9;
+    }
+    
     </style>
     <!-- site -->
     @isset($settings['theme_skin'])

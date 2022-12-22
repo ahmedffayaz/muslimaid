@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Exception;
 use App\Models\Store;
+use App\Models\Blog;
 use App\Models\Category;
 use App\Models\EditorPick;
 use Illuminate\Support\Str;
@@ -72,7 +73,8 @@ class CategoryController extends Controller
                 'sort' => $request->input('sort'), 
                 'status' => $request->input('status'), 
                 'meta_keyword' => $request->input('meta_keyword'),
-                'meta_description' => $request->input('meta_description')
+                'meta_description' => $request->input('meta_description'),
+                'slug'=> Str::slug($request->name),
 
             ]);
 
@@ -141,8 +143,9 @@ class CategoryController extends Controller
     {
         $categories = Category::latest()->where('parent_id',0)->get();
         $stores = Store::latest()->get();
+        $blog = Blog::latest()->get();
 
-        return view('admin-dashboard.categories.edit', compact('category','categories','stores'))->render();
+        return view('admin-dashboard.categories.edit', compact('category','categories','stores','blog'))->render();
 
     }
 
