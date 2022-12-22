@@ -64,17 +64,6 @@
     .view-btn.active {
         background-position: 0 -42px;
     }
-    
-    .panel {
-        padding: 1.2rem;
-        background-color: #fff;
-    }
-    
-    .rounded-border {
-        border: 1px solid #d9d9d9;
-        border-radius: 10px;
-    }
-
     .view-btn {
         display: inline-block;
         width: 50px;
@@ -143,7 +132,7 @@
     </div>
 </div>
 
-<div class="container ">
+<div class="container">
     <div class="map-search">
         <button href="javascript:;" class="d-sm-block current  mb-3" style="outline:0 !important" onclick="getCurrentLocation();"><img src="{{ asset('frontend/images/map-pointer.png') }}" alt="" style="width: 85%;" /></button>
         <div class="search-wrap searchbox">
@@ -185,11 +174,11 @@
             </div>
         </div>
     </div>
-    <div id="infowindow-content" class="d-none">
+    {{-- <div id="infowindow-content" class="d-none">
         <span id="place-name" class="title"></span><br />
         <span id="place-address"></span>
     </div>
-    <button class="icon-btn black d-none"><i class="bi bi-search"></i></button>
+    <button class="icon-btn black d-none"><i class="bi bi-search"></i></button> --}}
 </div>
 
 <div class="container mt-4">
