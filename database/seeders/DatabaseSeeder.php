@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
             PagesSeeder::class,
             MenuSeeder::class,
             SliderSeeder::class,
-            EmailTemplatesSeeder::class
-           
+            EmailTemplatesSeeder::class,
+            TestimonialSeeder::class
         ]);
         // \App\Models\User::factory(10)->create();
     }

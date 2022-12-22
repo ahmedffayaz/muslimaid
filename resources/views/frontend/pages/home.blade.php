@@ -203,44 +203,6 @@
 @endif
 @endauth
 
-@if($testimonials)
-    @if (count($testimonials) > 0)
-        <!-- testimonial -->
-        <div class="mt-2 mb-5">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="testimonials-view">
-                            <div class="testimonials-view__list">
-                                <div class="testimonials-list">
-                                    <ol class="testimonials-list__content">
-                                        @foreach ($testimonials as $testimonial)
-                                            <li class="testimonials-list__item">
-                                                <div class="testimonial">
-                                                    <div class="testimonial__avatar"><img src="{{asset('storage/users/images/avatar/' . $testimonial->image )}}"></div>
-                                                    <div class="testimonial__content">
-                                                        <div class="testimonial__author">{{ $testimonial->name }}</div>
-                                                        <div class="testimonial__position">{{ $testimonial->position . ', ' . $testimonial->company }}</div>
-                                                        <div class="testimonial__text">{{ $testimonial->description }}</div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        @endforeach
-                                    </ol>
-                                    <div class="testimonials-list__pagination">
-                                    {{ $testimonials->links() }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- testimonial / end -->
-    @endif
-@endif
-
 @guest
 <!-- .block-slideshow -->
  <div class="block home-header block--highlighted pt-5" style="background: linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.4)),
@@ -345,6 +307,48 @@
     </div>
 </div>
 @endguest
+
+@if($testimonials)
+    @if (count($testimonials) > 0)
+        <!-- testimonial -->
+        <div class="block my-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 mb-5">
+                        <h1 class="text-center">Testimonial</h1>
+                    </div>
+                    <div class="col-12">
+                        <div class="testimonials-view">
+                            <div class="testimonials-view__list">
+                                <div class="testimonials-list">
+                                    <ol class="testimonials-list__content">
+                                        @foreach ($testimonials as $testimonial)
+                                            <li class="testimonials-list__item">
+                                                <div class="testimonial">
+                                                    <div class="testimonial__avatar"><img src="{{asset('storage/users/images/avatar/' . $testimonial->image )}}"></div>
+                                                    <div class="testimonial__content">
+                                                        <div class="testimonial__author">{{ $testimonial->name }}</div>
+                                                        <div class="testimonial__position">{{ $testimonial->position . ', ' . $testimonial->company }}</div>
+                                                        <div class="testimonial__text">{{ $testimonial->description }}</div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        @endforeach
+                                    </ol>
+                                    <div class="testimonials-list__pagination">
+                                    {{ $testimonials->links() }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- testimonial / end -->
+    @endif
+@endif
+
 <!-- Cashbacks -->
 @if(count($stores))
 <div class="block">
