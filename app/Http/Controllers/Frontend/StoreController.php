@@ -25,11 +25,10 @@ class StoreController extends Controller
     public function show($slug)
     {
         $store = Store::where('slug', $slug)->first();
-        $reviews = $store->reviews->where('status', 'active')->take(5);
 
         // $vouchers = Voucher::where('store_id', $store->id)->latest()->paginate(5);
         $count = count($store->cashbacks);
-        return view('frontend.stores.show',compact('store','count', 'reviews'));
+        return view('frontend.stores.show',compact('store','count'));
     }
 
     public function storeLocation(Request $request)
@@ -58,6 +57,16 @@ class StoreController extends Controller
         }
 
         return view('frontend.stores.location', compact('locations','categories', 'array'));
+    }
+
+    public function showReviews(Request $request, $id)
+    {
+        $limit = $request->limit;
+        $reviews = Store::where('id', $id)->first()->reviews()->where('status', 'active')
+            ->with('user', function ($query) {
+                $query->select('id', 'first_name', 'last_name', 'avatar');
+            })->limit($limit)->get();
+        return response()->json([$reviews]);
     }
 
     /**

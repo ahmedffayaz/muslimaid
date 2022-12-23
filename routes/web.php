@@ -241,6 +241,7 @@ Route::get('top-cashback',[App\Http\Controllers\Frontend\PagesController::class,
 Route::get('trending',[App\Http\Controllers\Frontend\PagesController::class, 'trending'])->name('trending');
 Route::get('cashback/{slug}',[App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
 Route::get('stores/cashback-to-door',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
+Route::get('stores/reviews/{id}', [App\Http\Controllers\Frontend\StoreController::class, 'showReviews'])->name('store.reviews.show');
 Route::post('stores/reviews/submit', [App\Http\Controllers\Frontend\StoreController::class, 'storeReviews'])->name('store.reviews.submit');
 Route::get('search_suggestions',[App\Http\Controllers\Frontend\PagesController::class, 'searchSuggestions'])->name('search_suggestions');
 Route::get('pages/{page}',[App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('page');

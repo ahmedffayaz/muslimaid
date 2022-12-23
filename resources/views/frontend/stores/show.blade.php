@@ -371,7 +371,10 @@
                         </div>
                         @endif
                         <!-- Reviews tab -->
-                        @if($reviews->count())
+                        @php
+                            $revews_count = $store->reviews->where('status', 'active')->count();
+                        @endphp
+                        @if($revews_count)
                         <div class="product-tabs  product-tabs--layout--sidebar">
                             <div class="product-tabs__content">
                                 <div class="product-tabs__pane product-tabs__pane--active" id="tab-description">
@@ -379,54 +382,13 @@
                                         <div class="reviews-view__list">
                                             <h3 class="reviews-view__header">Reviews</h3>
                                             <div class="reviews-list">
-                                                <ol class="reviews-list__content">
-                                                    @foreach($reviews as $review)
-                                                    <li class="reviews-list__item">
-                                                        <div class="review">
-                                                            <div class="review__avatar"><img @if($review->user->avatar != '' && $review->user->avatar != NULL)
-                                                                        src="{{ asset('storage/users/images/avatar/' . $review->user->avatar) }}"
-                                                                    @else
-                                                                        src="{{ asset('frontend/images/avatars/avatar-1.jpg') }}"
-                                                                    @endif alt=""></div>
-                                                            <div class="review__content">
-                                                                <div class="review__author">{{ $review->user->first_name . ' ' . $review->user->last_name }}</div>
-                                                                <div class="review__rating">
-                                                                    <div class="rating">
-                                                                        <div class="rating__body">
+                                                <ol class="reviews-list__content" data-count="{{ $revews_count }}" id="reviews">
 
-                                                                            @foreach (range(1,5) as $index)
-                                                                            <svg class="rating__star @if($index <= $review->rating) rating__star--active @endif" width="13px" height="12px">
-                                                                                <g class="rating__fill">
-                                                                                    <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal"></use>
-                                                                                </g>
-                                                                                <g class="rating__stroke">
-                                                                                    <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal-stroke"></use>
-                                                                                </g>
-                                                                            </svg>
-                                                                            <div class="rating__star rating__star--only-edge @if($index <= $review->rating) rating__star--active @endif">
-                                                                                <div class="rating__fill">
-                                                                                    <div class="fake-svg-icon"></div>
-                                                                                </div>
-                                                                                <div class="rating__stroke">
-                                                                                    <div class="fake-svg-icon"></div>
-                                                                                </div>
-                                                                            </div>
-                                                                            @endforeach
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="review__text">{!!$review->review!!}</div>
-                                                                <div class="review__date">{{Carbon\Carbon::parse($review->created_at)->isoFormat('Do MMMM YYYY')}}</div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    @endforeach
                                                 </ol>
 
                                             </div>
                                             <div class="col text-center mt-4" id="load-more">
-                                                <a href="javascript:void(0)" class="btn btn-primary">Load More</a>
+
                                             </div>
                                         </div>
                                     </div>
@@ -693,6 +655,110 @@
                 return false;
             }
         })
+
+        $(document).ready(function(){
+
+            getReviews()
+
+            let count = $('.reviews-list__content').attr('data-count');
+            let button = `<a href="javascript:void(0)" class="btn btn-primary">Load More</a>`;
+
+            if (count > 5) {
+                $('#load-more').append(button);
+            }
+
+            $('#load-more').on('click', function (event){
+                event.preventDefault();
+                getReviews()
+            })
+        })
+
+        // Get store reviews
+        function getReviews(){
+            let limit = 5;
+            let id = "{{ $store->id }}";
+            let url = "{{ route('store.reviews.show', ':id') }}";
+                url = url.replace(':id', id);
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    limit: limit,
+                },
+                success: function(response){
+                    showReviews(response);
+                }
+            })
+        }
+
+        // Show store reviews
+        function showReviews(response){
+            let reviews = response[0];
+            let review = '';
+            let rating = '';
+            let description  = '';
+
+            // All reviews
+            reviews.forEach(function (data){
+                // If reviews description is null
+                if (data.review != null) {
+                    description = data.review;
+                } else {
+                    description = ``;
+                }
+
+                // If user avatar is null
+                if (data.user.avatar != null) {
+                    avatar = `<img src="{{ asset('frontend/images/avatars/`+ data.user.avatar +`') }}"></div>`
+                } else {
+                    avatar = `<img src="{{ asset('admin-dashboard/images/avatar.png') }}"></div>`
+                }
+
+                // Ratings
+                let range = Array.from({length:5}, (x, i) => i);
+                range.forEach(function (index){
+                    if (index + 1 <= data.rating) {
+                        activeStars = `rating__star--active`;
+                    }
+                    rating += `<svg class="rating__star `+ activeStars +`" width="13px" height="12px">
+                                    <g class="rating__fill">
+                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal"></use>
+                                    </g>
+                                    <g class="rating__stroke">
+                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal-stroke"></use>
+                                    </g>
+                                </svg>
+                                <div class="rating__star rating__star--only-edge `+ activeStars +`">
+                                    <div class="rating__fill">
+                                        <div class="fake-svg-icon"></div>
+                                    </div>
+                                    <div class="rating__stroke">
+                                        <div class="fake-svg-icon"></div>
+                                    </div>
+                                </div>`;
+
+                })
+
+                review += `<li class="reviews-list__item store-review more-reviews">
+                                <div class="review">
+                                    <div class="review__avatar">`
+                                        + avatar +
+                                    `<div class="review__content">
+                                        <div class="review__author">`+ data.user.first_name + ' ' + data.user.last_name+`</div>
+                                        <div class="review__rating">
+                                            <div class="rating">
+                                                <div class="rating__body">`+ rating +`</div>
+                                            </div>
+                                        </div>
+                                        <div class="review__text">`+ description +`</div>
+                                        <div class="review__date">`+ new Date(data.created_at).toLocaleDateString().split('T')[0] +`</div>
+                                    </div>
+                                </div>
+                            </li>`;
+            })
+            $('#reviews').append(review);
+        }
 
     </script>
     @endpush
