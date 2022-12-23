@@ -1,3 +1,4 @@
+
 <div class="block mt-5">
     <div class="container">
         <div class="row">
@@ -179,7 +180,7 @@
                                                         Cashback
                                                     </div>
                                                     <div class="product-card__prices">
-                                                        <div class="distance calculatedDistance"
+                                                        <div class="distance calculatedDistanceList"
                                                             id="distance-<?= $store->id ?>">1.4 miles away</div>
                                                     </div>
                                                 </div>
