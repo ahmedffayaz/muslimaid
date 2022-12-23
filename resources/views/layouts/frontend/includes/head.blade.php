@@ -22,9 +22,6 @@ if(!empty($rule))
 
 
 }
-
-
-
 @endphp
 <head>
     <meta charset="UTF-8">

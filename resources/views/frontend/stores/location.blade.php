@@ -97,6 +97,12 @@
                             <use xlink:href="{{ asset('frontend/images/sprite.svg') }}#arrow-rounded-right-6x9"></use>
                         </svg>
                     </li>
+                    <li class="breadcrumb-item">
+                        <a href="{{ route('categories.index') }}">Categories</a>
+                        <svg class="breadcrumb-arrow" width="6px" height="9px">
+                            <use xlink:href="{{ asset('frontend/images/sprite.svg') }}#arrow-rounded-right-6x9"></use>
+                        </svg>
+                    </li>
                     <li class="breadcrumb-item active" aria-current="page">Cashback To Your Door</li>
                 </ol>
             </nav>
