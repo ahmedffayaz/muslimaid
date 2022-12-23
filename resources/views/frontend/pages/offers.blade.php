@@ -9,25 +9,7 @@
     padding: 14px;
 }
    </style>
-<!-- Cashbacks -->
-@php $categories = getCategories(); @endphp
-@isset($categories)
-<!-- .block-product-columns -->
-@if($page->lb_content)
-<div class="block block-product-columns mt-5">
-    <div class="container">
-        <div class="row">
-           
-            <div class="col-lg-12">
-                <div id="your_container"> <!-- The element you want to render the content in -->
-                    {!! $page->lb_content !!}
-                  </div>
-            </div>
-        </div>
-    </div>
-</div>
-@endif
-<div class="container">
+   <div class="container">
     <div class="page-header__breadcrumb">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
@@ -46,31 +28,40 @@
     <div class="row">
         <div class="col-12">
             <div class="block-finder__body">
-               <img class="banner__size" src="{{url('storage/photos/1/bulbb.jpg')}}" alt="bjh">
+               <img class="banner__size" src="{{$page->banner_image}}" alt="Offer Page Image Missing">
                  <div class="block-finder__header">
-                    <div class="block-finder__title">Offers</div>
+                    <div class="block-finder__title">{{$page->title}}</div>
                     <div class="block-finder__subtitle"></div>
                  </div>
             </div>
             <div class="category-text panel  mb-3 mt-4 pt-3">
-                <p class="mt-1">
-                    With Cashblack To Your Door, you can discover local restaurants and grocery stores to order African, Caribbean or 
-                    from any other authentic Black-owned vendors and earn cashback through our partnerships with your favourite 
-                    delivery apps such as Deliveroo and Uber Eats. Whether there’s rice at home or not, you can be sure that through 
-                    Cashblack To Your Door, you’ll always be able to find local Black-owned retailers for your next order.
-                    You can go to <span class="text-bold text-success"> Grocery Stores</span> or 
-                    <span class="text-bold text-success">Restaurants.</span>
-                </p>
+                <p class="mt-1">{{$page->description}}</p>
             </div>
         </div>
     </div>
 </div>
-
+<!-- Cashbacks -->
+@php $categories = getCategories(); @endphp
+@isset($categories)
+<!-- .block-product-columns -->
+@if($page->lb_content)
+<div class="block block-product-columns">
+    <div class="container">
+        <div class="row">
+           
+            <div class="col-lg-12">
+                <div id="your_container"> <!-- The element you want to render the content in -->
+                    {!! $page->lb_content !!}
+                  </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endif
 
 <div class="block block-product-columns pt-3 mt-3">
     <div class="container">
         <div class="row">
-           
             @foreach ($categories as $category)
                @if($category->stores->count()) 
             

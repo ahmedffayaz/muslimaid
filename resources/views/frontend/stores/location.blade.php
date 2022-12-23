@@ -88,7 +88,7 @@
 
 <div class="page-header">
     <div class="page-header__container container">
-        <div class="page-header__breadcrumb pb-3">
+        <div class="page-header__breadcrumb ">
             <nav aria-label="breadcrumb">
                 <ol class="breadcrumb">
                     <li class="breadcrumb-item">
@@ -101,7 +101,20 @@
                 </ol>
             </nav>
         </div>
-        <div class="category-text panel rounded-border mb-4 mt-2">
+        <div class="container p-2 my-2">
+            <div class="row">
+                <div class="col-12">
+                    <div class="block-finder__body">
+                            <img class="banner__size" style="width:1110px;" src="{{url('storage/photos/static_image_banner.jpg')}}" alt="Store Image Missing">
+                            <div class="block-finder__header">
+                                <div class="block-finder__title">Cashback To Your Door</div>
+                                <div class="block-finder__subtitle"></div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="category-text panel rounded-border mb-4 mt-4 pt-3">
             <p>
                 With Cashblack To Your Door, you can discover local restaurants and grocery stores to order African, Caribbean or 
                 from any other authentic Black-owned vendors and earn cashback through our partnerships with your favourite 

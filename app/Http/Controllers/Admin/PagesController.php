@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Page;
-
+use Illuminate\Support\Str;
 class PagesController extends Controller
 {
     /**
@@ -40,12 +40,15 @@ class PagesController extends Controller
     {
         $page = new Page;
         $page->title = $request->title;
-        $page->slug = \Str::slug($request->title);
+        $page->slug = Str::slug($request->title);
         $page->excerpt = $request->excerpt;
         $page->lb_content = $request->content;
         $page->status = $request->status;
+        $page->banner_image = $request->filepath;
+        $page->description = $request->description;
         $page->default = 0;
         $page->save();
+        dd($page);
         flash()->success('New Page created successfully');
         return redirect()->route('admin.pages.index');
     }
@@ -85,6 +88,10 @@ class PagesController extends Controller
         $page->excerpt = $request->excerpt;
         $page->lb_content = $request->content;
         $page->status = $request->status;
+        if(isset($request->filepath)){
+            $page->banner_image = $request->filepath;
+        }
+        $page->description = $request->description;
         $page->save();
         flash()->success('Page updated');
         return redirect()->route('admin.pages.index');
