@@ -383,9 +383,13 @@
                                                     @foreach($reviews as $review)
                                                     <li class="reviews-list__item">
                                                         <div class="review">
-                                                            <div class="review__avatar"><img src="{{ asset('storage/users/images/avatar/') }}" alt=""></div>
+                                                            <div class="review__avatar"><img @if($review->user->avatar != '' && $review->user->avatar != NULL)
+                                                                        src="{{ asset('storage/users/images/avatar/' . $review->user->avatar) }}"
+                                                                    @else
+                                                                        src="{{ asset('frontend/images/avatars/avatar-1.jpg') }}"
+                                                                    @endif alt=""></div>
                                                             <div class="review__content">
-                                                                <div class="review__author">{{$review->reviewer}}</div>
+                                                                <div class="review__author">{{ $review->user->first_name . ' ' . $review->user->last_name }}</div>
                                                                 <div class="review__rating">
                                                                     <div class="rating">
                                                                         <div class="rating__body">
@@ -421,6 +425,9 @@
                                                 </ol>
 
                                             </div>
+                                            <div class="col text-center mt-4" id="load-more">
+                                                <a href="javascript:void(0)" class="btn btn-primary">Load More</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -429,47 +436,49 @@
                         @endif
                     </div>
 
-                    <!-- Store Reviews -->
-                    <div class="card mt-5">
-                        <div class="card-header">
-                            <h5>Write A Review</h5>
-                        </div>
-                        <div class="card-divider"></div>
-                        <div class="card-body">
-                            <div class="row no-gutters">
-                                <div class="col-12 col-lg-12 col-xl-12">
-                                    <form action="{{ route('store.reviews.submit') }}" method="POST" id="store-reviews-form">
-                                        @csrf
-                                        <input type="hidden" id="store-id" name="store_id" value="{{ $store->id }}" required>
-                                        <div class="row">
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label for="rating">Review Star</label>
-                                                    <select class="form-control" id="rating" name="rating" required>
-                                                        <option selected disabled>Chosee Stars Rating</option>
-                                                        <option value="5">5 Stars Rating</option>
-                                                        <option value="4">4 Stars Rating</option>
-                                                        <option value="3">3 Stars Rating</option>
-                                                        <option value="2">2 Stars Rating</option>
-                                                        <option value="1">1 Star Rating</option>
-                                                    </select>
+                    @auth
+                        <!-- Store Reviews -->
+                        <div class="card mt-5">
+                            <div class="card-header">
+                                <h5>Write A Review</h5>
+                            </div>
+                            <div class="card-divider"></div>
+                            <div class="card-body">
+                                <div class="row no-gutters">
+                                    <div class="col-12 col-lg-12 col-xl-12">
+                                        <form action="{{ route('store.reviews.submit') }}" method="POST" id="store-reviews-form">
+                                            @csrf
+                                            <input type="hidden" id="store-id" name="store_id" value="{{ $store->id }}" required>
+                                            <div class="row">
+                                                <div class="col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="rating">Review Star</label>
+                                                        <select class="form-control" id="rating" name="rating" required>
+                                                            <option selected disabled>Chosee Stars Rating</option>
+                                                            <option value="5">5 Stars Rating</option>
+                                                            <option value="4">4 Stars Rating</option>
+                                                            <option value="3">3 Stars Rating</option>
+                                                            <option value="2">2 Stars Rating</option>
+                                                            <option value="1">1 Star Rating</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <div class="form-group">
-                                            <label for="review">Your Review</label>
-                                            <textarea class="form-control" id="review" name="review" placeholder="Type your message" rows="5"></textarea>
-                                        </div>
-                                        <div class="form-group mt-5 mb-0">
-                                            <button class="btn btn-primary">Save</button>
-                                        </div>
-                                    </form>
+                                            <div class="form-group">
+                                                <label for="review">Your Review</label>
+                                                <textarea class="form-control" id="review" name="review" placeholder="Type your message" rows="5"></textarea>
+                                            </div>
+                                            <div class="form-group mt-5 mb-0">
+                                                <button class="btn btn-primary">Save</button>
+                                            </div>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Store Reviews End -->
+                        <!-- Store Reviews End -->
+                    @endauth
                 </div>
             </div>
         </div>

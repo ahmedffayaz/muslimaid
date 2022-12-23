@@ -72,13 +72,11 @@ class StoreController extends Controller
             ]);
 
             DB::beginTransaction();
-            // Auth user name
-            $username = auth()->user()->first_name . ' ' . auth()->user()->last_name;
 
             $reviews = new StoreReview;
             $reviews->store_id = $request->store_id;
+            $reviews->user_id = auth()->user()->id;
             $reviews->review = $request->review;
-            $reviews->reviewer = $username;
             $reviews->rating = $request->rating;
             $reviews->status = 'pending';
             $reviews->save();
