@@ -2,11 +2,16 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Exception;
 use App\Models\Store;
 use App\Models\Voucher;
 use App\Models\Category;
+use App\Models\StoreReview;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\ValidationException;
 
 class StoreController extends Controller
 {
@@ -20,11 +25,11 @@ class StoreController extends Controller
     public function show($slug)
     {
         $store = Store::where('slug', $slug)->first();
+        $reviews = $store->reviews->where('status', 'active')->take(5);
 
         // $vouchers = Voucher::where('store_id', $store->id)->latest()->paginate(5);
         $count = count($store->cashbacks);
-        return view('frontend.stores.show',compact('store','count'));
-        // return view('frontend.stores.show',compact('store'));
+        return view('frontend.stores.show',compact('store','count', 'reviews'));
     }
 
     public function storeLocation(Request $request)
@@ -51,7 +56,47 @@ class StoreController extends Controller
                 }
              }
         }
-        // dd($array);
+
         return view('frontend.stores.location', compact('locations','categories', 'array'));
+    }
+
+    /**
+     * Save store reviews
+     */
+    public function storeReviews(Request $request)
+    {
+        try {
+            $request->validate([
+                'store_id' => 'required|integer',
+                'rating' => 'required|integer',
+            ]);
+
+            DB::beginTransaction();
+            // Auth user name
+            $username = auth()->user()->first_name . ' ' . auth()->user()->last_name;
+
+            $reviews = new StoreReview;
+            $reviews->store_id = $request->store_id;
+            $reviews->review = $request->review;
+            $reviews->reviewer = $username;
+            $reviews->rating = $request->rating;
+            $reviews->status = 'pending';
+            $reviews->save();
+
+            DB::commit();
+
+            Session::flash('success', 'Thank you for your feedback. <br>The review will appear shortly.');
+            return redirect()->back();
+        } catch (ValidationException $exception) {
+            DB::rollBack();
+
+            Session::flash('error', $exception->getMessage());
+            return redirect()->back();
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            Session::flash('error', 'Something went wrong.');
+            return redirect()->back();
+        }
     }
 }

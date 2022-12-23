@@ -1,5 +1,29 @@
 @extends('layouts.frontend.app')
 @section('content')
+
+{{-- Show message on submit form --}}
+@if(Session::has('error'))
+    <div class="toast bg-danger m-2" role="alert" aria-live="assertive" aria-atomic="true" style="position:absolute; top:0; right:0; z-index: 200">
+        <div class="toast-header p-3">
+            <strong class="mr-auto">{{ session('error') }}</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+@endif
+@if(Session::has('success'))
+    <div class="toast bg-success m-2" role="alert" aria-live="assertive" aria-atomic="true" style="position:absolute; top:0; right:0; z-index: 200">
+        <div class="toast-header p-3">
+            <strong class="mr-auto">{{ session('success') }}</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+@endif
+{{-- Show message on submit form end --}}
+
 <style>
     @media (min-width: 992px) {
         .product--layout--sidebar .product__content {
@@ -160,7 +184,7 @@
                                 @else
                                     @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @endif --}}
-                                
+
                                  Cashback</h5>
 
                                 <a href="#" @guest class="btn btn-primary" data-toggle="modal" data-target="#signinModal" @else form_id="form_{{$store->id}}" class="btn btn-primary store_form" @endguest>Get Cashback</a>
@@ -178,7 +202,7 @@
                                 @else
                                     @if($cashback->type=='fixed'){{$cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$cashback->sale_commission}}@if($cashback->type=='percentage')%@endif
                                 @endif
-                                
+
                             </h4>
                             @php
                                 $substr = explode (",", $cashback->detail);
@@ -207,7 +231,7 @@
                                 @else
                                 @if($cashback->type=='fixed'){{$cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$cashback->sale_commission}}@if($cashback->type=='percentage')%@endif
                                 @endif
-                                
+
                             </h4>
                             @php
                             $substr = explode (",", $cashback->detail);
@@ -294,7 +318,7 @@
                                         </div>
                                     </div>
                                     @endforeach
-                                    
+
                                     <div class="remaining_voucher" style="display: none;">
                                     @foreach ($store->vouchers->skip(3) as $voucher)
                                     <div class="product-card mb-2 p-4">
@@ -333,12 +357,12 @@
                                     </div>
                                     @endforeach
                                     </div>
-                                    
+
                                     @if($store->vouchers->count() > 3)
                                         <div class="mt-2 voucher_footer">
-                                            
+
                                             <small class="ml-3 my-auto">Total vouchers count: {{$store->vouchers->count()}}</small>
-                                            
+
                                             <button class="btn btn-link float-right my-auto see-all-vouchers">See All Vouchers</button>
                                         </div>
                                     @endif
@@ -347,7 +371,7 @@
                         </div>
                         @endif
                         <!-- Reviews tab -->
-                        @if($store->reviews->count())
+                        @if($reviews->count())
                         <div class="product-tabs  product-tabs--layout--sidebar">
                             <div class="product-tabs__content">
                                 <div class="product-tabs__pane product-tabs__pane--active" id="tab-description">
@@ -356,10 +380,10 @@
                                             <h3 class="reviews-view__header">Reviews</h3>
                                             <div class="reviews-list">
                                                 <ol class="reviews-list__content">
-                                                    @foreach($store->reviews->take(3) as $review)
+                                                    @foreach($reviews as $review)
                                                     <li class="reviews-list__item">
                                                         <div class="review">
-
+                                                            <div class="review__avatar"><img src="{{ asset('storage/users/images/avatar/') }}" alt=""></div>
                                                             <div class="review__content">
                                                                 <div class="review__author">{{$review->reviewer}}</div>
                                                                 <div class="review__rating">
@@ -405,6 +429,47 @@
                         @endif
                     </div>
 
+                    <!-- Store Reviews -->
+                    <div class="card mt-5">
+                        <div class="card-header">
+                            <h5>Write A Review</h5>
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-body">
+                            <div class="row no-gutters">
+                                <div class="col-12 col-lg-12 col-xl-12">
+                                    <form action="{{ route('store.reviews.submit') }}" method="POST" id="store-reviews-form">
+                                        @csrf
+                                        <input type="hidden" id="store-id" name="store_id" value="{{ $store->id }}" required>
+                                        <div class="row">
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="rating">Review Star</label>
+                                                    <select class="form-control" id="rating" name="rating" required>
+                                                        <option selected disabled>Chosee Stars Rating</option>
+                                                        <option value="5">5 Stars Rating</option>
+                                                        <option value="4">4 Stars Rating</option>
+                                                        <option value="3">3 Stars Rating</option>
+                                                        <option value="2">2 Stars Rating</option>
+                                                        <option value="1">1 Star Rating</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="review">Your Review</label>
+                                            <textarea class="form-control" id="review" name="review" placeholder="Type your message" rows="5"></textarea>
+                                        </div>
+                                        <div class="form-group mt-5 mb-0">
+                                            <button class="btn btn-primary">Save</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Store Reviews End -->
                 </div>
             </div>
         </div>
@@ -432,7 +497,7 @@
                                     src="{{asset('frontend/images/products/product-16.jpg')}}"
                                     @endif alt="">
 
-                    <h5>Get upto 
+                    <h5>Get upto
                                 {{-- @if($store->custom_cashback_percentage)
                                 @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @else
@@ -471,13 +536,13 @@
                                     src="{{asset('frontend/images/products/product-16.jpg')}}"
                                     @endif alt="">
 
-                    <h5>Get upto 
+                    <h5>Get upto
                                 {{-- @if($store->custom_cashback_percentage)
                                     @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @else
                                 @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @endif --}}
-                                
+
                                  Cashback</h5>
                 </div>
                 <div class="modal-footer">
@@ -601,6 +666,23 @@
         $('.see-all-vouchers').on('click', function(){
             $('.voucher_footer').hide();
             $('.remaining_voucher').show();
+        })
+
+        $('#store-reviews-form').validate({
+            errorClass: 'invalid-feedback d-block',
+            rules: {
+                store_id: {
+                    required: true,
+                },
+                rating: {
+                    required: true,
+                },
+            },
+            submitHandler: function(form) {
+                if ($(form).valid())
+                form.submit();
+                return false;
+            }
         })
 
     </script>
