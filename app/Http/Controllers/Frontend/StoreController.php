@@ -61,11 +61,13 @@ class StoreController extends Controller
 
     public function showReviews(Request $request, $id)
     {
-        $limit = $request->limit;
+        $limit = 5;
+        $reviewsCount = $request->reviewsCount;
+        $limit = $request->limit ? $request->limit + $reviewsCount : $limit;
         $reviews = Store::where('id', $id)->first()->reviews()->where('status', 'active')
             ->with('user', function ($query) {
                 $query->select('id', 'first_name', 'last_name', 'avatar');
-            })->limit($limit)->get();
+            })->skip($reviewsCount)->take($limit)->get();
         return response()->json([$reviews]);
     }
 

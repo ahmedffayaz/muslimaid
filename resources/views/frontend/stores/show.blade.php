@@ -588,6 +588,7 @@
 
     @push('scripts')
     <script>
+        let reviewsCount = 0;
         $('.store_form').on('click', function(e) {
             e.preventDefault();
             $('#tracker').modal('show');
@@ -656,11 +657,9 @@
         })
 
         $(document).ready(function(){
-
-            getReviews()
-
             let count = $('.reviews-list__content').attr('data-count');
-            let button = `<a href="javascript:void(0)" class="btn btn-primary">Load More</a>`;
+            getReviews(count)
+            let button = `<a href="javascript:void(0)" class="btn btn-primary" id="load-more-btn">Load More</a>`;
 
             if (count > 5) {
                 $('#load-more').append(button);
@@ -668,12 +667,13 @@
 
             $('#load-more').on('click', function (event){
                 event.preventDefault();
-                getReviews()
+                // Send request for reviews
+                getReviews(count)
             })
         })
 
         // Get store reviews
-        function getReviews(){
+        function getReviews(count){
             let limit = 5;
             let id = "{{ $store->id }}";
             let url = "{{ route('store.reviews.show', ':id') }}";
@@ -684,9 +684,21 @@
                 type: 'GET',
                 data: {
                     limit: limit,
+                    reviewsCount: reviewsCount,
                 },
                 success: function(response){
+                    reviewsCount = response[0].length + reviewsCount;
+
+                    // Send request for show reviews
                     showReviews(response);
+
+                    // convert string to integer
+                    count = parseInt(count);
+
+                    // Hide load more button if reviews count equal to db record
+                    if (count == reviewsCount) {
+                        $('#load-more').hide();
+                    }
                 }
             })
         }
@@ -715,6 +727,7 @@
                 }
 
                 // Ratings
+                // convert string to integer
                 ratingInt = parseInt(data.rating);
                 for(var star = 1; star <= ratingInt; star++){
                     if (star <= data.rating) {
