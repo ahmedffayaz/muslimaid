@@ -416,7 +416,6 @@
                                                     <div class="form-group">
                                                         <label for="rating">Review Star</label>
                                                         <select class="form-control" id="rating" name="rating" required>
-                                                            <option selected disabled>Chosee Stars Rating</option>
                                                             <option value="5">5 Stars Rating</option>
                                                             <option value="4">4 Stars Rating</option>
                                                             <option value="3">3 Stars Rating</option>
@@ -716,12 +715,12 @@
                 }
 
                 // Ratings
-                let range = Array.from({length:5}, (x, i) => i);
-                range.forEach(function (index){
-                    if (index + 1 <= data.rating) {
+                ratingInt = parseInt(data.rating);
+                for(var star = 1; star <= ratingInt; star++){
+                    if (star <= data.rating) {
                         activeStars = `rating__star--active`;
                     }
-                    rating += `<svg class="rating__star `+ activeStars +`" width="13px" height="12px">
+                    rating += `<svg class="rating__star ` + activeStars + `" width="13px" height="12px">
                                     <g class="rating__fill">
                                         <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal"></use>
                                     </g>
@@ -729,7 +728,7 @@
                                         <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal-stroke"></use>
                                     </g>
                                 </svg>
-                                <div class="rating__star rating__star--only-edge `+ activeStars +`">
+                                <div class="rating__star rating__star--only-edge ">
                                     <div class="rating__fill">
                                         <div class="fake-svg-icon"></div>
                                     </div>
@@ -737,8 +736,7 @@
                                         <div class="fake-svg-icon"></div>
                                     </div>
                                 </div>`;
-
-                })
+                }
 
                 review += `<li class="reviews-list__item store-review more-reviews">
                                 <div class="review">
@@ -756,6 +754,7 @@
                                     </div>
                                 </div>
                             </li>`;
+                rating = '';
             })
             $('#reviews').append(review);
         }
