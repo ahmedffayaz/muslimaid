@@ -48,7 +48,6 @@ class PagesController extends Controller
         $page->description = $request->description;
         $page->default = 0;
         $page->save();
-        dd($page);
         flash()->success('New Page created successfully');
         return redirect()->route('admin.pages.index');
     }

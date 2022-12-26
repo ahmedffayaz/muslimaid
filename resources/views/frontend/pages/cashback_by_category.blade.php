@@ -86,7 +86,6 @@
     }
     .block-finder__body {
         background: none no-repeat;
-        /* background-image: url('storage/photos/1/del.png'); */
     }
     .block-finder__title{
     background-color: #fff;
@@ -98,8 +97,7 @@
     font-size: 1.5rem;
     }
     .box {
-    height: 230px;
-    /* width: calc(20% - 12px); */
+       height: 230px;
         margin: 8px 3px;
     }
     .panel {
@@ -135,16 +133,16 @@
                 <div class="block-finder__header">
                    <div class="block-finder__title">{{$category->name}}</div>
                    <div class="block-finder__subtitle"></div>
-                </div>
-                <div class="panel  mb-4 my-2">
-                    <p>{{$category->description}}</p>
-                </div>
-         </div>    
+                </div>  
+         </div> 
+            <div class="panel  mb-4 my-2">
+               <p>{{$category->description}}</p>
+            </div>   
         </div>
     </div>
 </div>
 
-<div class="block mt-5 pt-5">
+<div class="block mt-5">
     
     <div class="container">
         <div class="row">
