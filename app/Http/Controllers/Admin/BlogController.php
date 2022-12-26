@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Blog;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 
 class BlogController extends Controller
@@ -49,11 +50,11 @@ class BlogController extends Controller
         ]);
         $blog = new Blog;
         $blog->title = $request->title;
-        $blog->slug = \Str::slug($request->title,'_');
+        $blog->slug = Str::slug($request->title,'_');
         $blog->excerpt = $request->excerpt;
         $blog->lb_content = $request->content;
         $blog->featured_image = $request->filepath;
-        $blog->url = 'http://127.0.0.1:8000/post/'.\Str::slug($request->title,'_');
+        $blog->url = 'http://127.0.0.1:8000/post/'.Str::slug($request->title,'_');
         $blog->meta_keyword = $request->meta_keyword;
         $blog->meta_description = $request->meta_description;
         $blog->save();
