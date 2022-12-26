@@ -195,8 +195,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="product-card__rating-legend">
-                                            {{ $store->reviews->count() }} Reviews out of {{ $store->reviews->count('user_id') }} Users</div>
+                                        <div class="product-card__rating-legend">{{ $store->reviews->count() }} Reviews</div>
                                     </div>
                                 @endif
                                 <!-- Average ratigs / end -->
@@ -421,7 +420,7 @@
                                 <div class="product-tabs__pane product-tabs__pane--active" id="tab-description">
                                     <div class="reviews-view">
                                         <div class="reviews-view__list">
-                                            <h3 class="reviews-view__header">Reviews</h3>
+                                            <h3 class="reviews-view__header">Customer Reviews</h3>
                                             <div class="reviews-list">
                                                 <ol class="reviews-list__content" data-count="{{ $revews_count }}" id="reviews">
 
@@ -764,7 +763,7 @@
                 }
 
                 // If user avatar is null
-                if (data.user.avatar != null) {
+                if (data.user.avatar != null && data.user.avatar != '') {
                     avatar = `<img src="{{ asset('frontend/images/avatars/`+ data.user.avatar +`') }}"></div>`
                 } else {
                     avatar = `<img src="{{ asset('admin-dashboard/images/avatar.png') }}"></div>`

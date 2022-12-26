@@ -46,14 +46,16 @@
                         <ul class="link-list-opt no-bdr">
                             <li><a href="{{route('admin.reviews.edit', $review)}}" class="review-edit" review-id={{$review->id}}><em class="icon ni ni-edit"></em><span>Edit Review</span></a></li>
                             {{-- <li><a href="{{route('admin.stores.images', $store)}}"><em class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
-                            {{-- <li><a  onclick="$('#delete-review-{{$review->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Review</span></a>
+                            @can('delete reviews')
+                                <li><a form_id="delete-review-{{ $review->id }}" class="delete-review" style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Review</span></a>
 
-                                <form action="{{ route('admin.reviews.destroy', $review) }}" id="delete-review-{{$review->id}}" method="POST" class="m-0">
-                                    @method('DELETE')
-                                    @csrf
+                                    <form action="{{ route('admin.reviews.destroy', $review) }}" id="delete-review-{{$review->id}}" method="POST" class="m-0">
+                                        @method('DELETE')
+                                        @csrf
 
-                                </form>
-                            </li> --}}
+                                    </form>
+                                </li>
+                            @endcan
                         </ul>
                     </div>
                 </div>
