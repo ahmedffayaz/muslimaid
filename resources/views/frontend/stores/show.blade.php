@@ -414,7 +414,7 @@
                         @php
                             $revews_count = $store->reviews->where('status', 'active')->count();
                         @endphp
-                        @if($revews_count)
+                        {{-- @if($revews_count) --}}
                         <div class="product-tabs  product-tabs--layout--sidebar">
                             <div class="product-tabs__content">
                                 <div class="product-tabs__pane product-tabs__pane--active" id="tab-description">
@@ -422,64 +422,54 @@
                                         <div class="reviews-view__list">
                                             <h3 class="reviews-view__header">Customer Reviews</h3>
                                             <div class="reviews-list">
+                                                @if($revews_count)
                                                 <ol class="reviews-list__content" data-count="{{ $revews_count }}" id="reviews">
 
                                                 </ol>
-
+                                                @else
+                                                    <div class="review__text">There is no review at the moment. Be the first to add one!</div>
+                                                @endif
                                             </div>
                                             <div class="col text-center mt-4" id="load-more">
 
                                             </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        @endif
-                    </div>
-
-                    @auth
-                        <!-- Store Reviews -->
-                        <div class="card mt-5">
-                            <div class="card-header">
-                                <h5>Write A Review</h5>
-                            </div>
-                            <div class="card-divider"></div>
-                            <div class="card-body">
-                                <div class="row no-gutters">
-                                    <div class="col-12 col-lg-12 col-xl-12">
-                                        <form action="{{ route('store.reviews.submit') }}" method="POST" id="store-reviews-form">
-                                            @csrf
-                                            <input type="hidden" id="store-id" name="store_id" value="{{ $store->id }}" required>
-                                            <div class="row">
-                                                <div class="col-lg-6">
-                                                    <div class="form-group">
-                                                        <label for="rating">Review Star</label>
-                                                        <select class="form-control" id="rating" name="rating" required>
-                                                            <option value="5">5 Stars Rating</option>
-                                                            <option value="4">4 Stars Rating</option>
-                                                            <option value="3">3 Stars Rating</option>
-                                                            <option value="2">2 Stars Rating</option>
-                                                            <option value="1">1 Star Rating</option>
-                                                        </select>
+                                        @auth
+                                            <form action="{{ route('store.reviews.submit') }}" class="reviews-view__form" method="POST" id="store-reviews-form">
+                                                @csrf
+                                                <h3 class="reviews-view__header">Write A Review</h3>
+                                                <input type="hidden" id="store-id" name="store_id" value="{{ $store->id }}" required>
+                                                <div class="row">
+                                                    <div class="col-12 col-lg-9 col-xl-8">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-4">
+                                                                <label for="review-stars">Review Stars</label>
+                                                                <select class="form-control"  id="rating" name="rating" required>
+                                                                    <option value="5">5 Stars Rating</option>
+                                                                    <option value="4">4 Stars Rating</option>
+                                                                    <option value="3">3 Stars Rating</option>
+                                                                    <option value="2">2 Stars Rating</option>
+                                                                    <option value="1">1 Stars Rating</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="review-text">Your Review</label>
+                                                            <textarea class="form-control" id="store-review" name="review" placeholder="Type your message" rows="6"></textarea>
+                                                        </div>
+                                                        <div class="form-group mb-0">
+                                                            <button type="submit" class="btn btn-primary btn-lg">Post Your Review</button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <label for="review">Your Review</label>
-                                                <textarea class="form-control" id="store-review" name="review" placeholder="Type your message" rows="5"></textarea>
-                                            </div>
-                                            <div class="form-group mt-5 mb-0">
-                                                <button class="btn btn-primary">Save</button>
-                                            </div>
-                                        </form>
+                                            </form>
+                                        @endauth
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- Store Reviews End -->
-                    @endauth
+                        {{-- @endif --}}
+                    </div>
                 </div>
             </div>
         </div>
