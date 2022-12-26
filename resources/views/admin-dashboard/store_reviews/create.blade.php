@@ -1,6 +1,6 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
-    
+
 
 <div class="nk-content ">
     <div class="container-fluid">
@@ -28,7 +28,11 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">Reviewer Name</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="reviewer" name="reviewer" required>
+                                                    <select class="form-select form-control" data-search="on" name="user_id" required>
+                                                        @foreach ($users as $user)
+                                                            <option value="{{ $user->id }}">{{ $user->first_name . ' ' . $user->last_name }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -36,26 +40,26 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="default-06">Store</label>
                                                 <div class="form-control-wrap ">
-                                                    
+
                                                         <select class="form-select form-control" data-search="on" id="default-06" name="store_id" required>
                                                             @foreach ($stores as $store)
                                                             <option value="{{$store->id}}">{{$store->name}}</option>
                                                             @endforeach
                                                         </select>
-                                                   
+
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="col-lg-12">
                                             <div class="card">
                                                 <input name="review" type="hidden">
                                                 <label class="form-label" for="phone-no-1">Review</label>
                                                 <!-- Create the editor container -->
                                                 <div  id="editor-container">
-                                                  
+
                                                 </div>
-                                               
+
                                             </div>
                                         </div>
                                         <div class="col-12">
@@ -68,9 +72,9 @@
                             </div>
                         </div>
                     </div><!-- .nk-block -->
-                    
-                  
-                    
+
+
+
                 </div><!-- .components-preview -->
             </div>
         </div>
@@ -94,14 +98,14 @@
         placeholder: 'Compose an epic...',
         theme: 'snow'
       });
-      
+
     //   var form = document.querySelector('form');
       $(".review_form").submit(function(e) {
-          
+
         // Populate hidden form on submit
         var desc = document.querySelector('input[name=review]');
         desc.value = quill.root.innerHTML;
-       
-        
+
+
       });</script>
 @endpush

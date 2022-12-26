@@ -80,6 +80,7 @@ class StoreController extends Controller
             $request->validate([
                 'store_id' => 'required|integer',
                 'rating' => 'required|integer',
+                'review' => 'nullable|max:256'
             ]);
 
             DB::beginTransaction();
@@ -87,7 +88,7 @@ class StoreController extends Controller
             $reviews = new StoreReview;
             $reviews->store_id = $request->store_id;
             $reviews->user_id = auth()->user()->id;
-            $reviews->review = $request->review;
+            $reviews->review = htmlentities($request->review);
             $reviews->rating = $request->rating;
             $reviews->status = 'pending';
             $reviews->save();

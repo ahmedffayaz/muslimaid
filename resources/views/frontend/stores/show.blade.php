@@ -159,6 +159,47 @@
                             <!-- .product__info -->
                             <div class="product__info">
                                 <h1 class="product__name">{{$store->name}}</h1>
+                                <!-- Average ratigs -->
+                                @if ($store->reviews->count())
+                                    <div class="product-card__rating mx-auto mb-3">
+                                        <div class="product-card__rating-stars">
+                                            <div class="rating">
+                                                <div class="rating__body">
+                                                    @foreach (range(1, 5) as $index)
+                                                        <svg class="rating__star @if ($index <= $store->reviews->avg('rating')) rating__star--active @endif"
+                                                            width="13px" height="12px">
+                                                            <g class="rating__fill">
+                                                                <use
+                                                                    xlink:href="{{ asset('frontend/images/sprite.svg') }}#star-normal">
+                                                                </use>
+                                                            </g>
+                                                            <g class="rating__stroke">
+                                                                <use
+                                                                    xlink:href="{{ asset('frontend/images/sprite.svg') }}#star-normal-stroke">
+                                                                </use>
+                                                            </g>
+                                                        </svg>
+
+                                                        <div
+                                                            class="rating__star rating__star--only-edge @if ($index <= $store->reviews->avg('rating')) rating__star--active @endif">
+                                                            <div class="rating__fill">
+                                                                <div class="fake-svg-icon">
+                                                                </div>
+                                                            </div>
+                                                            <div class="rating__stroke">
+                                                                <div class="fake-svg-icon">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="product-card__rating-legend">
+                                            {{ $store->reviews->count() }} Reviews out of {{ $store->reviews->count('user_id') }} Users</div>
+                                    </div>
+                                @endif
+                                <!-- Average ratigs / end -->
                                 <p style="font-size: 13px">Updated: {{Carbon\Carbon::parse($store->updated_at)->isoFormat('Do MMMM YYYY')}}</p>
 
                                 <div class="product__description">
@@ -428,7 +469,7 @@
 
                                             <div class="form-group">
                                                 <label for="review">Your Review</label>
-                                                <textarea class="form-control" id="review" name="review" placeholder="Type your message" rows="5"></textarea>
+                                                <textarea class="form-control" id="store-review" name="review" placeholder="Type your message" rows="5"></textarea>
                                             </div>
                                             <div class="form-group mt-5 mb-0">
                                                 <button class="btn btn-primary">Save</button>
@@ -648,6 +689,9 @@
                 rating: {
                     required: true,
                 },
+                review: {
+                    maxlength: 250,
+                }
             },
             submitHandler: function(form) {
                 if ($(form).valid())
@@ -741,7 +785,7 @@
                                         <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal-stroke"></use>
                                     </g>
                                 </svg>
-                                <div class="rating__star rating__star--only-edge ">
+                                <div class="rating__star rating__star--only-edge ` + activeStars + `">
                                     <div class="rating__fill">
                                         <div class="fake-svg-icon"></div>
                                     </div>
