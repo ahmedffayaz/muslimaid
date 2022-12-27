@@ -18,7 +18,6 @@ class EmailTemplatesController extends Controller
     public function index()
     {
         $templates = EmailTemplate::all();
-        // dd($templates);
         return view('admin-dashboard.email_templates.index',compact('templates'));
     }
 

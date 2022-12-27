@@ -195,6 +195,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::post('tickets/search',  [App\Http\Controllers\Admin\TicketsController::class,'searchTickets'])->name('tickets.search');
     Route::put('tickets/close_ticket/{ticket}',[App\Http\Controllers\Admin\TicketsController::class,'closeTicket'])->name('tickets.close');
     Route::resource('tickets',  TicketsController::class);
+    Route::resource('ticketCategory',TicketCategoryController::class);
     
     Route::resource('replies', RepliesController::class);
 
