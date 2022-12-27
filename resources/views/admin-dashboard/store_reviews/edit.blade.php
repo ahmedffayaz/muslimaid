@@ -1,5 +1,5 @@
 
-<form action="{{route('admin.reviews.update',$review)}}" class="gy-3 form-validate is-alter review_form" method="POST">
+<form action="{{route('admin.reviews.update',$review)}}" class="gy-3 form-validate is-alter review_form" method="POST" id="store-reviews-form">
     @csrf
     @method('PUT')
     <input type="hidden" name="edit_from_store" value="1">

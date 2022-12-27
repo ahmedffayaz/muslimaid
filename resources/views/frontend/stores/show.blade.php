@@ -1,6 +1,8 @@
 @extends('layouts.frontend.app')
 @section('content')
-
+@php
+    $revews_count = $store->reviews->where('status', 'active')->count();
+@endphp
 {{-- Show message on submit form --}}
 @if(Session::has('error'))
     <div class="toast bg-danger m-2" role="alert" aria-live="assertive" aria-atomic="true" style="position:absolute; top:0; right:0; z-index: 200">
@@ -160,44 +162,42 @@
                             <div class="product__info">
                                 <h1 class="product__name">{{$store->name}}</h1>
                                 <!-- Average ratigs -->
-                                @if ($store->reviews->count())
-                                    <div class="product-card__rating mx-auto mb-3">
-                                        <div class="product-card__rating-stars">
-                                            <div class="rating">
-                                                <div class="rating__body">
-                                                    @foreach (range(1, 5) as $index)
-                                                        <svg class="rating__star @if ($index <= $store->reviews->avg('rating')) rating__star--active @endif"
-                                                            width="13px" height="12px">
-                                                            <g class="rating__fill">
-                                                                <use
-                                                                    xlink:href="{{ asset('frontend/images/sprite.svg') }}#star-normal">
-                                                                </use>
-                                                            </g>
-                                                            <g class="rating__stroke">
-                                                                <use
-                                                                    xlink:href="{{ asset('frontend/images/sprite.svg') }}#star-normal-stroke">
-                                                                </use>
-                                                            </g>
-                                                        </svg>
+                                <div class="product-card__rating mx-auto mb-3">
+                                    <div class="product-card__rating-stars">
+                                        <div class="rating">
+                                            <div class="rating__body">
+                                                @foreach (range(1, 5) as $index)
+                                                    <svg class="rating__star @if ($index <= $store->rating) rating__star--active @endif"
+                                                        width="13px" height="12px">
+                                                        <g class="rating__fill">
+                                                            <use
+                                                                xlink:href="{{ asset('frontend/images/sprite.svg') }}#star-normal">
+                                                            </use>
+                                                        </g>
+                                                        <g class="rating__stroke">
+                                                            <use
+                                                                xlink:href="{{ asset('frontend/images/sprite.svg') }}#star-normal-stroke">
+                                                            </use>
+                                                        </g>
+                                                    </svg>
 
-                                                        <div
-                                                            class="rating__star rating__star--only-edge @if ($index <= $store->reviews->avg('rating')) rating__star--active @endif">
-                                                            <div class="rating__fill">
-                                                                <div class="fake-svg-icon">
-                                                                </div>
-                                                            </div>
-                                                            <div class="rating__stroke">
-                                                                <div class="fake-svg-icon">
-                                                                </div>
+                                                    <div
+                                                        class="rating__star rating__star--only-edge @if ($index <= $store->rating) rating__star--active @endif">
+                                                        <div class="rating__fill">
+                                                            <div class="fake-svg-icon">
                                                             </div>
                                                         </div>
-                                                    @endforeach
-                                                </div>
+                                                        <div class="rating__stroke">
+                                                            <div class="fake-svg-icon">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
                                             </div>
                                         </div>
-                                        <div class="product-card__rating-legend">{{ $store->reviews->count() }} Reviews</div>
                                     </div>
-                                @endif
+                                    <div class="product-card__rating-legend">{{ $revews_count }} Reviews</div>
+                                </div>
                                 <!-- Average ratigs / end -->
                                 <p style="font-size: 13px">Updated: {{Carbon\Carbon::parse($store->updated_at)->isoFormat('Do MMMM YYYY')}}</p>
 
@@ -411,10 +411,6 @@
                         </div>
                         @endif
                         <!-- Reviews tab -->
-                        @php
-                            $revews_count = $store->reviews->where('status', 'active')->count();
-                        @endphp
-                        {{-- @if($revews_count) --}}
                         <div class="product-tabs  product-tabs--layout--sidebar">
                             <div class="product-tabs__content">
                                 <div class="product-tabs__pane product-tabs__pane--active" id="tab-description">
@@ -468,7 +464,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- @endif --}}
                     </div>
                 </div>
             </div>
@@ -669,24 +664,39 @@
             $('.remaining_voucher').show();
         })
 
-        $('#store-reviews-form').validate({
-            errorClass: 'invalid-feedback d-block',
-            rules: {
-                store_id: {
-                    required: true,
+        $('#store-reviews-form').on('submit', function (event){
+            event.preventDefault();
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: new FormData(this),
+                success: function(response){
+                    $('#store-reviews-form')[0].reset()
+                    $.toast({
+                        icon: 'success',
+                        text: response.success,
+                        position: 'top-right'
+                    })
                 },
-                rating: {
-                    required: true,
-                },
-                review: {
-                    maxlength: 250,
+                error: function(response){
+                    // pass error message on got error
+                    let errors = response.responseJSON.errors;
+                    let error;
+                    for (const key in errors) {
+                        error = `${errors[key]}`
+                    }
+
+                    $.toast({
+                        icon: 'error',
+                        text: error,
+                        position: 'top-right'
+
+                    })
                 }
-            },
-            submitHandler: function(form) {
-                if ($(form).valid())
-                form.submit();
-                return false;
-            }
+            })
         })
 
         $(document).ready(function(){
@@ -720,10 +730,10 @@
                     reviewsCount: reviewsCount,
                 },
                 success: function(response){
-                    reviewsCount = response[0].length + reviewsCount;
-
+                    reviewsCount = response[1] + reviewsCount;
+                    console.log(response[1])
                     // Send request for show reviews
-                    showReviews(response);
+                    $('#reviews').append(response[0]);
 
                     // convert string to integer
                     count = parseInt(count);
@@ -734,75 +744,6 @@
                     }
                 }
             })
-        }
-
-        // Show store reviews
-        function showReviews(response){
-            let reviews = response[0];
-            let review = '';
-            let rating = '';
-            let description  = '';
-
-            // All reviews
-            reviews.forEach(function (data){
-                // If reviews description is null
-                if (data.review != null) {
-                    description = data.review;
-                } else {
-                    description = ``;
-                }
-
-                // If user avatar is null
-                if (data.user.avatar != null && data.user.avatar != '') {
-                    avatar = `<img src="{{ asset('frontend/images/avatars/`+ data.user.avatar +`') }}"></div>`
-                } else {
-                    avatar = `<img src="{{ asset('admin-dashboard/images/avatar.png') }}"></div>`
-                }
-
-                // Ratings
-                // convert string to integer
-                ratingInt = parseInt(data.rating);
-                for(var star = 1; star <= ratingInt; star++){
-                    if (star <= data.rating) {
-                        activeStars = `rating__star--active`;
-                    }
-                    rating += `<svg class="rating__star ` + activeStars + `" width="13px" height="12px">
-                                    <g class="rating__fill">
-                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal"></use>
-                                    </g>
-                                    <g class="rating__stroke">
-                                        <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal-stroke"></use>
-                                    </g>
-                                </svg>
-                                <div class="rating__star rating__star--only-edge ` + activeStars + `">
-                                    <div class="rating__fill">
-                                        <div class="fake-svg-icon"></div>
-                                    </div>
-                                    <div class="rating__stroke">
-                                        <div class="fake-svg-icon"></div>
-                                    </div>
-                                </div>`;
-                }
-
-                review += `<li class="reviews-list__item store-review more-reviews">
-                                <div class="review">
-                                    <div class="review__avatar">`
-                                        + avatar +
-                                    `<div class="review__content">
-                                        <div class="review__author">`+ data.user.first_name + ' ' + data.user.last_name+`</div>
-                                        <div class="review__rating">
-                                            <div class="rating">
-                                                <div class="rating__body">`+ rating +`</div>
-                                            </div>
-                                        </div>
-                                        <div class="review__text">`+ description +`</div>
-                                        <div class="review__date">`+ new Date(data.created_at).toLocaleDateString().split('T')[0] +`</div>
-                                    </div>
-                                </div>
-                            </li>`;
-                rating = '';
-            })
-            $('#reviews').append(review);
         }
 
     </script>

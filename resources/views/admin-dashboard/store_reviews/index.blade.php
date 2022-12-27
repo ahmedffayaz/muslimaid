@@ -243,7 +243,7 @@
                 {
                     $('#review-modal').modal('show');
                     $('#review').html(data);
-
+                    updateReview()
                 }
             });
 
@@ -268,6 +268,34 @@
         });
     });
 
+    function updateReview(){
+        $('#store-reviews-form').on('submit', function(event){
+            event.preventDefault();
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'PUT',
+                data: $(this).serialize(),
+                success: function (data) {
+                    $('#review-modal').modal('hide');
+                    (function(NioApp, $){
+                        'use strict';
 
+                        toastr.clear();
+                        NioApp.Toast('Review Updated Successfully.', 'success');
+
+                    })(NioApp, jQuery);
+                    $('#table-data').load(window.location.href + ' #table-data')
+                },
+                error: function (data) {
+                    (function(NioApp, $){
+                        'use strict';
+                        toastr.clear();
+                        NioApp.Toast('Something went wrong! unable to update the review', 'error');
+
+                    })(NioApp, jQuery);
+                }
+            })
+        });
+    }
         </script>
 @endpush

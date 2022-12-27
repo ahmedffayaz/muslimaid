@@ -27,7 +27,7 @@ class StoreReviewsController extends Controller
         $route='index';
         $stores = Store::latest()->get();
         $users = User::get();
-        $reviews = StoreReview::latest()->paginate(30);
+        $reviews = StoreReview::orderBy('status', 'desc')->latest()->paginate(30);
         return view('admin-dashboard.store_reviews.index',compact('reviews','stores', 'users','route'));
     }
 
@@ -53,6 +53,15 @@ class StoreReviewsController extends Controller
     {
         try{
             $review = StoreReview::create($request->all());
+
+            // Get average rating against active reviews
+            $averageRating = $review->where('store_id', $review->store_id)->where('status', 'active')->avg('rating');
+
+            // Update store rating
+            $review->store()->update([
+                'rating' => $averageRating
+            ]);
+
             flash()->success('Review added successfully');
             return redirect()->route('admin.reviews.index');
 
@@ -98,6 +107,17 @@ class StoreReviewsController extends Controller
     {
         try{
             $review->update($request->all());
+
+            // Get average rating against active reviews
+            $averageRating = StoreReview::where('store_id', $review->store_id)->where('status', 'active')->avg('rating');
+
+            // Update store rating
+            if($request->status != 'pending'){
+                $store = $review->store()->update([
+                    'rating' => $averageRating
+                ]);
+            }
+
             if(!$request->ajax())
             {
                 flash()->success('Review updated successfully');

@@ -11,15 +11,16 @@
 
                 </a>
             </div><!-- .nk-header-brand -->
-            @isset($settings['dashboard_menu_type']) @if($settings['dashboard_menu_type'] == 'top')  
+            @isset($settings['dashboard_menu_type']) @if($settings['dashboard_menu_type'] == 'top')
             <div class="nk-header-search ml-3 ml-xl-0">
                 <div class="dropdown">
-                    <a href="{{route('admin.home.index')}}"  class="dropbtn user-name"><em class="icon ni ni-home-fill"></em> Dashboard</a>                    
+                    <a href="{{route('admin.home.index')}}"  class="dropbtn user-name"><em class="icon ni ni-home-fill"></em> Dashboard</a>
                 </div>
-                
-               
+                @php
+                $new_reviews = \App\Models\StoreReview::where('status', 'pending')->get();
+                @endphp
                 <div class="dropdown">
-                    <a href="{{route('admin.stores.index')}}"  class="dropbtn user-name dropdown-indicator"><em class="icon ni ni-db-fill"></em> Data</a>
+                    <a href="{{route('admin.stores.index')}}"  class="dropbtn user-name dropdown-indicator @if(count($new_reviews)) icon-status-before icon-status-info-before @endif"><em class="icon ni ni-db-fill"></em> Data</a>
                     <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-content">
                         <div class="dropdown-inner px-4">
                             <ul class="link-list">
@@ -41,7 +42,7 @@
                                 @endcan
                                 @can('view reviews')
                                 <li class="">
-                                    <a href="{{route('admin.reviews.index')}}" class="">
+                                    <a href="{{route('admin.reviews.index')}}" class="@if(count($new_reviews)) icon-status icon-status-info @endif">
                                         <span class="nk-menu-icon"><em class="icon ni ni-notice"></em></span>
                                         <span class="nk-menu-text">Store Reviews</span>
                                     </a>
@@ -57,11 +58,11 @@
                                 @endcan
                             </ul>
                         </div>
-                        
-                    </div>         
+
+                    </div>
                 </div>
                 @php
-                $new_cashouts = \App\Models\Cashout::where('new_cashout',1)->get();    
+                $new_cashouts = \App\Models\Cashout::where('new_cashout',1)->get();
                 @endphp
                 <div class="dropdown">
                     <a href="{{route('admin.commissions.index')}}"  class="dropbtn user-name dropdown-indicator  @if(count($new_cashouts)) icon-status-before icon-status-info-before @endif"><em class="icon ni ni-sign-gbp"></em> Sales</a>
@@ -94,14 +95,14 @@
                             @endcan
                             </ul>
                         </div>
-                        
+
                     </div>
-                
+
                 </div>
                 @can('view users')
                 <div class="dropdown">
                     <a href="{{route('admin.users.index')}}"  class="dropbtn user-name"><em class="icon ni ni-users-fill"></em> Users</a>
-                
+
                 </div>
                 @endcan
                 <div class="dropdown">
@@ -134,7 +135,7 @@
                             </li><!-- .nk-menu-item -->
                             @endcan
                             </ul>
-                        </div> 
+                        </div>
                     </div>
                 </div>
                 <div class="dropdown">
@@ -200,13 +201,13 @@
                                         <span class="nk-menu-text">Menu</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
-                                
+
                             </ul>
-                        </div> 
+                        </div>
                     </div>
                 </div>
                 @php
-                $new_tickets = \App\Models\Ticket::where('new_ticket',1)->get();    
+                $new_tickets = \App\Models\Ticket::where('new_ticket',1)->get();
                 @endphp
                 <div class="dropdown">
                     <a href="{{route('admin.pages.index')}}"  class="dropbtn user-name dropdown-indicator @if(count($new_tickets)) icon-status-before icon-status-info-before @endif"><em class="icon ni ni-layout-alt-fill"></em> CMS</a>
@@ -215,7 +216,7 @@
                             <ul class="link-list">
                                 @can('view tickets')
                             <li class=" ">
-                               
+
                                 <a href="{{route('admin.tickets.index')}}" class=" @if(count($new_tickets)) icon-status icon-status-info @endif">
                                     <span class="nk-menu-icon "><em class="icon ni ni-chat-fill"></em></span>
                                     <span class="nk-menu-text">Tickets</span>
@@ -247,15 +248,15 @@
                                 </a>
                             </li><!-- .nk-menu-item -->
                             </ul>
-                        </div> 
+                        </div>
                     </div>
                 </div>
-               
-               
+
+
             </div><!-- .nk-header-news -->
-            
+
             @endif @endisset
-            
+
             <div class="nk-header-tools">
                 <ul class="nk-quick-nav">
                     <li> <a href="{{url('/')}}" target="_blank"  class="btn btn-outline-primary btn-dim btn-sm d-none d-md-inline-flex"><em class="icon ni ni-external-alt mr-1"></em> Visit Site</a></li>
@@ -264,10 +265,10 @@
                         <a class="dropdown-toggle mr-n1">
                             <div class="user-toggle">
                                 <div class="user-avatar sm">
-                                    @if(Auth::user()->avatar == 'default.png')   
+                                    @if(Auth::user()->avatar == 'default.png')
                                     <img src="{{asset('admin-dashboard/images/avatar.png')}}"
                                      alt="store logo" class="" style="max-width:50px;max-height:50px"/>
-                                @else    
+                                @else
                                      <img src="@isset(Auth::user()->avatar){{asset('storage/users/images/avatar/'.Auth::user()->avatar)}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif"
                                      alt="store logo" class="" style="max-width:50px;max-height:50px"/>
                                 @endif
@@ -282,14 +283,14 @@
                             <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                                 <div class="user-card">
                                     <div class="user-avatar">
-                                    @if(Auth::user()->avatar == 'default.png')   
+                                    @if(Auth::user()->avatar == 'default.png')
                                         <img src="{{asset('admin-dashboard/images/avatar.png')}}"
                                          alt="store logo" class="" style="max-width:50px;max-height:50px"/>
-                                    @else    
+                                    @else
                                          <img src="@isset(Auth::user()->avatar){{asset('storage/users/images/avatar/'.Auth::user()->avatar)}}@else{{asset('admin-dashboard/images/cloud-uploading.png')}}@endif"
                                          alt="store logo" class="" style="max-width:50px;max-height:50px"/>
                                     @endif
-                                    
+
                                         </div>
                                     <div class="user-info">
                                         <span class="lead-text">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span>

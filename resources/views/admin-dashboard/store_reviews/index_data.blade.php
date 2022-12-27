@@ -22,7 +22,7 @@
 @foreach ($reviews as $review)
 <div class="nk-tb-item">
     <div class="nk-tb-col">
-        <span><a href="{{route('admin.reviews.edit', $review)}}" class="review-edit text-dark" review-id={{$review->id}}>{{$review->user->first_name . ' ' . $review->user->last_name}}</a></span>
+        <span><a href="{{route('admin.reviews.edit', $review)}}" class="review-edit text-dark @if($review->status != 'active') icon-status icon-status-info @endif" review-id={{$review->id}}>{{$review->user->first_name . ' ' . $review->user->last_name}}</a></span>
     </div>
 
     <div class="nk-tb-col">
