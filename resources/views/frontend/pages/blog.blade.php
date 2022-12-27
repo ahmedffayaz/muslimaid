@@ -1,5 +1,11 @@
 @extends('layouts.frontend.app')
 @section('content')
+<style>
+    .container-fluid{
+     width:1250px;
+     margin-left: -80px;
+    }
+</style>
 <div class="page-header">
     <div class="page-header__container container">
         <div class="page-header__breadcrumb">

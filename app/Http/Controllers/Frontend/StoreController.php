@@ -22,6 +22,7 @@ class StoreController extends Controller
         $store = Store::where('slug', $slug)->first();
         $count = count($store->cashbacks);
         return view('frontend.stores.show',compact('store','count'));
+        // return view('frontend.stores.show',compact('store'));
     }
 
     public function storeLocation(Request $request)
