@@ -1,5 +1,10 @@
 @extends('layouts.frontend.app')
 @section('content')
+<style>
+     .img{
+        width: 50%;
+    }
+</style>
 <div class="page-header">
     <div class="page-header__container container">
         <div class="page-header__breadcrumb">
@@ -38,7 +43,7 @@
                         {{-- <div class="post-header__meta-item"><a href="">4 Comments</a></div> --}}
                     </div>
                 </div>
-                <div class="post__featured">
+                <div class="post__featured img">
                     <a href="">
                         <img @if($blog->featured_image)
                         src="{{$blog->featured_image}}"

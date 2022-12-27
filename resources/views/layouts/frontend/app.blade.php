@@ -74,14 +74,15 @@
     }
    .block-finder__body {
         background: none no-repeat;
+        -webkit-box-orient: horizontal !important;
     }
     .banner__size{
-        width: 1110px;
+        width: 1125px;
         height: 400px;
     }
     .block-finder__title{
         background-color: #fff;
-        padding: 0.5rem 1rem;
+        padding: 0.5rem 3rem;
         position: absolute;
         left: 3rem;
         top: 50%;

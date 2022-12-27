@@ -57,22 +57,22 @@ class PagesController extends Controller
     public function show($slug)
     {
         $page = Page::where('slug', $slug)->first();
-        if($slug == 'offers'){
-            return view('frontend.pages.offers',compact('page'));
+        if ($slug == 'offers') {
+            return view('frontend.pages.offers', compact('page'));
         }
-        if($slug == 'contact'){
-            return view('frontend.pages.contact',compact('page'));
+        if ($slug == 'contact') {
+            return view('frontend.pages.contact', compact('page'));
         }
-        if($slug == 'about'){
-            return view('frontend.pages.about',compact('page'));
+        if ($slug == 'about') {
+            return view('frontend.pages.about', compact('page'));
         }
-        if($slug == 'vouchers'){
+        if ($slug == 'vouchers') {
             $stores = Store::has('vouchers')->latest()->paginate(10);
             $term = null;
-        return view('frontend.pages.vouchers',compact('stores','term','page'));
+            return view('frontend.pages.vouchers', compact('stores', 'term', 'page'));
         }
 
-        return view('frontend.pages.single_page',compact('page'));
+        return view('frontend.pages.single_page', compact('page'));
     }
 
     /**
@@ -109,115 +109,130 @@ class PagesController extends Controller
         //
     }
 
-    public function offers(){
+    public function offers()
+    {
         $stores = Store::latest()->get();
-        return view('frontend.pages.offers',compact('stores'));
+        return view('frontend.pages.offers', compact('stores'));
     }
 
 
-    public function cashbackByCategory($slug){
-       
-        $category = Category::where('slug',$slug)->first();
+    public function cashbackByCategory($slug)
+    {
+
+        $category = Category::where('slug', $slug)->first();
         $stores = $category->stores()->paginate(20);
-        return view('frontend.pages.cashback_by_category',compact('stores','category'));
+        return view('frontend.pages.cashback_by_category', compact('stores', 'category'));
     }
-    public function topStores(){
+    public function topStores()
+    {
         $stores = Store::withCount('clicks')
-        ->orderBy('clicks', 'desc')->paginate(20);
-        return view('frontend.pages.top_cashback',compact('stores'));
+            ->orderBy('clicks', 'desc')->paginate(20);
+        return view('frontend.pages.top_cashback', compact('stores'));
     }
 
-    public function trending(){
-       
-        $stores =  Store::has('clicks')->with('clicks')->get()->sortByDesc(function($store)
-        {
+    public function trending()
+    {
+
+        $stores =  Store::has('clicks')->with('clicks')->get()->sortByDesc(function ($store) {
             return $store->clicks->count();
         });
-        return view('frontend.pages.trending',compact('stores'));
+        return view('frontend.pages.trending', compact('stores'));
     }
-    public function about(){
+    public function about()
+    {
         return view('frontend.pages.about');
     }
 
-    public function contact(){
+    public function contact()
+    {
         return view('frontend.pages.contact');
     }
 
-    public function blog(){
+    public function blog()
+    {
         $blogs = Blog::latest()->get();
-        return view('frontend.pages.blog',compact('blogs'));
+        return view('frontend.pages.blog', compact('blogs'));
     }
 
-    public function login(Request $request){
+    public function login(Request $request)
+    {
         session(['prvUrl' => $request->get('prvUrl')]);
         return view('auth.login');
     }
 
-    public function register(Request $request){
+    public function register(Request $request)
+    {
         session(['prvUrl' => $request->get('prvUrl')]);
         return view('auth.register');
     }
 
-    public function search(Request $request, Store $stores){
+    public function search(Request $request, Store $stores)
+    {
         $stores = $stores->newQuery();
         $term = null;
         if ($request->input('search')) {
-            $stores->where('name','like', '%'.$request->input('search').'%');
+            $stores->where('name', 'like', '%' . $request->input('search') . '%');
             $term = $request->input('search');
-           
         }
         $stores = $stores->latest()->paginate(20);
         // dd($stores);
-        return view('frontend.pages.search',compact('stores','term'));
+        return view('frontend.pages.search', compact('stores', 'term'));
     }
 
-    public function searchSuggestions(Request $request, Store $stores){
+    public function searchSuggestions(Request $request, Store $stores)
+    {
         $stores = $stores->newQuery();
         $term = null;
         if ($request->input('term')) {
-            $stores->where('name','like', '%'.$request->input('term').'%');
+            $stores->where('name', 'like', '%' . $request->input('term') . '%');
             $term = $request->input('term');
-           
         }
         $stores = $stores->latest()->get();
-        return view('frontend.components.search_suggestions',compact('stores','term'))->render();
+        return view('frontend.components.search_suggestions', compact('stores', 'term'))->render();
     }
 
-    public function vouchers(){
+    public function vouchers()
+    {
         $stores = Store::has('vouchers')->latest()->paginate(10);
         $term = null;
-        return view('frontend.pages.vouchers',compact('stores','term'));
+        return view('frontend.pages.vouchers', compact('stores', 'term'));
     }
 
-    public function blogPost($slug){
+    public function blogPost($slug)
+    {
         $blog = Blog::where('slug', $slug)->first();
         $blogs = Blog::latest()->get();
 
-        return view('frontend.pages.single_blog',compact('blog','blogs'));
+        return view('frontend.pages.single_blog', compact('blog', 'blogs'));
     }
 
 
-    public function contactForm(Request $request){
+    public function contactForm(Request $request)
+    {
         $contact = ContactForm::create($request->all());
 
-        $user_email_template = EmailTemplate::where('key','user_new_contact')->first(); 
-        $admin_email_template = EmailTemplate::where('key','admin_new_contact')->first(); 
+        $user_email_template = EmailTemplate::where('key', 'user_new_contact')->first();
+        $admin_email_template = EmailTemplate::where('key', 'admin_new_contact')->first();
 
-        $filtered_user_message  = str_replace(['{{ SITE_TITLE }}', '{{ SITE_URL }}', '{{ NAME }}', '{{ EMAIL }}','{{ SUBJECT }}','{{ MESSAGE }}'],
-                                            [SiteSetting()['website_title'], url('/') ,$request->input('name'),$request->input('email'),$request->input('subject'),$request->input('message')],
-                                            $user_email_template->message );
-        $filtered_admin_message  = str_replace(['{{ SITE_TITLE }}', '{{ SITE_URL }}', '{{ NAME }}', '{{ EMAIL }}', '{{ SUBJECT }}','{{ MESSAGE }}'],
-                                            [SiteSetting()['website_title'], url('/') ,$request->input('name'),$request->input('email'),$request->input('subject'),$request->input('message')],
-                                            $admin_email_template->message );
+        $filtered_user_message  = str_replace(
+            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}'],
+            [SiteSetting()['website_title'], url('/'), $request->input('name'), $request->input('email'), $request->input('subject'), $request->input('message')],
+            $user_email_template->message
+        );
+        $filtered_admin_message  = str_replace(
+            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}'],
+            [SiteSetting()['website_title'], url('/'), $request->input('name'), $request->input('email'), $request->input('subject'), $request->input('message')],
+            $admin_email_template->message
+        );
 
         $email_data = array(
             'name' =>  $request->input('name'),
             'email' => $request->input('email'),
-            'message'=>$request->input('message'),
-            'email_message'=> $filtered_admin_message,
-            'subject'=> $admin_email_template->subject
+            'message' => $request->input('message'),
+            'email_message' => $filtered_admin_message,
+            'subject' => $admin_email_template->subject
         );
-        
+
         Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
             $message->to('admin@trs.com', $email_data['name'])
                 ->subject($email_data['subject']);
@@ -225,9 +240,9 @@ class PagesController extends Controller
         $email_data = array(
             'name' =>  $request->input('name'),
             'email' => $request->input('email'),
-            'message'=>$request->input('message'),
-            'email_message'=>$filtered_user_message,
-            'subject'=>$user_email_template->subject
+            'message' => $request->input('message'),
+            'email_message' => $filtered_user_message,
+            'subject' => $user_email_template->subject
         );
         Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
             $message->to($email_data['email'], $email_data['name'])
@@ -236,17 +251,19 @@ class PagesController extends Controller
         return redirect()->back()->with('success', 'Thanks for contact us.');
     }
 
-    public function allStores(){
+    public function allStores()
+    {
         $s = Store::latest()->get();
         $groups = $s->sortBy('name')->groupBy(function ($store) {
             return strtoupper(substr($store->name, 0, 1));
         });
         // dd($stores);
-        return view('frontend.pages.all_stores',compact('groups'));
+        return view('frontend.pages.all_stores', compact('groups'));
     }
-    public function allStoresLetter($letter){
-        $stores = Store::where('name','like',$letter.'%')->get();
+    public function allStoresLetter($letter)
+    {
+        $stores = Store::where('name', 'like', $letter . '%')->get();
         // dd($stores);
-        return view('frontend.pages.stores_with_letter',compact('stores','letter'));
+        return view('frontend.pages.stores_with_letter', compact('stores', 'letter'));
     }
 }

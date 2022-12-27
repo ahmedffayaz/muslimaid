@@ -20,8 +20,6 @@ class StoreController extends Controller
     public function show($slug)
     {
         $store = Store::where('slug', $slug)->first();
-
-        // $vouchers = Voucher::where('store_id', $store->id)->latest()->paginate(5);
         $count = count($store->cashbacks);
         return view('frontend.stores.show',compact('store','count'));
         // return view('frontend.stores.show',compact('store'));
@@ -41,17 +39,16 @@ class StoreController extends Controller
 
         $locations = Store::with('logo','storeAddress')->paginate(10);
         $categories = Category::with(['stores.storeAddress'])->where('parent_id', '=', 0)->orderBy('name', 'ASC')->get();
-        $array = array();
+        $location_array = array();
         foreach($categories as $category){
              foreach($category->stores as $store){
-                $array['des'][] =$store->description;
+                $location_array['des'][] =$store->description;
                 foreach ($store->storeAddress as $address) {
-                    $array['lat'][] =$address->latitude;
-                    $array['long'][] =$address->longitude;
+                    $location_array['lat'][] =$address->latitude;
+                    $location_array['long'][] =$address->longitude;
                 }
              }
         }
-        // dd($array);
         return view('frontend.stores.location', compact('locations','categories', 'array'));
     }
 }
