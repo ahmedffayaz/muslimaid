@@ -14,7 +14,7 @@ class AddRatingToStoresTable extends Migration
     public function up()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->integer('rating')->detault(0)->after('longitude');
+            $table->integer('rating')->default(0)->after('longitude');
         });
     }
 
