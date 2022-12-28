@@ -29,10 +29,8 @@
                                             </thead>
                                             <tbody>
                                                 @foreach ($clicks as $click)
-                                                    
-                                               
                                             <tr>
-                                                <td><input type="radio" name="click_id" value="{{$click->id}}"></td>
+                                                <td><input type="radio" name="click_id" value="{{$click->id}}" required></td>
                                                 <td>
                                                     {{Carbon\Carbon::parse($click->created_at)->isoFormat('Do MMMM YYYY hh:mm:ss')}}
                                                 </td>
