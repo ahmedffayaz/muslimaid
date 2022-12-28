@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Store;
-use App\Models\Category;
-use App\Models\Page;
 use App\Models\Blog;
+use App\Models\Page;
+use App\Models\Store;
+use App\Models\Ticket;
+use App\Models\Category;
 use App\Models\ContactForm;
-use Harimayco\Menu\Models\Menus;
-use Harimayco\Menu\Models\MenuItems;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
+use Harimayco\Menu\Models\Menus;
+use App\Http\Controllers\Controller;
+use Harimayco\Menu\Models\MenuItems;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 
 class PagesController extends Controller
@@ -248,6 +251,18 @@ class PagesController extends Controller
             $message->to($email_data['email'], $email_data['name'])
                 ->subject($email_data['subject']);
         });
+
+        $ticket = new Ticket([
+            'title'     => $request->input('subject'),
+            'user_id'   => Auth::user()->id,
+            'ticket_id' => strtoupper(Str::random(12)),
+            'category_id'  => '4',
+            'priority'  => 'high',
+            'ticket_type'  => 'ticket',
+            'message'   => $request->input('message'),
+            'status'    => "open",
+        ]);
+        $ticket->save();
         return redirect()->back()->with('success', 'Thanks for contact us.');
     }
 

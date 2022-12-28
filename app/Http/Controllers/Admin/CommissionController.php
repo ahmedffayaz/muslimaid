@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\UserCashback;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use App\Models\ExitClick;
-use App\Models\CashbackStatusChange;
 use App\Models\Store;
 use App\Models\Network;
+use App\Models\ExitClick;
 use App\Models\SiteSetting;
-use Illuminate\Support\Facades\DB;
+use App\Models\UserCashback;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use App\Models\CashbackStatusChange;
 
 class CommissionController extends Controller
 {
@@ -32,7 +32,7 @@ class CommissionController extends Controller
         $route = 'index';
         $networks = Network::latest()->get();
         $clicks = ExitClick::latest()->get();
-        $statuses = \DB::table('cashback_statuses')->latest()->get();
+        $statuses = DB::table('cashback_statuses')->latest()->get();
         $coms = UserCashback::latest()->paginate(20);
         
         return view('admin-dashboard.commissions.index', compact('coms','networks','clicks','statuses','route'));
