@@ -40,21 +40,14 @@
     <div class="row">
         <div class="col-12">
             <div class="block-finder__body mb-1">
-               <img class="banner__size" src="{{url('storage/photos/1/eyes.png')}}" alt="bjh">
+               <img class="banner__size" src="{{$page->banner_image}}" alt="Vouchers Image Missing">
                  <div class="block-finder__header">
-                    <div class="block-finder__title">Vouchers</div>
+                    <div class="block-finder__title">{{$page->title}}</div>
                     <div class="block-finder__subtitle"></div>
                  </div>
             </div>
-            <div class="category-text panel  mb-4 mt-2 ">
-                <p class="mt-1">
-                    With Cashblack To Your Door, you can discover local restaurants and grocery stores to order African, Caribbean or 
-                    from any other authentic Black-owned vendors and earn cashback through our partnerships with your favourite 
-                    delivery apps such as Deliveroo and Uber Eats. Whether there’s rice at home or not, you can be sure that through 
-                    Cashblack To Your Door, you’ll always be able to find local Black-owned retailers for your next order.
-                    You can go to <span class="text-bold text-success"> Grocery Stores</span> or 
-                    <span class="text-bold text-success">Restaurants.</span>
-                </p>
+            <div class="category-text panel  mb-4 mt-4 pt-3">
+                <p class="mt-1">{{$page->description}}</p>
             </div>
         </div>
     </div>
