@@ -54,7 +54,7 @@ class StoreController extends Controller
         $mainCategory = Category::whereName('Cashback to door')->first();
 
         // dd($mainCategory->id);
-        $locations = Store::when($mainCategory->id, function($query) use ($mainCategory) {
+        $locations = Store::when(optional($mainCategory)->id, function($query) use ($mainCategory) {
             $query->whereHas('categories', function ($query) use ($mainCategory) {
                 $query->where('category_id', $mainCategory->id);
             });
@@ -62,7 +62,7 @@ class StoreController extends Controller
         
         $categories = Category::with(['stores.storeAddress'])->whereParentId($mainCategory['id'])->orderBy('name', 'ASC')->get();
        
-        $array = array();
+        $location_array = array();
         foreach($categories as $category){
              foreach($category->stores as $store){
                 $location_array['des'][] =$store->description;
