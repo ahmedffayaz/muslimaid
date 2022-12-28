@@ -44,13 +44,13 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::post('dataByPeriod', [App\Http\Controllers\HomeController::class, 'dataByPeriod'])->name('home.index_data');
 
 
-    //Networks 
+    //Networks
     Route::post('networks/fetch',[App\Http\Controllers\Admin\NetworkController::class,'fetch'])->name('networks.fetch');
     Route::get('networks/categories/{network}', [App\Http\Controllers\Admin\NetworkController::class,'categories'])->name('networks.categories');
     Route::get('networks/categories_export/{network}',[App\Http\Controllers\Admin\NetworkController::class,'exportCsv'])->name('networks.categories.export');
     Route::resource('networks', NetworkController::class);
 
-    //Stores 
+    //Stores
     Route::get('stores/images/{store}', [App\Http\Controllers\Admin\StoreController::class,'storeImages'])->name('stores.images');
     Route::post('stores/vouchers', [App\Http\Controllers\Admin\StoreController::class,'fetchVouchers'])->name('stores.vouchers');
     Route::post('stores/cashbacks', [App\Http\Controllers\Admin\StoreController::class,'fetchCashbacks'])->name('stores.cashbacks');
@@ -86,7 +86,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('stores', StoreController::class);
     Route::resource('storecashbacks', StoreCashbackController::class);
 
-    //Vouchers 
+    //Vouchers
     Route::resource('vouchers', VouchersController::class);
     Route::post('vouchers/fetch',[App\Http\Controllers\Admin\VouchersController::class,'fetch'])->name('vouchers.fetch');
     Route::get('voucherss/export', [App\Http\Controllers\Admin\VouchersController::class,'exportCsv'])->name('vouchers.export');
@@ -98,13 +98,13 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::post('categories/fetch',[App\Http\Controllers\Admin\CategoryController::class,'fetch'])->name('categories.fetch');
     Route::post('categories/search_categories',  [App\Http\Controllers\Admin\CategoryController::class,'searcCategories'])->name('categories.search_categories');
     Route::resource('categories', CategoryController::class);
-    
-    //IMported Network Categories 
+
+    //IMported Network Categories
     Route::post('importedcategories/fetch',[App\Http\Controllers\Admin\ImportedCategoryController::class,'fetch'])->name('importedcategories.fetch');
     Route::post('importedcategories/search_importedcategories',  [App\Http\Controllers\Admin\ImportedCategoryController::class,'searcImportedCategories'])->name('importedcategories.search_importedcategories');
     Route::resource('importedcategories', ImportedCategoryController::class);
-    
-    //Users 
+
+    //Users
     Route::post('users/cashbacks', [App\Http\Controllers\Admin\UserController::class,'fetchCashbacks'])->name('users.cashbacks');
     Route::post('users/clicks', [App\Http\Controllers\Admin\UserController::class,'fetchClicks'])->name('users.clicks');
     Route::get('users/export', [App\Http\Controllers\Admin\UserController::class,'exportCsv'])->name('users.export');
@@ -116,7 +116,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::post('users/search_users',  [App\Http\Controllers\Admin\UserController::class,'searchUsers'])->name('users.search_users');
     Route::get('users/show', [App\Http\Controllers\Admin\UserController::class,'showUser'])->name('users.show_user');
     Route::resource('users', UserController::class);
-    
+
     // Imorters
     Route::post('importer/import', [App\Http\Controllers\Admin\ImporterController::class,'import'])->name('importer.import');
     Route::get('importer/commissions', [App\Http\Controllers\Admin\ImporterController::class,'import_commissions'])->name('importer.commissions');
@@ -125,12 +125,12 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::get('importer/importer_setting_form/{id}', [App\Http\Controllers\Admin\ImporterController::class,'importerSettingForm'])->name('importer.importer_setting_form');
     Route::resource('importer', ImporterController::class);
 
-    //Clicks 
+    //Clicks
     Route::get('clicks/export', [App\Http\Controllers\Admin\ClickController::class,'exportCsv'])->name('clicks.export');
     Route::post('clicks/fetch',[App\Http\Controllers\Admin\ClickController::class,'fetch'])->name('clicks.fetch');
     Route::post('clicks/search_clicks',  [App\Http\Controllers\Admin\ClickController::class,'searchClicks'])->name('clicks.search_clicks');
     Route::resource('clicks', ClickController::class);
-    
+
     // Cashbacks
     Route::get('commissionss/export', [App\Http\Controllers\Admin\CommissionController::class,'exportCsv'])->name('commissions.export');
     Route::post('commissions/fetch',[App\Http\Controllers\Admin\CommissionController::class,'fetch'])->name('commissions.fetch');
@@ -140,7 +140,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::get('commissions/status_history/{commission}',  [App\Http\Controllers\Admin\CommissionController::class,'statusHistory'])->name('commissions.history');
     Route::resource('commissions', CommissionController::class);
     Route::resource('cashouts', CashoutController::class);
-    
+
     // Reviews
     Route::resource('reviews', StoreReviewsController::class);
     Route::post('reviews/fetch',[App\Http\Controllers\Admin\StoreReviewsController::class,'fetch'])->name('reviews.fetch');
@@ -174,10 +174,10 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::post('create-menu',[App\Http\Controllers\Admin\MenuController::class,'store']);
     Route::get('add-categories-to-menu',[App\Http\Controllers\Admin\MenuController::class,'addCatToMenu']);
     Route::get('add-post-to-menu',[App\Http\Controllers\Admin\MenuController::class,'addPostToMenu']);
-    Route::get('add-custom-link',[App\Http\Controllers\Admin\MenuController::class,'addCustomLink']);	
-    Route::get('update-menu',[App\Http\Controllers\Admin\MenuController::class,'updateMenu']);			
-    
-    // Languages 
+    Route::get('add-custom-link',[App\Http\Controllers\Admin\MenuController::class,'addCustomLink']);
+    Route::get('update-menu',[App\Http\Controllers\Admin\MenuController::class,'updateMenu']);
+
+    // Languages
     Route::post('languages/fetch',[App\Http\Controllers\Admin\LanguageController::class,'fetch'])->name('languages.fetch');
     Route::post('languages/search_languages',  [App\Http\Controllers\Admin\LanguageController::class,'searchLanguages'])->name('languages.search_languages');
 
@@ -196,7 +196,7 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::put('tickets/close_ticket/{ticket}',[App\Http\Controllers\Admin\TicketsController::class,'closeTicket'])->name('tickets.close');
     Route::resource('tickets',  TicketsController::class);
     Route::resource('ticketCategory',TicketCategoryController::class);
-    
+
     Route::resource('replies', RepliesController::class);
 
 
@@ -212,12 +212,12 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('seo', SeoController::class);
     Route::resource('email_templates', EmailTemplatesController::class);
 
-    
-    
+
+
     Route::get('site/shutdown', function(){
         return Artisan::call('down');
     });
-    
+
     Route::get('site/live', function(){
         return Artisan::call('up');
     });
@@ -242,6 +242,9 @@ Route::get('top-cashback',[App\Http\Controllers\Frontend\PagesController::class,
 Route::get('trending',[App\Http\Controllers\Frontend\PagesController::class, 'trending'])->name('trending');
 Route::get('cashback/{slug}',[App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
 Route::get('categories/cashback-to-door',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
+// Route::get('stores/cashback-to-door',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
+Route::get('stores/reviews/{id}', [App\Http\Controllers\Frontend\StoreController::class, 'showReviews'])->name('store.reviews.show');
+Route::post('stores/reviews/submit', [App\Http\Controllers\Frontend\StoreController::class, 'storeReviews'])->name('store.reviews.submit');
 Route::get('search_suggestions',[App\Http\Controllers\Frontend\PagesController::class, 'searchSuggestions'])->name('search_suggestions');
 Route::get('pages/{page}',[App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('page');
 Route::get('post/{blog}',[App\Http\Controllers\Frontend\PagesController::class, 'blogPost'])->name('post');
@@ -277,7 +280,7 @@ Route::namespace('App\Http\Controllers\Client')
         Route::resource('claim', ClaimController::class);
         Route::resource('referral',ReferController::class);
         Route::post('send-referral-link',[App\Http\Controllers\Client\ReferController::class, 'sendReferralLink'])->name('send-referral-link');
-        
+
     });
 
 
@@ -289,5 +292,5 @@ Route::namespace('App\Http\Controllers\Client')
     Route::get('login/{provider}/callback',[App\Http\Controllers\SocialController::class, 'Callback']);
     Route::get('register-form',[App\Http\Controllers\Auth\registerController::class,'showRegistrationForm'])->name('register-form');
 
-   
-     Route::get('account/verify/{token}', [App\Http\Controllers\Auth\VerifyController::class, 'verifyAccount'])->name('user.verify'); 
+
+     Route::get('account/verify/{token}', [App\Http\Controllers\Auth\VerifyController::class, 'verifyAccount'])->name('user.verify');

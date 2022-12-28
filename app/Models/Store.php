@@ -14,15 +14,15 @@ class Store extends Model
 
     protected $fillable = ['network_id',
      'name',
-     'slug', 
-     'advertiser_id', 
+     'slug',
+     'advertiser_id',
      'tracking_url',
-     'store_url', 
+     'store_url',
      'description',
      'terms_conditions',
      'extra_info',
      'network_status',
-     'status_description', 
+     'status_description',
      'override_cashback',
      'override_categories',
      'feature_sidebar',
@@ -35,7 +35,7 @@ class Store extends Model
      'city',
      'postal_code',
      'latitude',
-     'longitude' 
+     'longitude'
     ];
 
     public function network(){
@@ -67,11 +67,11 @@ class Store extends Model
         return $this->hasMany(Voucher::class);
     }
     public function reviews(){
-        
-        return $this->hasMany(StoreReview::class)->orderBy('id', 'DESC');
+
+        return $this->hasMany(StoreReview::class)->orderBy('rating', 'DESC');
     }
     public function commissions(){
-        
+
         return $this->hasMany(UserCashback::class);
     }
     public function editorPicks(){

@@ -18,9 +18,9 @@
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
                                         <li class="nk-block-tools-opt"><a href="{{route('admin.reviews.create')}}" class="btn btn-primary btn-sm" ><em class="icon ni ni-plus"></em><span>Add Review</span></a></li>
-                                      
+
                                         <li><a href="{{route('admin.reviews.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
-                                      
+
                                     </ul>
                                 </div>
                             </div><!-- .toggle-wrap -->
@@ -35,16 +35,22 @@
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <div class="form-control-wrap ">
-                                            <label class="form-label" for="reviewer">Reviewer Name</label>
+                                            <label class="form-label" for="reviewer">Reviewer</label>
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control" id="reviewer" value="" name="reviewer">
+                                                <select class="form-select form-control" data-search="on" id="reviewer_id" name="reviewer_id">
+                                                    <option value="0">All</option>
+                                                    @foreach ($users as $user)
+                                                        <option value="{{$user->id}}">{{$user->first_name . ' ' . $user->last_name}}</option>
+                                                    @endforeach
+                                                </select>
+                                                {{-- <input type="text" class="form-control" id="reviewer" value="" name="reviewer"> --}}
                                             </div>
-                                                
+
                                         </div>
                                     </div>
                                 </div>
-                                
-                            
+
+
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-label" for="store_id">Store</label>
@@ -57,28 +63,28 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div> 
-                                    
+                                </div>
+
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-label" for="status">Status</label>
                                         <div class="form-control-wrap ">
-                                            
+
                                             <select class="form-control form-select" name="status" required>
                                                 <option value="-1">Any</option>
-                                                
+
                                                 <option value="active">Active</option>
                                                 <option value="pending">Pending</option>
-                                                    
-                                            
-                                                
-                                                    
-                                            
+
+
+
+
+
                                             </select>
-                                        
+
                                         </div>
                                     </div>
-                                </div>                  
+                                </div>
                                 <div class="col-3 align-self-end">
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-success btn-block">Search</button>
@@ -86,22 +92,22 @@
                                 </div>
                             </div>
                         </form>
-                       
+
                     </div>
                 </div>
                 @include('flash::message')
                 <div class="nk-block">
                     <div class="card card-stretch">
                         <div class="card-inner-group">
-                            
+
                             <div class="card-inner px-0">
                                 <div class="nk-tb-list nk-tb-ulist" id="table-data">
-                                    
-                                    @include('admin-dashboard.store_reviews.index_data')                                   
-                                    
+
+                                    @include('admin-dashboard.store_reviews.index_data')
+
                                 </div><!-- .nk-tb-list -->
                             </div><!-- .card-inner -->
-                           
+
                         </div><!-- .card-inner-group -->
                     </div><!-- .card -->
                 </div><!-- .nk-block -->
@@ -115,8 +121,8 @@
         <div class="modal-content">
             <div class="modal-header align-center">
                 <div class="nk-file-title">
-              
-                   
+
+
                     <div class="nk-file-name">
                         <div class="nk-file-name-text"><span class="title">Review</span></div>
 
@@ -126,7 +132,7 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="review" class=" p-4">
-             
+
 
             </div>
         </div><!-- .modal-content -->
@@ -140,16 +146,16 @@
     <script>
     $(document).ready(function(){
      $(document).on('click', '.pagination a', function(event){
-        event.preventDefault(); 
+        event.preventDefault();
         var route = $('.pagination').attr('route');
         var page = $(this).attr('href').split('page=')[1];
-        
+
          if(route=='index'){
-            
+
             $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
-            
+
              pageurl = "{{route('admin.reviews.fetch')}}?page="
              var _token = $("input[name=_token]").val();
             $.ajax({
@@ -163,67 +169,68 @@
                     $('html, body').animate({ scrollTop: 0 }, 'slow');
                 }
                 });
-         } 
+         }
 
          if(route=='search'){
-              
+
             $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
-            
-              
+
+
             var _token = $("input[name=_token]").val();
-            var reviewer = $("input[name=reviewer]").val();
+            var reviewer_id = $("select[name=reviewer_id]").val();
             var store_id = $("select[name=store_id]").val();
-           
+
             var status = $("select[name=status]").val();
             $.ajax({
               url:'{{route("admin.reviews.search_reviews")}}?page='+page,
               method:"POST",
-              data:{_token:_token,reviewer:reviewer,store_id:store_id,status:status},
+              data:{_token:_token,reviewer_id:reviewer_id,store_id:store_id,status:status},
               success:function(data)
               {
+                console.log(data)
                $('#table-data').html(data);
                $('html, body').animate({ scrollTop: 0 }, 'slow');
               }
             });
-         }       
+         }
      });
     });
-    </script> 
+    </script>
     <script>
         $(document).ready(function(){
-        
+
          $(document).on('submit', '.search_form', function(event){
-            event.preventDefault(); 
+            event.preventDefault();
             $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
-            
-              
+
+
             var _token = $("input[name=_token]").val();
-            var reviewer = $("input[name=reviewer]").val();
+            var reviewer = $("select[name=reviewer_id]").val();
             var store_id = $("select[name=store_id]").val();
-           
+
             var status = $("select[name=status]").val();
             $.ajax({
             url:'{{route("admin.reviews.search_reviews")}}',
               method:"POST",
-              data:{_token:_token,reviewer:reviewer,store_id:store_id,status:status},
+              data:{_token:_token,reviewer_id:reviewer,store_id:store_id,status:status},
               success:function(data)
               {
                $('#table-data').html(data);
                $('html, body').animate({ scrollTop: 0 }, 'slow');
               }
             });
-            
+
          });
-        
+
         });
          // Review Edit Popup
     $(document).ready(function(){
         $(document).on('click', '.review-edit', function(event){
-            event.preventDefault(); 
+            event.preventDefault();
             var id = $(this).attr('review-id');
             pageurl = $(this).attr('href');
             var _token = $("input[name=_token]").val();
@@ -236,12 +243,59 @@
                 {
                     $('#review-modal').modal('show');
                     $('#review').html(data);
-                   
+                    updateReview()
                 }
             });
-               
+
         });
     });
-   
-        </script>  
+
+    $(document).ready(function(){
+        $(document).on('click', '.delete-review', function(event){
+            var form_id = $(this).attr('form_id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function (result) {
+                if (result.value) {
+                $('#'+form_id).submit();
+                }
+            });
+            event.preventDefault();
+        });
+    });
+
+    function updateReview(){
+        $('#store-reviews-form').on('submit', function(event){
+            event.preventDefault();
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'PUT',
+                data: $(this).serialize(),
+                success: function (data) {
+                    $('#review-modal').modal('hide');
+                    (function(NioApp, $){
+                        'use strict';
+
+                        toastr.clear();
+                        NioApp.Toast('Review Updated Successfully.', 'success');
+
+                    })(NioApp, jQuery);
+                    $('#table-data').load(window.location.href + ' #table-data')
+                },
+                error: function (data) {
+                    (function(NioApp, $){
+                        'use strict';
+                        toastr.clear();
+                        NioApp.Toast('Something went wrong! unable to update the review', 'error');
+
+                    })(NioApp, jQuery);
+                }
+            })
+        });
+    }
+        </script>
 @endpush
