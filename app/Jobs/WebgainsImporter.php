@@ -60,7 +60,8 @@ class WebgainsImporter
                 CURLOPT_URL => 'https://api.webgains.com/2.0/programs?key='.$settings['webgains_api_key'].'&programsjoined=1&campaignId='.$settings['webgains_campaignid'],
                 CURLOPT_RETURNTRANSFER => 1,
             ));
-
+            curl_setopt($cu, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($cu, CURLOPT_SSL_VERIFYPEER, 0);
             $result = curl_exec($cu);
             if (curl_errno($cu)) {
                 echo 'Error:' . curl_error($cu);
@@ -270,7 +271,8 @@ class WebgainsImporter
         if($setting->import_vouchers == 1){
             
             $curl = curl_init();
-
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
             curl_setopt_array($curl, array(
                 CURLOPT_URL => 'https://api.webgains.com/2.0/vouchers?key='.$settings['webgains_api_key'].'&campaignId='.$settings['webgains_campaignid'].'&networks=UK&joined=1',
                 CURLOPT_RETURNTRANSFER => 1,
