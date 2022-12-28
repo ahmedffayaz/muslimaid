@@ -21,8 +21,9 @@
                                         <label for="store_id" class="mb-2">Select retailer</label>
                                         <select id="store_id" class="form-control form-control-select2" name="store_id" required>
                                             <option selected disabled value="">Select a retailer..</option>
+                                          
                                             @foreach ($clicks->unique('store_id') as $click)
-                                                <option value="{{$click->store->id}}">{{$click->store->name}}</option>
+                                                <option value="{{$click->store_id}}">{{$click->store->name}}</option>
                                             @endforeach
                                         </select>
                                     </div>

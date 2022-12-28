@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Language;
-use App\Models\TicketCategory;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Ticket;
+use App\Models\Language;
 use App\Mailers\AppMailer;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
+use App\Models\TicketCategory;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 
 
@@ -31,8 +33,8 @@ class TicketsController extends Controller
 
             $ticket = new Ticket([
                 'title'     => $request->input('title'),
-                'user_id'   => \Auth::user()->id,
-                'ticket_id' => strtoupper(\Str::random(12)),
+                'user_id'   => Auth::user()->id,
+                'ticket_id' => strtoupper(Str::random(12)),
                 'category_id'  => $request->input('category'),
                 'priority'  => 'high',
                 'ticket_type'  => 'ticket',
