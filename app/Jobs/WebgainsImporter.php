@@ -2,29 +2,32 @@
 
 namespace App\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Http\Request;
+use Exception;
 use App\Models\Store;
-use App\Models\ImportedCategory;
-use App\Models\StoreCashback;
-use App\Models\StoreImage;
-use App\Models\UserCashback;
+use App\Models\Network;
 use App\Models\Voucher;
 use App\Models\ExitClick;
-use App\Models\ImporterSetting;
+use App\Models\StoreImage;
 use App\Models\SiteSetting;
-use App\Models\CashbackStatusChange;
-use App\Models\Network;
-use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use Illuminate\Support\Str;
+use App\Models\UserCashback;
+use Illuminate\Http\Request;
+use App\Models\StoreCashback;
+use Illuminate\Bus\Queueable;
+use App\Models\ImporterSetting;
+use App\Models\ImportedCategory;
+use Illuminate\Support\Facades\DB;
+use App\Models\CashbackStatusChange;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class WebgainsImporter implements ShouldQueue
+class WebgainsImporter
 {
+    //implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
@@ -64,7 +67,6 @@ class WebgainsImporter implements ShouldQueue
             }
             curl_close($cu);
             $result_array = json_decode($result, TRUE);
-
             foreach ($result_array as $results) {
                 try {
 
@@ -78,7 +80,7 @@ class WebgainsImporter implements ShouldQueue
                         }
                         $store = Store::create([
                             'name'         => $results['name'],
-                            'slug'         => \Str::slug($results['name']),
+                            'slug'         => Str::slug($results['name']),
                             'advertiser_id' => $results['id'],
                             'network_id'   => 2,
                             'tracking_url' => $store_link,
@@ -97,7 +99,7 @@ class WebgainsImporter implements ShouldQueue
                                             if ($index == '1') {
                                                 break;
                                             }
-                                            $c_type = \Str::contains($tier['commission'], '%') ? 'percentage' : 'fixed';
+                                            $c_type = Str::contains($tier['commission'], '%') ? 'percentage' : 'fixed';
                                             if ($c_type == 'percentage') {
                                                 $sale_commission =  str_replace('%', '', $tier['commission']);
                                                 $currency = null;
@@ -180,7 +182,7 @@ class WebgainsImporter implements ShouldQueue
                                                 if ($index == '1') {
                                                     break;
                                                 }
-                                                $c_type = \Str::contains($tier['commission'], '%') ? 'percentage' : 'fixed';
+                                                $c_type = Str::contains($tier['commission'], '%') ? 'percentage' : 'fixed';
                                                 if ($c_type == 'percentage') {
                                                     $sale_commission =  str_replace('%', '', $tier['commission']);
                                                     $currency = null;
@@ -258,7 +260,7 @@ class WebgainsImporter implements ShouldQueue
                             $store->update();
                         }
                     }
-                } catch (\Execption $e) {
+                } catch (Exception $e) {
                     flash()->error('Error while running importer');
                     return redirect()->route('admin.stores.index');
                 }

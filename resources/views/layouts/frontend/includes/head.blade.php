@@ -22,9 +22,6 @@ if(!empty($rule))
 
 
 }
-
-
-
 @endphp
 <head>
     <meta charset="UTF-8">
@@ -55,6 +52,7 @@ if(!empty($rule))
     @endisset
     <!-- font - fontawesome -->
     <link rel="stylesheet" href="{{ asset('frontend/vendor/fontawesome/css/all.min.css')}}">
+    <link rel="stylesheet" href="{{ asset('https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.css')}}">
     <!-- font - stroyka -->
     <link rel="stylesheet" href="{{ asset('frontend/fonts/stroyka/stroyka.css')}}">
     <link rel="stylesheet" href="{{asset('vendor/laraberg/css/laraberg.css')}}">

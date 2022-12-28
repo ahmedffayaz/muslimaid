@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\ExitClick;
-use App\Models\UserCashback;
+use Illuminate\Support\Facades\Response;
+use Throwable;
 use App\Models\User;
-use App\Models\CashbackStatusChange;
 use App\Models\Store;
 use App\Models\Network;
+use App\Models\ExitClick;
+use App\Models\UserCashback;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use App\Models\CashbackStatusChange;
 
 class ClickController extends Controller
 {
@@ -131,8 +133,8 @@ class ClickController extends Controller
             fclose($handle);
             $headers = array('Content-Type' => 'text/csv',);
 
-            return \Response::download($filename, 'clicks.csv', $headers);
-        } catch (\Throwable $th) {
+            return Response::download($filename, 'clicks.csv', $headers);
+        } catch (Throwable $th) {
 
             flash()->error('Error while exporting exit clics');
 

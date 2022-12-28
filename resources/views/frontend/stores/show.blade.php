@@ -1,5 +1,31 @@
 @extends('layouts.frontend.app')
 @section('content')
+@php
+    $revews_count = $store->reviews->where('status', 'active')->count();
+@endphp
+{{-- Show message on submit form --}}
+@if(Session::has('error'))
+    <div class="toast bg-danger m-2" role="alert" aria-live="assertive" aria-atomic="true" style="position:absolute; top:0; right:0; z-index: 200">
+        <div class="toast-header p-3">
+            <strong class="mr-auto">{{ session('error') }}</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+@endif
+@if(Session::has('success'))
+    <div class="toast bg-success m-2" role="alert" aria-live="assertive" aria-atomic="true" style="position:absolute; top:0; right:0; z-index: 200">
+        <div class="toast-header p-3">
+            <strong class="mr-auto">{{ session('success') }}</strong>
+            <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    </div>
+@endif
+{{-- Show message on submit form end --}}
+
 <style>
     @media (min-width: 992px) {
         .product--layout--sidebar .product__content {
@@ -135,6 +161,44 @@
                             <!-- .product__info -->
                             <div class="product__info">
                                 <h1 class="product__name">{{$store->name}}</h1>
+                                <!-- Average ratigs -->
+                                <div class="product-card__rating mx-auto mb-3">
+                                    <div class="product-card__rating-stars">
+                                        <div class="rating">
+                                            <div class="rating__body">
+                                                @foreach (range(1, 5) as $index)
+                                                    <svg class="rating__star @if ($index <= $store->rating) rating__star--active @endif"
+                                                        width="13px" height="12px">
+                                                        <g class="rating__fill">
+                                                            <use
+                                                                xlink:href="{{ asset('frontend/images/sprite.svg') }}#star-normal">
+                                                            </use>
+                                                        </g>
+                                                        <g class="rating__stroke">
+                                                            <use
+                                                                xlink:href="{{ asset('frontend/images/sprite.svg') }}#star-normal-stroke">
+                                                            </use>
+                                                        </g>
+                                                    </svg>
+
+                                                    <div
+                                                        class="rating__star rating__star--only-edge @if ($index <= $store->rating) rating__star--active @endif">
+                                                        <div class="rating__fill">
+                                                            <div class="fake-svg-icon">
+                                                            </div>
+                                                        </div>
+                                                        <div class="rating__stroke">
+                                                            <div class="fake-svg-icon">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="product-card__rating-legend">{{ $revews_count }} Reviews</div>
+                                </div>
+                                <!-- Average ratigs / end -->
                                 <p style="font-size: 13px">Updated: {{Carbon\Carbon::parse($store->updated_at)->isoFormat('Do MMMM YYYY')}}</p>
 
                                 <div class="product__description">
@@ -160,7 +224,7 @@
                                 @else
                                     @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @endif --}}
-                                
+
                                  Cashback</h5>
 
                                 <a href="#" @guest class="btn btn-primary" data-toggle="modal" data-target="#signinModal" @else form_id="form_{{$store->id}}" class="btn btn-primary store_form" @endguest>Get Cashback</a>
@@ -178,7 +242,7 @@
                                 @else
                                     @if($cashback->type=='fixed'){{$cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$cashback->sale_commission}}@if($cashback->type=='percentage')%@endif
                                 @endif
-                                
+
                             </h4>
                             @php
                                 $substr = explode (",", $cashback->detail);
@@ -207,7 +271,7 @@
                                 @else
                                 @if($cashback->type=='fixed'){{$cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$cashback->sale_commission}}@if($cashback->type=='percentage')%@endif
                                 @endif
-                                
+
                             </h4>
                             @php
                             $substr = explode (",", $cashback->detail);
@@ -294,7 +358,7 @@
                                         </div>
                                     </div>
                                     @endforeach
-                                    
+
                                     <div class="remaining_voucher" style="display: none;">
                                     @foreach ($store->vouchers->skip(3) as $voucher)
                                     <div class="product-card mb-2 p-4">
@@ -333,12 +397,12 @@
                                     </div>
                                     @endforeach
                                     </div>
-                                    
+
                                     @if($store->vouchers->count() > 3)
                                         <div class="mt-2 voucher_footer">
-                                            
+
                                             <small class="ml-3 my-auto">Total vouchers count: {{$store->vouchers->count()}}</small>
-                                            
+
                                             <button class="btn btn-link float-right my-auto see-all-vouchers">See All Vouchers</button>
                                         </div>
                                     @endif
@@ -347,64 +411,60 @@
                         </div>
                         @endif
                         <!-- Reviews tab -->
-                        @if($store->reviews->count())
                         <div class="product-tabs  product-tabs--layout--sidebar">
                             <div class="product-tabs__content">
                                 <div class="product-tabs__pane product-tabs__pane--active" id="tab-description">
                                     <div class="reviews-view">
                                         <div class="reviews-view__list">
-                                            <h3 class="reviews-view__header">Reviews</h3>
+                                            <h3 class="reviews-view__header">Customer Reviews</h3>
                                             <div class="reviews-list">
-                                                <ol class="reviews-list__content">
-                                                    @foreach($store->reviews->take(3) as $review)
-                                                    <li class="reviews-list__item">
-                                                        <div class="review">
+                                                @if($revews_count)
+                                                <ol class="reviews-list__content" data-count="{{ $revews_count }}" id="reviews">
 
-                                                            <div class="review__content">
-                                                                <div class="review__author">{{$review->reviewer}}</div>
-                                                                <div class="review__rating">
-                                                                    <div class="rating">
-                                                                        <div class="rating__body">
-
-                                                                            @foreach (range(1,5) as $index)
-                                                                            <svg class="rating__star @if($index <= $review->rating) rating__star--active @endif" width="13px" height="12px">
-                                                                                <g class="rating__fill">
-                                                                                    <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal"></use>
-                                                                                </g>
-                                                                                <g class="rating__stroke">
-                                                                                    <use xlink:href="{{asset('frontend/images/sprite.svg')}}#star-normal-stroke"></use>
-                                                                                </g>
-                                                                            </svg>
-                                                                            <div class="rating__star rating__star--only-edge @if($index <= $review->rating) rating__star--active @endif">
-                                                                                <div class="rating__fill">
-                                                                                    <div class="fake-svg-icon"></div>
-                                                                                </div>
-                                                                                <div class="rating__stroke">
-                                                                                    <div class="fake-svg-icon"></div>
-                                                                                </div>
-                                                                            </div>
-                                                                            @endforeach
-
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="review__text">{!!$review->review!!}</div>
-                                                                <div class="review__date">{{Carbon\Carbon::parse($review->created_at)->isoFormat('Do MMMM YYYY')}}</div>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    @endforeach
                                                 </ol>
+                                                @else
+                                                    <div class="review__text">There is no review at the moment. Be the first to add one!</div>
+                                                @endif
+                                            </div>
+                                            <div class="col text-center mt-4" id="load-more">
 
                                             </div>
                                         </div>
+                                        @auth
+                                            <form action="{{ route('store.reviews.submit') }}" class="reviews-view__form" method="POST" id="store-reviews-form">
+                                                @csrf
+                                                <h3 class="reviews-view__header">Write A Review</h3>
+                                                <input type="hidden" id="store-id" name="store_id" value="{{ $store->id }}" required>
+                                                <div class="row">
+                                                    <div class="col-12 col-lg-9 col-xl-8">
+                                                        <div class="form-row">
+                                                            <div class="form-group col-md-4">
+                                                                <label for="review-stars">Review Stars</label>
+                                                                <select class="form-control"  id="rating" name="rating" required>
+                                                                    <option value="5">5 Stars Rating</option>
+                                                                    <option value="4">4 Stars Rating</option>
+                                                                    <option value="3">3 Stars Rating</option>
+                                                                    <option value="2">2 Stars Rating</option>
+                                                                    <option value="1">1 Stars Rating</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label for="review-text">Your Review</label>
+                                                            <textarea class="form-control" id="store-review" name="review" placeholder="Type your message" rows="6"></textarea>
+                                                        </div>
+                                                        <div class="form-group mb-0">
+                                                            <button type="submit" class="btn btn-primary btn-lg">Post Your Review</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        @endauth
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        @endif
                     </div>
-
                 </div>
             </div>
         </div>
@@ -432,7 +492,7 @@
                                     src="{{asset('frontend/images/products/product-16.jpg')}}"
                                     @endif alt="">
 
-                    <h5>Get upto 
+                    <h5>Get upto
                                 {{-- @if($store->custom_cashback_percentage)
                                 @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @else
@@ -471,13 +531,13 @@
                                     src="{{asset('frontend/images/products/product-16.jpg')}}"
                                     @endif alt="">
 
-                    <h5>Get upto 
+                    <h5>Get upto
                                 {{-- @if($store->custom_cashback_percentage)
                                     @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @else
                                 @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                 @endif --}}
-                                
+
                                  Cashback</h5>
                 </div>
                 <div class="modal-footer">
@@ -553,6 +613,7 @@
 
     @push('scripts')
     <script>
+        let reviewsCount = 0;
         $('.store_form').on('click', function(e) {
             e.preventDefault();
             $('#tracker').modal('show');
@@ -602,6 +663,88 @@
             $('.voucher_footer').hide();
             $('.remaining_voucher').show();
         })
+
+        $('#store-reviews-form').on('submit', function (event){
+            event.preventDefault();
+
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: new FormData(this),
+                success: function(response){
+                    $('#store-reviews-form')[0].reset()
+                    $.toast({
+                        icon: 'success',
+                        text: response.success,
+                        position: 'top-right'
+                    })
+                },
+                error: function(response){
+                    // pass error message on got error
+                    let errors = response.responseJSON.errors;
+                    let error;
+                    for (const key in errors) {
+                        error = `${errors[key]}`
+                    }
+
+                    $.toast({
+                        icon: 'error',
+                        text: error,
+                        position: 'top-right'
+
+                    })
+                }
+            })
+        })
+
+        $(document).ready(function(){
+            let count = $('.reviews-list__content').attr('data-count');
+            getReviews(count)
+            let button = `<a href="javascript:void(0)" class="btn btn-primary" id="load-more-btn">Load More</a>`;
+
+            if (count > 5) {
+                $('#load-more').append(button);
+            }
+
+            $('#load-more').on('click', function (event){
+                event.preventDefault();
+                // Send request for reviews
+                getReviews(count)
+            })
+        })
+
+        // Get store reviews
+        function getReviews(count){
+            let limit = 5;
+            let id = "{{ $store->id }}";
+            let url = "{{ route('store.reviews.show', ':id') }}";
+                url = url.replace(':id', id);
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                data: {
+                    limit: limit,
+                    reviewsCount: reviewsCount,
+                },
+                success: function(response){
+                    reviewsCount = response[1] + reviewsCount;
+                    console.log(response[1])
+                    // Send request for show reviews
+                    $('#reviews').append(response[0]);
+
+                    // convert string to integer
+                    count = parseInt(count);
+
+                    // Hide load more button if reviews count equal to db record
+                    if (count == reviewsCount) {
+                        $('#load-more').hide();
+                    }
+                }
+            })
+        }
 
     </script>
     @endpush

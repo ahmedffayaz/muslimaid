@@ -11,10 +11,15 @@ class StoreReview extends Model
 {
     use HasFactory , SoftDeletes;
 
-    protected $fillable = ['store_id', 'review', 'reviewer','rating', 'status'];
+    protected $fillable = ['store_id', 'user_id', 'review', 'rating', 'status'];
 
     public function store(){
         return $this->belongsTo(Store::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
 }

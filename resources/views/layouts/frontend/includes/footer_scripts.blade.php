@@ -2,6 +2,8 @@
 {{-- <script src="{{ asset('frontend/vendor/jquery/jquery.min.js')}}"></script> --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
 <script src="{{ asset('frontend/vendor/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <script src="{{ asset('frontend/vendor/owl-carousel/owl.carousel.min.js')}}"></script>
 <script src="{{ asset('frontend/vendor/nouislider/nouislider.min.js')}}"></script>
@@ -26,13 +28,13 @@
     $('div.alert').not('.alert-important').delay(2000).fadeOut(350);
     $('div.toast').toast({ delay: 3000 });
     $('div.toast').toast('show');
-    
+
 </script>
 <script>$(".search__input").keydown(function(e) {
-    
+
     switch (e.which) {
       case 40:
-      
+
         e.preventDefault(); // prevent moving the cursor
         $('li:not(:last-child).suggestions__item.selected').removeClass('selected')
           .next().addClass('selected');
@@ -42,7 +44,7 @@
 
         break;
       case 38:
-      
+
         e.preventDefault(); // prevent moving the cursor
         $('li:not(:first-child).suggestions__item.selected').removeClass('selected')
           .prev().addClass('selected');
@@ -77,7 +79,7 @@
 
   $(document).ready( function() {
           $(document).on('submit', '.footer-newsletter__form', function(event){
-            event.preventDefault();          
+            event.preventDefault();
             $.ajax({
                   url: $(this).attr('action'),
                   type: "POST",
@@ -86,7 +88,7 @@
                     $('.newsletter-message').text(data);
                     $('.footer-newsletter__form').trigger("reset");
                   }
-              });      
+              });
           });
       });
   </script>
