@@ -241,7 +241,7 @@ Route::get('category/{slug}',[App\Http\Controllers\Frontend\PagesController::cla
 Route::get('top-cashback',[App\Http\Controllers\Frontend\PagesController::class, 'topStores'])->name('top_stores');
 Route::get('trending',[App\Http\Controllers\Frontend\PagesController::class, 'trending'])->name('trending');
 Route::get('cashback/{slug}',[App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
-Route::get('stores/cashback-to-door',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
+Route::get('categories/cashback-to-door',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
 Route::get('search_suggestions',[App\Http\Controllers\Frontend\PagesController::class, 'searchSuggestions'])->name('search_suggestions');
 Route::get('pages/{page}',[App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('page');
 Route::get('post/{blog}',[App\Http\Controllers\Frontend\PagesController::class, 'blogPost'])->name('post');
@@ -250,6 +250,7 @@ Route::get('all_stores/{letter}',[App\Http\Controllers\Frontend\PagesController:
 Route::get('all_stores',[App\Http\Controllers\Frontend\PagesController::class, 'allStores'])->name('all_stores');
 
 Route::resource('newsletter',App\Http\Controllers\Frontend\NewsletterController::class);
+Route::resource('categories',App\Http\Controllers\Frontend\CategoryController::class);
 
 
 

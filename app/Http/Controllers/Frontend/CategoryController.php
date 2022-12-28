@@ -15,8 +15,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $category=Category::all();
-        return view ('frontend.category',compact('category'));
+        $categories = Category::with('childs')->where('parent_id','0')->get();
+
+        $subCategories = Category::with('stores')->where('parent_id','0')->get();
+        return view ('frontend.categories.index',compact('categories'));
     }
 
     /**
@@ -46,9 +48,22 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($slug)
     {
-        //
+        $categorySlug = Category::whereSlug($slug)->first();
+        if(!empty($categorySlug) && $categorySlug['parent_id'] == 0)
+        {   
+            $parentSlug = $slug;
+            $chlidSlug = '';
+           
+        }else{
+            $parentSlug = Category::whereId($categorySlug['parent_id'])->first();
+            $parentSlug = $parentSlug['slug'];
+            $chlidSlug = $slug;
+        }
+
+        return view('frontend.categories.detail',compact('parentSlug','chlidSlug'));
+      
     }
 
     /**
@@ -84,5 +99,6 @@ class CategoryController extends Controller
     {
         //
     }
+
 
 }
