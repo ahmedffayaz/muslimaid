@@ -1,6 +1,6 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
-    
+
 
 <div class="nk-content ">
     <div class="container-fluid">
@@ -28,7 +28,7 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">Title</label>
                                                 <div class="form-control-wrap">
-                                                    <input id="page-title" type="text" class="form-control " name="title" placeholder="Title" value="" required> 
+                                                    <input id="page-title" type="text" class="form-control " name="title" placeholder="Title" value="" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -40,17 +40,17 @@
                                                         <select class="form-control form-select" name="status" required>
                                                             <option selected value="1">Active</option>
                                                             <option value="0">In-active</option>
-                                                          
+
                                                         </select>
                                                     </div>
-                                                </div>                                                
-                                            </div>                                           
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-lg-12">
                                         <fieldset class="uk-fieldset">
                                         <div class="laraberg-sidebar">
                                             <textarea name="excerpt" placeholder="Excerpt"></textarea>
-                                           
+
                                         </div>
                                         <div class="uk-margin">
                                             <textarea name="content" id="content" hidden></textarea>
@@ -74,16 +74,16 @@
                                                           <i class="fa fa-picture-o"></i> Choose
                                                         </a>
                                                       </span>
-                                                      <input id="thumbnail" class="form-control" type="text" name="filepath" required>
+                                                      <input id="thumbnail" class="form-control" type="text" name="filepath">
                                                     </div>
                                                     <div id="holder" style="margin-top:15px;max-height:100px;"></div>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
-                                               
+
                                                 <button class="btn btn-primary" type="submit">Save</button>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -91,9 +91,9 @@
                             </div>
                         </div>
                     </div><!-- .nk-block -->
-                    
-                  
-                    
+
+
+
                 </div><!-- .components-preview -->
             </div>
         </div>
@@ -117,22 +117,22 @@
         placeholder: 'Compose an epic...',
         theme: 'snow'
       });
-      
+
     //   var form = document.querySelector('form');
       // $(".user-form").submit(function(e) {
-          
+
       //   // Populate hidden form on submit
       //   var desc = document.querySelector('input[name=intro]');
       //   desc.value = quill.root.innerHTML;
-       
-        
+
+
       // });
 </script>
 <script>
     window.addEventListener('DOMContentLoaded', () => {
         Laraberg.init('content', { height: '600px', laravelFilemanager: true, sidebar: true })
     })
-</script>  
+</script>
 
 <script>
     var route_prefix = "/filemanager";
@@ -269,12 +269,12 @@
       })
     });
   </script>
-  
+
   <script>
         jQuery.validator.addMethod("regex", function(value, element) {
           return this.optional(element) || /^[\w. ]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
-        
+
         $('.form-validate').validate({
           rules: {
             title: {
