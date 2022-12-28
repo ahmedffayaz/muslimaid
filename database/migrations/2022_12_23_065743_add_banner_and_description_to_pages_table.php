@@ -14,8 +14,8 @@ class AddBannerAndDescriptionToPagesTable extends Migration
     public function up()
     {
         Schema::table('pages', function (Blueprint $table) {
-            $table->text('banner_image');
-            $table->longText('description');
+            $table->text('banner_image')->nullable();
+            $table->longText('description')->nullable();
         });
     }
 
@@ -27,8 +27,8 @@ class AddBannerAndDescriptionToPagesTable extends Migration
     public function down()
     {
         Schema::table('pages', function (Blueprint $table) {
-            $table->text('banner_image');
-            $table->longText('description');
+            $table->dropColumn('banner_image');
+            $table->dropColumn('description');
         });
     }
 }
