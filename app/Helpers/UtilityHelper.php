@@ -8,6 +8,8 @@ use Harimayco\Menu\Models\Menus;
 use Harimayco\Menu\Models\MenuItems;
 use App\Models\UserVerify;
 use App\Models\EmailTemplate;
+use Illuminate\Support\Str;
+use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
@@ -288,6 +290,14 @@ function getCategories()
 function SiteSetting(){
     return \App\Models\SiteSetting::latest()->get()->pluck('value','type');
 }
+function getRecaptchaSiteKey(){
+    $key=SiteSetting::where('title','Site Key')->pluck('value')->first();
+   return $key;
+}
+function getRecaptchaSecretKey(){
+    $key=SiteSetting::where('title','Secret')->pluck('value')->first();
+    return $key;
+}
 function currency(){
     $settings = SiteSetting();
 $currency = \App\Models\Currency::where('id',$settings['currency'])->pluck('symbol')->first();
@@ -416,6 +426,7 @@ function checkStaticpageRule($url)
             ->subject($data['subject']);
     });
    }
+  
 
 // function isAppleEnabled(){
 //     if(SiteSetting()['apple_client_id'] && SiteSetting()['apple_client_secret'] && SiteSetting()['apple_url']){

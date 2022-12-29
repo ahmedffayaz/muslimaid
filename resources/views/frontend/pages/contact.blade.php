@@ -72,21 +72,33 @@
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="form-name">Your Name</label>
-                        <input type="text" id="form-name" name="name" class="form-control" placeholder="Your Name" required>
+                        <input type="text" id="form-name" name="name" class="form-control" value="{{old('name')}}" placeholder="Your Name" required>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="form-email">Email</label>
-                        <input type="email" id="form-email" name="email" class="form-control" placeholder="Email Address" required>
+                        <input type="email" id="form-email" name="email" class="form-control" value="{{old('email')}}" placeholder="Email Address" required>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="form-subject">Subject</label>
-                    <input type="text" id="form-subject" name="subject" class="form-control" placeholder="Subject" required>
+                    <input type="text" id="form-subject" name="subject" class="form-control" value="{{old('subject')}}" placeholder="Subject" required>
                 </div>
                 <div class="form-group">
                     <label for="form-message">Message</label>
-                    <textarea id="form-message" class="form-control" name="message" rows="4" required></textarea>
+                    <textarea id="form-message" class="form-control" name="message" rows="4"  required> {{old('message')}}</textarea>
                 </div>
+                <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                    <label for="form-message">Captcha</label>
+                    <div class="col-md-6">
+                        {!! app('captcha')->display() !!}
+                         @if ($errors->has('g-recaptcha-response'))
+                            <span class="help-block">
+                                <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                            </span>
+                        @endif
+                    </div>
+                </div>
+
                 <button type="submit" class="btn btn-primary">Send Message</button>
             </form>
         </div>

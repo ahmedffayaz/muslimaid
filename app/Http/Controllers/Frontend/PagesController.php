@@ -11,11 +11,13 @@ use App\Models\ContactForm;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
+use Illuminate\Http\Response;
 use Harimayco\Menu\Models\Menus;
 use App\Http\Controllers\Controller;
 use Harimayco\Menu\Models\MenuItems;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 
 class PagesController extends Controller
@@ -23,7 +25,7 @@ class PagesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -212,6 +214,9 @@ class PagesController extends Controller
 
     public function contactForm(Request $request)
     {
+        $this->validate($request, [
+            'g-recaptcha-response' => 'required|captcha',
+        ]);
         $contact = ContactForm::create($request->all());
 
         $user_email_template = EmailTemplate::where('key', 'user_new_contact')->first();
@@ -272,13 +277,11 @@ class PagesController extends Controller
         $groups = $s->sortBy('name')->groupBy(function ($store) {
             return strtoupper(substr($store->name, 0, 1));
         });
-        // dd($stores);
         return view('frontend.pages.all_stores', compact('groups'));
     }
     public function allStoresLetter($letter)
     {
         $stores = Store::where('name', 'like', $letter . '%')->get();
-        // dd($stores);
         return view('frontend.pages.stores_with_letter', compact('stores', 'letter'));
     }
 }

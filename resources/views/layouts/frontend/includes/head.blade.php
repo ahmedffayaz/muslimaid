@@ -43,6 +43,7 @@ if(!empty($rule))
     <link rel="stylesheet" href="{{ asset('frontend/vendor/photoswipe/photoswipe.css')}}">
     <link rel="stylesheet" href="{{ asset('frontend/vendor/photoswipe/default-skin/default-skin.css')}}">
     <link rel="stylesheet" href="{{ asset('frontend/vendor/select2/css/select2.min.css')}}">
+    {!! NoCaptcha::renderJs() !!}
     @isset($settings['theme_skin'])
       @if($settings['theme_skin']!='custom')
         <link rel="stylesheet" href="{{ asset('frontend/css_'.$settings['theme_skin'].'/style.css')}}">
@@ -72,5 +73,6 @@ if(!empty($rule))
 
   gtag('config', "{{$settings['ga_tracking_id']}}");
 </script>
+
 @endif
 </head>
