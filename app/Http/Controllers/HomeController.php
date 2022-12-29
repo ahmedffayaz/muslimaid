@@ -11,7 +11,6 @@ use App\Models\CashbackStatus;
 use App\Models\Ticket;
 use App\Models\User;
 use App\Models\StoreReview;
-use App\Models\TicketCategory;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 use Illuminate\Support\Facades\Cookie;
 
@@ -92,7 +91,6 @@ class HomeController extends Controller
         $clicks = ExitClick::latest()->where('created_at', '>=', $time_period)->get();
         $total_clicks = ExitClick::latest()->get();
         $tickets = Ticket::where('new_ticket',1)->latest()->get();
-        $ticketCategory=TicketCategory::latest()->get();
         $users = User::role('user')->where('created_at', '>=', $time_period)->latest()->get();
         $total_users = User::role('user')->latest()->get();
         $reviews = StoreReview::where('status','pending')->latest()->get();
@@ -102,7 +100,7 @@ class HomeController extends Controller
 
         return view('admin-dashboard.home_data',compact('coms','total_coms',
         'stores','total_revenue','pending_total_revenue','clicks','total_clicks',
-        'tickets','ticketCategory','users','total_users','reviews','converted','notconverted','period'))->render();
+        'tickets','users','total_users','reviews','converted','notconverted','period'))->render();
 
     }
 }

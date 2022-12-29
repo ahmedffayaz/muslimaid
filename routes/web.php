@@ -195,8 +195,6 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::post('tickets/search',  [App\Http\Controllers\Admin\TicketsController::class,'searchTickets'])->name('tickets.search');
     Route::put('tickets/close_ticket/{ticket}',[App\Http\Controllers\Admin\TicketsController::class,'closeTicket'])->name('tickets.close');
     Route::resource('tickets',  TicketsController::class);
-    Route::resource('ticketCategory',TicketCategoryController::class);
-
     Route::resource('replies', RepliesController::class);
 
 
@@ -221,15 +219,12 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::get('site/live', function(){
         return Artisan::call('up');
     });
-
-
-
 });
 
 //Front Website Routes
 
-Route::get('new_ticket', [App\Http\Controllers\Frontend\TicketsController::class, 'create']);
-Route::post('new_ticket',[App\Http\Controllers\Frontend\TicketsController::class, 'store']);
+// Route::get('new_ticket', [App\Http\Controllers\Frontend\TicketsController::class, 'create']);
+// Route::post('new_ticket',[App\Http\Controllers\Frontend\TicketsController::class, 'store']);
 
 Route::get('offers',[App\Http\Controllers\Frontend\PagesController::class, 'offers'])->name('offers');
 Route::get('vouchers',[App\Http\Controllers\Frontend\PagesController::class, 'vouchers'])->name('vouchers');

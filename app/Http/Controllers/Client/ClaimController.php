@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use App\Models\Ticket;
 use App\Models\ExitClick;
 use App\Models\UserCashback;
-use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ClaimController extends Controller
 {
@@ -30,7 +32,7 @@ class ClaimController extends Controller
      */
     public function create()
     {
-        $user = \Auth::user();
+        $user = Auth::user();
         $clicks = $user->clicks;
         return view('client-dashboard.claim.create', compact('clicks'));
     }
@@ -81,8 +83,7 @@ class ClaimController extends Controller
         $claim->update([
             'claim_amount' => $request->input('amount')
             ]);
-        $this->sendEmailNotification($claim);
-
+         $this->sendEmailNotification($claim);
         flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
         return redirect()->route('account.claim.index');
 
@@ -103,7 +104,7 @@ class ClaimController extends Controller
     {
         $store_id = $request->input('store_id');
         $claim = $request->input('claim_type');
-        $user = \Auth::user();
+        $user = Auth::user();
         $clicks = $user->clicks->where('store_id', $store_id);       
         if($claim  =='missing cashback'){
             return view('client-dashboard.claim.claim_step2',compact('store_id','claim','clicks'));
@@ -152,16 +153,21 @@ class ClaimController extends Controller
         $claim->store_id=$click->store_id;
         $claim->user_id=$click->user_id;
         $claim->click_id=$click->id;
-        $claim->ticket_id = strtoupper(\Str::random(12));
+        $claim->ticket_id = strtoupper(Str::random(12));
         $claim->cashback_id=$click->cashback->id ?? NULL;
         $claim->claim_amount=$click->cashback->order_value ?? NULL;
+        $claim->claim_type=$claim_type;
         $claim->title = 'Claim: '.$claim_type;
-        $claim->claim_type = $claim_type;
+        if( $claim_type == 'missing cashback'){
+            $claim->category_id='1';
+        }else if($claim_type == 'declined cashback'){
+            $claim->category_id='2';
+        }else if ($claim_type =='incorrect amount'){
+            $claim->category_id='3';
+        }
         $claim->ticket_type = 'claim';
         $claim->status = 'open';
         $claim->save();
-
-
         if($claim_type=='incorrect amount' || $claim_type == 'declined cashback'){
             flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
             return redirect()->route('account.claim.index');

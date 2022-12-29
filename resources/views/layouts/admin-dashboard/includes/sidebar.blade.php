@@ -263,16 +263,8 @@ data-content="sidebarMenu">
                                     <span class="nk-menu-text">Blog</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
-                            <li class="nk-menu-item ">
-                                <a href="{{route('admin.ticketCategory.index')}}" class="nk-menu-link">
-                                    <span class="nk-menu-icon "><em class="icon ni ni-article"></em></span>
-                                    <span class="nk-menu-text">CategoryTickets</span>
-                                </a>
-                            </li>
                         </ul>
                     </li>
-                    
-                   
                 </ul><!-- .nk-menu -->
             </div><!-- .nk-sidebar-menu -->
         </div><!-- .nk-sidebar-content -->
