@@ -28,8 +28,7 @@ Route::namespace('App\Http\Controllers\Website')->prefix('site')->name('site.')-
 
 });
 
-// Route::get('/awin', [App\Http\Controllers\AwinController::class, 'awinTest']);
-
+Route::get('/awin', [App\Http\Controllers\AwinController::class, 'awinTest']);
 
 //Admin routes
 Route::namespace('App\Http\Controllers\Admin')

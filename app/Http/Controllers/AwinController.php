@@ -33,7 +33,7 @@ class AwinController extends Controller
         $importerSetting = ImporterSetting::where('network_id', $network->id)->first();
         $siteSettings = SiteSetting::latest()->get()->pluck('value', 'type');
 
-        if ($importerSetting->import_stores == 1) {
+        if ($importerSetting->import_stores == 12) {
             $curl = curl_init();
 
             curl_setopt($curl, CURLOPT_URL, "https://api.awin.com/publishers/{$siteSettings['awin_publisher_id']}/programmes?countryCode=GB&relationship=joined");
@@ -102,10 +102,18 @@ class AwinController extends Controller
             StoreImage::insert($newStoresImages);
         }
 
-        if ($importerSetting->import_transactions == 1) {
+        // TODO: replace 12 with 1 in final state
+        if ($importerSetting->import_cashbacks == 12) {
             $curl = curl_init();
 
-            curl_setopt($curl, CURLOPT_URL, "https://api.awin.com/publishers/{$siteSettings['awin_publisher_id']}/programmedetails?countryCode=GB&relationship=joined&advertiserId=9");
+            $startDate = date('Y-m-d\TH:i:s', strtotime(' -31 days'));
+            $endDate = date('Y-m-d\TH:i:s');
+
+            curl_setopt(
+                $curl,
+                CURLOPT_URL,
+                "https://api.awin.com/publishers/{$siteSettings['awin_publisher_id']}/transactions/?startDate=$startDate&endDate=$endDate&timezone=UTC"
+            );
 
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
@@ -122,15 +130,14 @@ class AwinController extends Controller
             }
 
             curl_close($curl);
-
+            
             $stores = json_decode($curlResponse, true);
 
             $cashback_percent_setting = SiteSetting::where('type', 'cashback_percentage')->first()->value;
-            $startdate = date('Y-m-d\TH:i:s', strtotime(' -31 days'));
-            $enddate = date('Y-m-d\TH:i:s');
-            $campaignid = $siteSettings['awin_campaignid'];
-            $username = $siteSettings['awin_user_name'];
-            $password = $siteSettings['awin_password'];
+            
+            $publisherId = $siteSettings['awin_publisher_id'];
+            $authorizationToken = $siteSettings['awin_authorization_token'];
+
             $soap = new \SoapClient(
                 NULL,
                 array(
@@ -141,7 +148,9 @@ class AwinController extends Controller
                     'exceptions' => 0
                 )
             );
-            $results = $soap->getFullEarnings($startdate, $enddate, $campaignid, $username, $password);
+
+            $results = $soap->getFullEarnings($startDate, $endDate, $publisherId, $authorizationToken, null);
+
             if ($results) {
                 $cashback_percent = 0;
                 foreach ($results as $cashback) {
@@ -165,19 +174,17 @@ class AwinController extends Controller
                         $click_id = $new_click->id;
                         $cashback_percent = $cashback_percent_setting;
                     }
+
                     $cashback_amount_for_user = ($cashback->commission / 100) * $cashback_percent;
                     $commission_exist = UserCashback::where(['exit_click_id' =>  $click_id, 'network_commission_id' =>  $cashback->transactionID])->first();
+
                     $status = '';
-                    if ($cashback->status == 'delayed') {
-                        $status = 1;
-                    } else if ($cashback->status == 'cancelled') {
-                        $status = 2;
-                    } else if ($cashback->status == 'confirmed') {
-                        $status = 3;
-                    }
-                    if ($cashback->status == 'confirmed' &&  $cashback->paymentStatus != 'paid') {
-                        $status = 1;
-                    }
+                    if ($cashback->status == 'delayed') $status = 1;
+                    else if ($cashback->status == 'cancelled') $status = 2;
+                    else if ($cashback->status == 'confirmed') $status = 3;
+
+                    if ($cashback->status == 'confirmed' &&  $cashback->paymentStatus != 'paid') $status = 1;
+                    
                     if (!$commission_exist) {
                         $commission = UserCashback::create([
                             'store_id' => $store->id,
@@ -193,13 +200,13 @@ class AwinController extends Controller
                             'click_date' => \Carbon\Carbon::parse($cashback->clickthroughTime)->toDateTimeString(),
                         ]);
 
-                        $change_status = CashbackStatusChange::create([
+                        CashbackStatusChange::create([
                             'user_cashback_id' => $commission->id,
                             'cashback_status_id' => $status
                         ]);
                     } else {
                         if ($commission_exist->status != $status) {
-                            $change_status = CashbackStatusChange::create([
+                            CashbackStatusChange::create([
                                 'user_cashback_id' => $commission_exist->id,
                                 'cashback_status_id' => $status
                             ]);
