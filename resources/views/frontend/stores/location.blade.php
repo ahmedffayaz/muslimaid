@@ -103,7 +103,15 @@
             <div class="row">
                 <div class="col-12">
                     <div class="block-finder__body">
-                            <img class="banner__size" style="width:1110px;" src="{{ asset('frontend/images/banners/categories/cashback.png') }}" alt="Store Image Missing">
+                            <img class="banner__size" style="width:1110px;" @if($mainCategory->banner_type == 'upload' && $mainCategory->banner_upload != NULL && $mainCategory->banner_upload != '')
+                            @if(!file_exists(storage_path('app/public/categories/images/' . $mainCategory->banner_upload)))
+                                    src="{{ asset('frontend/images/banners/categories/cashback.png') }}"
+                                @else
+                                    src="{{ asset('storage/categories/images/' . $mainCategory->banner_upload) }}"
+                                @endif
+                            @else
+                                src="{{ asset('frontend/images/banners/categories/cashback.png') }}"
+                            @endif alt="Store Image Missing">
                             <div class="block-finder__header">
                                 <div class="block-finder__title">{{ $mainCategory->name }}</div>
                                 <div class="block-finder__subtitle"></div>
