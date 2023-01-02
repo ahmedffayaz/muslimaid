@@ -33,7 +33,7 @@ class AwinController extends Controller
         $importerSetting = ImporterSetting::where('network_id', $network->id)->first();
         $siteSettings = SiteSetting::latest()->get()->pluck('value', 'type');
 
-        if ($importerSetting->import_stores == 12) {
+        if ($importerSetting->import_stores == 1) {
             $curl = curl_init();
 
             curl_setopt($curl, CURLOPT_URL, "https://api.awin.com/publishers/{$siteSettings['awin_publisher_id']}/programmes?countryCode=GB&relationship=joined");
