@@ -21,7 +21,7 @@
                                 <div class="card-head">
                                     {{-- <h5 class="card-title">Page</h5> --}}
                                 </div>
-                                <form action="{{route('admin.pages.store')}}" class="" method="POST">
+                                <form action="{{route('admin.pages.store')}}" class="pages-form" method="POST">
                                     @csrf
                                     <div class="row g-4">
                                         <div class="col-lg-6">
@@ -63,6 +63,7 @@
                                                  <!-- Create the editor container -->
                                                  <div  id="editor-container">
                                                  </div>
+                                                 <input name="intro" type="hidden">
                                             </div>
                                         </div>
                                         <div class="col-12">
@@ -118,15 +119,15 @@
         theme: 'snow'
       });
       
-    //   var form = document.querySelector('form');
-      // $(".user-form").submit(function(e) {
+      var form = document.querySelector('form');
+      $(".pages-form").submit(function(e) {
           
-      //   // Populate hidden form on submit
-      //   var desc = document.querySelector('input[name=intro]');
-      //   desc.value = quill.root.innerHTML;
+        // Populate hidden form on submit
+        var desc = document.querySelector('input[name=intro]');
+        desc.value = quill.root.innerHTML;
        
         
-      // });
+      });
 </script>
 <script>
     window.addEventListener('DOMContentLoaded', () => {

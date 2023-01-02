@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
 use Harimayco\Menu\Models\Menus;
 use App\Http\Controllers\Controller;
+use App\Models\Charity;
 use Harimayco\Menu\Models\MenuItems;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -74,8 +75,8 @@ class PagesController extends Controller
             $term = null;
             return view('frontend.pages.vouchers', compact('stores', 'term', 'page'));
         }
-
-        return view('frontend.pages.single_page', compact('page'));
+        $charity=Charity::orderBy('id', 'DESC')->paginate(10);
+        return view('frontend.pages.single_page', compact('page','charity'));
     }
 
     /**
@@ -272,13 +273,11 @@ class PagesController extends Controller
         $groups = $s->sortBy('name')->groupBy(function ($store) {
             return strtoupper(substr($store->name, 0, 1));
         });
-        // dd($stores);
         return view('frontend.pages.all_stores', compact('groups'));
     }
     public function allStoresLetter($letter)
     {
         $stores = Store::where('name', 'like', $letter . '%')->get();
-        // dd($stores);
         return view('frontend.pages.stores_with_letter', compact('stores', 'letter'));
     }
 }
