@@ -53,14 +53,6 @@
         outline: none !important;
     }
 
-    .view-btn.grid-view {
-        background-image: url({{ asset('frontend/images/grid-view-icon.png') }});
-    }
-
-    .view-btn.list-view {
-        background-image: url({{ asset('frontend/images/list-view-icon.png') }});
-    }
-
     .view-btn.active {
         background-position: 0 -42px;
     }
@@ -122,11 +114,11 @@
         </div>
         <div class="category-text panel rounded-border mb-4 mt-4 pt-3">
             <p>
-                With Cashblack To Your Door, you can discover local restaurants and grocery stores to order African, Caribbean or 
-                from any other authentic Black-owned vendors and earn cashback through our partnerships with your favourite 
-                delivery apps such as Deliveroo and Uber Eats. Whether there’s rice at home or not, you can be sure that through 
+                With Cashblack To Your Door, you can discover local restaurants and grocery stores to order African, Caribbean or
+                from any other authentic Black-owned vendors and earn cashback through our partnerships with your favourite
+                delivery apps such as Deliveroo and Uber Eats. Whether there’s rice at home or not, you can be sure that through
                 Cashblack To Your Door, you’ll always be able to find local Black-owned retailers for your next order.
-                You can go to <span class="text-bold text-success"> Grocery Stores</span> or 
+                You can go to <span class="text-bold text-success"> Grocery Stores</span> or
                 <span class="text-bold text-success">Restaurants.</span>
             </p>
         </div>
@@ -141,8 +133,6 @@
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
-                        <a href="javascript:;" id="gridview" class="grid-view view-btn mt-1 active"></a>
-                        <a href="javascript:;" id="listview" class="list-view view-btn mt-1"></a>
                     </div>
                 </div>
             </div>
@@ -228,21 +218,6 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#listview').on('click', function() {
-                $('#gridview.active').removeClass('active');
-                $(this).addClass('active');
-                $('.categorylist').css("display", "block");
-                $('.categorygrid').css("display", "none");
-                directionRenderFnForListView();
-            });
-
-            $('#gridview').on('click', function() {
-                $('#listview.active').removeClass('active');
-                $(this).addClass('active');
-                $('.categorygrid').css("display", "block");
-                $('.categorylist').css("display", "none");
-            });
-
             $("select.store").change(function() {
                 var selectedStore = $(this).children("option:selected").val();
                 if (selectedStore != "default_option") {
@@ -254,7 +229,7 @@
             });
         });
 
-        ajaxPagination();
+        showStores();
 
         var map;
         var center;
@@ -288,8 +263,8 @@
                     id: storeValue,
                 },
                 success: function(response) {
-                    console.log(response);
                     let html = $('#get-stores').html(response);
+                    ajaxPagination()
                 },
                 error: function(errors) {
                     console.log(errors)

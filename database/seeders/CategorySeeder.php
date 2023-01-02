@@ -15,7 +15,7 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        
+
         $faker = Faker::create();
         $categories = array(
             array('id' => '1','name' => 'Electronics','description' => NULL,'sort' => NULL,'logo_type' => 'upload','logo_upload' => 'electronics.png','logo_link' => NULL,'banner_type' => 'upload','banner_upload' => 'category_default_banner.png','banner_link' => NULL,'parent_id' => '0','status' => '1','created_at' => '2021-05-26 08:38:56','updated_at' => '2021-05-26 08:38:56','deleted_at' => NULL),
@@ -119,12 +119,11 @@ class CategorySeeder extends Seeder
             array('id' => '99','name' => 'Parking & Transfers','description' => NULL,'sort' => NULL,'logo_type' => 'upload','logo_upload' => 'category_default_logo.png','logo_link' => NULL,'banner_type' => 'upload','banner_upload' => 'category_default_banner.png','banner_link' => NULL,'parent_id' => '94','status' => '1','created_at' => '2021-05-26 08:38:56','updated_at' => '2021-05-26 08:38:56','deleted_at' => NULL),
             array('id' => '100','name' => 'Rail & Coach','description' => NULL,'sort' => NULL,'logo_type' => 'upload','logo_upload' => 'category_default_logo.png','logo_link' => NULL,'banner_type' => 'upload','banner_upload' => 'category_default_banner.png','banner_link' => NULL,'parent_id' => '94','status' => '1','created_at' => '2021-05-26 08:38:56','updated_at' => '2021-05-26 08:38:56','deleted_at' => NULL),
             array('id' => '101','name' => 'Cashback to door','description' => NULL,'sort' => NULL,'logo_type' => 'upload','logo_upload' => 'category_default_logo.png','logo_link' => NULL,'banner_type' => 'upload','banner_upload' => 'category_default_banner.png','banner_link' => NULL,'parent_id' => '0','status' => '1','created_at' => '2021-05-26 08:38:56','updated_at' => '2021-05-26 08:38:56','deleted_at' => NULL),
-            array('id' => '101','name' => 'BBQ','description' => NULL,'sort' => NULL,'logo_type' => 'upload','logo_upload' => 'category_default_logo.png','logo_link' => NULL,'banner_type' => 'upload','banner_upload' => 'category_default_banner.png','banner_link' => NULL,'parent_id' => '101','status' => '1','created_at' => '2021-05-26 08:38:56','updated_at' => '2021-05-26 08:38:56','deleted_at' => NULL),
-            array('id' => '101','name' => 'breakfast','description' => NULL,'sort' => NULL,'logo_type' => 'upload','logo_upload' => 'category_default_logo.png','logo_link' => NULL,'banner_type' => 'upload','banner_upload' => 'category_default_banner.png','banner_link' => NULL,'parent_id' => '101','status' => '1','created_at' => '2021-05-26 08:38:56','updated_at' => '2021-05-26 08:38:56','deleted_at' => NULL),
-            array('id' => '101','name' => 'American','description' => NULL,'sort' => NULL,'logo_type' => 'upload','logo_upload' => 'category_default_logo.png','logo_link' => NULL,'banner_type' => 'upload','banner_upload' => 'category_default_banner.png','banner_link' => NULL,'parent_id' => '101','status' => '1','created_at' => '2021-05-26 08:38:56','updated_at' => '2021-05-26 08:38:56','deleted_at' => NULL),
-          );
-          
-        
+            array('id' => '102','name' => 'Grocery Stores','description' => NULL,'sort' => NULL,'logo_type' => 'upload','logo_upload' => 'category_default_logo.png','logo_link' => NULL,'banner_type' => 'upload','banner_upload' => 'category_default_banner.png','banner_link' => NULL,'parent_id' => '101','status' => '1','created_at' => '2021-05-26 08:38:56','updated_at' => '2021-05-26 08:38:56','deleted_at' => NULL),
+            array('id' => '103','name' => 'Restaurants','description' => NULL,'sort' => NULL,'logo_type' => 'upload','logo_upload' => 'category_default_logo.png','logo_link' => NULL,'banner_type' => 'upload','banner_upload' => 'category_default_banner.png','banner_link' => NULL,'parent_id' => '101','status' => '1','created_at' => '2021-05-26 08:38:56','updated_at' => '2021-05-26 08:38:56','deleted_at' => NULL),
+        );
+
+
         foreach($categories as $cat){
             $category                   = new Category();
             $category->name             = $cat['name'];
@@ -139,6 +138,6 @@ class CategorySeeder extends Seeder
             $category->feature_sidebar = ($cat['parent_id'] == 0) ? $faker->randomElement($array = array ('1','0')) : 0;
             $category->save();
         }
-        
+
     }
 }
