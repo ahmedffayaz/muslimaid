@@ -53,7 +53,7 @@
                         </div>
                     </div>
                     <div class="product-card__rating-legend">
-                        {{ $store->reviews->count() }} Reviews</div>
+                        {{ $store->activeReviews->count() }} Reviews</div>
                 </div>
             @endif
         </div>

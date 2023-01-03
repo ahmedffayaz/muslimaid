@@ -70,6 +70,10 @@ class Store extends Model
 
         return $this->hasMany(StoreReview::class)->orderBy('rating', 'DESC');
     }
+    public function activeReviews(){
+
+        return $this->reviews()->where('status', 'active');
+    }
     public function commissions(){
 
         return $this->hasMany(UserCashback::class);
