@@ -23,7 +23,7 @@
                         <div class="rating">
                             <div class="rating__body">
                                 @foreach (range(1, 5) as $index)
-                                    <svg class="rating__star @if ($index <= $store->reviews->avg('rating')) rating__star--active @endif"
+                                    <svg class="rating__star @if ($index <= $store->rating) rating__star--active @endif"
                                         width="13px" height="12px">
                                         <g class="rating__fill">
                                             <use
@@ -38,7 +38,7 @@
                                     </svg>
 
                                     <div
-                                        class="rating__star rating__star--only-edge @if ($index <= $store->reviews->avg('rating')) rating__star--active @endif">
+                                        class="rating__star rating__star--only-edge @if ($index <= $store->rating) rating__star--active @endif">
                                         <div class="rating__fill">
                                             <div class="fake-svg-icon">
                                             </div>
