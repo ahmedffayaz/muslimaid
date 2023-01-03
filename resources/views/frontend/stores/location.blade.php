@@ -152,23 +152,23 @@
                         <input type="radio" name="type" id="changetype-geocode" />
                         <label for="changetype-geocode">geocode</label>
 
-                    <input type="radio" name="type" id="changetype-cities" />
-                    <label for="changetype-cities">(cities)</label>
+                        <input type="radio" name="type" id="changetype-cities" />
+                        <label for="changetype-cities">(cities)</label>
 
-                    <input type="radio" name="type" id="changetype-regions" />
-                    <label for="changetype-regions">(regions)</label>
-                </div>
-                <br />
-                <div id="strict-bounds-selector" class="pac-controls">
-                    <input type="checkbox" id="use-location-bias" value="" checked />
-                    <label for="use-location-bias">Bias to map viewport</label>
+                        <input type="radio" name="type" id="changetype-regions" />
+                        <label for="changetype-regions">(regions)</label>
+                    </div>
+                    <br />
+                    <div id="strict-bounds-selector" class="pac-controls">
+                        <input type="checkbox" id="use-location-bias" value="" checked />
+                        <label for="use-location-bias">Bias to map viewport</label>
 
-                    <input type="checkbox" id="use-strict-bounds" value="" />
-                    <label for="use-strict-bounds">Strict bounds</label>
+                        <input type="checkbox" id="use-strict-bounds" value="" />
+                        <label for="use-strict-bounds">Strict bounds</label>
+                    </div>
                 </div>
-            </div>
                 <div>
-                    <input id="pac-input" style="padding-left: 50px; " name="user_address" class="form-control searchbox" type="text" placeholder="Enter a locations" value="" />
+                    <input id="pac-input" style="padding-left: 70px; " name="user_address" class="form-control searchbox" type="text" placeholder="Enter a locations" value="" />
                     <span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
                 </div>
             </div>
