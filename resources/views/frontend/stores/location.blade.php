@@ -69,10 +69,6 @@
         display: none;
     }
 
-    .select2-container--default .select2-selection--multiple {
-        border-radius: 1.75rem !important;
-    }
-
     .pagination {
         justify-content: center;
     }
@@ -229,8 +225,6 @@
                 }
             });
         });
-
-        showStores();
 
         var map;
         var center;
