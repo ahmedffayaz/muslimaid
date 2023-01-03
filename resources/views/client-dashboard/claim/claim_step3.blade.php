@@ -16,11 +16,11 @@
                                 <div class="form-row">
                                     <div class="form-group col-xl-8 col-md-8">
                                         <label for="amount">Order Amount</label>
-                                        <input type="text" class="form-control" id="amount" name="amount" placeholder="Order Amount">
+                                        <input type="text" class="form-control" id="amount" name="amount" placeholder="Order Amount" required>
                                     </div>
                                     <div class="form-group col-xl-8 col-md-12">
                                         <label for="product">Product Purchased</label>
-                                        <input type="text" class="form-control" id="product" name="product" placeholder="Product">
+                                        <input type="text" class="form-control" id="product" name="product" placeholder="Product" required>
                                     </div>  
                                 </div>
                                 <button type="submit" class="btn btn-primary">Next</button>
