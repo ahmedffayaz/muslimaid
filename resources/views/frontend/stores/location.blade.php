@@ -67,6 +67,12 @@
     .pagination {
         justify-content: center;
     }
+
+    @media (max-width: 767px) {
+        .block-banner__body {
+            height: 190px;
+        }
+    }
 </style>
 
 <div class="page-header">
@@ -90,27 +96,7 @@
                 </ol>
             </nav>
         </div>
-        <div class="container p-2 my-2">
-            <div class="row">
-                <div class="col-12">
-                    <div class="block-finder__body">
-                            <img class="banner__size" style="width:1110px;" @if($mainCategory->banner_type == 'upload' && $mainCategory->banner_upload != NULL && $mainCategory->banner_upload != '')
-                            @if(!file_exists(storage_path('app/public/categories/images/' . $mainCategory->banner_upload)))
-                                    src="{{ asset('frontend/images/banners/categories/cashback.png') }}"
-                                @else
-                                    src="{{ asset('storage/categories/images/' . $mainCategory->banner_upload) }}"
-                                @endif
-                            @else
-                                src="{{ asset('frontend/images/banners/categories/cashback.png') }}"
-                            @endif alt="Store Image Missing">
-                            <div class="block-finder__header">
-                                <div class="block-finder__title">{{ $mainCategory->name }}</div>
-                                <div class="block-finder__subtitle"></div>
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('layouts.frontend.includes.banners.categories_banner')
         <div class="category-text panel rounded-border mb-4 mt-4 pt-3">
             <p>{{ $mainCategory->description }}</p>
         </div>
