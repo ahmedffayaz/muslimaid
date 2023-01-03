@@ -35,11 +35,6 @@
         flex-grow: 1 !important;
     }
 
-    .border {
-        border: 2px solid #000 !important;
-        border-radius: 1.75rem;
-    }
-
     .current {
         border: none;
         z-index: 24;
@@ -122,7 +117,7 @@
         <div class="page-header__title">
             <div class="row">
                 <div class="col-md-12 pl-0">
-                    <h1 class="col-md-5 float-left">Cashback To Your Door</h1>
+                    <h4 class="col-md-5 float-left">Search For {{ $mainCategory->name }}</h4>
                     <div class="col-md-5 float-right  d-flex flex-justify-between">
                         <select class="form-control width store form-control-select2" multiple
                             data-placeholder="All" id="select-categories" onchange="showStores()">
@@ -173,7 +168,7 @@
                 </div>
             </div>
                 <div>
-                    <input id="pac-input" style="padding-left: 50px; " name="user_address" class="form-control searchbox border" type="text" placeholder="Enter a locations" value="" />
+                    <input id="pac-input" style="padding-left: 50px; " name="user_address" class="form-control searchbox" type="text" placeholder="Enter a locations" value="" />
                     <span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
                 </div>
             </div>

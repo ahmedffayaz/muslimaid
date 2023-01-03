@@ -49,16 +49,13 @@ class StoreController extends Controller
             return view('frontend.stores.stores',compact('locations'));
         }
 
-       // $locations = Store::with('logo','storeAddress')->paginate(10);
-        //$categories = Category::with(['stores.storeAddress'])->where('parent_id', '=', 0)->orderBy('name', 'ASC')->get();
-        $mainCategory = Category::whereName('Cashback to door')->first();
+        $mainCategory = Category::whereName('Cashback To Your Door')->first();
 
-        // dd($mainCategory->id);
         $locations = Store::when(optional($mainCategory)->id, function($query) use ($mainCategory) {
             $query->whereHas('categories', function ($query) use ($mainCategory) {
                 $query->where('category_id', $mainCategory->id);
             });
-        })->with('logo', 'storeAddress')->paginate(10);
+        })->where('status', 1)->with('logo', 'storeAddress')->paginate(10);
 
         $categories = Category::with(['stores.storeAddress'])->whereParentId($mainCategory['id'])->orderBy('name', 'ASC')->get();
 
