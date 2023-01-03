@@ -17,7 +17,7 @@
             <div class="product-card__name">
                 <a href="{{ route('store.show', $store->slug) }}">{{ $store->name }}</a>
             </div>
-            @if ($store->reviews->count())
+            {{-- @if ($store->reviews->count()) --}}
                 <div class="product-card__rating mx-auto">
                     <div class="product-card__rating-stars">
                         <div class="rating">
@@ -55,7 +55,7 @@
                     <div class="product-card__rating-legend">
                         {{ $store->activeReviews->count() }} Reviews</div>
                 </div>
-            @endif
+            {{-- @endif --}}
         </div>
         <div class="product-card__actions">
             <div class="product-card__prices">
