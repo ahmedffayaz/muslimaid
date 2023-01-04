@@ -43,10 +43,10 @@
                                         </div>
                                         <div class="col-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="default-06">Status</label>
+                                                <label class="form-label" for="status">Status</label>
                                                 <div class="form-control-wrap ">
                                                     <div class="form-control-select">
-                                                        <select class="form-control" id="default-06" name="status" required>
+                                                        <select class="form-control" id="status" name="status" required>
                                                             <option value="1">Active</option>
                                                             <option value="0">In-active</option>
                                                         </select>

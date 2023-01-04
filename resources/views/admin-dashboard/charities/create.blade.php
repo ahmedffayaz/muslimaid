@@ -1,5 +1,13 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
+@if(session()->has('message'))
+<div class = "container alert {{ session('alert-class') }} alert-dismissible fade show alert-important" role = "alert">
+    {{ session('message') }}.
+<button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close">
+    <span aria-hidden = "true">&times;</span>
+</button>
+</div>
+@endif
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
@@ -28,6 +36,11 @@
                                                 <label class="form-label" for="title">Title</label>
                                                 <div class="form-control-wrap">
                                                     <input type="text" class="form-control" id="title" name="title" required>
+                                                    @error('title')
+                                                    <span class="invalid-feedback d-block" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -37,12 +50,17 @@
                                                 <div class="form-control-wrap ">
                                                     <div class="form-control-select">
                                                         <select class="form-control" id="charity_types_id" name="charity_types_id" required>    
-                                                        <option value="0">None</option>
+                                                        <option disabled selected>None</option>
                                                         @foreach ($charitiestypes as $types)
                                                         <option value="{{$types->id}}" style="font-weight:bold">{{$types->title}}</option>
                                                         @endforeach
                                                         </select>
                                                     </div>
+                                                    @error('charity_types_id')
+                                                    <span class="invalid-feedback d-block" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -52,6 +70,11 @@
                                                 <!-- Create the editor container -->
                                                 <div  id="editor-container"> </div>
                                                 <input name="description" type="hidden">
+                                                @error('description')
+                                                <span class="invalid-feedback d-block" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                                @enderror
                                                
                                             </div>
                                         </div>
@@ -62,11 +85,8 @@
                                                 <div class="form-control-wrap ">
                                                     <div class="form-control-select">
                                                         <select class="form-control" name="logo_type" id='logo_type' required>
-                                                            
                                                             <option value="upload">Upload</option>
-                                                            <option value="link">Link</option>
-                                                                
-                                                           
+                                                            <option value="link">Link</option> 
                                                         </select>
                                                     </div>
                                                 </div>
@@ -76,7 +96,12 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="logo_link">Logo Link</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="logo_link" name="logo_link" required>
+                                                    <input type="text" id="logo_link" class="form-control" id="logo_link" name="logo_link" required>
+                                                    @error('logo_link')
+                                                    <span class="invalid-feedback d-block" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -85,7 +110,12 @@
                                                 <label class="form-label" for="logo_upload">Logo Upload</label>
                                                 <div class="form-control-wrap">
                                                     <div class="custom-file">
-                                                        <input type="file" class="custom-file-input" name='logo_upload' id="logo_upload">
+                                                        <input type="file" class="custom-file-input" name='logo_upload' id="logo_upload" required>
+                                                        @error('logo_upload')
+                                                        <span class="invalid-feedback d-block" role="alert">
+                                                            <strong>{{ $message }}</strong>
+                                                        </span>
+                                                        @enderror
                                                         <label class="custom-file-label" for="logo_upload">Choose file</label>
                                                     </div>
                                                 </div>
@@ -118,7 +148,7 @@
                                                 <label class="form-label" for="banner_upload">Banner Upload</label>
                                                 <div class="form-control-wrap">
                                                     <div class="custom-file">
-                                                        <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload">
+                                                        <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload" required>
                                                         <label class="custom-file-label" for="banner_upload">Choose file</label>
                                                     </div>
                                                 </div>
@@ -128,7 +158,12 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="country">Country</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="country" name="country">
+                                                    <input type="text" class="form-control" id="country" name="country" required>
+                                                    @error('country')
+                                                    <span class="invalid-feedback d-block" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>

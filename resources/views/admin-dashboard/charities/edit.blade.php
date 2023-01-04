@@ -53,7 +53,7 @@
                                                 
                                                 <label class="form-label" for="description">Description</label>
                                                 <!-- Create the editor container -->
-                                                <div  id="editor-container">{{$charity->description}}</div>
+                                                <div  id="editor-container">{!!$charity->description !!}</div>
                                                 <input name="description" type="hidden">
                                             </div>
                                         </div>

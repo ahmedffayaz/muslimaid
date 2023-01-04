@@ -203,5 +203,5 @@
         
         });
         
-        </script>  
+    </script>  
 @endpush

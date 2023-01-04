@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Image;
+use Exception;
 use App\Models\Charity;
+use App\Models\Category;
+use Illuminate\Support\Facades\File;
+use App\Models\CharityType;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
-use Exception;
-use App\Models\CharityType;
 
 class CharityController extends Controller
 {
@@ -20,9 +22,33 @@ class CharityController extends Controller
      */
     public function index()
     {
-        $charities=Charity::latest()->get();
+        $charities=Charity::latest()->paginate(30);
         $charitiestypes=CharityType::latest()->get();
         return view('admin-dashboard.charities.index',compact('charities','charitiestypes'));
+    }
+    public function searchCharities(Request $request)
+    {  
+        $charitiestypes=CharityType::latest()->get();
+
+        $charities = (new Charity())->newQuery();
+
+        if ($request->input('charity_types_id')) {
+            $charities->where('charity_types_id', $request->input('charity_types_id'));
+        }
+        if ($request->input('country')) {
+            $charities->where('country', $request->input('country'));
+           
+        }
+        if ($request->input('title')) {
+            $charities->where('title',$request->input('title'));
+           
+        }
+        if ($request->input('status')!=-1) {
+            $charities->where('status', $request->input('status'));
+        }
+        $charities = $charities->orderBy('title','DESC')->latest()->paginate(30);
+        $route='search';
+        return view('admin-dashboard.charities.index_data', compact('charities','route'))->render();
     }
 
     /**
@@ -46,14 +72,14 @@ class CharityController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:255',
+            'charity_types_id' =>'required',
             'country' => 'required',
             'logo_type' => 'required|max:255',
             'banner_type' => 'required',
-            'charity_types_id' =>'required',
+           
         ]);
 
-        if ($validator->fails()) {
-            flash()->success($validator->errors());
+        if ($validator->fails()) { 
             return redirect()->route('admin.charities.create')
                         ->withErrors($validator)
                         ->withInput();
@@ -61,24 +87,25 @@ class CharityController extends Controller
         // try {
            $charity = Charity::create([
                 'title' => $request->input('title'),
-                'country' => $request->input('country'), 
                 'charity_types_id' => $request->input('charity_types_id'), 
                 'description' => $request->input('description'), 
                 'logo_type' => $request->input('logo_type'), 
                 'logo_link' => $request->input('logo_link'), 
                 'banner_type' => $request->input('banner_type'), 
-                'banner_link' => $request->input('banner_link'), 
+                'banner_link' => $request->input('banner_link'),
+                'country' => $request->input('country'),  
                 'status' => $request->input('status'), 
             ]);
         if($request->input('logo_type')=='upload'){
-            if($request->has('logo_upload')){
-                
-                $imageName = $request->input('name').'_logo_'.time().'.'.$request->logo_upload->extension();          
+            if($request->has('logo_upload')){ 
+                $imageName = $request->input('name').'_logo_'.time().'.'.$request->logo_upload->extension();  
+                if (File::exists(public_path('storage/charities/images'.$imageName))) {
+                    File::delete(public_path('storage/charities/images'.$imageName));
+                }        
                 $request->logo_upload->storeAs('public/charities/images',$imageName);
                 
                $charity->logo_upload = $imageName;
                $charity->update();
-
             }else{
                $charity->logo_upload = 'category_default_logo.png';
                $charity->update();
@@ -90,10 +117,10 @@ class CharityController extends Controller
             if($request->has('banner_upload')){
                 
                 $imageName =$request->input('name').'_banner_'.time().'.'.$request->banner_upload->extension();          
-                $request->banner_upload->storeAs('public/charities/images',$imageName);
-                
-               $charity->banner_upload = $imageName;
-               $charity->update();
+                 $request->banner_upload->storeAs('public/charities/images',$imageName);
+                  
+                $charity->banner_upload = $imageName;
+                $charity->update();
 
             }else{
                $charity->banner_upload = 'category_default_banner.png';
@@ -122,12 +149,11 @@ class CharityController extends Controller
             'title' => 'required',
             'status' => 'required',
         ]);
-
-        $charityType= $request->all()([
+        CharityType::create([
             'title' =>  $request->title,
             'status' => $request->status,
         ]);
-        $charityType->create();
+
         flash()->success('New Charity Type added');
         return redirect()->route('admin.charities.charity_type_view');
     }
@@ -163,7 +189,7 @@ class CharityController extends Controller
      */
     public function show($id)
     {
-        //
+       
     }
 
     /**

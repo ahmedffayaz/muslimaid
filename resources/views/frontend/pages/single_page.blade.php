@@ -69,35 +69,24 @@
                     <div class="block-header__divider"></div>
                 </div>
                 <div class="row">
-                    @foreach ($charity as $ch)
+                    @foreach ($charity as $charity)
                         <div class="col-md-4">
                             <div class="block-product-columns__column pt-2">
-                                <div class="block-product-columns__item" id="loadMore ">
-                                    <div class="product-card product-card--hidden-actions product-card--layout--horizontal" >
-                                        <button class="product-card__quickview" type="button">
-                                            <svg width="16px" height="16px">
-                                                <use xlink:href="images/sprite.svg#quickview-16"></use>
-                                            </svg>
-                                            <span class="fake-svg-icon"></span>
-                                        </button>
-                                        <div class="product-card__badges-list">
-                                            <div class="product-card__badge product-card__badge--new "> {!! $ch->status ? '<span class="tb-status text-light">active</span>' : '<span class="tb-status text-light">inactive</span>'!!}
-                                            </div>
-                                        </div>
+                                <div class="block-product-columns__item" >
+                                    <div class="product-card product-card--hidden-actions product-card--layout--horizontal product-card__quickvieww" 
+                                                       type="button" toggle="model" data-target="#quickview-modal" data-id="{{$charity->id}}" style="min-height: 150px">
                                         <div class="product-card__image product-image">
                                             <a href="product.html" class="product-image__body">
-                                                <img class="product-image__img" src="{{asset('storage/charities/images/'.$ch->logo_upload)}}" alt="">
+                                                <img class="product-image__img" src="{{asset('storage/charities/images/'.$charity->logo_upload)}}" alt="">
                                             </a>
                                         </div>
                                         <div class="product-card__info">
                                             <div class="product-card__name">
-                                                <a href="product.html">{{$ch->title}}</a>
+                                                <p>{{$charity->title}}</p>
                                             </div>
                                             <div class="product-card__rating">
-                                              
-                                               {!! Illuminate\Support\Str::limit($ch->description, 25 ) !!}
-                                            </div>
-                                           
+                                               {{ mb_substr(strip_tags($charity->description), 0, 50, 'UTF-8')}}...
+                                            </div> 
                                         </div>
                                     </div>
                                 </div>
@@ -106,13 +95,75 @@
                     @endforeach 
                 </div>
             </div>
-            <div class="nk-block-between-md g-3 p-5 card-inner">
-                <div class="pagination g" >
-                    {!! $charity->links()!!}                                               
-                    </div> 
-            </div><!-- .nk-block-between --> </div>
-    </div>
+            <div id="quickview-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-xl">
+                    <div class="modal-content" id="quickview-modal-content">   
+                    </div>
+                </div>
+            </div>
+                           
+        </div>
+        <div class="nk-block-between-md g-3 card-inner float-right">
+            <div class="pagination g" >
+                {!! $charity->links()!!}                                               
+            </div>    
+        </div><!-- .nk-block-between -->     
+    </div> 
 </div>
-
 @endsection
+@push('scripts')
+    <script>
+       
+    $('.product-card__quickvieww').on('click', function() {
+        var id = $(this).attr('data-id');
+        const quickview = {
+        cancelPreviousModal: function() {},
+        clickHandler: function() {
+            const modal = $('#quickview-modal');
+            const button = $(this);
+            let xhr = null;
+            const timeout = setTimeout(function() {
+                var _token = $("input[name=_token]").val();
+                xhr = $.ajax({
+                   url: '{{ route('showCharity') }}',
+                   method:"POST",
+                   data: {
+                        id: id,
+                        _token:_token
+                    },
+                    success: function(data) {
+                        quickview.cancelPreviousModal = function() {};
+                        modal.find('.modal-content').html(data);
+                        $(document).on('click', '.quickview__close', function() {
+                            modal.modal('hide');
+                        });
+                        
+                        $("#quickview-modal-content").html(data).show();
+                        $('#quickview-modal').modal('show');
+                    }
+                });
+            });
+            quickview.cancelPreviousModal = function() {
+                if (xhr) {
+                    xhr.abort();
+                }
+
+                // timeout ONLY_FOR_DEMO!
+                clearTimeout(timeout);
+            };
+        }
+    };
+   
+   
+    $(function () {
+        const modal = $('#quickview-modal');
+
+        modal.on('shown.bs.modal', function() {
+            $('.input-number', modal).customNumber();
+        });      
+    });
+           quickview.clickHandler.apply(this, arguments);  
+       });
+    </script>
+@endpush
 

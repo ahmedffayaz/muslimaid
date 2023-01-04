@@ -24,6 +24,6 @@ class Charity extends Model
 
     public function charity_type(){
 
-        return $this->belongsTo(CharityType::class);
+        return $this->hasOne(CharityType::class,'id','charity_types_id');
     }
 }

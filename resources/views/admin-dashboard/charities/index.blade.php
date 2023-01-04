@@ -10,8 +10,7 @@
                         <div class="nk-block-head-content">
                             <h3 class="nk-block-title page-title">Charities</h3>
                             <div class="nk-block-des text-soft">
-                                {{-- <p>You have total {{count($charities)}} tickets.</p> --}}
-                            </div>
+                           </div>
                         </div><!-- .nk-block-head-content -->
                         <div class="nk-block-head-content">
                             <div class="toggle-wrap nk-block-tools-toggle">
@@ -31,15 +30,15 @@
                 </div><!-- .nk-block-head -->
                 <div class="card card-preview mb-4">
                     <div class="card-inner">
-                        <form action="{{route('admin.tickets.search')}}" class="form-validate is-alter search_form" method="POST">
+                        <form action="{{route('admin.charities.search')}}" class="form-validate is-alter search_form" method="POST">
                             @csrf
                             <div class="row g-4">
                                 {{-- <div class="col-lg-2"></div> --}}
                                 <div class="col-lg-3">
                                     <div class="form-group">
-                                        <label class="form-label" for="keyword">Search for Keyword</label>
+                                        <label class="form-label" for="title">Search for Title</label>
                                         <div class="form-control-wrap">
-                                            <input type="text" class="form-control" id="keyword" value="" name="keyword">
+                                            <input type="text" class="form-control" id="title" value="" name="title">
                                         </div>
                                     </div>
                                 </div>
@@ -50,7 +49,7 @@
                                             <select class="form-select form-control" data-search="on" id="charity_types_id" name="charity_types_id">
                                                 <option value="0">Any</option>
                                                 @foreach ($charitiestypes as $charity)
-                                                <option value="{{$charity->id}}"> {{$charity->title}}</option>
+                                                <option value="{{$charity->id}}">{{$charity->title}}</option>
                                                 @endforeach 
                                             </select>
                                         </div>
@@ -62,8 +61,8 @@
                                         <div class="form-control-wrap ">
                                             <select class="form-select form-control" data-search="on" id="status" name="status">
                                                 <option value="-1">Any</option>
-                                                <option value="open">Open</option>
-                                                <option value="closed">Closed</option>
+                                                <option value="1">Active</option>
+                                                <option value="0">In-active</option>
                                             </select>
                                         </div>
                                     </div>
@@ -133,4 +132,35 @@
         });
    });
 </script>
+<script>
+    $(document).ready(function(){
+    
+     $(document).on('submit', '.search_form', function(event){
+        event.preventDefault(); 
+          
+        $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+        </div></div>`);
+
+         var _token = $("input[name=_token]").val();
+         var title = $("input[name=title").val();
+         var charity_types_id = $("select[name=charity_types_id]").val();
+         var status = $("select[name=status").val();
+         var country = $("select[name=country").val();
+        $.ajax({
+          url:'{{route("admin.charities.search", )}}',
+          method:"POST",
+          data:{_token:_token,title:title,charity_types_id:charity_types_id,country:country,status:status},
+          success:function(data)
+          {
+           $('#table-data').html(data);
+           $('html, body').animate({ scrollTop: 0 }, 'slow');
+          }
+        });
+        
+     });
+    
+    });
+    
+</script>  
 @endpush

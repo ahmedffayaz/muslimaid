@@ -75,7 +75,7 @@ class PagesController extends Controller
             $term = null;
             return view('frontend.pages.vouchers', compact('stores', 'term', 'page'));
         }
-        $charity=Charity::orderBy('id', 'DESC')->paginate(10);
+        $charity=Charity::where('status','=','1')->orderBy('id', 'DESC')->paginate(10);
         return view('frontend.pages.single_page', compact('page','charity'));
     }
 
@@ -279,5 +279,10 @@ class PagesController extends Controller
     {
         $stores = Store::where('name', 'like', $letter . '%')->get();
         return view('frontend.pages.stores_with_letter', compact('stores', 'letter'));
+    }
+    public function showCharity(Request $request){
+        $charity = Charity::with('charity_type')->find($request->id);
+        return view('frontend.pages.charity_model',compact('charity'));
+    
     }
 }
