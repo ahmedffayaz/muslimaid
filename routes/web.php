@@ -48,6 +48,7 @@ Route::namespace('App\Http\Controllers\Admin')
     //Networks
     Route::post('networks/fetch',[App\Http\Controllers\Admin\NetworkController::class,'fetch'])->name('networks.fetch');
     Route::get('networks/categories/{network}', [App\Http\Controllers\Admin\NetworkController::class,'categories'])->name('networks.categories');
+    Route::post('networks/categories_import/{network}', [App\Http\Controllers\Admin\NetworkController::class,'importCategories'])->name('networks.categories.import');
     Route::get('networks/categories_export/{network}',[App\Http\Controllers\Admin\NetworkController::class,'exportCsv'])->name('networks.categories.export');
     Route::resource('networks', NetworkController::class);
 

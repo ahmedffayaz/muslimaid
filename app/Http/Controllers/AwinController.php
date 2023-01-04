@@ -130,6 +130,8 @@ class AwinController extends Controller
             }
 
             curl_close($curl);
+
+            echo $curlResponse; die();
             
             $stores = json_decode($curlResponse, true);
 
@@ -155,51 +157,50 @@ class AwinController extends Controller
                 $cashback_percent = 0;
                 foreach ($results as $cashback) {
                     $store = Store::where('advertiser_id', $cashback->programID)->first();
-                    $click = ExitClick::where('id', $cashback->clickRef)->first();
+                    $click = ExitClick::where('id', $cashback->clickRef)->first(); 
                     if (!$click) {
-                        $click = ExitClick::where('network_click_ref', $cashback->clickRef)->first();
-                    }
-                    if ($click) {
-                        $click_id = $click->id;
+                        $click = ExitClick::where('network_click_ref', $cashback->clickRef)->first(); 
+                    if ($click) { 
+                        $click_id = $click->id; 
                         $cashback_percent = $click->current_cashback_percentage;
                     } else {
-                        $new_click = ExitClick::create([
-                            'store_id' => $store->id,
-                            'user_id' => 1,
+                        $new_click = ExitClick::create([ 
+                            'store_id' => $store->id, 
+                            'user_id' => 1, 
                             'network_click_ref' => $cashback->clickRef,
-                            'status' => 'pending',
+                            'status' => 'pending', 
                             'exit_url' => '#',
-                            'current_cashback_percentage' => $cashback_percent_setting
+                            'current_cashback_percentage' => $cashback_percent_setting 
                         ]);
-                        $click_id = $new_click->id;
+                        $click_id = $new_click->id; 
                         $cashback_percent = $cashback_percent_setting;
                     }
 
-                    $cashback_amount_for_user = ($cashback->commission / 100) * $cashback_percent;
-                    $commission_exist = UserCashback::where(['exit_click_id' =>  $click_id, 'network_commission_id' =>  $cashback->transactionID])->first();
+                    $cashback_amount_for_user = ($cashback->commission / 100) * $cashback_percent; 
+                    $commission_exist = UserCashback::where(['exit_click_id' =>  $click_id, 'network_commission_id' =>  $cashback->transactionID])->first(); 
 
                     $status = '';
                     if ($cashback->status == 'delayed') $status = 1;
                     else if ($cashback->status == 'cancelled') $status = 2;
                     else if ($cashback->status == 'confirmed') $status = 3;
 
-                    if ($cashback->status == 'confirmed' &&  $cashback->paymentStatus != 'paid') $status = 1;
+                    if ($cashback->status == 'confirmed' &&  $cashback->paymentStatus != 'paid') $status = 1; 
                     
                     if (!$commission_exist) {
-                        $commission = UserCashback::create([
+                        $commission = UserCashback::create([ 
                             'store_id' => $store->id,
-                            'user_id' => $click->user_id ?? 1,
-                            'exit_click_id' => $click_id,
-                            'amount' => round($cashback_amount_for_user, 2),
+                            'user_id' => $click->user_id ?? 1, 
+                            'exit_click_id' => $click_id, 
+                            'amount' => round($cashback_amount_for_user, 2), 
                             'network_commission' => $cashback->commission,
-                            'network_commission_id' => $cashback->transactionID,
+                            'network_commission_id' => $cashback->transactionID, 
                             'network_order_id' => $cashback->transactionID,
-                            'order_value' => $cashback->saleValue,
-                            'status' => $status,
-                            'event_date' => \Carbon\Carbon::parse($cashback->date)->toDateTimeString(),
-                            'click_date' => \Carbon\Carbon::parse($cashback->clickthroughTime)->toDateTimeString(),
+                            'order_value' => $cashback->saleValue, 
+                            'status' => $status, 
+                            'event_date' => \Carbon\Carbon::parse($cashback->date)->toDateTimeString(), 
+                            'click_date' => \Carbon\Carbon::parse($cashback->clickthroughTime)->toDateTimeString(), 
                         ]);
-
+ 
                         CashbackStatusChange::create([
                             'user_cashback_id' => $commission->id,
                             'cashback_status_id' => $status
