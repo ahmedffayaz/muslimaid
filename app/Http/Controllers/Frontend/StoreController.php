@@ -55,7 +55,7 @@ class StoreController extends Controller
             $query->whereHas('categories', function ($query) use ($mainCategory) {
                 $query->where('category_id', $mainCategory->id);
             });
-        })->where('status', 1)->with('logo', 'storeAddress')->paginate(10);
+        })->where('status', 'active')->with('logo', 'storeAddress')->paginate(10);
 
         $categories = Category::with(['stores.storeAddress'])->whereParentId($mainCategory['id'])->orderBy('name', 'ASC')->get();
 

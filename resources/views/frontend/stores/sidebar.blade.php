@@ -21,7 +21,7 @@
                     @if(count($category->childs))
                         @include('frontend.stores.sidebar_widget_subcategories',['childs' => $category->childs])
                     @endif
-                </li>  
+                </li>
                    @endforeach
                 </ul>
             </div>
@@ -38,9 +38,9 @@
                             </div>
                             <div class="col-9 pl-0"><h6>Tracking Reliability</h6>
                                 <span class="color-primary">98% tracked</span>
-                            </div>                      
+                            </div>
                         </div>
-                    </li>  
+                    </li>
                     <li class="widget-categories__item mb-4" data-toggle="popover" title="Less than 24 hours" data-content="On average, purchases at this retailer track into your Activity in less than 24 hours.">
                         <div class="widget-categories__row">
                             <div class="col-3 pl-0">
@@ -48,9 +48,9 @@
                             </div>
                             <div class="col-9 pl-0"><h6>Tracking speed</h6>
                                 <span class="color-primary">Less than 24 hours</span>
-                            </div>                      
+                            </div>
                         </div>
-                    </li> 
+                    </li>
                     <li class="widget-categories__item" data-toggle="popover" title="Less than 9 months" data-content="On average, cashback for this retailer will take less than 9 months to be confirmed">
                         <div class="widget-categories__row">
                             <div class="col-3 pl-0">
@@ -58,9 +58,9 @@
                             </div>
                             <div class="col-9 pl-0"><h6>Payment Speed</h6>
                                 <span  class="color-primary">Less than 9 months</span>
-                            </div>                      
+                            </div>
                         </div>
-                    </li> 
+                    </li>
                 </ul>
             </div>
         </div>
@@ -72,9 +72,9 @@
             <div class="widget-products widget">
                 <h4 class="widget__title">Similar Stores</h4>
                 <div class="widget-products__list">
-                    
+
                     @foreach ($sidebar_stores->take(5) as $item)
-               
+
                     <a href="{{route('store.show',$item->slug)}}" class="widget-products__item">
                         <div class="widget-products__image">
                             <div class="product-image">
@@ -86,7 +86,7 @@
                                         src="{{asset('storage/stores/images/'.$item->logo->first()->image)}}"
                                     @endif
                                 @else
-                                    src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                                    src="{{asset('frontend/images/products/product-16.jpg')}}"
                                 @endif alt="">
                                 {{-- </a> --}}
                             </div>
@@ -96,17 +96,18 @@
                                 {{$item->name}}
                             </div>
                             <div class="widget-products__prices">
-                                
-                                @if($item->custom_cashback_percentage)
-                                    @if($item->cashback->type=='fixed'){{$item->cashback->currency}}@endif{{($item->custom_cashback_percentage/100)*$item->cashback->sale_commission}}@if($item->cashback->type=='percentage')%@endif
-                                @else
-                                    @if($item->cashback->type=='fixed'){{$item->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$item->cashback->sale_commission}}@if($item->cashback->type=='percentage')%@endif
+                                @if ($item->cashback)
+                                    @if($item->custom_cashback_percentage)
+                                        @if($item->cashback->type=='fixed'){{$item->cashback->currency}}@endif{{($item->custom_cashback_percentage/100)*$item->cashback->sale_commission}}@if($item->cashback->type=='percentage')%@endif
+                                    @else
+                                        @if($item->cashback->type=='fixed'){{$item->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$item->cashback->sale_commission}}@if($item->cashback->type=='percentage')%@endif
+                                    @endif
                                 @endif
                                  Cashback
                             </div>
                         </div>
                     </a>
-           
+
                     @endforeach
                 </div>
             </div>
@@ -122,7 +123,7 @@
                     <p>Not enough data</p>
                     @endif
                     @foreach ($sidebar_stores->take(5) as $item)
-               
+
                     <a href="{{route('store.show',$item->slug)}}" class="widget-products__item">
                         <div class="widget-products__image">
                             <div class="product-image">
@@ -134,7 +135,7 @@
                                         src="{{asset('storage/stores/images/'.$item->logo->first()->image)}}"
                                     @endif
                                 @else
-                                    src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                                    src="{{asset('frontend/images/products/product-16.jpg')}}"
                                 @endif alt="">
                                 {{-- </a> --}}
                             </div>
@@ -144,7 +145,7 @@
                                 {{$item->name}}
                             </div>
                             <div class="widget-products__prices">
-                                
+
                                 @if($item->custom_cashback_percentage)
                                     @if($item->cashback->type=='fixed'){{$item->cashback->currency}}@endif{{($item->custom_cashback_percentage/100)*$item->cashback->sale_commission}}@if($item->cashback->type=='percentage')%@endif
                                 @else
@@ -154,7 +155,7 @@
                             </div>
                         </div>
                     </a>
-           
+
                     @endforeach
                 </div>
             </div>
