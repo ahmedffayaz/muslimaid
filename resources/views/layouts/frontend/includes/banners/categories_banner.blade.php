@@ -1,3 +1,9 @@
+<style>
+    .block-banner__title__bg {
+        background: white;
+        padding: 10px 0px 10px 0px;
+    }
+</style>
 <!-- .block-banner -->
 <div class="block block-banner">
     <div class="container mt-4">
@@ -20,7 +26,11 @@
                 @else
                     style="background-image: url({{ asset('frontend/images/banners/categories/cashback-bg-image.jpg') }})"
                 @endif ></div>
-            <div class="block-banner__title" style="color: black;">{{ $mainCategory->name }} <br class="block-banner__mobile-br"> Hand Tools</div>
+            <div class="block-banner__title d-flex justify-content-center">
+                <div class="col-lg-6">
+                    <div class="block-banner__title__bg">{{ $mainCategory->name }}</div>
+                </div>
+            </div>
         </a>
     </div>
 </div>
