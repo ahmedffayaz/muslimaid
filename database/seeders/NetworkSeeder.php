@@ -16,16 +16,23 @@ class NetworkSeeder extends Seeder
     {
         $network = new Network();
 		$network->name = 'CJ';
-		$network->description = 'CJ Affliate Network';
+		$network->description = 'CJ Affiliate Network';
 		$network->click_ref = 'ref';
 		$network->logo = 'cj-logo.svg';
 		$network->save();
 
         $network = new Network();
 		$network->name = 'Webgains';
-		$network->description = 'Webgains Affliate Network';
+		$network->description = 'Webgains Affiliate Network';
 		$network->click_ref = 'clickref';
 		$network->logo = 'webgains.png';
+		$network->save();
+
+        $network = new Network();
+		$network->name = 'Awin';
+		$network->description = 'Awin Affiliate Network';
+		$network->click_ref = 'clickref';
+		$network->logo = 'logo-awin-black.svg';
 		$network->save();
 
         //slice
