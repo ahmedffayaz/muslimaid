@@ -74,7 +74,14 @@
         }
     }
 </style>
-
+@php
+     $settings = SiteSetting();
+     if (isset($settings['favicon']) && $settings['favicon']!='default.png'){
+        $siteFavicon = 'storage/dashboard/images/logo/'.$settings['favicon'];
+     } else {
+        $siteFavicon = 'admin-dashboard/images/favicon.png';
+     }
+@endphp
 <div class="page-header">
     <div class="page-header__container container">
         <div class="page-header__breadcrumb ">
@@ -160,11 +167,6 @@
             </div>
         </div>
     </div>
-    {{-- <div id="infowindow-content" class="d-none">
-        <span id="place-name" class="title"></span><br />
-        <span id="place-address"></span>
-    </div>
-    <button class="icon-btn black d-none"><i class="bi bi-search"></i></button> --}}
 </div>
 
 <div class="container mt-4">
@@ -422,6 +424,7 @@
             var marker, i;
             var origins = [];
             var destinations = [];
+            let fav_icon = "{{ $siteFavicon }}";
 
             for (i = 0; i < locations.length; i++) {
 
@@ -430,10 +433,16 @@
                     origins.push(new google.maps.LatLng(myLat, myLng));
                     destinations.push(new google.maps.LatLng(address[j]['latitude'], address[j]['longitude']));
 
+                    // Google map pointer size
+                    const icon = {
+                        url: '<?= url('') ?>/' + fav_icon, // url
+                        scaledSize: new google.maps.Size(30, 30), // scaled size
+                    };
+
                     marker = new google.maps.Marker({
                         position: new google.maps.LatLng(address[j]['latitude'], address[j]['longitude']),
                         map: map,
-                        icon: '<?= url('') ?>/frontend/images/location-icon.png'
+                        icon: icon
                     });
                     var origin = window.location.origin;
                     const contentString =
