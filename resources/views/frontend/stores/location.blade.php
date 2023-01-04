@@ -11,10 +11,6 @@
         align-items: center;
     }
 
-    .map-search .search-wrap {
-        margin-right: 15px
-    }
-
     .map-search .search-wrap input[type=text] {
         width: 100%;
         height: 100%;
@@ -22,7 +18,7 @@
         box-shadow: none;
     }
 
-    .fa-map-marker {
+    .fa-map-marker-alt {
         position: relative;
         top: -48px;
         left: 30px;
@@ -30,7 +26,7 @@
     }
 
     .searchbox {
-        padding: 1.5rem 1rem 1.5rem 1rem;
+        padding: 1.9rem 1rem 1.5rem 1rem;
         position: relative;
         flex-grow: 1 !important;
     }
@@ -127,7 +123,9 @@
 
 <div class="container">
     <div class="map-search">
-        <button href="javascript:;" class="d-sm-block current  mb-3" style="outline:0 !important" onclick="getCurrentLocation();"><img src="{{ asset('frontend/images/map-pointer.png') }}" alt="" style="width: 85%;" /></button>
+        <button href="javascript:;" class="d-sm-block current mb-3" style="outline:0 !important" onclick="getCurrentLocation();">
+            <i class="fas fa-map-marked-alt" style="font-size: 68px; color: #3366cc;"></i>
+        </button>
         <div class="search-wrap searchbox">
             <div>
                 <div class="d-none">
@@ -162,7 +160,7 @@
                 </div>
                 <div>
                     <input id="pac-input" style="padding-left: 70px; " name="user_address" class="form-control searchbox" type="text" placeholder="Enter a locations" value="" />
-                    <span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
+                    <span><i class="fas fa-map-marker-alt" aria-hidden="true"></i></span>
                 </div>
             </div>
         </div>
