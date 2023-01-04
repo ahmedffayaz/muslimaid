@@ -160,8 +160,6 @@ class NetworkController extends Controller
             $path = Storage::putFileAs('awin-categories-csvs', $request->file('csv'), time() . '.csv');
 
             dispatch(new AwinCategoryImporter($network, $path));
-
-            flash()->success('Categories importer has been started as a background job.');
         } catch (Exception $e) {
             flash()->error($e->getMessage());
         }

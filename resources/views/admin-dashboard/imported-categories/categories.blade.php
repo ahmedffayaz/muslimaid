@@ -134,9 +134,6 @@
                                     <span>Start Importer</span>&nbsp;
                                 </button>
                             </div>
-                            <div class="form-group">
-                                <span class="alert alert-danger" style="display: none;"></span>
-                            </div>
                         </form>
                     </div>
                 </div>
@@ -144,6 +141,34 @@
             <div class="modal-footer bg-lighter">
                 <div class="text-center w-100">
                     <p>Import categories using CSV file.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- import categories success feedback -->
+<div class="modal fade success-model" tabindex="-1" id="import-categories-success">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross"></em></a>
+            <div class="modal-body modal-body-lg text-center">
+                <div class="nk-modal">
+                    <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-check bg-success"></em>
+                    <h4 class="nk-modal-title">Importing data</h4>
+                    <div class="nk-modal-text">
+                        <div class="caption-text">Importer is running in background and it will import the relevant data.</div>
+                        <span class="sub-text-sm">You can still use the application while the importer is running in background</a></span>
+                    </div>
+                    <div class="nk-modal-action">
+                        <a href="#" class="btn btn-lg btn-mw btn-primary" data-dismiss="modal">OK</a>
+                    </div>
+
+                </div>
+            </div>
+            <div class="modal-footer bg-lighter">
+                <div class="text-center w-100">
+                    <p></p>
                 </div>
             </div>
         </div>
@@ -359,11 +384,11 @@
 
             let form = $(this);
             let modal = $('#import-categories');
+            let closeBtn = modal.find('[data-dismiss="modal"]');
+            let submitBtn = modal.find('[submit-btn]');
 
-            modal.find('[data-dismiss="modal"]').hide();
-            modal.find('[submit-btn]')
-                .attr('disabled', 'disabled')
-                .append(`<span class="spinner-border spinner-border-sm"></span>`);
+            closeBtn.hide();
+            submitBtn.attr('disabled', 'disabled').append(`<span class="spinner-border spinner-border-sm"></span>`);
 
             $.ajax({
                 url: form.attr('action'),
@@ -371,7 +396,16 @@
                 data: new FormData(form[0]),
                 contentType: false,
                 processData: false,
-                complete: function(data) {
+                success: function (response) {
+                    form.trigger('reset');
+                    form.find('[for="categories-csv-input"]').text('Choose categories CSV');
+                    closeBtn.show();
+                    submitBtn.removeAttr('disabled').find('.spinner-border').remove();
+                    modal.modal('hide');
+                    
+                    $('#import-categories-success').modal('show');
+                },
+                error: function(data) {
                     window.location.reload();
                 }
             });

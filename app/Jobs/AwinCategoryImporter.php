@@ -48,59 +48,39 @@ class AwinCategoryImporter implements ShouldQueue
             fclose($handle);
         }
 
-        $parentCategories = [];
+        $subSectorsRows = array_column($csvToArray, 'subSectors');
+        $dbCategories = ImportedCategory::whereNetworkId($this->network->id)->get()->toArray();
+        $newCategories = [];
+        $now = Carbon::now()->format('Y-m-d H:i:s');
 
-        foreach (array_column($csvToArray, 'parentSectors') as $parentSectors) {
-            if (empty($parentSectors)) continue;
+        foreach ($subSectorsRows as $subSectorsRow) {
+            if (empty($subSectorsRow)) continue;
 
-            foreach (explode('|', $parentSectors) as $parentSector) {
-                if (!in_array($parentSector, $parentCategories)) {
-                    $parentCategories[] = $parentSector;
+            $subSectors = explode('|', $subSectorsRow);
+
+            foreach ($subSectors as $subSector) {
+                if (
+                    !in_array($subSector, array_column($newCategories, 'name'))
+                    && !in_array($subSector, array_column($dbCategories, 'name'))
+                ) {
+                    $newCategories[] = [
+                        'network_id' => $this->network->id,
+                        'name' => $subSector,
+                        'parent_id' => 0,
+                        'mapped_to' => 0,
+                        'created_at' => $now,
+                    ];
                 }
             }
         }
 
-        $allCategories = [];
+        if (count($newCategories) > 0) {
+            $categoriesChunks = count($newCategories) > 100
+                ? array_chunk($newCategories, 100)
+                : [$newCategories];
 
-        foreach ($parentCategories as $parentCategory) {
-            $allCategories[$parentCategory] = [];
-        }
-
-        foreach ($csvToArray as $row) {
-            if (empty($row['subSectors'])) continue;
-
-            foreach (explode('|', $row['subSectors']) as $subSector) {
-                if (empty($row['parentSectors'])) continue;
-
-                foreach (explode('|', $row['parentSectors']) as $parentSector) {
-                    if (!in_array($subSector, $allCategories[$parentSector])) {
-                        $allCategories[$parentSector][] = [
-                            'network_id' => $this->network->id,
-                            'name' => $subSector,
-                            'mapped_to' => 0,
-                            'created_at' => Carbon::now(),
-                            'updated_at' => Carbon::now(),
-                        ];
-                    }
-                }
-            }
-        }
-
-        foreach ($allCategories as $parentCategory => $subCategories) {
-            $parent = ImportedCategory::create([
-                'network_id' => $this->network->id,
-                'name' => $parentCategory,
-                'parent_id' => 0,
-                'mapped_to' => 0,
-            ]);
-            
-            foreach ($subCategories as $subCategory) {
-                ImportedCategory::create([
-                    'network_id' => $this->network->id,
-                    'name' => $subCategory['name'],
-                    'parent_id' => $parent->id,
-                    'mapped_to' => 0,
-                ]);
+            foreach ($categoriesChunks as $categoriesChunk) {
+                ImportedCategory::insert($categoriesChunk);
             }
         }
 
