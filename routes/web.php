@@ -210,7 +210,8 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('seo', SeoController::class);
     Route::resource('email_templates', EmailTemplatesController::class);
 
-
+    // Countries
+    Route::resource('countries', CountryController::class);
 
     Route::get('site/shutdown', function(){
         return Artisan::call('down');
