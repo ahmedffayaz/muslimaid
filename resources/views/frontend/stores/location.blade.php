@@ -35,11 +35,6 @@
         flex-grow: 1 !important;
     }
 
-    .border {
-        border: 2px solid #000 !important;
-        border-radius: 1.75rem;
-    }
-
     .current {
         border: none;
         z-index: 24;
@@ -51,14 +46,6 @@
 
     .gm-ui-hover-effect {
         outline: none !important;
-    }
-
-    .view-btn.grid-view {
-        background-image: url({{ asset('frontend/images/grid-view-icon.png') }});
-    }
-
-    .view-btn.list-view {
-        background-image: url({{ asset('frontend/images/list-view-icon.png') }});
     }
 
     .view-btn.active {
@@ -77,15 +64,24 @@
         display: none;
     }
 
-    .select2-container--default .select2-selection--multiple {
-        border-radius: 1.75rem !important;
-    }
-
     .pagination {
         justify-content: center;
     }
-</style>
 
+    @media (max-width: 767px) {
+        .block-banner__body {
+            height: 190px;
+        }
+    }
+</style>
+@php
+     $settings = SiteSetting();
+     if (isset($settings['favicon']) && $settings['favicon']!='default.png'){
+        $siteFavicon = 'storage/dashboard/images/logo/'.$settings['favicon'];
+     } else {
+        $siteFavicon = 'admin-dashboard/images/favicon.png';
+     }
+@endphp
 <div class="page-header">
     <div class="page-header__container container">
         <div class="page-header__breadcrumb ">
@@ -103,37 +99,18 @@
                             <use xlink:href="{{ asset('frontend/images/sprite.svg') }}#arrow-rounded-right-6x9"></use>
                         </svg>
                     </li>
-                    <li class="breadcrumb-item active" aria-current="page">Cashback To Your Door</li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ $mainCategory->name }}</li>
                 </ol>
             </nav>
         </div>
-        <div class="container p-2 my-2">
-            <div class="row">
-                <div class="col-12">
-                    <div class="block-finder__body">
-                            <img class="banner__size" style="width:1110px;" src="{{url('storage/photos/static_image_banner.jpg')}}" alt="Store Image Missing">
-                            <div class="block-finder__header">
-                                <div class="block-finder__title">Cashback To Your Door</div>
-                                <div class="block-finder__subtitle"></div>
-                            </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @include('layouts.frontend.includes.banners.categories_banner')
         <div class="category-text panel rounded-border mb-4 mt-4 pt-3">
-            <p>
-                With Cashblack To Your Door, you can discover local restaurants and grocery stores to order African, Caribbean or 
-                from any other authentic Black-owned vendors and earn cashback through our partnerships with your favourite 
-                delivery apps such as Deliveroo and Uber Eats. Whether there’s rice at home or not, you can be sure that through 
-                Cashblack To Your Door, you’ll always be able to find local Black-owned retailers for your next order.
-                You can go to <span class="text-bold text-success"> Grocery Stores</span> or 
-                <span class="text-bold text-success">Restaurants.</span>
-            </p>
+            <p>{{ $mainCategory->description }}</p>
         </div>
         <div class="page-header__title">
             <div class="row">
                 <div class="col-md-12 pl-0">
-                    <h1 class="col-md-5 float-left">Cashback To Your Door</h1>
+                    <h4 class="col-md-5 float-left">Search For {{ $mainCategory->name }}</h4>
                     <div class="col-md-5 float-right  d-flex flex-justify-between">
                         <select class="form-control width store form-control-select2" multiple
                             data-placeholder="All" id="select-categories" onchange="showStores()">
@@ -141,8 +118,6 @@
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
-                        <a href="javascript:;" id="gridview" class="grid-view view-btn mt-1 active"></a>
-                        <a href="javascript:;" id="listview" class="list-view view-btn mt-1"></a>
                     </div>
                 </div>
             </div>
@@ -170,33 +145,28 @@
                         <input type="radio" name="type" id="changetype-geocode" />
                         <label for="changetype-geocode">geocode</label>
 
-                    <input type="radio" name="type" id="changetype-cities" />
-                    <label for="changetype-cities">(cities)</label>
+                        <input type="radio" name="type" id="changetype-cities" />
+                        <label for="changetype-cities">(cities)</label>
 
-                    <input type="radio" name="type" id="changetype-regions" />
-                    <label for="changetype-regions">(regions)</label>
-                </div>
-                <br />
-                <div id="strict-bounds-selector" class="pac-controls">
-                    <input type="checkbox" id="use-location-bias" value="" checked />
-                    <label for="use-location-bias">Bias to map viewport</label>
+                        <input type="radio" name="type" id="changetype-regions" />
+                        <label for="changetype-regions">(regions)</label>
+                    </div>
+                    <br />
+                    <div id="strict-bounds-selector" class="pac-controls">
+                        <input type="checkbox" id="use-location-bias" value="" checked />
+                        <label for="use-location-bias">Bias to map viewport</label>
 
-                    <input type="checkbox" id="use-strict-bounds" value="" />
-                    <label for="use-strict-bounds">Strict bounds</label>
+                        <input type="checkbox" id="use-strict-bounds" value="" />
+                        <label for="use-strict-bounds">Strict bounds</label>
+                    </div>
                 </div>
-            </div>
                 <div>
-                    <input id="pac-input" style="padding-left: 50px; " name="user_address" class="form-control searchbox border" type="text" placeholder="Enter a locations" value="" />
+                    <input id="pac-input" style="padding-left: 70px; " name="user_address" class="form-control searchbox" type="text" placeholder="Enter a locations" value="" />
                     <span><i class="fa fa-map-marker" aria-hidden="true"></i></span>
                 </div>
             </div>
         </div>
     </div>
-    {{-- <div id="infowindow-content" class="d-none">
-        <span id="place-name" class="title"></span><br />
-        <span id="place-address"></span>
-    </div>
-    <button class="icon-btn black d-none"><i class="bi bi-search"></i></button> --}}
 </div>
 
 <div class="container mt-4">
@@ -228,21 +198,6 @@
 @push('scripts')
     <script type="text/javascript">
         $(document).ready(function() {
-            $('#listview').on('click', function() {
-                $('#gridview.active').removeClass('active');
-                $(this).addClass('active');
-                $('.categorylist').css("display", "block");
-                $('.categorygrid').css("display", "none");
-                directionRenderFnForListView();
-            });
-
-            $('#gridview').on('click', function() {
-                $('#listview.active').removeClass('active');
-                $(this).addClass('active');
-                $('.categorygrid').css("display", "block");
-                $('.categorylist').css("display", "none");
-            });
-
             $("select.store").change(function() {
                 var selectedStore = $(this).children("option:selected").val();
                 if (selectedStore != "default_option") {
@@ -253,8 +208,6 @@
                 }
             });
         });
-
-        ajaxPagination();
 
         var map;
         var center;
@@ -288,8 +241,8 @@
                     id: storeValue,
                 },
                 success: function(response) {
-                    console.log(response);
                     let html = $('#get-stores').html(response);
+                    ajaxPagination()
                 },
                 error: function(errors) {
                     console.log(errors)
@@ -471,6 +424,7 @@
             var marker, i;
             var origins = [];
             var destinations = [];
+            let fav_icon = "{{ $siteFavicon }}";
 
             for (i = 0; i < locations.length; i++) {
 
@@ -479,10 +433,16 @@
                     origins.push(new google.maps.LatLng(myLat, myLng));
                     destinations.push(new google.maps.LatLng(address[j]['latitude'], address[j]['longitude']));
 
+                    // Google map pointer size
+                    const icon = {
+                        url: '<?= url('') ?>/' + fav_icon, // url
+                        scaledSize: new google.maps.Size(30, 30), // scaled size
+                    };
+
                     marker = new google.maps.Marker({
                         position: new google.maps.LatLng(address[j]['latitude'], address[j]['longitude']),
                         map: map,
-                        icon: '<?= url('') ?>/frontend/images/location-icon.png'
+                        icon: icon
                     });
                     var origin = window.location.origin;
                     const contentString =

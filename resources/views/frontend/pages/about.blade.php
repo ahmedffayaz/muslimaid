@@ -11,7 +11,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="{{url('/')}}">Home</a>
-                    <svg class="breadcrumb-arrow" width="6px" height="9px">              
+                    <svg class="breadcrumb-arrow" width="6px" height="9px">
                         <use xlink:href="{{asset('frontend/images/sprite.svg')}}#arrow-rounded-right-6x9"></use>
                     </svg>
                 </li>
@@ -25,13 +25,6 @@
         <div class="col-12">
             <div class="block-finder__body">
                <img class="banner__size" src="{{$page->banner_image}}" alt="About-us Image Missing">
-                 <div class="block-finder__header">
-                    <div class="block-finder__title">{{$page->title}}</div>
-                    <div class="block-finder__subtitle"></div>
-                 </div>
-            </div>
-            <div class="category-text panel  mb-3 mt-4 pt-3">
-                <p class="mt-1">{{$page->description}}</p>
             </div>
         </div>
     </div>
@@ -41,19 +34,17 @@
         <div class="row justify-content-center">
             <div class="col-12 col-xl-10">
                 <div class="about-us__body">
-                    <h1 class="about-us__title">About Us</h1>
+                    <h1 class="about-us__title">{{$page->title}}</h1>
                     <div class="about-us__text typography">
-                        <p>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras lacus metus, convallis ut leo nec, tincidunt
-                            eleifend justo. Ut felis orci, hendrerit a pulvinar et, gravida ac lorem. Sed vitae molestie sapien, at
-                            sollicitudin tortor.
-                        </p>
-                        <p>
-                            Duis id volutpat libero, id vestibulum purus.Donec euismod accumsan felis,egestas lobortis velit tempor vitae.
-                            Integer eget velit fermentum, dignissim odio non, bibendum velit.
-                        </p>
+                        <p>Cashback is a social enterprise that aims to promote and support Black-owned businesses and charities through the provision of cashback to our registered members with the overall goal of promoting a fairer society.</p>
+
+                        <p>Founded in 2020, the need for financial and socio-economic empowerment within the Black community was never more apparent – both globally and in the United Kingdom. Cashback aims to benefit both the Black community and society as a whole by decreasing the racial wealth gap through the promotion of Black-owned businesses and the provision of funds back to consumers of these businesses through cashback.</p>
+
+                        <p>Whether you’re looking for local eating spots for a dine-in or a take-away, the latest and most fashionable offerings from clothes and accessories designers, beauty and wellness brands to leave you looking and feeling your finest or any other goods and services providers you would ever need;</p>
+
+                        <p>Cashback is here to support you supporting Black-owned businesses.</p>
                     </div>
-                    <div class="about-us__team">
+                    {{-- <div class="about-us__team">
                         <h2 class="about-us__team-title">Meat Our Team</h2>
                         <div class="about-us__team-subtitle text-muted">Want to work in our friendly team?<br><a href="contact-us.html">Contact us</a> and we will consider your candidacy.</div>
                         <div class="about-us__teammates teammates">
@@ -81,7 +72,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

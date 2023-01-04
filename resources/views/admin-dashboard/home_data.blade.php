@@ -179,13 +179,7 @@
                         <em class="icon bg-primary-dim ni ni-bag"></em></a>
                         </li>
                         <li class="item">
-                            <a href="{{route('admin.ticketCategory.index')}}">
-                            <div class="info">
-                                <div class="title">Total ticketCategory</div>
-                                <div class="count">{{count($ticketCategory)}}</div>
-                            </div>
-                            
-                        </a><a href="{{route('admin.stores.index')}}">
+                        <a href="{{route('admin.stores.index')}}">
                         <em class="icon bg-primary-dim ni ni-bag"></em></a>
                         </li>
                         <li class="item">

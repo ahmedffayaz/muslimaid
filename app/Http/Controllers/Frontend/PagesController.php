@@ -255,7 +255,7 @@ class PagesController extends Controller
 
         $ticket = new Ticket([
             'title'     => $request->input('subject'),
-            'user_id'   => Auth::user()->id,
+            'user_id'   =>  Auth::user()->id,
             'ticket_id' => strtoupper(Str::random(12)),
             'category_id'  => '4',
             'priority'  => 'high',
@@ -280,6 +280,7 @@ class PagesController extends Controller
         $stores = Store::where('name', 'like', $letter . '%')->get();
         return view('frontend.pages.stores_with_letter', compact('stores', 'letter'));
     }
+    
     public function showCharity(Request $request){
         $charity = Charity::with('charity_type')->find($request->id);
         return view('frontend.pages.charity_model',compact('charity'));

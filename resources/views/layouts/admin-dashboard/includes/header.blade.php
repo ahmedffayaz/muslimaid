@@ -236,12 +236,6 @@
                                 </a>
                             </li><!-- .nk-menu-item -->
                             <li class=" ">
-                                <a href="{{route('admin.ticketCategory.index')}}" class="">
-                                    <span class="nk-menu-icon "><em class="icon ni ni-chat-fill"></em></span>
-                                    <span class="nk-menu-text">Category Tickets</span>
-                                </a>
-                            </li>
-                            <li class=" ">
                                 <a href="{{route('admin.blogs.index')}}" class="">
                                     <span class="nk-menu-icon "><em class="icon ni ni-article"></em></span>
                                     <span class="nk-menu-text">Blog</span>

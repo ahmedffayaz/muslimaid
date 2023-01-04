@@ -33,7 +33,7 @@ class StoreController extends Controller
     }
 
     public function storeLocation(Request $request)
-    {   
+    {
         if ($request->ajax()) {
             if($request->has('id'))
             {
@@ -44,24 +44,21 @@ class StoreController extends Controller
             })->with('logo', 'storeAddress')->paginate(10);
         }else{
             $locations = Store::with('logo', 'storeAddress')->paginate(10);
-            
+
         }
             return view('frontend.stores.stores',compact('locations'));
         }
 
-       // $locations = Store::with('logo','storeAddress')->paginate(10);
-        //$categories = Category::with(['stores.storeAddress'])->where('parent_id', '=', 0)->orderBy('name', 'ASC')->get();
-        $mainCategory = Category::whereName('Cashback to door')->first();
+        $mainCategory = Category::whereName('Cashback To Your Door')->first();
 
-        // dd($mainCategory->id);
         $locations = Store::when(optional($mainCategory)->id, function($query) use ($mainCategory) {
             $query->whereHas('categories', function ($query) use ($mainCategory) {
                 $query->where('category_id', $mainCategory->id);
             });
-        })->with('logo', 'storeAddress')->paginate(10);
-        
+        })->where('status', 'active')->with('logo', 'storeAddress')->paginate(10);
+
         $categories = Category::with(['stores.storeAddress'])->whereParentId($mainCategory['id'])->orderBy('name', 'ASC')->get();
-       
+
         $location_array = array();
         foreach($categories as $category){
              foreach($category->stores as $store){
@@ -72,7 +69,7 @@ class StoreController extends Controller
                 }
              }
         }
-        return view('frontend.stores.location', compact('locations','categories', 'location_array'));
+        return view('frontend.stores.location', compact('locations','categories', 'location_array', 'mainCategory'));
     }
 
     public function showReviews(Request $request, $id)

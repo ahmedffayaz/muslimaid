@@ -25,9 +25,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class WebgainsImporter
+class WebgainsImporter implements ShouldQueue
 {
-    //implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
@@ -48,16 +47,16 @@ class WebgainsImporter
     public function handle()
     {
         //fetching importer settings
-        $network = Network::where('id',2)->first();
-        $setting = ImporterSetting::where('network_id',2)->first();
-        $settings = SiteSetting::latest()->get()->pluck('value','type');
+        $network = Network::where('id', 2)->first();
+        $setting = ImporterSetting::where('network_id', 2)->first();
+        $settings = SiteSetting::latest()->get()->pluck('value', 'type');
 
-        if($setting->import_stores == 1){
+        if ($setting->import_stores == 1) {
 
             $cu = curl_init();
 
             curl_setopt_array($cu, array(
-                CURLOPT_URL => 'https://api.webgains.com/2.0/programs?key='.$settings['webgains_api_key'].'&programsjoined=1&campaignId='.$settings['webgains_campaignid'],
+                CURLOPT_URL => 'https://api.webgains.com/2.0/programs?key=' . $settings['webgains_api_key'] . '&programsjoined=1&campaignId=' . $settings['webgains_campaignid'],
                 CURLOPT_RETURNTRANSFER => 1,
             ));
             curl_setopt($cu, CURLOPT_SSL_VERIFYHOST, 0);
@@ -137,7 +136,7 @@ class WebgainsImporter
                         }
 
                         if (!empty($results['categories'])) {
-                            foreach($results['categories'] as $category){
+                            foreach ($results['categories'] as $category) {
                                 $category_parent = ImportedCategory::where('name', $category['name'])->first();
                                 if (!$category_parent) {
                                     $category_parent = new ImportedCategory();
@@ -161,8 +160,8 @@ class WebgainsImporter
                             'is_uploaded' => 1,
                             'is_fake' => 1
                         ]);
-                    }else if($results['status'] == 'live' && $results['membershipStatus'] == '10') {
-                        if (!$store->override_cashback){
+                    } else if ($results['status'] == 'live' && $results['membershipStatus'] == '10') {
+                        if (!$store->override_cashback) {
                             $https_link = substr($results['textLink'], 0, 4);
                             if ($https_link == "http") {
                                 $store_link = str_replace("mycampaignid", $settings['webgains_campaignid'], $results['textLink']);
@@ -223,7 +222,7 @@ class WebgainsImporter
                                 DB::table('category_store')->where('store_id', $store->id)->delete();
 
                                 if (!empty($results['categories'])) {
-                                    foreach($results['categories'] as $category){
+                                    foreach ($results['categories'] as $category) {
                                         $category_parent = ImportedCategory::where('name', $category['name'])->first();
                                         if (!$category_parent) {
                                             $category_parent = new ImportedCategory();
@@ -268,13 +267,13 @@ class WebgainsImporter
             }
         }
 
-        if($setting->import_vouchers == 1){
-            
+        if ($setting->import_vouchers == 1) {
+
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
             curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://api.webgains.com/2.0/vouchers?key='.$settings['webgains_api_key'].'&campaignId='.$settings['webgains_campaignid'].'&networks=UK&joined=1',
+                CURLOPT_URL => 'https://api.webgains.com/2.0/vouchers?key=' . $settings['webgains_api_key'] . '&campaignId=' . $settings['webgains_campaignid'] . '&networks=UK&joined=1',
                 CURLOPT_RETURNTRANSFER => 1,
             ));
 
@@ -288,8 +287,8 @@ class WebgainsImporter
             foreach ($result_array1 as $result) {
                 $store = Store::where('advertiser_id', $result['programId'])->first();
                 $voucher_exist = Voucher::where('link_id', $result['id'])->first();
-                if (!$voucher_exist){
-                    $voucher = Voucher::create([    
+                if (!$voucher_exist) {
+                    $voucher = Voucher::create([
                         'click_url'       => empty($result['trackingUrl']) ? '#' : $result['trackingUrl'],
                         'sale_commission' => empty($result['discount']) ? NULL : $result['discount'],
                         'store_id' => $store->id ?? 0,
@@ -307,16 +306,16 @@ class WebgainsImporter
             }
         }
 
-        if($setting->import_cashbacks == 1){
-
+        if ($setting->import_cashbacks == 1) {
             $cashback_percent_setting = SiteSetting::where('type', 'cashback_percentage')->first()->value;
             $startdate = date('Y-m-d\TH:i:s', strtotime(' -31 days'));
             $enddate = date('Y-m-d\TH:i:s');
             $campaignid = $settings['webgains_campaignid'];
             $username = $settings['webgains_user_name'];
             $password = $settings['webgains_password'];
-            $soap = new \SoapClient (NULL, 
-                array ( 
+            $soap = new \SoapClient(
+                NULL,
+                array(
                     "location"   => "http://ws.webgains.com/aws.php",
                     "uri"        => "urn:http://ws.webgains.com/aws.php",
                     "style"      => SOAP_RPC,
@@ -324,13 +323,15 @@ class WebgainsImporter
                     'exceptions' => 0
                 )
             );
+
             $results = $soap->getFullEarnings($startdate, $enddate, $campaignid, $username, $password);
-            if($results){
+
+            if ($results) {
                 $cashback_percent = 0;
-                foreach($results as $cashback){
+                foreach ($results as $cashback) {
                     $store = Store::where('advertiser_id', $cashback->programID)->first();
                     $click = ExitClick::where('id', $cashback->clickRef)->first();
-                    if(!$click){
+                    if (!$click) {
                         $click = ExitClick::where('network_click_ref', $cashback->clickRef)->first();
                     }
                     if ($click) {
@@ -348,17 +349,17 @@ class WebgainsImporter
                         $click_id = $new_click->id;
                         $cashback_percent = $cashback_percent_setting;
                     }
-                    $cashback_amount_for_user = ( $cashback->commission / 100) * $cashback_percent;
+                    $cashback_amount_for_user = ($cashback->commission / 100) * $cashback_percent;
                     $commission_exist = UserCashback::where(['exit_click_id' =>  $click_id, 'network_commission_id' =>  $cashback->transactionID])->first();
                     $status = '';
-                    if ( $cashback->status == 'delayed') {
+                    if ($cashback->status == 'delayed') {
                         $status = 1;
-                    } else if ( $cashback->status == 'cancelled') {
+                    } else if ($cashback->status == 'cancelled') {
                         $status = 2;
-                    } else if ( $cashback->status == 'confirmed') {
+                    } else if ($cashback->status == 'confirmed') {
                         $status = 3;
-                    } 
-                    if ( $cashback->status == 'confirmed' &&  $cashback->paymentStatus != 'paid') {
+                    }
+                    if ($cashback->status == 'confirmed' &&  $cashback->paymentStatus != 'paid') {
                         $status = 1;
                     }
                     if (!$commission_exist) {
@@ -403,5 +404,4 @@ class WebgainsImporter
             }
         }
     }
-
 }

@@ -28,6 +28,7 @@ Route::namespace('App\Http\Controllers\Website')->prefix('site')->name('site.')-
 
 });
 
+Route::get('/awin', [App\Http\Controllers\AwinController::class, 'awinTest']);
 
 //Admin routes
 Route::namespace('App\Http\Controllers\Admin')
@@ -47,6 +48,7 @@ Route::namespace('App\Http\Controllers\Admin')
     //Networks
     Route::post('networks/fetch',[App\Http\Controllers\Admin\NetworkController::class,'fetch'])->name('networks.fetch');
     Route::get('networks/categories/{network}', [App\Http\Controllers\Admin\NetworkController::class,'categories'])->name('networks.categories');
+    Route::post('networks/categories_import/{network}', [App\Http\Controllers\Admin\NetworkController::class,'importCategories'])->name('networks.categories.import');
     Route::get('networks/categories_export/{network}',[App\Http\Controllers\Admin\NetworkController::class,'exportCsv'])->name('networks.categories.export');
     Route::resource('networks', NetworkController::class);
 
@@ -203,8 +205,6 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::post('tickets/search',  [App\Http\Controllers\Admin\TicketsController::class,'searchTickets'])->name('tickets.search');
     Route::put('tickets/close_ticket/{ticket}',[App\Http\Controllers\Admin\TicketsController::class,'closeTicket'])->name('tickets.close');
     Route::resource('tickets',  TicketsController::class);
-    Route::resource('ticketCategory',TicketCategoryController::class);
-
     Route::resource('replies', RepliesController::class);
 
 
@@ -220,7 +220,8 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::resource('seo', SeoController::class);
     Route::resource('email_templates', EmailTemplatesController::class);
 
-
+    // Countries
+    Route::resource('countries', CountryController::class);
 
     Route::get('site/shutdown', function(){
         return Artisan::call('down');
@@ -229,15 +230,12 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::get('site/live', function(){
         return Artisan::call('up');
     });
-
-
-
 });
 
 //Front Website Routes
 
-Route::get('new_ticket', [App\Http\Controllers\Frontend\TicketsController::class, 'create']);
-Route::post('new_ticket',[App\Http\Controllers\Frontend\TicketsController::class, 'store']);
+// Route::get('new_ticket', [App\Http\Controllers\Frontend\TicketsController::class, 'create']);
+// Route::post('new_ticket',[App\Http\Controllers\Frontend\TicketsController::class, 'store']);
 
 Route::get('offers',[App\Http\Controllers\Frontend\PagesController::class, 'offers'])->name('offers');
 Route::get('vouchers',[App\Http\Controllers\Frontend\PagesController::class, 'vouchers'])->name('vouchers');
@@ -249,7 +247,7 @@ Route::get('category/{slug}',[App\Http\Controllers\Frontend\PagesController::cla
 Route::get('top-cashback',[App\Http\Controllers\Frontend\PagesController::class, 'topStores'])->name('top_stores');
 Route::get('trending',[App\Http\Controllers\Frontend\PagesController::class, 'trending'])->name('trending');
 Route::get('cashback/{slug}',[App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
-Route::get('categories/cashback-to-door',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
+Route::get('categories/cashback-to-your-door',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
 // Route::get('stores/cashback-to-door',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
 Route::get('stores/reviews/{id}', [App\Http\Controllers\Frontend\StoreController::class, 'showReviews'])->name('store.reviews.show');
 Route::post('stores/reviews/submit', [App\Http\Controllers\Frontend\StoreController::class, 'storeReviews'])->name('store.reviews.submit');

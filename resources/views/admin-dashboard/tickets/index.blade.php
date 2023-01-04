@@ -17,7 +17,7 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li class="nk-block-tools-opt"><a href="{{route('admin.ticketCategory.index')}}" class="btn btn-primary btn-sm"><em class="icon ni ni-plus"></em><span>Manage Ticket Category</span></a></li>
+                                        {{-- <li class="nk-block-tools-opt"><a href="{{route('admin.ticketCategory.index')}}" class="btn btn-primary btn-sm"><em class="icon ni ni-plus"></em><span>Manage Ticket Category</span></a></li> --}}
                                         {{-- <li><a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
                                     </ul>
                                 </div>

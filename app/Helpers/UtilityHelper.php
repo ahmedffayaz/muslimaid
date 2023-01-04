@@ -426,3 +426,20 @@ function checkStaticpageRule($url)
 //         return false;
 //     }
 // }
+
+function safeParseUrl($url)
+{
+    if (empty($url)) return null;
+
+    $parsed = parse_url($url);
+
+    if (array_key_exists('scheme', $parsed)) {
+        return $parsed['scheme'] . '://' . $parsed['host'];
+    } 
+    
+    if (array_key_exists('path', $parsed)) {
+        return 'http://' . $parsed['path'];
+    }
+
+    return null;
+}
