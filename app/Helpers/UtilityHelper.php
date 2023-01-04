@@ -3,7 +3,7 @@
 use Carbon\Carbon;
 use App\Models\Store;
 use App\Models\Category;
-use Intervention\Image\Image;
+// use Intervention\Image\Image;
 use Harimayco\Menu\Models\Menus;
 use Harimayco\Menu\Models\MenuItems;
 use App\Models\UserVerify;
@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Intervention\Image\ImageManagerStatic as Image;
 
 // function ccEmails() {
 //     return config('mail.toSend.ccs');

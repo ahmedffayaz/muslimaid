@@ -1,6 +1,4 @@
-@php
-     $settings = SiteSetting();
-@endphp
+@php $settings = SiteSetting(); @endphp
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 

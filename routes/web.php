@@ -171,7 +171,15 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::post('settings/search_settings',  [App\Http\Controllers\Admin\SettingsController::class,'searchSettings'])->name('settings.search_settings');
     Route::post('maintenance', [App\Http\Controllers\Admin\SettingsController::class,'maintenance'])->name('settings.maintenance');
     Route::resource('settings', SettingsController::class);
-
+    Route::resource('charities', CharityController::class);
+    Route::get('charity-type-create',[App\Http\Controllers\Admin\CharityController::class, 'charityTypeCreate'])->name('charities.charity_type_create');
+    Route::get('charity-type-view',[App\Http\Controllers\Admin\CharityController::class, 'charityTypeView'])->name('charities.charity_type_view');
+    Route::get('charity-type-edit/{id}',[App\Http\Controllers\Admin\CharityController::class,'charityTypeEdit'])->name('charities.charity_type_edit');
+    Route::post('admin_charities_store',[App\Http\Controllers\Admin\CharityController::class,'charityTypeStore'])->name('admin-charities-store');
+    Route::put('charity_type_update/{id}',[App\Http\Controllers\Admin\CharityController::class,'charityTypeUpdate'])->name('charitiestype-update');
+    Route::post('charities/search',  [App\Http\Controllers\Admin\CharityController::class,'searchCharities'])->name('charities.search');
+  
+    
     Route::get('manage-menus/{id?}',[App\Http\Controllers\Admin\MenuController::class,'index']);
     Route::post('create-menu',[App\Http\Controllers\Admin\MenuController::class,'store']);
     Route::get('add-categories-to-menu',[App\Http\Controllers\Admin\MenuController::class,'addCatToMenu']);
@@ -249,6 +257,7 @@ Route::get('post/{blog}',[App\Http\Controllers\Frontend\PagesController::class, 
 Route::post('contact_form',[App\Http\Controllers\Frontend\PagesController::class, 'contactForm'])->name('contactForm');
 Route::get('all_stores/{letter}',[App\Http\Controllers\Frontend\PagesController::class, 'allStoresLetter'])->name('all_stores_of_letter');
 Route::get('all_stores',[App\Http\Controllers\Frontend\PagesController::class, 'allStores'])->name('all_stores');
+Route::post('showCharity', [App\Http\Controllers\Frontend\PagesController::class,'showCharity'])->name('showCharity');
 
 Route::resource('newsletter',App\Http\Controllers\Frontend\NewsletterController::class);
 Route::resource('categories',App\Http\Controllers\Frontend\CategoryController::class);

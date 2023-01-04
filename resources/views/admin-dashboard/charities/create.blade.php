@@ -1,7 +1,13 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
-    
-
+@if(session()->has('message'))
+<div class = "container alert {{ session('alert-class') }} alert-dismissible fade show alert-important" role = "alert">
+    {{ session('message') }}.
+<button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close">
+    <span aria-hidden = "true">&times;</span>
+</button>
+</div>
+@endif
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
@@ -10,7 +16,7 @@
                     <div class="nk-block nk-block-lg">
                         <div class="nk-block-head">
                             <div class="nk-block-head-content">
-                                <h4 class="title nk-block-title">Add Category</h4>
+                                <h4 class="title nk-block-title">Add Charity</h4>
                                 <div class="nk-block-des">
                                     {{-- <p>You can make style out your....</p> --}}
                                 </div>
@@ -20,49 +26,55 @@
                         <div class="card">
                             <div class="card-inner">
                                 <div class="card-head">
-                                    <h5 class="card-title">Category Info</h5>
+                                    <h5 class="card-title">Charity Info</h5>
                                 </div>
-                                <form action="{{route('admin.categories.store')}}" class="gy-3 form-validate is-alter" method="POST" enctype="multipart/form-data">
+                                <form action="{{route('admin.charities.store')}}" class="gy-3 form-validate is-alter charity-form" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row g-4">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="full-name-1">Category Name</label>
+                                                <label class="form-label" for="title">Title</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="full-name-1" name="name" required>
+                                                    <input type="text" class="form-control" id="title" name="title" required>
+                                                    @error('title')
+                                                    <span class="invalid-feedback d-block" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="default-06">Parent Category</label>
+                                                <label class="form-label" for="charity_types_id">Charity Type</label>
                                                 <div class="form-control-wrap ">
                                                     <div class="form-control-select">
-                                                        <select class="form-control" id="default-06" name="parent_id" required>
-                                                            
-                                                        <option value="0">None</option>
-                                                        @foreach ($categories as $parent)
-                                                        <option value="{{$parent->id}}" style="font-weight:bold">{{$parent->name}}</option>
-                                                        @if(count($parent->childs))
-                                                                @include('admin-dashboard.categories.child_input',['childs' => $parent->childs, 'isEdit'=>0,'dashes'=>'~'])
-                                                            @endif
-                                                            
+                                                        <select class="form-control" id="charity_types_id" name="charity_types_id" required>    
+                                                        <option disabled selected>None</option>
+                                                        @foreach ($charitiestypes as $types)
+                                                        <option value="{{$types->id}}" style="font-weight:bold">{{$types->title}}</option>
                                                         @endforeach
-                                                                                            
-                                                           
                                                         </select>
                                                     </div>
+                                                    @error('charity_types_id')
+                                                    <span class="invalid-feedback d-block" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="card">
-                                                <input name="description" type="hidden">
-                                                <label class="form-label" for="phone-no-1">Description</label>
+                                                <label class="form-label" for="description">Description</label>
                                                 <!-- Create the editor container -->
-                                                <div  id="editor-container">
-                                               
-                                                </div>
+                                                <div  id="editor-container"> </div>
+                                                <input name="description" type="hidden">
+                                                @error('description')
+                                                <span class="invalid-feedback d-block" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                                @enderror
                                                
                                             </div>
                                         </div>
@@ -73,11 +85,8 @@
                                                 <div class="form-control-wrap ">
                                                     <div class="form-control-select">
                                                         <select class="form-control" name="logo_type" id='logo_type' required>
-                                                            
                                                             <option value="upload">Upload</option>
-                                                            <option value="link">Link</option>
-                                                                
-                                                           
+                                                            <option value="link">Link</option> 
                                                         </select>
                                                     </div>
                                                 </div>
@@ -87,7 +96,12 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="logo_link">Logo Link</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="logo_link" name="logo_link" required>
+                                                    <input type="text" id="logo_link" class="form-control" id="logo_link" name="logo_link" required>
+                                                    @error('logo_link')
+                                                    <span class="invalid-feedback d-block" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
@@ -96,7 +110,12 @@
                                                 <label class="form-label" for="logo_upload">Logo Upload</label>
                                                 <div class="form-control-wrap">
                                                     <div class="custom-file">
-                                                        <input type="file" class="custom-file-input" name='logo_upload' id="logo_upload">
+                                                        <input type="file" class="custom-file-input" name='logo_upload' id="logo_upload" required>
+                                                        @error('logo_upload')
+                                                        <span class="invalid-feedback d-block" role="alert">
+                                                            <strong>{{ $message }}</strong>
+                                                        </span>
+                                                        @enderror
                                                         <label class="custom-file-label" for="logo_upload">Choose file</label>
                                                     </div>
                                                 </div>
@@ -129,7 +148,7 @@
                                                 <label class="form-label" for="banner_upload">Banner Upload</label>
                                                 <div class="form-control-wrap">
                                                     <div class="custom-file">
-                                                        <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload">
+                                                        <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload" required>
                                                         <label class="custom-file-label" for="banner_upload">Choose file</label>
                                                     </div>
                                                 </div>
@@ -137,54 +156,39 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="full-name-1">Sort</label>
+                                                <label class="form-label" for="country">Country</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="full-name-1" name="sort">
+                                                    <input type="text" class="form-control" id="country" name="country" required>
+                                                    @error('country')
+                                                    <span class="invalid-feedback d-block" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                    @enderror
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="default-06">Status</label>
+                                                <label class="form-label" for="status">Status</label>
                                                 <div class="form-control-wrap ">
                                                     <div class="form-control-select">
-                                                        <select class="form-control" id="default-06" name="status" required>
-                                                            
+                                                        <select class="form-control" id="status" name="status" required>
                                                             <option value="1">Active</option>
-                                                            <option value="0">In-active</option>
-                                                                
-                                                           
+                                                            <option value="0">In-active</option>   
                                                         </select>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                                <label class="form-label" for="reviewer">Meta Keywords</label>
-                                                <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword" value="" > 
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-12">
-                                            <div class="form-group">
-                                            <label class="form-label" for="reviewer">Meta Description</label>
-                                            <textarea  class="form-control " name="meta_description" placeholder="Meta Description" value="" ></textarea>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <button type="submit" class="btn btn-lg btn-primary">Save</button>
                                             </div>
                                         </div>
-                                    </div>
                                 </form>
                             </div>
                         </div>
-                    </div><!-- .nk-block -->
-                    
-                  
-                    
+                    </div><!-- .nk-block -->    
                 </div><!-- .components-preview -->
             </div>
         </div>
@@ -209,14 +213,12 @@
         theme: 'snow'
       });
       
-    //   var form = document.querySelector('form');
-      $(".user-form").submit(function(e) {
+      var form = document.querySelector('form');
+      $(".charity-form").submit(function(e) {
           
         // Populate hidden form on submit
         var desc = document.querySelector('input[name=description]');
-        desc.value = quill.root.innerHTML;
-       
-        
+        desc.value = quill.root.innerHTML;  
       });
 </script>
 <script>
