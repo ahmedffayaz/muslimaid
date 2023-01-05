@@ -373,18 +373,13 @@
                                 @foreach ($stores->take(15) as $store)
                                     @include('layouts.frontend.includes.stores')
                                 @endforeach
-
                             </div>
                         </div>
                         <a href="{{url('/pages/offers')}}" class="btn btn-primary mt-5 mx-auto d-table">More Cashback</a>
                     </div>
-
                 </div>
-
-
             </div>
         </div>
-
     </div>
 </div>
 @endif
@@ -428,52 +423,34 @@
             <div class="block-header__divider"></div>
         </div>
         <div class="block-categories__list">
-
             @foreach ($featured_categories->take(6) as $category)
-
-
-            <div class="block-categories__item category-card category-card--layout--classic">
-                <div class="category-card__body">
-                    <div class="category-card__image">
-                        <a href="{{route('cashabck',$category->slug)}}">
-                            @if($category->logo_type == 'upload')
-
-                            <img src="{{asset('frontend/images/categories/images/'.$category->logo_upload)}}"  alt="">
-
-                            @elseif($category->logo_type == 'link')
-
-                            <img src="{{$category->logo_link}}"  alt="">
-
-                            @endif</a>
-                    </div>
-                    <div class="category-card__content">
-                        <div class="category-card__name">
-                            <a href="{{route('cashabck',$category->slug)}}">{{$category->name}}</a>
+                <div class="block-categories__item category-card category-card--layout--classic">
+                    <div class="category-card__body">
+                        <div class="category-card__image">
+                            <a href="{{route('cashabck',$category->slug)}}">
+                                @if($category->logo_type == 'upload')
+                                    <img src="{{asset('frontend/images/categories/images/'.$category->logo_upload)}}"  alt="">
+                                @elseif($category->logo_type == 'link')
+                                    <img src="{{$category->logo_link}}"  alt="">
+                                @endif</a>
                         </div>
-                        @if(count($category->childs))
-                        <ul class="category-card__links">
-                            @foreach ($category->childs->take(5) as $item)
-                            <li><a href="{{route('cashabck',$item->slug)}}">{{$item->name}}</a></li>
-                            @endforeach
-
-
-                        </ul>
-                        @endif
-
-                        {{-- <div class="category-card__all">
-                            <a href="">Show All</a>
+                        <div class="category-card__content">
+                            <div class="category-card__name">
+                                <a href="{{route('cashabck',$category->slug)}}">{{$category->name}}</a>
+                            </div>
+                            @if(count($category->childs))
+                                <ul class="category-card__links">
+                                    @foreach ($category->childs->take(5) as $item)
+                                        <li><a href="{{route('cashabck',$item->slug)}}">{{$item->name}}</a></li>
+                                    @endforeach
+                                </ul>
+                            @endif
                         </div>
-                        <div class="category-card__products">
-                            572 Products
-                        </div> --}}
                     </div>
                 </div>
-            </div>
             @endforeach
         </div>
     </div>
 </div>
 <!-- .block-categories / end -->
-
-
 @endsection
