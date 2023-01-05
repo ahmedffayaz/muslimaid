@@ -325,7 +325,14 @@
                                         @foreach ($testimonials as $testimonial)
                                             <li class="testimonials-list__item">
                                                 <div class="testimonial">
-                                                    <div class="testimonial__avatar"><img src="{{asset('storage/users/images/avatar/' . $testimonial->image )}}"></div>
+                                                    <div class="testimonial__avatar">
+                                                        <img @if ($testimonial->image != null && $testimonial->image != '' && file_exists(storage_path('app/public/users/images/avatar/' . $testimonial->image)))
+                                                                src="{{ asset('storage/users/images/avatar/' . $testimonial->image) }}"
+                                                            @else
+                                                                src="{{ asset('admin-dashboard/images/avatar.png') }}"
+                                                            @endif
+                                                        alt="{{ $testimonial->name . ' Avatar' }}">
+                                                    </div>
                                                     <div class="testimonial__content">
                                                         <div class="testimonial__author">{{ $testimonial->name }}</div>
                                                         <div class="testimonial__position">{{ $testimonial->position . ', ' . $testimonial->company }}</div>
