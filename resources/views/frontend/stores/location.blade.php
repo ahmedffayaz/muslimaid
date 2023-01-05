@@ -26,7 +26,7 @@
     }
 
     .searchbox {
-        padding: 1.9rem 1rem 1.5rem 1rem;
+        padding: 1.9rem 0rem 1.5rem 1rem;
         position: relative;
         flex-grow: 1 !important;
     }
@@ -105,7 +105,7 @@
         </div>
         <div class="page-header__title">
             <div class="row">
-                <div class="col-md-12 pl-0">
+                <div class="col-md-12 pl-0 pr-0">
                     <h4 class="col-md-5 float-left">Search For {{ $mainCategory->name }}</h4>
                     <div class="col-md-5 float-right  d-flex flex-justify-between">
                         <select class="form-control width store form-control-select2" multiple
