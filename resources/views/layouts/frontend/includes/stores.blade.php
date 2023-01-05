@@ -1,3 +1,8 @@
+<style>
+    .product-card__info {
+        flex-grow: 0;
+    }
+</style>
 <div class="products-list__item text-center all_stores {{ $store->name }}_store">
     <div class="product-card ">
         <div class="product-card__image product-image">
@@ -68,8 +73,8 @@
                         @else
                             @if ($store->cashback->type == 'fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if ($store->cashback->type == 'percentage')%@endif
                         @endif
+                        Cashback
                     @endif
-                    Cashback
                 </div>
             <div class="product-card__prices">
                 <div class="distance calculatedDistance"
