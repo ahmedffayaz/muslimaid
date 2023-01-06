@@ -178,8 +178,8 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::post('admin_charities_store',[App\Http\Controllers\Admin\CharityController::class,'charityTypeStore'])->name('admin-charities-store');
     Route::put('charity_type_update/{id}',[App\Http\Controllers\Admin\CharityController::class,'charityTypeUpdate'])->name('charitiestype-update');
     Route::post('charities/search',  [App\Http\Controllers\Admin\CharityController::class,'searchCharities'])->name('charities.search');
-  
-    
+
+
     Route::get('manage-menus/{id?}',[App\Http\Controllers\Admin\MenuController::class,'index']);
     Route::post('create-menu',[App\Http\Controllers\Admin\MenuController::class,'store']);
     Route::get('add-categories-to-menu',[App\Http\Controllers\Admin\MenuController::class,'addCatToMenu']);
@@ -247,7 +247,7 @@ Route::get('category/{slug}',[App\Http\Controllers\Frontend\PagesController::cla
 Route::get('top-cashback',[App\Http\Controllers\Frontend\PagesController::class, 'topStores'])->name('top_stores');
 Route::get('trending',[App\Http\Controllers\Frontend\PagesController::class, 'trending'])->name('trending');
 Route::get('cashback/{slug}',[App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
-Route::get('categories/cashback-to-your-door',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
+Route::get('categories/{slug}',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
 // Route::get('stores/cashback-to-door',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
 Route::get('stores/reviews/{id}', [App\Http\Controllers\Frontend\StoreController::class, 'showReviews'])->name('store.reviews.show');
 Route::post('stores/reviews/submit', [App\Http\Controllers\Frontend\StoreController::class, 'storeReviews'])->name('store.reviews.submit');
