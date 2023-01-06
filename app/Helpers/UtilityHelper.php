@@ -385,7 +385,7 @@ function checkStaticpageRule($url)
 
    }elseif($slug){
        $categories = App\Models\Category::where('slug',$slug)->first();
-        if ($categories->title && $categories->meta_description && $categories->meta_keyword) {
+        if ($categories->meta_description && $categories->meta_keyword) {
             return $categories;
         }
         return null;

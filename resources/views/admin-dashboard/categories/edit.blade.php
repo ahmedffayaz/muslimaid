@@ -191,10 +191,8 @@
         @endif
         <div class="col-lg-12">
             <div class="form-group">
-                <label class="form-label" for="reviewer">Title</label>
-                <div class="form-control-wrap">
-                    <input type="text" class="form-control" name="title" placeholder="Title" value="{{ $category->title }}" >
-                </div>
+                <label class="form-label" for="reviewer">Meta Description</label>
+                <textarea  class="form-control" name="meta_description" placeholder="Meta Description">{{ $category->meta_description }}</textarea>
             </div>
         </div>
         <div class="col-lg-12">
@@ -204,11 +202,6 @@
                     <input type="text" class="form-control" name="meta_keyword" placeholder="Meta keyword" value="{{ $category->meta_keyword }}" >
                 </div>
             </div>
-        </div>
-        <div class="col-lg-12">
-            <div class="form-group">
-            <label class="form-label" for="reviewer">Meta Description</label>
-            <textarea  class="form-control" name="meta_description" placeholder="Meta Description">{{ $category->meta_description }}</textarea>
         </div>
         <div class="col-12">
             <div class="form-group">

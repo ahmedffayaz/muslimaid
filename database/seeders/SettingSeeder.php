@@ -32,8 +32,6 @@ class SettingSeeder extends Seeder
             'Company Rights' => '© 2021 Cashback Reborn.',
             'Sign Up Email' => 'info@trs.com',
             'Currency' => 'GBP',
-            'Meta Description' => 'Enjoy a rewarding shopping experience and get unlimited cashback discounts. Simply visit our website to earn cashback with online shopping.',
-            'Meta Keywords' => 'Cashback, voucher codes, comparison',
             'Footer Text' => '© 2021 Cashback Reborn.',
             'Meta Title' => 'Cashback Websites | Earn Cashback for Online Shopping',
             'Contact Us Email' => 'contact@trs.com',

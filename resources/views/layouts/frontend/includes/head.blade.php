@@ -16,7 +16,7 @@ $current_url = url()->full();
 
     if( $static_rule != null)
     {
-        $title = $static_rule['title'];
+        $title = isset($static_rule['name']) ? $static_rule['name'] : $static_rule['title'];
         $keyword = $static_rule['meta_keyword'];
         $description = $static_rule['meta_description'];
     }
@@ -29,13 +29,11 @@ $current_url = url()->full();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="format-detection" content="telephone=no">
     @if($static_rule != null)
-        <title>{{ $title }}</title>
-        <meta name="description" content='{{ $description }}'/>
-        <meta name="keywords" content='{{ $keyword }}'/>
+    <title>{{ $title }}</title>
+    <meta name="description" content='{{ $description }}'/>
+    <meta name="keywords" content='{{ $keyword }}'/>
     @else
     <title>{{ $settings['website_title'] }}</title>
-    <meta name="description" content='{{ $settings['meta_description'] }}'/>
-    <meta name="keywords" content='{{ $settings['meta_keywords'] }}'/>
     @endif
 
     <link rel="icon" type="image/png" href="@if(isset($settings['favicon']) && $settings['favicon']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}@else{{asset('admin-dashboard/images/favicon.png')}}@endif">
