@@ -231,7 +231,9 @@
         // Show stores on select categories
         function showStores() {
             let storeValue = $('#select-categories').val();
-            let url = "{{ route('store.location') }}";
+            let slug = "{{ Request::route('slug') }}";
+            let url = "{{ route('store.location', ':slug') }}";
+                url = url.replace(':slug', slug);
             $.ajax({
                 url: url,
                 type: 'GET',
