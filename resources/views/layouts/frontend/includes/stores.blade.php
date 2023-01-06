@@ -1,23 +1,28 @@
+<style>
+    .product-card__info {
+        flex-grow: 0;
+    }
+</style>
 <div class="products-list__item text-center all_stores {{ $store->name }}_store">
     <div class="product-card ">
         <div class="product-card__image product-image">
-            <a href="{{ route('store.show', $store->slug) }}"
-                class="product-image__body" style="padding-bottom:100px">
+            <a href="{{ route('store.show', $store->slug) }}" class="product-image__body">
                 <img class="product-image__img"
                     @if ($store->logo->first()) @if ($store->logo->first()->is_fake)
                         src="{{ asset('frontend/images/logos/' . $store->logo->first()->image) }}"
+                        @else
+                            src="{{ asset('storage/stores/images/' . $store->logo->first()->image) }}" @endif
                     @else
-                        src="{{ asset('storage/stores/images/' . $store->logo->first()->image) }}" @endif
-                @else
-                    src="{{ asset('frontend/images/products/product-16.jpg') }}"
-                    @endif alt="">
+                        src="{{ asset('frontend/images/products/product-16.jpg') }}"
+                    @endif
+                alt="Cashback store logo">
             </a>
         </div>
         <div class="product-card__info">
             <div class="product-card__name">
                 <a href="{{ route('store.show', $store->slug) }}">{{ $store->name }}</a>
             </div>
-            {{-- @if ($store->reviews->count()) --}}
+            @if ($store->rating != 0)
                 <div class="product-card__rating mx-auto">
                     <div class="product-card__rating-stars">
                         <div class="rating">
@@ -55,7 +60,7 @@
                     <div class="product-card__rating-legend">
                         {{ $store->activeReviews->count() }} Reviews</div>
                 </div>
-            {{-- @endif --}}
+            @endif
         </div>
         <div class="product-card__actions">
             <div class="product-card__prices">
@@ -68,8 +73,8 @@
                         @else
                             @if ($store->cashback->type == 'fixed'){{$store->cashback->currency}}@endif{{(SiteSetting()['cashback_percentage']/100)*$store->cashback->sale_commission}}@if ($store->cashback->type == 'percentage')%@endif
                         @endif
+                        Cashback
                     @endif
-                    Cashback
                 </div>
             <div class="product-card__prices">
                 <div class="distance calculatedDistance"
