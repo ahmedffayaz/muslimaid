@@ -253,7 +253,7 @@ Route::get('stores/reviews/{id}', [App\Http\Controllers\Frontend\StoreController
 Route::post('stores/reviews/submit', [App\Http\Controllers\Frontend\StoreController::class, 'storeReviews'])->name('store.reviews.submit');
 Route::get('search_suggestions',[App\Http\Controllers\Frontend\PagesController::class, 'searchSuggestions'])->name('search_suggestions');
 Route::get('pages/{page}',[App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('page');
-Route::get('post/{blog}',[App\Http\Controllers\Frontend\PagesController::class, 'blogPost'])->name('post');
+Route::get('post/{slug}',[App\Http\Controllers\Frontend\PagesController::class, 'blogPost'])->name('post');
 Route::post('contact_form',[App\Http\Controllers\Frontend\PagesController::class, 'contactForm'])->name('contactForm');
 Route::get('all_stores/{letter}',[App\Http\Controllers\Frontend\PagesController::class, 'allStoresLetter'])->name('all_stores_of_letter');
 Route::get('all_stores',[App\Http\Controllers\Frontend\PagesController::class, 'allStores'])->name('all_stores');

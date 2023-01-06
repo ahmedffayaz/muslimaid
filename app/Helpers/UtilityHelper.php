@@ -366,10 +366,8 @@ function checkStaticpageRule($url)
     $slug = request()->route('slug');
     $store_rules = App\Models\Seo_rule::with('ruleData')->where('url',$url)->first();
 
-    $blog = App\Models\Blog::where('url',$url)->first();
-
-   if($store_rules != null)
-   {
+    if($store_rules != null)
+    {
         $meta_description = [];
         $meta_keyword = [];
         foreach($store_rules as $rule)
@@ -378,22 +376,20 @@ function checkStaticpageRule($url)
             $rule['key'] == 'meta:keywords'?  $meta_keyword[] =$rule['value'] : '';
         }
         return  ['meta_description' =>implode( ',' , $meta_description ) , 'meta_keyword'=>implode( ',' , $meta_keyword ) ];
-
-   }elseif(!empty($blog)){
-
-    return $blog;
-
-   }elseif($slug){
-       $categories = App\Models\Category::where('slug',$slug)->first();
+    }elseif($slug){
+        $blog = App\Models\Blog::where('slug',$slug)->first();
+        if ($blog->meta_description && $blog->meta_keyword) {
+            return $blog;
+        }
+        return null;
+    }elseif($slug){
+        $categories = App\Models\Category::where('slug',$slug)->first();
         if ($categories->meta_description && $categories->meta_keyword) {
             return $categories;
         }
         return null;
-
     }else{
-
         return null;
-
     }
 }
 

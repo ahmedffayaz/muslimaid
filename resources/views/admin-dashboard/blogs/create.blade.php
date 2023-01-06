@@ -1,6 +1,6 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
-    
+
 
 <div class="nk-content ">
     <div class="container-fluid">
@@ -37,7 +37,7 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">Title</label>
                                                 <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="" required> 
+                                                    <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -45,7 +45,6 @@
                                             <fieldset class="uk-fieldset">
                                                 <div class="laraberg-sidebar">
                                                     <textarea name="excerpt" placeholder="Excerpt"></textarea>
-                                                
                                                 </div>
                                                 <div class="uk-margin">
                                                     <textarea name="content" id="content" hidden></textarea>
@@ -55,38 +54,35 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">Banner Image</label>
-                                               
-                                                    <div class="input-group">
-                                                      <span class="input-group-btn">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
                                                         <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white">
-                                                          <i class="fa fa-picture-o"></i> Choose
+                                                            <i class="fa fa-picture-o"></i> Choose
                                                         </a>
-                                                      </span>
-                                                      <input id="thumbnail" class="form-control" type="text" name="filepath" required>
-                                                    </div>
-                                                    <div id="holder" style="margin-top:15px;max-height:100px;"></div>
-                                                   
-                                             
-                                               
+                                                    </span>
+                                                    <input id="thumbnail" class="form-control" type="text" name="filepath" required>
+                                                </div>
+                                                <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                              <label class="form-label" for="reviewer">Meta Description</label>
+                                              <textarea  class="form-control " name="meta_description" placeholder="Meta Description" value="" ></textarea>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                           <div class="form-group">
                                               <label class="form-label" for="reviewer">Meta Keywords</label>
                                               <div class="form-control-wrap">
-                                                  <input id="blog-title" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword" value="" > 
+                                                  <input id="blog-title" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword" value="" >
                                               </div>
                                           </div>
-                                      </div>
-                                      <div class="col-lg-12">
-                                          <div class="form-group">
-                                          <label class="form-label" for="reviewer">Meta Description</label>
-                                          <textarea  class="form-control " name="meta_description" placeholder="Meta Description" value="" ></textarea>
                                       </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <button onclock="remobe_bug()" class="btn btn-primary add-blog" type="submit">Save</button>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -94,9 +90,9 @@
                             </div>
                         </div>
                     </div><!-- .nk-block -->
-                    
-                  
-                    
+
+
+
                 </div><!-- .components-preview -->
             </div>
         </div>
@@ -112,7 +108,7 @@
     window.onbeforeunload = function() {
        return null;
       };
-</script> 
+</script>
 <script>
     var route_prefix = "/filemanager";
    </script>
@@ -249,12 +245,12 @@
       })
     });
   </script>
-  
+
   <script>
         jQuery.validator.addMethod("regex", function(value, element) {
           return this.optional(element) || /^[\w. ]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
-        
+
         $('.form-validate').validate({
           rules: {
             title: {
