@@ -13,7 +13,7 @@ class Category extends Model
 {
     use HasFactory , SoftDeletes;
 
-    protected $fillable = [ 'name','slug','description','sort','logo_type','logo_upload','logo_link','banner_type','banner_upload','banner_link', 'status','parent_id','mapped_to', 'network_id','feature_homepage','feature_sidebar'];
+    protected $fillable = [ 'name','slug','description','sort','logo_type','logo_upload','logo_link','banner_type','banner_upload','banner_link', 'status','parent_id','mapped_to', 'network_id','feature_homepage','feature_sidebar', 'title', 'meta_description', 'meta_keyword'];
     public function stores(){
 
         return $this->belongsToMany(Store::class);

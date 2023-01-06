@@ -363,11 +363,11 @@ function metaDescription($descriptions)
 
 function checkStaticpageRule($url)
 {
-    $store_rules = App\Models\Store_seo_data::where('url',$url)->get();
+    $slug = request()->route('slug');
+    $store_rules = App\Models\Seo_rule::with('ruleData')->where('url',$url)->first();
 
     $blog = App\Models\Blog::where('url',$url)->first();
 
-    $categories = App\Models\Category::where('url',$url)->first();
    if($store_rules != null)
    {
         $meta_description = [];
@@ -383,15 +383,18 @@ function checkStaticpageRule($url)
 
     return $blog;
 
-   }elseif(!empty($categories)){
+   }elseif($slug){
+       $categories = App\Models\Category::where('slug',$slug)->first();
+        if ($categories->title && $categories->meta_description && $categories->meta_keyword) {
+            return $categories;
+        }
+        return null;
 
-    return $categories;
+    }else{
 
-   }else{
+        return null;
 
-    return null;
-
-   }
+    }
 }
 
    function sendVerificationEmail($user)
@@ -401,7 +404,7 @@ function checkStaticpageRule($url)
     $token = Str::random(64);
 
     UserVerify::create([
-          'user_id' => $user->id, 
+          'user_id' => $user->id,
           'token' => $token
         ]);
 
@@ -435,8 +438,8 @@ function safeParseUrl($url)
 
     if (array_key_exists('scheme', $parsed)) {
         return $parsed['scheme'] . '://' . $parsed['host'];
-    } 
-    
+    }
+
     if (array_key_exists('path', $parsed)) {
         return 'http://' . $parsed['path'];
     }
@@ -444,7 +447,7 @@ function safeParseUrl($url)
     return null;
 }
 
-function convertPathForOS($path) 
+function convertPathForOS($path)
 {
     if (empty($path)) return $path;
 

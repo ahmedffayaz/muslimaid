@@ -1,39 +1,43 @@
 @php
 $current_url = url()->full();
 
-$rule = App\Models\Seo_rule::with('ruleData')->where('url',$current_url)->first();
+// $rule = App\Models\Seo_rule::with('ruleData')->where('url',$current_url)->first();
 
 
-if(!empty($rule))
-{
-  $meta_data = $rule->ruleData()->get();
-  $keyword = metaKeyword($meta_data);
-  $description = metaDescription($meta_data);
+// if(!empty($rule))
+// {
+//   $meta_data = $rule->ruleData()->get();
+//   $keyword = metaKeyword($meta_data);
+//   $description = metaDescription($meta_data);
 
-}else{
+// }else{
 
-  $static_rule =  checkStaticpageRule($current_url);
+    $static_rule =  checkStaticpageRule($current_url);
 
-  if( $static_rule != null)
-  {
-    $keyword = $static_rule['meta_keyword'];
-    $description = $static_rule['meta_description'];
-  }
+    if( $static_rule != null)
+    {
+        $title = $static_rule['title'];
+        $keyword = $static_rule['meta_keyword'];
+        $description = $static_rule['meta_description'];
+    }
 
 
-}
+// }
 @endphp
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="format-detection" content="telephone=no">
-    @if($rule != null || $static_rule != null)
-    <meta name="keywords" content='{{ $keyword }}'/>
-    <meta name="description" content='{{ $description }}'/>
-
+    @if($static_rule != null)
+        <title>{{ $title }}</title>
+        <meta name="description" content='{{ $description }}'/>
+        <meta name="keywords" content='{{ $keyword }}'/>
+    @else
+    <title>{{ $settings['website_title'] }}</title>
+    <meta name="description" content='{{ $settings['meta_description'] }}'/>
+    <meta name="keywords" content='{{ $settings['meta_keywords'] }}'/>
     @endif
 
-    <title>{{$settings['website_title']}}</title>
     <link rel="icon" type="image/png" href="@if(isset($settings['favicon']) && $settings['favicon']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['favicon'])}}@else{{asset('admin-dashboard/images/favicon.png')}}@endif">
     <!-- fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700,700i">
