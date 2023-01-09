@@ -11,8 +11,6 @@ use App\Models\StoreCashback;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
-
-
 class StoreSeeder extends Seeder
 {
     /**

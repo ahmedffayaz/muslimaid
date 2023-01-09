@@ -9,7 +9,7 @@ use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
-    private $count = 1000;
+    private $count = 10;
 
     /**
      * Run the database seeds.
@@ -72,6 +72,6 @@ class UserSeeder extends Seeder
             User::insert($usersChunk);
         }
 
-        Role::findByName('user')->users()->sync(User::whereNotIn('id', [1, 2, 3])->pluck('id'));
+        Role::findByName('user')->users()->sync(User::whereNotIn('id', [2, 3])->pluck('id'));
     }
 }
