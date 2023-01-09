@@ -15,15 +15,8 @@
         </nav>
     </div>
 </div>
-<div class="container p-2 my-2">
+<div class="container p-0 my-2">
     @include('layouts.frontend.includes.banners.pages_banner')
-    <div class="row">
-        <div class="col-12">
-            <div class="category-text panel mb-4 mt-4 pt-3">
-                <p class="mt-1">{{$page->description}}</p>
-            </div>
-        </div>
-    </div>
 </div>
 
 @if(Session::has('success'))
@@ -43,7 +36,7 @@
 <div class="block block-product-columns mt-5">
     <div class="container">
         <div class="row">
-            <div class="col-12 mt-5">
+            <div class="col-12">
                 <h1>{{$page->title}}</h1>
 
 

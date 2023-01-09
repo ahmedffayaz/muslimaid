@@ -26,13 +26,6 @@
 </div>
 <div class="container p-2 my-2">
     @include('layouts.frontend.includes.banners.pages_banner')
-    <div class="row">
-        <div class="col-12">
-            <div class="category-text panel  mb-4 mt-4 pt-3">
-                <p class="mt-1">{{$page->description}}</p>
-            </div>
-        </div>
-    </div>
 </div>
 <!-- Cashbacks -->
 @php $categories = getCategories(); @endphp

@@ -38,13 +38,6 @@
 </div>
 <div class="container">
     @include('layouts.frontend.includes.banners.pages_banner')
-    <div class="row">
-        <div class="col-12">
-            <div class="category-text panel  mb-4 mt-4 pt-3">
-                <p class="mt-1">{{$page->description}}</p>
-            </div>
-        </div>
-    </div>
 </div>
 
 <div class="block block-product-columns mt-5">
