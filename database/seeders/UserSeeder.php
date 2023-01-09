@@ -1,15 +1,16 @@
 <?php
 
 namespace Database\Seeders;
-use Spatie\Permission\Models\Role;
 
 use App\Models\User;
-use Illuminate\Database\Seeder;
-
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
+use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
+    private $count = 1000;
+
     /**
      * Run the database seeds.
      *
@@ -17,55 +18,60 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $admin = new User();
-		$admin->first_name = 'Super';
-		$admin->last_name = 'Admin';
-		$admin->email = 'admin@trs.com';
-		$admin->password = bcrypt('123@#$xyz990');
-		$admin->registration_type = 'sign up';
-        $admin->avatar = 'default.png';
-        $admin->is_email_verified = '1';
-		$admin->save();
-        $admin->assignRole('admin');
-        $admin->assignRole('user');
+        // Super admin
+        User::create([
+            'first_name' => 'Super',
+            'last_name' => 'Admin',
+            'email' => 'admin@trs.com',
+            'password' => bcrypt('123@#$xyz990'),
+            'registration_type' => 'sign up',
+            'avatar' => 'default.png',
+            'is_email_verified' => 1,
+        ])->assignRole(['admin', 'user']);
 
-        $data = new User();
-		$data->first_name = 'Data';
-		$data->last_name = 'Operator';
-		$data->email = 'data@trs.com';
-		$data->password = bcrypt('123@#$xyz990');
-		$data->registration_type = 'sign up';
-        $data->avatar = 'default.png';
-        $admin->is_email_verified = '1';
-		$data->save();
-        $data->assignRole('data');
+        // Data Operator
+        User::create([
+            'first_name' => 'Data',
+            'last_name' => 'Operator',
+            'email' => 'data@trs.com',
+            'password' => bcrypt('123@#$xyz990'),
+            'registration_type' => 'sign up',
+            'avatar' => 'default.png',
+            'is_email_verified' => 1,
+        ])->assignRole(['data']);
 
-        $finance = new User();
-		$finance->first_name = 'Finance';
-		$finance->last_name = 'Manager';
-		$finance->email = 'finance@trs.com';
-		$finance->password = bcrypt('123@#$xyz990');
-		$finance->registration_type = 'sign up';
-        $finance->avatar = 'default.png';
-        $admin->is_email_verified = '1';
-		$finance->save();
-        $finance->assignRole('finance');
+        // Finance Manager
+        User::create([
+            'first_name' => 'Finance',
+            'last_name' => 'Manager',
+            'email' => 'finance@trs.com',
+            'password' => bcrypt('123@#$xyz990'),
+            'registration_type' => 'sign up',
+            'avatar' => 'default.png',
+            'is_email_verified' => 1,
+        ])->assignRole(['finance']);
 
         $faker = Faker::create();
 
-    	foreach (range(1,1000) as $index) {
+        $users = [];
+        $password = bcrypt('123@#$xyz990'); // important optimization
 
-            $user = new User();
-            $user->first_name = $faker->firstName;
-            $user->last_name = $faker->lastName;
-            $user->email = $faker->unique()->email;
-            $user->password = bcrypt('123@#$xyz990');
-            $user->registration_type = 'sign up';
-            $user->avatar = 'default.png';
-            $admin->is_email_verified = '1';
-            $user->save();	     
-            $user->assignRole('user');
-	}
+        for ($i = 0; $i < $this->count; $i++) {
+            $users[] = [
+                'first_name' => $faker->firstName,
+                'last_name' => $faker->lastName,
+                'email' => $faker->unique()->safeEmail,
+                'password' => $password,
+                'registration_type' => 'sign up',
+                'avatar' => 'default.png',
+                'is_email_verified' => 1,
+            ];
+        }
 
+        foreach (array_chunk($users, 500) as $usersChunk) {
+            User::insert($usersChunk);
+        }
+
+        Role::findByName('user')->users()->sync(User::whereNotIn('id', [1, 2, 3])->pluck('id'));
     }
 }

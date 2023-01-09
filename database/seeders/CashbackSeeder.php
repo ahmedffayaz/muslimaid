@@ -2,15 +2,19 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\UserCashback;
-use App\Models\CashbackStatusChange;
 use App\Models\ExitClick;
 use App\Models\SiteSetting;
 use Faker\Factory as Faker;
+use App\Models\UserCashback;
+use Illuminate\Support\Carbon;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use App\Models\CashbackStatusChange;
 
 class CashbackSeeder extends Seeder
 {
+    private $count = 1000;
+
     /**
      * Run the database seeds.
      *
@@ -18,35 +22,41 @@ class CashbackSeeder extends Seeder
      */
     public function run()
     {
-        
         $faker = Faker::create();
-        $cashback_percent = SiteSetting::where('type','cashback_percentage')->first()->value;
+        $now = Carbon::parse(now())->format('Y-m-d H:i:s');
 
-        foreach (range(1,1000) as $index) {
+        $cashbacks = [];
+        $cashbacksStatuses = [];
 
-            
-            $order_value = $faker->numberBetween(50,200);
-            $network_commission = $faker->numberBetween(1,10);
-            $amount = ($network_commission/100) * $cashback_percent;
+        $clicks = ExitClick::orderBy(DB::raw('RAND()'))->limit($this->count)->get()->toArray();
+        $cashbackPercent = SiteSetting::where('type', 'cashback_percentage')->first()->value;
 
-            $click = ExitClick::findOrFail($faker->numberBetween(1,5000));
-            $commission = UserCashback::create([
-            'store_id' => $click->store_id,
-            'user_id'  => $click->user_id ?? 0,
-            'exit_click_id' => $click->id,
-            'amount' => round($amount,3),
-            'network_commission' => round($network_commission,3),
-            'order_value' => round($order_value,3),
-            'status' => $faker->numberBetween(1,4),
-            'event_date'=> \Carbon\Carbon::parse($click->created_at)->format('Y-m-d H:i:s'),
-            'click_date'=> $click->created_at,
-            
-        ]); 
+        for ($i = 0; $i < $this->count; $i++) {
+            $orderValue = $faker->numberBetween(50, 200);
+            $networkCommission = $faker->numberBetween(1, 10);
+            $amount = ($networkCommission / 100) * $cashbackPercent;
 
-        $change_status = CashbackStatusChange::create([
-            'user_cashback_id'=>$commission->id,
-            'cashback_status_id'=>$commission->status
-        ]);
+            $status = $faker->numberBetween(1, 4);
+
+            $cashbacks[] = [
+                'store_id' => $clicks[$i]['store_id'],
+                'user_id'  => $clicks[$i]['user_id'] ?? 0,
+                'exit_click_id' => $clicks[$i]['id'],
+                'amount' => round($amount, 3),
+                'network_commission' => round($networkCommission, 3),
+                'order_value' => round($orderValue, 3),
+                'status' => $status,
+                'event_date' => $now,
+                'click_date' => $now,
+            ];
+
+            $cashbacksStatuses[] = [
+                'user_cashback_id' => ($i + 1),
+                'cashback_status_id' => $status
+            ];
         }
+
+        UserCashback::insert($cashbacks);
+        CashbackStatusChange::insert($cashbacksStatuses);
     }
 }

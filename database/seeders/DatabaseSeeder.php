@@ -13,12 +13,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-
         $this->call([
             RolesPermissionsSeeder::class,
             UserSeeder::class,
             NetworkSeeder::class,
-            // StoreSeeder::class,
+            StoreSeeder::class,
             CategorySeeder::class,
             CashbackStatusSeeder::class,
             ClicksSeeder::class,
@@ -34,6 +33,5 @@ class DatabaseSeeder extends Seeder
             TicketCategorySeeder::class,
             RegionSeeder::class
         ]);
-        // \App\Models\User::factory(10)->create();
     }
 }
