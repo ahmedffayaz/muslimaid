@@ -358,7 +358,7 @@ function checkStaticpageRule($url)
 {
     $slug = request()->route('slug');
     $current_route_name = Request::route()->getName();
-    $seo_rules = App\Models\Seo_rule::with('ruleData')->where('url',$url)->first();
+    $seo_rules = App\Models\Seo_rule::where('is_enabled', 1)->with('ruleData')->where('url',$url)->first();
     if($seo_rules != null)
     {
         $meta_description = [];
