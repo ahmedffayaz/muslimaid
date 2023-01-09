@@ -84,6 +84,8 @@ class AwinCategoryImporter implements ShouldQueue
             }
         }
 
+        // TODO: assign categories to stores
+
         Storage::delete($this->csvFilePath);
     }
 }
