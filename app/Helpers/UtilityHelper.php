@@ -443,3 +443,10 @@ function safeParseUrl($url)
 
     return null;
 }
+
+function convertPathForOS($path) 
+{
+    if (empty($path)) return $path;
+
+    return str_replace('\\', '/', str_replace('/', DIRECTORY_SEPARATOR, $path));
+}

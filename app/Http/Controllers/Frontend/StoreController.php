@@ -32,8 +32,10 @@ class StoreController extends Controller
         return view('frontend.stores.show',compact('store','count'));
     }
 
-    public function storeLocation(Request $request)
+    public function storeLocation(Request $request, $slug)
     {
+        $mainCategory = Category::whereSlug($slug)->first();
+
         if ($request->ajax()) {
             if($request->has('id'))
             {
@@ -43,13 +45,15 @@ class StoreController extends Controller
                 });
             })->with('logo', 'storeAddress')->paginate(10);
         }else{
-            $locations = Store::with('logo', 'storeAddress')->paginate(10);
+            $locations = Store::when(optional($mainCategory)->id, function($query) use ($mainCategory) {
+                $query->whereHas('categories', function ($query) use ($mainCategory) {
+                    $query->where('category_id', $mainCategory->id);
+                });
+            })->where('status', 'active')->with('logo', 'storeAddress')->paginate(10);
 
         }
             return view('frontend.stores.stores',compact('locations'));
         }
-
-        $mainCategory = Category::whereName('Cashback To Your Door')->first();
 
         $locations = Store::when(optional($mainCategory)->id, function($query) use ($mainCategory) {
             $query->whereHas('categories', function ($query) use ($mainCategory) {

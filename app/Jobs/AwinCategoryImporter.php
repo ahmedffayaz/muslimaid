@@ -39,7 +39,7 @@ class AwinCategoryImporter implements ShouldQueue
         $header = null;
         $csvToArray = [];
 
-        if (($handle = fopen(str_replace('/', '\\', storage_path('\\app\\' . $this->csvFilePath)), 'r')) !== false) {
+        if (($handle = fopen(convertPathForOS(storage_path('app\\' . $this->csvFilePath)), 'r')) !== false) {
             while (($row = fgetcsv($handle, 1000, ',')) !== false) {
                 if (!$header) $header = $row;
                 else $csvToArray[] = array_combine($header, $row);
