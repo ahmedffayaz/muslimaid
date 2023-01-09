@@ -1,18 +1,21 @@
 <?php
 
 use Carbon\Carbon;
+use App\Models\Blog;
+use App\Models\Page;
+// use Intervention\Image\Image;
 use App\Models\Store;
 use App\Models\Category;
-// use Intervention\Image\Image;
+use App\Models\UserVerify;
+use Illuminate\Support\Str;
+use App\Models\EmailTemplate;
 use Harimayco\Menu\Models\Menus;
 use Harimayco\Menu\Models\MenuItems;
-use App\Models\UserVerify;
-use App\Models\EmailTemplate;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Intervention\Image\ImageManagerStatic as Image;
 
 // function ccEmails() {
@@ -351,43 +354,49 @@ function isGoogleEnabled(){
     }
 }
 
-function metaKeyword($keywords)
-{
-    return implode( ',' , $keywords->where('type', 'meta')->where('key', 'meta_keyword')->pluck('value')->toArray());
-}
-
-function metaDescription($descriptions)
-{
-    return implode( ',' , $descriptions->where('type', 'meta')->where('key', 'meta_description')->pluck('value')->toArray());
-}
-
 function checkStaticpageRule($url)
 {
     $slug = request()->route('slug');
-    $store_rules = App\Models\Seo_rule::with('ruleData')->where('url',$url)->first();
-
-    if($store_rules != null)
+    $current_route_name = Request::route()->getName();
+    $seo_rules = App\Models\Seo_rule::with('ruleData')->where('url',$url)->first();
+    if($seo_rules != null)
     {
         $meta_description = [];
         $meta_keyword = [];
-        foreach($store_rules as $rule)
+        $title = Str::title(str_replace('-' , ' ', $slug));
+        foreach($seo_rules->ruleData as $rule)
         {
-            $rule['key'] == 'meta:description'?  $meta_description[] =$rule['value'] : '';
-            $rule['key'] == 'meta:keywords'?  $meta_keyword[] =$rule['value'] : '';
+            $rule['key'] == 'meta_description'?  $meta_description[] =$rule['value'] : '';
+            $rule['key'] == 'meta_keyword'?  $meta_keyword[] =$rule['value'] : '';
         }
-        return  ['meta_description' =>implode( ',' , $meta_description ) , 'meta_keyword'=>implode( ',' , $meta_keyword ) ];
+        return  ['title' => $title, 'meta_description' =>implode( ',' , $meta_description ) , 'meta_keyword'=>implode( ',' , $meta_keyword ) ];
     }elseif($slug){
-        $blog = App\Models\Blog::where('slug',$slug)->first();
-        if ($blog->meta_description && $blog->meta_keyword) {
-            return $blog;
+        $route_names = [
+            'post' => '\App\Models\Blog',
+            'page' => '\App\Models\Page',
+            'store.location'  => '\App\Models\Category',
+            'store.show' => '\App\Models\Store'
+        ];
+
+        foreach ($route_names as $route_name => $model) {
+            if ($current_route_name == 'store.show') {
+                $meta_description = [];
+                $meta_keyword = [];
+                $store = Store::where('slug', $slug)->select('id', 'name')->with('storeRuleData')->first();
+                $title = $store->name;
+                foreach($store->storeRuleData as $meta_data) {
+                    $meta_data['key'] == 'meta:description' ? $meta_description[] = $meta_data['value'] : '';
+                    $meta_data['key'] == 'meta:keywords' ? $meta_keyword[] = $meta_data['value'] : '';
+                }
+                return ['title' => $title, 'meta_description' => implode(',', $meta_description), 'meta_keyword' => implode(',', $meta_keyword)];
+            }elseif ($route_name == $current_route_name){
+                $record = $model::where('slug',$slug)->first();
+                if (($record->title ? $record->title : $record->name) || $record->meta_description && $record->meta_keyword) {
+                    return $record;
+                }
+                return null;
+            }
         }
-        return null;
-    }elseif($slug){
-        $categories = App\Models\Category::where('slug',$slug)->first();
-        if ($categories->meta_description && $categories->meta_keyword) {
-            return $categories;
-        }
-        return null;
     }else{
         return null;
     }

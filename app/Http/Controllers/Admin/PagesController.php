@@ -45,7 +45,9 @@ class PagesController extends Controller
         $page->lb_content = $request->content;
         $page->status = $request->status;
         $page->banner_image = $request->filepath;
-        $page->description = $request->description;
+        $page->description = $request->short_description;
+        $page->meta_description = $request->meta_description;
+        $page->meta_keyword = $request->meta_keyword;
         $page->default = 0;
         $page->save();
         flash()->success('New Page created successfully');
@@ -90,7 +92,9 @@ class PagesController extends Controller
         if(isset($request->filepath)){
             $page->banner_image = $request->filepath;
         }
-        $page->description = $request->description;
+        $page->description = $request->short_description;
+        $page->meta_description = $request->meta_description;
+        $page->meta_keyword = $request->meta_keyword;
         $page->save();
         flash()->success('Page updated');
         return redirect()->route('admin.pages.index');

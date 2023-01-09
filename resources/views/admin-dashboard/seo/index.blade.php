@@ -100,7 +100,6 @@
                                         <div class="form-control-wrap">
                                             <select class="form-select form-control" id="key-${counter}" name="type[${counter}][key]" required>
                                                 <option Selected disabled>Choose key</option>
-                                                <option value="meta_title">Meta: Title</option>
                                                 <option value="meta_description">Meta: Description</option>
                                                 <option value="meta_keyword">Meta: Keyword</option>
                                             </select>

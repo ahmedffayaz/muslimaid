@@ -1,28 +1,14 @@
 @php
 $current_url = url()->full();
 
-// $rule = App\Models\Seo_rule::with('ruleData')->where('url',$current_url)->first();
+$static_rule =  checkStaticpageRule($current_url);
 
-
-// if(!empty($rule))
-// {
-//   $meta_data = $rule->ruleData()->get();
-//   $keyword = metaKeyword($meta_data);
-//   $description = metaDescription($meta_data);
-
-// }else{
-
-    $static_rule =  checkStaticpageRule($current_url);
-
-    if( $static_rule != null)
-    {
-        $title = isset($static_rule['name']) ? $static_rule['name'] : $static_rule['title'];
-        $keyword = $static_rule['meta_keyword'];
-        $description = $static_rule['meta_description'];
-    }
-
-
-// }
+if(checkStaticpageRule($current_url) != null)
+{
+    $title = isset($static_rule['name']) ? $static_rule['name'] : $static_rule['title'];
+    $keyword = $static_rule['meta_keyword'];
+    $description = $static_rule['meta_description'];
+}
 @endphp
 <head>
     <meta charset="UTF-8">

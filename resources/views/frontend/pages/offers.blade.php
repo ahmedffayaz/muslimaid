@@ -15,7 +15,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="{{url('/')}}">Home</a>
-                    <svg class="breadcrumb-arrow" width="6px" height="9px">              
+                    <svg class="breadcrumb-arrow" width="6px" height="9px">
                         <use xlink:href="{{asset('frontend/images/sprite.svg')}}#arrow-rounded-right-6x9"></use>
                     </svg>
                 </li>
@@ -25,16 +25,10 @@
     </div>
 </div>
 <div class="container p-2 my-2">
+    @include('layouts.frontend.includes.banners.pages_banner')
     <div class="row">
         <div class="col-12">
-            <div class="block-finder__body">
-               <img class="banner__size" src="{{$page->banner_image}}" alt="Offer Page Image Missing">
-                 <div class="block-finder__header">
-                    <div class="block-finder__title">{{$page->title}}</div>
-                    <div class="block-finder__subtitle"></div>
-                 </div>
-            </div>
-            <div class="category-text panel  mb-3 mt-4 pt-3">
+            <div class="category-text panel  mb-4 mt-4 pt-3">
                 <p class="mt-1">{{$page->description}}</p>
             </div>
         </div>
@@ -48,7 +42,7 @@
 <div class="block block-product-columns">
     <div class="container">
         <div class="row">
-           
+
             <div class="col-lg-12">
                 <div id="your_container"> <!-- The element you want to render the content in -->
                     {!! $page->lb_content !!}
@@ -63,18 +57,18 @@
     <div class="container">
         <div class="row">
             @foreach ($categories as $category)
-               @if($category->stores->count()) 
-            
+               @if($category->stores->count())
+
             <div class="col-lg-4 mt-5 ">
                 <div class="block-header">
                     <h3 class="block-header__title"> @if($category->logo_type == 'upload')
-        
+
                         <img src="{{asset('storage/categories/images/'.$category->logo_upload)}}" width="25px" alt="">
-                      
+
                         @elseif($category->logo_type == 'link')
-                        
+
                         <img src="{{$category->logo_link}}"  width="25px" alt="">
-                     
+
                         @endif{{$category->name}}</h3>
                     <div class="block-header__divider"></div>
                     <ul class="block-header__groups-list">
@@ -82,10 +76,10 @@
                     </ul>
                 </div>
                 <div class="block-product-columns__column">
-                  
+
                     @foreach ($category->stores->unique()->take(5) as $store)
-                        
-                    
+
+
                     <div class="block-product-columns__item">
                         <div class="product-card product-card--hidden-actions product-card--layout--horizontal mb-3">
                             <div class="product-card__image product-image">
@@ -97,7 +91,7 @@
                                         src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
                                     @endif
                                 @else
-                                    src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                                    src="{{asset('frontend/images/products/product-16.jpg')}}"
                                 @endif alt="">
                                 </a>
                             </div>
@@ -134,13 +128,13 @@
                                                 <div class="product-card__rating-legend">{{$store->reviews->count()}} Reviews</div>
                                             </div>
                                 @endif
-                                
+
                             </div>
                             <div class="product-card__actions">
-                               
+
                                 <div class="product-card__prices">
                                     @if($store->cashback)
-                                        
+
                                         @if($store->custom_cashback_percentage)
                                             @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                         @else
@@ -149,7 +143,7 @@
                                          Cashback
                                     @endif
                                 </div>
-                             
+
                             </div>
                         </div>
                     </div>
@@ -158,7 +152,7 @@
             </div>
             @endif
             @endforeach
-         
+
         </div>
     </div>
 </div>
