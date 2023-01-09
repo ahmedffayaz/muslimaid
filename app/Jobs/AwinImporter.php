@@ -10,12 +10,14 @@ use App\Models\StoreImage;
 use App\Models\SiteSetting;
 use Illuminate\Support\Str;
 use App\Models\UserCashback;
-use App\Models\StoreCashback;
 use Illuminate\Bus\Queueable;
+use App\Models\CashbackStatus;
+use Illuminate\Support\Carbon;
 use App\Models\ImporterSetting;
 use Illuminate\Support\Facades\DB;
 use App\Models\CashbackStatusChange;
 use Illuminate\Queue\SerializesModels;
+use App\Jobs\AwinStoreCashbacksImporter;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -48,6 +50,7 @@ class AwinImporter implements ShouldQueue
     public function handle()
     {
         if ($this->importerSetting->import_stores == 1) $this->importStores();
+        if ($this->importerSetting->import_cashbacks == 1) $this->importUsersCashbacks();
     }
 
     /**
@@ -143,6 +146,21 @@ class AwinImporter implements ShouldQueue
      */
     private function importStoresCashbacks()
     {
+        // We have API call limit for '20' calls per minute (for safe side make it '15'), so we divide and conquer
+        $storesChunks = Store::where('network_id', $this->network->id)->orderBy('id', 'DESC')->get()->chunk(15);
+
+        foreach ($storesChunks as $key => $storesChunk) {
+            AwinStoreCashbacksImporter::dispatch($storesChunk)->delay(now()->addMinutes($key + 1));
+        }
+    }
+
+    /**
+     * Import users' cashbacks
+     * 
+     * @return void
+     */
+    private function importUsersCashbacks()
+    {
         $curl = curl_init();
 
         $startDate = date('Y-m-d\TH:i:s', strtotime('-31 days'));
@@ -165,8 +183,6 @@ class AwinImporter implements ShouldQueue
 
         if (curl_errno($curl)) {
             flash()->error('Error: ' . curl_error($curl));
-            curl_close($curl);
-
             return redirect()->route('admin.stores.index');
         }
 
@@ -174,39 +190,72 @@ class AwinImporter implements ShouldQueue
 
         $transactions = json_decode($curlResponse, true);
 
-        // Return in case of no transactions
+        // Return in case of no transaction
         if (empty($transactions)) return;
 
         $dbStores = Store::whereNetworkId($this->network->id)->get()->toArray();
+        $cashbackStatuses = CashbackStatus::get();
 
         foreach ($transactions as $transaction) {
+            // Skip transaction without advertiser ID
             if (!array_key_exists('advertiserId', $transaction) || empty($transaction['advertiserId'])) continue;
+
+            // Skip transaction without click reference
+            if (empty($transaction['clickRefs'])) continue;
 
             // Make sure the store of the transaction exists in our database
             $dbStoreKey = array_search($transaction['advertiserId'], array_column($dbStores, 'advertiser_id'));
             if (empty($dbStoreKey)) continue;
 
+            // If the db store's cashback is set to be overridden by admin, then we will skip this
             if ($dbStores[$dbStoreKey]['override_cashback']) continue;
 
-            $commissionType = array_key_exists('type', $transaction['commissionAmount']) && (strpos(strtolower($transaction['commissionAmount']['type']), 'percent') !== false)
-                ? 'percentage'
-                : 'fixed';
+            $exitClick = ExitClick::where('id', $transaction['clickRefs']['clickRef'])
+                ->orWhere('network_click_ref', $transaction['clickRefs']['clickRef'])->first();
 
-            StoreCashback::updateOrCreate([
-                'store_id' => $dbStores[$dbStoreKey]['id'],
-                'type' => $commissionType,
-                'sale_commission' => $transaction['commissionAmount']['amount'],
+            if (empty($exitClick)) {
+                $exitClick = ExitClick::create([
+                    'store_id' => $dbStores[$dbStoreKey]['id'],
+                    'user_id' => 1,
+                    'network_click_ref' => $transaction['clickRefs']['clickRef'],
+                    'status' => 'pending',
+                    'exit_url' => '#',
+                    'current_cashback_percentage' => $this->siteSettings['cashback_percentage'],
+                ]);
+            }
+
+            $transactionStatus = 'pending';
+
+            if ($transaction['commissionStatus'] == 'pending') $transactionStatus = 'pending';
+            if ($transaction['commissionStatus'] == 'approved') $transactionStatus = 'paid';
+            if ($transaction['commissionStatus'] == 'declined') $transactionStatus = 'failed';
+            if ($transaction['commissionStatus'] == 'deleted') $transactionStatus = 'failed';
+
+            $userCashbackAmount = ($transaction['commissionAmount']['amount'] / 100) * $exitClick->current_cashback_percentage;
+
+            $userCashback = UserCashback::updateOrCreate([
+                'exit_click_id' =>  $exitClick->id,
+                'network_commission_id' =>  $transaction['id']
             ], [
                 'store_id' => $dbStores[$dbStoreKey]['id'],
-                'type' => $commissionType,
-                'cashback_name' => 'default',
-                'image' => '#',
-                'click_url' =>  '#',
-                'sale_commission' => $transaction['commissionAmount']['amount'],
-                'currency' => $transaction['commissionAmount']['currency'],
-                'detail' => 'default',
-                'network_detail' => 'default',
-                'default' => 1
+                'user_id' => 1,
+                'exit_click_id' => $exitClick->id,
+                'amount' => round($userCashbackAmount, 2),
+                'network_commission' => $transaction['commissionAmount']['amount'],
+                'network_commission_id' => $transaction['id'],
+                'network_order_id' => $transaction['id'],
+                'order_value' => round($transaction['saleAmount']['amount'], 2),
+                'status' => $transaction['commissionStatus'],
+                'event_date' => Carbon::parse($transaction['transactionDate'])->toDateTimeString(),
+                'click_date' => Carbon::parse($transaction['clickDate'])->toDateTimeString(),
+            ]);
+
+            CashbackStatusChange::updateOrCreate([
+                'user_cashback_id' => $userCashback->id,
+                'cashback_status_id' => $cashbackStatuses->where('status', $transactionStatus)->first()->id
+            ], [
+                'user_cashback_id' => $userCashback->id,
+                'cashback_status_id' => $cashbackStatuses->where('status', $transactionStatus)->first()->id
             ]);
         }
 
