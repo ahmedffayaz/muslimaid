@@ -174,12 +174,16 @@ class PagesController extends Controller
     {
         $stores = $stores->newQuery();
         $term = null;
-        if ($request->input('search')) {
-            $stores->where('name', 'like', '%' . $request->input('search') . '%');
+        $search = $request->input('search');
+        if ($search) {
+            $stores->where('name', 'like', '%' . $request->input('search') . '%')
+                ->orWhereHas('storeRuleData', function ($query) use ($search) {
+                    $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $search . '%');
+                });
             $term = $request->input('search');
         }
         $stores = $stores->latest()->paginate(20);
-        // dd($stores);
+
         return view('frontend.pages.search', compact('stores', 'term'));
     }
 
@@ -280,10 +284,10 @@ class PagesController extends Controller
         $stores = Store::where('name', 'like', $letter . '%')->get();
         return view('frontend.pages.stores_with_letter', compact('stores', 'letter'));
     }
-    
+
     public function showCharity(Request $request){
         $charity = Charity::with('charity_type')->find($request->id);
         return view('frontend.pages.charity_model',compact('charity'));
-    
+
     }
 }
