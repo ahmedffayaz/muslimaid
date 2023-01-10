@@ -7,7 +7,7 @@
       padding: 0 !important;
       border-radius: 4px;
       -moz-border-radius: 4px;
-      border:1px solid #ddd; 
+      border:1px solid #ddd;
       -webkit-box-shadow: 0 6px 12px rgba(0,0,0,.175);
       box-shadow: 0 6px 12px rgba(0,0,0,.175);
       -moz-box-shadow: 0 6px 12px rgba(0,0,0,.175);
@@ -59,27 +59,27 @@
     width: 16px;
     z-index: 1;
     }
-    
+
     div.bhoechie-tab-content{
       background-color: #ffffff;
       /* border: 1px solid #eeeeee; */
       padding-left: 20px;
     }
-    
+
     div.bhoechie-tab div.bhoechie-tab-content:not(.active){
       display: none;
     }
-    
+
     .shine {
     background: #f6f7f8;
     background-image: linear-gradient(to right, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
     background-repeat: no-repeat;
-    background-size: 800px 230px; 
+    background-size: 800px 230px;
     display: inline-block;
-    position: relative; 
-    
+    position: relative;
+
     -webkit-animation-duration: 1s;
-    -webkit-animation-fill-mode: forwards; 
+    -webkit-animation-fill-mode: forwards;
     -webkit-animation-iteration-count: infinite;
     -webkit-animation-name: placeholderShimmer;
     -webkit-animation-timing-function: linear;
@@ -112,77 +112,72 @@
     padding: 1px;
 }
 .size{
-   
+
 }
 @-webkit-keyframes placeholderShimmer {
   0% {
     background-position: -468px 0;
   }
-  
+
   100% {
-    background-position: 468px 0; 
+    background-position: 468px 0;
   }
 }
 </style>
 
-<div class="container p-2 my-2 mt-2">
+<div class="container p-3 my-2 mt-2">
+    @php
+        $mainCategory = $category;
+    @endphp
+    @include('layouts.frontend.includes.banners.categories_banner')
     <div class="row">
         <div class="col-12">
-          <div class="block-finder__body">
-             <img class="banner__size" src="{{asset('storage/categories/images/'.$category->banner_upload)}}" alt="">
-                <div class="block-finder__header">
-                   <div class="block-finder__title">{{$category->name}}</div>
-                   <div class="block-finder__subtitle"></div>
-                </div>  
-         </div> 
             <div class="panel  mb-4 my-2">
                <p>{{$category->description}}</p>
-            </div>   
+            </div>
         </div>
     </div>
 </div>
 
-<div class="block mt-5 pt-5">
-    
+<div class="block">
+
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h1 class="text-center">{{$category->name}}</h1>
-                <p  class="text-center">{!!$category->description!!}</p>
                 @if($category->picks->count())
-                
+
                 <div class="row bhoechie-tab-container my-5 col-lg-10 mx-auto">
-                    
+
                     <div class="col-lg-8 col-md-8 bhoechie-tab align-self-center">
                         <!-- flight section -->
                         @foreach ($category->picks->take(5) as $key=>$pick)
-                            
-                        
+
+
                         <div class="bhoechie-tab-content @if($key==0) active @endif">
                             <div class="row">
                                 <div class="col-lg-12 align-self-center py-4">
                                     <img style="max-height: 50px;" class="mb-2" @if($pick->store->logo->first())
                                     src="{{asset('storage/stores/images/'.$pick->store->logo->first()->image)}}"
                                     @else
-                                    src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                                    src="{{asset('frontend/images/products/product-16.jpg')}}"
                                     @endif alt="">
                                     <h4>{{$pick->store->name}}</h4>
                                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                                        Maecenas fermentum, diam non iaculis finibus, ipsum arcu sollicitudin dolor. 
+                                        Maecenas fermentum, diam non iaculis finibus, ipsum arcu sollicitudin dolor.
                                         </p>
-                                        <p> 
+                                        <p>
                                             <b> @if($pick->store->cashback->type=='fixed'){{$pick->store->cashback->currency}} @endif{{$pick->store->cashback->sale_commission}}@if($pick->store->cashback->type=='percentage')%@endif Cashback</b>
                                         </b>
                                     </p>
                                     <a href="{{route('store.show',$pick->store->slug)}}" class="btn btn-primary">Shop Now</a>
                                 </div>
-                               
+
                             </div>
                         </div>
                         @endforeach
-            
+
                     </div>
-                    
+
                     <div class="col-lg-4 col-md-4 bhoechie-tab-menu align-self-center">
                         <div class="list-group">
                             @foreach ($category->picks->take(5) as $key=>$pick)
@@ -194,7 +189,7 @@
                                 src="{{asset('storage/stores/images/'.$pick->store->logo->first()->image)}}"
                             @endif
                         @else
-                            src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                            src="{{asset('frontend/images/products/product-16.jpg')}}"
                         @endif alt="">
                                     <p class="small mb-0 text-dark mt-1"> @if($pick->store->cashback->type=='fixed'){{$pick->store->cashback->currency}} @endif{{$pick->store->cashback->sale_commission}}@if($pick->store->cashback->type=='percentage')%@endif Cashback</p>
                             </a>
@@ -203,9 +198,9 @@
                         </div>
                         </div>
                 </div>
-                 
+
                 @endif
-               
+
                 @if($stores->count())
                 <div class="block">
                     <div class="block-header">
@@ -214,8 +209,8 @@
                         <div class="products-view__list products-list scrolling-pagination" data-layout="grid-5-full" data-with-features="false" data-mobile-grid-columns="2">
                             <div class="products-list__body ">
                                 @foreach ($stores as $store)
-                                    
-                               
+
+
                                 <div class="products-list__item text-center">
                                     <div class="product-card ">
                                         <div class="product-card__image product-image">
@@ -227,7 +222,7 @@
                                                     src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
                                                 @endif
                                             @else
-                                                src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                                                src="{{asset('frontend/images/products/product-16.jpg')}}"
                                             @endif alt="">
                                             </a>
                                         </div>
@@ -264,11 +259,11 @@
                                                 <div class="product-card__rating-legend">{{$store->reviews->count()}} Reviews</div>
                                             </div>
                                             @endif
-                                          
+
                                         </div>
                                         <div class="product-card__actions">
                                             <div class="product-card__prices">
-                                               
+
                                                 @if($store->custom_cashback_percentage)
                                                     @if($store->cashback->type=='fixed'){{$store->cashback->currency}}@endif{{($store->custom_cashback_percentage/100)*$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif
                                                 @else
@@ -276,15 +271,15 @@
                                                 @endif
                                                  Cashback
                                             </div>
-                                            
+
                                         </div>
                                     </div>
                                 </div>
                                 @endforeach
-                                {!! $stores->links()!!} 
+                                {!! $stores->links()!!}
                             </div>
                         </div>
-                       
+
                     </div>
                 </div>
                 @else
@@ -292,7 +287,7 @@
                 @endif
             </div>
         </div>
-        
+
     </div>
 </div>
 
@@ -310,19 +305,19 @@
         $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
     });
 });
-</script>    
+</script>
 <script type="text/javascript">
     $('ul.pagination').hide();
     $(function() {
         $('.scrolling-pagination').jscroll({
             autoTrigger: true,
-            loadingHtml: ` <div class="products-list__body"> 
+            loadingHtml: ` <div class="products-list__body">
                         <box class="shine products-list__item"></box>
                         <box class="shine products-list__item"></box>
                         <box class="shine products-list__item"></box>
                         <box class="shine products-list__item"></box>
                         <box class="shine products-list__item"></box>
-                        
+
                         <box class="shine products-list__item"></box>
                         <box class="shine products-list__item"></box>
                         <box class="shine products-list__item"></box>
