@@ -34,8 +34,12 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (\Exception $e) {
+            if ($e->getPrevious() instanceof \Illuminate\Session\TokenMismatchException) {
+                Session::flash('message', 'Session has been expired');
+                Session::flash('alert-class', 'alert-danger');
+                return redirect()->back();
+            };
         });
     }
 }
