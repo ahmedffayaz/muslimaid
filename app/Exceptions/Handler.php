@@ -2,8 +2,8 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
 
 class Handler extends ExceptionHandler
 {
@@ -36,7 +36,7 @@ class Handler extends ExceptionHandler
     {
         $this->renderable(function (\Exception $e) {
             if ($e->getPrevious() instanceof \Illuminate\Session\TokenMismatchException) {
-                Session::flash('message', 'Session has been expired');
+                Session::flash('message', 'Form has expired. Please try again.');
                 Session::flash('alert-class', 'alert-danger');
                 return redirect()->back();
             };
