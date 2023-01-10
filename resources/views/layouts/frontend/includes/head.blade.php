@@ -15,7 +15,7 @@ if(checkStaticpageRule($current_url) != null)
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="format-detection" content="telephone=no">
     @if($static_rule != null)
-        <title>{{ $title }}</title>
+        <title>{{ $title != '' ? $title : $settings['website_title'] }}</title>
         @if ($description != '')
         <meta name="description" content='{{ $description }}'/>
         @endif

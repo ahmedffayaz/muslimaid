@@ -27,25 +27,15 @@
                             </div><!-- .nk-block-head-content -->
                         </div><!-- .nk-block-between -->
                     </div><!-- .nk-block-head -->
-
                     @include('flash::message')
                     <div class="nk-block">
                         <div class="card card-stretch">
                             <div class="card-inner-group">
-
                                 <div class="card-inner px-0">
                                     <div class="nk-tb-list nk-tb-ulist" id="table-data">
-
                                         @include('admin-dashboard.seo.index_data')
-                                        <div class="col-sm-12">
-                                            <div class="progress">
-                                                <div class="progress-bar bg-primary" data-progress="25"></div>
-                                            </div>
-                                        </div>
-
                                     </div><!-- .nk-tb-list -->
                                 </div><!-- .card-inner -->
-
                             </div><!-- .card-inner-group -->
                         </div><!-- .card -->
                     </div><!-- .nk-block -->
@@ -147,7 +137,7 @@
 
             // Delete appenended fields
             $(document).on('click', '.delBtn', function() {
-                $(this).parent().parent().remove();
+                $(this).parent().parent().parent().remove();
             });
 
             // Open edit modal
