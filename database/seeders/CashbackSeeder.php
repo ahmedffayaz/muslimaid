@@ -56,7 +56,12 @@ class CashbackSeeder extends Seeder
             ];
         }
 
-        UserCashback::insert($cashbacks);
-        CashbackStatusChange::insert($cashbacksStatuses);
+        foreach (array_chunk($cashbacks, 500) as $cashbacksChunk) {
+            UserCashback::insert($cashbacksChunk);
+        }
+
+        foreach (array_chunk($cashbacksStatuses, 500) as $cashbacksStatusesChunk) {
+            CashbackStatusChange::insert($cashbacksStatusesChunk);
+        }
     }
 }

@@ -2,13 +2,16 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\StoreReview;
+use App\Models\User;
 use App\Models\Store;
+use App\Models\StoreReview;
 use Faker\Factory as Faker;
+use Illuminate\Database\Seeder;
 
 class ReviewSeeder extends Seeder
 {
+    private $count = 3000;
+
     /**
      * Run the database seeds.
      *
@@ -17,19 +20,22 @@ class ReviewSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
+        $storesCount = Store::count();
+        $usersCount = User::count();
 
-        foreach (range(1,3000) as $index) {
+        $reviews = [];
 
+        for ($i = 1; $i <= $this->count; $i++) {
+            $reviews[] = [
+                'store_id' => $faker->numberBetween(1, $storesCount),
+                'user_id' => $faker->numberBetween(1, $usersCount),
+                'review' => $faker->paragraph(3, true),
+                'rating' =>  $faker->numberBetween(4, 5)
+            ];
+        }
 
-            $store = Store::findOrFail($faker->numberBetween(1,1000));
-            $review = StoreReview::create([
-            'store_id' => $store->id,
-            'reviewer' => $faker->name,
-            'review' => $faker->paragraph($nbSentences = 3, $variableNbSentences = true),
-            'rating' =>  $faker->numberBetween(4,5)
-           
-            
-        ]); 
+        foreach (array_chunk($reviews, 500) as $reviewsChunk) {
+            StoreReview::insert($reviewsChunk);
         }
     }
 }

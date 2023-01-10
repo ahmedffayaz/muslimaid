@@ -4,12 +4,13 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Faker\Factory as Faker;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
-    private $count = 10;
+    private $count = 50;
 
     /**
      * Run the database seeds.
@@ -55,6 +56,7 @@ class UserSeeder extends Seeder
 
         $users = [];
         $password = bcrypt('123@#$xyz990'); // important optimization
+        $now = Carbon::parse(now())->format('Y-m-d H:i:s');
 
         for ($i = 0; $i < $this->count; $i++) {
             $users[] = [
@@ -63,8 +65,11 @@ class UserSeeder extends Seeder
                 'email' => $faker->unique()->safeEmail,
                 'password' => $password,
                 'registration_type' => 'sign up',
+                'registration_type' => 'sign up',
                 'avatar' => 'default.png',
                 'is_email_verified' => 1,
+                'created_at' => $now,
+                'updated_at' => $now,
             ];
         }
 

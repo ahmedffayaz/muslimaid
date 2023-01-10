@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\ExitClick;
+use App\Models\Store;
+use App\Models\User;
 use Faker\Factory as Faker;
 
 class ClicksSeeder extends Seeder
@@ -18,12 +20,15 @@ class ClicksSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
+        $storesCount = Store::count();
+        $usersCount = User::count();
+
         $clicks = [];
 
         for ($i = 0; $i < $this->count; $i++) {
             $clicks[] = [
-                'store_id' => $faker->numberBetween(1, 50),
-                'user_id' => $faker->numberBetween(1, 1000),
+                'store_id' => $faker->numberBetween(1, $storesCount),
+                'user_id' => $faker->numberBetween(1, $usersCount),
                 'status' => 'pending',
                 'exit_url' => '#',
             ];
