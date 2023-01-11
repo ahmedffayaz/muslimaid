@@ -39,6 +39,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-map"></em><span>Map</span></a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem10"><i><em class="icon ni ni-app"></em></i><span>ReCaptcha</span></a>
+                                    </li>
                                     {{--<li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-code"></em><span>APIs Integration</span></a>
                                     </li>--}}
@@ -821,6 +824,51 @@
                                             </form>
                                         </div>
                                       
+                                    </div>
+                                    <div class="tab-pane" id="tabItem10">
+                                        <div class="nk-block">
+                                            <div class="nk-block-head">
+                                                <h5 class="title">Google Recaptcha key Settings</h5>
+                                            </div><!-- .nk-block-head -->
+                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
+                                                @csrf
+                                                @method('POST')
+                                                <div class="row g-3 align-center">
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Site Key <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Enter google map API key."></em></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" name="site_key" value="{{$settings['site_key']}}" placeholder="Recaptcha Stire Key">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3">
+                                                        <div class="form-group">
+                                                            <label class="form-label">Secret Key <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Enter google map API key."></em></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-9">
+                                                        <div class="form-group">
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" name="secret" value="{{$settings['secret']}}" placeholder="Recaptcha Secret Key">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="row g-3">
+                                                    <div class="col-lg-9 offset-lg-3">
+                                                        <div class="form-group mt-2">
+                                                            <button type="submit" class="btn btn-lg btn-primary">Update</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
                                     </div>
                                     
                                 </div>

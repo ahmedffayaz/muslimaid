@@ -11,12 +11,14 @@ use App\Models\ContactForm;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
+use Illuminate\Http\Response;
 use Harimayco\Menu\Models\Menus;
 use App\Http\Controllers\Controller;
 use App\Models\Charity;
 use Harimayco\Menu\Models\MenuItems;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 
 class PagesController extends Controller
@@ -24,7 +26,7 @@ class PagesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -217,6 +219,9 @@ class PagesController extends Controller
 
     public function contactForm(Request $request)
     {
+        $this->validate($request, [
+            'g-recaptcha-response' => 'required|captcha',
+        ]);
         $contact = ContactForm::create($request->all());
 
         $user_email_template = EmailTemplate::where('key', 'user_new_contact')->first();

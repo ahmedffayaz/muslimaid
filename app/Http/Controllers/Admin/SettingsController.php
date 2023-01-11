@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\SiteSetting;
+use Throwable;
 use App\Models\Currency;
+use App\Models\SiteSetting;
+use Illuminate\Http\Request;
 use App\Models\CashbackStatus;
 use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Permission;
+
 class SettingsController extends Controller
 {
     function __construct()
@@ -251,7 +254,7 @@ class SettingsController extends Controller
             return array('message'=>'Settings saved',
                     'response'=>'success');
 
-        } catch (\Throwable $th) {
+        } catch (Throwable $th) {
             return array('message'=>$th->getMessage(),
                         'response'=>'error');
         }
@@ -311,17 +314,16 @@ class SettingsController extends Controller
 
 
     public function maintenance(Request $request){
-        // dd($request->input('maintenance'));
 
         try {
             if($request->input('maintenance')){
                 
-            \Artisan::call('down');
+            Artisan::call('down');
                 return array('message'=>'Maintenance Mode enabled',
                 'response'=>'success');
 
             }else{
-            \Artisan::call('up');
+            Artisan::call('up');
                 return array('message'=>'Maintenance Mode disabled',
                 'response'=>'success');
             }
