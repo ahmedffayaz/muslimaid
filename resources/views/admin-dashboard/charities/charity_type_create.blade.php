@@ -25,15 +25,15 @@
                             <div class="card-inner">
                                 <div class="card-head">
                                 </div>
-                                <form action="{{route('admin.ticketCategory.store')}}" class="" method="POST">
+                                <form action="{{route('admin.admin-charities-store')}}" class="" method="POST">
                                     @csrf
                                     <div class="row g-4">
-                                        <div class="col-lg-12">
+                                        <div class="col-6">
                                             <div class="form-group">
-                                                <label class="form-label" >Name</label>
+                                                <label class="form-label" >Title</label>
                                                 <div class="form-control-wrap">
-                                                    <input id="ticket-name" type="text" class="form-control" name="name" placeholder="Name" value="{{old('name')}}" >       
-                                                    @error('name')
+                                                    <input id="ticket-name" type="text" class="form-control" name="title" placeholder="Title" value="{{old('name')}}" >       
+                                                    @error('title')
                                                     <span class="invalid-feedback d-block" role="alert">
                                                         <strong>{{ $message }}</strong>
                                                     </span>
@@ -41,24 +41,22 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-12">
+                                        <div class="col-6">
                                             <div class="form-group">
-                                                <label class="form-label">Description</label>
-                                                <div class="form-control-wrap">
-                                                    <textarea id="ticket-description" type="text" class="form-control " name="description" placeholder="Description"> {{old('description')}} </textarea>
-                                                        @error('description')
-                                                        <span class="invalid-feedback d-block" role="alert">
-                                                            <strong>{{ $message }}</strong>
-                                                        </span>
-                                                        @enderror
+                                                <label class="form-label" for="status">Status</label>
+                                                <div class="form-control-wrap ">
+                                                    <div class="form-control-select">
+                                                        <select class="form-control" id="status" name="status" required>
+                                                            <option value="1">Active</option>
+                                                            <option value="0">In-active</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
-                                               
-                                                <button class="btn btn-primary" type="submit">Save</button>
-                                                
+                                                <button class="btn btn-primary" type="submit">Save</button> 
                                             </div>
                                         </div>
                                     </div>

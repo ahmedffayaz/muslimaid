@@ -23,9 +23,18 @@
                     </div>
                 </div>
             </div>
-
+        </div>
+        <div class="row mt-4 mb-3">
+            <div class="col-lg-6 col-md-3 col-sm-6">
+                <div class="preview-block">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" name="is_enabled" id="is_enabled" {{ $isEdit && $seoData->is_enabled == 1 ? 'checked' : '' }}>
+                        <label class="custom-control-label" for="is_enabled">Enable</label>
+                    </div>
+                </div>
+            </div>
             {{-- Add Button --}}
-            <div class="col-lg-12" style="margin-bottom: 20px;">
+            <div class="col-lg-6" style="margin-bottom: 20px;">
                 <a href="javascript:void(0)" class="btn btn-sm btn-primary" style="float: right;" id="append_fields">
                     <em class="icon ni ni-plus"></em>
                     <span>Add</span>
@@ -46,7 +55,6 @@
                                             <div class="form-control-wrap">
                                                 <select class="form-select form-control" id="key-{{ $loop->index + 1 }}" name="type[{{ $loop->index + 1 }}][key]">
                                                     <option selected disabled>Choose key</option>
-                                                    <option value="meta_title" {{ $rule_data->key == 'meta_title' ? 'selected' : '' }}>Meta: Title</option>
                                                     <option value="meta_description" {{ $rule_data->key == 'meta_description' ? 'selected' : '' }}>Meta: Description</option>
                                                     <option value="meta_keyword" {{ $rule_data->key == 'meta_keyword' ? 'selected' : '' }}>Meta: Keyword</option>
                                                 </select>

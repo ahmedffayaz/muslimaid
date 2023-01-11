@@ -201,6 +201,12 @@
                                         <span class="nk-menu-text">Menu</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->
+                                <li class="">
+                                    <a href="/admin/charities" class="">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-menu"></em></span>
+                                        <span class="nk-menu-text">Charities</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
 
                             </ul>
                         </div>
@@ -229,12 +235,6 @@
                                     <span class="nk-menu-text">Pages</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
-                            <li class=" ">
-                                <a href="{{route('admin.ticketCategory.index')}}" class="">
-                                    <span class="nk-menu-icon "><em class="icon ni ni-chat-fill"></em></span>
-                                    <span class="nk-menu-text">Category Tickets</span>
-                                </a>
-                            </li>
                             <li class=" ">
                                 <a href="{{route('admin.blogs.index')}}" class="">
                                     <span class="nk-menu-icon "><em class="icon ni ni-article"></em></span>

@@ -31,7 +31,8 @@ class DatabaseSeeder extends Seeder
             SliderSeeder::class,
             EmailTemplatesSeeder::class,
             TestimonialSeeder::class,
-            TicketCategorySeeder::class
+            TicketCategorySeeder::class,
+            RegionSeeder::class
         ]);
         // \App\Models\User::factory(10)->create();
     }

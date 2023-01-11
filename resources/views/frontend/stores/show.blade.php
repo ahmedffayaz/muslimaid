@@ -1,7 +1,7 @@
 @extends('layouts.frontend.app')
 @section('content')
 @php
-    $revews_count = $store->reviews->where('status', 'active')->count();
+    $revews_count = $store->activeReviews->count();
 @endphp
 {{-- Show message on submit form --}}
 @if(Session::has('error'))

@@ -1,5 +1,6 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
+
 @if(session()->has('message'))
 <div class = "container alert {{ session('alert-class') }} alert-dismissible fade show alert-important" role = "alert">
     {{ session('message') }}.
@@ -8,7 +9,6 @@
 </button>
 </div>
 @endif
-
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
@@ -25,16 +25,16 @@
                             <div class="card-inner">
                                 <div class="card-head">
                                 </div>
-                                <form action="{{route('admin.ticketCategory.update',$ticketCategory)}}" class="" method="POST">
-                                    @csrf
+                                <form action="{{route('admin.charitiestype-update',$charityType->id)}}" class="" method="POST">
                                     @method('PUT')
+                                    @csrf
                                     <div class="row g-4">
-                                        <div class="col-lg-12">
+                                        <div class="col-6">
                                             <div class="form-group">
-                                                <label class="form-label">Name</label>
+                                                <label class="form-label" >Title</label>
                                                 <div class="form-control-wrap">
-                                                    <input id="ticket-name" type="text" class="form-control " name="name"  value="{{$ticketCategory->name}}"> 
-                                                    @error('name')
+                                                    <input id="ticket-name" type="text" class="form-control" name="title"  value="{{$charityType->title}}" >       
+                                                    @error('title')
                                                     <span class="invalid-feedback d-block" role="alert">
                                                         <strong>{{ $message }}</strong>
                                                     </span>
@@ -42,30 +42,30 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-lg-12">
+                                        <div class="col-6">
                                             <div class="form-group">
-                                                <label class="form-label">Description</label>
-                                                <div class="form-control-wrap">
-                                                    <textarea id="ticket-description" type="text" class="form-control" rows="5" name="description"> {{$ticketCategory->description}} </textarea>
-                                                    @error('description')
-                                                    <span class="invalid-feedback d-block" role="alert">
-                                                        <strong>{{ $message }}</strong>
-                                                    </span>
-                                                    @enderror
+                                                <label class="form-label" for="default-06">Status</label>
+                                                <div class="form-control-wrap ">
+                                                    <div class="form-control-select">
+                                                        <select class="form-control" id="default-06" name="status" required>
+                                                            <option @if($charityType->status == 1) selected @endif value="1">Active</option>
+                                                            <option @if($charityType->status == 0) selected @endif value="0">In-active</option> 
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <button class="btn btn-primary" type="submit">Save</button>  
+                                                <button class="btn btn-primary" type="submit">Save</button> 
                                             </div>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
-                    </div><!-- .nk-block -->
-                   </div><!-- .components-preview -->
+                    </div><!-- .nk-block -->  
+                </div><!-- .components-preview -->
             </div>
         </div>
     </div>

@@ -14,8 +14,8 @@ class AddBannerAndDescriptionToPagesTable extends Migration
     public function up()
     {
         Schema::table('pages', function (Blueprint $table) {
-            $table->text('banner_image')->nullable();
-            $table->longText('description')->nullable();
+            $table->text('banner_image')->nullable()->after('status');
+            $table->longText('description')->nullable()->after('banner_image');
         });
     }
 

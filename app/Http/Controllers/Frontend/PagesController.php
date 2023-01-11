@@ -14,6 +14,7 @@ use App\Models\EmailTemplate;
 use Illuminate\Http\Response;
 use Harimayco\Menu\Models\Menus;
 use App\Http\Controllers\Controller;
+use App\Models\Charity;
 use Harimayco\Menu\Models\MenuItems;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -76,8 +77,8 @@ class PagesController extends Controller
             $term = null;
             return view('frontend.pages.vouchers', compact('stores', 'term', 'page'));
         }
-
-        return view('frontend.pages.single_page', compact('page'));
+        $charity=Charity::where('status','=','1')->orderBy('id', 'DESC')->paginate(10);
+        return view('frontend.pages.single_page', compact('page','charity'));
     }
 
     /**
@@ -175,12 +176,16 @@ class PagesController extends Controller
     {
         $stores = $stores->newQuery();
         $term = null;
-        if ($request->input('search')) {
-            $stores->where('name', 'like', '%' . $request->input('search') . '%');
+        $search = $request->input('search');
+        if ($search) {
+            $stores->where('name', 'like', '%' . $request->input('search') . '%')
+                ->orWhereHas('storeRuleData', function ($query) use ($search) {
+                    $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $search . '%');
+                });
             $term = $request->input('search');
         }
         $stores = $stores->latest()->paginate(20);
-        // dd($stores);
+
         return view('frontend.pages.search', compact('stores', 'term'));
     }
 
@@ -259,7 +264,7 @@ class PagesController extends Controller
 
         $ticket = new Ticket([
             'title'     => $request->input('subject'),
-            'user_id'   => Auth::user()->id,
+            'user_id'   =>  Auth::user()->id,
             'ticket_id' => strtoupper(Str::random(12)),
             'category_id'  => '4',
             'priority'  => 'high',
@@ -283,5 +288,11 @@ class PagesController extends Controller
     {
         $stores = Store::where('name', 'like', $letter . '%')->get();
         return view('frontend.pages.stores_with_letter', compact('stores', 'letter'));
+    }
+
+    public function showCharity(Request $request){
+        $charity = Charity::with('charity_type')->find($request->id);
+        return view('frontend.pages.charity_model',compact('charity'));
+
     }
 }

@@ -1,6 +1,6 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
-    
+
 
 <div class="nk-content ">
     <div class="container-fluid">
@@ -39,17 +39,17 @@
                                                 <div class="form-control-wrap ">
                                                     <div class="form-control-select">
                                                         <select class="form-control" id="default-06" name="parent_id" required>
-                                                            
+
                                                         <option value="0">None</option>
                                                         @foreach ($categories as $parent)
                                                         <option value="{{$parent->id}}" style="font-weight:bold">{{$parent->name}}</option>
                                                         @if(count($parent->childs))
                                                                 @include('admin-dashboard.categories.child_input',['childs' => $parent->childs, 'isEdit'=>0,'dashes'=>'~'])
                                                             @endif
-                                                            
+
                                                         @endforeach
-                                                                                            
-                                                           
+
+
                                                         </select>
                                                     </div>
                                                 </div>
@@ -61,23 +61,23 @@
                                                 <label class="form-label" for="phone-no-1">Description</label>
                                                 <!-- Create the editor container -->
                                                 <div  id="editor-container">
-                                               
+
                                                 </div>
-                                               
+
                                             </div>
                                         </div>
-                                       
+
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="logo_type">Logo</label>
                                                 <div class="form-control-wrap ">
                                                     <div class="form-control-select">
                                                         <select class="form-control" name="logo_type" id='logo_type' required>
-                                                            
+
                                                             <option value="upload">Upload</option>
                                                             <option value="link">Link</option>
-                                                                
-                                                           
+
+
                                                         </select>
                                                     </div>
                                                 </div>
@@ -110,7 +110,7 @@
                                                         <select class="form-control" name="banner_type" id='banner_type' required>
                                                             <option value="upload">Upload</option>
                                                             <option value="link">Link</option>
-                                                            
+
                                                         </select>
                                                     </div>
                                                 </div>
@@ -149,11 +149,11 @@
                                                 <div class="form-control-wrap ">
                                                     <div class="form-control-select">
                                                         <select class="form-control" id="default-06" name="status" required>
-                                                            
+
                                                             <option value="1">Active</option>
                                                             <option value="0">In-active</option>
-                                                                
-                                                           
+
+
                                                         </select>
                                                     </div>
                                                 </div>
@@ -161,16 +161,17 @@
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Meta Keywords</label>
-                                                <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword" value="" > 
-                                                </div>
+                                                <label class="form-label" for="reviewer">Meta Description</label>
+                                                <textarea  class="form-control" name="meta_description" placeholder="Meta Description" value="" ></textarea>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                            <label class="form-label" for="reviewer">Meta Description</label>
-                                            <textarea  class="form-control " name="meta_description" placeholder="Meta Description" value="" ></textarea>
+                                                <label class="form-label" for="reviewer">Meta Keywords</label>
+                                                <div class="form-control-wrap">
+                                                    <input type="text" class="form-control" name="meta_keyword" placeholder="Meta keyword" value="" >
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
@@ -182,9 +183,9 @@
                             </div>
                         </div>
                     </div><!-- .nk-block -->
-                    
-                  
-                    
+
+
+
                 </div><!-- .components-preview -->
             </div>
         </div>
@@ -208,15 +209,15 @@
         placeholder: 'Compose an epic...',
         theme: 'snow'
       });
-      
+
     //   var form = document.querySelector('form');
       $(".user-form").submit(function(e) {
-          
+
         // Populate hidden form on submit
-        var desc = document.querySelector('input[name=intro]');
+        var desc = document.querySelector('input[name=description]');
         desc.value = quill.root.innerHTML;
-       
-        
+
+
       });
 </script>
 <script>
@@ -228,13 +229,13 @@
 
         }
         else if ($('#logo_type').val() == 'link') {
-           
+
             $('.logo_link').show();
             $('#logo_link').attr('required', 'required');
             $('.logo_upload').hide();
-            
+
         }
-        
+
     });
     $(document.body).on("change","#logo_type",function(){
         if (this.value == 'upload') {
@@ -244,13 +245,13 @@
 
         }
         else if (this.value == 'link') {
-           
+
             $('.logo_link').show();
             $('#logo_link').attr('required', 'required');
             $('.logo_upload').hide();
-            
+
         }
-        
+
     });
 </script>
 <script>
@@ -262,16 +263,16 @@
 
         }
         else if ($('#banner_type').val() == 'link') {
-           
+
             $('.banner_link').show();
             $('#banner_link').attr('required', 'required');
             $('.banner_upload').hide();
-           
+
         }
-        
+
     });
     $(document.body).on("change","#banner_type",function(){
-      
+
         if (this.value == 'upload') {
             $('.banner_upload').show();
             $('.banner_link').hide();
@@ -279,13 +280,13 @@
 
         }
         else if (this.value == 'link') {
-           
+
             $('.banner_link').show();
             $('#banner_link').attr('required', 'required');
             $('.banner_upload').hide();
-            
+
         }
-        
+
     });
 </script>
 @endpush

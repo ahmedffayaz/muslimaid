@@ -1,6 +1,6 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
-    
+
 
 <div class="nk-content ">
     <div class="container-fluid">
@@ -29,7 +29,7 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">Title</label>
                                                 <div class="form-control-wrap">
-                                                    <input id="page-title" type="text" class="form-control " name="title" placeholder="Title" value="{{ $page->title }}" required> 
+                                                    <input id="page-title" type="text" class="form-control " name="title" placeholder="Title" value="{{ $page->title }}" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -41,11 +41,11 @@
                                                         <select class="form-control form-select" name="status" required>
                                                             <option @if($page->status == 1) selected @endif value="1">Active</option>
                                                             <option @if($page->status == 0) selected @endif value="0">In-active</option>
-                                                          
+
                                                         </select>
                                                     </div>
-                                                </div>                                                
-                                            </div>                                           
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <fieldset class="uk-fieldset">
@@ -56,31 +56,41 @@
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label class="form-label">Description</label>
-                                                <div class="form-control-wrap">
-                                                   <textarea class="form-control" name="description" rows="5">{!!$page->description!!}</textarea>
+                                                <label class="form-label">Banner Image</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
+                                                        <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white">
+                                                            <i class="fa fa-picture-o"></i> Choose
+                                                        </a>
+                                                    </span>
+                                                    <input id="thumbnail" class="form-control" type="text"name="filepath">
                                                 </div>
+                                                <div id="holder" style="margin-top:15px;max-height:100px;"></div>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label class="form-label">Banner Image</label>
-                                               
-                                                    <div class="input-group">
-                                                      <span class="input-group-btn">
-                                                        <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white">
-                                                          <i class="fa fa-picture-o"></i> Choose
-                                                        </a>
-                                                      </span>
-                                                      <input id="thumbnail" class="form-control" type="text"name="filepath">
-                                                    </div>
-                                                    <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+                                              <label class="form-label" for="reviewer">Page Short Description</label>
+                                              <textarea  class="form-control" name="short_description" placeholder="Page Short Description">{{ $page->description }}</textarea>
                                             </div>
                                         </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                              <label class="form-label" for="reviewer">Meta Description</label>
+                                              <textarea  class="form-control" name="meta_description" placeholder="Meta Description">{{ $page->meta_description }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                          <div class="form-group">
+                                              <label class="form-label" for="reviewer">Meta Keywords</label>
+                                              <div class="form-control-wrap">
+                                                  <input id="blog-title" type="text" class="form-control" name="meta_keyword" placeholder="Meta keyword" value="{{ $page->meta_keyword }}">
+                                              </div>
+                                          </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <button class="btn btn-primary" type="submit">Save</button>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -100,7 +110,7 @@
     window.addEventListener('DOMContentLoaded', () => {
         Laraberg.init('content', { height: '600px', laravelFilemanager: true, sidebar: true })
     })
-</script>  
+</script>
 
 <script>
     var route_prefix = "/filemanager";
@@ -237,12 +247,12 @@
       })
     });
   </script>
-  
+
   <script>
         jQuery.validator.addMethod("regex", function(value, element) {
           return this.optional(element) || /^[\w. ]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
-        
+
         $('.form-validate').validate({
           rules: {
             title: {
