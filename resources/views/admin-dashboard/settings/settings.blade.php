@@ -842,7 +842,7 @@
                                                     <div class="col-lg-9">
                                                         <div class="form-group">
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" name="site_key" value="{{$settings['site_key']}}" placeholder="Recaptcha Stire Key">
+                                                                <input type="text" class="form-control" name="site_key" value="" placeholder="Recaptcha Stire Key">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -854,7 +854,7 @@
                                                     <div class="col-lg-9">
                                                         <div class="form-group">
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" name="secret" value="{{$settings['secret']}}" placeholder="Recaptcha Secret Key">
+                                                                <input type="text" class="form-control" name="secret" value="" placeholder="Recaptcha Secret Key">
                                                             </div>
                                                         </div>
                                                     </div>

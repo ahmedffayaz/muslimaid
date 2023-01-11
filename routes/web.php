@@ -50,7 +50,8 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::get('networks/categories_export/{network}',[App\Http\Controllers\Admin\NetworkController::class,'exportCsv'])->name('networks.categories.export');
     Route::resource('networks', NetworkController::class);
 
-    //Stores
+    // Stores
+    Route::post('stores/import-fake-data', [App\Http\Controllers\Admin\StoreController::class,'importFakeData'])->name('stores.import-fake-data');
     Route::get('stores/images/{store}', [App\Http\Controllers\Admin\StoreController::class,'storeImages'])->name('stores.images');
     Route::post('stores/vouchers', [App\Http\Controllers\Admin\StoreController::class,'fetchVouchers'])->name('stores.vouchers');
     Route::post('stores/cashbacks', [App\Http\Controllers\Admin\StoreController::class,'fetchCashbacks'])->name('stores.cashbacks');

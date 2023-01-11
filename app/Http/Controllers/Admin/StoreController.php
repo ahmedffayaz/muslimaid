@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use Exception;
+use App\Models\Store;
+use App\Models\Slider;
+use App\Models\Network;
 use App\Models\Category;
 use App\Models\Currency;
 use App\Models\EditorPick;
-use App\Models\Network;
-use App\Models\Slider;
-use App\Models\Store;
-use App\Models\StoreAddress;
-use App\Models\StoreCashback;
 use App\Models\StoreImage;
 use App\Models\StoreReview;
-use App\Models\Store_seo_data;
+use Illuminate\Support\Str;
+use App\Models\StoreAddress;
 use Illuminate\Http\Request;
+use App\Models\StoreCashback;
+use Illuminate\Http\Response;
+use App\Models\Store_seo_data;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
@@ -29,6 +33,7 @@ class StoreController extends Controller
         $this->middleware('permission:add stores', ['only' => ['create', 'Store']]);
         $this->middleware('permission:delete stores', ['only' => ['destroy']]);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -89,7 +94,7 @@ class StoreController extends Controller
                 // 'terms_conditions'    => $request->input('terms_conditions'),
                 'status' => 'active',
                 'override_cashback' => 1,
-                'slug' => \Str::slug($request->input('store_name')),
+                'slug' => Str::slug($request->input('store_name')),
             ]);
 
             // $cashback = StoreCashback::create([
@@ -107,7 +112,6 @@ class StoreController extends Controller
 
             flash()->success('New store added');
             return redirect()->route('admin.stores.index');
-
         } catch (Exception $exception) {
 
             flash()->error('Error while adding new store');
@@ -147,7 +151,6 @@ class StoreController extends Controller
         $networks = Network::all();
         $categories = Category::all();
         return view('admin-dashboard.stores.edit', compact('store', 'networks', 'categories', 'logoUrl'));
-
     }
 
     /**
@@ -170,7 +173,7 @@ class StoreController extends Controller
                 'terms_conditions' => $request->input('terms_conditions'),
                 'custom_cashback_percentage' => $request->input('custom_cashback_percentage'),
                 'status' => $request->input('status'),
-                'slug' => \Str::slug($request->input('store_name')),
+                'slug' => Str::slug($request->input('store_name')),
                 'override_categories' => $request->has('override_categories') ? 1 : 0,
                 'override_cashback' => $request->has('override_cashback') ? 1 : 0,
                 'feature_homepage' => 0,
@@ -184,18 +187,16 @@ class StoreController extends Controller
                 ]);
             }
 
-            if (!$request->ajax()) {flash()->success('Store info updated successfully');
+            if (!$request->ajax()) {
+                flash()->success('Store info updated successfully');
                 return redirect()->back();
             } else {
                 return true;
             }
-
         } catch (\Throwable $th) {
 
             return $th;
-
         }
-
     }
 
     /**
@@ -222,6 +223,7 @@ class StoreController extends Controller
             return view('admin-dashboard.stores.index_data', compact('stores', 'route'))->render();
         }
     }
+
     public function exportCsv(Request $request)
     {
         try {
@@ -236,12 +238,13 @@ class StoreController extends Controller
             $headers = array(
                 'Content-Type' => 'text/csv',
             );
-            return \Response::download($filename, 'stores.csv', $headers);
+            return Response::download($filename, 'stores.csv', $headers);
         } catch (\Throwable $th) {
             flash()->error('Error while exporting the stores');
             return redirect()->route('admin.stores.index');
         }
     }
+
     public function storeImages(Store $store)
     {
 
@@ -253,7 +256,7 @@ class StoreController extends Controller
         if ($request->has('image')) {
 
             $img_exist = StoreImage::where(['store_id' => $store->id, 'title' => $request->title])->first();
-            $imageName = \Str::slug($store->name) . '_' . $request->title . '_' . time() . '.' . $request->image->extension();
+            $imageName = Str::slug($store->name) . '_' . $request->title . '_' . time() . '.' . $request->image->extension();
             $request->image->storeAs('public/stores/images', $imageName);
 
             if ($img_exist) {
@@ -266,11 +269,13 @@ class StoreController extends Controller
 
                 ]);
 
-                return array('message' => 'Image uploaded successfully',
-                    'updated' => 'success');
+                return array(
+                    'message' => 'Image uploaded successfully',
+                    'updated' => 'success'
+                );
             }
 
-            $imageName = \Str::slug($store->name) . '_' . $request->title . '_' . time() . '.' . $request->image->extension();
+            $imageName = Str::slug($store->name) . '_' . $request->title . '_' . time() . '.' . $request->image->extension();
             $request->image->storeAs('public/stores/images', $imageName);
 
             $logo = StoreImage::create([
@@ -282,13 +287,16 @@ class StoreController extends Controller
 
             ]);
 
-            return array('message' => 'Image uploaded successfully',
-                'updated' => 'success');
-
+            return array(
+                'message' => 'Image uploaded successfully',
+                'updated' => 'success'
+            );
         } else {
 
-            return array('message' => 'Image is required',
-                'updated' => 'error');
+            return array(
+                'message' => 'Image is required',
+                'updated' => 'error'
+            );
         }
     }
 
@@ -299,8 +307,8 @@ class StoreController extends Controller
         $storeimage->delete();
         flash()->success('Image deleted');
         return redirect()->route('admin.stores.show', $store);
-
     }
+
     public function searchStores(Request $request, Store $stores)
     {
         // dd($request->all());
@@ -318,12 +326,10 @@ class StoreController extends Controller
         // Search by store name.
         if ($request->input('store_name')) {
             $stores->where('name', 'like', '%' . $request->input('store_name') . '%');
-
         }
         // Search by store name.
         if ($request->input('overridden')) {
             $stores->where('override_cashback', 1)->orWhere('override_categories', 1);
-
         }
 
         // Search by status.
@@ -335,6 +341,7 @@ class StoreController extends Controller
         $route = 'search';
         return view('admin-dashboard.stores.index_data', compact('stores', 'route'))->render();
     }
+
     public function fetchVouchers(Request $request)
     {
         if ($request->ajax()) {
@@ -342,6 +349,7 @@ class StoreController extends Controller
             return view('admin-dashboard.stores.vouchers', compact('store'))->render();
         }
     }
+
     public function fetchCashbacks(Request $request)
     {
         if ($request->ajax()) {
@@ -349,6 +357,7 @@ class StoreController extends Controller
             return view('admin-dashboard.stores.cashbacks', compact('store'))->render();
         }
     }
+
     public function fetchReviews(Request $request)
     {
         if ($request->ajax()) {
@@ -356,15 +365,18 @@ class StoreController extends Controller
             return view('admin-dashboard.stores.reviews', compact('store'))->render();
         }
     }
+
     public function editReview(Request $request, StoreReview $review)
     {
         return view('admin-dashboard.stores.review-form', compact('review'))->render();
     }
+
     public function editCashback(Request $request, StoreCashback $cashback)
     {
         $currencies = Currency::all();
         return view('admin-dashboard.stores.cashback-edit', compact('cashback', 'currencies'))->render();
     }
+
     public function updateCashback(Request $request, StoreCashback $cashback)
     {
         $cashback->update($request->all());
@@ -372,6 +384,7 @@ class StoreController extends Controller
         $store->update(['custom_cashback_percentage' => $request->input('custom_cashback_percentage')]);
         return ['percentage' => $store->custom_cashback_percentage, 'updated' => true];
     }
+
     public function createCashback(Request $request)
     {
         $cashback = StoreCashback::create($request->all());
@@ -381,6 +394,7 @@ class StoreController extends Controller
         }
         return true;
     }
+
     public function fetchImages(Request $request)
     {
         if ($request->ajax()) {
@@ -400,8 +414,8 @@ class StoreController extends Controller
                 'category_id' => $category,
             ]);
         }
-
     }
+
     public function editorPicks()
     {
         $route = 'index';
@@ -410,9 +424,9 @@ class StoreController extends Controller
         $categories = Category::where('parent_id', 0)->get();
         $picks = Store::has('editorPicks')->latest()->paginate(32);
 
-        // dd($picks);
         return view('admin-dashboard.stores.editor_picks', compact('picks', 'route', 'networks', 'stores', 'categories'));
     }
+
     public function fetchEditorPicks(Request $request)
     {
         if ($request->ajax()) {
@@ -421,6 +435,7 @@ class StoreController extends Controller
             return view('admin-dashboard.stores.picks_data', compact('picks', 'route'))->render();
         }
     }
+
     public function searchEditorPicks(Request $request, Store $picks)
     {
         // dd($request->all());
@@ -438,7 +453,6 @@ class StoreController extends Controller
         // Search by store name.
         if ($request->input('store_name')) {
             $picks->where('name', 'like', '%' . $request->input('store_name') . '%');
-
         }
 
         // Search by status.
@@ -450,6 +464,7 @@ class StoreController extends Controller
         $route = 'search';
         return view('admin-dashboard.stores.picks_data', compact('picks', 'route'))->render();
     }
+
     public function createEditorPick(Request $request)
     {
         foreach ($request->input('picks') as $pick) {
@@ -461,45 +476,47 @@ class StoreController extends Controller
                 [
                     'category_id' => $request->input('category_id'),
                     'store_id' => $pick,
-                ]);
+                ]
+            );
         }
         flash()->success('Category updated');
         return redirect()->back();
     }
+
     public function overrideCategories(Request $request, Store $store)
     {
         try {
             $store->update([
                 'override_categories' => $request->has('override_categories') ? 1 : 0,
             ]);
-            if (!$request->ajax()) {flash()->success('Store info updated successfully');
+            if (!$request->ajax()) {
+                flash()->success('Store info updated successfully');
                 return redirect()->back();
             } else {
                 return true;
             }
-
         } catch (\Throwable $th) {
-            return $th - getMessage();
+            return $th->getMessage();
         }
-
     }
+
     public function overrideCashback(Request $request, Store $store)
     {
         try {
             $store->update([
                 'override_cashback' => $request->has('override_cashback') ? 1 : 0,
             ]);
-            if (!$request->ajax()) {flash()->success('Store info updated successfully');
+            if (!$request->ajax()) {
+                flash()->success('Store info updated successfully');
                 return redirect()->back();
             } else {
                 return true;
             }
-
         } catch (\Throwable $th) {
             return $th->getMessage();
         }
-
     }
+
     public function showStore()
     {
 
@@ -526,7 +543,7 @@ class StoreController extends Controller
 
     public function storeSeoRule(Request $request)
     {
-       
+
         $validator = Validator::make($request->all(), [
             'key' => 'required',
             'value' => 'required',
@@ -554,7 +571,6 @@ class StoreController extends Controller
 
             flash()->success('Store Seo rule added');
             return redirect()->back();
-
         } catch (Exception $exception) {
 
             flash()->error('Error while adding new Seo rule');
@@ -579,8 +595,7 @@ class StoreController extends Controller
         }
 
         try {
-
-            $storeaddresses = StoreAddress::create([
+            StoreAddress::create([
                 'store_id' => $request->input('store_id'),
                 'city' => $request->input('city'),
                 'postal_code' => $request->input('postal_code'),
@@ -591,7 +606,6 @@ class StoreController extends Controller
 
             flash()->success('store address added');
             return redirect()->back();
-
         } catch (Exception $exception) {
 
             flash()->error('Error while adding store address.');
@@ -630,7 +644,6 @@ class StoreController extends Controller
         if (!$request->ajax()) {
             flash()->success('Address updated successfully');
             return redirect()->back();
-
         }
     }
 
@@ -638,7 +651,6 @@ class StoreController extends Controller
     {
         StoreAddress::where('id', $id)->delete();
         flash()->success('Seo rule deleted');
-
     }
 
     public function editStoreSeoRule($id)
@@ -667,7 +679,6 @@ class StoreController extends Controller
         if (!$request->ajax()) {
             flash()->success('Seo rule updated successfully');
             return redirect()->back();
-
         }
     }
 
@@ -675,6 +686,17 @@ class StoreController extends Controller
     {
         Store_seo_data::where('id', $id)->delete();
         flash()->success('Seo rule deleted');
+    }
 
+    public function importFakeData()
+    {
+        try {
+            Artisan::call('db:seed --class=FakeStoresSeeder');
+            return flash()->success('Fake data has been imported.');
+        } catch (Exception $e) {
+            return flash()->success($e->getMessage());
+        } finally {
+            return redirect()->back();
+        }
     }
 }
