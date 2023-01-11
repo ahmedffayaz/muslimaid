@@ -29,12 +29,13 @@ class VerifyController extends Controller
 
                 if (!empty($verifyUser->user->referred_by)) {
                     $referralBonus = array_key_exists('referral_bonus', SiteSetting()->toArray()) ? (SiteSetting()['referral_bonus'] != NULL ? SiteSetting()['referral_bonus'] : 0) : 0;
-
-                    $referral_bonus = UserCashback::create([
-                        'user_id' => $verifyUser->user->referred_by,
-                        'amount' => $referralBonus,
-                        'status' => '3',
-                    ]);
+                    if ($referralBonus != 0) {
+                        $referral_bonus = UserCashback::create([
+                            'user_id' => $verifyUser->user->referred_by,
+                            'amount' => $referralBonus,
+                            'status' => '3',
+                        ]);
+                    }
                 }
 
                 session()->flash('message', 'Your e-mail is verified. You can now login.');
