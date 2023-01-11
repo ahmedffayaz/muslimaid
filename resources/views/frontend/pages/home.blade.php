@@ -34,9 +34,7 @@
             }
         }
 
-        /*
-                // .testimonial
-                */
+        /* .testimonial */
         .testimonial {
             display: -webkit-box;
             display: -ms-flexbox;
@@ -100,9 +98,7 @@
             }
         }
 
-        /*
-                // .testimonials-list
-                */
+        /* .testimonials-list */
         .testimonials-list__content {
             list-style: none;
             padding: 0;
@@ -137,14 +133,11 @@
 
 @section('content')
     @include('flash::message')
-
     @auth
         @if ($slider)
             <!-- .block-slideshow -->
-            <!-- <div class="block-header__title text-center"><span>Welcome back to Cashback</span></div> -->
             <div class="block-slideshow block-slideshow--layout--full block mt-5">
                 <div class="container">
-
                     <div class="row">
                         <div class="col-12">
                             <div class="block-slideshow__body">
@@ -174,7 +167,6 @@
                                                             style="background-image: url({{ asset('storage/slider/slides/images/' . $slide->banner) }})">
                                                         </div>
                                                     @endif
-
 
                                                     <div class="block-slideshow__slide-content"
                                                         style="background-color:hsla(0,0%,100%,.92); width:450px">
@@ -211,27 +203,23 @@
                                                                 @if ($slide->store->cashback->type == 'percentage')
                                                                     %
                                                                 @endif
+                                                                Cashback
                                                             @endif
-                                                            Cashback
                                                         </div>
                                                         <div class="block-slideshow__slide-text"
                                                             style="padding:10px 20px 30px 20px; ">{{ $slide->description }}
                                                         </div>
-
                                                     </div>
                                                 </a>
                                             @endif
                                         @endif
                                     @endforeach
-
-
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
             <!-- .block-slideshow / end -->
         @endif
     @endauth
@@ -239,11 +227,9 @@
     @guest
         <!-- .block-slideshow -->
         <div class="block home-header block--highlighted pt-5"
-            style="background: linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.4)),
-    url('{{ asset('frontend/images/home_background.jpg') }}'); z-index:-1; background-repeat: no-repeat; background-size: 100% 100%;">
+            style="background: linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.4)), url('{{ asset('frontend/images/home_background.jpg') }}'); z-index:-1; background-repeat: no-repeat; background-size: 100% 100%;">
             <div class="container">
                 <div class="row">
-                    {{-- <div class="col-lg-3 d-none d-lg-block"></div> --}}
                     @guest
                         <div class="col-md-6 align-self-center" style="z-index:1; color:white">
                             <h1>Get cashback shopping at 500+ popular brands</h1>
@@ -315,11 +301,8 @@
                             <p>Join for free with over 15 million members saving hundreds of pounds each year from all the top 5,000
                                 online retailers.</p>
                             <a href="{{ route('offers') }}"class="btn btn-primary">Browse Offers<a>
-
                         </div>
                     @endguest
-
-
                 </div>
             </div>
         </div>
@@ -347,7 +330,6 @@
                         <h5>Payout how you want</h5>
                         <p>Get your money directly to your bank account, PayPal, or Gift Cards.</p>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -434,37 +416,6 @@
             </div>
         </div>
     @endif
-    <!-- .block-brands -->
-    {{-- <div class="block block-brands">
-    <div class="container">
-        <div class="block-brands__slider">
-            <div class="owl-carousel">
-                <div class="block-brands__item">
-                    <a href=""><img src="{{ asset('frontend/images/logos/logo-1.png')}}" alt=""></a>
-                </div>
-                <div class="block-brands__item">
-                    <a href=""><img src="{{ asset('frontend/images/logos/logo-2.png')}}" alt=""></a>
-                </div>
-                <div class="block-brands__item">
-                    <a href=""><img src="{{ asset('frontend/images/logos/logo-3.png')}}" alt=""></a>
-                </div>
-                <div class="block-brands__item">
-                    <a href=""><img src="{{ asset('frontend/images/logos/logo-4.png')}}" alt=""></a>
-                </div>
-                <div class="block-brands__item">
-                    <a href=""><img src="{{ asset('frontend/images/logos/logo-5.png')}}" alt=""></a>
-                </div>
-                <div class="block-brands__item">
-                    <a href=""><img src="{{ asset('frontend/images/logos/logo-6.png')}}" alt=""></a>
-                </div>
-                <div class="block-brands__item">
-                    <a href=""><img src="{{ asset('frontend/images/logos/logo-7.png')}}" alt=""></a>
-                </div>
-            </div>
-        </div>
-    </div>
-</div> --}}
-    <!-- .block-brands / end -->
 
     <!-- .block-categories -->
     <div class="block block--highlighted block-categories block-categories--layout--classic mb-5">
@@ -481,9 +432,11 @@
                                 <a href="{{ route('cashabck', $category->slug) }}">
                                     @if ($category->logo_type == 'upload')
                                         @if (!file_exists(asset('storage/categories/images/' . $category->logo_upload)))
-                                            <img src="{{ asset('frontend/images/categories/images/' . $category->logo_upload) }}" alt="">
+                                            <img src="{{ asset('frontend/images/categories/images/' . $category->logo_upload) }}"
+                                                alt="">
                                         @else
-                                            <img src="{{ asset('storage/categories/images/' . $category->logo_upload) }}" alt="{{ $category->name }}">
+                                            <img src="{{ asset('storage/categories/images/' . $category->logo_upload) }}"
+                                                alt="{{ $category->name }}">
                                         @endif
                                     @elseif($category->logo_type == 'link')
                                         <img src="{{ $category->logo_link }}" alt="">

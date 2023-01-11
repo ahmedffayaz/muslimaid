@@ -6,11 +6,9 @@ use Exception;
 use App\Models\Store;
 use App\Models\Blog;
 use App\Models\Category;
-use App\Models\EditorPick;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
 
@@ -27,7 +25,7 @@ class CategoryController extends Controller
         $route = 'index';
         $categories = Category::where('parent_id', '=', 0)->orderBy('name', 'ASC')->get();
         $allCategories = Category::latest()->get();
-        return view('admin-dashboard.categories.categories', compact('categories','allCategories','route'));
+        return view('admin-dashboard.categories.categories', compact('categories', 'allCategories', 'route'));
     }
 
     /**
@@ -37,9 +35,8 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('parent_id',0)->orderBy('name', 'ASC')->get();
+        $categories = Category::where('parent_id', 0)->orderBy('name', 'ASC')->get();
         return view('admin-dashboard.categories.create', compact('categories'));
-
     }
 
     /**
@@ -57,8 +54,8 @@ class CategoryController extends Controller
         if ($validator->fails()) {
             flash()->success($validator->errors()->first());
             return redirect()->route('admin.categories.create')
-                        ->withErrors($validator)
-                        ->withInput();
+                ->withErrors($validator)
+                ->withInput();
         }
 
         try {
@@ -75,43 +72,38 @@ class CategoryController extends Controller
                 'title' => $request->input('title'),
                 'meta_keyword' => $request->input('meta_keyword'),
                 'meta_description' => $request->input('meta_description'),
-                'slug'=> Str::slug($request->name),
+                'slug' => Str::slug($request->name),
             ]);
 
-        if($request->input('logo_type')=='upload'){
-            if($request->has('logo_upload')){
+            if ($request->input('logo_type') == 'upload') {
+                if ($request->has('logo_upload')) {
+                    $imageName = Str::slug($request->input('name')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
+                    $request->logo_upload->storeAs('public/categories/images', $imageName);
 
-                $imageName = Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo_upload->extension();
-                $request->logo_upload->storeAs('public/categories/images',$imageName);
-
-                $category->logo_upload = $imageName;
-                $category->update();
-
-            }else{
-                $category->logo_upload = 'category_default_logo.png';
-                $category->update();
-            }
-        }
-
-        if($request->input('banner_type')=='upload'){
-
-            if($request->has('banner_upload')){
-
-                $imageName = Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner_upload->extension();
-                $request->banner_upload->storeAs('public/categories/images',$imageName);
-
-                $category->banner_upload = $imageName;
-                $category->update();
-
-            }else{
-                $category->banner_upload = 'category_default_banner.png';
-                $category->update();
+                    $category->logo_upload = $imageName;
+                    $category->update();
+                } else {
+                    $category->logo_upload = 'category_default_logo.png';
+                    $category->update();
+                }
             }
 
-        }
+            if ($request->input('banner_type') == 'upload') {
+
+                if ($request->has('banner_upload')) {
+
+                    $imageName = Str::slug($request->input('name')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
+                    $request->banner_upload->storeAs('public/categories/images', $imageName);
+
+                    $category->banner_upload = $imageName;
+                    $category->update();
+                } else {
+                    $category->banner_upload = 'category_default_banner.png';
+                    $category->update();
+                }
+            }
             flash()->success('New Category added');
             return redirect()->route('admin.categories.index');
-
         } catch (Exception $exception) {
 
             flash()->error('Error while adding new category');
@@ -130,7 +122,7 @@ class CategoryController extends Controller
         $route = 'index';
         $categories = Category::latest()->paginate(20);
         $store_categories = Category::latest()->get();
-        return view('admin-dashboard.categories.index', compact('categories','store_categories','route'));
+        return view('admin-dashboard.categories.index', compact('categories', 'store_categories', 'route'));
     }
 
     /**
@@ -141,12 +133,11 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        $categories = Category::latest()->where('parent_id',0)->get();
+        $categories = Category::latest()->where('parent_id', 0)->get();
         $stores = Store::latest()->get();
         $blog = Blog::latest()->get();
 
-        return view('admin-dashboard.categories.edit', compact('category','categories','stores','blog'))->render();
-
+        return view('admin-dashboard.categories.edit', compact('category', 'categories', 'stores', 'blog'))->render();
     }
 
     /**
@@ -170,69 +161,47 @@ class CategoryController extends Controller
                 'banner_link' => $request->input('banner_link'),
                 'sort' => $request->input('sort'),
                 'status' => $request->input('status'),
-                'feature_homepage' =>0,
-                'feature_sidebar' =>0,
+                'feature_homepage' => 0,
+                'feature_sidebar' => 0,
                 'title' => $request->input('title'),
                 'meta_keyword' => $request->input('meta_keyword'),
                 'meta_description' => $request->input('meta_description')
 
             ]);
-            // if($category->picks->count()){
-            //     $category->picks()->delete();
-            // }
-            // foreach($request->input('picks') as $pick){
-            //     EditorPick::create([
-            //         'category_id' => $category->id,
-            //         'store_id' => $pick
-            //     ]);
-            // }
 
-            foreach($request->input('tags') as $tag){
+            foreach ($request->input('tags') as $tag) {
                 $category->update([
                     $tag => 1
                 ]);
             }
 
-
-            if($request->input('logo_type')=='upload'){
-
-                if($request->has('logo_upload')){
-
-                    // Storage::delete(['public/categories/images/'. $category->logo_upload]);
-
-                    $imageName = Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo_upload->extension();
-                    $request->logo_upload->storeAs('public/categories/images',$imageName);
+            if ($request->input('logo_type') == 'upload') {
+                if ($request->has('logo_upload')) {
+                    $imageName = Str::slug($request->input('name')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
+                    $request->logo_upload->storeAs('public/categories/images', $imageName);
 
                     $category->logo_upload = $imageName;
                     $category->update();
-
                 }
             }
-            if($request->input('banner_type')=='upload'){
+            if ($request->input('banner_type') == 'upload') {
+                if ($request->has('banner_upload')) {
+                    $imageName = Str::slug($request->input('name')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
+                    $request->logo_upload->storeAs('public/categories/images', $imageName);
 
-            if($request->has('banner_upload')){
-
-                // Storage::delete(['public/categories/images/'. $category->banner_upload]);
-
-                $imageName = Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner_upload->extension();
-                $request->logo_upload->storeAs('public/categories/images',$imageName);
-
-                $category->banner_upload = $imageName;
-                $category->update();
-
-            }}
-
-            if(!$request->ajax()){
-                flash()->success('Category updated');
-
-                return redirect()->route('admin.categories.index');
-            }else{
-                return 1;
+                    $category->banner_upload = $imageName;
+                    $category->update();
+                }
             }
 
+            if (!$request->ajax()) {
+                flash()->success('Category updated');
+                return redirect()->route('admin.categories.index');
+            } else {
+                return 1;
+            }
         } catch (\Throwable $th) {
-
-            flash()->error($th->getMessage().'Error while updating the category');
+            flash()->error($th->getMessage() . 'Error while updating the category');
             return redirect()->route('admin.categories.index');
         }
     }
@@ -246,10 +215,8 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $childs = $category->childs;
-
-
-        if(count($childs)){
-            foreach($childs as $child){
+        if (count($childs)) {
+            foreach ($childs as $child) {
                 $child->parent_id = $category->parent_id;
                 $child->update();
             }
@@ -261,25 +228,21 @@ class CategoryController extends Controller
     }
     function fetch(Request $request)
     {
-     if($request->ajax())
-     {
-        $route = 'index';
-
-        $categories = Category::latest()->paginate(20);
-
-         return view('admin-dashboard.categories.index_data', compact('categories','route'))->render();
-     }
+        if ($request->ajax()) {
+            $route = 'index';
+            $categories = Category::latest()->paginate(20);
+            return view('admin-dashboard.categories.index_data', compact('categories', 'route'))->render();
+        }
     }
     public function exportCsv(Request $request)
     {
         try {
-
             $table = Category::latest()->get();
             $filename = "categories.csv";
             $handle = fopen($filename, 'w+');
-            fputcsv($handle, array('Name', 'Parent Category','No of Stores', 'Status'));
+            fputcsv($handle, array('Name', 'Parent Category', 'No of Stores', 'Status'));
 
-            foreach($table as $row) {
+            foreach ($table as $row) {
                 fputcsv($handle, array($row->name, $row->parent->name ?? '', count($row->stores), $row->status ? 'active' : 'in-active'));
             }
 
@@ -291,17 +254,13 @@ class CategoryController extends Controller
 
             return Response::download($filename, 'categories.csv', $headers);
         } catch (\Throwable $th) {
-
             flash()->error('Error while exporting categories');
             return redirect()->route('admin.categories.index');
-
         }
-
     }
     public function searcCategories(Request $request, Category $categories)
     {
-        // dd($request->all());
-        $categories= $categories->newQuery();
+        $categories = $categories->newQuery();
 
         // Search by parent.
         if ($request->input('parent_id')) {
@@ -310,19 +269,18 @@ class CategoryController extends Controller
 
         // Search by name.
         if ($request->input('title')) {
-            $categories->where('name','like', '%'.$request->input('title').'%');
-
+            $categories->where('name', 'like', '%' . $request->input('title') . '%');
         }
 
         $categories = $categories->latest()->paginate(20);
-        $route='search';
-        return view('admin-dashboard.categories.index_data', compact('categories','route'))->render();
-
+        $route = 'search';
+        return view('admin-dashboard.categories.index_data', compact('categories', 'route'))->render();
     }
 
-    public function picks(Category $category){
-        $categories = Category::latest()->where('parent_id',0)->get();
+    public function picks(Category $category)
+    {
+        $categories = Category::latest()->where('parent_id', 0)->get();
         $stores = Store::latest()->get();
-        return view('admin-dashboard.categories.picks-form',compact('category','categories','stores'))->render();
+        return view('admin-dashboard.categories.picks-form', compact('category', 'categories', 'stores'))->render();
     }
 }
