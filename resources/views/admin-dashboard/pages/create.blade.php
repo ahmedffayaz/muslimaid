@@ -59,27 +59,37 @@
                                     </div>
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <label class="form-label">Description</label>
-                                                 <!-- Create the editor container -->
-                                                 <div  id="editor-container">
-                                                 </div>
-                                                 <input name="intro" type="hidden">
-                                            </div>
-                                        </div>
-                                        <div class="col-12">
-                                            <div class="form-group">
                                                 <label class="form-label">Banner Image</label>
-                                                    <div class="input-group">
-                                                      <span class="input-group-btn">
+                                                <div class="input-group">
+                                                    <span class="input-group-btn">
                                                         <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white">
-                                                          <i class="fa fa-picture-o"></i> Choose
+                                                            <i class="fa fa-picture-o"></i> Choose
                                                         </a>
-                                                      </span>
-                                                      <input id="thumbnail" class="form-control" type="text" name="filepath">
-                                                    </div>
-                                                    <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+                                                    </span>
+                                                    <input id="thumbnail" class="form-control" type="text" name="filepath">
+                                                </div>
+                                                <div id="holder" style="margin-top:15px;max-height:100px;"></div>
                                             </div>
                                         </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                              <label class="form-label" for="reviewer">Page Short Description</label>
+                                              <textarea  class="form-control" name="short_description" placeholder="Page Short Description" value="" ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="form-group">
+                                              <label class="form-label" for="reviewer">Meta Description</label>
+                                              <textarea  class="form-control" name="meta_description" placeholder="Meta Description" value="" ></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                          <div class="form-group">
+                                              <label class="form-label" for="reviewer">Meta Keywords</label>
+                                              <div class="form-control-wrap">
+                                                  <input id="blog-title" type="text" class="form-control" name="meta_keyword" placeholder="Meta keyword" value="" >
+                                              </div>
+                                          </div>
                                         <div class="col-12">
                                             <div class="form-group">
 
@@ -121,12 +131,12 @@
 
       var form = document.querySelector('form');
       $(".pages-form").submit(function(e) {
-          
+
         // Populate hidden form on submit
         var desc = document.querySelector('input[name=intro]');
         desc.value = quill.root.innerHTML;
-       
-        
+
+
       });
 </script>
 <script>

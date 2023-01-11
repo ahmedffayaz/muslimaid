@@ -50,7 +50,7 @@ class BlogController extends Controller
         ]);
         $blog = new Blog;
         $blog->title = $request->title;
-        $blog->slug = Str::slug($request->title,'_');
+        $blog->slug = Str::slug($request->title);
         $blog->excerpt = $request->excerpt;
         $blog->lb_content = $request->content;
         $blog->featured_image = $request->filepath;
@@ -61,7 +61,7 @@ class BlogController extends Controller
 
         $inserted_blog = Blog::where('title', $request->title)->get();
         $counter = count($inserted_blog);
-        
+
         if($counter>1){
             if($blog->slug == ''){
                 $blog->slug = $blog->id;
@@ -71,7 +71,7 @@ class BlogController extends Controller
                 $blog->save();
             }
         }
-        
+
 
         flash()->success('New blog post created successfully');
         return redirect()->route('admin.blogs.index');

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddRatingToStoresTable extends Migration
+class AddIsEnabledToSeoRulesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddRatingToStoresTable extends Migration
      */
     public function up()
     {
-        Schema::table('stores', function (Blueprint $table) {
-            $table->integer('rating')->default(0)->after('longitude');
+        Schema::table('seo_rules', function (Blueprint $table) {
+            $table->boolean('is_enabled')->default(0)->after('url');
         });
     }
 
@@ -25,8 +25,8 @@ class AddRatingToStoresTable extends Migration
      */
     public function down()
     {
-        Schema::table('stores', function (Blueprint $table) {
-            $table->dropColumn('rating');
+        Schema::table('seo_rules', function (Blueprint $table) {
+            $table->dropColumn('is_enabled');
         });
     }
 }

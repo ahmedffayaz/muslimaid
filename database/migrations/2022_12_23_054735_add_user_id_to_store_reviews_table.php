@@ -27,7 +27,8 @@ class AddUserIdToStoreReviewsTable extends Migration
     public function down()
     {
         Schema::table('store_reviews', function (Blueprint $table) {
-            //
+            $table->dropColumn('user_id');
+            $table->dropColumn('reviewer');
         });
     }
 }

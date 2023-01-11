@@ -159,7 +159,7 @@
                     </div>
                 </div>
                 <div>
-                    <input id="pac-input" style="padding-left: 70px; " name="user_address" class="form-control searchbox" type="text" placeholder="Enter a locations" value="" />
+                    <input id="pac-input" style="padding-left: 70px; " name="user_address" class="form-control searchbox" type="text" placeholder="Enter a location" value="" />
                     <span><i class="fas fa-map-marker-alt" aria-hidden="true"></i></span>
                 </div>
             </div>

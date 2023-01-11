@@ -61,7 +61,8 @@ class SeoController extends Controller
             $final_string = rtrim($request->url, '/');
 
             $seo_rule = Seo_rule::create([
-                'url' => $final_string
+                'url' => $final_string,
+                'is_enabled' => isset($request->is_enabled) ? 1 : 0
             ]);
 
             if($request->type)
@@ -146,7 +147,8 @@ class SeoController extends Controller
             $final_string = rtrim($request->url, '/');
 
             $seo->update([
-                'url' => $final_string
+                'url' => $final_string,
+                'is_enabled' => isset($request->is_enabled) ? 1 : 0
             ]);
 
             if($request->type)

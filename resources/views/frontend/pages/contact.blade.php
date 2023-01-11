@@ -6,7 +6,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="{{url('/')}}">Home</a>
-                    <svg class="breadcrumb-arrow" width="6px" height="9px">              
+                    <svg class="breadcrumb-arrow" width="6px" height="9px">
                         <use xlink:href="{{asset('frontend/images/sprite.svg')}}#arrow-rounded-right-6x9"></use>
                     </svg>
                 </li>
@@ -15,21 +15,8 @@
         </nav>
     </div>
 </div>
-<div class="container p-2 my-2">
-    <div class="row">
-        <div class="col-12">
-            <div class="block-finder__body">
-               <img  class="banner__size" src="{{$page->banner_image}}" alt="Contact Image Missing">
-                <div class="block-finder__header">
-                   <div class="block-finder__title">{{$page->title}}</div>
-                   <div class="block-finder__subtitle"></div>
-                </div>
-            </div>
-            <div class="category-text panel mb-4 mt-4 pt-3">
-                <p class="mt-1">{{$page->description}}</p>
-            </div>
-        </div>
-    </div>
+<div class="container p-0 my-2">
+    @include('layouts.frontend.includes.banners.pages_banner')
 </div>
 
 @if(Session::has('success'))
@@ -49,9 +36,9 @@
 <div class="block block-product-columns mt-5">
     <div class="container">
         <div class="row">
-            <div class="col-12 mt-5">
+            <div class="col-12">
                 <h1>{{$page->title}}</h1>
-                
+
 
             </div>
             <div class="col-lg-12">
@@ -91,7 +78,7 @@
             </form>
         </div>
     </div>
-                
+
     </div>
 </div>
 @endsection
@@ -102,7 +89,7 @@
     jQuery.validator.addMethod("regex", function(value, element) {
     return this.optional(element) || /^[A-Za-z ]+$/i.test(value);
     }, "Only alphabetic input is allow");
-    
+
     $('.form-validate').validate({
         errorClass: 'invalid-feedback d-block',
         rules: {
