@@ -6,7 +6,6 @@ use App\Models\Category;
 use App\Models\UserVerify;
 use Illuminate\Support\Str;
 use App\Models\EmailTemplate;
-use Illuminate\Support\Str;
 use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
