@@ -43,13 +43,13 @@ class StoreController extends Controller
                 $query->whereHas('categories', function ($query) use ($request) {
                     $query->whereIn('category_id', $request->id);
                 });
-            })->with('logo', 'storeAddress')->paginate(10);
+            })->with('logo', 'storeAddress')->paginate(25);
         }else{
             $locations = Store::when(optional($mainCategory)->id, function($query) use ($mainCategory) {
                 $query->whereHas('categories', function ($query) use ($mainCategory) {
                     $query->where('category_id', $mainCategory->id);
                 });
-            })->where('status', 'active')->with('logo', 'storeAddress')->paginate(10);
+            })->where('status', 'active')->with('logo', 'storeAddress')->paginate(25);
 
         }
             return view('frontend.stores.stores',compact('locations'));
@@ -59,7 +59,7 @@ class StoreController extends Controller
             $query->whereHas('categories', function ($query) use ($mainCategory) {
                 $query->where('category_id', $mainCategory->id);
             });
-        })->where('status', 'active')->with('logo', 'storeAddress')->paginate(10);
+        })->where('status', 'active')->with('logo', 'storeAddress')->paginate(25);
 
         $categories = Category::with(['stores.storeAddress'])->whereParentId($mainCategory['id'])->orderBy('name', 'ASC')->get();
 
