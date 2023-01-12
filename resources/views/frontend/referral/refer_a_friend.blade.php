@@ -1,5 +1,6 @@
 @extends('layouts.frontend.app')
 @section('content')
+@include('layouts.frontend.includes.toast')
     <div class="block mt-3">
         <div class="page-header">
             <div class="page-header__container container">
@@ -23,8 +24,6 @@
             </div>
         </div>
         <div class="container">
-            @include('flash::message')
-            @include('layouts.frontend.includes.alert')
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -41,7 +40,7 @@
                             <div class="posts-view__list posts-list posts-list--layout--list">
                                 <div class="posts-list__body">
                                     <div class="posts-list__item">
-                                        <form action="{{ route('account.send-referral-link') }}" method="post">
+                                        <form action="{{ route('account.send-referral-link') }}" id="send-email" method="post">
                                             @csrf
                                             <div class="row g-3 align-center">
                                                 <div class="col-lg-3">
@@ -99,6 +98,40 @@
 @endsection
 @push('scripts')
     <script type="text/javascript">
+
+        $('#send-email').on('submit', function (event){
+            event.preventDefault();
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                processData: false,
+                contentType: false,
+                data: new FormData(this),
+                success: function (response) {
+                    console.log(response)
+                    $('div.toast').removeClass('d-none bg-danger');
+                    $('div.toast').addClass('bg-success');
+                    $('#toast-message').text(response.message);
+                    $('div.toast').toast({ delay: 3000 });
+                    $('div.toast').toast('show');
+                },
+                error: function (response) {
+                    console.log(response)
+                    // pass error message on got error
+                    let errors = response.responseJSON.message;
+                    let error;
+                    for (const key in errors) {
+                        error = `${errors[key]}`
+                    }
+
+                    $('div.toast').removeClass('d-none');
+                    $('div.toast').addClass('bg-danger');
+                    $('#toast-message').text(error);
+                    $('div.toast').toast({ delay: 3000 });
+                    $('div.toast').toast('show');
+                }
+            })
+        })
         function copyText() {
 
             // Get the text field
@@ -108,10 +141,11 @@
             navigator.clipboard.writeText(copyText.value);
 
             if (navigator.clipboard.writeText.length == 1) {
-                $('#alert-message').removeClass('d-none');
-                $('#alert-message').text('Referral link copied');
-                $('#alert-message').addClass('alert-success');
-                $('div.alert').not('.alert-important').delay(2000).fadeOut(350);
+                $('div.toast').removeClass('d-none bg-danger');
+                $('div.toast').addClass('bg-success');
+                $('#toast-message').text('Referral link copied');
+                $('div.toast').toast({ delay: 3000 });
+                $('div.toast').toast('show');
             }
         }
     </script>
