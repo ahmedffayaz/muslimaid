@@ -1,6 +1,6 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
-    
+
 
 <div class="nk-content ">
     <div class="container-fluid">
@@ -29,7 +29,7 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">Title</label>
                                                 <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="{{ $blog->title }}" required> 
+                                                    <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="{{ $blog->title }}" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -42,21 +42,22 @@
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Meta Keywords</label>
-                                                <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword" value="{{ $blog->meta_keyword }}" > 
-                                                </div>
+                                                <label class="form-label" for="reviewer">Meta Description</label>
+                                                <textarea  class="form-control " name="meta_description" placeholder="Meta Description" value="{{ $blog->meta_description }}" ></textarea>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                            <label class="form-label" for="reviewer">Meta Description</label>
-                                            <textarea  class="form-control " name="meta_description" placeholder="Meta Description" value="{{ $blog->meta_description }}" ></textarea>
+                                                <label class="form-label" for="reviewer">Meta Keywords</label>
+                                                <div class="form-control-wrap">
+                                                    <input id="blog-title" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword" value="{{ $blog->meta_keyword }}" >
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <button class="btn btn-primary" type="submit">Save</button>
-                                                
+
                                             </div>
                                         </div>
                                     </div>
@@ -76,5 +77,5 @@
     window.addEventListener('DOMContentLoaded', () => {
         Laraberg.init('content', { height: '600px', laravelFilemanager: true, sidebar: true })
     })
-</script>  
+</script>
 @endpush

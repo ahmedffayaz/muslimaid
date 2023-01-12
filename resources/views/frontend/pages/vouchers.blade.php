@@ -27,7 +27,7 @@
             <ol class="breadcrumb">
                 <li class="breadcrumb-item">
                     <a href="{{url('/')}}">Home</a>
-                    <svg class="breadcrumb-arrow" width="6px" height="9px">              
+                    <svg class="breadcrumb-arrow" width="6px" height="9px">
                         <use xlink:href="{{asset('frontend/images/sprite.svg')}}#arrow-rounded-right-6x9"></use>
                     </svg>
                 </li>
@@ -36,27 +36,14 @@
         </nav>
     </div>
 </div>
-<div class="container p-2 my-2">
-    <div class="row">
-        <div class="col-12">
-            <div class="block-finder__body mb-1">
-               <img class="banner__size" src="{{$page->banner_image}}" alt="Vouchers Image Missing">
-                 <div class="block-finder__header">
-                    <div class="block-finder__title">{{$page->title}}</div>
-                    <div class="block-finder__subtitle"></div>
-                 </div>
-            </div>
-            <div class="category-text panel  mb-4 mt-4 pt-3">
-                <p class="mt-1">{{$page->description}}</p>
-            </div>
-        </div>
-    </div>
+<div class="container">
+    @include('layouts.frontend.includes.banners.pages_banner')
 </div>
 
 <div class="block block-product-columns mt-5">
     <div class="container">
         <div class="row">
-           
+
             <div class="col-lg-12">
                 <div id="your_container"> <!-- The element you want to render the content in -->
                     {!! $page->lb_content !!}
@@ -76,11 +63,11 @@
                             <div class="view-options__layout">
                                 <div class="layout-switcher">
                                     <div class="layout-switcher__list">
-                                        
+
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                     @if(count($stores))
@@ -91,7 +78,7 @@
                                     <div class="product-card product-card--hidden-actions ">
                                         <div class="product-card__image product-image">
                                             <a href="{{route('store.show',$store->slug)}}" class="product-image__body">
-                                                <img class="product-image__img"  
+                                                <img class="product-image__img"
                                                 @if($store->logo->first())
                                                     @if($store->logo->first()->is_fake)
                                                         src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
@@ -99,7 +86,7 @@
                                                         src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
                                                     @endif
                                                 @else
-                                                    src="{{asset('frontend/images/products/product-16.jpg')}}" 
+                                                    src="{{asset('frontend/images/products/product-16.jpg')}}"
                                                 @endif alt="">
                                             </a>
                                         </div>
@@ -136,43 +123,43 @@
                                                     <div class="product-card__rating-legend">{{$store->reviews->count()}} Reviews</div>
                                                 </div>
                                             @endif
-                                            
+
                                             <ul class="product-card__features-list">
                                                 @foreach($store->vouchers->take(3) as $voucher)
                                                 <li>{{$voucher->link_name}}</li>
                                                 @endforeach
-                                                
+
                                             </ul>
                                             @if($store->vouchers->count()>3)
                                             <p><a href="{{route('store.show',$store->slug)}}">{{$store->vouchers->count()-3}} more vouchers</a></p>
                                             @endif
                                         </div>
                                         <div class="product-card__actions align-self-center">
-                                            
+
                                             {{-- <div class="product-card__prices">
                                                 @if($store->cashback->type=='fixed'){{$store->cashback->currency}} @endif{{$store->cashback->sale_commission}}@if($store->cashback->type=='percentage')%@endif Cashback
                                             </div> --}}
                                             <div class="product-card__buttons mt-2">
                                                 {{-- <button class="btn btn-primary product-card__addtocart" type="button">Shop Now</button> --}}
                                                 <a href="{{route('store.show',$store->slug)}}" class="btn btn-primary product-card__addtocart product-card__addtocart--list" type="button">Shop Now</a>
-                                            
+
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             @endforeach
                         </div>
-                        {!! $stores->links()!!} 
+                        {!! $stores->links()!!}
                     </div>
-                    @else 
+                    @else
                     <div class="text-center">
                         <img src="{{asset('frontend/images/item_no.png')}}" alt="">
                         <h3 class="mt-4">No  Vouchers Available</h3>
                     </div>
-                   
+
                     @endif
                     {{-- <div class="products-view__pagination">
-                        
+
                     </div> --}}
                 </div>
             </div>

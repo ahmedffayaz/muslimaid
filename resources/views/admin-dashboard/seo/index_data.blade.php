@@ -7,6 +7,7 @@
 <div class="nk-tb-item nk-tb-head">
     <div class="nk-tb-col"><span class="sub-text">URL</span></div>
     <div class="nk-tb-col"><span class="sub-text">Values</span></div>
+    <div class="nk-tb-col nk-tb-col-tools text-right"><span class="sub-text">Status</span></div>
     <div class="nk-tb-col nk-tb-col-tools text-right">
     <span class="sub-text">Action</span>
     </div>
@@ -26,7 +27,9 @@
                 <span><b>{{ ucfirst(str_replace('_', ' ', $rule->key)) }}:</b> </span><span>{{ $rule->value }}</span><br>
             @endforeach
         </div>
-
+        <div class="nk-tb-col nk-tb-col-tools text-right">
+            <span>{!! $seo->is_enabled == 1 ? '<span class="tb-status badge badge-success">Enable</span>' : '<span class="tb-status badge badge-danger">Disable</span>' !!}</span>
+        </div>
         <div class="nk-tb-col nk-tb-col-tools">
             <ul class="nk-tb-actions gx-1">
                 <li>
@@ -69,5 +72,5 @@
 </div><!-- .nk-block-between -->                                  --}}
 
 @else
-<h3 class="m-auto text-center py-5">No record found</h3> 
+<h3 class="m-auto text-center py-5">No record found</h3>
 @endif

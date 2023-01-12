@@ -12,10 +12,14 @@ class SearchStores extends Component
     public function render()
     {
         $stores = array();
-        if($this->search!= ''){
-            $stores= Store::where('name','like', '%'.$this->search.'%')->get();
+        $search = $this->search;
+        if($search != ''){
+            $stores= Store::where('name','like', '%'.$search.'%')
+                ->orWhereHas('storeRuleData', function($query) use ($search) {
+                    $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $search . '%');
+                })->get();
         }
-        
+
      return view('livewire.search-stores', [
             'stores' => $stores,
         ]);

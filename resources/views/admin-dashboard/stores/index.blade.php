@@ -17,9 +17,25 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li class="nk-block-tools-opt"><a href="{{route('admin.stores.create')}}" class="btn btn-primary btn-sm"><em class="icon ni ni-plus"></em><span>Add Store</span></a></li>
-                                        <li><a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
-
+                                        <li class="nk-block-tools-opt">
+                                            <button class="btn btn-warning btn-sm" id="fake-data-importer-btn">
+                                                <em class="icon ni ni-upload-cloud"></em>
+                                                <span>Import Fake Stores</span>
+                                            </button>
+                                            <form action="{{ route('admin.stores.import-fake-data') }}" id="fake-data-importer-form" method="post">@csrf</form>
+                                        </li>
+                                        <li class="nk-block-tools-opt">
+                                            <a href="{{route('admin.stores.create')}}" class="btn btn-primary btn-sm">
+                                                <em class="icon ni ni-plus"></em>
+                                                <span>Add Store</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light">
+                                                <em class="icon ni ni-download-cloud"></em>
+                                                <span>Export</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div><!-- .toggle-wrap -->
@@ -148,9 +164,7 @@
             }
 
             if (route == 'search') {
-                $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
-            </div></div>`);
+                $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div></div>`);
 
                 var _token = $("input[name=_token]").val();
                 var network_id = $("select[name=network_id]").val();
@@ -238,6 +252,26 @@
                 }
             });
             event.preventDefault();
+        });
+
+        $('#fake-data-importer-btn').on('click', function(e) {
+            let _self = $(this);
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function(result) {
+                if (result.value) {
+                    _self
+                        .attr('disabled', 'disabled')
+                        .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
+
+                    $('#fake-data-importer-form').submit();
+                }
+            });
         });
     });
 </script>

@@ -11,12 +11,14 @@ use App\Models\ContactForm;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
+use Illuminate\Http\Response;
 use Harimayco\Menu\Models\Menus;
 use App\Http\Controllers\Controller;
 use App\Models\Charity;
 use Harimayco\Menu\Models\MenuItems;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 
 class PagesController extends Controller
@@ -24,7 +26,7 @@ class PagesController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function index()
     {
@@ -174,12 +176,16 @@ class PagesController extends Controller
     {
         $stores = $stores->newQuery();
         $term = null;
-        if ($request->input('search')) {
-            $stores->where('name', 'like', '%' . $request->input('search') . '%');
+        $search = $request->input('search');
+        if ($search) {
+            $stores->where('name', 'like', '%' . $request->input('search') . '%')
+                ->orWhereHas('storeRuleData', function ($query) use ($search) {
+                    $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $search . '%');
+                });
             $term = $request->input('search');
         }
         $stores = $stores->latest()->paginate(20);
-        // dd($stores);
+
         return view('frontend.pages.search', compact('stores', 'term'));
     }
 
@@ -213,7 +219,9 @@ class PagesController extends Controller
 
     public function contactForm(Request $request)
     {
-        // dd($request->all());
+        $this->validate($request, [
+            'g-recaptcha-response' => 'required|captcha',
+        ]);
         $contact = ContactForm::create($request->all());
 
         $user_email_template = EmailTemplate::where('key', 'user_new_contact')->first();
@@ -280,10 +288,10 @@ class PagesController extends Controller
         $stores = Store::where('name', 'like', $letter . '%')->get();
         return view('frontend.pages.stores_with_letter', compact('stores', 'letter'));
     }
-    
+
     public function showCharity(Request $request){
         $charity = Charity::with('charity_type')->find($request->id);
         return view('frontend.pages.charity_model',compact('charity'));
-    
+
     }
 }

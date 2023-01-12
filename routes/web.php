@@ -28,8 +28,6 @@ Route::namespace('App\Http\Controllers\Website')->prefix('site')->name('site.')-
 
 });
 
-Route::get('/awin', [App\Http\Controllers\AwinController::class, 'awinTest']);
-
 //Admin routes
 Route::namespace('App\Http\Controllers\Admin')
     ->middleware(['auth','role:admin|data|finance'])
@@ -52,7 +50,8 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::get('networks/categories_export/{network}',[App\Http\Controllers\Admin\NetworkController::class,'exportCsv'])->name('networks.categories.export');
     Route::resource('networks', NetworkController::class);
 
-    //Stores
+    // Stores
+    Route::post('stores/import-fake-data', [App\Http\Controllers\Admin\StoreController::class,'importFakeData'])->name('stores.import-fake-data');
     Route::get('stores/images/{store}', [App\Http\Controllers\Admin\StoreController::class,'storeImages'])->name('stores.images');
     Route::post('stores/vouchers', [App\Http\Controllers\Admin\StoreController::class,'fetchVouchers'])->name('stores.vouchers');
     Route::post('stores/cashbacks', [App\Http\Controllers\Admin\StoreController::class,'fetchCashbacks'])->name('stores.cashbacks');
@@ -178,8 +177,8 @@ Route::namespace('App\Http\Controllers\Admin')
     Route::post('admin_charities_store',[App\Http\Controllers\Admin\CharityController::class,'charityTypeStore'])->name('admin-charities-store');
     Route::put('charity_type_update/{id}',[App\Http\Controllers\Admin\CharityController::class,'charityTypeUpdate'])->name('charitiestype-update');
     Route::post('charities/search',  [App\Http\Controllers\Admin\CharityController::class,'searchCharities'])->name('charities.search');
-  
-    
+
+
     Route::get('manage-menus/{id?}',[App\Http\Controllers\Admin\MenuController::class,'index']);
     Route::post('create-menu',[App\Http\Controllers\Admin\MenuController::class,'store']);
     Route::get('add-categories-to-menu',[App\Http\Controllers\Admin\MenuController::class,'addCatToMenu']);
@@ -247,13 +246,13 @@ Route::get('category/{slug}',[App\Http\Controllers\Frontend\PagesController::cla
 Route::get('top-cashback',[App\Http\Controllers\Frontend\PagesController::class, 'topStores'])->name('top_stores');
 Route::get('trending',[App\Http\Controllers\Frontend\PagesController::class, 'trending'])->name('trending');
 Route::get('cashback/{slug}',[App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
-Route::get('categories/cashback-to-your-door',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
+Route::get('categories/{slug}',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
 // Route::get('stores/cashback-to-door',[App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
 Route::get('stores/reviews/{id}', [App\Http\Controllers\Frontend\StoreController::class, 'showReviews'])->name('store.reviews.show');
 Route::post('stores/reviews/submit', [App\Http\Controllers\Frontend\StoreController::class, 'storeReviews'])->name('store.reviews.submit');
 Route::get('search_suggestions',[App\Http\Controllers\Frontend\PagesController::class, 'searchSuggestions'])->name('search_suggestions');
-Route::get('pages/{page}',[App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('page');
-Route::get('post/{blog}',[App\Http\Controllers\Frontend\PagesController::class, 'blogPost'])->name('post');
+Route::get('pages/{slug}',[App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('page');
+Route::get('post/{slug}',[App\Http\Controllers\Frontend\PagesController::class, 'blogPost'])->name('post');
 Route::post('contact_form',[App\Http\Controllers\Frontend\PagesController::class, 'contactForm'])->name('contactForm');
 Route::get('all_stores/{letter}',[App\Http\Controllers\Frontend\PagesController::class, 'allStoresLetter'])->name('all_stores_of_letter');
 Route::get('all_stores',[App\Http\Controllers\Frontend\PagesController::class, 'allStores'])->name('all_stores');

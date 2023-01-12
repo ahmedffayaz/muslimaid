@@ -117,8 +117,6 @@ class PaymentController extends Controller
     }
 
     public function cashout(Request $request){
-         dd($request->all());
-
         if(array_key_exists('min_cashout_amount',SiteSetting()->toArray()))
          $min = SiteSetting()['min_cashout_amount'];
         else $min = 1; 
@@ -173,7 +171,6 @@ class PaymentController extends Controller
             return redirect()->back();
     }
     public function CharityCashout(Request $request,Cashout $cashout ){
-        dd($request->all());
         if(array_key_exists('min_cashout_amount',SiteSetting()->toArray()))
          $min = SiteSetting()['min_cashout_amount'];
         else $min = 1; 
@@ -189,45 +186,37 @@ class PaymentController extends Controller
             flash()->error('You have already  withdraw request.');
             return redirect()->back();
         }
-
         $validator = Validator::make($request->all(), [
-            'user_id' => 'required',   // required  validation
-            'charity_types_id' => 'required', 
-        ]); // create the validations
-        
-        if ($validator->fails())   //check all validations are fine, if not then redirect and show error messages
-        {
-            return response()->json($validator->errors(),422);
-            // validation failed redirect back to form
-
-        }
-        else{
-            $cashout = Cashout::create([
-                'user_id' => $user->id,
-                'charity_types_id'=>$request->charity_types_id,
-                'amount'=>$request->amount, 
-                'payment_method'=>$request->payment_method, 
-                'status'=>'processing donation']);
-               
-            $cashback = $user->cashbacks()->where('id', $request->id)->first();
-            $cashback->update(['status' => 5,'cashout_id'=>$cashout->id]);
-                $cashback->statusHistory()->create([
-                    'cashback_status_id'=>$cashback->status
-                ]);
-                if($user->bonus && $user->bonus->status == 'unpaid'){
-                    $user->bonus->update([
-                        'status'=>'paid',
-                        'cashout_id'=> $cashout->id
-                        ]);
-                }
-               
-                flash()->success("We're processing your withdrawal. Please allow 4 working days for ".$balance." to reach your ".$request->payment_method." account.");
-                // return redirect()->back();
-                return response()->json(["status"=>true, 'response'=>200]); 
+            'charity_types_id' =>'required',
+            'amount' => 'required',
+            
            
-     
-
+        ]);
+        if ($validator->fails()) { 
+            return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput();
         }
-                //   return response()->json($cashback->errors(),422);
+        $cashout = Cashout::create([
+            'user_id' => $user->id,
+            'charity_types_id'=>$request->charity_types_id,
+            'amount'=>$request->amount, 
+            'payment_method'=>$request->payment_method, 
+            'status'=>'processing donation']);
+           
+        $cashback = $user->cashbacks()->where('id', $request->id)->first();
+        $cashback->update(['status' => 5,'cashout_id'=>$cashout->id]);
+            $cashback->statusHistory()->create([
+                'cashback_status_id'=>$cashback->status
+            ]);
+            if($user->bonus && $user->bonus->status == 'unpaid'){
+                $user->bonus->update([
+                    'status'=>'paid',
+                    'cashout_id'=> $cashout->id
+                    ]);
+            }
+           
+            flash()->success("We're processing your withdrawal. Please allow 4 working days for ".$balance." to reach your ".$request->payment_method." account.");
+            return redirect()->back();
     }
 }
