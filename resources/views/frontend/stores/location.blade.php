@@ -450,7 +450,7 @@
                         '<div id="siteNotice">' +
                         "</div>" +
                         '<div id="mapPopupHeader">' +
-                        '<a href="' + origin + '/cashback/silk-center' +
+                        '<a href="' + origin + '/cashback/' + locations[i]['slug'] +
                         '"><div id="headerTitleAddress"><h4 id="firstHeading" class="firstHeading">' + locations[i][
                         'name'] + '</h4></a>' +
                         "</div></div>" +
