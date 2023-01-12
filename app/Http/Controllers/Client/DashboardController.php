@@ -21,7 +21,8 @@ class DashboardController extends Controller
     public function index()
     {
         $user = \Auth::user();
-        return view('client-dashboard.dashboard',compact('user'));
+        $items = $user->cashbacks()->latest()->limit(5)->get();
+        return view('client-dashboard.dashboard',compact('user', 'items'));
     }
 
     /**
@@ -78,7 +79,7 @@ class DashboardController extends Controller
     public function update(Request $request, User $user)
     {
         // dd($request->all());
-        
+
         $validated = $request->validate([
             'firstname' => 'required|regex:/^[A-Za-z ]+$/',
             'lastname' => 'required|regex:/^[A-Za-z ]+$/',
@@ -88,7 +89,7 @@ class DashboardController extends Controller
             'firstname.required' => 'First name is required.',
             'lastname.required' => 'Last name is required.'
         ]);
-        
+
         $user->update([
             'first_name' => $request->firstname,
             'last_name' => $request->lastname,
@@ -97,7 +98,7 @@ class DashboardController extends Controller
             'intro' => $request->intro,
         ]);
         flash()->success('User updated successfully');
-        return redirect()->back();   
+        return redirect()->back();
     }
 
     /**

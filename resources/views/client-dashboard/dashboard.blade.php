@@ -62,10 +62,10 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach ($user->cashbacks->take(5) as $item)
+                                                @foreach ($items as $item)
                                                     <tr>
                                                         <td>
-                                                            @if ($item->store)
+                                                            @if ($item->store_id)
                                                                 <a href="{{ route('store.show', $item->store->slug) }}"
                                                                     target="_blank">{{ $item->store->name }}</a>
                                                             @else
