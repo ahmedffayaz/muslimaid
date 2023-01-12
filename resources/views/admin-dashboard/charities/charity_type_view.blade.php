@@ -78,7 +78,7 @@
 
 <div class="nk-block-between-md g-3 card-inner">
     <div class="pagination g" >
-        {{-- {!! $ticketCategory->links()!!}                                            --}}
+        {{-- {!! $CharityType->links()!!}                                            --}}
     </div>    
 </div><!-- .nk-block-between --> 
 @endsection

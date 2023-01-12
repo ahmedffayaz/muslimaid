@@ -219,7 +219,8 @@
                                                
                                                 {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
-                                            <form action="{{route('admin.cashouts.update',$cashout)}}" class="gy-3 form-validate is-alter" method="POST">
+                                           
+                                            <form action="{{route('admin.cashouts.update',$cashout)}}" class="gy-3 form-validate is-alter"  id="form_withdraw" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="row g-4">
@@ -229,8 +230,12 @@
                                                             <div class="form-control-wrap ">
                                                                 <div class="form-control-select">
                                                                     <select class="form-control" id="default-06" name="status" required>
-                                                                        <option @if($cashout->status == 'pending') selected @endif value="pending">Pending</option>
-                                                                        <option @if($cashout->status == 'paid') selected @endif value="paid">Paid</option>
+                                                                       
+                                                                            <option @if($cashout->status == 'pending') selected @endif value="pending">Pending</option>
+                                                                            <option @if($cashout->status == 'paid') selected @endif value="paid">Paid</option>
+                                                                            <option @if($cashout->status == 'donated') selected @endif value="donated">Donated</option>
+                                                                           
+                            
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -238,7 +243,7 @@
                                                     </div>
                                                    <div class="col-12">
                                                         <div class="form-group">
-                                                            <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                                                            <button type="button" class="btn btn-lg btn-primary withdraw_submit">Save</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -263,5 +268,28 @@
 
 @endsection
 @push('scripts')
- 
+<script>
+    $(document).on('click', '.withdraw_submit', function (e) {
+        var form_id = "form_withdraw";
+        var action = $(this).attr("action");
+        var method = $(this).attr("method");
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, submit it!'
+        }).then(function (result) {
+            if (result.value) { 
+                $("#"+form_id).submit();
+            } 
+            else{
+                window.toast({
+                type: 'error',
+                title: error.response.data.message
+            });
+            }
+       });
+    });
+</script>
 @endpush

@@ -19,6 +19,7 @@ class CashoutController extends Controller
     public function index()
     {
         $cashouts = Cashout::latest()->paginate(10);
+
         return view('admin-dashboard.cashouts.index', compact('cashouts'));
     }
 
@@ -91,7 +92,13 @@ class CashoutController extends Controller
             }
 
         }
+        elseif($request->input('status') == 'donated'){
+            $cashout->update(['status'=>'donated']);
+            foreach($cashout->cashbacks as $cashback){
+                $cashback->update(['status'=>7]);
+            }
 
+        }
         flash()->success('cashout updated');
         return redirect()->back();
         

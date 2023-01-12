@@ -203,7 +203,7 @@
                                 </li><!-- .nk-menu-item -->
                                 <li class="">
                                     <a href="/admin/charities" class="">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-menu"></em></span>
+                                        <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
                                         <span class="nk-menu-text">Charities</span>
                                     </a>
                                 </li><!-- .nk-menu-item -->

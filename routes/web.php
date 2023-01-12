@@ -281,12 +281,16 @@ Route::namespace('App\Http\Controllers\Client')
         Route::get('payment-details',[App\Http\Controllers\Client\PaymentController::class,'paymentDetails'])->name('payment_details');
         Route::post('payment-save',[App\Http\Controllers\Client\PaymentController::class,'paymentSave'])->name('payment_save');
         Route::post('cashout',[App\Http\Controllers\Client\PaymentController::class,'cashout'])->name('cashout');
+        Route::post('CharityCashout',[App\Http\Controllers\Client\PaymentController::class,'CharityCashout'])->name('CharityCashout');
         Route::post('claim/step2',[App\Http\Controllers\Client\ClaimController::class,'step2'])->name('claim.step2');
         Route::post('claim/step3',[App\Http\Controllers\Client\ClaimController::class,'step3'])->name('claim.step3');
         Route::resource('claim', ClaimController::class);
         Route::resource('referral',ReferController::class);
         Route::post('send-referral-link',[App\Http\Controllers\Client\ReferController::class, 'sendReferralLink'])->name('send-referral-link');
-
+        
+        Route::get('CharityWithdraw',[App\Http\Controllers\Client\PaymentController::class,'CharityWithdraw'])->name('CharityWithdraw');
+        
+        
     });
 
 

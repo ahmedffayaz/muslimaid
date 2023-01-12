@@ -55,7 +55,7 @@
                                             <div class="form-group">
                                                 <label class="form-label" for="phone-no-1">Network Commission</label>
                                                 <div class="form-control-wrap">
-                                                    <input type="text" class="form-control" id="phone-no-1" value="" name="network_commission" >
+                                                    <input type="text" class="form-control" id="phone-no-1" value="" name="network_commission" required>
                                                 </div>
                                             </div>
                                         </div>

@@ -12,6 +12,7 @@ use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
+use  Illuminate\Support\Facades\Response;
 
 class CommissionController extends Controller
 {
@@ -46,7 +47,7 @@ class CommissionController extends Controller
     public function create()
     {
         $clicks = ExitClick::latest()->get();
-        $statuses = \DB::table('cashback_statuses')->latest()->get();
+        $statuses = DB::table('cashback_statuses')->latest()->get();
         return view('admin-dashboard.commissions.create', compact('clicks','statuses'));
 
     }
@@ -60,7 +61,6 @@ class CommissionController extends Controller
     public function store(Request $request)
     {
         try {
-
             $click = ExitClick::findOrFail($request->exit_click_id);
             $custom_cashback_percentage = $click->store->custom_cashback_percentage;
 
@@ -123,7 +123,7 @@ class CommissionController extends Controller
     public function edit(UserCashback $commission)
     {
         $clicks = ExitClick::latest()->get();
-        $statuses = \DB::table('cashback_statuses')->latest()->get();
+        $statuses = DB::table('cashback_statuses')->latest()->get();
         return view('admin-dashboard.commissions.edit', compact('commission','clicks','statuses'))->render();
     }
 
@@ -210,7 +210,7 @@ class CommissionController extends Controller
                 'Content-Type' => 'text/csv',
             );
 
-            return \Response::download($filename, 'cashbacks.csv', $headers);
+            return Response::download($filename, 'cashbacks.csv', $headers);
         }catch (\Throwable $th) {
             flash()->error('Error while exporting cashbacks');
             return redirect()->route('admin.commissions.index');
@@ -220,7 +220,7 @@ class CommissionController extends Controller
     public function createMultiple()
     {
         $clicks = ExitClick::latest()->get();
-        $statuses = \DB::table('cashback_statuses')->latest()->get();
+        $statuses = DB::table('cashback_statuses')->latest()->get();
         return view('admin-dashboard.commissions.create_multiple', compact('clicks','statuses'));
 
     }

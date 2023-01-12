@@ -81,7 +81,13 @@
             <span class="tb-status badge badge-danger">{{ $commission->statusMap->status ?? $commission->status}}</span>
         @elseif(($commission->statusMap->status ?? $commission->status) == "pending")
             <span class="tb-status badge badge-info">{{ $commission->statusMap->status ?? $commission->status}}</span>
+        @elseif(($commission->statusMap->status ?? $commission->status) == "processing donation")
+            <span class="tb-status badge badge-warning">{{ $commission->statusMap->status ?? $commission->status}}</span>
+         @elseif(($commission->statusMap->status ?? $commission->status) == "donated")
+            <span class="tb-status badge badge-info">{{ $commission->statusMap->status ?? $commission->status}}</span>
+            
         @endif
+        
     </div>
     
    

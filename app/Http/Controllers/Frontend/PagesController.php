@@ -77,8 +77,8 @@ class PagesController extends Controller
             $term = null;
             return view('frontend.pages.vouchers', compact('stores', 'term', 'page'));
         }
-        $charity=Charity::where('status','=','1')->orderBy('id', 'DESC')->paginate(10);
-        return view('frontend.pages.single_page', compact('page','charity'));
+        $HomePageCharities=Charity::where('status','=','1')->orderBy('id', 'DESC')->paginate(10);
+        return view('frontend.pages.single_page', compact('page','HomePageCharities'));
     }
 
     /**
@@ -261,11 +261,10 @@ class PagesController extends Controller
             $message->to($email_data['email'], $email_data['name'])
                 ->subject($email_data['subject']);
         });
-
         $ticket = new Ticket([
             'title'     => $request->input('subject'),
-            'user_id'   =>  Auth::user()->id,
-            'ticket_id' => strtoupper(Str::random(12)),
+            'user_id'   =>  isset(Auth::user()->id) ?(Auth::user()->id):0, 
+           'ticket_id' => strtoupper(Str::random(12)),
             'category_id'  => '4',
             'priority'  => 'high',
             'ticket_type'  => 'ticket',

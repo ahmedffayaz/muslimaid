@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Currency;
 use App\Models\SiteSetting;
 
 $settings = App\Models\SiteSetting::latest()->get()->pluck('value','type');

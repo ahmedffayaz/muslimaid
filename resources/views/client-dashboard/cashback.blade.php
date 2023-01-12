@@ -70,7 +70,12 @@
                                                 <span class="badge badge-danger">{{ $cashback->statusMap->status}}</span>
                                             @elseif($cashback->statusMap->status == "pending")
                                                 <span class="badge badge-info">{{ $cashback->statusMap->status}}</span>
-                                            @endif
+                                            @elseif($cashback->statusMap->status == "processing")
+                                                <span class="badge badge-info">{{ $cashback->statusMap->status}}</span>
+                                            @elseif($cashback->statusMap->status == "donated")
+                                                <span class="badge badge-info">{{ $cashback->statusMap->status}}</span>
+                                            
+                                                @endif
                                         </td>
                                     </tr> 
                                     @endforeach

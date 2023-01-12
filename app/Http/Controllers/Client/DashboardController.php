@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Models\UserCashback;
 use App\Models\ExitClick;
-use Illuminate\Support\Facades\Hash;
+use App\Models\UserCashback;
+use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
@@ -20,7 +21,7 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $user = \Auth::user();
+        $user = Auth::user();
         return view('client-dashboard.dashboard',compact('user'));
     }
 
@@ -64,7 +65,7 @@ class DashboardController extends Controller
      */
     public function edit()
     {
-        $user = \Auth::user();
+        $user = Auth::user();
         return view('client-dashboard.edit-profile',compact('user'));
     }
 
@@ -112,13 +113,13 @@ class DashboardController extends Controller
     }
     public function cashback(){
 
-        $user = \Auth::user();
+        $user = Auth::user();
         $cashbacks = UserCashback::where('user_id',$user->id)->latest()->get();
         return view('client-dashboard.cashback',compact('user','cashbacks'));
     }
     public function clicks(){
 
-        $user = \Auth::user();
+        $user = Auth::user();
         $clicks = ExitClick::where('user_id',$user->id)->latest()->get();
         return view('client-dashboard.clicks',compact('user','clicks'));
     }
@@ -127,7 +128,7 @@ class DashboardController extends Controller
     }
     public function savePassword(Request $request)
     {
-        $user = \Auth::user();
+        $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
