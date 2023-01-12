@@ -280,13 +280,13 @@ function SiteSetting()
 
 function getRecaptchaSiteKey()
 {
-    $key = SiteSetting::where('title','Site Key')->pluck('value')->first();
+    $key = SiteSetting::where('title', 'Site Key')->pluck('value')->first();
     return $key;
 }
 
 function getRecaptchaSecretKey()
 {
-    $key = SiteSetting::where('title','Secret')->pluck('value')->first();
+    $key = SiteSetting::where('title', 'Secret')->pluck('value')->first();
     return $key;
 }
 
@@ -444,4 +444,23 @@ function convertPathForOS($path)
     if (empty($path)) return $path;
 
     return str_replace('\\', '/', str_replace('/', DIRECTORY_SEPARATOR, $path));
+}
+
+function getImageUrl($url)
+{
+    if (empty($url) || (isset($url->image) && empty($url->image))) {
+        return asset('frontend/images/products/product-16.jpg');
+    }
+
+    if (isset($url->image)) {
+        $baseDir = $url->is_fake ? 'frontend/images/logos/' : 'storage/stores/images/';
+
+        return strpos($url->image, 'http') !== false
+            ? $url->image
+            : asset($baseDir . ltrim($url->image, '/'));
+    }
+
+    return strpos($url, 'http') !== false
+        ? $url
+        : asset('storage/stores/images/' . ltrim($url, '/'));
 }
