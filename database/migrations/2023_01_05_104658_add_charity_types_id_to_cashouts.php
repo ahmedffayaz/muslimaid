@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddDescriptionToTicketCategoriesTable extends Migration
+class AddCharityTypesIdToCashouts extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddDescriptionToTicketCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::table('ticket_categories', function (Blueprint $table) {
-            $table->string('description')->after('name');
+        Schema::table('cashouts', function (Blueprint $table) {
+            $table->unsignedBigInteger('charity_types_id')->nullable()->after('new_cashout');
+            
         });
     }
 
@@ -25,8 +26,8 @@ class AddDescriptionToTicketCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::table('ticket_categories', function (Blueprint $table) {
-            $table->dropColumn('description');
+        Schema::table('cashouts', function (Blueprint $table) {
+            //
         });
     }
 }

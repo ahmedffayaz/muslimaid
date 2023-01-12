@@ -2,9 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\CharityType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 
 class Cashout extends Model
@@ -28,6 +29,7 @@ class Cashout extends Model
         'bic',
         'payment_method', 
         'new_cashout', 
+        'charity_types_id',
         'status'];
 
     public function user(){
@@ -40,6 +42,9 @@ class Cashout extends Model
     public function bonus(){
         return $this->hasOne(Bonus::class);
     }
+    public function charity_type(){
 
+        return $this->hasOne(CharityType::class,'id','charity_types_id');
+    }
 }
 

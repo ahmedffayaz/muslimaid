@@ -193,6 +193,13 @@ class SettingsController extends Controller
             ],[
                 'value'     =>  $request->has('payment_method_cheque') ? 1 : 0
             ]);
+            $settings = SiteSetting::updateOrCreate([
+                'type'   => 'payment_method_charity',
+                'title'  => 'Payment Method Charity',
+                
+            ],[
+                'value'     =>  $request->has('payment_method_charity') ? 1 : 0
+            ]);
 
 
             if($request->has('dashboard_logo')){

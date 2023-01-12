@@ -44,18 +44,27 @@
         <span class="tb-amount"><span class="currency">{{ currency()}}</span>{{number_format((float)$cashout->amount, 2, '.', '')}}</span>
     </div>
     <div class="nk-tb-col tb-col-mb">
-        <span>{{$cashout->payment_method}}</span>
+        <span>{{ $cashout->payment_method }}</span>
     </div>
-    
     <div class="nk-tb-col ">
         <span>{{$cashout->created_at}}</span>  
     </div> 
    
     <div class="nk-tb-col ">
         <span>
-            {!! $cashout->status =='paid'  ? '<span class="tb-status badge badge-success">paid</span>' : '<span class="tb-status badge badge-info">pending</span>'!!}
+                @if($cashout->status =='paid')
+                <span class="tb-status badge badge-success">paid</span>
+                @elseif($cashout->status =='pending')
+                <span class="tb-status badge badge-info">pending</span>
+                @elseif($cashout->status =='processing donation')
+                <span class="tb-status badge badge-warning">processing donation</span>
+                @elseif($cashout->status =='donated')
+                <span class="tb-status badge badge-warning">donated</span>
+                @endif
         </span>
+
     </div>
+
     <div class="nk-tb-col nk-tb-col-tools">
         <ul class="nk-tb-actions gx-1">
             <li class="nk-tb-action">

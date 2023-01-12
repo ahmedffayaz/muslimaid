@@ -27,17 +27,66 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="dashboard__address card address-card address-card--featured">
-                            <div class="address-card__body mt-4">
-                                <div class="address-card__name">Available Balance:<span
-                                        class="text-md-right address-card__name2 float-right">
-                                        {{ currency() }}{{ number_format((float) Auth::user()->availableBalance(), 2, '.', '') }}</span>
-                                </div>
-                                <br>
-                                <div class="address-card__name">Pending Balance:<span
-                                        class="text-md-right address-card__name2 float-right">
-                                        {{ currency() }}{{ number_format((float) Auth::user()->availableBalance(), 2, '.', '') }}</span>
-                                </div>
+                    </div>
+                    <div class="dashboard__address card address-card address-card--featured">
+                        <div class="address-card__body mt-4">
+                            <div class="address-card__name">Available Balance:<span class="text-md-right address-card__name2 float-right"> {{ currency()}}{{number_format((float)Auth::user()->availableBalance(), 2, '.', '')}}</span></div>
+                            <br>
+                            <div class="address-card__name">Pending Balance:<span class="text-md-right address-card__name2 float-right"> {{ currency()}}{{number_format((float)Auth::user()->availableBalance(), 2, '.', '')}}</span></div>
+                            
+                        </div> 
+                    </div>
+                    @if($user->cashbacks->count())
+                    <div class="dashboard__orders card">
+                        <div class="card-header">
+                            <h5 class="d-inline-block">Recent Cashback</h5>
+                            @if($user->cashbacks->count() > 5)
+                            <a href="{{route('account.cashback')}}" class="float-right font-14">View All</a>
+                            @endif
+                        </div>
+                        <div class="card-divider"></div>
+                        <div class="card-table">
+                            <div class="table-responsive-sm">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            
+                                            <th>Store</th>
+                                            <th>Order Amount</th>
+                                            <th>Cashback</th>
+                                            <th>Date</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($user->cashbacks->take(5) as $item)
+                                            <tr>
+                                                
+                                                <td><a href="{{route('store.show',$item->store->slug)}}" target="_blank">{{$item->store->name}}</a></td>
+                                                <td>{{ currency() }}{{number_format((float)$item->order_value, 2, '.', '')}}</td>
+                                                <td>{{ currency() }}{{number_format((float)$item->amount, 2, '.', '')}}</td>
+                                                <td>{{Carbon\Carbon::parse($item->event_date)->isoFormat('Do MMMM YYYY')}}</td>
+                                                <td>
+                                                    @if($item->statusMap->status == "confirmed")
+                                                        <span class="badge badge-success">{{ $item->statusMap->status}}</span>
+                                                    @elseif($item->statusMap->status == "paid")
+                                                        <span class="badge badge-success">{{ $item->statusMap->status}}</span>
+                                                    @elseif($item->statusMap->status == "failed")
+                                                        <span class="badge badge-danger">{{ $item->statusMap->status}}</span>
+                                                    @elseif($item->statusMap->status == "pending")
+                                                        <span class="badge badge-info">{{ $item->statusMap->status}}</span>
+                                                    @elseif($item->statusMap->status == "donated")
+                                                        <span class="badge badge-warning">{{ $item->statusMap->status}}</span>
+                                                    @elseif($item->statusMap->status == "processing donation")
+                                                        <span class="badge badge-success">{{ $item->statusMap->status}}</span>
+                                                    @elseif($item->statusMap->status == "processing")
+                                                        <span class="badge badge-info">{{ $item->statusMap->status}}</span>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         @if ($user->cashbacks->count())

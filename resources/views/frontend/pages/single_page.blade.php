@@ -69,7 +69,7 @@
                     <div class="block-header__divider"></div>
                 </div>
                 <div class="row">
-                    @foreach ($charity as $charity)
+                    @foreach ($HomePageCharities as $charity)
                         <div class="col-md-4">
                             <div class="block-product-columns__column pt-2">
                                 <div class="block-product-columns__item" >
@@ -85,7 +85,7 @@
                                                 <p>{{$charity->title}}</p>
                                             </div>
                                             <div class="product-card__rating">
-                                               {{ mb_substr(strip_tags($charity->description), 0, 50, 'UTF-8')}}...
+                                               {{ mb_substr(strip_tags($charity->description), 0, 40, 'UTF-8')}}...
                                             </div> 
                                         </div>
                                     </div>
@@ -105,14 +105,14 @@
         </div>
         <div class="nk-block-between-md g-3 card-inner float-right">
             <div class="pagination g" >
-                {!! $charity->links()!!}                                               
+                {!! $HomePageCharities->links()!!}                                               
             </div>    
         </div><!-- .nk-block-between -->     
     </div> 
 </div>
 @endsection
 @push('scripts')
-    <script>
+<script>
        
     $('.product-card__quickvieww').on('click', function() {
         var id = $(this).attr('data-id');
@@ -164,6 +164,6 @@
     });
            quickview.clickHandler.apply(this, arguments);  
        });
-    </script>
+</script>
 @endpush
 

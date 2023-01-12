@@ -155,7 +155,7 @@ class CharityController extends Controller
         ]);
 
         flash()->success('New Charity Type added');
-        return redirect()->route('admin.charities.charity_type_view');
+        return redirect()->route('admin.charities.index');
     }
    
     //  charity edit function

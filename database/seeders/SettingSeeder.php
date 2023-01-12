@@ -73,6 +73,7 @@ class SettingSeeder extends Seeder
             'Map Key' => 'AIzaSyAOxeH_CSvIYJQL8UCa9LnkUUi5AmVcI-c',
             'Awin Publisher ID' => '740509',
             'Awin Authorization Token' => '782f574c-8469-45ae-a37b-580d0c8c49c6',
+            'Payment Method Charity' => 1,
         );
 
         foreach ($settings as $key => $value) {
