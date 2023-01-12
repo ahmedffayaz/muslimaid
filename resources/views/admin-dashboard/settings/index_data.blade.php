@@ -39,9 +39,6 @@
             </div>
       
     </div>
-   
-  
-    
     <div class="nk-tb-col  text-center">
         <span>{{$setting->type?? ''}}</span>
     </div>

@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\UserVerify;
 use Illuminate\Support\Str;
 use App\Models\EmailTemplate;
+use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Request;
@@ -276,6 +277,19 @@ function SiteSetting()
 {
     return \App\Models\SiteSetting::latest()->get()->pluck('value', 'type');
 }
+
+function getRecaptchaSiteKey()
+{
+    $key = SiteSetting::where('title','Site Key')->pluck('value')->first();
+    return $key;
+}
+
+function getRecaptchaSecretKey()
+{
+    $key = SiteSetting::where('title','Secret')->pluck('value')->first();
+    return $key;
+}
+
 function currency()
 {
     $settings = SiteSetting();
@@ -310,7 +324,6 @@ function similarStores($store)
         ->get();
     return $similarStores;
 }
-
 
 function maintenance()
 {
