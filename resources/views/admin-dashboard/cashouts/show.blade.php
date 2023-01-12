@@ -219,6 +219,7 @@
                                                
                                                 {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
+                                           
                                             <form action="{{route('admin.cashouts.update',$cashout)}}" class="gy-3 form-validate is-alter" method="POST">
                                                 @csrf
                                                 @method('PUT')
@@ -229,8 +230,14 @@
                                                             <div class="form-control-wrap ">
                                                                 <div class="form-control-select">
                                                                     <select class="form-control" id="default-06" name="status" required>
-                                                                        <option @if($cashout->status == 'pending') selected @endif value="pending">Pending</option>
-                                                                        <option @if($cashout->status == 'paid') selected @endif value="paid">Paid</option>
+                                                                        @if(($cashout->payment_method == "paypal")||($cashout->payment_method == "bank"))
+                                                                            <option @if($cashout->status == 'pending') selected @endif value="pending">Pending</option>
+                                                                            <option @if($cashout->status == 'paid') selected @endif value="paid">Paid</option>
+                                                                        @elseif($cashout->payment_method == "charity")
+                                                                            <option @if($cashout->status == 'processing donation') selected @endif value="processing donation">Processing donation</option>
+                                                                            <option @if($cashout->status == 'donated') selected @endif value="donated">Donated</option>
+                                                                           
+                                                                        @endif
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -238,7 +245,7 @@
                                                     </div>
                                                    <div class="col-12">
                                                         <div class="form-group">
-                                                            <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                                                            <button type="submit" class="btn btn-lg btn-primary submit" form_id="{{$cashout->id}}">Save</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -263,5 +270,24 @@
 
 @endsection
 @push('scripts')
- 
+{{-- <script>
+    $(document).ready(function(){   
+       $(document).on('click', '.submit', function(event){
+            var form_id = $(this).attr('form_id');
+            console.log(form_id)
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, submit it!'
+            }).then(function (result) {
+                if (result.value) {
+                $('#'+form_id).submit();
+                }
+           });
+           event.preventDefault(); 
+        });
+   });
+</script> --}}
 @endpush

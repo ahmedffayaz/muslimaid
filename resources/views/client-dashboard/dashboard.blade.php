@@ -68,6 +68,12 @@
                                                         <span class="badge badge-danger">{{ $item->statusMap->status}}</span>
                                                     @elseif($item->statusMap->status == "pending")
                                                         <span class="badge badge-info">{{ $item->statusMap->status}}</span>
+                                                    @elseif($item->statusMap->status == "donated")
+                                                        <span class="badge badge-warning">{{ $item->statusMap->status}}</span>
+                                                    @elseif($item->statusMap->status == "processing donation")
+                                                        <span class="badge badge-success">{{ $item->statusMap->status}}</span>
+                                                    @elseif($item->statusMap->status == "processing")
+                                                        <span class="badge badge-info">{{ $item->statusMap->status}}</span>
                                                     @endif
                                                 </td>
                                             </tr>
