@@ -83,7 +83,7 @@ data-content="sidebarMenu">
                 @php
                 $new_cashouts = \App\Models\Cashout::where('new_cashout',1)->get();    
                 @endphp
-                    @canany(['view cashbacks','add cashbacks','view cashbouts'])
+                    @canany(['view cashbacks','add cashbacks','view cashouts'])
 
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">

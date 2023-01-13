@@ -230,12 +230,9 @@
                                                             <div class="form-control-wrap ">
                                                                 <div class="form-control-select">
                                                                     <select class="form-control" id="default-06" name="status" required>
-                                                                       
                                                                             <option @if($cashout->status == 'pending') selected @endif value="pending">Pending</option>
                                                                             <option @if($cashout->status == 'paid') selected @endif value="paid">Paid</option>
                                                                             <option @if($cashout->status == 'donated') selected @endif value="donated">Donated</option>
-                                                                           
-                            
                                                                     </select>
                                                                 </div>
                                                             </div>
