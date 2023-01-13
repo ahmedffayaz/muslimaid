@@ -40,7 +40,7 @@
                                         <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-map"></em><span>Map</span></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#tabItem10"><i><em class="icon ni ni-app"></em></i><span>ReCaptcha</span></a>
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem10"><i><em class="icon ni ni-app"></em></i><span>Recaptcha</span></a>
                                     </li>
                                     {{--<li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-code"></em><span>APIs Integration</span></a>
@@ -760,10 +760,6 @@
                                                             <input type="checkbox" class="custom-control-input" id="payment_method_bank" name="payment_method_bank" @if($settings['payment_method_bank']) checked @endif value="1">
                                                             <label class="custom-control-label" for="payment_method_bank">Bank Transfer</label>
                                                         </div>
-                                                        {{-- <div class="custom-control custom-switch d-block mt-2">
-                                                            <input type="checkbox" class="custom-control-input" id="payment_method_cheque" name="payment_method_cheque" @if($settings['payment_method_cheque']) checked @endif value="1">
-                                                            <label class="custom-control-label" for="payment_method_cheque">Cheque</label>
-                                                        </div> --}}
                                                         <div class="custom-control custom-switch d-block mt-2">
                                                             <input type="checkbox" class="custom-control-input" id="payment_method_charity" name="payment_method_charity" @if($settings['payment_method_charity']) checked @endif value="1">
                                                             <label class="custom-control-label" for="payment_method_charity">Charity</label>
