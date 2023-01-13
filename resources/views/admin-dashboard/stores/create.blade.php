@@ -9,15 +9,15 @@
                     <div class="nk-block nk-block-lg">
                         <div class="nk-block-head">
                             <div class="nk-block-head-content">
-@if ($errors->any())
-<div class="alert alert-danger">
-    <ul>
-        @foreach ($errors->all() as $error)
-        <li>{{ $error }}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
+                            @if ($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                            @endif
                                 <h4 class="title nk-block-title">Add Store</h4>
                                 <div class="nk-block-des">
                                     {{-- <p>You can make style out your....</p> --}}
@@ -29,7 +29,7 @@
                                 <div class="card-head">
                                     <h5 class="card-title">Store Info</h5>
                                 </div>
-                                <form action="{{route('admin.stores.store')}}" class="gy-3 form-validate is-alter" method="POST">
+                                <form action="{{route('admin.stores.store')}}" class="gy-3 form-validate store_form is-alter" method="POST">
                                     @csrf
                                     <div class="row g-4">
                                         <div class="col-lg-6">
@@ -78,12 +78,15 @@
                                         <div class="col-lg-12">
                                             <div class="card">
                                                 <input name="description" type="hidden">
-                                                <label class="form-label" for="phone-no-1">Description</label>
+                                                <label class="form-label" for="description">Description</label>
                                                 <!-- Create the editor container -->
-                                                <div  id="editor-container">
-                                                  
+                                                <div  id="editor-container">  
                                                 </div>
-                                               
+                                                @error('description')
+                                                <span class="invalid-feedback d-block" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                                @enderror
                                             </div>
                                         </div>
                                         
@@ -143,8 +146,8 @@
         theme: 'snow'
       });
       
-    //   var form = document.querySelector('form');
-      $("#store_form").submit(function(e) {
+      var form = document.querySelector('form');
+      $(".store_form").submit(function(e) {
           
         // Populate hidden form on submit
         var desc = document.querySelector('input[name=description]');
@@ -169,6 +172,7 @@
                         required: true,
                         url: true
                     }
+                   
                 },
                 submitHandler: function(form) {
                     if ($(form).valid())

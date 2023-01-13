@@ -760,10 +760,10 @@
                                                             <input type="checkbox" class="custom-control-input" id="payment_method_bank" name="payment_method_bank" @if($settings['payment_method_bank']) checked @endif value="1">
                                                             <label class="custom-control-label" for="payment_method_bank">Bank Transfer</label>
                                                         </div>
-                                                        <div class="custom-control custom-switch d-block mt-2">
+                                                        {{-- <div class="custom-control custom-switch d-block mt-2">
                                                             <input type="checkbox" class="custom-control-input" id="payment_method_cheque" name="payment_method_cheque" @if($settings['payment_method_cheque']) checked @endif value="1">
                                                             <label class="custom-control-label" for="payment_method_cheque">Cheque</label>
-                                                        </div>
+                                                        </div> --}}
                                                         <div class="custom-control custom-switch d-block mt-2">
                                                             <input type="checkbox" class="custom-control-input" id="payment_method_charity" name="payment_method_charity" @if($settings['payment_method_charity']) checked @endif value="1">
                                                             <label class="custom-control-label" for="payment_method_charity">Charity</label>

@@ -68,11 +68,9 @@ class StoreController extends Controller
      */
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'store_name' => 'required|max:255',
             'network_id' => 'required',
-            // 'category_id' => 'required',
             'tracking_url' => 'required|url',
             'store_url' => 'required|url',
         ]);
