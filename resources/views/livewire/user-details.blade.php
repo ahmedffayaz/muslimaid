@@ -196,9 +196,7 @@
                                                                         $method =  $user->paymentInfo->payment_method ?? '';
                                                                     @endphp
                                                                     <option value="paypal" @if($method ==  'paypal') selected @endif>Paypal</option>
-                                                                    <option value="bank" @if($method ==  'bank') selected @endif>Bank</option>
-                                                                    <option value="cheque" @if($method == 'cheque') selected @endif> Cheque</option>
-                                                                        
+                                                                    <option value="bank" @if($method ==  'bank') selected @endif>Bank</option>   
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -209,48 +207,6 @@
                                                         <label class="form-label" for="paypal_email">Paypal Email</label>
                                                         <div class="form-control-wrap">
                                                             <input type="text" class="form-control" id="paypal_email" name="paypal_email" required value="{{$user->paymentInfo->paypal_email ?? ''}}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="row g4 cheque">
-                                                <div class="col-lg-6">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="first_name">First name</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="text" class="form-control" id="first_name" name="first_name" required value="{{$user->paymentInfo->first_name ?? ''}}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="last_name">Last name</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="text" class="form-control" id="last_name" name="last_name" required value="{{$user->paymentInfo->last_name ?? ''}}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="address">Address</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="text" class="form-control" id="address" name="address" required value="{{$user->paymentInfo->address ?? ''}}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="city">City</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="text" class="form-control" id="city" name="city" required value="{{$user->paymentInfo->city ?? ''}}">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-6">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="postcode">Postcode</label>
-                                                        <div class="form-control-wrap">
-                                                            <input type="text" class="form-control" id="postcode" name="postcode" required value="{{$user->paymentInfo->postcode ?? ''}}">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -549,7 +505,6 @@
 </script> 
 
 <script>
-        $('.cheque').hide();
         $('.bank').hide();
 
     function show_paypal(){
@@ -580,60 +535,29 @@
         $('#bic').removeAttr('required').val('');
     }
 
-    function hide_cheque(){
-        $('.cheque').hide();     
-        $('#first_name').removeAttr('required').val('');
-        $('#last_name').removeAttr('required').val('');
-        $('#address').removeAttr('required').val('');
-        $('#city').removeAttr('required').val('');
-        $('#postcode').removeAttr('required').val('');
-    }
-
-    function show_cheque(){
-        $('.cheque').show();
-        $('#first_name').attr('required', 'required');
-        $('#last_name').attr('required', 'required');
-        $('#address').attr('required', 'required');
-        $('#city').attr('required', 'required');
-        $('#postcode').attr('required', 'required');
-    }
 
 
     $(document).ready(function() {
         if ($('#payment_method').val() == 'bank') {
-            hide_cheque();
             hide_paypal();
             show_bank();
         }
         else if ($('#payment_method').val() == 'paypal') {
             show_paypal();
-            hide_cheque();
             hide_bank();
-        }
-        else if ($('#payment_method').val() == 'cheque') {
-            show_cheque();
-            hide_bank();
-            hide_paypal();
         }
 
     });
     
     $(document.body).on("change","#payment_method",function(){
         if (this.value == 'bank') {
-            hide_cheque();
             hide_paypal();
             show_bank();
 
         }
         else if (this.value == 'paypal') {
             show_paypal();
-            hide_cheque();
             hide_bank();
-        }
-        else if (this.value == 'cheque') {
-            show_cheque();
-            hide_bank();
-            hide_paypal();
         }
     });
 
