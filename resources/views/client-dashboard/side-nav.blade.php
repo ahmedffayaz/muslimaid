@@ -17,7 +17,7 @@
             <a href="{{route('account.withdraw.index')}}">Withdraw</a>
         </li>
         <li class="account-nav__item {{ (request()->is('account/payment-details')) ? 'account-nav__item--active ' : '' }}">
-            <a href="{{route('account.payment_details')}}">Payment Method</a>
+            <a href="{{route('account.payment_details')}}">Payment Methods</a>
         </li>
         <li class="account-nav__item {{ (request()->is('account/statement')) ? 'account-nav__item--active ' : '' }}">
             <a href="{{route('account.statement')}}">Statement</a>

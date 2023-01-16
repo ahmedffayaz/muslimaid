@@ -22,7 +22,7 @@
                                 <div class="card-head">
                                     <h5 class="card-title">Category Info</h5>
                                 </div>
-                                <form action="{{route('admin.categories.store')}}" class="gy-3 form-validate is-alter" method="POST" enctype="multipart/form-data">
+                                <form action="{{route('admin.categories.store')}}" class="gy-3 form-validate is-alter user-form" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="row g-4">
                                         <div class="col-lg-6">

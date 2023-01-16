@@ -82,15 +82,24 @@
                                                             @if ($item->statusMap->status == 'confirmed')
                                                                 <span
                                                                     class="badge badge-success">{{ $item->statusMap->status }}</span>
-                                                            @elseif($item->statusMap->status == 'paid')
+                                                             @elseif($item->statusMap->status == 'paid')
                                                                 <span
                                                                     class="badge badge-success">{{ $item->statusMap->status }}</span>
-                                                            @elseif($item->statusMap->status == 'failed')
+                                                             @elseif($item->statusMap->status == 'failed')
                                                                 <span
                                                                     class="badge badge-danger">{{ $item->statusMap->status }}</span>
-                                                            @elseif($item->statusMap->status == 'pending')
+                                                             @elseif($item->statusMap->status == 'pending')
                                                                 <span
+                                                                    class="badge badge-danger">{{ $item->statusMap->status }}</span>
+                                                            @elseif($item->statusMap->status == 'donated')
+                                                                    <span
                                                                     class="badge badge-info">{{ $item->statusMap->status }}</span>
+                                                            @elseif($item->statusMap->status == 'processing donation')
+                                                                    <span
+                                                                    class="badge badge-warning">{{ $item->statusMap->status }}</span>
+                                                            @elseif($item->statusMap->status == 'processing')
+                                                                <span
+                                                                    class="badge badge-danger">{{ $item->statusMap->status }}</span>
                                                             @endif
                                                         </td>
                                                     </tr>

@@ -52,7 +52,6 @@ class SettingSeeder extends Seeder
             'Dashboard Menu Type' => 'top',
             'Payment Method Paypal' => 1,
             'Payment Method Bank' => 1,
-            'Payment Method Cheque' => 1,
             'Min Cashout Amount' => 1,
             'Welcome Bonus' => 2,
             'Facebook client id' => '3200039003655128',

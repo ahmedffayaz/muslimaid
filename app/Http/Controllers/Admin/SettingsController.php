@@ -187,13 +187,6 @@ class SettingsController extends Controller
                 'value'     =>  $request->has('payment_method_bank') ? 1 : 0
             ]);
             $settings = SiteSetting::updateOrCreate([
-                'type'   => 'payment_method_cheque',
-                'title'  => 'Payment Method Cheque',
-                
-            ],[
-                'value'     =>  $request->has('payment_method_cheque') ? 1 : 0
-            ]);
-            $settings = SiteSetting::updateOrCreate([
                 'type'   => 'payment_method_charity',
                 'title'  => 'Payment Method Charity',
                 
