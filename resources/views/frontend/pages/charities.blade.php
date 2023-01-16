@@ -65,7 +65,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="block-header">
-                    <h3 class="block-header__title">Top Charities</h3>
+                    <h3 class="block-header__title">Charities We Support</h3>
                     <div class="block-header__divider"></div>
                 </div>
                 <div class="row">
