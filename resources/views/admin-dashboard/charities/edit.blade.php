@@ -57,7 +57,6 @@
                                                 <input name="description" type="hidden">
                                             </div>
                                         </div>
-                                       
                                         <div class="col-lg-6">
                                             <div class="form-group">
                                                 <label class="form-label" for="logo_type">Logo</label>
@@ -152,6 +151,7 @@
                                                 <button type="submit" class="btn btn-lg btn-primary">Save</button>
                                             </div>
                                         </div>
+                                    </div>
                                 </form>
                             </div>
                         </div>

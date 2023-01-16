@@ -175,11 +175,11 @@ class CharityController extends Controller
             return redirect()->route('admin.charities.charity_type_view');
         }
     //  charity destroy function
-    public function charityTypeDestroy(CharityType $charityType)
+    public function charityTypeDestroy($id)
     {
-        $charityType->delete();
+        CharityType::where('id',$id)->delete();
         flash()->success('Charity Type deleted');
-        return view('admin-dashboard.charities.charity_type_view');
+        return redirect()->back();
     }
     /**
      * Display the specified resource.
