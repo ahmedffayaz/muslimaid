@@ -96,11 +96,6 @@ class PaymentController extends Controller
     {
         //
     }
-    public function statement(){
-        $user =Auth::user();
-        $cashouts = $user->cashouts();
-        return view('client-dashboard.statement',compact('cashouts'));
-    }
     public function paymentDetails(){
         return view('client-dashboard.payment_details');
     }
