@@ -10,7 +10,7 @@
                        
                         <div class="col-12">
                             <h4 class="contact-us__header card-title">Submit a claim</h4>
-                            <form action="{{route('account.claim.update', $claim)}}" method="POST">
+                            <form action="{{route('account.tickets.update', $claim)}}" method="POST">
                                 @csrf
                                 @method('PUT')
                                 <div class="form-row">

@@ -2,17 +2,16 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Models\Ticket;
 use App\Models\ExitClick;
 use App\Models\UserCashback;
-use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
-
-class ClaimController extends Controller
+class TicketController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,7 +20,7 @@ class ClaimController extends Controller
      */
     public function index()
     {
-        return view('client-dashboard.claim.index');
+        return view('client-dashboard.tickets.index');
        
     }
 
@@ -34,7 +33,7 @@ class ClaimController extends Controller
     {
         $user = Auth::user();
         $clicks = $user->clicks;
-        return view('client-dashboard.claim.create', compact('clicks'));
+        return view('client-dashboard.tickets.create', compact('clicks'));
     }
 
     /**
@@ -45,7 +44,7 @@ class ClaimController extends Controller
      */
     public function store(Request $request)
     {
-
+        //
     }
 
     /**
@@ -56,8 +55,8 @@ class ClaimController extends Controller
      */
     public function show($id)
     {
-        $claim = Ticket::where('ticket_id',$id)->firstOrFail();
-        return view('client-dashboard.claim.show',compact('claim'));
+        $ticket = Ticket::where('ticket_id',$id)->firstOrFail();
+        return view('client-dashboard.tickets.show',compact('ticket'));
     }
 
     /**
@@ -78,15 +77,14 @@ class ClaimController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Ticket $claim)
+    public function update(Request $request, Ticket $ticket)
     {
-        $claim->update([
+        $ticket->update([
             'claim_amount' => $request->input('amount')
             ]);
-         $this->sendEmailNotification($claim);
+         $this->sendEmailNotification($ticket);
         flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
-        return redirect()->route('account.claim.index');
-
+        return redirect()->route('account.tickets.index');
     }
 
     /**
@@ -99,7 +97,6 @@ class ClaimController extends Controller
     {
         //
     }
-
     public function step2(Request $request)
     {
         $store_id = $request->input('store_id');
@@ -107,7 +104,7 @@ class ClaimController extends Controller
         $user = Auth::user();
         $clicks = $user->clicks->where('store_id', $store_id);       
         if($claim  =='missing cashback'){
-            return view('client-dashboard.claim.claim_step2',compact('store_id','claim','clicks'));
+            return view('client-dashboard.tickets.ticket_step2',compact('store_id','claim','clicks'));
         }
         if($claim == 'declined cashback'){
             $cashback =  UserCashback::where([
@@ -116,7 +113,7 @@ class ClaimController extends Controller
             ])->where('status',2)->get();
 
             if(count($cashback)){
-                return view('client-dashboard.claim.claim_step2',compact('store_id','claim','clicks','cashback'));
+                return view('client-dashboard.tickets.ticket_step2',compact('store_id','claim','clicks','cashback'));
 
             }else{
                 flash()->error('We have no record of a declined transaction with this retailer.');
@@ -133,7 +130,7 @@ class ClaimController extends Controller
             ])->whereIn('status',[1,4,3])->get();
 
             if(count($cashback)){
-                return view('client-dashboard.claim.claim_step2',compact('store_id','claim','clicks','cashback'));
+                return view('client-dashboard.tickets.ticket_step2',compact('store_id','claim','clicks','cashback'));
 
             }else{
                 flash()->error('We have no record of a pending, confirmed or paid transaction with this retailer.');
@@ -170,12 +167,12 @@ class ClaimController extends Controller
         $claim->save();
         if($claim_type=='incorrect amount' || $claim_type == 'declined cashback'){
             flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
-            return redirect()->route('account.claim.index');
+            return redirect()->route('account.tickets.index');
             $this->sendEmailNotification($claim);
 
         }
 
-        return view('client-dashboard.claim.claim_step3',compact('claim'));
+        return view('client-dashboard.tickets.ticket_step3',compact('claim'));
 
     }
 
@@ -216,7 +213,5 @@ class ClaimController extends Controller
         });
 
     }
-
-    
 
 }

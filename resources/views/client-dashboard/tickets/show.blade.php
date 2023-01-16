@@ -12,7 +12,7 @@
                     <div class="card-header">
                         <h5 class="d-inline-block">Claim</h5>
                         
-                        <a href="{{route('account.claim.create')}}" class="float-right font-14">Raise a Claim</a>
+                        <a href="{{route('account.tickets.create')}}" class="float-right font-14">Raise a Claim</a>
                         
                     </div>
                 </div> --}}
@@ -20,7 +20,7 @@
                 
                 <div class="card mb-4">
                     <div class="order-header">
-                        <h5 class="order-header__title">Claim {{$claim->ticket_id}}</h5>
+                        <h5 class="order-header__title">Claim {{$ticket->ticket_id}}</h5>
                         <div class="order-header__subtitle">We've received your claim. Please allow up to six months to get a decision from the retailer. 
 
                         </div>
@@ -37,30 +37,30 @@
                                 </thead>
                                 <tbody class="card-table__body card-table__body--merge-rows">
                                     <tr>
-                                        <td>Retailer: {{$claim->store->name}}</td>
-                                        <td>@if($claim->status =='open')
+                                        <td>Retailer: {{$ticket->store->name}}</td>
+                                        <td>@if($ticket->status =='open')
                                             <span class="badge badge-primary">Open</span>
-                                        @elseif($claim->status=='pending')
-                                            @if($claim->lastReply->user_id ==Auth::user()->id) <span class="badge badge-info">Replied </span>
+                                        @elseif($ticket->status=='pending')
+                                            @if($ticket->lastReply->user_id ==Auth::user()->id) <span class="badge badge-info">Replied </span>
                                             @else <span class="badge badge-warning">Awaiting your reply </span>@endif
                                 
-                                        @elseif($claim->status=='closed')
+                                        @elseif($ticket->status=='closed')
                                             <span class="badge badge-success">Closed</span>
                                 
                                         @endif
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>Claim date: {{Carbon\Carbon::parse($claim->promotion_end_date)->isoFormat('Do MMMM YYYY')}}</td>
+                                        <td>Claim date: {{Carbon\Carbon::parse($ticket->promotion_end_date)->isoFormat('Do MMMM YYYY')}}</td>
                                         <td></td>
                                        
                                     </tr>
                                     <tr>
-                                        <td>Purchase amount: {{ currency() }}{{$claim->claim_amount}}</td>
+                                        <td>Purchase amount: {{ currency() }}{{$ticket->claim_amount}}</td>
                                         <td></td>
                                     </tr>
                                     <tr>
-                                        <td>Visit date: {{Carbon\Carbon::parse($claim->promotion_end_date)->isoFormat('Do MMMM YYYY')}}</td>
+                                        <td>Visit date: {{Carbon\Carbon::parse($ticket->promotion_end_date)->isoFormat('Do MMMM YYYY')}}</td>
                                         <td></td>
                                     </tr>
                                 </tbody>
@@ -70,14 +70,14 @@
                     </div>
                     
                 </div>
-                @if(count($claim->replies))
+                @if(count($ticket->replies))
                 <div class="card mb-4">
                     <div class="order-header">
                         <h5 class="order-header__title">Replies</h5>
                     </div>
                     <div class="card-body pt-0">
                         
-                        @foreach($claim->replies as $reply)
+                        @foreach($ticket->replies as $reply)
                             <div class="nk-reply-item">
                                 <div class="nk-reply-header">
                                     <div class="user-card">
@@ -98,7 +98,7 @@
                     </div>
                 </div>
                 @endif
-                @if($claim->status!='closed')
+                @if($ticket->status!='closed')
                 <div class="card">
                     <div class="order-header">
                         <h5 class="order-header__title">Reply</h5>
@@ -107,7 +107,7 @@
                     <div class="card-body pt-0">
                         <form method="POST" action="{{route('admin.replies.store')}}">
                             @csrf
-                            <input type="hidden" name="ticket_id" value="{{$claim->id}}">
+                            <input type="hidden" name="ticket_id" value="{{$ticket->id}}">
                             <div class="form-group">
                             
                                 <textarea id="form-message" class="form-control" name="reply" placeholder="Hello" rows="4" spellcheck="false"></textarea>

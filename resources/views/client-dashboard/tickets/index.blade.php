@@ -12,8 +12,8 @@
                 <div class="card">
                    
                     <div class="card-header">
-                        <h5  class="d-inline-block">Claims</h5>
-                        <a href="{{route('account.claim.create')}}" class="float-right font-14">Raise a claim</a>
+                        <h5  class="d-inline-block">Tickets</h5>
+                        <a href="{{route('account.tickets.create')}}" class="float-right font-14">Raise a ticket</a>
                     </div>
                     <div class="card-divider"></div>
                    
@@ -22,10 +22,10 @@
                             <table>
                                 <thead>
                                     <tr>
-                                        <th>Claim ID</th>
+                                        <th>Ticket ID</th>
                                         <th>Store</th>
                                         <th>Order Amount</th>
-                                        <th>Claim Type</th>
+                                        <th>Ticket Type</th>
                                         <th>Date</th>
                                         <th>Status</th>
                                        
@@ -34,7 +34,7 @@
                                 <tbody>
                                     @foreach (Auth::user()->claims as $claim )
                                     <tr>
-                                        <td><a href="{{route('account.claim.show',$claim->ticket_id)}}">{{$claim->ticket_id}}</a></td>
+                                        <td><a href="{{route('account.tickets.show',$claim->ticket_id)}}">{{$claim->ticket_id}}</a></td>
                                         <td>{{$claim->store->name}}</td>
                                         <td>{{ currency() }}{{number_format((float)$claim->claim_amount, 2, '.', '')}}</td>
                                         <td class="text-capitalize">{{$claim->claim_type}}</td>
@@ -65,7 +65,7 @@
                   
                     
                     <div>
-                        <a href="{{route('account.claim.create')}}" class="btn btn-primary mt-4">Raise a claim</a>
+                        <a href="{{route('account.tickets.create')}}" class="btn btn-primary mt-4">Raise a claim</a>
                     </div>
                 </div>
                 @endif
