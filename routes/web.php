@@ -175,6 +175,8 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('admin_charities_store', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeStore'])->name('admin-charities-store');
         Route::put('charity_type_update/{id}', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeUpdate'])->name('charitiestype-update');
         Route::post('charities/search',  [App\Http\Controllers\Admin\CharityController::class, 'searchCharities'])->name('charities.search');
+        
+        Route::get('charity_type_delete/{id}', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeDestroy'])->name('charity_type_delete');
 
         // Menus
         Route::get('manage-menus/{id?}', [App\Http\Controllers\Admin\MenuController::class, 'index']);
