@@ -35,7 +35,6 @@ class VerifyController extends Controller
 
                 if (!empty($verifyUser->user->referred_by)) {
                     $this->referralBonus($verifyUser->user->referred_by, $bonusStatus);
-                    // SocialController::ReferralBonus($verifyUser);
                 }
 
                 session()->flash('message', 'Your e-mail is verified. You can now login.');

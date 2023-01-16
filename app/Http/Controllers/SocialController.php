@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Socialite;
+use Carbon\Carbon;
 use App\Models\User;
+use App\Traits\UserBonus;
 use App\Models\EmailTemplate;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -12,6 +14,8 @@ use Illuminate\Support\Facades\Session;
 
 class SocialController extends Controller
 {
+    use UserBonus;
+
     public function redirect($provider)
     {
         return Socialite::driver($provider)->redirect();
@@ -19,6 +23,7 @@ class SocialController extends Controller
 
     public function Callback($provider)
     {
+        $today = Carbon::today()->toDateString();
         $userSocial =   Socialite::driver($provider)->stateless()->user();
         $users       =   User::where(['email' => $userSocial->getEmail()])->first();
         if ($users) {
@@ -49,9 +54,18 @@ class SocialController extends Controller
                 'image'             => $userSocial->getAvatar(),
                 'provider_id'       => $userSocial->getId(),
                 'provider'          => $provider,
+                'referred_by'       => Session::has('refCode') ? base64_decode(Session::get('refCode')) : null,
+                'referred_at'       => Session::has('refCode') ? $today : '',
+                'is_email_verified' => 1
             ]);
 
             $user->assignRole('user');
+
+            $bonusStatus = 3;
+            $this->welcomBonus($user, $bonusStatus);
+            if (!empty($user->provider) && !empty($user->referred_by)) {
+                $this->referralBonus($user->referred_by, $bonusStatus);
+            }
 
             $email_template = EmailTemplate::where('key', 'user_welcome')->first();
 
@@ -69,6 +83,7 @@ class SocialController extends Controller
                     ->subject($email_data['subject']);
             });
             Auth::login($user);
+            Session::forget('refCode');
             Session::flash('welcome', 'welcome message');
             if (Session::has('prvUrl')) {
                 return redirect(session('prvUrl'));
