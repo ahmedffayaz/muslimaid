@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
-use Session;
-use Auth;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 class LoginController extends Controller
 {
@@ -41,21 +40,29 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    // protected function authenticated($request, $user){
-    //     if($user->hasRole('admin')){
-    //         return redirect('/admin/home');
-    //     } else {
-    //         return redirect('/');
-    //     }
-    // }
-
+    /**
+     * The user has been authenticated.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        if ($user->provider != 'email'){
+            auth()->logout();
+            Session::flash('message', 'Please login with social media instead of.');
+            Session::flash('alert-class', 'alert-danger');
+            return redirect()->route('login');
+        }
+    }
 
     protected function redirectTo()
     {
         if (Session::has('prvUrl')){
             return session('prvUrl');
           }else{
-            
+
             if (!Auth::user()->is_email_verified) {
               auth()->logout();
               Session::flash('email-not-verified');

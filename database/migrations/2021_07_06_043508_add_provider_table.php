@@ -14,7 +14,7 @@ class AddProviderTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('provider')->nullable();
+            $table->enum('provider', ['email', 'google', 'facebook']);
             $table->string('provider_id')->nullable();
         });
     }
