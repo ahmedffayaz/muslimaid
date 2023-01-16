@@ -3,15 +3,12 @@
 namespace App\Http\Controllers;
 
 use Socialite;
-use Auth;
-use Hash;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-use Illuminate\Support\Facades\Mail;
 use App\Models\EmailTemplate;
-use Session;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 class SocialController extends Controller
 {

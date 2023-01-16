@@ -69,7 +69,7 @@
                                                                 <a href="{{ route('store.show', $item->store->slug) }}"
                                                                     target="_blank">{{ $item->store->name }}</a>
                                                             @else
-                                                                System Bonus
+                                                                {{ ucfirst(str_replace('_', ' ', $item->type)) }}
                                                             @endif
                                                         </td>
                                                         <td>{{ currency() }}{{ number_format((float) $item->order_value, 2, '.', '') }}

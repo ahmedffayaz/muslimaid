@@ -3,24 +3,19 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Mail;
 use App\Models\EmailTemplate;
 use Carbon\Carbon;
 use App\Models\Bonus;
-use App\Models\UserCashback;
+use App\Traits\UserBonus;
 use Session;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Str;
-use App\Jobs\SendEmailJob;
 
 class RegisterController extends Controller
 {
@@ -36,6 +31,7 @@ class RegisterController extends Controller
     */
 
     use RegistersUsers;
+    use UserBonus;
 
     /**
      * Where to redirect users after registration.
@@ -93,14 +89,17 @@ class RegisterController extends Controller
             'referred_by'=>empty($data['referral_code']) ? '' : base64_decode($data['referral_code']),
             'referred_at'=>empty($data['referral_code']) ? '' : $today,
         ]);
-        // $role = Role::create(['name' => 'user']);
 
         $user->assignRole('user');
 
-        $email_template = EmailTemplate::where('key','user_welcome')->first(); 
+        $bonusStatus = 1;
+
+        $this->welcomBonus($user, $bonusStatus);
+
+        $email_template = EmailTemplate::where('key','user_welcome')->first();
 
         $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}'],[SiteSetting()['website_title'], url('/') ,$user->first_name,$user->email],$email_template->message );
-        
+
         $email_data = array(
             'name' =>  $data['firstname'],
             'email' => $data['email'],
@@ -108,37 +107,17 @@ class RegisterController extends Controller
             'subject'=>$email_template->subject
         );
 
-        $bonus = array_key_exists('welcome_bonus',SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
-      
-
-        $user_bonus = Bonus::create([
-            'user_id'=>$user->id,
-            'amount'=>$bonus,
-         ]);
-     
-        // if(!empty($data['referral_code']))
-        // {
-        //     $referralBonus = array_key_exists('referral_bonus',SiteSetting()->toArray()) ? SiteSetting()['referral_bonus'] : 0;
-        //     $id =  base64_decode($data['referral_code']);
-        //     $referral_bonus = UserCashback::create([
-        //         'user_id'=>$id,
-        //         'amount'=>$referralBonus,
-        //         'status'=>'3',
-        //     ]);
-        // }
-        
-        
         Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
             $message->to($email_data['email'], $email_data['name'])
                 ->subject($email_data['subject']);
         });
-        
+
         //send email to user to verify email address
          dispatch(new \App\Jobs\SendEmailJob($user));
         // return $user;
         return redirect()->route('login');
 
-       
+
     }
 
     /**
@@ -167,8 +146,8 @@ class RegisterController extends Controller
 
     protected function redirectTo()
     {
-      
-        Session::flash('welcome','welcome message'); 
+
+        Session::flash('welcome','welcome message');
         if (Session::has('prvUrl')){
             return session('prvUrl');
         }else{
@@ -176,5 +155,5 @@ class RegisterController extends Controller
         }
     }
 
-    
+
 }
