@@ -63,7 +63,12 @@ class LoginController extends Controller
             'password' => 'required|string',
             'g-recaptcha-response' => 'required|captcha',
         ]);
-    }
+       
+         
+        
+        }
+       
+    
         protected function redirectTo(){
         if (Session::has('prvUrl')){
             return session('prvUrl');
