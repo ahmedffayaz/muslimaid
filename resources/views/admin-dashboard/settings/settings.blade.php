@@ -40,7 +40,7 @@
                                         <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-map"></em><span>Map</span></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#tabItem10"><i><em class="icon ni ni-app"></em></i><span>Recaptcha</span></a>
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem10"><em class="icon ni ni-shield-check"></em><span>Recaptcha</span></a>
                                     </li>
                                     {{--<li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-code"></em><span>APIs Integration</span></a>

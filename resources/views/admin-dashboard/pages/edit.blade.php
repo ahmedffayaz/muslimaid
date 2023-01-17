@@ -38,11 +38,17 @@
                                                 <label class="form-label" for="default-06">Status</label>
                                                 <div class="form-control-wrap ">
                                                     <div class="">
-                                                        <select class="form-control form-select" name="status" required>
+                                                      @if($page->default) 
+                                                      <select class="form-control form-select disabled " name="status" required>
+                                                        <option @if($page->status == 1) selected  @endif value="1">Active</option>
+                                                    </select>
+                                                   @else
+                                                     <select class="form-control form-select" name="status" required>
                                                             <option @if($page->status == 1) selected @endif value="1">Active</option>
                                                             <option @if($page->status == 0) selected @endif value="0">In-active</option>
 
                                                         </select>
+                                                    @endif
                                                     </div>
                                                 </div>
                                             </div>
@@ -94,6 +100,7 @@
                                             </div>
                                         </div>
                                     </div>
+                                  </div>
                                 </form>
                             </div>
                         </div>

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddProviderTable extends Migration
+class AddTypeToUserCashbacksTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class AddProviderTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->enum('provider', ['email', 'google', 'facebook']);
-            $table->string('provider_id')->nullable();
+        Schema::table('user_cashbacks', function (Blueprint $table) {
+            $table->enum('type', ['cashback', 'welcome_bonus', 'referral_bonus'])->default('cashback')->after('status');
         });
     }
 
@@ -26,9 +25,8 @@ class AddProviderTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('provider');
-            $table->dropColumn('provider_id');
+        Schema::table('user_cashbacks', function (Blueprint $table) {
+            $table->dropColumn('type');
         });
     }
 }

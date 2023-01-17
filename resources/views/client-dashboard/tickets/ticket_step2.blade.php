@@ -11,7 +11,7 @@
                         <div class="col-12">
                             <h4 class="contact-us__header card-title">Submit a claim</h4>
                             @if($claim=='missing cashback')
-                            <form action="{{route('account.claim.step3')}}" method="POST">
+                            <form action="{{route('account.tickets.step3')}}" method="POST">
                                 @csrf
                                 <input type="hidden" name="claim_type" value="{{$claim}}">
                                 <div class="form-row">
@@ -46,7 +46,7 @@
                                 <button type="submit" class="btn btn-primary">Next</button>
                             </form>
                         @elseif($claim == 'incorrect amount' || $claim == 'declined cashback')
-                        <form action="{{route('account.claim.step3')}}" method="POST">
+                        <form action="{{route('account.tickets.step3')}}" method="POST">
                             @csrf
                             <input type="hidden" name="claim_type" value="{{$claim}}">
                             <div class="form-row">

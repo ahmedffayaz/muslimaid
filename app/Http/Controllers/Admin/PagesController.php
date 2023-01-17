@@ -15,6 +15,7 @@ class PagesController extends Controller
      */
     public function index()
     {
+       
         $route='index';
         $pages = Page::latest()->paginate(20);
         return view('admin-dashboard.pages.index',compact('pages','route'));
@@ -38,6 +39,7 @@ class PagesController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $page = new Page;
         $page->title = $request->title;
         $page->slug = Str::slug($request->title);
@@ -85,6 +87,7 @@ class PagesController extends Controller
      */
     public function update(Request $request, Page $page)
     {
+        
         $page->title = $request->title;
         $page->excerpt = $request->excerpt;
         $page->lb_content = $request->content;

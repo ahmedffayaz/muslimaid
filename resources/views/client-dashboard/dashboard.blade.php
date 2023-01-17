@@ -68,9 +68,9 @@
                                                             @if ($item->store_id)
                                                                 <a href="{{ route('store.show', $item->store->slug) }}"
                                                                     target="_blank">{{ $item->store->name }}</a>
-                                                             @else
-                                                                System Bonus
-                                                             @endif
+                                                            @else
+                                                                {{ ucfirst(str_replace('_', ' ', $item->type)) }}
+                                                            @endif
                                                         </td>
                                                         <td>{{ currency() }}{{ number_format((float) $item->order_value, 2, '.', '') }}
                                                         </td>
@@ -96,10 +96,10 @@
                                                                     class="badge badge-info">{{ $item->statusMap->status }}</span>
                                                             @elseif($item->statusMap->status == 'processing donation')
                                                                     <span
-                                                                    class="badge badge-warning">{{ $item->statusMap->status }}</span>  
+                                                                    class="badge badge-warning">{{ $item->statusMap->status }}</span>
                                                             @elseif($item->statusMap->status == 'processing')
                                                                 <span
-                                                                    class="badge badge-danger">{{ $item->statusMap->status }}</span>        
+                                                                    class="badge badge-danger">{{ $item->statusMap->status }}</span>
                                                             @endif
                                                         </td>
                                                     </tr>
