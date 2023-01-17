@@ -270,6 +270,7 @@ Route::namespace('App\Http\Controllers\Client')
         Route::get('change_password', [App\Http\Controllers\Client\DashboardController::class, 'changePassword'])->name('change_password');
         Route::post('users/passwordsave/', [App\Http\Controllers\Client\DashboardController::class, 'savePassword'])->name('save_password');
         Route::resource('withdraw', PaymentController::class);
+        Route::get('payment-details', [App\Http\Controllers\Client\PaymentController::class, 'paymentDetails'])->name('payment_details');
         Route::get('statement', [App\Http\Controllers\Client\PaymentController::class, 'statement'])->name('statement');
         Route::get('payment-methods', [App\Http\Controllers\Client\PaymentController::class, 'paymentDetails'])->name('payment_details');
         Route::post('payment-save', [App\Http\Controllers\Client\PaymentController::class, 'paymentSave'])->name('payment_save');

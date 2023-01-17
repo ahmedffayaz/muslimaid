@@ -19,6 +19,8 @@
         <li class="account-nav__item {{ (request()->is('account/payment-methods')) ? 'account-nav__item--active ' : '' }}">
             <a href="{{route('account.payment_details')}}">Payment Methods</a>
         </li>
+        <li class="account-nav__item {{ (request()->is('account/claim')) ? 'account-nav__item--active ' : '' }}">
+            <a href="{{route('account.claim.index')}}">Claims</a>
         <li class="account-nav__item {{ (request()->is('account/statement')) ? 'account-nav__item--active ' : '' }}">
             <a href="{{route('account.statement')}}">Statement</a>
         </li>
