@@ -40,7 +40,7 @@
                                         {!! app('captcha')->display() !!}
                                          @if ($errors->has('g-recaptcha-response'))
                                             <span class="invalid-feedback d-block"  role="alert">
-                                                <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                                {{ $errors->first('g-recaptcha-response') }}
                                             </span>
                                         @endif
                                     </div>

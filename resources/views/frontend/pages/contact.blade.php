@@ -78,8 +78,8 @@
                     <div class="col-md-6">
                         {!! app('captcha')->display() !!}
                          @if ($errors->has('g-recaptcha-response'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                            <span class="invalid-feedback d-block" role="alert">
+                                {{ $errors->first('g-recaptcha-response') }}
                             </span>
                         @endif
                     </div>
