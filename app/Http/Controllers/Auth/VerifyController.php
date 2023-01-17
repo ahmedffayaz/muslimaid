@@ -19,9 +19,6 @@ class VerifyController extends Controller
     {
         $verifyUser = UserVerify::where('token', $token)->first();
 
-        session()->flash('message', 'Sorry your email cannot be identified.');
-        session()->flash('alert-class', 'alert-danger');
-
         if (!is_null($verifyUser)) {
             $user = $verifyUser->user;
 
@@ -37,12 +34,12 @@ class VerifyController extends Controller
                     $this->referralBonus($verifyUser->user->referred_by, $bonusStatus);
                 }
 
-                session()->flash('message', 'Your e-mail is verified. You can now login.');
-                session()->flash('alert-class', 'alert-success');
+                session()->flash('success', 'Your e-mail is verified. You can now login.');
             } else {
-                session()->flash('message', 'Your e-mail is already verified. You can now login.');
-                session()->flash('alert-class', 'alert-success');
+                session()->flash('success', 'Your e-mail is already verified. You can now login.');
             }
+        } else {
+            session()->flash('error', 'Sorry your email cannot be identified.');
         }
 
         return redirect()->route('login');

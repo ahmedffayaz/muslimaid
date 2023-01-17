@@ -25,12 +25,13 @@ class SocialController extends Controller
     {
         $today = Carbon::today()->toDateString();
         $userSocial =   Socialite::driver($provider)->stateless()->user();
-        $users       =   User::where(['email' => $userSocial->getEmail()])->first();
+        $users      =   User::where(['email' => $userSocial->getEmail()])->first();
         if ($users) {
             Auth::login($users);
             if (Session::has('prvUrl')) {
                 return redirect(session('prvUrl'));
             } else {
+                Session::flash('login-welcome');
                 return redirect('/');
             }
         } else {

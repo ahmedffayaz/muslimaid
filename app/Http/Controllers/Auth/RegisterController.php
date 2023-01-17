@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Auth;
 
 use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Bonus;
 use App\Traits\UserBonus;
 use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
@@ -130,8 +129,6 @@ class RegisterController extends Controller
         $this->validator($request->all())->validate();
 
         event(new Registered($user = $this->create($request->all())));
-
-        //$this->guard()->login($user);
 
         if ($response = $this->registered($request, $user)) {
             return $response;
