@@ -11,39 +11,26 @@
         font-weight: bold;
     }
 </style>
-<div class="page-header">
-    <div class="page-header__container container">
-        <div class="page-header__breadcrumb">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="{{url('/')}}">Home</a>
-                        <svg class="breadcrumb-arrow" width="6px" height="9px">              
-                            <use xlink:href="{{asset('frontend/images/sprite.svg')}}#arrow-rounded-right-6x9"></use>
-                        </svg>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">Charities</li>
-                </ol>
-            </nav>
-        </div>
-        <div class="container p-2 my-2">
-            <div class="row">
-                <div class="col-12">
-                    <div class="block-finder__body">
-                            <img class="banner__size" style="width:1110px;" src="{{url('storage/photos/static_image_banner.jpg')}}" alt="Charities Image Missing">
-                            <div class="block-finder__header">
-                                <div class="block-finder__title">{{$page->title}}</div>
-                                <div class="block-finder__subtitle"></div>
-                            </div>
-                    </div>
-                </div>
+    <div class="page-header">
+        <div class="page-header__container container">
+            <div class="page-header__breadcrumb">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{url('/')}}">Home</a>
+                            <svg class="breadcrumb-arrow" width="6px" height="9px">              
+                                <use xlink:href="{{asset('frontend/images/sprite.svg')}}#arrow-rounded-right-6x9"></use>
+                            </svg>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">Charities</li>
+                    </ol>
+                </nav>
             </div>
         </div>
-            <div class="category-text panel mb-4 pt-3">
-                <p>{{$page->description}}</p>
-            </div>
     </div>
-</div>
+    <div class="container p-2 my-2">
+        @include('layouts.frontend.includes.banners.pages_banner')
+    </div>
 @if(!isset($page->title)){{abort(404)}} @endif
 <div class="block block-product-columns">
     <div class="container">
