@@ -66,9 +66,14 @@ $footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('id','5')->first();
                             <h5 class="footer-newsletter__title">Newsletter</h5>
                             <form action="{{route('newsletter.store')}}" class="footer-newsletter__form" method="POST">
                                 @csrf
-                                <label class="sr-only" for="footer-newsletter-address">Email Address</label>
-                                <input type="text"name="email" class="footer-newsletter__form-input form-control" id="footer-newsletter-address" placeholder="Email Address...">
-                                <button type="submit" class="footer-newsletter__form-button btn btn-primary">Subscribe</button>
+                               <label class="sr-only" for="footer-newsletter-address">Email Address</label>
+                                <div class="col-md-8 p-0">
+                                    <input type="text" name="email" class="footer-newsletter__form-input form-control" id="footer-newsletter-address" placeholder="Email Address...">
+                                
+                                </div>
+                                <div class="col-md-2 p-0 ">
+                                    <button type="submit" class="footer-newsletter__form-button btn btn-primary">Subscribe</button>
+                                </div>
                             </form>
 
                             <p class="newsletter-message mt-1 text-success"></p>
@@ -149,3 +154,22 @@ $footer_menu_column_4 = Harimayco\Menu\Models\Menus::where('id','5')->first();
         </div>
     </div>
 </footer>
+
+@push('scripts')
+
+<script>
+    $('.footer-newsletter__form').validate({
+        errorClass: 'invalid-feedback d-block',
+        rules: {
+            email: {
+                required: true,
+            },
+        },
+        submitHandler: function(form) {
+            if ($(form).valid())
+            form.submit();
+            return false;
+        }
+    });
+</script>
+@endpush
