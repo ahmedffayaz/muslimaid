@@ -2,25 +2,25 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-use Illuminate\Support\Facades\Mail;
-use App\Models\EmailTemplate;
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Bonus;
-use App\Models\UserCashback;
-use Session;
-use Illuminate\Auth\Events\Registered;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Str;
 use App\Jobs\SendEmailJob;
+use Illuminate\Support\Str;
+use App\Models\UserCashback;
+use Illuminate\Http\Request;
+use App\Models\EmailTemplate;
+use Illuminate\Http\JsonResponse;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Auth\Events\Registered;
+use App\Providers\RouteServiceProvider;
+use Illuminate\Support\Facades\Session;
+use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -67,6 +67,7 @@ class RegisterController extends Controller
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'g-recaptcha-response' => ['required','captcha'],
         ]);
     }
 
@@ -93,6 +94,7 @@ class RegisterController extends Controller
             'referred_by'=>empty($data['referral_code']) ? '' : base64_decode($data['referral_code']),
             'referred_at'=>empty($data['referral_code']) ? '' : $today,
         ]);
+
         // $role = Role::create(['name' => 'user']);
 
         $user->assignRole('user');

@@ -273,6 +273,16 @@
                                             <input type="password" class="form-control" placeholder="Password"
                                                 name="password_confirmation" required>
                                         </div>
+                                        <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                                            <div class="col-md-6">
+                                                {!! app('captcha')->display() !!}
+                                                 @if ($errors->has('g-recaptcha-response'))
+                                                    <span class="help-block">
+                                                        <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                                                    </span>
+                                                @endif
+                                            </div>
+                                        </div>
                                         <button type="submit" class="btn btn-primary mt-1">Join now for free</button>
                                     </form>
                                     @if (isFacebookEnabled() || isGoogleEnabled())
