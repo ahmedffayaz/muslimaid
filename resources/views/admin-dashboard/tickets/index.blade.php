@@ -141,6 +141,7 @@
                     $('#table-data').html(data);
                     $('html, body').animate({ scrollTop: 0 }, 'slow');
                 }
+                $('#reload').ajax().reload();
                 });
          } 
 

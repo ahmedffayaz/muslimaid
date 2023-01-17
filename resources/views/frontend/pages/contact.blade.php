@@ -75,12 +75,11 @@
                     <textarea id="form-message" class="form-control" name="message" rows="4"  required> {{old('message')}}</textarea>
                 </div>
                 <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
-                    <label for="form-message">Captcha</label>
                     <div class="col-md-6">
                         {!! app('captcha')->display() !!}
                          @if ($errors->has('g-recaptcha-response'))
-                            <span class="help-block">
-                                <strong>{{ $errors->first('g-recaptcha-response') }}</strong>
+                            <span class="invalid-feedback d-block" role="alert">
+                                {{ $errors->first('g-recaptcha-response') }}
                             </span>
                         @endif
                     </div>

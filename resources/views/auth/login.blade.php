@@ -1,5 +1,6 @@
 @extends('layouts.frontend.app')
 @section('content')
+
 <div class="block mt-5">
     <div class="container">
         <div class="col-md-10 d-flex flex-column mx-auto">
@@ -17,7 +18,7 @@
                     <h3 class="card-title">Login</h3>
                     <div class="row">
                         <div class="col-md-6 d-flex flex-column">
-                            <form method="POST" action="{{ route('login') }}">
+                            <form method="POST" action="{{ route('login') }}" class="form-validate">
                                 @csrf
                                 <div class="form-group">
                                     <label>Email address</label>
@@ -54,6 +55,16 @@
                                         </span>
                                         <label class="form-check-label" for="login-remember">Remember Me</label>
                                     </div>
+                                </div>
+                                <div class="form-group {{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}" >
+                                    <div class="col-md-6">
+                                        {!! app('captcha')->display() !!}
+                                     </div>
+                                        @if ($errors->has('g-recaptcha-response'))
+                                            <span class="invalid-feedback d-block" role="alert">
+                                                {{ $errors->first('g-recaptcha-response') }}
+                                            </span>
+                                        @endif
                                 </div>
                                 <button type="submit" class="btn btn-primary mt-1">Login</button>
                             </form>

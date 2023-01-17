@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Schema;
 use App\Models\SiteSetting;
+use Illuminate\Support\ServiceProvider;
 
 class SocialLoginConfigServiceProvider extends ServiceProvider
 {
@@ -24,7 +26,7 @@ class SocialLoginConfigServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if(\Schema::hasTable('site_settings')){
+        if(Schema::hasTable('site_settings')){
             $configServices=SiteSetting::latest()->get()->pluck('value','type');
 
             if ($configServices) {
@@ -40,8 +42,8 @@ class SocialLoginConfigServiceProvider extends ServiceProvider
                     'redirect'          => $configServices['google_url'] ?? '',
                 );
     
-                \Config::set('services.facebook', $facebookconfig);
-                \Config::set('services.google', $googleconfig);
+                Config::set('services.facebook', $facebookconfig);
+                Config::set('services.google', $googleconfig);
             }
         }
     }

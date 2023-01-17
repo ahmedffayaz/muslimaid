@@ -86,19 +86,34 @@ class LoginController extends Controller
         return $this->sendFailedLoginResponse($request);
     }
 
-    protected function redirectTo()
+    /**
+     * Validate the user login request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return void
+     *
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    protected function validateLogin(Request $request)
     {
+        $request->validate([
+            $this->username() => 'required|string',
+            'password' => 'required|string',
+            'g-recaptcha-response' => 'required|captcha',
+        ]);
+    }
+
+    protected function redirectTo(){
         if (Session::has('prvUrl')){
             return session('prvUrl');
           }else{
-
             if (!Auth::user()->is_email_verified) {
-              auth()->logout();
-              Session::flash('email-not-verified');
-              return route('login');
+                auth()->logout();
+                Session::flash('email-not-verified');
+                return route('login');
             }
             Session::flash('login-welcome');
             return '/';
-          }
+        }
     }
 }

@@ -842,7 +842,7 @@
                                                     <div class="col-lg-9">
                                                         <div class="form-group">
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" name="site_key" value="" placeholder="Recaptcha Stire Key">
+                                                                <input type="text" class="form-control" name="site_key" value="" placeholder="Recaptcha Site Key">
                                                             </div>
                                                         </div>
                                                     </div>
