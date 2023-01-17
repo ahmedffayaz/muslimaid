@@ -38,7 +38,6 @@
     
     <div class="nk-tb-col">
         {!! $page->status ==1  ? '<span class="tb-status badge badge-success">Active</span>' : '<span class="tb-status badge badge-warning">In-active</span>'!!}
- 
     </div>
     <div class="nk-tb-col nk-tb-col-tools">
         <ul class="nk-tb-actions gx-1">
@@ -49,7 +48,7 @@
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="link-list-opt no-bdr">
                             <li><a href="{{route('admin.pages.edit', $page)}}"><em class="icon ni ni-edit"></em><span>Edit Page</span></a></li>
-                            @if(!$page->default)
+                            @if(!$page->default || $page->status == 'inactive')
                             <li><a  class='delete'  form_id = "delete-page-{{$page->id}}"   style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Page</span></a>
                                                     
                                 <form action="{{ route('admin.pages.destroy', $page) }}" id="delete-page-{{$page->id}}" method="POST" class="m-0">
