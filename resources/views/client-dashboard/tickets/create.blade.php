@@ -14,7 +14,7 @@
                             <h5>To start the claim process, select the retailer and type of claim you wish to raise</h5>
 
                                 <p>Please select the retailer you would like to enquire about:</p>
-                            <form action="{{route('account.claim.step2')}}" method="POST">
+                            <form action="{{route('account.tickets.step2')}}" method="POST">
                                 @csrf
                                 <div class="form-row mb-4">
                                     <div class="form-groug col-xl-8 col-md-12">
