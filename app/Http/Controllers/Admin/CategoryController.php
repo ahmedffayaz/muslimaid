@@ -150,7 +150,7 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
 
-        try {
+         try {
             $category->update([
                 'name' => $request->input('name'),
                 'parent_id' => $request->input('parent_id'),
@@ -168,13 +168,13 @@ class CategoryController extends Controller
                 'meta_description' => $request->input('meta_description')
 
             ]);
-
-            foreach ($request->input('tags') as $tag) {
-                $category->update([
-                    $tag => 1
-                ]);
+            if($category->parent_id === 0){
+                foreach ($request->input('tags') as $tag) {
+                    $category->update([
+                        $tag => 1
+                    ]);
+                }
             }
-
             if ($request->input('logo_type') == 'upload') {
                 if ($request->has('logo_upload')) {
                     $imageName = Str::slug($request->input('name')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
