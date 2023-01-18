@@ -81,8 +81,15 @@
                             </div>
                             <div class="col-12 col-lg-12 col-xl-12">
                                 <div class="form-group px-1">
+                                    <label for="profile-address">Adress</label>
+                                    <input name="address" id="address" class="form-control" value="{{$user->address}}" >
+                                   
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-12 col-xl-12">
+                                <div class="form-group px-1">
                                     <label for="profile-phone">Intro</label>
-                                    <textarea name="intro" id="intro" class="form-control" rows="5" >{{$user->intro}}</textarea>
+                                    <textarea name="intro" id="intro" class="form-control" rows="5" >{{strip_tags($user->intro)}}</textarea>
                                    
                                 </div>
                             </div>
