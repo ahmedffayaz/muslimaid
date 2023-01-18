@@ -16,7 +16,6 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::with('childs')->where('parent_id','0')->get();
-
         $subCategories = Category::with('stores')->where('parent_id','0')->get();
         return view ('frontend.categories.index',compact('categories'));
     }

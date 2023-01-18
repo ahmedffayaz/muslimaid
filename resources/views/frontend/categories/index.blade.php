@@ -31,21 +31,25 @@
                 <div class="container">
                     <div class="row"> 
                         @foreach ($categories as $category)
-                           @if($category->childs->count())   
-                            <div class="col-lg-4 mt-5">
-                                <div class="block-header">
-                                    <h3 class="block-header__title"><a href="{{route('categories.show',$category->slug)}}">{{$category->name}}</a></h3>
-                                    <div class="block-header__divider"></div>
-                                </div>
-                                <div class="block-product-columns__column">
-                                    @foreach ($category->childs as $subcategory)
-                                    <ul class="block-header__groups-list">
-                                        <li><a href="{{route('categories.show',$subcategory->slug)}}" type="button" class="block-header__group color-primary">{{ $subcategory->name }}</a></li>
-                                    </ul>
-                                    @endforeach
-                                </div>
-                            </div>
-                            @endif
+                             @if($category->status ===1)
+                                  @if($category->childs->count())                                     
+                                        <div class="col-lg-4 mt-5">
+                                            <div class="block-header">
+                                                <h3 class="block-header__title"><a href="{{route('categories.show',$category->slug)}}">{{$category->name}}</a></h3>
+                                                <div class="block-header__divider"></div>
+                                            </div>
+                                            <div class="block-product-columns__column">
+                                                @foreach ($category->childs as $subcategory)
+                                                    @if($subcategory->status ===1)
+                                                        <ul class="block-header__groups-list">
+                                                            <li><a href="{{route('categories.show',$subcategory->slug)}}" type="button" class="block-header__group color-primary">{{ $subcategory->name }}</a></li>
+                                                        </ul>
+                                                    @endif
+                                                @endforeach
+                                            </div>
+                                        </div>
+                                  @endif
+                             @endif
                         @endforeach
                     </div>
                 </div>

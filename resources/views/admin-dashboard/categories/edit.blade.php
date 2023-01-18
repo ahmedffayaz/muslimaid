@@ -174,20 +174,19 @@
                         </select>
                     </div>
                 </div>
-        </div> --}}
-        @if($category->parent_id == 0)
-        <div class="col-md-12">
-            <label class="form-label" for="default-06">Tags</label>
-                <div class="form-control-wrap ">
-                    <div class="">
-                        <select class="form-control form-select select-2" name="tags[]" id="tags" multiple>
-                            <option @if($category->feature_homepage) selected @endif value="feature_homepage">Homepage featured</option>
-                            <option @if($category->feature_sidebar) selected @endif value="feature_sidebar">Sidebar featured</option>
-                        </select>
+        </div> --}} 
+        @if($category->parent_id === 0)
+            <div class="col-md-12">
+                <label class="form-label" for="default-06">Tags</label>
+                    <div class="form-control-wrap ">
+                        <div class="">
+                            <select class="form-control form-select select-2" name="tags[]" id="tags" multiple>
+                                <option @if($category->feature_homepage) selected @endif value="feature_homepage">Homepage featured</option>
+                                <option @if($category->feature_sidebar) selected @endif value="feature_sidebar">Sidebar featured</option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-        </div>
-
+            </div>
         @endif
         <div class="col-lg-12">
             <div class="form-group">
