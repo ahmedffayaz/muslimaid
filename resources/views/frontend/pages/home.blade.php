@@ -34,100 +34,7 @@
             }
         }
 
-        /* .testimonial */
-        .testimonial {
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-        }
 
-        .testimonial__avatar {
-            -ms-flex-negative: 0;
-            flex-shrink: 0;
-        }
-
-        [dir=ltr] .testimonial__avatar {
-            margin-left: 16px;
-            margin-right: 24px;
-        }
-
-        [dir=rtl] .testimonial__avatar {
-            margin-right: 16px;
-            margin-left: 24px;
-        }
-
-        .testimonial__avatar img {
-            width: 70px;
-            border-radius: 1000px;
-        }
-
-        .testimonial__author {
-            margin-top: -4px;
-            font-size: 16px;
-            font-weight: 500;
-        }
-
-        .testimonial__position {
-            margin-top: 3px;
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        .testimonial__text {
-            font-size: 16px;
-            margin-top: 12px;
-        }
-
-        @media (min-width: 576px) and (max-width: 767px) {
-            [dir=ltr] .testimonial__avatar {
-                margin-right: 18px;
-            }
-
-            [dir=rtl] .testimonial__avatar {
-                margin-left: 18px;
-            }
-
-            .testimonial__avatar img {
-                width: 60px;
-            }
-        }
-
-        @media (max-width: 575px) {
-            .testimonial__avatar {
-                display: none;
-            }
-        }
-
-        /* .testimonials-list */
-        .testimonials-list__content {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .testimonials-list__item {
-            border-bottom: 1px solid #ebebeb;
-            padding-top: 28px;
-            padding-bottom: 24px;
-        }
-
-        .testimonials-list__item:first-child {
-            padding-top: 0;
-        }
-
-        .testimonials-list__pagination {
-            margin-top: 36px;
-        }
-
-        @media (max-width: 767px) {
-            .testimonials-list__pagination {
-                margin-top: 30px;
-            }
-        }
-
-        .pagination {
-            justify-content: center !important;
-        }
     </style>
 @endpush
 
@@ -346,55 +253,7 @@
     @endguest
 
     @if ($testimonials)
-        @if (count($testimonials) > 0)
-            <!-- testimonial -->
-            <div class="block my-5">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12 mb-5">
-                            <h1 class="text-center">Testimonial</h1>
-                        </div>
-                        <div class="col-12">
-                            <div class="testimonials-view">
-                                <div class="testimonials-view__list">
-                                    <div class="testimonials-list">
-                                        <ol class="testimonials-list__content">
-                                            @foreach ($testimonials as $testimonial)
-                                                <li class="testimonials-list__item">
-                                                    <div class="testimonial">
-                                                        <div class="testimonial__avatar">
-                                                            <img @if ($testimonial->image != null &&
-                                                                $testimonial->image != '' &&
-                                                                file_exists(storage_path('app/public/users/images/avatar/' . $testimonial->image))) src="{{ asset('storage/users/images/avatar/' . $testimonial->image) }}"
-                                                            @else
-                                                                src="{{ asset('admin-dashboard/images/avatar.png') }}" @endif
-                                                                alt="{{ $testimonial->name . ' Avatar' }}">
-                                                        </div>
-                                                        <div class="testimonial__content">
-                                                            <div class="testimonial__author">{{ $testimonial->name }}
-                                                            </div>
-                                                            <div class="testimonial__position">
-                                                                {{ $testimonial->position . ', ' . $testimonial->company }}
-                                                            </div>
-                                                            <div class="testimonial__text">{{ $testimonial->description }}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            @endforeach
-                                        </ol>
-                                        <div class="testimonials-list__pagination">
-                                            {{ $testimonials->links() }}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!-- testimonial / end -->
-        @endif
+        @include('layouts.frontend.includes.sections.testimonial')
     @endif
 
     <!-- Cashbacks -->
