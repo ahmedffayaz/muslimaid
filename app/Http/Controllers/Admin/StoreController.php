@@ -178,7 +178,6 @@ class StoreController extends Controller
                 'feature_sidebar' => 0,
                 'editor_pick' => 0,
             ]);
-
             foreach ($request->input('tags') as $tag) {
                 $store->update([
                     $tag => 1,
@@ -405,12 +404,13 @@ class StoreController extends Controller
     {
 
         DB::table('category_store')->where('store_id', $request->input('store_id'))->delete();
-
-        foreach ($request->input('category_id') as $category) {
-            DB::table('category_store')->insert([
-                'store_id' => $request->input('store_id'),
-                'category_id' => $category,
-            ]);
+        if($request->input('category_id')!=null){
+            foreach ($request->input('category_id') as $category) {
+                DB::table('category_store')->insert([
+                    'store_id' => $request->input('store_id'),
+                    'category_id' => $category,
+                ]);
+            } 
         }
     }
 
