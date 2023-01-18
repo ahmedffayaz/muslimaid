@@ -464,3 +464,13 @@ function getImageUrl($url)
         ? $url
         : asset('storage/stores/images/' . ltrim($url, '/'));
 }
+
+/**
+ * @param $file
+ * get file
+ */
+function isFileExist($url)
+{
+    $file = file_exists(public_path(parse_url($url)['path']));
+    return $file;
+}

@@ -1,28 +1,10 @@
 @extends('layouts.frontend.app')
 @section('content')
+
 <div class="block mt-5">
     <div class="container">
         <div class="col-md-10 d-flex flex-column mx-auto">
             <div class="card flex-grow-1 mb-md-0">
-   
-            @if(Session::has('login-expired'))
-                    <div class = "container alert alert-danger alert-dismissible fade show alert-important" role = "alert">
-                    Your Session has expired! Please login again.
-                    <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close">
-                        <span aria-hidden = "true">&times;</span>
-                    </button>
-                </div>
-            @endif
-
-            @if(Session::has('email-not-verified'))
-                    <div class = "container alert alert-danger alert-dismissible fade show alert-important" role = "alert">
-                        You need to confirm your account.please check your email.
-                    <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close">
-                        <span aria-hidden = "true">&times;</span>
-                    </button>
-                </div>
-            @endif
-
             @if(session()->has('message'))
                     <div class = "container alert {{ session('alert-class') }} alert-dismissible fade show alert-important" role = "alert">
                         {{ session('message') }}.
@@ -36,7 +18,7 @@
                     <h3 class="card-title">Login</h3>
                     <div class="row">
                         <div class="col-md-6 d-flex flex-column">
-                            <form method="POST" action="{{ route('login') }}">
+                            <form method="POST" action="{{ route('login') }}" class="form-validate">
                                 @csrf
                                 <div class="form-group">
                                     <label>Email address</label>
@@ -74,6 +56,16 @@
                                         <label class="form-check-label" for="login-remember">Remember Me</label>
                                     </div>
                                 </div>
+                                <div class="form-group {{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}" >
+                                    <div class="col-md-6">
+                                        {!! app('captcha')->display() !!}
+                                     </div>
+                                        @if ($errors->has('g-recaptcha-response'))
+                                            <span class="invalid-feedback d-block" role="alert">
+                                                {{ $errors->first('g-recaptcha-response') }}
+                                            </span>
+                                        @endif
+                                </div>
                                 <button type="submit" class="btn btn-primary mt-1">Login</button>
                             </form>
                             @if(isFacebookEnabled() || isGoogleEnabled())
@@ -90,11 +82,11 @@
                                 </div>
                             @endif
                             </div>
-                            
+
                             <div class="mt-4 mx-auto d-none d-md-block" style="border-left:1px solid rgba(0,0,0,0.1); height: 220px;"></div>
 
                             <div class="col-md-5 d-flex flex-column">
-                            
+
                                 <h4 class="mb-3">
                                     Save money on your favourite brands
                                 </h4>

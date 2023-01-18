@@ -17,6 +17,7 @@ use App\Models\ImporterSetting;
 use App\Models\ImportedCategory;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\CashbackStatusChange;
 
 class ImporterController extends Controller
 {

@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use  Illuminate\Support\Facades\Response;
 use App\Models\User;
-use App\Models\PaymentInfo;
 use App\Models\ExitClick;
+use App\Models\PaymentInfo;
 use App\Models\UserCashback;
-use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 
 
@@ -179,7 +180,7 @@ class UserController extends Controller
                 'Content-Type' => 'text/csv',
             );
 
-            return \Response::download($filename, 'users.csv', $headers);
+            return Response::download($filename, 'users.csv', $headers);
 
         } catch (\Throwable $th) {
 

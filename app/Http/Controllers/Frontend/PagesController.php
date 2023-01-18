@@ -267,10 +267,10 @@ class PagesController extends Controller
         $ticket = new Ticket([
             'title'     => $request->input('subject'),
             'user_id'   =>  Auth::user()->id, 
-           'ticket_id' => strtoupper(Str::random(12)),
+            'ticket_id' => strtoupper(Str::random(12)),
             'category_id'  => '4',
             'priority'  => 'high',
-            'ticket_type'  => 'ticket',
+            'ticket_type'  => 'contact',
             'message'   => $request->input('message'),
             'status'    => "open",
         ]);

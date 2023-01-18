@@ -35,6 +35,16 @@
                                     <label>Repeat Password</label>
                                     <input type="password" class="form-control" placeholder="Confirm Password" name="password_confirmation" required>
                                 </div>
+                                <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
+                                    <div class="col-md-6">
+                                        {!! app('captcha')->display() !!}
+                                    </div>
+                                    @if ($errors->has('g-recaptcha-response'))
+                                        <span class="invalid-feedback d-block"  role="alert">
+                                            {{ $errors->first('g-recaptcha-response') }}
+                                        </span>
+                                    @endif
+                                </div>
                                 <button type="submit" class="btn btn-primary mt-1">Register</button>
                             </form>
                             @if(isFacebookEnabled() || isGoogleEnabled())
