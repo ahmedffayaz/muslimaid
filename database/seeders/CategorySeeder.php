@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use App\Models\Category;
 use Carbon\Carbon;
+use App\Models\Category;
 use Faker\Factory as Faker;
+use Illuminate\Support\Str;
+use Illuminate\Database\Seeder;
 
 class CategorySeeder extends Seeder
 {
@@ -16,7 +17,6 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-
         $faker = Faker::create();
         $categories = array(
             array('name' => 'Electronics','description' => NULL,'sort' => NULL,'logo_type' => 'upload','logo_upload' => 'electronics.png','logo_link' => NULL,'banner_type' => 'upload','banner_upload' => 'category_default_banner.png','banner_link' => NULL,'parent_id' => '0','status' => '1','created_at' => Carbon::now(),'updated_at' => Carbon::now(),'deleted_at' => NULL),
@@ -131,11 +131,10 @@ class CategorySeeder extends Seeder
             array('name' => 'Transfers & Airport Parking ','description' => NULL,'sort' => NULL,'logo_type' => 'upload','logo_upload' => 'category_default_logo.png','logo_link' => NULL,'banner_type' => 'upload','banner_upload' => 'category_default_banner.png','banner_link' => NULL,'parent_id' => '93','status' => '1','created_at' => Carbon::now(),'updated_at' => Carbon::now(),'deleted_at' => NULL),
         );
 
-
         foreach($categories as $cat){
             $category                   = new Category();
             $category->name             = $cat['name'];
-            $category->slug             =  \Str::slug($cat['name']);
+            $category->slug             =  Str::slug($cat['name']);
             $category->description       = 'Browse our best offers, including exclusive cashback deals increased for a limited time only.';
             $category->parent_id        = $cat['parent_id'];
             $category->logo_type        = 'upload';
