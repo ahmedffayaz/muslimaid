@@ -1,196 +1,202 @@
 @extends('frontend.layouts.app')
+
 @section('content')
-<style type="text/css">
-    #map {
-        height: 400px;
-    }
-
-    .map-search {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .map-search .search-wrap input[type=text] {
-        width: 100%;
-        height: 100%;
-        border: 1;
-        box-shadow: none;
-    }
-
-    .fa-map-marker-alt {
-        position: relative;
-        top: -48px;
-        left: 30px;
-        font-size: 23px;
-    }
-
-    .searchbox {
-        padding: 1.9rem 0rem 1.5rem 1rem;
-        position: relative;
-        flex-grow: 1 !important;
-    }
-
-    .current {
-        border: none;
-        z-index: 24;
-        background: none;
-        color: #000;
-        text-decoration: none;
-        outline: none !important;
-    }
-
-    .gm-ui-hover-effect {
-        outline: none !important;
-    }
-
-    .view-btn.active {
-        background-position: 0 -42px;
-    }
-    .view-btn {
-        display: inline-block;
-        width: 50px;
-        height: 34px;
-        background-repeat: no-repeat;
-        background-position: 0 0;
-        margin-left: 16px;
-    }
-
-    .categorylist {
-        display: none;
-    }
-
-    .pagination {
-        justify-content: center;
-    }
-
-    @media (max-width: 767px) {
-        .block-banner__body {
-            height: 190px;
+    <style type="text/css">
+        #map {
+            height: 400px;
         }
-    }
-</style>
-@php
-     $settings = SiteSetting();
-     if (isset($settings['favicon']) && $settings['favicon']!='default.png'){
-        $siteFavicon = 'storage/dashboard/images/logo/'.$settings['favicon'];
-     } else {
-        $siteFavicon = 'admin-dashboard/images/favicon.png';
-     }
-@endphp
-<div class="page-header">
-    <div class="page-header__container container">
-        <div class="page-header__breadcrumb ">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item">
-                        <a href="{{ url('/') }}">Home</a>
-                        <svg class="breadcrumb-arrow" width="6px" height="9px">
-                            <use xlink:href="{{ asset('frontend/images/sprite.svg') }}#arrow-rounded-right-6x9"></use>
-                        </svg>
-                    </li>
-                    <li class="breadcrumb-item">
-                        <a href="{{ route('categories.index') }}">Categories</a>
-                        <svg class="breadcrumb-arrow" width="6px" height="9px">
-                            <use xlink:href="{{ asset('frontend/images/sprite.svg') }}#arrow-rounded-right-6x9"></use>
-                        </svg>
-                    </li>
-                    <li class="breadcrumb-item active" aria-current="page">{{ $mainCategory->name }}</li>
-                </ol>
-            </nav>
-        </div>
-        @include('frontend.layouts.includes.banners.categories_banner')
-        <div class="category-text panel rounded-border mb-4 mt-4 pt-3">
-            <p>{{ $mainCategory->description }}</p>
-        </div>
-        <div class="page-header__title">
-            <div class="row">
-                <div class="col-md-12 pl-0 pr-0">
-                    <h4 class="col-md-5 float-left">Search For {{ $mainCategory->name }}</h4>
-                    <div class="col-md-5 float-right  d-flex flex-justify-between">
-                        <select class="form-control width store form-control-select2" multiple
-                            data-placeholder="All" id="select-categories" onchange="showStores()">
-                            @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
-                            @endforeach
-                        </select>
+
+        .map-search {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .map-search .search-wrap input[type=text] {
+            width: 100%;
+            height: 100%;
+            border: 1;
+            box-shadow: none;
+        }
+
+        .fa-map-marker-alt {
+            position: relative;
+            top: -48px;
+            left: 30px;
+            font-size: 23px;
+        }
+
+        .searchbox {
+            padding: 1.9rem 0rem 1.5rem 1rem;
+            position: relative;
+            flex-grow: 1 !important;
+        }
+
+        .current {
+            border: none;
+            z-index: 24;
+            background: none;
+            color: #000;
+            text-decoration: none;
+            outline: none !important;
+        }
+
+        .gm-ui-hover-effect {
+            outline: none !important;
+        }
+
+        .view-btn.active {
+            background-position: 0 -42px;
+        }
+
+        .view-btn {
+            display: inline-block;
+            width: 50px;
+            height: 34px;
+            background-repeat: no-repeat;
+            background-position: 0 0;
+            margin-left: 16px;
+        }
+
+        .categorylist {
+            display: none;
+        }
+
+        .pagination {
+            justify-content: center;
+        }
+
+        @media (max-width: 767px) {
+            .block-banner__body {
+                height: 190px;
+            }
+        }
+    </style>
+
+    @php
+        $settings = SiteSetting();
+        if (isset($settings['favicon']) && $settings['favicon'] != 'default.png') {
+            $siteFavicon = 'storage/dashboard/images/logo/' . $settings['favicon'];
+        } else {
+            $siteFavicon = 'admin-dashboard/images/favicon.png';
+        }
+    @endphp
+
+    <div class="page-header">
+        <div class="page-header__container container">
+            <div class="page-header__breadcrumb ">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="{{ url('/') }}">Home</a>
+                            <svg class="breadcrumb-arrow" width="6px" height="9px">
+                                <use xlink:href="{{ asset('frontend/images/sprite.svg') }}#arrow-rounded-right-6x9"></use>
+                            </svg>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{{ route('categories.index') }}">Categories</a>
+                            <svg class="breadcrumb-arrow" width="6px" height="9px">
+                                <use xlink:href="{{ asset('frontend/images/sprite.svg') }}#arrow-rounded-right-6x9"></use>
+                            </svg>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">{{ $mainCategory->name }}</li>
+                    </ol>
+                </nav>
+            </div>
+
+            @include('frontend.layouts.includes.banners.categories_banner')
+
+            <div class="category-text panel rounded-border mb-4 mt-4 pt-3">
+                <p>{{ $mainCategory->description }}</p>
+            </div>
+
+            <div class="page-header__title">
+                <div class="row">
+                    <div class="col-md-12 pl-0 pr-0">
+                        <h4 class="col-md-5 float-left">Search For {{ $mainCategory->name }}</h4>
+                        <div class="col-md-5 float-right  d-flex flex-justify-between">
+                            <select class="form-control width store form-control-select2" multiple data-placeholder="All" id="select-categories" onchange="showStores()">
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="container">
-    <div class="map-search">
-        <button href="javascript:;" class="d-sm-block current mb-3" style="outline:0 !important" onclick="getCurrentLocation();">
-            <i class="fas fa-map-marked-alt" style="font-size: 68px; color: #3366cc;"></i>
-        </button>
-        <div class="search-wrap searchbox">
-            <div>
-                <div class="d-none">
-                    <div id="title">Autocomplete search</div>
-                    <div id="type-selector" class="pac-controls">
-                        <input type="radio" name="type" id="changetype-all" checked="checked" />
-                        <label for="changetype-all">All</label>
-
-                        <input type="radio" name="type" id="changetype-establishment" />
-                        <label for="changetype-establishment">establishment</label>
-
-                        <input type="radio" name="type" id="changetype-address" />
-                        <label for="changetype-address">address</label>
-
-                        <input type="radio" name="type" id="changetype-geocode" />
-                        <label for="changetype-geocode">geocode</label>
-
-                        <input type="radio" name="type" id="changetype-cities" />
-                        <label for="changetype-cities">(cities)</label>
-
-                        <input type="radio" name="type" id="changetype-regions" />
-                        <label for="changetype-regions">(regions)</label>
-                    </div>
-                    <br />
-                    <div id="strict-bounds-selector" class="pac-controls">
-                        <input type="checkbox" id="use-location-bias" value="" checked />
-                        <label for="use-location-bias">Bias to map viewport</label>
-
-                        <input type="checkbox" id="use-strict-bounds" value="" />
-                        <label for="use-strict-bounds">Strict bounds</label>
-                    </div>
-                </div>
+    <div class="container">
+        <div class="map-search">
+            <button href="javascript:;" class="d-sm-block current mb-3" style="outline:0 !important" onclick="getCurrentLocation();">
+                <i class="fas fa-map-marked-alt" style="font-size: 68px; color: #3366cc;"></i>
+            </button>
+            <div class="search-wrap searchbox">
                 <div>
-                    <input id="pac-input" style="padding-left: 70px; " name="user_address" class="form-control searchbox" type="text" placeholder="Enter a location" value="" />
-                    <span><i class="fas fa-map-marker-alt" aria-hidden="true"></i></span>
+                    <div class="d-none">
+                        <div id="title">Autocomplete search</div>
+                        <div id="type-selector" class="pac-controls">
+                            <input type="radio" name="type" id="changetype-all" checked="checked" />
+                            <label for="changetype-all">All</label>
+
+                            <input type="radio" name="type" id="changetype-establishment" />
+                            <label for="changetype-establishment">establishment</label>
+
+                            <input type="radio" name="type" id="changetype-address" />
+                            <label for="changetype-address">address</label>
+
+                            <input type="radio" name="type" id="changetype-geocode" />
+                            <label for="changetype-geocode">geocode</label>
+
+                            <input type="radio" name="type" id="changetype-cities" />
+                            <label for="changetype-cities">(cities)</label>
+
+                            <input type="radio" name="type" id="changetype-regions" />
+                            <label for="changetype-regions">(regions)</label>
+                        </div>
+                        <br />
+                        <div id="strict-bounds-selector" class="pac-controls">
+                            <input type="checkbox" id="use-location-bias" value="" checked />
+                            <label for="use-location-bias">Bias to map viewport</label>
+
+                            <input type="checkbox" id="use-strict-bounds" value="" />
+                            <label for="use-strict-bounds">Strict bounds</label>
+                        </div>
+                    </div>
+                    <div>
+                        <input id="pac-input" style="padding-left: 70px; " name="user_address" class="form-control searchbox" type="text" placeholder="Enter a location">
+                        <span><i class="fas fa-map-marker-alt" aria-hidden="true"></i></span>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="container mt-4">
-    <div class="map-area">
-        <div id="floating-panel" style="display: none;">
-            <b>Mode of Travel:</b>
-            <select id="mode">
-                <option value="DRIVING" selected>Driving</option>
-                <option value="WALKING">Walking</option>
-                <option value="TRANSIT">Transit</option>
-            </select>
+    <div class="container mt-4">
+        <div class="map-area">
+            <div id="floating-panel" style="display: none;">
+                <b>Mode of Travel:</b>
+                <select id="mode">
+                    <option value="DRIVING" selected>Driving</option>
+                    <option value="WALKING">Walking</option>
+                    <option value="TRANSIT">Transit</option>
+                </select>
+            </div>
+            <div id="map"></div>
         </div>
-        <div id="map"></div>
     </div>
-</div>
 
-<div id="get-stores">
-    @include('frontend.stores.stores')
-</div>
+    <div id="get-stores">
+        @include('frontend.stores.stores')
+    </div>
 
     {{-- for maping variables --}}
-    <?php
-    $radius = '';
-    $user_lat = '';
-    $user_lng = '';
-    ?>
+    @php
+        $radius = '';
+        $user_lat = '';
+        $user_lng = '';
+    @endphp
 @endsection
 
 @push('scripts')
@@ -221,7 +227,6 @@
 
         function getLocation() {
             if (navigator.geolocation) {
-
                 navigator.geolocation.getCurrentPosition(showPosition, errorCashback);
             } else {
                 console.log("Geolocation is not supported by this browser.");
@@ -233,7 +238,7 @@
             let storeValue = $('#select-categories').val();
             let slug = "{{ Request::route('slug') }}";
             let url = "{{ route('store.location', ':slug') }}";
-                url = url.replace(':slug', slug);
+            url = url.replace(':slug', slug);
             $.ajax({
                 url: url,
                 type: 'GET',
@@ -251,27 +256,23 @@
         }
 
         function showPosition(position) {
-
             myLat = position.coords.latitude;
             myLng = position.coords.longitude;
 
             if (getCookie('position_latitude') && getCookie('position_longitude')) {} else {
-
                 setCookie("position_latitude", myLat);
                 setCookie("position_longitude", myLng);
+
                 window.location.reload();
             }
-
-
         }
 
-        function errorCashback(error) { //console.log("User Rejected geolocation");
+        function errorCashback(error) {
             if (error.code == error.PERMISSION_DENIED) {
                 myLat = 51.509865;
                 myLng = -0.118092;
 
                 if (getCookie('position_latitude') && getCookie('position_longitude')) {
-
                 } else {
                     setCookie("position_latitude", myLat);
                     setCookie("position_longitude", myLng);
@@ -281,12 +282,11 @@
         }
 
         function initMap() {
-
             directionsService = new google.maps.DirectionsService();
             directionsRenderer = new google.maps.DirectionsRenderer();
             getLocation();
-            setTimeout(function() {
 
+            setTimeout(function() {
                 center = new google.maps.LatLng(myLat, myLng);
 
                 infowindow = new google.maps.InfoWindow();
@@ -311,16 +311,15 @@
             document.getElementById("mode").addEventListener("change", () => {
                 calculateAndDisplayRoute();
             });
-
         }
 
         window.initMap = initMap;
 
         function getCurrentLocation() {
-
             infoWindow = new google.maps.InfoWindow({
                 content: "<img src=<?= url('') ?>/frontend/images/human1.png>"
             });
+
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     (position) => {
@@ -350,21 +349,21 @@
         }
 
         function calculateAndDisplayRoute(dLat = null, dLng = null) {
-
             if (dLat != null && dLng != null) {
                 $("#destinationLat").val(dLat);
                 $("#destinationLng").val(dLng);
             }
+
             if ((dLat == null && $("#destinationLat").val() == "") && (dLng == null && $("#destinationLng").val() == "")) {
                 window.alert('Please Select Destination First ');
                 return false;
             }
+
             var pointA = center;
             var pointB = new google.maps.LatLng(dLat, dLng);
 
             service = new google.maps.DistanceMatrixService();
             const selectedMode = document.getElementById("mode").value;
-
 
             var pointBB = new google.maps.LatLng($("#destinationLat").val(), $("#destinationLng").val());
 
@@ -381,8 +380,8 @@
             if (selectedMode == "WALKING") {
                 var travelModeIcon = "fa fa-male";
             }
-            directionsService.route(request, function(result, status) {
 
+            directionsService.route(request, function(result, status) {
                 if (status == 'OK') {
                     directionsRenderer.setDirections(result);
                     var request = {
@@ -395,7 +394,6 @@
 
                     };
                     // service.getDistanceMatrix(request).then((response) => {
-
                     //     var element = response.rows[0].elements[0];
                     //     infowindow.setContent('<i class="' + travelModeIcon + '" aria-hidden="true"></i> ' +
                     //         element.distance.text +
@@ -405,7 +403,6 @@
                     //         map,
                     //         shouldFocus: false,
                     //     });
-
                     // });
                     directionsRenderer.setMap(map);
                 } else {
@@ -414,10 +411,8 @@
             });
         }
 
-
-        //new
+        // new
         function directionRenderFn() {
-
             directionsRenderer.setMap(map);
             infowindow = new google.maps.InfoWindow();
 
@@ -427,7 +422,6 @@
             let fav_icon = "{{ $siteFavicon }}";
 
             for (i = 0; i < locations.length; i++) {
-
                 for (j = 0; j < locations[i]['store_address'].length; j++) {
                     var address = locations[i]['store_address'];
                     origins.push(new google.maps.LatLng(myLat, myLng));
@@ -452,7 +446,92 @@
                         '<div id="mapPopupHeader">' +
                         '<a href="' + origin + '/cashback/' + locations[i]['slug'] +
                         '"><div id="headerTitleAddress"><h4 id="firstHeading" class="firstHeading">' + locations[i][
-                        'name'] + '</h4></a>' +
+                            'name'
+                        ] + '</h4></a>' +
+                        "</div></div>" +
+                        '<div id="bodyContent">' +
+                        '<p><span class="addressIcon"><i class="ion-location mr2" aria-hidden="true"></i></span>' +
+                        locations[i]['store_address'][j]['address'] + '</p>' +
+                        '<div class="storeTimings d-none">' +
+                        '<h4><span><i class="ion-clock mr2" aria-hidden="true"></i></i></span>Timings</h4>' +
+                        '<ul>12PM</ul>' +
+                        '</div>' +
+                        '<p id="directionBtn"><button class="btn btn-primary" onclick="calculateAndDisplayRoute(' +
+                        locations[i]['store_address'][j]['latitude'] + ',' + locations[i]['store_address'][j]['longitude'] +
+                        ')">GET DIRECTION</button></p>' +
+                        "</div>" +
+                        "</div>";
+
+                    google.maps.event.addListener(marker, 'click', (function(marker, i) {
+                        return function() {
+                            infowindow.setContent(contentString);
+                            infowindow.open(map, marker);
+                        }
+                    })(marker, i));
+                }
+            }
+
+            service = new google.maps.DistanceMatrixService();
+
+            var request = {
+                origins: origins,
+                destinations: destinations,
+                travelMode: 'DRIVING',
+                unitSystem: google.maps.UnitSystem.IMPERIAL,
+                avoidHighways: false,
+                avoidTolls: false,
+            };
+
+            service.getDistanceMatrix(request).then((response) => {
+
+                var elementRows = response.rows;
+                $(".calculatedDistance").each(function(index) {
+                    locations.push(parseFloat(elementRows[index].elements[index].distance.text.replace(
+                        /[^\d.]/g, '')));
+
+                    $(this).html(elementRows[index].elements[index].distance.text + "les away");
+                });
+            });
+
+            setTimeout(function() {
+                var arrs = [];
+                var arrs = locations;
+
+                // orderByDistanceRendering(arrs);
+            }, 700);
+        }
+
+        function directionRenderFnForListView() {
+            var locations = <?php print_r(json_encode($locations)); ?>;
+            locations = locations.data;
+            directionsRenderer.setMap(map);
+            infowindow = new google.maps.InfoWindow();
+
+            var marker, i;
+            var origins = [];
+            var destinations = [];
+
+            for (i = 0; i < locations.length; i++) {
+                for (j = 0; j < locations[i]['store_address'].length; j++) {
+                    var address = locations[i]['store_address'];
+                    origins.push(new google.maps.LatLng(myLat, myLng));
+                    destinations.push(new google.maps.LatLng(address[j]['latitude'], address[j]['longitude']));
+
+                    marker = new google.maps.Marker({
+                        position: new google.maps.LatLng(address[j]['latitude'], address[j]['longitude']),
+                        map: map,
+                        icon: '<?= url('') ?>/frontend/images/location-icon.png'
+                    });
+                    var origin = window.location.origin;
+                    const contentString =
+                        '<div id="content">' +
+                        '<div id="siteNotice">' +
+                        "</div>" +
+                        '<div id="mapPopupHeader">' +
+                        '<a href="' + origin + '/cashback/silk-center' +
+                        '"><div id="headerTitleAddress"><h4 id="firstHeading" class="firstHeading">' + locations[i][
+                            'name'
+                        ] + '</h4></a>' +
                         "</div></div>" +
                         '<div id="bodyContent">' +
                         '<p><span class="addressIcon"><i class="ion-location mr2" aria-hidden="true"></i></span>' +
@@ -487,108 +566,24 @@
             };
 
             service.getDistanceMatrix(request).then((response) => {
-
                 var elementRows = response.rows;
-                $(".calculatedDistance").each(function(index) {
+                $(".calculatedDistanceList").each(function(index) {
                     locations.push(parseFloat(elementRows[index].elements[index].distance.text.replace(
                         /[^\d.]/g, '')));
 
                     $(this).html(elementRows[index].elements[index].distance.text + "les away");
                 });
             });
+
             setTimeout(function() {
                 var arrs = [];
                 var arrs = locations;
 
-               // orderByDistanceRendering(arrs);
+                // orderByDistanceRendering(arrs);
             }, 700);
         }
 
-        function directionRenderFnForListView() {
-         var locations = <?php print_r(json_encode($locations)); ?>;
-        locations = locations.data;
-        directionsRenderer.setMap(map);
-        infowindow = new google.maps.InfoWindow();
-
-        var marker, i;
-        var origins = [];
-        var destinations = [];
-
-        for (i = 0; i < locations.length; i++) {
-
-            for (j = 0; j < locations[i]['store_address'].length; j++) {
-                var address = locations[i]['store_address'];
-                origins.push(new google.maps.LatLng(myLat, myLng));
-                destinations.push(new google.maps.LatLng(address[j]['latitude'], address[j]['longitude']));
-
-                marker = new google.maps.Marker({
-                    position: new google.maps.LatLng(address[j]['latitude'], address[j]['longitude']),
-                    map: map,
-                    icon: '<?= url('') ?>/frontend/images/location-icon.png'
-                });
-                var origin = window.location.origin;
-                const contentString =
-                    '<div id="content">' +
-                    '<div id="siteNotice">' +
-                    "</div>" +
-                    '<div id="mapPopupHeader">' +
-                    '<a href="' + origin + '/cashback/silk-center' +
-                    '"><div id="headerTitleAddress"><h4 id="firstHeading" class="firstHeading">' + locations[i][
-                    'name'] + '</h4></a>' +
-                    "</div></div>" +
-                    '<div id="bodyContent">' +
-                    '<p><span class="addressIcon"><i class="ion-location mr2" aria-hidden="true"></i></span>' +
-                    locations[i]['store_address'][j]['address'] + '</p>' +
-                    '<div class="storeTimings d-none">' +
-                    '<h4><span><i class="ion-clock mr2" aria-hidden="true"></i></i></span>Timings</h4>' +
-                    '<ul>12PM</ul>' +
-                    '</div>' +
-                    '<p id="directionBtn"><button class="btn btn-primary" onclick="calculateAndDisplayRoute(' +
-                    locations[i]['store_address'][j]['latitude'] + ',' + locations[i]['store_address'][j]['longitude'] +
-                    ')">GET DIRECTION</button></p>' +
-                    "</div>" +
-                    "</div>";
-
-                google.maps.event.addListener(marker, 'click', (function(marker, i) {
-                    return function() {
-                        infowindow.setContent(contentString);
-                        infowindow.open(map, marker);
-                    }
-                })(marker, i));
-            }
-        }
-        service = new google.maps.DistanceMatrixService();
-
-        var request = {
-            origins: origins,
-            destinations: destinations,
-            travelMode: 'DRIVING',
-            unitSystem: google.maps.UnitSystem.IMPERIAL,
-            avoidHighways: false,
-            avoidTolls: false,
-        };
-
-        service.getDistanceMatrix(request).then((response) => {
-
-            var elementRows = response.rows;
-            $(".calculatedDistanceList").each(function(index) {
-                locations.push(parseFloat(elementRows[index].elements[index].distance.text.replace(
-                    /[^\d.]/g, '')));
-
-                $(this).html(elementRows[index].elements[index].distance.text + "les away");
-            });
-        });
-        setTimeout(function() {
-            var arrs = [];
-            var arrs = locations;
-
-        // orderByDistanceRendering(arrs);
-        }, 700);
-        }
-
-
-
-        //serach location on field
+        // serach location on field
         function addressLocationSearch() {
             /*****For Address Search input field Starts*****/
 
@@ -676,6 +671,7 @@
             setupClickListener("changetype-geocode", ["geocode"]);
             setupClickListener("changetype-cities", ["(cities)"]);
             setupClickListener("changetype-regions", ["(regions)"]);
+
             biasInputElement.addEventListener("change", () => {
                 if (biasInputElement.checked) {
                     autocomplete.bindTo("bounds", map);
@@ -696,6 +692,7 @@
 
                 input.value = "";
             });
+
             strictBoundsInputElement.addEventListener("change", () => {
                 autocomplete.setOptions({
                     strictBounds: strictBoundsInputElement.checked,
@@ -710,7 +707,6 @@
 
             /*****For Address Search input field End********/
         }
-
 
         function setCookie(cname, cvalue, exdays) {
             const d = new Date();
@@ -732,11 +728,11 @@
                     return c.substring(name.length, c.length);
                 }
             }
+
             return "";
         }
 
         // function orderByDistanceRendering(arrs) {
-
         //     $("#storesListN").empty();
         //     var storesHtml = "";
         //     $.each(arrs, function(index, location) {
@@ -770,22 +766,22 @@
         //             '                            </div>\n' +
         //             '                        </li>';
         //     });
-
         //     $("#storesListN").html(storesHtml);
         // }
 
         // Ajax pagination
-        function ajaxPagination () {
-            $('.pagination a').on('click', function(e){
+        function ajaxPagination() {
+            $('.pagination a').on('click', function(e) {
                 e.preventDefault();
                 form = $(this);
                 var url = $(this).attr('href');
-                $.get(url, form.serialize(), function(data){
+                $.get(url, form.serialize(), function(data) {
                     $('#get-stores').html(data);
                     ajaxPagination()
                 });
             });
         }
     </script>
+
     <script type="text/javascript" src="https://maps.google.com/maps/api/js?key={{ SiteSetting()['map_key'] }}&callback=initMap&libraries=places&v=weekly" async></script>
 @endpush

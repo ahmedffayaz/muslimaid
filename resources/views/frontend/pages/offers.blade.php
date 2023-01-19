@@ -1,4 +1,5 @@
 @extends('frontend.layouts.app')
+
 @push('styles')
     <style>
         .block-header__group--active .block-header__group--active:focus,
@@ -33,13 +34,14 @@
             </nav>
         </div>
     </div>
+
     <div class="container p-2 my-2">
         @include('frontend.layouts.includes.banners.pages_banner')
     </div>
-    <!-- Cashbacks -->
+    
     @php $categories = getCategories(); @endphp
+
     @isset($categories)
-        <!-- .block-product-columns -->
         @if ($page->lb_content)
             <div class="block block-product-columns">
                 <div class="container">
@@ -47,7 +49,6 @@
 
                         <div class="col-lg-12">
                             <div id="your_container">
-                                <!-- The element you want to render the content in -->
                                 {!! $page->lb_content !!}
                             </div>
                         </div>
@@ -66,43 +67,42 @@
                                     <h3 class="block-header__title">
                                         @if ($category->logo_type == 'upload')
                                             @if (!file_exists(asset('storage/categories/images/' . $category->logo_upload)))
-                                                <img src="{{ asset('frontend/images/categories/images/' . $category->logo_upload) }}"
-                                                    width="25px" alt="{{ $category->name }}">
+                                                <img src="{{ asset('frontend/images/categories/images/' . $category->logo_upload) }}" width="25px" alt="{{ $category->name }}">
                                             @else
-                                                <img src="{{ asset('storage/categories/images/' . $category->logo_upload) }}"
-                                                    width="25px" alt="{{ $category->name }}">
+                                                <img src="{{ asset('storage/categories/images/' . $category->logo_upload) }}" width="25px" alt="{{ $category->name }}">
                                             @endif
                                         @elseif($category->logo_type == 'link')
                                             <img src="{{ $category->logo_link }}" width="25px" alt="{{ $category->name }}">
-                                        @endif{{ $category->name }}
+                                        @endif
+                                        {{ $category->name }}
                                     </h3>
                                     <div class="block-header__divider"></div>
                                     <ul class="block-header__groups-list">
-                                        <li><a href="{{ route('cashabck', $category->slug) }}" type="button"
-                                                class="block-header__group block-header__group--active">View More</a></li>
+                                        <li>
+                                            <a href="{{ route('cashabck', $category->slug) }}" type="button" class="block-header__group block-header__group--active">View More</a>
+                                        </li>
                                     </ul>
                                 </div>
                                 <div class="block-product-columns__column">
                                     @foreach ($category->stores->unique()->take(5) as $store)
                                         <div class="block-product-columns__item">
-                                            <div
-                                                class="product-card product-card--hidden-actions product-card--layout--horizontal mb-3">
+                                            <div class="product-card product-card--hidden-actions product-card--layout--horizontal mb-3">
                                                 <div class="product-card__image product-image">
-                                                    <a href="{{ route('store.show', $store->slug) }}"
-                                                        class="product-image__body">
-                                                        <img class="product-image__img"
-                                                            @if ($store->logo->first()) @if ($store->logo->first()->is_fake)
-                                        src="{{ asset('frontend/images/logos/' . $store->logo->first()->image) }}"
-                                    @else
-                                        src="{{ asset('storage/stores/images/' . $store->logo->first()->image) }}" @endif
-                                                        @else src="{{ asset('frontend/images/products/product-16.jpg') }}"
-                                                            @endif alt="">
+                                                    <a href="{{ route('store.show', $store->slug) }}" class="product-image__body">
+                                                        <img class="product-image__img" alt=""
+                                                            @if ($store->logo->first()) 
+                                                                @if ($store->logo->first()->is_fake)
+                                                                    src="{{ asset('frontend/images/logos/' . $store->logo->first()->image) }}"
+                                                                @else
+                                                                    src="{{ asset('storage/stores/images/' . $store->logo->first()->image) }}" @endif
+                                                            @else 
+                                                                src="{{ asset('frontend/images/products/product-16.jpg') }}" 
+                                                            @endif>
                                                     </a>
                                                 </div>
                                                 <div class="product-card__info">
                                                     <div class="product-card__name">
-                                                        <a
-                                                            href="{{ route('store.show', $store->slug) }}">{{ $store->name }}</a>
+                                                        <a href="{{ route('store.show', $store->slug) }}">{{ $store->name }}</a>
                                                     </div>
                                                     @if ($store->rating != 0)
                                                         <div class="product-card__rating">
@@ -110,16 +110,14 @@
                                                                 <div class="rating">
                                                                     <div class="rating__body">
                                                                         @foreach (range(1, 5) as $index)
-                                                                            <svg class="rating__star @if ($index <= $store->reviews->avg('rating')) rating__star--active @endif"
-                                                                                width="13px" height="12px">
+                                                                            <svg class="rating__star @if ($index <= $store->reviews->avg('rating')) rating__star--active @endif" width="13px"
+                                                                                height="12px">
                                                                                 <g class="rating__fill">
-                                                                                    <use
-                                                                                        xlink:href="{{ asset('frontend/images/sprite.svg') }}#star-normal">
+                                                                                    <use xlink:href="{{ asset('frontend/images/sprite.svg') }}#star-normal">
                                                                                     </use>
                                                                                 </g>
                                                                                 <g class="rating__stroke">
-                                                                                    <use
-                                                                                        xlink:href="{{ asset('frontend/images/sprite.svg') }}#star-normal-stroke">
+                                                                                    <use xlink:href="{{ asset('frontend/images/sprite.svg') }}#star-normal-stroke">
                                                                                     </use>
                                                                                 </g>
                                                                             </svg>
@@ -137,32 +135,26 @@
                                                                 </div>
                                                             </div>
                                                             <div class="product-card__rating-legend">
-                                                                {{ $store->activeReviews->count() }} Reviews</div>
+                                                                {{ $store->activeReviews->count() }} Reviews
+                                                            </div>
                                                         </div>
                                                     @endif
-
                                                 </div>
                                                 <div class="product-card__actions">
-
                                                     <div class="product-card__prices">
                                                         @if ($store->cashback)
-
                                                             @if ($store->custom_cashback_percentage)
-                                                                @if ($store->cashback->type == 'fixed')
-                                                                    {{ $store->cashback->currency }}@endif
+                                                                @if ($store->cashback->type == 'fixed') {{ $store->cashback->currency }} @endif
                                                                 {{ ($store->custom_cashback_percentage / 100) * $store->cashback->sale_commission }}
-                                                                @if ($store->cashback->type == 'percentage')%@endif
+                                                                @if ($store->cashback->type == 'percentage') % @endif
                                                             @else
-                                                                @if ($store->cashback->type == 'fixed')
-                                                                    {{ $store->cashback->currency }}@endif
+                                                                @if ($store->cashback->type == 'fixed') {{ $store->cashback->currency }} @endif
                                                                 {{ (SiteSetting()['cashback_percentage'] / 100) * $store->cashback->sale_commission }}
-                                                                @if ($store->cashback->type == 'percentage')%
-                                                                @endif
+                                                                @if ($store->cashback->type == 'percentage') % @endif
                                                             @endif
                                                             Cashback
                                                         @endif
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -171,11 +163,9 @@
                             </div>
                         @endif
                     @endforeach
-
                 </div>
             </div>
         </div>
-        <!-- .block-product-columns / end -->
     @endisset
 
 @endsection

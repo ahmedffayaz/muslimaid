@@ -4,14 +4,17 @@
     }
 
     @media (min-width: 768px) {
+
         .block-slideshow--layout--full .block-slideshow__body,
         .block-slideshow--layout--full .block-slideshow__slide {
             height: 200px;
         }
     }
 
-    @media (max-width: 767px){
-        .block-slideshow__body, .block-slideshow__slide {
+    @media (max-width: 767px) {
+
+        .block-slideshow__body,
+        .block-slideshow__slide {
             height: 226px;
         }
     }
@@ -75,7 +78,6 @@
         }
     }
 
-
     /* .testimonials-list */
     .testimonials-list__content {
         list-style: none;
@@ -93,52 +95,50 @@
         padding-top: 0;
     }
 </style>
+
 @if (count($testimonials) > 0)
-<!-- .block-slideshow -->
-<div class="block-slideshow block--highlighted block-slideshow--layout--full block">
-    <div class="container">
-        <div class="block-header">
-            <h3 class="block-header__title">Latest Testimonials</h3>
-            <div class="block-header__divider"></div>
-        </div>
-        <div class="block-slideshow__body">
-            <div class="owl-carousel">
-                @foreach ($testimonials as $testimonial)
-                <a class="block-slideshow__slide" href="">
-                    <div class="testimonials-view">
-                        <div class="testimonials-view__list">
-                            <div class="testimonials-list">
-                                <ol class="testimonials-list__content">
-                                    <li class="testimonials-list__item">
-                                        <div class="testimonial">
-                                            <div class="testimonial__avatar">
-                                                <img @if ($testimonial->image != null && $testimonial->image != '' &&
-                                                        file_exists(storage_path('app/public/users/images/avatar/' . $testimonial->image)))
-                                                        src="{{ asset('storage/users/images/avatar/' . $testimonial->image) }}"
-                                                    @else
-                                                        src="{{ asset('admin-dashboard/images/avatar.png') }}"
-                                                    @endif
-                                                alt="{{ $testimonial->name . ' Avatar' }}">
-                                            </div>
-                                            <div class="testimonial__content">
-                                                <div class="testimonial__author">{{ $testimonial->name }}
+    <div class="block-slideshow block--highlighted block-slideshow--layout--full block">
+        <div class="container">
+            <div class="block-header">
+                <h3 class="block-header__title">Latest Testimonials</h3>
+                <div class="block-header__divider"></div>
+            </div>
+            <div class="block-slideshow__body">
+                <div class="owl-carousel">
+                    @foreach ($testimonials as $testimonial)
+                        <a class="block-slideshow__slide" href="">
+                            <div class="testimonials-view">
+                                <div class="testimonials-view__list">
+                                    <div class="testimonials-list">
+                                        <ol class="testimonials-list__content">
+                                            <li class="testimonials-list__item">
+                                                <div class="testimonial">
+                                                    <div class="testimonial__avatar">
+                                                        <img alt="{{ $testimonial->name . ' Avatar' }}"
+                                                            @if ($testimonial->image != null && $testimonial->image != '' && file_exists(storage_path('app/public/users/images/avatar/' . $testimonial->image))) 
+                                                                src="{{ asset('storage/users/images/avatar/' . $testimonial->image) }}"
+                                                            @else
+                                                                src="{{ asset('admin-dashboard/images/avatar.png') }}" 
+                                                            @endif>
+                                                    </div>
+                                                    <div class="testimonial__content">
+                                                        <div class="testimonial__author">{{ $testimonial->name }}
+                                                        </div>
+                                                        <div class="testimonial__position">
+                                                            {{ $testimonial->position . ', ' . $testimonial->company }}
+                                                        </div>
+                                                        <div class="testimonial__text">{{ $testimonial->description }}</div>
+                                                    </div>
                                                 </div>
-                                                <div class="testimonial__position">
-                                                    {{ $testimonial->position . ', ' . $testimonial->company }}
-                                                </div>
-                                                <div class="testimonial__text">{{ $testimonial->description }}</div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ol>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </a>
-                @endforeach
+                        </a>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>
-</div>
-<!-- .block-slideshow / end -->
 @endif

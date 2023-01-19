@@ -2,111 +2,113 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
-    @include('frontend.layouts.includes.head')
+@include('frontend.layouts.includes.head')
 
 <body>
-    <style>.account-menu__links {
-
-        padding: 6px 0;
-
-    }
-
-    @media(min-width: 768px){
-        .slider-store-name{
-        position: absolute;
-        right: 20px;
-        top: 20px;
-        font-size: 18px;
+    <style>
+        .account-menu__links {
+            padding: 6px 0;
         }
-    }
 
-    @media(max-width: 767px){
-        .slider-store-name {
-        text-align: center;
-        position: relative;
-        font-size: 18px !important;
+        @media(min-width: 768px) {
+            .slider-store-name {
+                position: absolute;
+                right: 20px;
+                top: 20px;
+                font-size: 18px;
+            }
         }
-        .slider_pic{
-            margin:auto;
+
+        @media(max-width: 767px) {
+            .slider-store-name {
+                text-align: center;
+                position: relative;
+                font-size: 18px !important;
+            }
+
+            .slider_pic {
+                margin: auto;
+            }
         }
-    }
 
-    .suggestions__item.selected{background-color:#faf2e2}
+        .suggestions__item.selected {
+            background-color: #faf2e2
+        }
 
-    #accordion .btn.focus, .btn:focus {
-        box-shadow: none;
-    }
+        #accordion .btn.focus,
+        .btn:focus {
+            box-shadow: none;
+        }
 
-    [dir=ltr] .nav-links__item--has-submenu .nav-links__item-body {
-        padding-right: 20px;
-        padding-left: 20px;
-    }
+        [dir=ltr] .nav-links__item--has-submenu .nav-links__item-body {
+            padding-right: 20px;
+            padding-left: 20px;
+        }
 
-    .site-header__logo {
-        -ms-flex-negative: 0;
-        flex-shrink: 0;
-        width: 150px;
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: flex;
-        -webkit-box-align: left;
-        -ms-flex-align: left;
-        align-items: left;
-        -webkit-box-pack: left;
-        -ms-flex-pack: left;
-        justify-content: left;
-        color: inherit;
-    }
+        .site-header__logo {
+            -ms-flex-negative: 0;
+            flex-shrink: 0;
+            width: 150px;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-box-align: left;
+            -ms-flex-align: left;
+            align-items: left;
+            -webkit-box-pack: left;
+            -ms-flex-pack: left;
+            justify-content: left;
+            color: inherit;
+        }
 
-    .departments__body{
-        z-index: 1;
-    }
+        .departments__body {
+            z-index: 1;
+        }
 
-    .nav-panel{
-        background: rgba(299, 299, 299, 0.97);
-        color: black
+        .nav-panel {
+            background: rgba(299, 299, 299, 0.97);
+            color: black
+        }
 
-    }
+        .site-header__middle {
+            height: 70px;
+            padding-top: 25px;
+            padding-bottom: 20px;
+        }
 
-    .site-header__middle {
-        height: 70px;
-        padding-top: 25px;
-        padding-bottom: 20px;
-    }
+        .nav-links__item--hover .nav-links__item-body {
+            background: #EDEEEE;
+        }
 
-    .nav-links__item--hover .nav-links__item-body {
-        background: #EDEEEE;
-    }
+        .block-finder__body {
+            background: none no-repeat;
+            -webkit-box-orient: horizontal !important;
+        }
 
-   .block-finder__body {
-        background: none no-repeat;
-        -webkit-box-orient: horizontal !important;
-    }
+        .banner__size {
+            width: 1125px;
+            height: 400px;
+        }
 
-    .banner__size{
-        width: 1125px;
-        height: 400px;
-    }
+        .block-finder__title {
+            background-color: #fff;
+            padding: 0.5rem 3rem;
+            position: absolute;
+            left: 3rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+        }
 
-    .block-finder__title{
-        background-color: #fff;
-        padding: 0.5rem 3rem;
-        position: absolute;
-        left: 3rem;
-        top: 50%;
-        transform: translateY(-50%);
-        font-size: 1.5rem;
-    }
-
-    .panel {
-        padding: 1.2rem;
-        border: 1px solid #d9d9d9;
-    }
+        .panel {
+            padding: 1.2rem;
+            border: 1px solid #d9d9d9;
+        }
     </style>
 
     <!-- site -->
     @isset($settings['theme_skin'])
-        @if($settings['theme_skin']=='custom')
+        @if ($settings['theme_skin'] == 'custom')
             @include('frontend.layouts.includes.colors')
         @endif
     @endisset
@@ -180,57 +182,37 @@
             </div>
         </div>
     </div>
-    @if(Session::has('welcome'))
-    <div class="modal fade" tabindex="-1" role="dialog" id="welcome-message" aria-labelledby="trackerLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            {{-- <div class="modal-header">
-              <h5 class="modal-title">Modal title</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div> --}}
-            {{-- <div class="modal-body text-center py-5">
-                <svg style="width: 40px" class="fill-primary mb-3 mx-auto" id="icon-recorded-tick" viewBox="0 0 40 40"><path d="M17 27.556c-.444 0-.889-.112-1.222-.445-.667-.667-.667-1.667 0-2.333l11.889-11.89c.666-.666 1.666-.666 2.333 0 .667.668.667 1.668 0 2.334l-11.889 11.89c-.222.332-.667.444-1.111.444z"></path><path d="M17 27.556c-.444 0-.889-.112-1.222-.445l-5.89-5.889c-.666-.666-.666-1.666 0-2.333.668-.667 1.668-.667 2.334 0l5.89 5.889c.666.666.666 1.666 0 2.333-.223.333-.668.445-1.112.445z"></path><path d="M20 0C9 0 0 9 0 20s9 20 20 20 20-9 20-20S31 0 20 0zm0 35.556c-8.556 0-15.556-7-15.556-15.556S11.444 4.444 20 4.444s15.556 7 15.556 15.556-7 15.556-15.556 15.556z"></path></svg>
-              <h3 class="color-primary my-3">Welcome to {{SiteSetting()['website_title']}}</h3>
-              <p>Now you can earn cashback at your favourite places to shop online, from travel and tech to fashion and gadgets, thousands of exclusive rates are available. It’s completely safe, secure and there are absolutely no hidden charges.</p>
-
-            </div> --}}
-            <div class="modal-body text-center py-5">
-                <svg style="width: 40px" class="fill-primary mb-3 mx-auto" id="icon-recorded-tick" viewBox="0 0 40 40"><path d="M17 27.556c-.444 0-.889-.112-1.222-.445-.667-.667-.667-1.667 0-2.333l11.889-11.89c.666-.666 1.666-.666 2.333 0 .667.668.667 1.668 0 2.334l-11.889 11.89c-.222.332-.667.444-1.111.444z"></path><path d="M17 27.556c-.444 0-.889-.112-1.222-.445l-5.89-5.889c-.666-.666-.666-1.666 0-2.333.668-.667 1.668-.667 2.334 0l5.89 5.889c.666.666.666 1.666 0 2.333-.223.333-.668.445-1.112.445z"></path><path d="M20 0C9 0 0 9 0 20s9 20 20 20 20-9 20-20S31 0 20 0zm0 35.556c-8.556 0-15.556-7-15.556-15.556S11.444 4.444 20 4.444s15.556 7 15.556 15.556-7 15.556-15.556 15.556z"></path></svg>
-              <h3 class="color-primary my-3">Welcome to {{SiteSetting()['website_title']}}</h3>
-              <p>We just need to verify your email address before you can access {{SiteSetting()['website_title']}}.
-
-                Verify your email address</p>
-
-            </div>
-            {{-- <div class="modal-footer">
-
-              <button type="button" class="btn btn-primary" data-dismiss="modal">Okay</button>
-            </div> --}}
-          </div>
-        </div>
-      </div>
-
-{{-- <p class="alert
-{{ Session::get('alert-class', 'alert-info') }}">{{Session::get('message') }}</p> --}}
-
-@endif
-{{--@if(Session::has('welcome'))
-    <div class="modal fade" tabindex="-1" role="dialog" id="login-message" aria-labelledby="trackerLabel" aria-hidden="true">
-        <div class="modal-dialog login-modal-dialog" role="document">
-            <div class="modal-content" style="background: #f9fafd">
-                <div class="modal-body text-center py-5">
-                    <svg style="width: 40px" class=" fill-primary mb-3 mx-auto" id="icon-recorded-tick" viewBox="0 0 40 40"><path d="M17 27.556c-.444 0-.889-.112-1.222-.445-.667-.667-.667-1.667 0-2.333l11.889-11.89c.666-.666 1.666-.666 2.333 0 .667.668.667 1.668 0 2.334l-11.889 11.89c-.222.332-.667.444-1.111.444z"></path><path d="M17 27.556c-.444 0-.889-.112-1.222-.445l-5.89-5.889c-.666-.666-.666-1.666 0-2.333.668-.667 1.668-.667 2.334 0l5.89 5.889c.666.666.666 1.666 0 2.333-.223.333-.668.445-1.112.445z"></path><path d="M20 0C9 0 0 9 0 20s9 20 20 20 20-9 20-20S31 0 20 0zm0 35.556c-8.556 0-15.556-7-15.556-15.556S11.444 4.444 20 4.444s15.556 7 15.556 15.556-7 15.556-15.556 15.556z"></path></svg>
-                    <h4 class="my-3">Welcome back {{Auth::user()->first_name}} {{Auth::user()->last_name}}.</h4>
+    
+    @if (Session::has('welcome'))
+        <div class="modal fade" tabindex="-1" role="dialog" id="welcome-message" aria-labelledby="trackerLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body text-center py-5">
+                        <svg style="width: 40px" class="fill-primary mb-3 mx-auto" id="icon-recorded-tick" viewBox="0 0 40 40">
+                            <path
+                                d="M17 27.556c-.444 0-.889-.112-1.222-.445-.667-.667-.667-1.667 0-2.333l11.889-11.89c.666-.666 1.666-.666 2.333 0 .667.668.667 1.668 0 2.334l-11.889 11.89c-.222.332-.667.444-1.111.444z">
+                            </path>
+                            <path
+                                d="M17 27.556c-.444 0-.889-.112-1.222-.445l-5.89-5.889c-.666-.666-.666-1.666 0-2.333.668-.667 1.668-.667 2.334 0l5.89 5.889c.666.666.666 1.666 0 2.333-.223.333-.668.445-1.112.445z">
+                            </path>
+                            <path
+                                d="M20 0C9 0 0 9 0 20s9 20 20 20 20-9 20-20S31 0 20 0zm0 35.556c-8.556 0-15.556-7-15.556-15.556S11.444 4.444 20 4.444s15.556 7 15.556 15.556-7 15.556-15.556 15.556z">
+                            </path>
+                        </svg>
+                        <h3 class="color-primary my-3">Welcome to {{ SiteSetting()['website_title'] }}</h3>
+                        <p>
+                            We just need to verify your email address before you can access {{ SiteSetting()['website_title'] }}.
+                            Verify your email address
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    @endif--}}
+    @endif
 
     <!-- photoswipe / end -->
     @include('frontend.layouts.includes.footer_scripts')
+
     @stack('scripts')
 </body>
 

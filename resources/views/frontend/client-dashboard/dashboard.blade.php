@@ -1,11 +1,14 @@
 @extends('frontend.layouts.app')
+
 @section('content')
     <div class="block mt-5">
         <div class="container">
             <div class="row">
+
                 <div class="col-12 col-lg-3 d-flex">
                     @include('frontend.client-dashboard.side-nav')
                 </div>
+
                 <div class="col-12 col-lg-9 mt-4 mt-lg-0">
                     <div class="dashboard">
                         <div class="dashboard__profile card profile-card">
@@ -22,21 +25,28 @@
                                 </div>
                                 <div class="profile-card__email">{{ $user->email }}</div>
                                 <div class="profile-card__edit">
-                                    <a href="{{ route('account.profile') }}" class="btn btn-secondary btn-sm">Edit
-                                        Profile</a>
+                                    <a href="{{ route('account.profile') }}" class="btn btn-secondary btn-sm">
+                                        Edit Profile
+                                    </a>
                                 </div>
                             </div>
                         </div>
                         <div class="dashboard__address card address-card address-card--featured">
                             <div class="address-card__body mt-4">
-                                <div class="address-card__name">Available Balance:<span
-                                        class="text-md-right address-card__name2 float-right">
-                                        {{ currency() }}{{ number_format((float) Auth::user()->availableBalance(), 2, '.', '') }}</span>
+                                <div class="address-card__name">
+                                    Available Balance:
+                                    <span class="text-md-right address-card__name2 float-right">
+                                        {{ currency() }}
+                                        {{ number_format((float) Auth::user()->availableBalance(), 2, '.', '') }}
+                                    </span>
                                 </div>
                                 <br>
-                                <div class="address-card__name">Pending Balance:<span
-                                        class="text-md-right address-card__name2 float-right">
-                                        {{ currency() }}{{ number_format((float) Auth::user()->availableBalance(), 2, '.', '') }}</span>
+                                <div class="address-card__name">
+                                    Pending Balance:
+                                    <span class="text-md-right address-card__name2 float-right">
+                                        {{ currency() }}
+                                        {{ number_format((float) Auth::user()->availableBalance(), 2, '.', '') }}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -66,40 +76,32 @@
                                                     <tr>
                                                         <td>
                                                             @if ($item->store_id)
-                                                                <a href="{{ route('store.show', $item->store->slug) }}"
-                                                                    target="_blank">{{ $item->store->name }}</a>
+                                                                <a href="{{ route('store.show', $item->store->slug) }}" target="_blank">{{ $item->store->name }}</a>
                                                             @else
                                                                 {{ ucfirst(str_replace('_', ' ', $item->type)) }}
                                                             @endif
                                                         </td>
-                                                        <td>{{ currency() }}{{ number_format((float) $item->order_value, 2, '.', '') }}
+                                                        <td>{{ currency() }} {{ number_format((float) $item->order_value, 2, '.', '') }}
                                                         </td>
-                                                        <td>{{ currency() }}{{ number_format((float) $item->amount, 2, '.', '') }}
+                                                        <td>{{ currency() }} {{ number_format((float) $item->amount, 2, '.', '') }}
                                                         </td>
                                                         <td>{{ Carbon\Carbon::parse($item->event_date)->isoFormat('Do MMMM YYYY') }}
                                                         </td>
                                                         <td>
                                                             @if ($item->statusMap->status == 'confirmed')
-                                                                <span
-                                                                    class="badge badge-success">{{ $item->statusMap->status }}</span>
-                                                             @elseif($item->statusMap->status == 'paid')
-                                                                <span
-                                                                    class="badge badge-success">{{ $item->statusMap->status }}</span>
-                                                             @elseif($item->statusMap->status == 'failed')
-                                                                <span
-                                                                    class="badge badge-danger">{{ $item->statusMap->status }}</span>
-                                                             @elseif($item->statusMap->status == 'pending')
-                                                                <span
-                                                                    class="badge badge-danger">{{ $item->statusMap->status }}</span>
+                                                                <span class="badge badge-success">{{ $item->statusMap->status }}</span>
+                                                            @elseif($item->statusMap->status == 'paid')
+                                                                <span class="badge badge-success">{{ $item->statusMap->status }}</span>
+                                                            @elseif($item->statusMap->status == 'failed')
+                                                                <span class="badge badge-danger">{{ $item->statusMap->status }}</span>
+                                                            @elseif($item->statusMap->status == 'pending')
+                                                                <span class="badge badge-danger">{{ $item->statusMap->status }}</span>
                                                             @elseif($item->statusMap->status == 'donated')
-                                                                    <span
-                                                                    class="badge badge-info">{{ $item->statusMap->status }}</span>
+                                                                <span class="badge badge-info">{{ $item->statusMap->status }}</span>
                                                             @elseif($item->statusMap->status == 'processing donation')
-                                                                    <span
-                                                                    class="badge badge-warning">{{ $item->statusMap->status }}</span>
+                                                                <span class="badge badge-warning">{{ $item->statusMap->status }}</span>
                                                             @elseif($item->statusMap->status == 'processing')
-                                                                <span
-                                                                    class="badge badge-danger">{{ $item->statusMap->status }}</span>
+                                                                <span class="badge badge-danger">{{ $item->statusMap->status }}</span>
                                                             @endif
                                                         </td>
                                                     </tr>
@@ -132,8 +134,7 @@
                                                 @foreach ($user->clicks->take(5) as $item)
                                                     @if ($item->store)
                                                         <tr>
-                                                            <td><a href="{{ route('store.show', $item->store->slug) }}"
-                                                                    target="_blank">{{ $item->store->name }}</a></td>
+                                                            <td><a href="{{ route('store.show', $item->store->slug) }}" target="_blank">{{ $item->store->name }}</a></td>
                                                             <td>{{ Carbon\Carbon::parse($item->created_at)->isoFormat('Do MMMM YYYY') }}
                                                             </td>
                                                         </tr>

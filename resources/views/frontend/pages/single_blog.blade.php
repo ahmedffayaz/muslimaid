@@ -1,10 +1,12 @@
 @extends('frontend.layouts.app')
+
 @section('content')
     <style>
         .img {
             width: 50%;
         }
     </style>
+
     <div class="page-header">
         <div class="page-header__container container">
             <div class="page-header__breadcrumb">
@@ -28,6 +30,7 @@
             </div>
         </div>
     </div>
+
     <div class="container">
         <div class="row">
             <div class="col-12 col-lg-8">
@@ -38,22 +41,22 @@
                         <h1 class="post-header__title">{{ $blog->title }}</h1>
                         <div class="post-header__meta">
                             <div class="post-header__meta-item">
-                                <a href="">{{ Carbon\Carbon::parse($blog->created_at)->isoFormat('Do MMMM YYYY') }}</a>
+                                <a href="#">{{ Carbon\Carbon::parse($blog->created_at)->isoFormat('Do MMMM YYYY') }}</a>
                             </div>
                         </div>
                     </div>
                     <div class="post__featured img">
-                        <a href="">
-                            <img @if ($blog->featured_image && isFileExist($blog->featured_image)) src="{{ $blog->featured_image }}"
-                                @else src="{{ asset('frontend/images/posts/post-featured.jpg') }}" @endif
-                            alt="">
+                        <a href="#">
+                            <img alt="featured_image"
+                                @if ($blog->featured_image && isFileExist($blog->featured_image)) 
+                                    src="{{ $blog->featured_image }}" 
+                                @else 
+                                    src="{{ asset('frontend/images/posts/post-featured.jpg') }}" 
+                                @endif>
                         </a>
                     </div>
-                    <div class="post__content typography text-justify">
-                        {!! $blog->lb_content !!}
-                    </div>
-                    <div class="post__footer">
-                    </div>
+                    <div class="post__content typography text-justify">{!! $blog->lb_content !!}</div>
+                    <div class="post__footer"></div>
                 </div>
             </div>
             <div class="col-12 col-lg-4">
@@ -67,9 +70,12 @@
                                         <div class="widget-posts__item">
                                             <div class="widget-posts__image">
                                                 <a href="{{ route('post', $blog->slug) }}">
-                                                    <img @if ($related_blog->featured_image && isFileExist($related_blog->featured_image)) src="{{ $related_blog->featured_image }}"
-                                                        @else src="{{ asset('frontend/images/posts/post-featured.jpg') }}" @endif
-                                                    alt="" height="90px" width="90px">
+                                                    <img alt="featured-image" height="90px" width="90px"
+                                                        @if ($related_blog->featured_image && isFileExist($related_blog->featured_image)) 
+                                                            src="{{ $related_blog->featured_image }}" 
+                                                        @else
+                                                            src="{{ asset('frontend/images/posts/post-featured.jpg') }}" 
+                                                        @endif>
                                                 </a>
                                             </div>
                                             <div class="widget-posts__info">

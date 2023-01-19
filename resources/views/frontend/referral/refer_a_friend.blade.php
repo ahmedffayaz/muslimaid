@@ -1,6 +1,9 @@
 @extends('frontend.layouts.app')
+
 @section('content')
-@include('frontend.layouts.includes.toast')
+
+    @include('frontend.layouts.includes.toast')
+
     <div class="block mt-3">
         <div class="page-header">
             <div class="page-header__container container">
@@ -24,6 +27,7 @@
             </div>
         </div>
         <div class="container">
+
             @if ($errors->any())
                 <div class="alert alert-danger">
                     <ul>
@@ -33,6 +37,7 @@
                     </ul>
                 </div>
             @endif
+
             <div class="row">
                 <div class="col-12 col-lg-8">
                     <div class="block">
@@ -45,44 +50,42 @@
                                             <div class="row g-3 align-center">
                                                 <div class="col-lg-3">
                                                     <div class="form-group">
-                                                        <label class="form-label" for="cashback_percentage">Invite Your
-                                                            Friends<em class="icon ni ni-question form-label"
-                                                                data-toggle="tooltip" data-placement="top"
-                                                                title=" Enter cashback percentage which will be given to user."></em></label>
+                                                        <label class="form-label" for="cashback_percentage">
+                                                            Invite Your Friends
+                                                            <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
+                                                                title="Enter cashback percentage which will be given to user."></em>
+                                                        </label>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-9">
                                                     <div class="form-group">
                                                         <div class="form-control-wrap">
                                                             <div class="input-group">
-                                                                <input type="text" class="form-control"
-                                                                    name="referral_email" id="referral_email" value=""
-                                                                    placeholder="Enter email">
-                                                                <button
-                                                                    class="input-group-btn btn btn-primary go inline">Send</button>
+                                                                <input type="text" class="form-control" name="referral_email" id="referral_email" placeholder="Enter email">
+                                                                <button class="input-group-btn btn btn-primary go inline">Send</button>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
+                                            </div>
                                         </form>
                                     </div>
                                     <div class="row g-3 align-center">
                                         <div class="col-lg-3">
                                             <div class="form-group">
-                                                <label class="form-label" for="cashback_percentage">Share Your Link<em
-                                                        class="icon ni ni-question form-label" data-toggle="tooltip"
-                                                        data-placement="top"
-                                                        title=" Enter cashback percentage which will be given to user."></em></label>
+                                                <label class="form-label" for="cashback_percentage">
+                                                    Share Your Link
+                                                    <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
+                                                        title=" Enter cashback percentage which will be given to user."></em>
+                                                </label>
                                             </div>
                                         </div>
                                         <div class="col-lg-9">
                                             <div class="form-group">
                                                 <div class="input-group">
                                                     <input type="text" class="form-control" id="ref_link"
-                                                        value="{{ url('/register-form?referby=' . base64_encode($user = \Auth::user()->id)) }}"
-                                                        readonly>
-                                                    <button class="input-group-btn btn btn-primary go inline"
-                                                        onclick="copyText()">Copy</button>
+                                                        value="{{ url('/register-form?referby=' . base64_encode($user = \Auth::user()->id)) }}" readonly>
+                                                    <button class="input-group-btn btn btn-primary go inline" onclick="copyText()">Copy</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -96,10 +99,10 @@
         </div>
     </div>
 @endsection
+
 @push('scripts')
     <script type="text/javascript">
-
-        $('#send-email').on('submit', function (event){
+        $('#send-email').on('submit', function(event) {
             event.preventDefault();
             $.ajax({
                 url: $(this).attr('action'),
@@ -107,19 +110,22 @@
                 processData: false,
                 contentType: false,
                 data: new FormData(this),
-                success: function (response) {
+                success: function(response) {
                     console.log(response)
                     $('div.toast').removeClass('d-none bg-danger');
                     $('div.toast').addClass('bg-success');
                     $('#toast-message').text(response.message);
-                    $('div.toast').toast({ delay: 3000 });
+                    $('div.toast').toast({
+                        delay: 3000
+                    });
                     $('div.toast').toast('show');
                 },
-                error: function (response) {
+                error: function(response) {
                     console.log(response)
-                    // pass error message on got error
+
                     let errors = response.responseJSON.message;
                     let error;
+
                     for (const key in errors) {
                         error = `${errors[key]}`
                     }
@@ -127,14 +133,16 @@
                     $('div.toast').removeClass('d-none');
                     $('div.toast').addClass('bg-danger');
                     $('#toast-message').text(error);
-                    $('div.toast').toast({ delay: 3000 });
+                    $('div.toast').toast({
+                        delay: 3000
+                    });
+
                     $('div.toast').toast('show');
                 }
             })
         })
-        function copyText() {
 
-            // Get the text field
+        function copyText() {
             var copyText = document.getElementById("ref_link");
             copyText.select();
             copyText.setSelectionRange(0, 99999); // For mobile devices
@@ -144,7 +152,9 @@
                 $('div.toast').removeClass('d-none bg-danger');
                 $('div.toast').addClass('bg-success');
                 $('#toast-message').text('Referral link copied');
-                $('div.toast').toast({ delay: 3000 });
+                $('div.toast').toast({
+                    delay: 3000
+                });
                 $('div.toast').toast('show');
             }
         }
