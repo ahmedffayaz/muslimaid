@@ -1,4 +1,4 @@
-@extends('layouts.frontend.app')
+@extends('frontend.layouts.app')
 @section('content')
     <style>
         .container-fluid {
@@ -27,7 +27,7 @@
                     $page->title = 'Blog';
                     $page->banner_image = null;
                 @endphp
-                @include('layouts.frontend.includes.banners.pages_banner')
+                @include('frontend.layouts.includes.banners.pages_banner')
             </div>
             <div class="page-header__title">
                 <h1>Blog</h1>

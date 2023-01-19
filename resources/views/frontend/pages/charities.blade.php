@@ -1,4 +1,4 @@
-@extends('layouts.frontend.app')
+@extends('frontend.layouts.app')
 @section('content')
 <style>
     .product-card__rating{
@@ -29,7 +29,7 @@
         </div>
     </div>
     <div class="container p-2 my-2">
-        @include('layouts.frontend.includes.banners.pages_banner')
+        @include('frontend.layouts.includes.banners.pages_banner')
     </div>
 @if(!isset($page->title)){{abort(404)}} @endif
 <div class="block block-product-columns">

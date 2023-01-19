@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 
-    @include('layouts.frontend.includes.head')
+    @include('frontend.layouts.includes.head')
 
 <body>
     <style>.account-menu__links {
@@ -19,6 +19,7 @@
         font-size: 18px;
         }
     }
+
     @media(max-width: 767px){
         .slider-store-name {
         text-align: center;
@@ -29,15 +30,18 @@
             margin:auto;
         }
     }
+
     .suggestions__item.selected{background-color:#faf2e2}
 
     #accordion .btn.focus, .btn:focus {
-    box-shadow: none;
+        box-shadow: none;
     }
+
     [dir=ltr] .nav-links__item--has-submenu .nav-links__item-body {
         padding-right: 20px;
         padding-left: 20px;
     }
+
     .site-header__logo {
         -ms-flex-negative: 0;
         flex-shrink: 0;
@@ -53,30 +57,37 @@
         justify-content: left;
         color: inherit;
     }
+
     .departments__body{
         z-index: 1;
     }
+
     .nav-panel{
         background: rgba(299, 299, 299, 0.97);
         color: black
 
     }
+
     .site-header__middle {
         height: 70px;
         padding-top: 25px;
         padding-bottom: 20px;
     }
+
     .nav-links__item--hover .nav-links__item-body {
         background: #EDEEEE;
     }
+
    .block-finder__body {
         background: none no-repeat;
         -webkit-box-orient: horizontal !important;
     }
+
     .banner__size{
         width: 1125px;
         height: 400px;
     }
+
     .block-finder__title{
         background-color: #fff;
         padding: 0.5rem 3rem;
@@ -86,29 +97,30 @@
         transform: translateY(-50%);
         font-size: 1.5rem;
     }
+
     .panel {
         padding: 1.2rem;
         border: 1px solid #d9d9d9;
     }
-
     </style>
+
     <!-- site -->
     @isset($settings['theme_skin'])
         @if($settings['theme_skin']=='custom')
-            @include('layouts.frontend.includes.colors')
+            @include('frontend.layouts.includes.colors')
         @endif
     @endisset
 
     {{-- Show session messages  --}}
-    @include('layouts.frontend.includes.session_messages')
+    @include('frontend.layouts.includes.session_messages')
 
     <div class="site">
         <!-- mobile site__header -->
-        @include('layouts.frontend.includes.mobile_header')
+        @include('frontend.layouts.includes.mobile_header')
 
         <!-- mobile site__header / end -->
         <!-- desktop site__header -->
-        @include('layouts.frontend.includes.header')
+        @include('frontend.layouts.includes.header')
 
         <!-- desktop site__header / end -->
         <!-- site__body -->
@@ -117,7 +129,7 @@
         </div>
         <!-- site__body / end -->
         <!-- site__footer -->
-        @include('layouts.frontend.includes.footer')
+        @include('frontend.layouts.includes.footer')
 
         <!-- site__footer / end -->
     </div>
@@ -130,7 +142,7 @@
     </div>
     <!-- quickview-modal / end -->
     <!-- mobilemenu -->
-    @include('layouts.frontend.includes.mobile_menu')
+    @include('frontend.layouts.includes.mobile_menu')
 
     <!-- mobilemenu / end -->
     <!-- photoswipe -->
@@ -218,7 +230,7 @@
     @endif--}}
 
     <!-- photoswipe / end -->
-    @include('layouts.frontend.includes.footer_scripts')
+    @include('frontend.layouts.includes.footer_scripts')
     @stack('scripts')
 </body>
 

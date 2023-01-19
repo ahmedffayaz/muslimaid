@@ -1,4 +1,4 @@
-@extends('layouts.frontend.app')
+@extends('frontend.layouts.app')
 @section('content')
 <style>.products-list[data-layout="list"] .product-card .product-card__image{
     width:150px;
@@ -37,7 +37,7 @@
     </div>
 </div>
 <div class="container">
-    @include('layouts.frontend.includes.banners.pages_banner')
+    @include('frontend.layouts.includes.banners.pages_banner')
 </div>
 
 <div class="block block-product-columns mt-5">

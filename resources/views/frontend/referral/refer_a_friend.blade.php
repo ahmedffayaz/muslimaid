@@ -1,6 +1,6 @@
-@extends('layouts.frontend.app')
+@extends('frontend.layouts.app')
 @section('content')
-@include('layouts.frontend.includes.toast')
+@include('frontend.layouts.includes.toast')
     <div class="block mt-3">
         <div class="page-header">
             <div class="page-header__container container">

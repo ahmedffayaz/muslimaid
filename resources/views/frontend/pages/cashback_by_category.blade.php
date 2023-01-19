@@ -1,4 +1,4 @@
-@extends('layouts.frontend.app')
+@extends('frontend.layouts.app')
 @section('content')
 <style>/*  bhoechie tab */
     div.bhoechie-tab-container{
@@ -129,7 +129,7 @@
     @php
         $mainCategory = $category;
     @endphp
-    @include('layouts.frontend.includes.banners.categories_banner')
+    @include('frontend.layouts.includes.banners.categories_banner')
     <div class="row">
         <div class="col-12">
             <div class="panel  mb-4 my-2">

@@ -1,4 +1,4 @@
-@extends('layouts.frontend.app')
+@extends('frontend.layouts.app')
 
 @push('styles')
     <style>
@@ -253,7 +253,7 @@
     @endguest
 
     @if ($testimonials)
-        @include('layouts.frontend.includes.sections.testimonial')
+        @include('frontend.layouts.includes.sections.testimonial')
     @endif
 
     <!-- Cashbacks -->

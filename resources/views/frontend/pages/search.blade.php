@@ -1,4 +1,4 @@
-@extends('layouts.frontend.app')
+@extends('frontend.layouts.app')
 @section('content')
 <style>.products-list[data-layout="list"] .product-card .product-card__image{
     width:150px;

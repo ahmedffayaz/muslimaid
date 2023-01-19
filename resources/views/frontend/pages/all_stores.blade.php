@@ -1,4 +1,4 @@
-@extends('layouts.frontend.app')
+@extends('frontend.layouts.app')
 @section('content')
 <style>/*  bhoechie tab */
   [dir=ltr] .product-card--layout--horizontal .product-card__actions {

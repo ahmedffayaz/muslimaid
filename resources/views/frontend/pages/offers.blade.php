@@ -1,4 +1,4 @@
-@extends('layouts.frontend.app')
+@extends('frontend.layouts.app')
 @push('styles')
     <style>
         .block-header__group--active .block-header__group--active:focus,
@@ -34,7 +34,7 @@
         </div>
     </div>
     <div class="container p-2 my-2">
-        @include('layouts.frontend.includes.banners.pages_banner')
+        @include('frontend.layouts.includes.banners.pages_banner')
     </div>
     <!-- Cashbacks -->
     @php $categories = getCategories(); @endphp

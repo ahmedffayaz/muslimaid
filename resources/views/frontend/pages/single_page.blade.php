@@ -1,4 +1,4 @@
-@extends('layouts.frontend.app')
+@extends('frontend.layouts.app')
 @section('content')
 
 @if(!isset($page->title)){{abort(404)}} @endif

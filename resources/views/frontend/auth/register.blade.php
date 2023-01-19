@@ -1,28 +1,21 @@
-@extends('layouts.frontend.app')
+@extends('frontend.layouts.app')
 @section('content')
-
 <div class="block mt-5">
     <div class="container">
         <div class="col-md-10 d-flex flex-column mx-auto">
             <div class="card flex-grow-1 mb-md-0">
-            @if(session()->has('message'))
-                    <div class = "container alert {{ session('alert-class') }} alert-dismissible fade show alert-important" role = "alert">
-                        {{ session('message') }}.
-                    <button type = "button" class = "close" data-dismiss = "alert" aria-label = "Close">
-                        <span aria-hidden = "true">&times;</span>
-                    </button>
-                </div>
-            @endif
-
                 <div class="card-body">
-                    <h3 class="card-title">Login</h3>
+                    <h3 class="card-title">Register</h3>
                     <div class="row">
                         <div class="col-md-6 d-flex flex-column">
-                            <form method="POST" action="{{ route('login') }}" class="form-validate">
+                            <form method="POST" action="{{ route('register') }}">
                                 @csrf
+                                <input type="hidden" class="form-control form-control-lg" id="lastname" placeholder="Enter your last name" name="lastname" value="Doe">
+                                <input type="hidden" class="form-control form-control-lg" id="firstname" placeholder="Enter your first name" name="firstname" value="john">
+                                <input type="hidden" class="form-control form-control-lg" name="referral_code" value="{{ $refCode }}">
                                 <div class="form-group">
                                     <label>Email address</label>
-                                    <input type="email" name="email" value="{{ old('email') }}" class="form-control" placeholder="Enter email" required autocomplete="email" autofocus>
+                                    <input type="email" name="email" class="form-control" placeholder="Enter email" required>
                                     @error('email')
                                     <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -31,42 +24,28 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Password</label>
-                                    <input type="password" name="password" required class="form-control" placeholder="Password">
+                                    <input type="password" class="form-control" name="password" required placeholder="Password">
                                     @error('password')
                                     <span class="invalid-feedback d-block" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
                                     @enderror
-                                    <small class="form-text text-muted">
-                                        <a href="{{route('password.request')}}">Forgotten Password</a>
-                                    </small>
-
                                 </div>
                                 <div class="form-group">
-                                    <div class="form-check">
-                                        <span class="form-check-input input-check">
-                                            <span class="input-check__body">
-                                                <input class="input-check__input" type="checkbox" id="login-remember">
-                                                <span class="input-check__box"></span>
-                                                <svg class="input-check__icon" width="9px" height="7px">
-                                                    <use xlink:href="{{asset('frontend/images/sprite.svg')}}#check-9x7"></use>
-                                                </svg>
-                                            </span>
-                                        </span>
-                                        <label class="form-check-label" for="login-remember">Remember Me</label>
-                                    </div>
+                                    <label>Repeat Password</label>
+                                    <input type="password" class="form-control" placeholder="Confirm Password" name="password_confirmation" required>
                                 </div>
-                                <div class="form-group {{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}" >
+                                <div class="form-group{{ $errors->has('g-recaptcha-response') ? ' has-error' : '' }}">
                                     <div class="col-md-6">
                                         {!! app('captcha')->display() !!}
-                                     </div>
-                                        @if ($errors->has('g-recaptcha-response'))
-                                            <span class="invalid-feedback d-block" role="alert">
-                                                {{ $errors->first('g-recaptcha-response') }}
-                                            </span>
-                                        @endif
+                                    </div>
+                                    @if ($errors->has('g-recaptcha-response'))
+                                        <span class="invalid-feedback d-block"  role="alert">
+                                            {{ $errors->first('g-recaptcha-response') }}
+                                        </span>
+                                    @endif
                                 </div>
-                                <button type="submit" class="btn btn-primary mt-1">Login</button>
+                                <button type="submit" class="btn btn-primary mt-1">Register</button>
                             </form>
                             @if(isFacebookEnabled() || isGoogleEnabled())
                                 <div>
@@ -80,21 +59,20 @@
                                             <i class="fab fa-google"></i> Join with Google</a>
                                     @endif
                                 </div>
-                            @endif
-                            </div>
+                             @endif
+                        </div>
 
-                            <div class="mt-4 mx-auto d-none d-md-block" style="border-left:1px solid rgba(0,0,0,0.1); height: 220px;"></div>
+                        <div class="mt-4 mx-auto d-none d-md-block" style="border-left:1px solid rgba(0,0,0,0.1); height: 220px;"></div>
 
-                            <div class="col-md-5 d-flex flex-column">
-
-                                <h4 class="mb-3">
-                                    Save money on your favourite brands
-                                </h4>
+                        <div class="col-md-5 d-flex flex-column">
+                            <h4 class="mb-3">
+                                Save money on your favourite brands
+                            </h4>
                                 <p><span class="mr-3" style="font-family: wingdings; font-size: 120%; color:green;">&#10004;</span>A few clicks to get cashback</p>
                                 <p><span class="mr-3" style="font-family: wingdings; font-size: 120%; color:green;">&#10004;</span>Completely free</p>
                                 <p><span class="mr-3" style="font-family: wingdings; font-size: 120%; color:green;">&#10004;</span>Get cashback and/or discount codes</p>
                                 <p><span class="mr-3" style="font-family: wingdings; font-size: 120%; color:green;">&#10004;</span>Join the thousands of people who are saving money when they buy from 500+ popular brands</p>
-
+                        
                             </div>
                         </div>
                     </div>

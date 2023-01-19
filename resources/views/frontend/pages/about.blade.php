@@ -1,4 +1,4 @@
-@extends('layouts.frontend.app')
+@extends('frontend.layouts.app')
 @section('content')
 <style>
     .about-us__body{
@@ -21,7 +21,7 @@
     </div>
 </div>
 <div class="container p-0 my-2">
-    @include('layouts.frontend.includes.banners.pages_banner')
+    @include('frontend.layouts.includes.banners.pages_banner')
 </div>
 <div class="block block-product-columns">
     <div class="container">

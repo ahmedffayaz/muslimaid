@@ -70,7 +70,7 @@ class RegisterController extends Controller
     {
         $refCode = $request->referby;
         Session::put('refCode', $refCode);
-        return view('auth.register', compact('refCode'));
+        return view('frontend.auth.register', compact('refCode'));
     }
     /**
      * Create a new user instance after a valid registration.

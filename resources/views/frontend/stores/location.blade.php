@@ -1,4 +1,4 @@
-@extends('layouts.frontend.app')
+@extends('frontend.layouts.app')
 @section('content')
 <style type="text/css">
     #map {
@@ -99,7 +99,7 @@
                 </ol>
             </nav>
         </div>
-        @include('layouts.frontend.includes.banners.categories_banner')
+        @include('frontend.layouts.includes.banners.categories_banner')
         <div class="category-text panel rounded-border mb-4 mt-4 pt-3">
             <p>{{ $mainCategory->description }}</p>
         </div>

@@ -1,10 +1,10 @@
-@extends('layouts.frontend.app')
+@extends('frontend.layouts.app')
 @section('content')
     <div class="block mt-5">
         <div class="container">
             <div class="row">
                 <div class="col-12 col-lg-3 d-flex">
-                    @include('client-dashboard.side-nav')
+                    @include('frontend.client-dashboard.side-nav')
                 </div>
                 <div class="col-12 col-lg-9 mt-4 mt-lg-0">
                     <div class="dashboard">
