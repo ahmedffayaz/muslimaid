@@ -111,7 +111,7 @@
                                 <div class="override mt-2">
                                     @if($store->override_cashback)
                                     <span class="badge badge-dim badge-pill badge-primary text-capitalize">
-                                        <em class="icon ni ni-done"></em> Cashabck Overridden
+                                        <em class="icon ni ni-done"></em> Cashback Overridden
                                     </span>
                                     @endif
                                     @if($store->override_categories)
