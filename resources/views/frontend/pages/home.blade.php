@@ -272,7 +272,7 @@
                                     data-with-features="false" data-mobile-grid-columns="2">
                                     <div class="products-list__body">
                                         @foreach ($stores->take(15) as $store)
-                                            @include('layouts.frontend.includes.stores')
+                                            @include('frontend.layouts.includes.stores')
                                         @endforeach
                                     </div>
                                 </div>
