@@ -5,14 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Seo_rule extends Model
+class SeoRule extends Model
 {
     use HasFactory;
 
-    protected $fillable = [ 'url', 'is_enabled'];
+    protected $fillable = ['url', 'is_enabled'];
 
     public function ruleData()
     {
-        return $this->hasMany(Seo_rule_data::class,'seo_rule_id','id');
+        return $this->hasMany(SeoRuleData::class, 'seo_rule_id', 'id');
     }
 }

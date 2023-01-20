@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateStoreSeoDatasTable extends Migration
+class CreateStoreSeoDataTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateStoreSeoDatasTable extends Migration
      */
     public function up()
     {
-        Schema::create('store_seo_datas', function (Blueprint $table) {
+        Schema::create('store_seo_data', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('store_id');
             $table->string('url');
@@ -31,6 +31,6 @@ class CreateStoreSeoDatasTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('store_seo_datas');
+        Schema::dropIfExists('store_seo_data');
     }
 }
