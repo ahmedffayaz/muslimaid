@@ -23,7 +23,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $items = $user->cashbacks()->latest()->limit(5)->get();
-        return view('client-dashboard.dashboard',compact('user', 'items'));
+        return view('frontend.client-dashboard.dashboard',compact('user', 'items'));
     }
 
     /**
@@ -67,7 +67,7 @@ class DashboardController extends Controller
     public function edit()
     {
         $user = Auth::user();
-        return view('client-dashboard.edit-profile',compact('user'));
+        return view('frontend.client-dashboard.edit-profile',compact('user'));
     }
 
     /**
@@ -116,16 +116,16 @@ class DashboardController extends Controller
 
         $user = Auth::user();
         $cashbacks = UserCashback::where('user_id',$user->id)->latest()->get();
-        return view('client-dashboard.cashback',compact('user','cashbacks'));
+        return view('frontend.client-dashboard.cashback',compact('user','cashbacks'));
     }
     public function clicks(){
 
         $user = Auth::user();
         $clicks = ExitClick::where('user_id',$user->id)->latest()->get();
-        return view('client-dashboard.clicks',compact('user','clicks'));
+        return view('frontend.client-dashboard.clicks',compact('user','clicks'));
     }
     public function changePassword(){
-        return view('client-dashboard.change-password');
+        return view('frontend.client-dashboard.change-password');
     }
     public function savePassword(Request $request)
     {

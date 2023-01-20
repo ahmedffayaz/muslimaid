@@ -16,12 +16,12 @@ class CreateStoreReviewsTable extends Migration
         Schema::create('store_reviews', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('store_id');
+            $table->unsignedBigInteger('user_id');
             $table->longText('review')->nullable();
-            $table->string('reviewer')->nullable();
+            $table->string('rating')->default(5);
             $table->string('status')->default('active');
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

@@ -87,7 +87,7 @@ class Store extends Model
 
     public function storeRuleData()
     {
-        return $this->hasMany(Store_seo_data::class,'store_id','id');
+        return $this->hasMany(StoreSeoData::class,'store_id','id');
     }
 
     public function storeAddress()

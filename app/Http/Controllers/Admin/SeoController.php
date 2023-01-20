@@ -3,9 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
-use App\Models\Seo_rule;
+use App\Models\SeoRule;
 use Illuminate\Http\Request;
-use App\Models\Seo_rule_data;
+use App\Models\SeoRuleData;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -20,7 +20,7 @@ class SeoController extends Controller
      */
     public function index()
     {
-        $seo_rules = Seo_rule::with('ruleData')->get();
+        $seo_rules = SeoRule::with('ruleData')->get();
 
         return view('admin-dashboard.seo.index',compact('seo_rules'));
     }
@@ -60,7 +60,7 @@ class SeoController extends Controller
             // Removing / from URL
             $final_string = rtrim($request->url, '/');
 
-            $seo_rule = Seo_rule::create([
+            $seo_rule = SeoRule::create([
                 'url' => $final_string,
                 'is_enabled' => isset($request->is_enabled) ? 1 : 0
             ]);
@@ -112,9 +112,9 @@ class SeoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Seo_rule $seo)
+    public function edit(SeoRule $seo)
     {
-        $seoData = Seo_rule::withCount('ruleData')->with('ruleData')->where('id',$seo['id'])->first();
+        $seoData = SeoRule::withCount('ruleData')->with('ruleData')->where('id',$seo['id'])->first();
 
         return view('admin-dashboard.seo.form',compact('seoData'));
     }
@@ -126,7 +126,7 @@ class SeoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request,  Seo_rule $seo)
+    public function update(Request $request,  SeoRule $seo)
     {
         $request->validate([
             'url' => 'required|url',
@@ -187,9 +187,9 @@ class SeoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Seo_rule $seo)
+    public function destroy(SeoRule $seo)
     {
-        Seo_rule_data::where('seo_rule_id',$seo['id'])->delete();
+        SeoRuleData::where('seo_rule_id',$seo['id'])->delete();
         $seo->delete();
         flash()->success('Seo rule deleted successfully');
         return redirect()->route('admin.seo.index');

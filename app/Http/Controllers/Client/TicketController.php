@@ -20,7 +20,7 @@ class TicketController extends Controller
      */
     public function index()
     {
-        return view('client-dashboard.tickets.index');
+        return view('frontend.client-dashboard.tickets.index');
        
     }
 
@@ -33,7 +33,7 @@ class TicketController extends Controller
     {
         $user = Auth::user();
         $clicks = $user->clicks;
-        return view('client-dashboard.tickets.create', compact('clicks'));
+        return view('frontend.client-dashboard.tickets.create', compact('clicks'));
     }
 
     /**
@@ -56,7 +56,7 @@ class TicketController extends Controller
     public function show($id)
     {
         $ticket = Ticket::where('ticket_id',$id)->firstOrFail();
-        return view('client-dashboard.tickets.show',compact('ticket'));
+        return view('frontend.client-dashboard.tickets.show',compact('ticket'));
     }
 
     /**
@@ -104,7 +104,7 @@ class TicketController extends Controller
         $user = Auth::user();
         $clicks = $user->clicks->where('store_id', $store_id);       
         if($claim  =='missing cashback'){
-            return view('client-dashboard.tickets.ticket_step2',compact('store_id','claim','clicks'));
+            return view('frontend.client-dashboard.tickets.ticket_step2',compact('store_id','claim','clicks'));
         }
         if($claim == 'declined cashback'){
             $cashback =  UserCashback::where([
@@ -113,7 +113,7 @@ class TicketController extends Controller
             ])->where('status',2)->get();
 
             if(count($cashback)){
-                return view('client-dashboard.tickets.ticket_step2',compact('store_id','claim','clicks','cashback'));
+                return view('frontend.client-dashboard.tickets.ticket_step2',compact('store_id','claim','clicks','cashback'));
 
             }else{
                 flash()->error('We have no record of a declined transaction with this retailer.');
@@ -130,7 +130,7 @@ class TicketController extends Controller
             ])->whereIn('status',[1,4,3])->get();
 
             if(count($cashback)){
-                return view('client-dashboard.tickets.ticket_step2',compact('store_id','claim','clicks','cashback'));
+                return view('frontend.client-dashboard.tickets.ticket_step2',compact('store_id','claim','clicks','cashback'));
 
             }else{
                 flash()->error('We have no record of a pending, confirmed or paid transaction with this retailer.');
@@ -172,7 +172,7 @@ class TicketController extends Controller
 
         }
 
-        return view('client-dashboard.tickets.ticket_step3',compact('claim'));
+        return view('frontend.client-dashboard.tickets.ticket_step3',compact('claim'));
 
     }
 

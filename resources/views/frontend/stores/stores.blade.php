@@ -1,4 +1,3 @@
-
 <div class="block mt-5">
     <div class="container">
         <div class="row">
@@ -9,11 +8,11 @@
                             <div class="block-header">
                             </div>
                             <div class="products-view">
-                                <div class="products-view__list products-list scrolling-pagination"
-                                    data-layout="grid-5-full" data-with-features="false" data-mobile-grid-columns="2">
+                                <div class="products-view__list products-list scrolling-pagination" data-layout="grid-5-full" data-with-features="false"
+                                    data-mobile-grid-columns="2">
                                     <div class="products-list__body ">
                                         @foreach ($locations as $store)
-                                            @include('layouts.frontend.includes.stores')
+                                            @include('frontend.layouts.includes.stores')
                                         @endforeach
                                     </div>
                                 </div>

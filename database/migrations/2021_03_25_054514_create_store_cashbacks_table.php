@@ -21,6 +21,7 @@ class CreateStoreCashbacksTable extends Migration
             $table->string('image')->nullable();
             $table->text('click_url')->nullable();
             $table->text('sale_commission')->nullable();
+            $table->string('cashback')->default(0);
             $table->text('currency')->nullable();
             $table->longText('detail')->nullable();
             $table->longText('network_detail')->nullable();
@@ -28,7 +29,6 @@ class CreateStoreCashbacksTable extends Migration
             $table->string('default')->default(0)->nullable();
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

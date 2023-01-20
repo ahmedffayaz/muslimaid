@@ -16,6 +16,7 @@ class CreateCashoutsTable extends Migration
         Schema::create('cashouts', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('charity_types_id')->nullable();
             $table->float('amount');
             $table->string('cashout_type')->nullable();
             $table->string('status')->nullable();
@@ -33,9 +34,9 @@ class CreateCashoutsTable extends Migration
             $table->string('bank_sort_code')->nullable();
             $table->string('bic')->nullable();
             $table->dateTime('paid_on')->nullable();
+            $table->integer('new_cashout')->default(0);
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

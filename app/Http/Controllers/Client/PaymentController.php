@@ -28,7 +28,7 @@ class PaymentController extends Controller
         $stores = Store::paginate('10');
         $usercashback=UserCashback::where('status', '3')->get();
         $term = null;
-        return view('client-dashboard.withdraw',compact('stores','term','charities','usercashback'));
+        return view('frontend.client-dashboard.withdraw',compact('stores','term','charities','usercashback'));
     }
 
     /**
@@ -97,7 +97,7 @@ class PaymentController extends Controller
         //
     }
     public function paymentDetails(){
-        return view('client-dashboard.payment_details');
+        return view('frontend.client-dashboard.payment_details');
     }
     public function paymentSave(Request $request){
 

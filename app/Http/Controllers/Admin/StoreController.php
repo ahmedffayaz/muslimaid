@@ -16,7 +16,7 @@ use App\Models\StoreAddress;
 use Illuminate\Http\Request;
 use App\Models\StoreCashback;
 use Illuminate\Http\Response;
-use App\Models\Store_seo_data;
+use App\Models\StoreSeoData;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
@@ -546,7 +546,7 @@ class StoreController extends Controller
             $store = Store::whereId($request->input('store_id'))->first();
 
             $url = $url . '/cashback/' . $store['slug'];
-            $store = Store_seo_data::create([
+            $store = StoreSeoData::create([
                 'store_id' => $request->input('store_id'),
                 'url' => $url,
                 'type' => 'meta',
@@ -640,11 +640,11 @@ class StoreController extends Controller
 
     public function editStoreSeoRule($id)
     {
-        $storeSeoRule = Store_seo_data::where('id', $id)->first();
+        $storeSeoRule = StoreSeoData::where('id', $id)->first();
         return view('admin-dashboard.stores.store_seo_edit_modal', compact('storeSeoRule'))->render();
     }
 
-    public function updateStoreSeoRule(Request $request, Store_seo_data $Store_seo_data)
+    public function updateStoreSeoRule(Request $request, StoreSeoData $Store_seo_data)
     {
         $validator = Validator::make($request->all(), [
             'key' => 'required',
@@ -657,7 +657,7 @@ class StoreController extends Controller
                 ->withInput();
         }
 
-        Store_seo_data::where('id', $request->input('seo_id'))->update([
+        StoreSeoData::where('id', $request->input('seo_id'))->update([
             'key' => $request->input('key'),
             'value' => $request->input('value'),
         ]);
@@ -669,7 +669,7 @@ class StoreController extends Controller
 
     public function deleteStoreSeoRule($id)
     {
-        Store_seo_data::where('id', $id)->delete();
+        StoreSeoData::where('id', $id)->delete();
         flash()->success('Seo rule deleted');
     }
 
