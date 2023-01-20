@@ -109,7 +109,7 @@ class StoreController extends Controller
             // }
 
             flash()->success('New store added');
-            return redirect()->route('admin.stores.index');
+            return redirect()->route('admin.stores.show_store','slug=' . $store->slug);
         } catch (Exception $exception) {
 
             flash()->error('Error while adding new store');
