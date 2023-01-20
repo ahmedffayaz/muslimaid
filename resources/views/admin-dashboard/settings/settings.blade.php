@@ -245,7 +245,7 @@
                                                 <div class="row g-3">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="theme_color">Dashbaord Menu Type <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Change admin dashboard menu appearance."></em></label>
+                                                            <label class="form-label" for="theme_color">Dashboard Menu Type <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top" title=" Change admin dashboard menu appearance."></em></label>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
