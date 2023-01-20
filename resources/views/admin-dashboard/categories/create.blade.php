@@ -55,6 +55,14 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col-lg-6">
+                                            <div class="form-group">
+                                                    <div class="custom-control custom-control-sm custom-checkbox notext">
+                                                        <input type="checkbox" class="custom-control-input" name="is_map_enable" value="1" id="uid1">
+                                                        <label class="custom-control-label" for="uid1">Enable Google Map</label>
+                                                    </div>
+                                            </div>
+                                        </div>
                                         <div class="col-lg-12">
                                             <div class="card">
                                                 <input name="description" type="hidden">

@@ -235,6 +235,9 @@ class StoreController extends Controller
 
     public function uploadImage(Request $request, Store $store)
     {
+        $validation = $request->validate([
+            'image' => 'required|mimes:jpeg,jpg,png,gif|max:2048',
+       ]);
         if ($request->has('image')) {
 
             $img_exist = StoreImage::where(['store_id' => $store->id, 'title' => $request->title])->first();
@@ -256,7 +259,6 @@ class StoreController extends Controller
                     'updated' => 'success'
                 );
             }
-
             $imageName = Str::slug($store->name) . '_' . $request->title . '_' . time() . '.' . $request->image->extension();
             $request->image->storeAs('public/stores/images', $imageName);
 
