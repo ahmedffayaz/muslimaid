@@ -119,7 +119,7 @@
                                                                 @csrf
                                                                 <input type="hidden" name="payment_method" value="bank">
                                                                 <button type="button"
-                                                                    @if (Auth::user()->availableBalance() < $min) class="btn btn-success" disabled 
+                                                                    @if (Auth::user()->availableBalance() < $min) class="btn btn-success disabled" 
                                                                     @elseif(in_array('pending', $cashout_status) || in_array('processing donation', $cashout_status))
                                                                         class="btn btn-success popoverData disabled withdraw_submit" rel="popover" data-placement="bottom" data-content="You already have a withdraw request" data-trigger="hover" 
                                                                     @else

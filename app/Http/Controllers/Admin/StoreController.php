@@ -88,28 +88,13 @@ class StoreController extends Controller
                 'tracking_url' => $request->input('tracking_url'),
                 'store_url' => $request->input('store_url'),
                 'description' => $request->input('description'),
-                // 'extra_info'    => $request->input('extra_info'),
-                // 'terms_conditions'    => $request->input('terms_conditions'),
                 'status' => 'active',
                 'override_cashback' => 1,
                 'slug' => Str::slug($request->input('store_name')),
             ]);
 
-            // $cashback = StoreCashback::create([
-            //     'store_id'=>$store->id,
-            //     'sale_commission'=>$request->input('store_cashback'),
-            //     'click_url'=>$request->input('tracking_url')
-            // ]);
-
-            // foreach ($request->input('category_id') as $category) {
-            //     DB::table('category_store')->insert([
-            //         'store_id' => $store->id,
-            //         'category_id' => $category
-            //     ]);
-            // }
-
             flash()->success('New store added');
-            return redirect()->route('admin.stores.index');
+            return redirect()->route('admin.stores.show_store','slug=' . $store->slug);
         } catch (Exception $exception) {
 
             flash()->error('Error while adding new store');
@@ -250,6 +235,9 @@ class StoreController extends Controller
 
     public function uploadImage(Request $request, Store $store)
     {
+        $validation = $request->validate([
+            'image' => 'required|mimes:jpeg,jpg,png,gif|max:2048',
+       ]);
         if ($request->has('image')) {
 
             $img_exist = StoreImage::where(['store_id' => $store->id, 'title' => $request->title])->first();
@@ -271,7 +259,6 @@ class StoreController extends Controller
                     'updated' => 'success'
                 );
             }
-
             $imageName = Str::slug($store->name) . '_' . $request->title . '_' . time() . '.' . $request->image->extension();
             $request->image->storeAs('public/stores/images', $imageName);
 

@@ -1,8 +1,9 @@
 
-                                <form action="{{route('admin.vouchers.update',$voucher)}}" class="gy-3 form-validate is-alter voucher_form" method="POST">
+                                <form action="{{route('admin.vouchers.update',$voucher)}}" class="gy-3 form-validate is-alter voucher_form " method="POST">
                                     @csrf
                                     @method('PUT')
                                     {{-- <input type="hidden" name="store_editor" value="1"> --}}
+                                   
                                     <div class="row g-4">
                                         <div class="col-lg-6">
                                             <div class="form-group">
@@ -80,6 +81,9 @@
                                                 <div class="form-control-wrap">
                                                     <input type="text" class="form-control date-picker" id="promotion_end_date" value="{{$voucher->promotion_end_date}}" name="promotion_end_date" required>
                                                 </div>
+                                                @if ($errors->has('promotion_end_date'))
+                                                <span class="invalid-feedback d-block" role="alert">End date must be greater than start date.</span>
+                                                @endif
                                             </div>
                                         </div>
                                         
@@ -124,5 +128,7 @@
         alert('yes');
        
         
-      });</script>
+      });
+    </script>
+    
 @endpush

@@ -196,6 +196,7 @@ class PaymentController extends Controller
             'user_id' => $user->id,
             'charity_types_id'=>$request->charity_types_id,
             'amount'=>$request->amount, 
+            'new_cashout'=>'1',
             'payment_method'=>$request->payment_method, 
             'status'=>'processing donation']);
            

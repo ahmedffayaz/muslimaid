@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Voucher;
 use App\Models\Store;
 use App\Models\Network;
+use App\Models\Voucher;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 
 class VouchersController extends Controller
@@ -53,14 +57,39 @@ class VouchersController extends Controller
      */
     public function store(Request $request)
     {
+            $validator = Validator::make($request->all(), [
+                'link_name' => 'required|max:255',
+                'description' => 'required|max:255',
+                'click_url' => 'required|url',
+                'sale_commission' => 'required',
+                'coupon_code' => 'required',
+                'destination' => 'required|url',
+                'promotion_type' => 'required',
+                'promotion_start_date' => 'required',
+                'promotion_end_date' => 'required|after:promotion_start_date',
+            ]);
+    
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
         try{
-        $inputs= $request->all();
-        $inputs['promotion_start_date'] = \Carbon\Carbon::parse($request->input('promotion_start_date'))->format('Y-m-d H:i:s');
-        $inputs['promotion_end_date'] = \Carbon\Carbon::parse($request->input('promotion_end_date'))->format('Y-m-d H:i:s');
-        
-        $voucher = Voucher::create($inputs);
+         $voucher = Voucher::create([
+            'link_name' => $request->input('link_name'),
+            'store_id' => $request->input('store_id'),
+            'description' => $request->input('description'),
+            'click_url' => $request->input('click_url'),
+            'sale_commission' => $request->input('sale_commission'),
+            'coupon_code' => $request->input('coupon_code'),
+            'destination' => $request->input('destination'),
+            'promotion_type' => $request->input('promotion_type'),
+            'promotion_start_date' => \Carbon\Carbon::parse($request->input('promotion_start_date'))->format('Y-m-d'),
+            'promotion_end_date' =>\Carbon\Carbon::parse($request->input('promotion_end_date'))->format('Y-m-d'),
+           
+        ]);
 
-        flash()->success('Voucher added successfully');
+       flash()->success('Voucher added successfully');
         return redirect()->route('admin.vouchers.index');
         }catch (\Throwable $th) {
             flash()->error('something went wrong! unable to add the voucher');
@@ -109,13 +138,37 @@ class VouchersController extends Controller
      */
     public function update(Request $request, Voucher $voucher)
     {
-        try{
-            $inputs= $request->all();
+        $validator = Validator::make($request->all(), [
+            'link_name' => 'required|max:255',
+            'description' => 'required|max:255',
+            'click_url' => 'required|url',
+            'sale_commission' => 'required',
+            'coupon_code' => 'required',
+            'destination' => 'required|url',
+            'promotion_type' => 'required',
+            'promotion_start_date' => 'required',
+            'promotion_end_date' => 'required|after:promotion_start_date',
+        ]);
 
-            $inputs['promotion_start_date'] = \Carbon\Carbon::parse($request->input('promotion_start_date'))->format('Y-m-d H:i:s');
-            $inputs['promotion_end_date'] = \Carbon\Carbon::parse($request->input('promotion_end_date'))->format('Y-m-d H:i:s');
-            
-            $voucher->update($inputs);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+        try{
+            $voucher->update([
+                'link_name' => $request->input('link_name'),
+                'store_id' => $request->input('store_id'),
+                'description' => $request->input('description'),
+                'click_url' => $request->input('click_url'),
+                'sale_commission' => $request->input('sale_commission'),
+                'coupon_code' => $request->input('coupon_code'),
+                'destination' => $request->input('destination'),
+                'promotion_type' => $request->input('promotion_type'),
+                'promotion_start_date' => \Carbon\Carbon::parse($request->input('promotion_start_date'))->format('Y-m-d'),
+                'promotion_end_date' =>\Carbon\Carbon::parse($request->input('promotion_end_date'))->format('Y-m-d'),
+               
+            ]);
             if(!$request->ajax())
             { 
                  flash()->success('Voucher updated successfully');
@@ -175,7 +228,7 @@ class VouchersController extends Controller
                 'Content-Type' => 'text/csv',
             );
 
-            return \Response::download($filename, 'vouchers.csv', $headers);
+            return Response::download($filename, 'vouchers.csv', $headers);
 
         } catch (\Throwable $th) {
 

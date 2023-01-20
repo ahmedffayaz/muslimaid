@@ -301,7 +301,6 @@
                                     <input id="logo-input"  name="image" class="d-none" type='file' onchange="readURL(this);" required/>
                                     <br> <br><span>Click here to select image</span>
                                     </label>
-                                   
                                 </div>
                                
                             </div>
@@ -821,7 +820,6 @@
 </script>
 
 @push('scripts')
-
 <script>
     function fetchVouchers(){
         pageurl = "{{route('admin.stores.vouchers')}}"
@@ -1348,10 +1346,23 @@
                     $('.file-upload').trigger("reset");
                     $('#blah').attr("src","{{asset('admin-dashboard/images/cloud-uploading.png')}}");
             },
-            error: function(data){
-                console.log("error");
-                console.log(data);
-            }
+            error: function (error) {
+                            if (error.responseJSON.error) {
+                                (function(NioApp, $){
+                                    'use strict';
+                                    toastr.clear();
+                                    NioApp.Toast(error.responseJSON.error, 'error');
+
+                                })(NioApp, jQuery);
+                            } else {
+                                (function(NioApp, $){
+                                    'use strict';
+                                    toastr.clear();
+                                    NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+
+                                })(NioApp, jQuery);
+                            }
+                        }
         });
      
         });

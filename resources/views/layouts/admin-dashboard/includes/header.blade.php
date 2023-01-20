@@ -85,7 +85,7 @@
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan--}}
-                            @can('view cashbouts')
+                            @can('view cashouts')
                             <li class="">
                                 <a href="{{route('admin.cashouts.index')}}" class="@if(count($new_cashouts)) icon-status icon-status-info @endif">
                                     <span class="nk-menu-icon"><em class="icon ni ni-cc-alt2-fill"></em></span>

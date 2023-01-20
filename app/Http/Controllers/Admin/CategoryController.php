@@ -62,6 +62,7 @@ class CategoryController extends Controller
             $category = Category::create([
                 'name' => $request->input('name'),
                 'parent_id' => $request->input('parent_id'),
+                'is_map_enable' => $request->input('is_map_enable') == 1 ? 1 : 0,
                 'description' => $request->input('description'),
                 'logo_type' => $request->input('logo_type'),
                 'logo_link' => $request->input('logo_link'),
@@ -149,11 +150,11 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-
          try {
             $category->update([
                 'name' => $request->input('name'),
                 'parent_id' => $request->input('parent_id'),
+                'is_map_enable' => $request->input('is_map_enable') == 1 ? 1 : 0,
                 'description' => $request->input('description'),
                 'logo_type' => $request->input('logo_type'),
                 'logo_link' => $request->input('logo_link'),
