@@ -262,7 +262,7 @@
                 text: "You won't be able to revert this!",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Ok!'
             }).then(function(result) {
                 if (result.value) {
                     _self
