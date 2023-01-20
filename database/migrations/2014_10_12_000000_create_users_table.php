@@ -24,15 +24,15 @@ class CreateUsersTable extends Migration
             $table->longText('intro')->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
+            $table->string('avatar')->nullable();
             $table->boolean('status')->default(1);
             $table->string('referred_by')->nullable();
             $table->string('referred_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
-            
-            
-
+            $table->enum('provider', ['email', 'google', 'facebook']);
+            $table->string('provider_id')->nullable();
         });
     }
 

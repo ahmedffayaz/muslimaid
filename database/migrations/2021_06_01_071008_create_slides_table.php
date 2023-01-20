@@ -22,6 +22,7 @@ class CreateSlidesTable extends Migration
             $table->string('banner')->nullable();
             $table->string('cashback_title')->nullable();
             $table->string('description')->nullable();
+            $table->string('order')->nullable();
             $table->timestamps();
         });
     }

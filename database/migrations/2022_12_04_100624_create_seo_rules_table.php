@@ -16,7 +16,7 @@ class CreateSeoRulesTable extends Migration
         Schema::create('seo_rules', function (Blueprint $table) {
             $table->id();
             $table->string('url');
-            $table->string('title');
+            $table->boolean('is_enabled')->default(0);
             $table->timestamps();
         });
     }

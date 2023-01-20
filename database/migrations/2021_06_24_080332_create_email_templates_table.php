@@ -20,6 +20,7 @@ class CreateEmailTemplatesTable extends Migration
             $table->string('key');
             $table->string('subject');
             $table->longText('message');
+            $table->text('keywords')->nullable();
             $table->timestamps();
         });
     }

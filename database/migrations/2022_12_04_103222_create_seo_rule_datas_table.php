@@ -16,8 +16,9 @@ class CreateSeoRuleDatasTable extends Migration
         Schema::create('seo_rule_datas', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('seo_rule_id')->constrained('seo_rules')->cascadeOnDelete();
-            $table->string('meta_keyword');
-            $table->longText('meta_description');
+            $table->string('type');
+            $table->string('key');
+            $table->longText('value');
             $table->timestamps();
         });
     }
