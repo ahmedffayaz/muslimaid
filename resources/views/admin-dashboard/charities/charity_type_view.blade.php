@@ -7,9 +7,9 @@
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">Charities</h3>
+                                <h3 class="nk-block-title page-title">Charity Types</h3>
                                 <div class="nk-block-des text-soft">
-                                    {{-- <p>You have total {{count($charityType)}} CharityTypes.</p> --}}
+                                    <p>You have total {{count($CharityType)}} Charity Types.</p>
                                 </div>
                             </div><!-- .nk-block-head-content -->
 
@@ -36,38 +36,28 @@
                                         @foreach ($CharityType as $charity)
                                             <div class="nk-tb-item">
                                                 <div class="nk-tb-col">
-                                                    <div class="tb-lead"><span><a
-                                                                href="{{ route('admin.charities.charity_type_edit', $charity) }}"
+                                                    <div class="tb-lead"><span><a href="{{ route('admin.charities.charity_type_edit', $charity) }}"
                                                                 class="a_link">{{ $charity->title }}</a></span></div>
                                                 </div>
                                                 <div class="nk-tb-col">
-                                                    {!! $charity->status == 1
-                                                        ? '<span class="tb-status badge badge-success">Active</span>'
-                                                        : '<span class="tb-status badge badge-warning">In-active</span>' !!}
+                                                    {!! $charity->status == 1 ? '<span class="tb-status badge badge-success">Active</span>' : '<span class="tb-status badge badge-warning">In-active</span>' !!}
 
                                                 </div>
-                                                {{-- {{ route('admin.charities.charity_type_edit', $charity) }} --}}
+                                                {{--  --}}
                                                 <div class="nk-tb-col nk-tb-col-tools">
                                                     <ul class="nk-tb-actions gx-1">
                                                         <li>
                                                             <div class="drodown">
-                                                                <a href="#"
-                                                                    class="dropdown-toggle btn btn-icon btn-trigger"
-                                                                    data-toggle="dropdown"><em
+                                                                <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em
                                                                         class="icon ni ni-more-h"></em></a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
                                                                     <ul class="link-list-opt no-bdr">
-                                                                        <li><a
-                                                                                href=""><em
+                                                                        <li><a class="edit-charity" href="{{ route('admin.charities.charity_type_edit', $charity) }}"><em
                                                                                     class="icon ni ni-edit"></em><span>Edit
                                                                                 </span></a></li>
-                                                                        <li><a class='delete'
-                                                                                form_id="delete-{{ $charity->id }}"
-                                                                                style="cursor: pointer"> <em
+                                                                        <li><a class='delete' form_id="delete-{{ $charity->id }}" style="cursor: pointer"> <em
                                                                                     class="icon ni ni-trash-fill"></em><span>Delete</span></a>
-                                                                            <form
-                                                                                action="{{ route('admin.charity_type_delete', $charity->id) }}"
-                                                                                id="delete-{{ $charity->id }}"
+                                                                            <form action="{{ route('admin.charity_type_delete', $charity->id) }}" id="delete-{{ $charity->id }}"
                                                                                 method="" class="m-0">
                                                                                 @csrf
                                                                             </form>
@@ -86,6 +76,25 @@
                             </div><!-- .card-inner-group -->
                         </div><!-- .card -->
                     </div><!-- .nk-block -->
+                    <!-- Edit Charity Modal -->
+                    <div class="modal fade" tabindex="-1" id="charity-modal">
+                        <div class="modal-dialog modal-sm" role="document">
+                            <div class="modal-content">
+
+                                <div class="modal-header align-center">
+                                    <div class="nk-file-title">
+
+                                        <div class="nk-file-name">
+                                            <div class="nk-file-name-text"><span class="title">Edit Charity Type</span></div>
+                                        </div>
+                                    </div>
+                                    <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+                                </div>
+                                <div id="voucher-form" class=" p-4">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -102,7 +111,6 @@
         $(document).ready(function() {
             $(document).on('click', '.delete', function(event) {
                 var form_id = $(this).attr('form_id');
-                // console.log(form_id)
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -115,6 +123,28 @@
                     }
                 });
                 event.preventDefault();
+            });
+        });
+    </script>
+    <script>
+        $(document).on('click', '.edit-charity', function(event) {
+            event.preventDefault();
+            var pageurl = $(this).attr('href');
+            var _token = $("input[name=_token]").val();
+            $.ajax({
+
+                url: pageurl,
+                method: "GET",
+                data: {
+                    _token: _token
+                },
+                success: function(data) {
+                    $('#charity-modal').modal('show');
+                    $('#voucher-form').html(data);
+                    $('.form-validate').each(function() {
+                        validateData($(this));
+                    });
+                }
             });
         });
     </script>
