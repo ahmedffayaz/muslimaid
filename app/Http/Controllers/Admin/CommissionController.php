@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Support\Facades\DB;
+use Exception;
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Store;
 use App\Models\Network;
@@ -10,11 +11,12 @@ use App\Models\ExitClick;
 use App\Models\SiteSetting;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Resources\Json\JsonResource;
 use  Illuminate\Support\Facades\Response;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class CommissionController extends Controller
 {
@@ -61,6 +63,19 @@ class CommissionController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'exit_click_id' => 'required|integer',
+            'order_value' => 'nullable|numeric',
+            'network_commission' => 'required|numeric',
+            'amount' => 'nullable|numeric',
+            'status' => 'required|integer'
+        ], [
+            'exit_click_id.required' => 'Exit click is required',
+            'exit_click_id.integer' => 'Exit click should be integer',
+            'order_value.numeric' => 'Order values should be number',
+            'amount.numeric' => 'Cashback amount should be number',
+        ]);
+
         try {
             $click = ExitClick::findOrFail($request->exit_click_id);
             $custom_cashback_percentage = $click->store->custom_cashback_percentage;
@@ -81,21 +96,22 @@ class CommissionController extends Controller
                 'status' => $request->status,
                 'event_date' => $click->created_at,
                 'click_date' => $click->created_at,
-
             ]);
 
-            $change_status = CashbackStatusChange::create([
+            CashbackStatusChange::create([
                 'user_cashback_id' => $commission->id,
                 'cashback_status_id' => $commission->status
-
             ]);
 
-            flash()->success('New Cashback Added');
-            return redirect()->route('admin.commissions.index');
-        } catch (\Throwable $th) {
-
-            flash()->error('Error While saving new cashback');
-            return redirect()->route('admin.commissions.index');
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'New Cashback Added'
+            ], JsonResponse::HTTP_OK);
+        } catch (Exception $exception) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Error While saving new cashback'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -120,7 +136,7 @@ class CommissionController extends Controller
     {
         $clicks = ExitClick::latest()->get();
         $statuses = DB::table('cashback_statuses')->latest()->get();
-        return view('admin-dashboard.commissions.edit', compact('commission', 'clicks', 'statuses'))->render();
+        return view('admin-dashboard.commissions.create', compact('commission', 'clicks', 'statuses'))->render();
     }
 
     /**
@@ -132,13 +148,25 @@ class CommissionController extends Controller
      */
     public function update(Request $request, UserCashback $commission)
     {
+        $request->validate([
+            'exit_click_id' => 'required|integer',
+            'order_value' => 'nullable|numeric',
+            'network_commission' => 'required|numeric',
+            'amount' => 'nullable|numeric',
+            'status' => 'required|integer'
+        ], [
+            'exit_click_id.required' => 'Exit click is required',
+            'exit_click_id.integer' => 'Exit click should be integer',
+            'order_value.numeric' => 'Order values should be number',
+            'amount.numeric' => 'Cashback amount should be number',
+        ]);
+
         try {
             //track status change of the cashback
             if ($commission->status != $request->status) {
                 $change_status = CashbackStatusChange::create([
                     'user_cashback_id' => $commission->id,
                     'cashback_status_id' => $request->status
-
                 ]);
             }
 
@@ -221,7 +249,6 @@ class CommissionController extends Controller
 
     public function storeMultiple(Request $request)
     {
-        // dd($request->all());
         $request->validate([
             'exit_click_id.*' => 'required|integer',
             'order_value.*' => 'nullable|numeric',
@@ -248,6 +275,7 @@ class CommissionController extends Controller
                 } else {
                     $cashback_percent = $global_percentage;
                 }
+
                 $commission = UserCashback::create([
                     'store_id' => $click->store_id,
                     'user_id'  => $click->user_id ?? 0,
@@ -256,29 +284,25 @@ class CommissionController extends Controller
                     'network_commission' => round($request->network_commission[$key], 3),
                     'order_value' => round($request->order_value[$key], 3),
                     'status' => $request->status[$key],
-                    'event_date' => \Carbon\Carbon::parse($request->event_date[$key])->format('Y-m-d H:i:s'),
+                    'event_date' => Carbon::parse($request->event_date[$key])->format('Y-m-d H:i:s'),
                     'click_date' => $click->created_at,
-
                 ]);
 
                 CashbackStatusChange::create([
                     'user_cashback_id' => $commission->id,
                     'cashback_status_id' => $commission->status
-
                 ]);
             }
 
-            // flash()->success('New Cashback Added');
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,
-                'data' => route('admin.commissions.index'),
                 'message' => 'New Cashback Added'
             ], JsonResponse::HTTP_OK);
-            // return route('admin.commissions.index')->with('success', 'New Cashback Added');
-        } catch (\Throwable $th) {
-
-            flash()->error('Error While saving new cashbacks');
-            return redirect()->route('admin.commissions.index');
+        } catch (Exception $exception) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'errors' => $exception->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     public function searchCommissions(Request $request, UserCashback $coms)
