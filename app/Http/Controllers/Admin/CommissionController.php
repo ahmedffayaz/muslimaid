@@ -12,6 +12,8 @@ use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\JsonResource;
 use  Illuminate\Support\Facades\Response;
 
 class CommissionController extends Controller
@@ -219,10 +221,20 @@ class CommissionController extends Controller
 
     public function storeMultiple(Request $request)
     {
+        // dd($request->all());
         $request->validate([
-            'exit_click_id' => 'required|integer',
-            'network_commission' => 'required|integer',
-            'event_date' => 'required|date'
+            'exit_click_id.*' => 'required|integer',
+            'order_value.*' => 'nullable|numeric',
+            'network_commission.*' => 'required|numeric',
+            'amount.*' => 'nullable|numeric',
+            'event_date.*' => 'required|date_format:m/d/Y'
+        ], [
+            'exit_click_id.*.required' => 'All exit clicks are required',
+            'exit_click_id.*.integer' => 'All exit clicks should be integer',
+            'order_value.*.numeric' => 'All order values should be number',
+            'amount.*.numeric' => 'All cashbacks amounts should be number',
+            'event_date.*.required' => 'All cashbacks event dates are required',
+            'event_date.*.date_format' => 'All cashbacks event dates should be match the format 01/25/2000'
         ]);
 
         try {
@@ -249,15 +261,20 @@ class CommissionController extends Controller
 
                 ]);
 
-                $change_status = CashbackStatusChange::create([
+                CashbackStatusChange::create([
                     'user_cashback_id' => $commission->id,
                     'cashback_status_id' => $commission->status
 
                 ]);
             }
 
-            flash()->success('New Cashback Added');
-            return redirect()->route('admin.commissions.index');
+            // flash()->success('New Cashback Added');
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'data' => route('admin.commissions.index'),
+                'message' => 'New Cashback Added'
+            ], JsonResponse::HTTP_OK);
+            // return route('admin.commissions.index')->with('success', 'New Cashback Added');
         } catch (\Throwable $th) {
 
             flash()->error('Error While saving new cashbacks');

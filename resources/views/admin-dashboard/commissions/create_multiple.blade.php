@@ -136,7 +136,7 @@
                 $('#multiple_cashbacks_form').html(response);
                 NioApp.Picker.date('.date-picker');
                 initializeSelect2();
-                storeMultipleCashbacks();
+                confirmMultipleCashbacks();
             }
         });
 
@@ -153,8 +153,8 @@
                     $('#modal').modal('show');
                     importCSV()
                 },
-                error: function (response) {
-                    console.log(response);
+                error: function (error) {
+                    console.log(error);
                 }
             });
         });
@@ -174,7 +174,7 @@
                         NioApp.Picker.date('.date-picker');
                         initializeSelect2();
                         $('#modal').modal('hide');
-                        storeMultipleCashbacks();
+                        confirmMultipleCashbacks();
                     },
                     error: function (error) {
                         if (error.responseJSON.error) {
@@ -182,14 +182,12 @@
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(error.responseJSON.error, 'error');
-
                             })(NioApp, jQuery);
                         } else {
                             (function(NioApp, $){
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
-
                             })(NioApp, jQuery);
                         }
                     }
@@ -197,7 +195,7 @@
             });
         }
 
-        function storeMultipleCashbacks () {
+        function confirmMultipleCashbacks () {
             $('#save_form').on("submit", function(event){
                 event.preventDefault();
                 Swal.fire({
@@ -206,13 +204,46 @@
                     icon: 'warning',
                     showCancelButton: true,
                     confirmButtonText: 'OK'
-                }).then((result) => {
-                    if (result.value) {
-                        console.log(result);
+                }).then((response) => {
+                    if (response.value) {
+                        let url = $(this).attr('action');
+                        let formData = new FormData(this);
+                        storeMultipleCashbacks(url, formData);
                     }
-                }).catch((error) => {
-                    console.log(error);
                 });
+            });
+        }
+
+        function storeMultipleCashbacks(url, formData) {
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    window.location.href = response.data;
+                    (function(NioApp, $){
+                        'use strict';
+                        toastr.clear();
+                        NioApp.Toast(response.message, 'success');
+                    })(NioApp, jQuery);
+                },
+                error: function (error) {
+                    if (error.responseJSON.error) {
+                        (function(NioApp, $){
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(error.responseJSON.error, 'error');
+                        })(NioApp, jQuery);
+                    } else {
+                        (function(NioApp, $){
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                        })(NioApp, jQuery);
+                    }
+                }
             });
         }
     });

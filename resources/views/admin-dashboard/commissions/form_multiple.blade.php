@@ -18,7 +18,7 @@
                         <div class="form-group">
                             <label class="form-label" for="exit_click_id">Exit Click</label>
                             <div class="form-control-wrap ">
-                                <input type="text" class="form-control" id="exit_click_id"
+                                <input type="number" class="form-control" id="exit_click_id"
                                     value="{{ $row[0] }}" name="exit_click_id[]" required>
                             </div>
                         </div>
@@ -26,36 +26,36 @@
 
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label class="form-label" for="phone-no-1">Order Value</label>
+                            <label class="form-label" for="order_value">Order Value</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="phone-no-1" value="{{ $row[1] }}"
-                                    name="order_value[]">
+                                <input type="number" class="form-control" id="order_value" value="{{ $row[1] }}"
+                                    name="order_value[]" step="0.00">
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label class="form-label" for="phone-no-1">Network Commission</label>
+                            <label class="form-label" for="network_commission">Network Commission</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="phone-no-1" value="{{ $row[2] }}"
-                                    name="network_commission[]" required>
+                                <input type="text" class="form-control" id="network_commission" value="{{ $row[2] }}"
+                                    name="network_commission[]" step="0.00" required>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label class="form-label" for="phone-no-1">Cashback Amount</label>
+                            <label class="form-label" for="amount">Cashback Amount</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="phone-no-1"
-                                    value="{{ !empty($row[3]) ? $row[3] : '' }}" name="amount[]">
+                                <input type="number" class="form-control" id="amount"
+                                    value="{{ !empty($row[3]) ? $row[3] : '' }}" name="amount[]" step="0.00">
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label class="form-label" for="pay-amount-1">Event Date</label>
+                            <label class="form-label" for="event_date">Event Date</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control date-picker" id="pay-amount-1"
+                                <input type="text" class="form-control date-picker" id="event_date"
                                     value="{{ $row[4] }}" name="event_date[]" required>
                             </div>
                         </div>
