@@ -707,7 +707,7 @@
                                             <div class="nk-block-head">
                                                 <h5 class="title">Cashback Settings</h5>
                                             </div><!-- .nk-block-head -->
-                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings" method="POST">
+                                            <form action="{{route('admin.settings.settings_save')}}" class="gy-3 form-settings form-validate" method="POST">
                                                 @csrf
                                                 @method('POST')
                                                 <div class="row g-3 align-center">
@@ -800,7 +800,7 @@
                                                 <div class="row g-3 align-center">
                                                     <div class="col-lg-3">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="welcome_bonus">Referral Bonus</label>
+                                                            <label class="form-label" for="referral_bonus">Referral Bonus</label>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-9">
@@ -937,6 +937,20 @@
 @push('scripts')
 
 <!-- Update Store-->
+<script>
+      jQuery.validator.addMethod("minValue", function(value, element, param) {
+    return this.optional(element) || value >= param;
+}, "Value must be equal to or greater than {0}.");
+
+$('.form-validate').validate({
+    rules: {
+        referral_bonus: {
+            required: true,
+            minValue: 1
+        }
+    }
+});
+    </script>
 <script>
 
 $(document).ready( function() {
