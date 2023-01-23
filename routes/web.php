@@ -230,8 +230,6 @@ Route::namespace('App\Http\Controllers\Admin')
     });
 
 //Front Website Routes
-
-Route::get('offers', [App\Http\Controllers\Frontend\PagesController::class, 'offers'])->name('offers');
 Route::get('vouchers', [App\Http\Controllers\Frontend\PagesController::class, 'vouchers'])->name('vouchers');
 Route::get('about', [App\Http\Controllers\Frontend\PagesController::class, 'about'])->name('about');
 Route::get('contact', [App\Http\Controllers\Frontend\PagesController::class, 'contact'])->name('contact');
