@@ -81,6 +81,12 @@ class PagesController extends Controller
             $HomePageCharities=Charity::where('status','=','1')->orderBy('id', 'DESC')->paginate(10);
             return view('frontend.pages.charities', compact('page','HomePageCharities'));
         }
+        if ($slug == 'trending') {
+            $stores =  Store::has('clicks')->with('clicks')->get()->sortByDesc(function ($store) {
+                return $store->clicks->count();
+            });
+            return view('frontend.pages.trending', compact('page','stores'));
+        }
         return view('frontend.pages.single_page', compact('page'));
     }
 
@@ -137,15 +143,6 @@ class PagesController extends Controller
         $stores = Store::withCount('clicks')
             ->orderBy('clicks', 'desc')->paginate(20);
         return view('frontend.pages.top_cashback', compact('stores'));
-    }
-
-    public function trending()
-    {
-
-        $stores =  Store::has('clicks')->with('clicks')->get()->sortByDesc(function ($store) {
-            return $store->clicks->count();
-        });
-        return view('frontend.pages.trending', compact('stores'));
     }
     public function about()
     {
