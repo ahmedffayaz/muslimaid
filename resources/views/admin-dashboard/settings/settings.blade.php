@@ -1010,7 +1010,6 @@
         $('.form-validate').validate({
             rules: {
                 referral_bonus: {
-                    required: true,
                     minValue: 1
                 }
             }
