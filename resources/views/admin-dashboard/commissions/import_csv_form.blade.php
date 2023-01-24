@@ -7,7 +7,7 @@
                         <div class="text-center mb-4 logo">
                             <label for="logo-input">
                             <img id="blah" src="{{asset('admin-dashboard/images/cloud-uploading.png')}}" alt="store logo" width="150px"/>
-                            <input id="logo-input"  name="import_cashback" class="d-none" type='file'/>
+                            <input id="logo-input" name="import_cashback" class="d-none" type='file'/>
                             <br> <br><span>Click here to select .csv file</span>
                             </label>
                         </div>
@@ -16,6 +16,13 @@
                 <div class="col-lg-12">
                     <div class="form-group">
                         <span class="badge badge-dot badge-danger">Only .csv file allowed.</span>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <span class="badge badge-dot badge-danger">
+                            <a href="{!! route('admin.commissions.download.file') !!}" target="_blank">Download CSV demo file</a>
+                        </span>
                     </div>
                 </div>
             </div>

@@ -43,7 +43,7 @@
         </div>
     </div>
 </div>
-@include('layouts.admin-dashboard.includes.modal_lg')
+@include('layouts.admin-dashboard.includes.modal_file_upload')
 @endsection
 
 @push('scripts')<script>
@@ -147,11 +147,10 @@
                 url: "{{ route('admin.commissions.import.form') }}",
                 type: 'GET',
                 success: function (response) {
-                    $('.modal-title').text('Import Cashbacks');
-                    $('.modal-body').html(response);
+                    $('.title').text('Import Cashbacks');
+                    $('#upload-file-form').html(response);
                     $('#save-btn').text('Import');
                     $('#modal').modal('show');
-                    NioApp.BS.fileinput('.custom-file-input');
                     importCSV()
                 },
                 error: function (error) {

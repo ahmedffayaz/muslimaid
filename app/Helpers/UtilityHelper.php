@@ -3,6 +3,7 @@
 use DateTime;
 use Carbon\Carbon;
 use App\Models\Store;
+use App\Models\SeoRule;
 use App\Models\Category;
 use App\Models\UserVerify;
 use App\Models\SiteSetting;
@@ -276,7 +277,7 @@ function getCategories()
 
 function SiteSetting()
 {
-    return \App\Models\SiteSetting::latest()->get()->pluck('value', 'type');
+    return SiteSetting::latest()->get()->pluck('value', 'type');
 }
 
 function getRecaptchaSiteKey()
@@ -356,7 +357,7 @@ function checkStaticpageRule($url)
 {
     $slug = request()->route('slug');
     $current_route_name = Request::route()->getName();
-    $seo_rules = App\Models\SeoRule::where('is_enabled', 1)->with('ruleData')->where('url', $url)->first();
+    $seo_rules = SeoRule::where('is_enabled', 1)->with('ruleData')->where('url', $url)->first();
     if ($seo_rules != null) {
         $meta_description = [];
         $meta_keyword = [];
@@ -477,14 +478,18 @@ function isFileExist($url)
 }
 
 /**
- * @param $data
- * Date formate
+ * @param $date
+ * Date format
  */
 function dbDate($date)
 {
     return Carbon::parse($date)->format('Y-m-d H:i:s');
 }
 
+/**
+ * @param $date
+ * Date format in 'm/d/Y'
+ */
 function convertDateFormat($date)
 {
     return Carbon::parse($date)->format('m/d/Y');

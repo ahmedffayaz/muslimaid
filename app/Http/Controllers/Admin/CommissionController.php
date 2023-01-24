@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use  Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Storage;
 
 class CommissionController extends Controller
 {
@@ -250,7 +251,6 @@ class CommissionController extends Controller
         try {
             foreach ($request->exit_click_id as $key => $value) {
                 $click = ExitClick::findOrFail($value);
-
                 $commission = UserCashback::create([
                     'store_id' => $click->store_id,
                     'user_id'  => $click->user_id ?? 0,
@@ -335,6 +335,8 @@ class CommissionController extends Controller
     {
         $validator = $request->validate([
             'import_cashback' => 'required|file|mimes:csv'
+        ], [
+            'import_cashback.required' => 'Upload CSV file.'
         ]);
 
         if (($open = fopen($request->import_cashback, "r")) !== FALSE) {
@@ -348,5 +350,10 @@ class CommissionController extends Controller
 
         $statuses = DB::table('cashback_statuses')->latest()->get();
         return view('admin-dashboard.commissions.form_multiple', compact('csvData', 'statuses'));
+    }
+
+    public function fileDownload()
+    {
+        return response()->download(asset('storage/files/cashbacks.csv'));
     }
 }

@@ -142,6 +142,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::resource('cashouts', CashoutController::class);
         Route::get('commissions/import/form', [App\Http\Controllers\Admin\CommissionController::class, 'importCashBacksForm'])->name('commissions.import.form');
         Route::post('commissions/import', [App\Http\Controllers\Admin\CommissionController::class, 'importCashBacks'])->name('commissions.import');
+        Route::get('cashback/download-csv-file', [App\Http\Controllers\Admin\CommissionController::class, 'fileDownload'])->name('commissions.download.file');
 
         // Reviews
         Route::resource('reviews', StoreReviewsController::class);
