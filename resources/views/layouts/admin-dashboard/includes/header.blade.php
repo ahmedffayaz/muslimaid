@@ -167,7 +167,7 @@
                                 @endcan
                                 @can('view languages')
                                 <li class="">
-                                    <a href="{{route('admin.languages.index')}}" class="">
+                                    <a href="{{route('admin.languages.coming-soon')}}" class="">
                                         <span class="nk-menu-icon"><em class="icon ni ni-text2"></em></span>
                                         <span class="nk-menu-text">Languages</span>
                                     </a>
@@ -175,7 +175,7 @@
                                 @endcan
                                 @can('view translations')
                                 <li class="">
-                                    <a href="{{route('admin.translations.index')}}" class="">
+                                    <a href="{{route('admin.translations.coming-soon')}}" class="">
                                         <span class="nk-menu-icon"><em class="icon ni ni-file-docs"></em></span>
                                         <span class="nk-menu-text">Translations</span>
                                     </a>

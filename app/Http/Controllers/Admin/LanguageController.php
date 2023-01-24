@@ -37,6 +37,7 @@ class LanguageController extends Controller
         $all_languages = Config::get('languages.languages');
         $languages = Language::orderBy('id', 'desc')->paginate(20);
         return view('admin-dashboard.languages.index', compact('all_languages','languages','route'));
+       
     }
 
     /**
@@ -184,5 +185,8 @@ class LanguageController extends Controller
         return view('admin-dashboard.languages.index_data', compact('languages','route'))->render();
         
 
+    }
+    public function comingSoon(){
+        return view('admin-dashboard.languages.coming-soon');
     }
 }
