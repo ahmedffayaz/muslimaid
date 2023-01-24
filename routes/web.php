@@ -134,11 +134,15 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::get('commissionss/export', [App\Http\Controllers\Admin\CommissionController::class, 'exportCsv'])->name('commissions.export');
         Route::post('commissions/fetch', [App\Http\Controllers\Admin\CommissionController::class, 'fetch'])->name('commissions.fetch');
         Route::get('addmultiple/commissions', [App\Http\Controllers\Admin\CommissionController::class, 'createMultiple'])->name('commissions.create_multiple');
-        Route::post('commissions/storemultiple', [App\Http\Controllers\Admin\CommissionController::class, 'storeMultiple'])->name('commissions.store_multiple');
+        Route::get('commissions/form', [App\Http\Controllers\Admin\CommissionController::class, 'commissionsForm'])->name('commissions.form');
+        Route::post('commissions/store-multiple-cashbacks', [App\Http\Controllers\Admin\CommissionController::class, 'storeMultiple'])->name('commissions.store_multiple');
         Route::post('commissions/search_commissions',  [App\Http\Controllers\Admin\CommissionController::class, 'searchCommissions'])->name('commissions.search_commissions');
         Route::get('commissions/status_history/{commission}',  [App\Http\Controllers\Admin\CommissionController::class, 'statusHistory'])->name('commissions.history');
         Route::resource('commissions', CommissionController::class);
         Route::resource('cashouts', CashoutController::class);
+        Route::get('commissions/import/form', [App\Http\Controllers\Admin\CommissionController::class, 'importCashBacksForm'])->name('commissions.import.form');
+        Route::post('commissions/import', [App\Http\Controllers\Admin\CommissionController::class, 'importCashBacks'])->name('commissions.import');
+        Route::get('cashback/download-csv-file', [App\Http\Controllers\Admin\CommissionController::class, 'fileDownload'])->name('commissions.download.file');
 
         // Reviews
         Route::resource('reviews', StoreReviewsController::class);
@@ -174,7 +178,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('admin_charities_store', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeStore'])->name('admin-charities-store');
         Route::put('charity_type_update/{id}', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeUpdate'])->name('charitiestype-update');
         Route::post('charities/search',  [App\Http\Controllers\Admin\CharityController::class, 'searchCharities'])->name('charities.search');
-        
+
         Route::get('charity_type_delete/{id}', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeDestroy'])->name('charity_type_delete');
 
         // Menus
