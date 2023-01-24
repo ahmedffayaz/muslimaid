@@ -144,15 +144,6 @@ class PagesController extends Controller
             ->orderBy('clicks', 'desc')->paginate(20);
         return view('frontend.pages.top_cashback', compact('stores'));
     }
-
-    // public function trending()
-    // {
-
-    //     $stores =  Store::has('clicks')->with('clicks')->get()->sortByDesc(function ($store) {
-    //         return $store->clicks->count();
-    //     });
-    //     return view('frontend.pages.trending', compact('stores'));
-    // }
     public function about()
     {
         return view('frontend.pages.about');
