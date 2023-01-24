@@ -192,13 +192,15 @@ Route::namespace('App\Http\Controllers\Admin')
         // Languages
         Route::post('languages/fetch', [App\Http\Controllers\Admin\LanguageController::class, 'fetch'])->name('languages.fetch');
         Route::post('languages/search_languages',  [App\Http\Controllers\Admin\LanguageController::class, 'searchLanguages'])->name('languages.search_languages');
-
-        Route::resource('languages', LanguageController::class);
+        Route::get('languages', [App\Http\Controllers\Admin\LanguageController::class, 'comingSoon'])->name('languages.coming-soon');
+       
+        // Route::resource('languages', LanguageController::class);
 
         Route::post('translations/fetch', [App\Http\Controllers\Admin\Translations\TranslationController::class, 'fetch'])->name('translations.fetch');
         Route::post('translations/search_translations',  [App\Http\Controllers\Admin\Translations\TranslationController::class, 'searchTranslations'])->name('translations.search_translations');
+        Route::get('translations',  [App\Http\Controllers\Admin\Translations\TranslationController::class, 'comingSoon'])->name('translations.coming-soon');
 
-        Route::resource('translations', Translations\TranslationController::class);
+        // Route::resource('translations', Translations\TranslationController::class);
         Route::resource('lines', Translations\LanguageLineController::class);
 
         // Route::get('get/user/{id}', [App\Http\Controllers\Admin\TestimonialController::class,'userDetails'])->name('users.fetch');
@@ -234,8 +236,6 @@ Route::namespace('App\Http\Controllers\Admin')
     });
 
 //Front Website Routes
-
-Route::get('offers', [App\Http\Controllers\Frontend\PagesController::class, 'offers'])->name('offers');
 Route::get('vouchers', [App\Http\Controllers\Frontend\PagesController::class, 'vouchers'])->name('vouchers');
 Route::get('about', [App\Http\Controllers\Frontend\PagesController::class, 'about'])->name('about');
 Route::get('contact', [App\Http\Controllers\Frontend\PagesController::class, 'contact'])->name('contact');
