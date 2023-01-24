@@ -56,7 +56,7 @@
                             <label class="form-label" for="event_date">Event Date</label>
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control date-picker" id="event_date"
-                                    value="{{ $row[4] }}" name="event_date[]" placeholder="01/25/2000" required>
+                                    value="{{ convertDateFormat($row[4]) }}" name="event_date[]" placeholder="01/25/2000" required>
                             </div>
                         </div>
                     </div>

@@ -183,6 +183,7 @@
                         confirmMultipleCashbacks();
                     },
                     error: function (error) {
+                        console.log(error);
                         btn.removeAttr('disabled', 'disabled').button('refresh');
                         btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                         if (error.responseJSON.error) {

@@ -1,12 +1,13 @@
 <?php
 
+use DateTime;
 use Carbon\Carbon;
 use App\Models\Store;
 use App\Models\Category;
 use App\Models\UserVerify;
+use App\Models\SiteSetting;
 use Illuminate\Support\Str;
 use App\Models\EmailTemplate;
-use App\Models\SiteSetting;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Request;
@@ -482,4 +483,9 @@ function isFileExist($url)
 function dbDate($date)
 {
     return Carbon::parse($date)->format('Y-m-d H:i:s');
+}
+
+function convertDateFormat($date)
+{
+    return Carbon::parse($date)->format('m/d/Y');
 }
