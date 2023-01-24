@@ -196,7 +196,7 @@ data-content="sidebarMenu">
                             @endcan
                             @can('view languages')
                             <li class="nk-menu-item">
-                                <a href="{{route('admin.languages.index')}}" class="nk-menu-link">
+                                <a href="{{route('admin.languages.coming-soon')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-text2"></em></span>
                                     <span class="nk-menu-text">Languages</span>
                                 </a>
@@ -204,7 +204,7 @@ data-content="sidebarMenu">
                             @endcan
                             @can('view translations')
                             <li class="nk-menu-item">
-                                <a href="{{route('admin.translations.index')}}" class="nk-menu-link">
+                                <a href="{{route('admin.translations.coming-soon')}}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-file-docs"></em></span>
                                     <span class="nk-menu-text">Translations</span>
                                 </a>

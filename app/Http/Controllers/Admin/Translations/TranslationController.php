@@ -170,5 +170,8 @@ class TranslationController extends Controller
         
 
     }
+    public function comingSoon(){
+        return view('admin-dashboard.translations.coming-soon');
+    }
 
 }
