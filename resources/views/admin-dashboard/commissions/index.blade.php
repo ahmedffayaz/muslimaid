@@ -69,7 +69,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="col-lg-3 col-md-9">
                                         <div class="form-group">
                                             <label class="form-label" for="user">User Name/ Store Name</label>
@@ -79,7 +78,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                     <div class="col-lg-2 col-md-6">
                                         <div class="form-group">
                                             <label class="form-label" for="network_id">Network</label>
@@ -117,19 +115,15 @@
                             </form>
                         </div>
                     </div>
-
                     <div class="nk-block">
                         <div class="card card-stretch">
                             <div class="card-inner-group">
-
+                                @include('flash::message')
                                 <div class="card-inner px-0">
                                     <div class="nk-tb-list nk-tb-ulist" id="table-data">
-
                                         @include('admin-dashboard.commissions.index_data')
-
                                     </div><!-- .nk-tb-list -->
                                 </div><!-- .card-inner -->
-
                             </div><!-- .card-inner-group -->
                         </div><!-- .card -->
                     </div><!-- .nk-block -->
@@ -369,12 +363,12 @@
             });
 
             // Edit Cashback
-            $('.cashback-edit').on('click', function (event) {
+            $('.cashback-edit').on('click', function(event) {
                 event.preventDefault();
                 $.ajax({
                     url: $(this).attr('href'),
                     type: 'GET',
-                    success: function (response) {
+                    success: function(response) {
                         $('.modal-title').text('Edit Cashback');
                         $('.modal-body').html(response);
                         $('#save-btn').text('Update');
@@ -385,10 +379,13 @@
                 });
             })
 
-            // Store Cashback
+            // Store cashback
             function store() {
                 $('#save_modal_form').on('submit', function(event) {
                     event.preventDefault();
+                    let btn = $('#save-btn')
+                    btn.attr('disabled', 'disabled')
+                        .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
                     let url = $(this).attr('action');
                     let id = $('#id').val()
                     let method = 'POST';
@@ -404,6 +401,8 @@
                         data: formData,
                         success: function(response) {
                             $('#modal').modal('hide');
+                            btn.removeAttr('disabled', 'disabled').button('refresh');
+                            btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                             $('#table-data').load(location.href + ' #table-data');
                             (function(NioApp, $) {
                                 'use strict';
@@ -412,17 +411,20 @@
                             })(NioApp, jQuery);
                         },
                         error: function(error) {
+                            btn.removeAttr('disabled', 'disabled').button('refresh');
+                            btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                             if (error.responseJSON.error) {
-                                (function(NioApp, $){
+                                (function(NioApp, $) {
                                     'use strict';
                                     toastr.clear();
                                     NioApp.Toast(error.responseJSON.error, 'error');
                                 })(NioApp, jQuery);
                             } else {
-                                (function(NioApp, $){
+                                (function(NioApp, $) {
                                     'use strict';
                                     toastr.clear();
-                                    NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                                    NioApp.Toast(Object.values(error.responseJSON.errors)[
+                                        0], 'error');
                                 })(NioApp, jQuery);
                             }
                         }

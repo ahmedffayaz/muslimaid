@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Exception;
 use Carbon\Carbon;
-use App\Models\User;
-use App\Models\Store;
 use App\Models\Network;
 use App\Models\ExitClick;
 use App\Models\SiteSetting;
@@ -15,8 +13,8 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use  Illuminate\Support\Facades\Response;
-use Illuminate\Http\Resources\Json\JsonResource;
 
 class CommissionController extends Controller
 {
@@ -78,10 +76,10 @@ class CommissionController extends Controller
 
         try {
             $click = ExitClick::findOrFail($request->exit_click_id);
-            $custom_cashback_percentage = $click->store->custom_cashback_percentage;
+            $customCashbackPercentage = $click->store->custom_cashback_percentage;
 
-            if ($custom_cashback_percentage) {
-                $cashback_percent = $custom_cashback_percentage;
+            if ($customCashbackPercentage) {
+                $cashback_percent = $customCashbackPercentage;
             } else {
                 $cashback_percent = SiteSetting::where('type', 'cashback_percentage')->first()->value;
             }
@@ -110,20 +108,9 @@ class CommissionController extends Controller
         } catch (Exception $exception) {
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'error' => 'Error While saving new cashback'
+                'error' => 'Exit Click not found'
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(UserCashback $commission)
-    {
-        //
     }
 
     /**
@@ -181,7 +168,7 @@ class CommissionController extends Controller
                 'message' => 'Cashback updated',
                 'updated' => 'success'
             );
-        } catch (\Throwable $th) {
+        } catch (Exception $exception) {
             return array(
                 'message' => 'Something went wrong!',
                 'updated' => 'error'
@@ -212,14 +199,12 @@ class CommissionController extends Controller
     public function exportCsv(Request $request)
     {
         try {
-
             $table = UserCashback::latest()->get();
             $filename = "cashbacks.csv";
             $handle = fopen($filename, 'w+');
             fputcsv($handle, array('User', 'User email', 'Store', 'Amount', 'Exit Click Id', 'Event Time', 'Status'));
 
             foreach ($table as $row) {
-
                 $fname = $row->user->first_name ?? '';
                 $lname = $row->user->last_name ?? '';
                 fputcsv($handle, array(
@@ -229,13 +214,11 @@ class CommissionController extends Controller
             }
 
             fclose($handle);
-
             $headers = array(
                 'Content-Type' => 'text/csv',
             );
-
             return Response::download($filename, 'cashbacks.csv', $headers);
-        } catch (\Throwable $th) {
+        } catch (Exception $exception) {
             flash()->error('Error while exporting cashbacks');
             return redirect()->route('admin.commissions.index');
         }
@@ -265,16 +248,8 @@ class CommissionController extends Controller
         ]);
 
         try {
-            $global_percentage = SiteSetting::where('type', 'cashback_percentage')->first()->value;
             foreach ($request->exit_click_id as $key => $value) {
                 $click = ExitClick::findOrFail($value);
-                $custom_cashback_percentage = $click->store->custom_cashback_percentage;
-
-                if ($custom_cashback_percentage) {
-                    $cashback_percent = $custom_cashback_percentage;
-                } else {
-                    $cashback_percent = $global_percentage;
-                }
 
                 $commission = UserCashback::create([
                     'store_id' => $click->store_id,
@@ -284,7 +259,7 @@ class CommissionController extends Controller
                     'network_commission' => round($request->network_commission[$key], 3),
                     'order_value' => round($request->order_value[$key], 3),
                     'status' => $request->status[$key],
-                    'event_date' => Carbon::parse($request->event_date[$key])->format('Y-m-d H:i:s'),
+                    'event_date' => dbDate($request->event_date[$key]),
                     'click_date' => $click->created_at,
                 ]);
 
@@ -294,10 +269,13 @@ class CommissionController extends Controller
                 ]);
             }
 
+            flash()->success('New cashbacks added');
+            return route('admin.commissions.index');
+        } catch (ModelNotFoundException) {
             return response()->json([
-                'status' => JsonResponse::HTTP_OK,
-                'message' => 'New Cashback Added'
-            ], JsonResponse::HTTP_OK);
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'error' => 'Exit Click not found'
+            ], JsonResponse::HTTP_NOT_FOUND);
         } catch (Exception $exception) {
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
@@ -313,17 +291,16 @@ class CommissionController extends Controller
         if ($request->input('user')) {
             $coms->whereHas('user', function ($query) use ($request) {
                 $query->where(DB::raw("CONCAT(first_name,' ',last_name)"), 'like', "%{$request->user}%");
-            })
-                ->orwhereHas('store', function ($query) use ($request) {
-                    $query->where('name', 'like', "%{$request->user}%");
-                });
+            })->orWhereHas('store', function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request->user}%");
+            });
         }
 
-        // Search by cick.
+        // Search by click.
         if ($request->input('click_id')) {
             $coms->where('exit_click_id', $request->click_id)
-                ->orwhere('user_id', $request->click_id)
-                ->orwhere('store_id', $request->click_id);
+                ->orWhere('user_id', $request->click_id)
+                ->orWhere('store_id', $request->click_id);
         }
 
         // Search by status.

@@ -19,7 +19,7 @@
                             <label class="form-label" for="exit_click_id">Exit Click</label>
                             <div class="form-control-wrap ">
                                 <input type="number" class="form-control" id="exit_click_id"
-                                    value="{{ $row[0] }}" name="exit_click_id[]" required>
+                                    value="{{ $row[0] }}" name="exit_click_id[]" placeholder="Exit Click ID" required>
                             </div>
                         </div>
                     </div>
@@ -29,7 +29,7 @@
                             <label class="form-label" for="order_value">Order Value</label>
                             <div class="form-control-wrap">
                                 <input type="number" class="form-control" id="order_value" value="{{ $row[1] }}"
-                                    name="order_value[]" step="0.00">
+                                    name="order_value[]" step="0.01" placeholder="Order Value">
                             </div>
                         </div>
                     </div>
@@ -37,8 +37,8 @@
                         <div class="form-group">
                             <label class="form-label" for="network_commission">Network Commission</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="network_commission" value="{{ $row[2] }}"
-                                    name="network_commission[]" step="0.00" required>
+                                <input type="number" class="form-control" id="network_commission" value="{{ $row[2] }}"
+                                    name="network_commission[]" step="0.01" placeholder="Network Commission" required>
                             </div>
                         </div>
                     </div>
@@ -47,7 +47,7 @@
                             <label class="form-label" for="amount">Cashback Amount</label>
                             <div class="form-control-wrap">
                                 <input type="number" class="form-control" id="amount"
-                                    value="{{ !empty($row[3]) ? $row[3] : '' }}" name="amount[]" step="0.00">
+                                    value="{{ !empty($row[3]) ? $row[3] : '' }}" name="amount[]" step="0.01" placeholder="Cashback Amount">
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                             <label class="form-label" for="event_date">Event Date</label>
                             <div class="form-control-wrap">
                                 <input type="text" class="form-control date-picker" id="event_date"
-                                    value="{{ $row[4] }}" name="event_date[]" required>
+                                    value="{{ $row[4] }}" name="event_date[]" placeholder="01/25/2000" required>
                             </div>
                         </div>
                     </div>
@@ -90,49 +90,46 @@
                     <div class="form-group">
                         <label class="form-label" for="exit_click_id">Exit Click</label>
                         <div class="form-control-wrap ">
-                            <input type="text" class="form-control" id="exit_click_id" value=""
-                                name="exit_click_id[]" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Order Value</label>
-                        <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="order_value[]">
+                            <input type="number" class="form-control" id="exit_click_id" value=""
+                                name="exit_click_id[]" placeholder="Exit Click ID" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Network Commission</label>
+                        <label class="form-label" for="order_value">Order Value</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="network_commission[]" required>
+                            <input type="number" class="form-control" id="order_value" value=""
+                                name="order_value[]" step="0.01" placeholder="Order Value">
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Cashback Amount</label>
+                        <label class="form-label" for="network_commission">Network Commission</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="amount[]" value="">
+                            <input type="number" class="form-control" id="network_commission" value=""
+                                name="network_commission[]" step="0.01" placeholder="Network Commission" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="pay-amount-1">Event Date</label>
+                        <label class="form-label" for="amount">Cashback Amount</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control date-picker" id="pay-amount-1" value=""
-                                name="event_date[]" required>
+                            <input type="number" class="form-control" id="amount" name="amount[]" step="0.01" placeholder="Cashback Amount">
                         </div>
                     </div>
                 </div>
-
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label class="form-label" for="event_date">Event Date</label>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control date-picker" id="event_date" value=""
+                                name="event_date[]" placeholder="01/25/2000" required>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label class="form-label" for="status">Status</label>
@@ -158,49 +155,46 @@
                     <div class="form-group">
                         <label class="form-label" for="exit_click_id">Exit Click</label>
                         <div class="form-control-wrap ">
-                            <input type="text" class="form-control" id="exit_click_id" value=""
-                                name="exit_click_id[]" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Order Value</label>
-                        <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="order_value[]">
+                            <input type="number" class="form-control" id="exit_click_id" value=""
+                                name="exit_click_id[]" placeholder="Exit Click ID" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Network Commission</label>
+                        <label class="form-label" for="order_value">Order Value</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="network_commission[]" required>
+                            <input type="number" class="form-control" id="order_value" value=""
+                                name="order_value[]" step="0.01" placeholder="Order Value">
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Cashback Amount</label>
+                        <label class="form-label" for="network_commission">Network Commission</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="amount[]" value="">
+                            <input type="number" class="form-control" id="network_commission" value=""
+                                name="network_commission[]" step="0.01" placeholder="Network Commission" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="pay-amount-1">Event Date</label>
+                        <label class="form-label" for="amount">Cashback Amount</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control date-picker" id="pay-amount-1" value=""
-                                name="event_date[]" required>
+                            <input type="number" class="form-control" id="amount" name="amount[]" step="0.01" placeholder="Cashback Amount">
                         </div>
                     </div>
                 </div>
-
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label class="form-label" for="event_date">Event Date</label>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control date-picker" id="event_date" value=""
+                                name="event_date[]" placeholder="01/25/2000" required>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label class="form-label" for="status">Status</label>
@@ -226,49 +220,46 @@
                     <div class="form-group">
                         <label class="form-label" for="exit_click_id">Exit Click</label>
                         <div class="form-control-wrap ">
-                            <input type="text" class="form-control" id="exit_click_id" value=""
-                                name="exit_click_id[]" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Order Value</label>
-                        <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="order_value[]">
+                            <input type="number" class="form-control" id="exit_click_id" value=""
+                                name="exit_click_id[]" placeholder="Exit Click ID" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Network Commission</label>
+                        <label class="form-label" for="order_value">Order Value</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="network_commission[]" required>
+                            <input type="number" class="form-control" id="order_value" value=""
+                                name="order_value[]" step="0.01" placeholder="Order Value">
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Cashback Amount</label>
+                        <label class="form-label" for="network_commission">Network Commission</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="amount[]" value="">
+                            <input type="number" class="form-control" id="network_commission" value=""
+                                name="network_commission[]" step="0.01" placeholder="Network Commission" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="pay-amount-1">Event Date</label>
+                        <label class="form-label" for="amount">Cashback Amount</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control date-picker" id="pay-amount-1" value=""
-                                name="event_date[]" required>
+                            <input type="number" class="form-control" id="amount" name="amount[]" step="0.01" placeholder="Cashback Amount">
                         </div>
                     </div>
                 </div>
-
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label class="form-label" for="event_date">Event Date</label>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control date-picker" id="event_date" value=""
+                                name="event_date[]" placeholder="01/25/2000" required>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label class="form-label" for="status">Status</label>
@@ -294,49 +285,46 @@
                     <div class="form-group">
                         <label class="form-label" for="exit_click_id">Exit Click</label>
                         <div class="form-control-wrap ">
-                            <input type="text" class="form-control" id="exit_click_id" value=""
-                                name="exit_click_id[]" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Order Value</label>
-                        <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="order_value[]">
+                            <input type="number" class="form-control" id="exit_click_id" value=""
+                                name="exit_click_id[]" placeholder="Exit Click ID" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Network Commission</label>
+                        <label class="form-label" for="order_value">Order Value</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="network_commission[]" required>
+                            <input type="number" class="form-control" id="order_value" value=""
+                                name="order_value[]" step="0.01" placeholder="Order Value">
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Cashback Amount</label>
+                        <label class="form-label" for="network_commission">Network Commission</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="amount[]" value="">
+                            <input type="number" class="form-control" id="network_commission" value=""
+                                name="network_commission[]" step="0.01" placeholder="Network Commission" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="pay-amount-1">Event Date</label>
+                        <label class="form-label" for="amount">Cashback Amount</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control date-picker" id="pay-amount-1" value=""
-                                name="event_date[]" required>
+                            <input type="number" class="form-control" id="amount" name="amount[]" step="0.01" placeholder="Cashback Amount">
                         </div>
                     </div>
                 </div>
-
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label class="form-label" for="event_date">Event Date</label>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control date-picker" id="event_date" value=""
+                                name="event_date[]" placeholder="01/25/2000" required>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label class="form-label" for="status">Status</label>
@@ -362,49 +350,46 @@
                     <div class="form-group">
                         <label class="form-label" for="exit_click_id">Exit Click</label>
                         <div class="form-control-wrap ">
-                            <input type="text" class="form-control" id="exit_click_id" value=""
-                                name="exit_click_id[]" required>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="col-lg-2">
-                    <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Order Value</label>
-                        <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="order_value[]">
+                            <input type="number" class="form-control" id="exit_click_id" value=""
+                                name="exit_click_id[]" placeholder="Exit Click ID" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Network Commission</label>
+                        <label class="form-label" for="order_value">Order Value</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="network_commission[]" required>
+                            <input type="number" class="form-control" id="order_value" value=""
+                                name="order_value[]" step="0.01" placeholder="Order Value">
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="phone-no-1">Cashback Amount</label>
+                        <label class="form-label" for="network_commission">Network Commission</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control" id="phone-no-1" value=""
-                                name="amount[]" value="">
+                            <input type="number" class="form-control" id="network_commission" value=""
+                                name="network_commission[]" step="0.01" placeholder="Network Commission" required>
                         </div>
                     </div>
                 </div>
                 <div class="col-lg-2">
                     <div class="form-group">
-                        <label class="form-label" for="pay-amount-1">Event Date</label>
+                        <label class="form-label" for="amount">Cashback Amount</label>
                         <div class="form-control-wrap">
-                            <input type="text" class="form-control date-picker" id="pay-amount-1" value=""
-                                name="event_date[]" required>
+                            <input type="number" class="form-control" id="amount" name="amount[]" step="0.01" placeholder="Cashback Amount">
                         </div>
                     </div>
                 </div>
-
+                <div class="col-lg-2">
+                    <div class="form-group">
+                        <label class="form-label" for="event_date">Event Date</label>
+                        <div class="form-control-wrap">
+                            <input type="text" class="form-control date-picker" id="event_date" value=""
+                                name="event_date[]" placeholder="01/25/2000" required>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-lg-2">
                     <div class="form-group">
                         <label class="form-label" for="status">Status</label>
@@ -424,10 +409,8 @@
     </div>
     <span class="btn btn-sm btn-success float-right" onclick="addRows();">Add Row</span>
     <div class="row ">
-        {{-- <div class="col-12"> --}}
-            <div class="form-group">
-                <button type="submit" class="btn btn-lg btn-primary">Save</button>
-            </div>
-        {{-- </div> --}}
+        <div class="form-group">
+            <button type="submit" class="btn btn-lg btn-primary" id="multiple-cashbacks-form-btn">Save</button>
+        </div>
     </div>
 </form>

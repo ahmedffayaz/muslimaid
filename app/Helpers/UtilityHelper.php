@@ -474,3 +474,12 @@ function isFileExist($url)
     $file = file_exists(public_path(parse_url($url)['path']));
     return $file;
 }
+
+/**
+ * @param $data
+ * Date formate
+ */
+function dbDate($date)
+{
+    return Carbon::parse($date)->format('Y-m-d H:i:s');
+}

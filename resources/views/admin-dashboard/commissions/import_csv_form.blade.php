@@ -5,7 +5,7 @@
         <div class="row g-4">
             <div class="col-lg-12">
                 <div class="form-group">
-                    <label class="form-label">Import Cashbacks</label>
+                    <label class="form-label">Import CSV file</label>
                     <div class="form-control-wrap">
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="import-csv" name="import_cashback">
@@ -16,7 +16,7 @@
             </div>
             <div class="col-lg-12">
                 <div class="form-group">
-                    <span class="badge badge-dot badge-danger">Must be upload CSV file.</span>
+                    <span class="badge badge-dot badge-danger">Only CSV file allowed.</span>
                 </div>
             </div>
             <div class="col-12 mt-3">

@@ -57,7 +57,7 @@
                         <div class="form-group">
                             <label class="form-label" for="exit_click_id">Exit Click</label>
                             <div class="form-control-wrap ">
-                                <input type="text" class="form-control" id="exit_click_id" value="" name="exit_click_id[]" required>
+                                <input type="number" class="form-control" id="exit_click_id" name="exit_click_id[]" placeholder="Exit Click ID" required>
                             </div>
                         </div>
                     </div>
@@ -66,7 +66,7 @@
                         <div class="form-group">
                             <label class="form-label" for="phone-no-1">Order Value</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="phone-no-1" value="" name="order_value[]">
+                                <input type="number" class="form-control" id="phone-no-1" step="0.01" placeholder="Order Value" name="order_value[]">
                             </div>
                         </div>
                     </div>
@@ -74,7 +74,7 @@
                         <div class="form-group">
                             <label class="form-label" for="phone-no-1">Network Commission</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="phone-no-1" value="" name="network_commission[]" >
+                                <input type="number" class="form-control" id="phone-no-1" step="0.01" placeholder="Network Commission" name="network_commission[]" >
                             </div>
                         </div>
                     </div>
@@ -82,7 +82,7 @@
                         <div class="form-group">
                             <label class="form-label" for="phone-no-1">Cashback Amount</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control" id="phone-no-1" value="" name="amount[]" >
+                                <input type="number" class="form-control" id="phone-no-1" step="0.01" placeholder="Cashback Amount" name="amount[]" >
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                         <div class="form-group">
                             <label class="form-label" for="pay-amount-1">Event Date</label>
                             <div class="form-control-wrap">
-                                <input type="text" class="form-control date-picker" id="pay-amount-1" value="" name="event_date[]" required>
+                                <input type="text" class="form-control date-picker" id="pay-amount-1" placeholder="01/25/2000" name="event_date[]" required>
                             </div>
                         </div>
                     </div>
@@ -151,6 +151,7 @@
                     $('.modal-body').html(response);
                     $('#save-btn').text('Import');
                     $('#modal').modal('show');
+                    NioApp.BS.fileinput('.custom-file-input');
                     importCSV()
                 },
                 error: function (error) {
@@ -163,6 +164,9 @@
         function importCSV() {
             $('#save_modal_form').on('submit', function (event) {
                 event.preventDefault();
+                let btn = $('#show-modal')
+                    btn.attr('disabled', 'disabled')
+                        .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
                 $.ajax({
                     url: $(this).attr('action'),
                     type: 'POST',
@@ -174,9 +178,13 @@
                         NioApp.Picker.date('.date-picker');
                         initializeSelect2();
                         $('#modal').modal('hide');
+                        btn.removeAttr('disabled', 'disabled').button('refresh');
+                        btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                         confirmMultipleCashbacks();
                     },
                     error: function (error) {
+                        btn.removeAttr('disabled', 'disabled').button('refresh');
+                        btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                         if (error.responseJSON.error) {
                             (function(NioApp, $){
                                 'use strict';
@@ -206,6 +214,9 @@
                     confirmButtonText: 'OK'
                 }).then((response) => {
                     if (response.value) {
+                        let btn = $('#multiple-cashbacks-form-btn');
+                        btn.attr('disabled', 'disabled')
+                            .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
                         let url = $(this).attr('action');
                         let formData = new FormData(this);
                         storeMultipleCashbacks(url, formData);
@@ -222,14 +233,12 @@
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    window.location.href = response.data;
-                    (function(NioApp, $){
-                        'use strict';
-                        toastr.clear();
-                        NioApp.Toast(response.message, 'success');
-                    })(NioApp, jQuery);
+                    window.location.href = response;
                 },
                 error: function (error) {
+                    let btn = $('#multiple-cashbacks-form-btn');
+                    btn.removeAttr('disabled', 'disabled').button('resfresh');
+                    btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                     if (error.responseJSON.error) {
                         (function(NioApp, $){
                             'use strict';
