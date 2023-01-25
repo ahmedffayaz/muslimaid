@@ -17,6 +17,7 @@ class CreateExitClicksTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('network_id')->nullable();
             $table->string('network_click_ref')->nullable();
             $table->string('status');
             $table->longText('exit_url')->nullable();

@@ -4,8 +4,10 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\ExitClick;
+use App\Models\Network;
 use App\Models\Store;
 use App\Models\User;
+use Carbon\Carbon;
 use Faker\Factory as Faker;
 
 class ClicksSeeder extends Seeder
@@ -22,6 +24,9 @@ class ClicksSeeder extends Seeder
         $faker = Faker::create();
         $storesCount = Store::count();
         $usersCount = User::count();
+        $networkCount = Network::count();
+
+        $now = Carbon::now();
 
         $clicks = [];
 
@@ -29,8 +34,11 @@ class ClicksSeeder extends Seeder
             $clicks[] = [
                 'store_id' => $faker->numberBetween(1, $storesCount),
                 'user_id' => $faker->numberBetween(1, $usersCount),
+                'network_id' => $faker->numberBetween(1, $networkCount),
                 'status' => 'pending',
                 'exit_url' => '#',
+                'created_at' => $now,
+                'updated_at' => $now,
             ];
         }
 
