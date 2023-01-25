@@ -147,7 +147,6 @@ Route::namespace('App\Http\Controllers\Admin')
         // Reviews
         Route::resource('reviews', StoreReviewsController::class);
         Route::post('reviews/fetch', [App\Http\Controllers\Admin\StoreReviewsController::class, 'fetch'])->name('reviews.fetch');
-        Route::get('reviews/export', [App\Http\Controllers\Admin\StoreReviewsController::class, 'exportCsv'])->name('reviews.export');
         Route::post('reviews/search_reviews',  [App\Http\Controllers\Admin\StoreReviewsController::class, 'searchReviews'])->name('reviews.search_reviews');
 
         // Reports
@@ -193,7 +192,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('languages/fetch', [App\Http\Controllers\Admin\LanguageController::class, 'fetch'])->name('languages.fetch');
         Route::post('languages/search_languages',  [App\Http\Controllers\Admin\LanguageController::class, 'searchLanguages'])->name('languages.search_languages');
         Route::get('languages', [App\Http\Controllers\Admin\LanguageController::class, 'comingSoon'])->name('languages.coming-soon');
-       
+
         // Route::resource('languages', LanguageController::class);
 
         Route::post('translations/fetch', [App\Http\Controllers\Admin\Translations\TranslationController::class, 'fetch'])->name('translations.fetch');
