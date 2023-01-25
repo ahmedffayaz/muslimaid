@@ -86,7 +86,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::resource('storecashbacks', StoreCashbackController::class);
 
         //Vouchers
-        Route::resource('vouchers', VouchersController::class);
+        Route::resource('vouchers', VouchersController::class)->except(['show']);
         Route::post('vouchers/fetch', [App\Http\Controllers\Admin\VouchersController::class, 'fetch'])->name('vouchers.fetch');
         Route::get('voucherss/export', [App\Http\Controllers\Admin\VouchersController::class, 'exportCsv'])->name('vouchers.export');
         Route::post('vouchers/search_vouchers',  [App\Http\Controllers\Admin\VouchersController::class, 'searchVouchers'])->name('vouchers.search_vouchers');
