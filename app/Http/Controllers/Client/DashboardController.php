@@ -23,7 +23,7 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $items = $user->cashbacks()->latest()->limit(5)->get();
-        return view('frontend.client-dashboard.dashboard',compact('user', 'items'));
+        return view('frontend.client-dashboard.dashboard', compact('user', 'items'));
     }
 
     /**
@@ -67,7 +67,7 @@ class DashboardController extends Controller
     public function edit()
     {
         $user = Auth::user();
-        return view('frontend.client-dashboard.edit-profile',compact('user'));
+        return view('frontend.client-dashboard.edit-profile', compact('user'));
     }
 
     /**
@@ -86,7 +86,7 @@ class DashboardController extends Controller
             'lastname' => 'required|regex:/^[A-Za-z ]+$/',
             // 'phone' => 'min:10|numeric|max:15',
             // 'address' => 'min:10'
-        ],$messages = [
+        ], $messages = [
             'firstname.required' => 'First name is required.',
             'lastname.required' => 'Last name is required.'
         ]);
@@ -112,19 +112,22 @@ class DashboardController extends Controller
     {
         //
     }
-    public function cashback(){
+    public function cashback()
+    {
 
         $user = Auth::user();
-        $cashbacks = UserCashback::where('user_id',$user->id)->latest()->get();
-        return view('frontend.client-dashboard.cashback',compact('user','cashbacks'));
+        $cashbacks = UserCashback::where('user_id', $user->id)->latest()->get();
+        return view('frontend.client-dashboard.cashback', compact('user', 'cashbacks'));
     }
-    public function clicks(){
+    public function clicks()
+    {
 
         $user = Auth::user();
-        $clicks = ExitClick::where('user_id',$user->id)->latest()->get();
-        return view('frontend.client-dashboard.clicks',compact('user','clicks'));
+        $clicks = ExitClick::where('user_id', $user->id)->latest()->get();
+        return view('frontend.client-dashboard.clicks', compact('user', 'clicks'));
     }
-    public function changePassword(){
+    public function changePassword()
+    {
         return view('frontend.client-dashboard.change-password');
     }
     public function savePassword(Request $request)
@@ -134,16 +137,24 @@ class DashboardController extends Controller
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
+
         if ($validator->fails()) {
             flash()->error($validator->errors()->first());
             return redirect()->back();
-
         }
-        $user->update([
-            'password' => Hash::make($request->password),
-        ]);
+        if (!Hash::check($request->old_password, $user->password)) {
+            flash()->error('Old password does not match with our records');
+            return redirect()->back();
+        } else if ($request->password != $request->password_confirmation) {
+            flash()->error('Password confirmation do not match');
+            return redirect()->back();
+        } else {
+            $user->update([
+                'password' => Hash::make($request->password),
+            ]);
 
-        flash()->success('Password changed successfully');
-        return redirect()->back();
+            flash()->success('Password changed successfully');
+            return redirect()->back();
+        }
     }
 }

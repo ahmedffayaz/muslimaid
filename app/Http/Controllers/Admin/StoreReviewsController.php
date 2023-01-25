@@ -12,10 +12,10 @@ class StoreReviewsController extends Controller
 {
     function __construct()
     {
-         $this->middleware('permission:view reviews', ['only' => ['index']]);
-         $this->middleware('permission:edit reviews', ['only' => ['edit','show','update']]);
-         $this->middleware('permission:add reviews', ['only' => ['create','Store']]);
-         $this->middleware('permission:delete reviews', ['only' => ['destroy']]);
+        $this->middleware('permission:view reviews', ['only' => ['index']]);
+        $this->middleware('permission:edit reviews', ['only' => ['edit', 'show', 'update']]);
+        $this->middleware('permission:add reviews', ['only' => ['create', 'Store']]);
+        $this->middleware('permission:delete reviews', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -24,11 +24,11 @@ class StoreReviewsController extends Controller
      */
     public function index()
     {
-        $route='index';
+        $route = 'index';
         $stores = Store::latest()->get();
         $users = User::get();
         $reviews = StoreReview::orderBy('status', 'desc')->latest()->paginate(30);
-        return view('admin-dashboard.store_reviews.index',compact('reviews','stores', 'users','route'));
+        return view('admin-dashboard.store_reviews.index', compact('reviews', 'stores', 'users', 'route'));
     }
 
     /**
@@ -51,7 +51,7 @@ class StoreReviewsController extends Controller
      */
     public function store(Request $request)
     {
-        try{
+        try {
             $review = StoreReview::create($request->all());
 
             // Get average rating against active reviews
@@ -64,8 +64,7 @@ class StoreReviewsController extends Controller
 
             flash()->success('Review added successfully');
             return redirect()->route('admin.reviews.index');
-
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             flash()->error('something went wrong! unable to add the Review');
             return redirect()->route('admin.reviews.index');
         }
@@ -93,7 +92,7 @@ class StoreReviewsController extends Controller
     {
         $users = User::get();
         $stores = Store::latest()->get();
-        return view('admin-dashboard.store_reviews.edit', compact('stores','review','users'))->render();
+        return view('admin-dashboard.store_reviews.edit', compact('stores', 'review', 'users'))->render();
     }
 
     /**
@@ -105,26 +104,25 @@ class StoreReviewsController extends Controller
      */
     public function update(Request $request, StoreReview $review)
     {
-        try{
+        try {
             $review->update($request->all());
 
             // Get average rating against active reviews
             $averageRating = StoreReview::where('store_id', $review->store_id)->where('status', 'active')->avg('rating');
 
             // Update store rating
-            if($request->status != 'pending'){
+            if ($request->status != 'pending') {
                 $store = $review->store()->update([
                     'rating' => $averageRating
                 ]);
             }
 
-            if(!$request->ajax())
-            {
+            if (!$request->ajax()) {
                 flash()->success('Review updated successfully');
-                return redirect()->back(); }
-            else{
+                return redirect()->back();
+            } else {
                 return true;
-                }
+            }
         } catch (\Throwable $th) {
             flash()->error('something went wrong! unable to update the review');
             return redirect()->route('admin.reviews.index');
@@ -145,42 +143,14 @@ class StoreReviewsController extends Controller
     }
     function fetch(Request $request)
     {
-     if($request->ajax())
-     {
-        $route = 'index';
-        $reviews = StoreReview::latest()->paginate(30);
+        if ($request->ajax()) {
+            $route = 'index';
+            $reviews = StoreReview::latest()->paginate(30);
 
-         return view('admin-dashboard.store_reviews.index_data', compact('reviews','route'))->render();
-     }
-    }
-    public function exportCsv(Request $request)
-    {
-        try {
-
-            $table = Category::latest()->get();
-            $filename = "categories.csv";
-            $handle = fopen($filename, 'w+');
-            fputcsv($handle, array('Name', 'Parent Category','No of Stores', 'Status'));
-
-            foreach($table as $row) {
-                fputcsv($handle, array($row->name, $row->parent->name ?? '', count($row->stores), $row->status ? 'active' : 'in-active'));
-            }
-
-            fclose($handle);
-
-            $headers = array(
-                'Content-Type' => 'text/csv',
-            );
-
-            return \Response::download($filename, 'categories.csv', $headers);
-        } catch (\Throwable $th) {
-
-            flash()->error('Error while exporting categories');
-            return redirect()->route('admin.categories.index');
-
+            return view('admin-dashboard.store_reviews.index_data', compact('reviews', 'route'))->render();
         }
-
     }
+
     public function searchReviews(Request $request, StoreReview $reviews)
     {
         $reviews = $reviews->newQuery();
@@ -193,18 +163,15 @@ class StoreReviewsController extends Controller
         // Search by reviewer.
         if ($request->input('reviewer_id')) {
             $reviews->where('user_id', $request->input('reviewer_id'));
-
         }
 
         // Search by store.
-        if ($request->input('status')!=-1) {
+        if ($request->input('status') != -1) {
             $reviews->where('status', $request->input('status'));
         }
 
         $reviews = $reviews->latest()->paginate(30);
-        $route='search';
-        return view('admin-dashboard.store_reviews.index_data', compact('reviews','route'))->render();
-
-
+        $route = 'search';
+        return view('admin-dashboard.store_reviews.index_data', compact('reviews', 'route'))->render();
     }
 }

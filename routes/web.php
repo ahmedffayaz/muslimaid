@@ -134,16 +134,19 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::get('commissionss/export', [App\Http\Controllers\Admin\CommissionController::class, 'exportCsv'])->name('commissions.export');
         Route::post('commissions/fetch', [App\Http\Controllers\Admin\CommissionController::class, 'fetch'])->name('commissions.fetch');
         Route::get('addmultiple/commissions', [App\Http\Controllers\Admin\CommissionController::class, 'createMultiple'])->name('commissions.create_multiple');
-        Route::post('commissions/storemultiple', [App\Http\Controllers\Admin\CommissionController::class, 'storeMultiple'])->name('commissions.store_multiple');
+        Route::get('commissions/form', [App\Http\Controllers\Admin\CommissionController::class, 'commissionsForm'])->name('commissions.form');
+        Route::post('commissions/store-multiple-cashbacks', [App\Http\Controllers\Admin\CommissionController::class, 'storeMultiple'])->name('commissions.store_multiple');
         Route::post('commissions/search_commissions',  [App\Http\Controllers\Admin\CommissionController::class, 'searchCommissions'])->name('commissions.search_commissions');
         Route::get('commissions/status_history/{commission}',  [App\Http\Controllers\Admin\CommissionController::class, 'statusHistory'])->name('commissions.history');
         Route::resource('commissions', CommissionController::class);
         Route::resource('cashouts', CashoutController::class);
+        Route::get('commissions/import/form', [App\Http\Controllers\Admin\CommissionController::class, 'importCashBacksForm'])->name('commissions.import.form');
+        Route::post('commissions/import', [App\Http\Controllers\Admin\CommissionController::class, 'importCashBacks'])->name('commissions.import');
+        Route::get('cashback/download-csv-file', [App\Http\Controllers\Admin\CommissionController::class, 'fileDownload'])->name('commissions.download.file');
 
         // Reviews
         Route::resource('reviews', StoreReviewsController::class);
         Route::post('reviews/fetch', [App\Http\Controllers\Admin\StoreReviewsController::class, 'fetch'])->name('reviews.fetch');
-        Route::get('reviews/export', [App\Http\Controllers\Admin\StoreReviewsController::class, 'exportCsv'])->name('reviews.export');
         Route::post('reviews/search_reviews',  [App\Http\Controllers\Admin\StoreReviewsController::class, 'searchReviews'])->name('reviews.search_reviews');
 
         // Reports
@@ -174,7 +177,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('admin_charities_store', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeStore'])->name('admin-charities-store');
         Route::put('charity_type_update/{id}', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeUpdate'])->name('charitiestype-update');
         Route::post('charities/search',  [App\Http\Controllers\Admin\CharityController::class, 'searchCharities'])->name('charities.search');
-        
+
         Route::get('charity_type_delete/{id}', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeDestroy'])->name('charity_type_delete');
 
         // Menus
@@ -189,7 +192,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('languages/fetch', [App\Http\Controllers\Admin\LanguageController::class, 'fetch'])->name('languages.fetch');
         Route::post('languages/search_languages',  [App\Http\Controllers\Admin\LanguageController::class, 'searchLanguages'])->name('languages.search_languages');
         Route::get('languages', [App\Http\Controllers\Admin\LanguageController::class, 'comingSoon'])->name('languages.coming-soon');
-       
+
         // Route::resource('languages', LanguageController::class);
 
         Route::post('translations/fetch', [App\Http\Controllers\Admin\Translations\TranslationController::class, 'fetch'])->name('translations.fetch');
@@ -239,7 +242,6 @@ Route::get('blog', [App\Http\Controllers\Frontend\PagesController::class, 'blog'
 Route::get('search', [App\Http\Controllers\Frontend\PagesController::class, 'search'])->name('search');
 Route::get('category/{slug}', [App\Http\Controllers\Frontend\PagesController::class, 'cashbackByCategory'])->name('cashabck');
 Route::get('top-cashback', [App\Http\Controllers\Frontend\PagesController::class, 'topStores'])->name('top_stores');
-Route::get('trending', [App\Http\Controllers\Frontend\PagesController::class, 'trending'])->name('trending');
 Route::get('cashback/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
 Route::get('categories/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
 Route::get('stores/reviews/{id}', [App\Http\Controllers\Frontend\StoreController::class, 'showReviews'])->name('store.reviews.show');
