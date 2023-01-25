@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Illuminate\Support\Facades\Auth;
 use Throwable;
 use App\Models\Currency;
 use App\Models\SiteSetting;
@@ -262,7 +263,12 @@ class SettingsController extends Controller
     }
 
     public function permissions(){
-        $roles = Role::whereNotIn('name', ['admin', 'user'])->get();
+        if(!Auth::user()->hasRole('admin')){
+            $roles = Role::whereNotIn('name', ['admin','user'])->get();
+        }
+        else{
+            $roles = Role::whereNotIn('name', ['admin'])->get();
+        }
         $permissions = Permission::all();
 
         return view('admin-dashboard.settings.permissions',compact('roles','permissions'));
