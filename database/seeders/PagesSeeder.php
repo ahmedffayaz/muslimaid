@@ -38,6 +38,7 @@ class PagesSeeder extends Seeder
             array('id' => '16','title' => 'Our Apps','slug' => 'our-apps','excerpt' => NULL,'default' => '0','status' => '1','created_at' => Carbon::now(),'updated_at' => Carbon::now(),'banner_image' => Null,'description' => 'Cashback is here to support you supporting Black-owned businesses.','meta_description' => Null,'meta_keyword' => Null),
             array('id' => '17','title' => 'Extensions','slug' => 'extensions','excerpt' => NULL,'default' => '0','status' => '1','created_at' => Carbon::now(),'updated_at' => Carbon::now(),'banner_image' => Null,'description' => 'Cashback is here to support you supporting Black-owned businesses.','meta_description' => Null,'meta_keyword' => Null),
             array('id' => '18','title' => 'Browser extension policy','slug' => 'browser-extension-policy','excerpt' => NULL,'default' => '0','status' => '1','created_at' => Carbon::now(),'updated_at' => Carbon::now(),'banner_image' => Null,'description' => 'Cashback is here to support you supporting Black-owned businesses.','meta_description' => Null,'meta_keyword' => Null),
+            array('id' => '19','title' => 'Trending','slug' => 'trending','excerpt' => NULL,'default' => '0','status' => '1','created_at' => Carbon::now(),'updated_at' => Carbon::now(),'banner_image' => Null,'description' => 'Cashback is here to support you supporting Black-owned businesses.','meta_description' => Null,'meta_keyword' => Null),     
           );
 
         Page::insert($pages);
