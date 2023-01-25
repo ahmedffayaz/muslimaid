@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use  Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Response;
 use App\Models\User;
 use App\Models\ExitClick;
 use App\Models\PaymentInfo;
@@ -11,10 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-
-
 
 class UserController extends Controller
 {
@@ -43,6 +42,25 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
+            'phone' => ['required', 'string', 'max:255'],
+        ]);
+
+        if ($validator->fails()) {
+            if (!$request->ajax()) {
+                flash()->error($validator->errors()->first());
+                return redirect()->back()->withInput();
+            }
+
+            return array(
+                'message' => $validator->errors()->first(),
+                'updated' => 'error'
+            );
+        }
+    
         $user =  User::create([
             'first_name' => $request->firstname,
             'last_name' => $request->lastname,
@@ -75,24 +93,55 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $user->update([
-            'first_name' => $request->firstname,
-            'last_name' => $request->lastname,
-            'email' => $request->email,
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'intro' => $request->intro,
-            'status' => $request->status,
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'firstname' => ['required', 'string', 'max:255'],
+                'lastname' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+                'phone' => ['required', 'string', 'max:255'],
+            ]);
 
-        $user->assignRole($request->roles);
+            if ($validator->fails()) {
+                if (!$request->ajax()) {
+                    flash()->error($validator->errors()->first());
+                    return redirect()->back();
+                }
 
-        if (!$request->ajax()) {
-            flash()->success('User updated successfully');
-            return redirect()->route('admin.users.index');
+                return array(
+                    'message' => $validator->errors()->first(),
+                    'success' => false
+                );
+            }
+
+            $user->update([
+                'first_name' => $request->input('firstname'),
+                'last_name' => $request->input('lastname'),
+                'email' => $request->input('email'),
+                'phone' => $request->input('phone'),
+                'address' => $request->input('address'),
+                'intro' => $request->input('intro'),
+                'status' => $request->input('status'),
+            ]);
+
+            $user->syncRoles($request->input('roles'));
+
+            if (!$request->ajax()) {
+                flash()->success('User updated successfully');
+                return redirect()->route('admin.users.index');
+            }
+
+            return array(
+                'message' => $validator->errors()->first(),
+                'success' => true
+            );
+        } catch (Exception $e) {
+            if (!$request->ajax()) throw new Exception($e->getMessage());
+
+            return array(
+                'message' => $e->getMessage(),
+                'success' => false
+            );
         }
-
-        return true;
     }
 
     public function destroy(User $user)

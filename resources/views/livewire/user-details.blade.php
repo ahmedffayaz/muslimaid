@@ -155,7 +155,9 @@
                                                     </div>
                                                     <div class="col-12">
                                                         <div class="form-group">
-                                                            <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                                                            <button type="submit" class="btn btn-lg btn-primary">
+                                                                <span>Save</span>
+                                                            </button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -308,6 +310,11 @@
 </div>
 
 @push('scripts')
+    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
+
+    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
+    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
+
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
             window.livewire.on('userChange', () => {
@@ -315,6 +322,7 @@
                 fetchCashbacks(1);
                 fetchClicks(1);
                 initializeSelect2();
+
                 var quill = new Quill('#editor-container', {
                     modules: {
                         toolbar: [
@@ -330,21 +338,15 @@
                     placeholder: 'Compose an epic...',
                     theme: 'snow'
                 });
-
             });
         });
-    </script>
-    <script>
+
         $(document).ready(function() {
             $('#user_select').on('change', function(e) {
                 livewire.emit('changeEvent', e.target.value)
             });
         });
-    </script>
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
-    <script>
+
         var quill = new Quill('#editor-container', {
             modules: {
                 toolbar: [
@@ -367,9 +369,7 @@
             var desc = document.querySelector('input[name=intro]');
             desc.value = quill.root.innerHTML;
         });
-    </script>
 
-    <script>
         function fetchCashbacks(page) {
             pageurl = "{{ route('admin.users.cashbacks') }}?page=" + page
 
@@ -427,34 +427,52 @@
                 fetchCashbacks(page);
             });
         });
-    </script>
 
-    <!-- Update User-->
-    <script>
         $(document).ready(function() {
             $(document).on('submit', '.user-form', function(event) {
                 event.preventDefault();
+
+                let form = $(this);
+                let submitBtn = form.find('[type="submit"]');
+                let submitBtnHtml = submitBtn.html();
+
+                submitBtn.attr('disabled', 'disabled')
+                    .append(`<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>`);
 
                 $.ajax({
                     type: 'PUT',
                     url: $(this).attr('action'),
                     data: $(this).serialize(),
                     success: function(data) {
+                        if (data.success) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast('User updated Successfully.', 'success');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(data.message, 'error');
+                            })(NioApp, jQuery);
+                        }
+                    },
+                    error: function(data) {
+                        console.log(data);
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
-                            NioApp.Toast('User updated Successfully.', 'success');
+                            NioApp.Toast('Something went wrong.', 'error');
                         })(NioApp, jQuery);
                     },
-                    error: function(data) {
-                        console.log("error");
-                        console.log(data);
+                    complete: function(data) {
+                        submitBtn.removeAttr('disabled').html(submitBtnHtml);
                     }
                 });
             });
         });
-    </script>
-    <script>
+
         $(document).ready(function() {
             $(document).on('submit', '#password_form', function(event) {
                 event.preventDefault();
@@ -477,9 +495,7 @@
                 });
             });
         });
-    </script>
 
-    <script>
         $(document).ready(function() {
             $(document).on('submit', '#payment_form', function(event) {
                 event.preventDefault();
@@ -503,9 +519,7 @@
                 });
             });
         });
-    </script>
 
-    <script>
         $('.bank').hide();
 
         function show_paypal() {
