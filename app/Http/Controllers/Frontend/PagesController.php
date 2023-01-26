@@ -124,15 +124,6 @@ class PagesController extends Controller
         $stores = Store::latest()->get();
         return view('frontend.pages.offers', compact('stores'));
     }
-
-
-    public function cashbackByCategory($slug)
-    {
-
-        $category = Category::where('slug', $slug)->first();
-        $stores = $category->stores()->paginate(20);
-        return view('frontend.pages.cashback_by_category', compact('stores', 'category'));
-    }
     public function topStores()
     {
         $stores = Store::withCount('clicks')

@@ -18,9 +18,9 @@ class ClickController extends Controller
 {
     function __construct()
     {
-         $this->middleware('permission:view clicks');
-        
+        $this->middleware('permission:view clicks');
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -101,6 +101,7 @@ class ClickController extends Controller
     {
         //
     }
+
     function fetch(Request $request)
     {
         if ($request->ajax()) {
@@ -110,13 +111,14 @@ class ClickController extends Controller
             return view('admin-dashboard.clicks.index_data', compact('clicks', 'route'))->render();
         }
     }
+
     public function exportCsv(Request $request)
     {
         try {
-
             $table = ExitClick::latest()->get();
             $filename = "clicks.csv";
             $handle = fopen($filename, 'w+');
+
             fputcsv($handle, array('User', 'User Email', 'Store', 'Exit Url', 'Time', 'Status'));
 
             foreach ($table as $row) {
@@ -135,40 +137,40 @@ class ClickController extends Controller
 
             return Response::download($filename, 'clicks.csv', $headers);
         } catch (Throwable $th) {
-
             flash()->error('Error while exporting exit clics');
 
             return redirect()->route('admin.clicks.index');
         }
     }
+
     public function searchClicks(Request $request, ExitClick $clicks)
     {
-        // dd($request->all());
         $clicks = $clicks->newQuery();
-
-        // Search by network.
-        // if ($request->input('network_id')) {
-        //     $clicks->where('network_id', $request->input('network_id'));
-        // }
 
         // Search by click id.
         if ($request->input('click_id')) {
             $clicks->where('id', $request->click_id)
-            ->orWhere('user_id',$request->click_id)
-            ->orWhere('store_id',$request->click_id);
+                ->orWhere('user_id', $request->click_id)
+                ->orWhere('store_id', $request->click_id);
         }
-        
+
         // Search by user.
         if ($request->input('user')) {
             $clicks->whereHas('user', function ($query) use ($request) {
-                $query->where(DB::raw("CONCAT(first_name,' ',last_name)"), 'like', "%{$request->user}%");})
-            ->orwhereHas('store', function ($query) use ($request) {
+                $query->where(DB::raw("CONCAT(first_name,' ',last_name)"), 'like', "%{$request->user}%");
+            })->orwhereHas('store', function ($query) use ($request) {
                 $query->where('name', 'like', "%{$request->user}%");
             });
         }
 
+        // Search by network.
+        if ($request->input('network_id')) {
+            $clicks->where('network_id', $request->input('network_id'));
+        }
+
         $clicks = $clicks->latest()->paginate(20);
         $route = 'search';
+
         return view('admin-dashboard.clicks.index_data', compact('clicks', 'route'))->render();
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
-use Carbon\Carbon;
 use App\Models\Network;
 use App\Models\ExitClick;
 use App\Models\SiteSetting;
@@ -15,7 +14,6 @@ use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use  Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Storage;
 
 class CommissionController extends Controller
 {
@@ -271,7 +269,7 @@ class CommissionController extends Controller
 
             flash()->success('New cashbacks added');
             return route('admin.commissions.index');
-        } catch (ModelNotFoundException) {
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'status' => JsonResponse::HTTP_NOT_FOUND,
                 'error' => 'Exit Click not found'

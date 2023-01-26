@@ -86,7 +86,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::resource('storecashbacks', StoreCashbackController::class);
 
         //Vouchers
-        Route::resource('vouchers', VouchersController::class);
+        Route::resource('vouchers', VouchersController::class)->except(['show']);
         Route::post('vouchers/fetch', [App\Http\Controllers\Admin\VouchersController::class, 'fetch'])->name('vouchers.fetch');
         Route::get('voucherss/export', [App\Http\Controllers\Admin\VouchersController::class, 'exportCsv'])->name('vouchers.export');
         Route::post('vouchers/search_vouchers',  [App\Http\Controllers\Admin\VouchersController::class, 'searchVouchers'])->name('vouchers.search_vouchers');
@@ -240,7 +240,6 @@ Route::get('about', [App\Http\Controllers\Frontend\PagesController::class, 'abou
 Route::get('contact', [App\Http\Controllers\Frontend\PagesController::class, 'contact'])->name('contact');
 Route::get('blog', [App\Http\Controllers\Frontend\PagesController::class, 'blog'])->name('blog');
 Route::get('search', [App\Http\Controllers\Frontend\PagesController::class, 'search'])->name('search');
-Route::get('category/{slug}', [App\Http\Controllers\Frontend\PagesController::class, 'cashbackByCategory'])->name('cashabck');
 Route::get('top-cashback', [App\Http\Controllers\Frontend\PagesController::class, 'topStores'])->name('top_stores');
 Route::get('cashback/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
 Route::get('categories/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
@@ -271,6 +270,7 @@ Route::namespace('App\Http\Controllers\Client')
         Route::get('change_password', [App\Http\Controllers\Client\DashboardController::class, 'changePassword'])->name('change_password');
         Route::post('users/passwordsave/', [App\Http\Controllers\Client\DashboardController::class, 'savePassword'])->name('save_password');
         Route::resource('withdraw', PaymentController::class);
+        Route::resource('replies', RepliesController::class);
         Route::get('payment-details', [App\Http\Controllers\Client\PaymentController::class, 'paymentDetails'])->name('payment_details');
         Route::get('statement', [App\Http\Controllers\Client\PaymentController::class, 'statement'])->name('statement');
         Route::get('payment-methods', [App\Http\Controllers\Client\PaymentController::class, 'paymentDetails'])->name('payment_details');
