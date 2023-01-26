@@ -269,7 +269,7 @@ class CommissionController extends Controller
 
             flash()->success('New cashbacks added');
             return route('admin.commissions.index');
-        } catch (ModelNotFoundException $exception) {
+        } catch (ModelNotFoundException $e) {
             return response()->json([
                 'status' => JsonResponse::HTTP_NOT_FOUND,
                 'error' => 'Exit Click not found'
