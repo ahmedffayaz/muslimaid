@@ -7,6 +7,7 @@ use App\Models\Network;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -51,6 +52,13 @@ class VouchersController extends Controller
         ]);
 
         if ($validator->fails()) {
+            if ($request->ajax()) {
+                return array(
+                    'message' => $validator->errors()->first(),
+                    'success' => false
+                );
+            }
+            
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
@@ -68,10 +76,26 @@ class VouchersController extends Controller
                 'promotion_end_date' => \Carbon\Carbon::parse($request->input('promotion_end_date'))->format('Y-m-d'),
             ]);
 
-            flash()->success('Voucher added successfully');
+            if ($request->ajax()) {
+                return array(
+                    'message' => 'Voucher added successfully.',
+                    'success' => true
+                );
+            }
+
+            flash()->success('Voucher added successfully.');
             return redirect()->route('admin.vouchers.index');
-        } catch (\Throwable $th) {
-            flash()->error('something went wrong! unable to add the voucher');
+        } catch (Exception $e) {
+            $message = 'Something went wrong! Unable to add the voucher.';
+
+            if ($request->ajax()) {
+                return array(
+                    'message' => $message,
+                    'success' => true
+                );
+            }
+
+            flash()->error($message);
             return redirect()->route('admin.vouchers.index');
         }
     }
@@ -102,6 +126,13 @@ class VouchersController extends Controller
         ]);
 
         if ($validator->fails()) {
+            if ($request->ajax()) {
+                return array(
+                    'message' => $validator->errors()->first(),
+                    'success' => false
+                );
+            }
+            
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
@@ -119,14 +150,26 @@ class VouchersController extends Controller
                 'promotion_end_date' => \Carbon\Carbon::parse($request->input('promotion_end_date'))->format('Y-m-d'),
             ]);
 
-            if (!$request->ajax()) {
-                flash()->success('Voucher updated successfully');
-                return redirect()->route('admin.vouchers.index');
+            if ($request->ajax()) {
+                return array(
+                    'message' => 'Voucher updated successfully.',
+                    'success' => true
+                );
+            }
+            
+            flash()->success('Voucher updated successfully');
+            return redirect()->route('admin.vouchers.index');
+        } catch (Exception $e) {
+            $message = 'Something went wrong! Unable to update the voucher.';
+
+            if ($request->ajax()) {
+                return array(
+                    'message' => $message,
+                    'success' => true
+                );
             }
 
-            return true;
-        } catch (\Throwable $th) {
-            flash()->error('Something went wrong! unable to update the voucher');
+            flash()->error($message);
             return redirect()->route('admin.vouchers.index');
         }
     }

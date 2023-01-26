@@ -8,7 +8,7 @@
     </div>
 @endif
 
-<form action="{{ route('admin.vouchers.update', $voucher) }}" class="gy-3 form-validate is-alter voucher_form" method="POST">
+<form action="{{ route('admin.vouchers.update', $voucher) }}" class="gy-3 is-alter" id="edit-voucher-form" method="POST">
     @csrf
     @method('PUT')
     <div class="row g-4">
@@ -56,7 +56,6 @@
             <div class="card">
                 <label class="form-label" for="phone-no-1">Description</label>
                 <textarea name="description" class="form-control ">{!! $voucher->description !!}</textarea>
-
             </div>
         </div>
 
@@ -94,20 +93,20 @@
 
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="promotion_start_date">Promotion Start Date</label>
+                <label class="form-label" for="promotion_start_date_edit">Promotion Start Date</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control date-picker" id="promotion_start_date"
-                        value="{{ \Carbon\Carbon::parse($voucher->promotion_start_date)->format('Y-m-d') }}" name="promotion_start_date" required>
+                    <input type="text" class="form-control date-picker promotion_start_date" id="promotion_start_date_edit"
+                        value="{{ \Carbon\Carbon::parse($voucher->promotion_start_date)->format('m/d/Y') }}" name="promotion_start_date" autocomplete="off" required>
                 </div>
             </div>
         </div>
 
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="promotion_end_date">Promotion End Date</label>
+                <label class="form-label" for="promotion_end_date_edit">Promotion End Date</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control date-picker" id="promotion_end_date"
-                        value="{{ \Carbon\Carbon::parse($voucher->promotion_end_date)->format('Y-m-d') }}" name="promotion_end_date" required>
+                    <input type="text" class="form-control date-picker promotion_end_date" id="promotion_end_date_edit"
+                        value="{{ \Carbon\Carbon::parse($voucher->promotion_end_date)->format('m/d/Y') }}" name="promotion_end_date" autocomplete="off" required>
                 </div>
                 @if ($errors->has('promotion_end_date'))
                     <span class="invalid-feedback d-block" role="alert">End date must be greater than start date.</span>
@@ -117,46 +116,10 @@
 
         <div class="col-12">
             <div class="form-group">
-                <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                <button type="submit" class="btn btn-lg btn-primary">
+                    <span>Save</span>
+                </button>
             </div>
         </div>
     </div>
 </form>
-
-@push('scripts')
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/summernote.css?ver=2.2.0') }}">
-    <script src="{{ asset('admin-dashboard/js/libs/editors/summernote.js?ver=2.2.0') }}"></script>
-
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
-
-    <script>
-        var vquill = new Quill('#veditor-container', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic'],
-                    ['link', 'blockquote', 'code-block', 'image'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }]
-                ]
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow'
-        });
-
-        $(".voucher_form").submit(function(e) {
-            e.preventDefault();
-
-            // Populate hidden form on submit
-            var desc = document.querySelector('input[name=description]');
-            desc.value = vquill.root.innerHTML;
-
-            alert('yes');
-        });
-    </script>
-@endpush

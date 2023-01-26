@@ -13,6 +13,7 @@
         <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Commission</span></div>
         <div class="nk-tb-col nk-tb-col-tools text-right"><span class="sub-text">Action</span></div>
     </div>
+
     @foreach ($vouchers as $voucher)
         <div class="nk-tb-item" @if ($voucher->promotion_end_date < \Carbon\Carbon::now()) style="background-color:#f1f1f1" @endif>
 

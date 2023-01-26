@@ -23,11 +23,10 @@ Route::get('/set-locale/{locale}', [App\Http\Controllers\Frontend\HomeController
 Auth::routes();
 
 Route::namespace('App\Http\Controllers\Website')->prefix('site')->name('site.')->group(function () {
-
     Route::resource('/exit_click', ClickController::class);
 });
 
-//Admin routes
+// Admin routes
 Route::namespace('App\Http\Controllers\Admin')
     ->middleware(['auth', 'role:admin|data|finance'])
     ->as('admin.')
@@ -41,7 +40,7 @@ Route::namespace('App\Http\Controllers\Admin')
 
         Route::post('dataByPeriod', [App\Http\Controllers\HomeController::class, 'dataByPeriod'])->name('home.index_data');
 
-        //Networks
+        // Networks
         Route::post('networks/fetch', [App\Http\Controllers\Admin\NetworkController::class, 'fetch'])->name('networks.fetch');
         Route::get('networks/categories/{network}', [App\Http\Controllers\Admin\NetworkController::class, 'categories'])->name('networks.categories');
         Route::post('networks/categories_import/{network}', [App\Http\Controllers\Admin\NetworkController::class, 'importCategories'])->name('networks.categories.import');
@@ -85,25 +84,25 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::resource('stores', StoreController::class);
         Route::resource('storecashbacks', StoreCashbackController::class);
 
-        //Vouchers
+        // Vouchers
         Route::resource('vouchers', VouchersController::class)->except(['show']);
         Route::post('vouchers/fetch', [App\Http\Controllers\Admin\VouchersController::class, 'fetch'])->name('vouchers.fetch');
         Route::get('voucherss/export', [App\Http\Controllers\Admin\VouchersController::class, 'exportCsv'])->name('vouchers.export');
         Route::post('vouchers/search_vouchers',  [App\Http\Controllers\Admin\VouchersController::class, 'searchVouchers'])->name('vouchers.search_vouchers');
 
-        //Categoires
+        // Categories
         Route::get('categories/export', [App\Http\Controllers\Admin\CategoryController::class, 'exportCsv'])->name('categories.export');
         Route::get('categories/picks/{category}', [App\Http\Controllers\Admin\CategoryController::class, 'picks'])->name('categories.picks');
         Route::post('categories/fetch', [App\Http\Controllers\Admin\CategoryController::class, 'fetch'])->name('categories.fetch');
         Route::post('categories/search_categories',  [App\Http\Controllers\Admin\CategoryController::class, 'searcCategories'])->name('categories.search_categories');
         Route::resource('categories', CategoryController::class);
 
-        //IMported Network Categories
+        // Imported Network Categories
         Route::post('importedcategories/fetch', [App\Http\Controllers\Admin\ImportedCategoryController::class, 'fetch'])->name('importedcategories.fetch');
         Route::post('importedcategories/search_importedcategories',  [App\Http\Controllers\Admin\ImportedCategoryController::class, 'searcImportedCategories'])->name('importedcategories.search_importedcategories');
         Route::resource('importedcategories', ImportedCategoryController::class);
 
-        //Users
+        // Users
         Route::post('users/cashbacks', [App\Http\Controllers\Admin\UserController::class, 'fetchCashbacks'])->name('users.cashbacks');
         Route::post('users/clicks', [App\Http\Controllers\Admin\UserController::class, 'fetchClicks'])->name('users.clicks');
         Route::get('users/export', [App\Http\Controllers\Admin\UserController::class, 'exportCsv'])->name('users.export');
@@ -116,7 +115,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::get('users/show', [App\Http\Controllers\Admin\UserController::class, 'showUser'])->name('users.show_user');
         Route::resource('users', UserController::class);
 
-        // Imorters
+        // Importers
         Route::post('importer/import', [App\Http\Controllers\Admin\ImporterController::class, 'import'])->name('importer.import');
         Route::get('importer/commissions', [App\Http\Controllers\Admin\ImporterController::class, 'import_commissions'])->name('importer.commissions');
         Route::get('importer/vouchers', [App\Http\Controllers\Admin\ImporterController::class, 'import_coupons'])->name('importer.vouchers');
@@ -124,7 +123,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::get('importer/importer_setting_form/{id}', [App\Http\Controllers\Admin\ImporterController::class, 'importerSettingForm'])->name('importer.importer_setting_form');
         Route::resource('importer', ImporterController::class);
 
-        //Clicks
+        // Clicks
         Route::get('clicks/export', [App\Http\Controllers\Admin\ClickController::class, 'exportCsv'])->name('clicks.export');
         Route::post('clicks/fetch', [App\Http\Controllers\Admin\ClickController::class, 'fetch'])->name('clicks.fetch');
         Route::post('clicks/search_clicks',  [App\Http\Controllers\Admin\ClickController::class, 'searchClicks'])->name('clicks.search_clicks');
@@ -157,7 +156,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('reports/search_earnings',  [App\Http\Controllers\Admin\ReportsController::class, 'search_earnings'])->name('reports.search_earnings');
         Route::post('reports/earnings/fetch', [App\Http\Controllers\Admin\ReportsController::class, 'fetchEarnings'])->name('reports.fetch_earnings');
 
-        //Settings
+        // Settings
         Route::get('settings/export', [App\Http\Controllers\Admin\SettingsController::class, 'exportCsv'])->name('settings.export');
         Route::get('mailer_settings', [App\Http\Controllers\Admin\SettingsController::class, 'mailerSettings'])->name('settings.mailer_settings');
         Route::get('cashback_status', [App\Http\Controllers\Admin\SettingsController::class, 'cashbackStatusNames'])->name('settings.cashback_status');
@@ -234,7 +233,7 @@ Route::namespace('App\Http\Controllers\Admin')
         });
     });
 
-//Front Website Routes
+// Front Website Routes
 Route::get('vouchers', [App\Http\Controllers\Frontend\PagesController::class, 'vouchers'])->name('vouchers');
 Route::get('about', [App\Http\Controllers\Frontend\PagesController::class, 'about'])->name('about');
 Route::get('contact', [App\Http\Controllers\Frontend\PagesController::class, 'contact'])->name('contact');
@@ -256,7 +255,7 @@ Route::post('showCharity', [App\Http\Controllers\Frontend\PagesController::class
 Route::resource('newsletter', App\Http\Controllers\Frontend\NewsletterController::class);
 Route::resource('categories', App\Http\Controllers\Frontend\CategoryController::class);
 
-//CLient Dashboard routes
+// CLient Dashboard routes
 Route::namespace('App\Http\Controllers\Client')
     ->middleware(['auth', 'role:user'])
     ->as('account.')

@@ -5,6 +5,7 @@
         <div class="container-fluid">
             <div class="nk-content-inner">
                 <div class="nk-content-body">
+
                     <div class="nk-block-head nk-block-head-sm">
                         @if ($errors->any())
                             <div class="alert alert-danger">
@@ -48,9 +49,10 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="card card-preview mb-4">
                         <div class="card-inner">
-                            <form action="{{ route('admin.stores.search_stores') }}" class="form-validate is-alter search_form" method="POST">
+                            <form action="{{ route('admin.stores.search_stores') }}" class="form-validate is-alter" id="search-form" method="POST">
                                 @csrf
                                 <div class="row g-4">
                                     <div class="col-lg-4">
@@ -97,7 +99,6 @@
                     <div class="nk-block">
                         <div class="card card-stretch">
                             <div class="card-inner-group">
-
                                 <div class="card-inner px-0">
                                     <div class="nk-tb-list nk-tb-ulist" id="table-data">
 
@@ -105,10 +106,10 @@
 
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -128,115 +129,115 @@
                     </div>
                     <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
                 </div>
-                <div id="add-voucher-form" class="p-4">
-                    <form action="{{ route('admin.vouchers.store') }}" class="gy-3 form-validate is-alter voucher_form" method="POST">
-                        @csrf
-                        <div class="row g-4">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label class="form-label" for="full-name-1">Title</label>
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control" id="full-name-1" name="link_name" required>
-                                    </div>
+                <form action="{{ route('admin.vouchers.store') }}" class="gy-3 is-alter p-4" id="add-voucher-form" method="POST">
+                    @csrf
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="full-name-1">Title</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="full-name-1" name="link_name" required>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="default-06">Store</label>
+                                <div class="form-control-wrap">
+                                    <select class="form-select form-control" data-search="on" id="default-06" name="store_id" required>
+                                        @foreach ($stores as $store)
+                                            <option value="{{ $store->id }}">{{ $store->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="pay-amount-1">Click url</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="pay-amount-1" name="click_url" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="phone-no-1">Destination url</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="phone-no-1" name="destination" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <input name="description" type="hidden">
+                                <label class="form-label" for="phone-no-1">Description</label>
+                                <textarea name="description" class="form-control "></textarea>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
                                 <div class="form-group">
-                                    <label class="form-label" for="default-06">Store</label>
+                                    <label class="form-label" for="promotion_type">Promotion Type</label>
                                     <div class="form-control-wrap">
-                                        <select class="form-select form-control" data-search="on" id="default-06" name="store_id" required>
-                                            @foreach ($stores as $store)
-                                                <option value="{{ $store->id }}">{{ $store->name }}</option>
-                                            @endforeach
+                                        <select class="form-select form-control select-2" data-search="on" id="promotion_type" name="promotion_type" required>
+                                            <option value="Coupon">Coupon</option>
+                                            <option value="Sale/Discount">Sale/Discount</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label class="form-label" for="pay-amount-1">Click url</label>
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control" id="pay-amount-1" name="click_url" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label class="form-label" for="phone-no-1">Destination url</label>
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control" id="phone-no-1" name="destination" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <input name="description" type="hidden">
-                                    <label class="form-label" for="phone-no-1">Description</label>
-                                    <textarea name="description" class="form-control "></textarea>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <div class="form-group">
-                                        <label class="form-label" for="promotion_type">Promotion Type</label>
-                                        <div class="form-control-wrap">
-                                            <select class="form-select form-control select-2" data-search="on" id="promotion_type" name="promotion_type" required>
-                                                <option value="Coupon">Coupon</option>
-                                                <option value="Sale/Discount">Sale/Discount</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 coupon-div">
-                                <div class="form-group">
-                                    <label class="form-label" for="coupon_code">Coupon Code</label>
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control" id="coupon_code" value="" name="coupon_code" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label class="form-label" for="sale_commission">Sale commission</label>
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control" id="sale_commission" value="" name="sale_commission" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label class="form-label" for="promotion_start_date">Promotion Start Date</label>
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control date-picker" id="promotion_start_date" value="" name="promotion_start_date" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label class="form-label" for="promotion_end_date">Promotion End Date</label>
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control date-picker" id="promotion_end_date" value="" name="promotion_end_date" required>
-                                    </div>
-                                    @if ($errors->has('promotion_end_date'))
-                                        <span class="invalid-feedback d-block" role="alert">End date must be greater than start date.</span>
-                                    @endif
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                        </div>
+                        <div class="col-lg-6 coupon-div">
+                            <div class="form-group">
+                                <label class="form-label" for="coupon_code">Coupon Code</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="coupon_code" name="coupon_code" required>
                                 </div>
                             </div>
                         </div>
-                    </form>
-                </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="sale_commission">Sale commission</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="sale_commission" name="sale_commission" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="promotion_start_date">Promotion Start Date</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control date-picker promotion_start_date" id="promotion_start_date" name="promotion_start_date"
+                                        autocomplete="off" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="promotion_end_date">Promotion End Date</label>
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control date-picker promotion_end_date" id="promotion_end_date" name="promotion_end_date"
+                                        autocomplete="off" required>
+                                </div>
+                                @if ($errors->has('promotion_end_date'))
+                                    <span class="invalid-feedback d-block" role="alert">End date must be greater than start date.</span>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-lg btn-primary"><span>Save</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
 
-    <!-- Modal Alert -->
-    <div class="modal fade" tabindex="-1" id="voucher-modal">
+    <!-- Edit Voucher Modal -->
+    <div class="modal fade" tabindex="-1" id="edit-voucher-modal">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
                 <div class="modal-header align-center">
@@ -245,9 +246,9 @@
                             <div class="nk-file-name-text"><span class="title">Edit Voucher</span></div>
                         </div>
                     </div>
-                    <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+                    <a href="javascript:void(0);" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
                 </div>
-                <div id="voucher-form" class=" p-4"></div>
+                <div id="edit-voucher-form-placeholder" class=" p-4"></div>
             </div>
         </div>
     </div>
@@ -261,73 +262,218 @@
                                 </div>
                             </div>`;
 
-        $(document).ready(function() {
-            $(document).on('click', '.pagination a', function(event) {
-                event.preventDefault();
+        $(document).on('submit', '#search-form', function(e) {
+            e.preventDefault();
 
-                var route = $('.pagination').attr('route');
-                var page = $(this).attr('href').split('page=')[1];
+            $('#table-data').html(tableSpinner);
 
-                if (route == 'index') {
-                    $('#table-data').html(tableSpinner);
+            $.ajax({
+                url: "{{ route('admin.vouchers.search_vouchers') }}",
+                method: "POST",
+                data: {
+                    _token: $("input[name=_token]").val(),
+                    network_id: $("select[name=network_id]").val(),
+                    store_id: $("select[name=stores_id]").val(),
+                },
+                success: function(data) {
+                    $('#table-data').html(data);
 
-                    pageurl = "{{ route('admin.vouchers.fetch') }}?page="
-                    var _token = $("input[name=_token]").val();
-
-                    $.ajax({
-                        url: pageurl + page,
-                        method: "POST",
-                        data: {
-                            _token: _token,
-                            page: page
-                        },
-                        success: function(data) {
-                            $('#table-data').html(data);
-                            $('html, body').animate({
-                                scrollTop: 0
-                            }, 'slow');
-                        }
-                    });
-                }
-
-                if (route == 'search') {
-                    $('#table-data').html(tableSpinner);
-
-                    var _token = $("input[name=_token]").val();
-                    var network_id = $("select[name=network_id]").val();
-                    var store_id = $("select[name=store_id]").val();
-
-                    $.ajax({
-                        url: '{{ route('admin.vouchers.search_vouchers') }}?page=' + page,
-                        method: "POST",
-                        data: {
-                            _token: _token,
-                            network_id: network_id,
-                            store_id: store_id
-                        },
-                        success: function(data) {
-                            $('#table-data').html(data);
-                            $('html, body').animate({
-                                scrollTop: 0
-                            }, 'slow');
-                        }
-                    });
+                    $('html, body').animate({
+                        scrollTop: 0
+                    }, 'slow');
                 }
             });
         });
 
-        $(document).ready(function() {
-            $(document).on('submit', '.search_form', function(event) {
-                event.preventDefault();
+        $(document).on('submit', '#add-voucher-form', function(e) {
+            e.preventDefault();
 
+            let form = $(this);
+            let submitBtn = form.find('[type="submit"]');
+            let submitBtnHtml = submitBtn.html();
+
+            submitBtn.attr('disabled', 'disabled')
+                .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
+
+            $.ajax({
+                url: form.attr('action'),
+                method: 'post',
+                data: form.serialize(),
+                success: function(data) {
+                    submitBtn.removeAttr('disabled').html(submitBtnHtml);
+
+                    if (data.success) {
+                        form.trigger('reset');
+                        $('#add-voucher-modal').modal('hide');
+
+                        (function(NioApp, $) {
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(data.message, 'success');
+                        })(NioApp, jQuery);
+
+                        fetchVouchers();
+                    } else {
+                        (function(NioApp, $) {
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(data.message, 'error');
+                        })(NioApp, jQuery);
+                    }
+                },
+                error: function(data) {
+                    submitBtn.removeAttr('disabled').html(submitBtnHtml);
+
+                    (function(NioApp, $) {
+                        'use strict';
+                        toastr.clear();
+                        NioApp.Toast('Something went wrong.', 'error');
+                    })(NioApp, jQuery);
+                },
+                complete: function(data) {
+                    // Just in case something breaks
+                    submitBtn.removeAttr('disabled').html(submitBtnHtml);
+                }
+            });
+        });
+
+        $(document).on('submit', '#edit-voucher-form', function(e) {
+            e.preventDefault();
+
+            let form = $(this);
+            let submitBtn = form.find('[type="submit"]');
+            let submitBtnHtml = submitBtn.html();
+
+            submitBtn.attr('disabled', 'disabled')
+                .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
+
+            $.ajax({
+                url: form.attr('action'),
+                method: 'post',
+                data: form.serialize(),
+                success: function(data) {
+                    submitBtn.removeAttr('disabled').html(submitBtnHtml);
+
+                    if (data.success) {
+                        $('#edit-voucher-modal').modal('hide');
+
+                        (function(NioApp, $) {
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(data.message, 'success');
+                        })(NioApp, jQuery);
+
+                        fetchVouchers();
+                    } else {
+                        (function(NioApp, $) {
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(data.message, 'error');
+                        })(NioApp, jQuery);
+                    }
+                },
+                error: function(data) {
+                    submitBtn.removeAttr('disabled').html(submitBtnHtml);
+
+                    (function(NioApp, $) {
+                        'use strict';
+                        toastr.clear();
+                        NioApp.Toast('Something went wrong.', 'error');
+                    })(NioApp, jQuery);
+                },
+                complete: function(data) {
+                    // Just in case something breaks
+                    submitBtn.removeAttr('disabled').html(submitBtnHtml);
+                }
+            });
+        });
+
+        $(document).on('click', '.edit-voucher', function(e) {
+            e.preventDefault();
+
+            let modal = $('#edit-voucher-modal');
+            let formPlaceholder = $('#edit-voucher-form-placeholder');
+
+            $.ajax({
+                url: $(this).attr('href'),
+                method: "GET",
+                data: {
+                    _token: $("input[name=_token]").val()
+                },
+                success: function(data) {
+                    modal.modal('show');
+                    formPlaceholder.html(data);
+
+                    $('.select-2').each(function() {
+                        initializeSelect2($(this));
+                    });
+
+                    formPlaceholder.find(".promotion_end_date").datepicker();
+                    formPlaceholder.find(".promotion_start_date").datepicker();
+
+                    checkVoucherType();
+                    attachFormValidator($(document).find('#edit-voucher-form'));
+                }
+            });
+        });
+
+        $(document).on("change", "#promotion_type", function() {
+            checkVoucherType()
+        });
+
+        $(document).on('click', '.delete', function(e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function(result) {
+                if (result.value) {
+                    $('#' + $(this).attr('form_id')).submit();
+                }
+            });
+        });
+
+        $(document).on('click', '.pagination a', function(e) {
+            e.preventDefault();
+
+            var route = $('.pagination').attr('route');
+            var page = $(this).attr('href').split('page=')[1];
+
+            if (route == 'index') {
+                $('#table-data').html(tableSpinner);
+
+                pageurl = "{{ route('admin.vouchers.fetch') }}?page="
+                var _token = $("input[name=_token]").val();
+
+                $.ajax({
+                    url: pageurl + page,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                        page: page
+                    },
+                    success: function(data) {
+                        $('#table-data').html(data);
+                        $('html, body').animate({
+                            scrollTop: 0
+                        }, 'slow');
+                    }
+                });
+            }
+
+            if (route == 'search') {
                 $('#table-data').html(tableSpinner);
 
                 var _token = $("input[name=_token]").val();
                 var network_id = $("select[name=network_id]").val();
-                var store_id = $("select[name=stores_id]").val();
+                var store_id = $("select[name=store_id]").val();
 
                 $.ajax({
-                    url: '{{ route('admin.vouchers.search_vouchers') }}',
+                    url: '{{ route('admin.vouchers.search_vouchers') }}?page=' + page,
                     method: "POST",
                     data: {
                         _token: _token,
@@ -341,71 +487,24 @@
                         }, 'slow');
                     }
                 });
-            });
-
-            $(document).on('click', '.edit-voucher', function(event) {
-                event.preventDefault();
-
-                var pageurl = $(this).attr('href');
-                var _token = $("input[name=_token]").val();
-
-                $.ajax({
-                    url: pageurl,
-                    method: "GET",
-                    data: {
-                        _token: _token
-                    },
-                    success: function(data) {
-                        $('#voucher-modal').modal('show');
-                        $('#voucher-form').html(data);
-                        $('.form-validate').each(function() {
-                            validateData($(this));
-                        });
-                        $(".select-2").each(function() {
-                            initializeSelect2($(this));
-                        });
-                        $("#promotion_end_date").datepicker();
-                        $("#promotion_start_date").datepicker();
-                        checkVoucherType();
-                    }
-                });
-            });
+            }
         });
 
-        function validateData(form) {
-            form.validate({
-                errorClass: 'invalid-feedback d-block',
-                rules: {
-                    promotion_start_date: {
-                        required: true,
-                    },
-                    promotion_end_date: {
-                        required: true,
-                        customdate: true,
-                    },
-                    click_url: {
-                        required: true,
-                        url: true
-                    },
-                    destination: {
-                        required: true,
-                        url: true
-                    }
-                },
-                messages: {
-                    promotion_end_date: {
-                        customdate: "End date must be greater than start date",
-                    }
-                },
-                submitHandler: function(form) {
-                    form.submit();
-                }
-            });
+        function fetchVouchers() {
+            $('#table-data').html(tableSpinner);
 
-            $.validator.addMethod("customdate", function(value, element) {
-                var startDate = new Date($("#promotion_start_date").val());
-                var endDate = new Date(value);
-                return this.optional(element) || (startDate < endDate);
+            $.ajax({
+                url: "{{ route('admin.vouchers.fetch') }}",
+                method: 'POST',
+                data: {
+                    _token: $('input[name=_token]').val(),
+                },
+                success: function(data) {
+                    $('#table-data').html(data);
+                    $('html, body').animate({
+                        scrollTop: 0
+                    }, 'slow');
+                }
             });
         }
 
@@ -427,62 +526,39 @@
             }
         }
 
-        $(document.body).on("change", "#promotion_type", function() {
-            checkVoucherType()
-        });
-
-        $(".form-validate").validate({
-            rules: {
-                promotion_start_date: {
-                    required: true,
-                },
-                promotion_end_date: {
-                    required: true,
-                    customdate: true,
-                },
-                click_url: {
-                    required: true,
-                    url: true
-                },
-                destination: {
-                    required: true,
-                    url: true
-                }
-            },
-            messages: {
-                promotion_end_date: {
-                    customdate: "End date must be greater than start date",
-                }
-            },
-            submitHandler: function(form) {
-                form.submit();
-            }
-        });
-
-        $.validator.addMethod("customdate", function(value, element) {
-            var startDate = new Date($("#promotion_start_date").val());
-            var endDate = new Date(value);
-            return this.optional(element) || (startDate < endDate);
-        });
-
-        $(document).ready(function() {
-            $(document).on('click', '.delete', function(event) {
-                event.preventDefault();
-
-                var form_id = $(this).attr('form_id');
-
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!'
-                }).then(function(result) {
-                    if (result.value) {
-                        $('#' + form_id).submit();
+        function attachFormValidator(form) {
+            form.validate({
+                rules: {
+                    promotion_start_date: {
+                        required: true,
+                    },
+                    promotion_end_date: {
+                        required: true,
+                        customdate: true,
+                    },
+                    click_url: {
+                        required: true,
+                        url: true
+                    },
+                    destination: {
+                        required: true,
+                        url: true
                     }
-                });
+                },
+                messages: {
+                    promotion_end_date: {
+                        customdate: 'End date must be greater than start date',
+                    }
+                }
             });
-        });
+
+            $.validator.addMethod('customdate', function(value, element) {
+                var startDate = new Date($(element).closest('form').find('.promotion_start_date').val());
+                var endDate = new Date(value);
+                return this.optional(element) || (startDate < endDate);
+            });
+        }
+
+        attachFormValidator($(document).find('#add-voucher-form'));
     </script>
 @endpush
