@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -20,69 +21,79 @@
                                 <div class="nk-block-des text-soft">
                                     <p>You have total {{ $vouchers->total() }} vouchers.</p>
                                 </div>
-                            </div><!-- .nk-block-head-content -->
+                            </div>
                             <div class="nk-block-head-content">
                                 <div class="toggle-wrap nk-block-tools-toggle">
-                                    <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
+                                    <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu">
+                                        <em class="icon ni ni-menu-alt-r"></em>
+                                    </a>
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
-                                            <li class="nk-block-tools-opt"><a href="#add-voucher-modal" data-toggle="modal" class="btn btn-primary btn-sm"><em
-                                                        class="icon ni ni-plus"></em><span>Add Voucher</span></a></li>
-                                            {{-- <li class="nk-block-tools-opt"><a href="{{route('admin.importer.vouchers')}}" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAlert"><em class="icon ni ni-download"></em><span>Import Vouchers</span></a></li> --}}
-
-                                            <li><a href="{{ route('admin.vouchers.export') }}" id="export" class="btn btn-success btn-sm"
-                                                    class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
-
+                                            <li class="nk-block-tools-opt">
+                                                <a href="#add-voucher-modal" data-toggle="modal" class="btn btn-primary btn-sm">
+                                                    <em class="icon ni ni-plus"></em>
+                                                    <span>Add Voucher</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{ route('admin.vouchers.export') }}" id="export" class="btn btn-success btn-sm"
+                                                    class="btn btn-white btn-outline-light">
+                                                    <em class="icon ni ni-download-cloud"></em>
+                                                    <span>Export</span>
+                                                </a>
+                                            </li>
                                         </ul>
-                                    </div>
-                                </div><!-- .toggle-wrap -->
-                            </div><!-- .nk-block-head-content -->
-                        </div><!-- .nk-block-between -->
-                    </div><!-- .nk-block-head -->
-                    <div class="card card-preview mb-4">
-                        <div class="card-inner">
-                            <form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
-                            @csrf
-                            <div class="row g-4">
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-label" for="network_id">Network</label>
-                                        <div class="form-control-wrap ">
-                                            <select class="form-select form-control" data-search="on" id="network_id" name="network_id">
-                                                <option value="0">All</option>
-                                                @foreach ($networks as $network)
-                                                <option value="{{$network->id}}">{{$network->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        
-                                        </div>
-                                    </div>
-                                </div>
-                            
-                                <div class="col-lg-4">
-                                    <div class="form-group">
-                                        <label class="form-label" for="stores_id">Store</label>
-                                        <div class="form-control-wrap ">
-                                            <select class="form-select form-control" data-search="on" id="stores_id" name="stores_id">
-                                                <option value="0">All</option>
-                                                @foreach ($stores as $store)
-                                                <option value="{{$store->id}}">{{$store->name}}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>                        
-                                <div class="col-4 align-self-end">
-                                    <div class="form-group">
-                                        <button type="submit" class="btn btn-success btn-block">Search</button>
                                     </div>
                                 </div>
                             </div>
-                        </form>
+                        </div>
+                    </div>
+                    <div class="card card-preview mb-4">
+                        <div class="card-inner">
+                            <form action="{{ route('admin.stores.search_stores') }}" class="form-validate is-alter search_form" method="POST">
+                                @csrf
+                                <div class="row g-4">
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-label" for="network_id">Network</label>
+                                            <div class="form-control-wrap ">
+                                                <select class="form-select form-control" data-search="on" id="network_id" name="network_id">
+                                                    <option value="0">All</option>
+                                                    @foreach ($networks as $network)
+                                                        <option value="{{ $network->id }}">{{ $network->name }}</option>
+                                                    @endforeach
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-4">
+                                        <div class="form-group">
+                                            <label class="form-label" for="stores_id">Store</label>
+                                            <div class="form-control-wrap ">
+                                                <select class="form-select form-control" data-search="on" id="stores_id" name="stores_id">
+                                                    <option value="0">All</option>
+                                                    @foreach ($stores as $store)
+                                                        <option value="{{ $store->id }}">{{ $store->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4 align-self-end">
+                                        <div class="form-group">
+                                            <button type="submit" class="btn btn-success btn-block">Search</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
 
                         </div>
                     </div>
+
                     @include('flash::message')
+
                     <div class="nk-block">
                         <div class="card card-stretch">
                             <div class="card-inner-group">
@@ -92,32 +103,32 @@
 
                                         @include('admin-dashboard.vouchers.index_data')
 
-                                    </div><!-- .nk-tb-list -->
-                                </div><!-- .card-inner -->
+                                    </div>
+                                </div>
 
-                            </div><!-- .card-inner-group -->
-                        </div><!-- .card -->
-                    </div><!-- .nk-block -->
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
     <!-- Add Voucher Modal -->
     <div class="modal fade" tabindex="-1" id="add-voucher-modal">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-
                 <div class="modal-header align-center">
                     <div class="nk-file-title">
-
                         <div class="nk-file-name">
-                            <div class="nk-file-name-text"><span class="title">Add Voucher</span></div>
-                            {{-- <div class="nk-file-name-sub">Project</div> --}}
+                            <div class="nk-file-name-text">
+                                <span class="title">Add Voucher</span>
+                            </div>
                         </div>
                     </div>
                     <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
                 </div>
-                <div id="add-voucher-form" class=" p-4">
+                <div id="add-voucher-form" class="p-4">
                     <form action="{{ route('admin.vouchers.store') }}" class="gy-3 form-validate is-alter voucher_form" method="POST">
                         @csrf
                         <div class="row g-4">
@@ -132,14 +143,12 @@
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <label class="form-label" for="default-06">Store</label>
-                                    <div class="form-control-wrap ">
-
+                                    <div class="form-control-wrap">
                                         <select class="form-select form-control" data-search="on" id="default-06" name="store_id" required>
                                             @foreach ($stores as $store)
                                                 <option value="{{ $store->id }}">{{ $store->name }}</option>
                                             @endforeach
                                         </select>
-
                                     </div>
                                 </div>
                             </div>
@@ -164,35 +173,21 @@
                                     <input name="description" type="hidden">
                                     <label class="form-label" for="phone-no-1">Description</label>
                                     <textarea name="description" class="form-control "></textarea>
-
-                                    <!-- Create the editor container -->
-                                    {{-- <div  id="editor-container">
-                                  
-                                </div> --}}
-
                                 </div>
                             </div>
-
                             <div class="col-lg-6">
                                 <div class="form-group">
                                     <div class="form-group">
                                         <label class="form-label" for="promotion_type">Promotion Type</label>
-
-                                        <div class="form-control-wrap ">
-
+                                        <div class="form-control-wrap">
                                             <select class="form-select form-control select-2" data-search="on" id="promotion_type" name="promotion_type" required>
-
                                                 <option value="Coupon">Coupon</option>
                                                 <option value="Sale/Discount">Sale/Discount</option>
-
                                             </select>
-
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-
                             <div class="col-lg-6 coupon-div">
                                 <div class="form-group">
                                     <label class="form-label" for="coupon_code">Coupon Code</label>
@@ -228,7 +223,6 @@
                                     @endif
                                 </div>
                             </div>
-
                             <div class="col-12">
                                 <div class="form-group">
                                     <button type="submit" class="btn btn-lg btn-primary">Save</button>
@@ -240,46 +234,47 @@
             </div>
         </div>
     </div>
+
     <!-- Modal Alert -->
     <div class="modal fade" tabindex="-1" id="voucher-modal">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
-
                 <div class="modal-header align-center">
                     <div class="nk-file-title">
-
                         <div class="nk-file-name">
                             <div class="nk-file-name-text"><span class="title">Edit Voucher</span></div>
-                            {{-- <div class="nk-file-name-sub">Project</div> --}}
                         </div>
                     </div>
                     <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
                 </div>
-                <div id="voucher-form" class=" p-4">
-                </div>
+                <div id="voucher-form" class=" p-4"></div>
             </div>
         </div>
     </div>
-
 @endsection
+
 @push('scripts')
     <script>
+        let tableSpinner = `<div class="text-center">
+                                <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>`;
+
         $(document).ready(function() {
             $(document).on('click', '.pagination a', function(event) {
                 event.preventDefault();
+
                 var route = $('.pagination').attr('route');
                 var page = $(this).attr('href').split('page=')[1];
 
                 if (route == 'index') {
-
-                    $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
-            </div></div>`);
+                    $('#table-data').html(tableSpinner);
 
                     pageurl = "{{ route('admin.vouchers.fetch') }}?page="
                     var _token = $("input[name=_token]").val();
-                    $.ajax({
 
+                    $.ajax({
                         url: pageurl + page,
                         method: "POST",
                         data: {
@@ -296,14 +291,12 @@
                 }
 
                 if (route == 'search') {
-
-                    $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
-            </div></div>`);
+                    $('#table-data').html(tableSpinner);
 
                     var _token = $("input[name=_token]").val();
                     var network_id = $("select[name=network_id]").val();
                     var store_id = $("select[name=store_id]").val();
+
                     $.ajax({
                         url: '{{ route('admin.vouchers.search_vouchers') }}?page=' + page,
                         method: "POST",
@@ -322,16 +315,12 @@
                 }
             });
         });
-    </script>
-    <script>
-        $(document).ready(function() {
 
+        $(document).ready(function() {
             $(document).on('submit', '.search_form', function(event) {
                 event.preventDefault();
-                $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
-            </div></div>`);
 
+                $('#table-data').html(tableSpinner);
 
                 var _token = $("input[name=_token]").val();
                 var network_id = $("select[name=network_id]").val();
@@ -352,14 +341,15 @@
                         }, 'slow');
                     }
                 });
-
             });
+
             $(document).on('click', '.edit-voucher', function(event) {
                 event.preventDefault();
+
                 var pageurl = $(this).attr('href');
                 var _token = $("input[name=_token]").val();
-                $.ajax({
 
+                $.ajax({
                     url: pageurl,
                     method: "GET",
                     data: {
@@ -374,15 +364,12 @@
                         $(".select-2").each(function() {
                             initializeSelect2($(this));
                         });
-                        $( "#promotion_end_date" ).datepicker();
-                        $( "#promotion_start_date" ).datepicker();
+                        $("#promotion_end_date").datepicker();
+                        $("#promotion_start_date").datepicker();
                         checkVoucherType();
-
                     }
                 });
             });
-
-
         });
 
         function validateData(form) {
@@ -414,6 +401,7 @@
                     form.submit();
                 }
             });
+
             $.validator.addMethod("customdate", function(value, element) {
                 var startDate = new Date($("#promotion_start_date").val());
                 var endDate = new Date(value);
@@ -430,8 +418,6 @@
         }
 
         function checkVoucherType() {
-
-
             if ($('#promotion_type').val() == 'Coupon') {
                 $('.coupon-div').show();
                 $('#coupon_code').attr('required', 'required');
@@ -439,13 +425,12 @@
                 $('.coupon-div').hide();
                 $('#coupon_code').removeAttr('required').val('');
             }
-
         }
+
         $(document.body).on("change", "#promotion_type", function() {
             checkVoucherType()
         });
-    </script>
-    <script>
+
         $(".form-validate").validate({
             rules: {
                 promotion_start_date: {
@@ -473,18 +458,19 @@
                 form.submit();
             }
         });
+
         $.validator.addMethod("customdate", function(value, element) {
             var startDate = new Date($("#promotion_start_date").val());
             var endDate = new Date(value);
             return this.optional(element) || (startDate < endDate);
         });
-    </script>
 
-    <script>
         $(document).ready(function() {
-
             $(document).on('click', '.delete', function(event) {
+                event.preventDefault();
+
                 var form_id = $(this).attr('form_id');
+
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -496,7 +482,6 @@
                         $('#' + form_id).submit();
                     }
                 });
-                event.preventDefault();
             });
         });
     </script>
