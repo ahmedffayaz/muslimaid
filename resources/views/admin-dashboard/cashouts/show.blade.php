@@ -153,12 +153,15 @@
                                     <div class="profile-ud-list">
                                         
                                         @foreach ($cashout->cashbacks as $cashback)
-                                            
-                                       
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">Store</span>
-                                                <span class="profile-ud-value"><a href="{{route('admin.stores.show_store')}}?slug={{$cashback->store->slug}}">{{$cashback->store->name}}</a></span>
+                                                    @if ($cashback->store_id)
+                                                        <span class="profile-ud-value"><a href="{{route('admin.stores.show_store')}}?slug={{$cashback->store->slug}}">
+                                                            {{ $cashback->store->name }}</a></span>
+                                                   @else
+                                                        <span class="profile-ud-value"> {{ ucfirst(str_replace('_', ' ', $cashback->type)) }}</span> 
+                                                   @endif
                                             </div>
                                         </div>
                                        
