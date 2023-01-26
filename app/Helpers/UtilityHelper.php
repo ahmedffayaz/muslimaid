@@ -493,3 +493,33 @@ function convertDateFormat($date)
 {
     return Carbon::parse($date)->format('m/d/Y');
 }
+
+function emailTemplate($key, $details, $filteredMessage = NULL, $requestFilteredMessage = NULL)
+{
+    $emailTemplate = EmailTemplate::where('key', $key)->first();
+
+    if ($filteredMessage && $requestFilteredMessage) {
+        $filteredAdminMessage  = str_replace(
+            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', $filteredMessage, '{{MESSAGE}}'],
+            [SiteSetting()['website_title'], url('/'), $details['name'], $details['email'], $details['subject'], $requestFilteredMessage, $details['message']],
+            $emailTemplate->message
+        );
+    } else {
+        $filteredAdminMessage  = str_replace(
+            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}'],
+            [SiteSetting()['website_title'], url('/'), $details['name'], $details['email'], $details['subject'], $details['message']],
+            $emailTemplate->message
+        );
+    }
+
+    $subject = str_replace(
+        ['{{SUBJECT}}'],
+        [$details['subject']],
+        $emailTemplate->subject
+    );
+
+    return array(
+        'message' => $filteredAdminMessage,
+        'subject' => $subject
+    );
+}

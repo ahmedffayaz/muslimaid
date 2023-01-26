@@ -2,23 +2,18 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use Exception;
 use App\Models\Blog;
 use App\Models\Page;
 use App\Models\Store;
-use App\Models\Ticket;
+use App\Models\Charity;
 use App\Models\Category;
 use App\Models\ContactForm;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\EmailTemplate;
+use App\Jobs\SendEmailToUser;
 use Illuminate\Http\Response;
-use Harimayco\Menu\Models\Menus;
+use App\Jobs\SendEmailToAdmin;
 use App\Http\Controllers\Controller;
-use App\Models\Charity;
-use Harimayco\Menu\Models\MenuItems;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
 
 
 class PagesController extends Controller
@@ -213,57 +208,22 @@ class PagesController extends Controller
         $this->validate($request, [
             'g-recaptcha-response' => 'required|captcha',
         ]);
-        $contact = ContactForm::create($request->all());
 
-        $user_email_template = EmailTemplate::where('key', 'user_new_contact')->first();
-        $admin_email_template = EmailTemplate::where('key', 'admin_new_contact')->first();
+        try {
+            ContactForm::create($request->all());
 
-        $filtered_user_message  = str_replace(
-            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}'],
-            [SiteSetting()['website_title'], url('/'), $request->input('name'), $request->input('email'), $request->input('subject'), $request->input('message')],
-            $user_email_template->message
-        );
-        $filtered_admin_message  = str_replace(
-            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}'],
-            [SiteSetting()['website_title'], url('/'), $request->input('name'), $request->input('email'), $request->input('subject'), $request->input('message')],
-            $admin_email_template->message
-        );
+            $adminEmailTemplateKey = 'admin_new_contact';
+            $userEmailTemplateKey = 'user_new_contact';
 
-        $email_data = array(
-            'name' =>  $request->input('name'),
-            'email' => $request->input('email'),
-            'message' => $request->input('message'),
-            'email_message' => $filtered_admin_message,
-            'subject' => $admin_email_template->subject
-        );
+            $data = $request->all();
 
-        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-            $message->to('admin@trs.com', $email_data['name'])
-                ->subject($email_data['subject']);
-        });
-        $email_data = array(
-            'name' =>  $request->input('name'),
-            'email' => $request->input('email'),
-            'message' => $request->input('message'),
-            'email_message' => $filtered_user_message,
-            'subject' => $user_email_template->subject
-        );
-        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-            $message->to($email_data['email'], $email_data['name'])
-                ->subject($email_data['subject']);
-        });
-        $ticket = new Ticket([
-            'title'     => $request->input('subject'),
-            'user_id'   =>  Auth::user()->id, 
-            'ticket_id' => strtoupper(Str::random(12)),
-            'category_id'  => '4',
-            'priority'  => 'high',
-            'ticket_type'  => 'contact',
-            'message'   => $request->input('message'),
-            'status'    => "open",
-        ]);
-        $ticket->save();
-        return redirect()->back()->with('success', 'Thanks for contact us.');
+            SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data);
+            SendEmailToUser::dispatch($userEmailTemplateKey, $data);
+
+            return redirect()->back()->with('success', 'Thanks for contact us.');
+        } catch (Exception $exception) {
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 
     public function allStores()
