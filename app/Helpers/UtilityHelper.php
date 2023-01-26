@@ -494,40 +494,32 @@ function convertDateFormat($date)
     return Carbon::parse($date)->format('m/d/Y');
 }
 
-function getAdminEmail($key, $request, $filteredMessage = NULL, $requestFilteredMessage = NULL)
+function emailTemplate($key, $details, $filteredMessage = NULL, $requestFilteredMessage = NULL)
 {
     $emailTemplate = EmailTemplate::where('key', $key)->first();
 
     if ($filteredMessage && $requestFilteredMessage) {
         $filteredAdminMessage  = str_replace(
             ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', $filteredMessage, '{{MESSAGE}}'],
-            [SiteSetting()['website_title'], url('/'), $request->input('name'), $request->input('email'), $request->input('subject'), $requestFilteredMessage, $request->input('message')],
+            [SiteSetting()['website_title'], url('/'), $details['name'], $details['email'], $details['subject'], $requestFilteredMessage, $details['message']],
             $emailTemplate->message
         );
     } else {
         $filteredAdminMessage  = str_replace(
             ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}'],
-            [SiteSetting()['website_title'], url('/'), $request->input('name'), $request->input('email'), $request->input('subject'), $request->input('message')],
+            [SiteSetting()['website_title'], url('/'), $details['name'], $details['email'], $details['subject'], $details['message']],
             $emailTemplate->message
         );
     }
 
     $subject = str_replace(
         ['{{SUBJECT}}'],
-        [$request->input('subject')],
+        [$details['subject']],
         $emailTemplate->subject
     );
 
-    $email_data = array(
-        'name' =>  $request->input('name'),
-        'email' => $request->input('email'),
-        'message' => $request->input('message'),
-        'email_message' => $filteredAdminMessage,
+    return array(
+        'message' => $filteredAdminMessage,
         'subject' => $subject
     );
-
-    Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-        $message->to(SiteSetting()['email'], $email_data['name'])
-            ->subject($email_data['subject']);
-    });
 }
