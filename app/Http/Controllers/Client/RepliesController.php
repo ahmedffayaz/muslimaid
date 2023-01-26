@@ -1,13 +1,11 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers\Client;
 
 use Illuminate\Support\Facades\Auth;
-use App\Models\Ticket;
 use App\Models\TicketReply;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
 
 class RepliesController extends Controller
 {
@@ -39,8 +37,6 @@ class RepliesController extends Controller
      */
     public function store(Request $request)
     {
-
-        
         $validatedData = $request->validate([
             'reply' => 'required|max:255'
         ]);
@@ -49,14 +45,13 @@ class RepliesController extends Controller
             'reply' => $validatedData['reply'],
             'user_id' => Auth::user()->id,
             'ticket_id' => $request->input('ticket_id'),
-            'reply_by'=>'admin'
+            'reply_by'=>'user'
         ]);
 
         $reply->ticket->update(['status'=>'pending']);
 
         return back();
     }
-
 
     /**
      * Display the specified resource.
