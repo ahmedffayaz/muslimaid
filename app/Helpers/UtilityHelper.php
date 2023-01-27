@@ -262,6 +262,7 @@ function getEvents()
     $events = Event::where('status', 'active')->get();
     return $events;
 }
+
 function getEventsForMenu()
 {
     $events = Event::where('menu_status', 'active')->get();
@@ -522,4 +523,25 @@ function emailTemplate($key, $details, $filteredMessage = NULL, $requestFiltered
         'message' => $filteredAdminMessage,
         'subject' => $subject
     );
+}
+
+function csvToArray($path)
+{
+    try {
+        $header = null;
+        $csvToArray = [];
+
+        if (($handle = fopen(convertPathForOS(base_path($path)), 'r')) !== false) {
+            while (($row = fgetcsv($handle, null, ',')) !== false) {
+                if (!$header) $header = $row;
+                else $csvToArray[] = array_combine($header, $row);
+            }
+
+            fclose($handle);
+        }
+
+        return $csvToArray;
+    } catch (Exception $e) {
+        return [];
+    }
 }

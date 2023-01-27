@@ -5,7 +5,9 @@ namespace Database\Seeders;
 use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Schema;
 
 class UserSeeder extends Seeder
 {
@@ -16,18 +18,11 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $header = null;
-        $csvToArray = [];
+        Schema::disableForeignKeyConstraints();
+        DB::table('users')->truncate();
+        Schema::enableForeignKeyConstraints();
 
-        if (($handle = fopen(convertPathForOS(base_path('resources\\views\\frontend\\seeders\\users.csv')), 'r')) !== false) {
-            while (($row = fgetcsv($handle, null, ',')) !== false) {
-                if (!$header) $header = $row;
-                else $csvToArray[] = array_combine($header, $row);
-            }
-
-            fclose($handle);
-        }
-
+        $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\users.csv');
         $users = [];
         $roles = [];
         $password = bcrypt('123@#$xyz990'); // important optimization
