@@ -7,11 +7,9 @@ use App\Models\Blog;
 use App\Models\Page;
 use App\Models\Store;
 use App\Models\Charity;
-use App\Models\Category;
 use App\Models\ContactForm;
 use Illuminate\Http\Request;
 use App\Jobs\SendEmailToUser;
-use Illuminate\Http\Response;
 use App\Jobs\SendEmailToAdmin;
 use App\Http\Controllers\Controller;
 
