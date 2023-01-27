@@ -22,26 +22,18 @@ class PagesController extends Controller
     {
         $page = Page::where('slug', $slug)->first();
 
-        if ($slug == 'offers') {
-            return view('frontend.pages.offers', compact('page'));
-        }
-
-        if ($slug == 'contact') {
-            return view('frontend.pages.contact', compact('page'));
-        }
-
-        if ($slug == 'about') {
-            return view('frontend.pages.about', compact('page'));
-        }
+        if (empty($page)) abort(404);
 
         if ($slug == 'vouchers') {
             $stores = Store::has('vouchers')->latest()->paginate(10);
             $term = null;
+
             return view('frontend.pages.vouchers', compact('stores', 'term', 'page'));
         }
 
         if ($slug == 'donate-to-charity') {
             $HomePageCharities = Charity::where('status', '=', '1')->orderBy('id', 'DESC')->paginate(10);
+
             return view('frontend.pages.charities', compact('page', 'HomePageCharities'));
         }
 
@@ -53,7 +45,11 @@ class PagesController extends Controller
             return view('frontend.pages.trending', compact('page', 'stores'));
         }
 
-        return view('frontend.pages.single_page', compact('page'));
+        if (view()->exists("frontend.pages.{$slug}")) {
+            return view("frontend.pages.{$slug}", compact('page'));
+        }
+
+        return view('frontend.pages.single-page', compact('page'));
     }
 
     public function offers()
