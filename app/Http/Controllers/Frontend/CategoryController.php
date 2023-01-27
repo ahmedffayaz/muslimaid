@@ -50,7 +50,6 @@ class CategoryController extends Controller
     public function show($slug)
     {
         $categorySlug = Category::whereSlug($slug)->first();
-        dd($categorySlug);
         if(!empty($categorySlug) && $categorySlug['parent_id'] == 0)
         {   
             $parentSlug = $slug;

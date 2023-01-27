@@ -273,7 +273,24 @@ function getCategories()
     $categories = Category::where('parent_id', 0)->orderBy('name', 'ASC')->get();
     return $categories;
 }
-
+function getCategoryStore($store)
+{
+    $show_store = 0;
+    foreach ($store->categories as $category){
+        foreach ($category->childs as $child){
+            if(in_array($child->id, $store->categories->pluck('id')->toArray())){
+                if($child->status == 1){
+                    $show_store = 1;
+                    break;
+                }
+            }
+        }
+        if($show_store == 1){
+            break;
+        }
+    }
+    return $show_store;
+}
 function SiteSetting()
 {
     return SiteSetting::latest()->get()->pluck('value', 'type');
@@ -411,7 +428,7 @@ function sendVerificationEmail($user)
 
     $link = url('') . '/account/verify/' . $token;
     $button = '<a href="' . $link . '" target="_blank"><input type="button" class="btn btn-success" value="Verify"></a>';
-    $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{BUTTON}}'], [SiteSetting()['website_title'], url('/'), $button], $verification_email_temp->message);
+    $filtered_message  = str_replace(['{{ SITE_TITLE }}', '{{ SITE_URL }}', '{{ BUTTON }}'], [SiteSetting()['website_title'], url('/'), $button], $verification_email_temp->message);
     $data = array(
         'email' => $user->email,
         'email_message' => $filtered_message,
@@ -500,20 +517,20 @@ function emailTemplate($key, $details, $filteredMessage = NULL, $requestFiltered
 
     if ($filteredMessage && $requestFilteredMessage) {
         $filteredAdminMessage  = str_replace(
-            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', $filteredMessage, '{{MESSAGE}}'],
+            ['{{ SITE_TITLE }}', '{{ SITE_URL }}', '{{ NAME }}', '{{ EMAIL }}', '{{ SUBJECT }}', $filteredMessage, '{{ MESSAGE }}'],
             [SiteSetting()['website_title'], url('/'), $details['name'], $details['email'], $details['subject'], $requestFilteredMessage, $details['message']],
             $emailTemplate->message
         );
     } else {
         $filteredAdminMessage  = str_replace(
-            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}'],
+            ['{{ SITE_TITLE }}', '{{ SITE_URL }}', '{{ NAME }}', '{{ EMAIL }}', '{{ SUBJECT }}', '{{ MESSAGE }}'],
             [SiteSetting()['website_title'], url('/'), $details['name'], $details['email'], $details['subject'], $details['message']],
             $emailTemplate->message
         );
     }
 
     $subject = str_replace(
-        ['{{SUBJECT}}'],
+        ['{{ SUBJECT }}'],
         [$details['subject']],
         $emailTemplate->subject
     );
