@@ -3,15 +3,12 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-use Faker\Factory as Faker;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 
 class UserSeeder extends Seeder
 {
-    private $count = 50;
-
     /**
      * Run the database seeds.
      *
@@ -19,54 +16,38 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        // Super admin
-        User::create([
-            'first_name' => 'Super',
-            'last_name' => 'Admin',
-            'email' => 'admin@trs.com',
-            'password' => bcrypt('123@#$xyz990'),
-            'registration_type' => 'sign up',
-            'avatar' => 'default.png',
-            'is_email_verified' => 1,
-        ])->assignRole(['admin', 'user']);
+        $header = null;
+        $csvToArray = [];
 
-        // Data Operator
-        User::create([
-            'first_name' => 'Data',
-            'last_name' => 'Operator',
-            'email' => 'data@trs.com',
-            'password' => bcrypt('123@#$xyz990'),
-            'registration_type' => 'sign up',
-            'avatar' => 'default.png',
-            'is_email_verified' => 1,
-        ])->assignRole(['data']);
+        if (($handle = fopen(convertPathForOS(base_path('resources\\views\\frontend\\seeders\\users.csv')), 'r')) !== false) {
+            while (($row = fgetcsv($handle, null, ',')) !== false) {
+                if (!$header) $header = $row;
+                else $csvToArray[] = array_combine($header, $row);
+            }
 
-        // Finance Manager
-        User::create([
-            'first_name' => 'Finance',
-            'last_name' => 'Manager',
-            'email' => 'finance@trs.com',
-            'password' => bcrypt('123@#$xyz990'),
-            'registration_type' => 'sign up',
-            'avatar' => 'default.png',
-            'is_email_verified' => 1,
-        ])->assignRole(['finance']);
-
-        $faker = Faker::create();
+            fclose($handle);
+        }
 
         $users = [];
+        $roles = [];
         $password = bcrypt('123@#$xyz990'); // important optimization
         $now = Carbon::parse(now())->format('Y-m-d H:i:s');
 
-        for ($i = 0; $i < $this->count; $i++) {
+        foreach ($csvToArray as $row) {
+            foreach (explode(',', $row['roles']) as $role) {
+                $roles[trim($role)][] = $row['id'];
+            }
+
             $users[] = [
-                'first_name' => $faker->firstName,
-                'last_name' => $faker->lastName,
-                'email' => $faker->unique()->safeEmail,
+                'id' => $row['id'],
+                'first_name' => $row['first_name'],
+                'last_name' => $row['last_name'],
+                'email' => $row['email'],
                 'password' => $password,
                 'registration_type' => 'sign up',
                 'registration_type' => 'sign up',
                 'avatar' => 'default.png',
+                'status' => $row['status'],
                 'is_email_verified' => 1,
                 'created_at' => $now,
                 'updated_at' => $now,
@@ -77,6 +58,8 @@ class UserSeeder extends Seeder
             User::insert($usersChunk);
         }
 
-        Role::findByName('user')->users()->sync(User::whereNotIn('id', [2, 3])->pluck('id'));
+        foreach ($roles as $roleName => $roleIds) {
+            Role::findByName($roleName)->users()->sync($roleIds);
+        }
     }
 }
