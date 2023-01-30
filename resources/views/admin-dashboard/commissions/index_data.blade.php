@@ -42,17 +42,27 @@
                         <span>{{ $commission->exitClick->user->first_name[0] ?? 'N' }}{{ $commission->exitClick->user->last_name[0] ?? 'A' }}</span>
                     </div>
                     <div class="user-info">
+                     
+                        @if ($commission->store_id)
                         <span class="tb-lead">{{ $commission->exitClick->user->id ?? '' }} @if ($commission->user->first_name != 'unnamed' || $commission->user->last_name != 'unnamed')
-                                - {{ $commission->user->first_name }} {{ $commission->user->last_name }}
-                            @endif
+                            - {{ $commission->user->first_name }} {{ $commission->user->last_name }}
+                        @endif
+                    </span>
+                    <span>{{ $commission->exitClick->user->email ?? '' }}</span>
+                        @else
+                        <span class="tb-lead">{{$commission->user->id}} @if($commission->user->first_name != 'unnamed' || $commission->user->last_name != 'unnamed')- {{$commission->user->first_name}} {{$commission->user->last_name}} @endif
                         </span>
-                        <span>{{ $commission->exitClick->user->email ?? '' }}</span>
+                        @endif
                     </div>
                 </div>
 
             </div>
             <div class="nk-tb-col" style="width: 20%">
-                <span><b>{{ $commission->store->id ?? '' }} - {{ $commission->store->name ?? '' }}</b></span>
+                @if ($commission->store_id)
+                  <span><b>{{ $commission->store->id ?? '' }} - {{ $commission->store->name ?? '' }}</b></span>
+                @else
+                  <span> {{ ucfirst(str_replace('_', ' ', $commission->type)) }}</span> 
+                @endif
             </div>
 
             <div class="nk-tb-col  text-center">
@@ -64,11 +74,21 @@
                     <span class="currency">{{ currency() }}</span>{{ number_format((float) $commission->amount, 2, '.', '') }}</span>
             </div>
             <div class="nk-tb-col  text-center">
+                @if ($commission->store_id)
                 <span>{{ $commission->exit_click_id }}</span>
+                @else 
+                <span>-</span>
+                @endif  
             </div>
             <div class="nk-tb-col  text-right">
+                @if ($commission->store_id)
                 <span>{{ $commission->event_date }}</span>
+                @else  
+                <span>{{$commission->created_at}}</span>
+                 @endif
             </div>
+               
+           
             <div class="nk-tb-col  text-right">
                 @if (($commission->statusMap->status ?? $commission->status) == 'confirmed')
                     <span

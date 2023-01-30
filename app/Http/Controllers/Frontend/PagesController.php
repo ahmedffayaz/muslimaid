@@ -2,126 +2,52 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use Exception;
 use App\Models\Blog;
 use App\Models\Page;
 use App\Models\Store;
-use App\Models\Ticket;
-use App\Models\Category;
-use App\Models\ContactForm;
-use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use App\Models\EmailTemplate;
-use Illuminate\Http\Response;
-use Harimayco\Menu\Models\Menus;
-use App\Http\Controllers\Controller;
 use App\Models\Charity;
-use Harimayco\Menu\Models\MenuItems;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Session;
+use App\Models\ContactForm;
+use Illuminate\Http\Request;
+use App\Jobs\SendEmailToUser;
+use App\Jobs\SendEmailToAdmin;
+use App\Http\Controllers\Controller;
 
 
 class PagesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function show($slug)
     {
         $page = Page::where('slug', $slug)->first();
-        if ($slug == 'offers') {
-            return view('frontend.pages.offers', compact('page'));
-        }
-        if ($slug == 'contact') {
-            return view('frontend.pages.contact', compact('page'));
-        }
-        if ($slug == 'about') {
-            return view('frontend.pages.about', compact('page'));
-        }
+
+        if (empty($page)) abort(404);
+
         if ($slug == 'vouchers') {
             $stores = Store::has('vouchers')->latest()->paginate(10);
             $term = null;
+
             return view('frontend.pages.vouchers', compact('stores', 'term', 'page'));
         }
+
         if ($slug == 'donate-to-charity') {
-            $HomePageCharities=Charity::where('status','=','1')->orderBy('id', 'DESC')->paginate(10);
-            return view('frontend.pages.charities', compact('page','HomePageCharities'));
+            $HomePageCharities = Charity::where('status', '=', '1')->orderBy('id', 'DESC')->paginate(10);
+
+            return view('frontend.pages.charities', compact('page', 'HomePageCharities'));
         }
+
         if ($slug == 'trending') {
             $stores =  Store::has('clicks')->with('clicks')->get()->sortByDesc(function ($store) {
                 return $store->clicks->count();
             });
-            return view('frontend.pages.trending', compact('page','stores'));
+
+            return view('frontend.pages.trending', compact('page', 'stores'));
         }
-        return view('frontend.pages.single_page', compact('page'));
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+        if (view()->exists("frontend.pages.{$slug}")) {
+            return view("frontend.pages.{$slug}", compact('page'));
+        }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+        return view('frontend.pages.single-page', compact('page'));
     }
 
     public function offers()
@@ -129,12 +55,14 @@ class PagesController extends Controller
         $stores = Store::latest()->get();
         return view('frontend.pages.offers', compact('stores'));
     }
+
     public function topStores()
     {
         $stores = Store::withCount('clicks')
             ->orderBy('clicks', 'desc')->paginate(20);
         return view('frontend.pages.top_cashback', compact('stores'));
     }
+
     public function about()
     {
         return view('frontend.pages.about');
@@ -207,63 +135,27 @@ class PagesController extends Controller
         return view('frontend.pages.single_blog', compact('blog', 'blogs'));
     }
 
-
     public function contactForm(Request $request)
     {
         $this->validate($request, [
             'g-recaptcha-response' => 'required|captcha',
         ]);
-        $contact = ContactForm::create($request->all());
 
-        $user_email_template = EmailTemplate::where('key', 'user_new_contact')->first();
-        $admin_email_template = EmailTemplate::where('key', 'admin_new_contact')->first();
+        try {
+            ContactForm::create($request->all());
 
-        $filtered_user_message  = str_replace(
-            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}'],
-            [SiteSetting()['website_title'], url('/'), $request->input('name'), $request->input('email'), $request->input('subject'), $request->input('message')],
-            $user_email_template->message
-        );
-        $filtered_admin_message  = str_replace(
-            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}'],
-            [SiteSetting()['website_title'], url('/'), $request->input('name'), $request->input('email'), $request->input('subject'), $request->input('message')],
-            $admin_email_template->message
-        );
+            $adminEmailTemplateKey = 'admin_new_contact';
+            $userEmailTemplateKey = 'user_new_contact';
 
-        $email_data = array(
-            'name' =>  $request->input('name'),
-            'email' => $request->input('email'),
-            'message' => $request->input('message'),
-            'email_message' => $filtered_admin_message,
-            'subject' => $admin_email_template->subject
-        );
+            $data = $request->all();
 
-        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-            $message->to('admin@trs.com', $email_data['name'])
-                ->subject($email_data['subject']);
-        });
-        $email_data = array(
-            'name' =>  $request->input('name'),
-            'email' => $request->input('email'),
-            'message' => $request->input('message'),
-            'email_message' => $filtered_user_message,
-            'subject' => $user_email_template->subject
-        );
-        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-            $message->to($email_data['email'], $email_data['name'])
-                ->subject($email_data['subject']);
-        });
-        $ticket = new Ticket([
-            'title'     => $request->input('subject'),
-            'user_id'   =>  Auth::user()->id, 
-            'ticket_id' => strtoupper(Str::random(12)),
-            'category_id'  => '4',
-            'priority'  => 'high',
-            'ticket_type'  => 'contact',
-            'message'   => $request->input('message'),
-            'status'    => "open",
-        ]);
-        $ticket->save();
-        return redirect()->back()->with('success', 'Thanks for contact us.');
+            SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data);
+            SendEmailToUser::dispatch($userEmailTemplateKey, $data);
+
+            return redirect()->back()->with('success', 'Thanks for contact us.');
+        } catch (Exception $exception) {
+            return redirect()->back()->with('error', 'Something went wrong');
+        }
     }
 
     public function allStores()
@@ -274,15 +166,16 @@ class PagesController extends Controller
         });
         return view('frontend.pages.all_stores', compact('groups'));
     }
+
     public function allStoresLetter($letter)
     {
         $stores = Store::where('name', 'like', $letter . '%')->get();
         return view('frontend.pages.stores_with_letter', compact('stores', 'letter'));
     }
 
-    public function showCharity(Request $request){
+    public function showCharity(Request $request)
+    {
         $charity = Charity::with('charity_type')->find($request->id);
-        return view('frontend.pages.charity_model',compact('charity'));
-
+        return view('frontend.pages.charity_model', compact('charity'));
     }
 }

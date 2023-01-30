@@ -262,6 +262,7 @@ function getEvents()
     $events = Event::where('status', 'active')->get();
     return $events;
 }
+
 function getEventsForMenu()
 {
     $events = Event::where('menu_status', 'active')->get();
@@ -500,7 +501,7 @@ function convertDateFormat($date)
 /**
  * Get banner image if not exist show default
  */
-function getBannerImageUrl($url, $type = NULL, $row=null)
+function getBannerImageUrl($url, $type = NULL, $row = null)
 {
     $defaultBanner = asset('frontend/images/banners/categories/cashback.png');
 
@@ -508,7 +509,7 @@ function getBannerImageUrl($url, $type = NULL, $row=null)
         return $defaultBanner;
     }
 
-    if(!empty($url) && !isFileExist($url)) {
+    if (!empty($url) && !isFileExist($url)) {
         return $defaultBanner;
     }
 
@@ -517,4 +518,55 @@ function getBannerImageUrl($url, $type = NULL, $row=null)
     }
 
     return asset(parse_url($url)['path']);
+}
+
+function emailTemplate($key, $details, $filteredMessage = NULL, $requestFilteredMessage = NULL)
+{
+    $emailTemplate = EmailTemplate::where('key', $key)->first();
+
+    if ($filteredMessage && $requestFilteredMessage) {
+        $filteredAdminMessage  = str_replace(
+            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', $filteredMessage, '{{MESSAGE}}'],
+            [SiteSetting()['website_title'], url('/'), $details['name'], $details['email'], $details['subject'], $requestFilteredMessage, $details['message']],
+            $emailTemplate->message
+        );
+    } else {
+        $filteredAdminMessage  = str_replace(
+            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}'],
+            [SiteSetting()['website_title'], url('/'), $details['name'], $details['email'], $details['subject'], $details['message']],
+            $emailTemplate->message
+        );
+    }
+
+    $subject = str_replace(
+        ['{{SUBJECT}}'],
+        [$details['subject']],
+        $emailTemplate->subject
+    );
+
+    return array(
+        'message' => $filteredAdminMessage,
+        'subject' => $subject
+    );
+}
+
+function csvToArray($path)
+{
+    try {
+        $header = null;
+        $csvToArray = [];
+
+        if (($handle = fopen(convertPathForOS(base_path($path)), 'r')) !== false) {
+            while (($row = fgetcsv($handle, null, ',')) !== false) {
+                if (!$header) $header = $row;
+                else $csvToArray[] = array_combine($header, $row);
+            }
+
+            fclose($handle);
+        }
+
+        return $csvToArray;
+    } catch (Exception $e) {
+        return [];
+    }
 }
