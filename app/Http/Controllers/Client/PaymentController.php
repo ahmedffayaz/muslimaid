@@ -117,7 +117,7 @@ class PaymentController extends Controller
         else $min = 1; 
         $user = Auth::user(); 
         $method = $user->paymentInfo()->where('payment_method',$request->payment_method)->first();
-        if(!$method && !SiteSetting()['payment_method_charity'])
+        if(!$method && $request->payment_method !='charity')
         {
             flash()->error('Payment method not found, please add your payment method information');
             return redirect()->back();
