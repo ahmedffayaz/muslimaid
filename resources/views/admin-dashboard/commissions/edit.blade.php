@@ -3,13 +3,6 @@
     @csrf
     @method('PUT')
     <div class="row g-4">
-        {{-- <div class="col-lg-12">
-            <div class="form-group">
-                <label class="form-label" for="default-06">Exit Click</label>
-                {{$commission->exit_click_id}} - {{$commission->exitClick->user->first_name}} {{$commission->exitClick->user->last_name}} - {{$commission->exitClick->store->name}}
-               
-            </div>
-        </div> --}}
         <div class="col-lg-6">
             <div class="form-group">
                 <label class="form-label" for="phone-no-1">Order Value</label>

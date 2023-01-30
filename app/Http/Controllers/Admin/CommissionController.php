@@ -61,9 +61,9 @@ class CommissionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'exit_click_id' => 'required|integer',
-            'order_value' => 'nullable|numeric',
-            'network_commission' => 'required|numeric',
+            'exit_click_id' => 'required|integer||gte:1',
+            'order_value' => 'nullable|numeric||gte:1',
+            'network_commission' => 'required|numeric||gte:1',
             'amount' => 'nullable|numeric',
             'status' => 'required|integer'
         ], [
