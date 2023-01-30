@@ -145,8 +145,8 @@
                                                                             class='category-edit'>
                                                                             <em class="icon ni ni-edit"></em> Edit
                                                                         </a>
-                                                                        <a class='category-delete'
-                                                                            form_id="delete-form-{{ $category->id }}"
+                                                                        <a class='category-delete' data-action="{{ route('admin.categories.destroy', $category) }}"
+                                                                            data-id="{{ $category->id }}"
                                                                             style="cursor: pointer">
                                                                             <em class="icon ni ni-trash-fill"></em>
                                                                             Delete
@@ -223,6 +223,7 @@
                 });
             });
 
+            // Show edit modal
             $('.category-edit').on('click', function(event) {
                 event.preventDefault();
                 $.ajax({
@@ -240,6 +241,29 @@
                         store()
                     }
                 });
+            });
+
+            // Show editor picks modal
+            $('.picks-edit').on('click', function(event) {
+                event.preventDefault();
+                var id = $(this).attr('category-id');
+                url = $(this).attr('href');
+                var _token = $("input[name=_token]").val();
+                $.ajax({
+                    url: url,
+                    method: "GET",
+                    data: {
+                        _token: _token
+                    },
+                    success: function(data) {
+                        $('.title').text('Editor Picks');
+                        $('#form-wrapper').html(data);
+                        $('#save-btn').text('Update');
+                        $('#modal').modal('show');
+                        initializeSelect2();
+                    }
+                });
+
             });
 
             function quillEditor() {
@@ -342,43 +366,18 @@
                                     'use strict';
                                     toastr.clear();
                                     NioApp.Toast(error.responseJSON.error, 'error');
-
                                 })(NioApp, jQuery);
                             } else {
                                 (function(NioApp, $){
                                     'use strict';
                                     toastr.clear();
                                     NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
-
                                 })(NioApp, jQuery);
                             }
                         }
                     });
                 });
             }
-
-            $(document).on('click', '.picks-edit', function(event) {
-                event.preventDefault();
-
-                var id = $(this).attr('category-id');
-                pageurl = $(this).attr('href');
-                var _token = $("input[name=_token]").val();
-                $.ajax({
-
-                    url: pageurl,
-                    method: "GET",
-                    data: {
-                        _token: _token
-                    },
-                    success: function(data) {
-                        $('#picks-modal').modal('show');
-                        $('#picks-form').html(data);
-                        initializeSelect2();
-
-                    }
-                });
-
-            });
         });
 
         $(document).ready(function() {
@@ -470,11 +469,12 @@
                 }
             });
         }
-    </script>
-    <script>
-        $(document).ready(function() {
-            $(document).on('click', '.category-delete', function(event) {
-                var form_id = $(this).attr('form_id');
+
+        // Delete category
+        $('.category-delete').on('click', function(event) {
+                event.preventDefault();
+                id = $(this).data('id')
+                url = $(this).data('action');
                 Swal.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to revert this!",
@@ -483,11 +483,38 @@
                     confirmButtonText: 'Yes, delete it!'
                 }).then(function(result) {
                     if (result.value) {
-                        $('#' + form_id).submit();
+                        $.ajax({
+                            url: url,
+                            type: 'DELETE',
+                            data: {
+                                '_token': "{{ csrf_token() }}",
+                                'id': id
+                            },
+                            success: function(response){
+                                $('#tree1').load(location.href + ' #tree1');
+                                (function(NioApp, $){
+                                    'use strict';
+                                    toastr.clear();
+                                    NioApp.Toast(response.success, 'success');
+                                })(NioApp, jQuery);
+                            },
+                            error: function(error){
+                                (function(NioApp, $){
+                                    'use strict';
+                                    toastr.clear();
+                                    NioApp.Toast(error.responseJSON.error, 'error');
+                                })(NioApp, jQuery);
+                            }
+                        });
+                    }else{
+                        (function(NioApp, $){
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast('Something went wrong, try again', 'error');
+                        })(NioApp, jQuery);
                     }
                 });
-                event.preventDefault();
+                // event.preventDefault();
             });
-        });
     </script>
 @endpush

@@ -105,7 +105,7 @@ class CategoryController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'error' => 'Error while adding new category'
+                'error' => $exception->getMessage() . 'Error while adding new category'
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -204,13 +204,13 @@ class CategoryController extends Controller
             DB::rollBack();
             return response()->json([
                 'status' => JsonResponse::HTTP_FORBIDDEN,
-                'error' => $exception->getMessage() . 'Error while updating the category'
+                'error' => 'Something went wrong'
             ], JsonResponse::HTTP_FORBIDDEN);
-        } catch (Throwable $th) {
+        } catch (Exception $exception) {
             DB::rollBack();
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'errors' => $th->getMessage() . 'Error while updating the category'
+                'errors' => $exception->getMessage() . 'Error while updating the category'
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -223,17 +223,35 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $childs = $category->childs;
-        if (count($childs)) {
-            foreach ($childs as $child) {
-                $child->parent_id = $category->parent_id;
-                $child->update();
+        try {
+            DB::beginTransaction();
+            $childs = $category->childs;
+            if (count($childs)) {
+                foreach ($childs as $child) {
+                    $child->parent_id = $category->parent_id;
+                    $child->update();
+                }
             }
-        }
-        $category->delete();
+            $category->delete();
+            DB::commit();
 
-        flash()->success('category deleted successfully');
-        return redirect()->route('admin.categories.index');
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'success' => 'Category deleted successfully'
+            ], JsonResponse::HTTP_OK);
+        } catch (ModelNotFoundException $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'error' => 'Something went wrong'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $exception->getMessage() . 'Error while updating the category'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
     function fetch(Request $request)
     {
