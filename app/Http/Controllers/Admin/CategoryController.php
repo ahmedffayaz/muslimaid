@@ -3,13 +3,18 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
-use App\Models\Store;
+use Throwable;
 use App\Models\Blog;
+use App\Models\Store;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
 
 
@@ -46,20 +51,10 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CategoryRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            flash()->success($validator->errors()->first());
-            return redirect()->route('admin.categories.create')
-                ->withErrors($validator)
-                ->withInput();
-        }
-
         try {
+            DB::beginTransaction();
             $category = Category::create([
                 'name' => $request->input('name'),
                 'parent_id' => $request->input('parent_id'),
@@ -91,9 +86,7 @@ class CategoryController extends Controller
             }
 
             if ($request->input('banner_type') == 'upload') {
-
                 if ($request->has('banner_upload')) {
-
                     $imageName = Str::slug($request->input('name')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
                     $request->banner_upload->storeAs('public/categories/images', $imageName);
 
@@ -104,12 +97,17 @@ class CategoryController extends Controller
                     $category->update();
                 }
             }
-            flash()->success('New Category added');
-            return redirect()->route('admin.categories.index');
+            DB::commit();
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'success' => 'New Category added'
+            ], JsonResponse::HTTP_OK);
         } catch (Exception $exception) {
-
-            flash()->error('Error while adding new category');
-            return redirect()->route('admin.categories.index');
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Error while adding new category'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -139,7 +137,7 @@ class CategoryController extends Controller
         $stores = Store::latest()->get();
         $blog = Blog::latest()->get();
 
-        return view('admin-dashboard.categories.edit', compact('category', 'categories', 'stores', 'blog'))->render();
+        return view('admin-dashboard.categories.create', compact('category', 'categories', 'stores', 'blog'))->render();
     }
 
     /**
@@ -152,6 +150,7 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
          try {
+            DB::beginTransaction();
             $category->update([
                 'name' => $request->input('name'),
                 'parent_id' => $request->input('parent_id'),
@@ -196,15 +195,24 @@ class CategoryController extends Controller
                 }
             }
 
-            if (!$request->ajax()) {
-                flash()->success('Category updated');
-                return redirect()->route('admin.categories.index');
-            } else {
-                return 1;
-            }
-        } catch (\Throwable $th) {
-            flash()->error($th->getMessage() . 'Error while updating the category');
-            return redirect()->route('admin.categories.index');
+            DB::commit();
+
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'success' => 'Category updated'
+            ], JsonResponse::HTTP_OK);
+        } catch (ModelNotFoundException $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_FORBIDDEN,
+                'error' => $exception->getMessage() . 'Error while updating the category'
+            ], JsonResponse::HTTP_FORBIDDEN);
+        } catch (Throwable $th) {
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'errors' => $th->getMessage() . 'Error while updating the category'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

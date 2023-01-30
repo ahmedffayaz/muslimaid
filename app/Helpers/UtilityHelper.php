@@ -502,16 +502,18 @@ function convertDateFormat($date)
  */
 function getBannerImageUrl($url, $type = NULL, $row=null)
 {
+    $defaultBanner = asset('frontend/images/banners/categories/cashback.png');
+
     if (empty($url)) {
-        return asset('frontend/images/banners/categories/cashback.png');
+        return $defaultBanner;
     }
 
     if(!empty($url) && !isFileExist($url)) {
-        return asset('frontend/images/banners/categories/cashback.png');
+        return $defaultBanner;
     }
 
     if ($row && $type && $row->banner_type != $type) {
-        return asset('frontend/images/banners/categories/cashback.png');
+        return $defaultBanner;
     }
 
     return asset(parse_url($url)['path']);
