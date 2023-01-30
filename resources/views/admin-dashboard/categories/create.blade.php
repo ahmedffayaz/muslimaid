@@ -9,6 +9,7 @@
             <div class="form-group">
                 <label class="form-label" for="full-name-1">Category Name</label>
                 <div class="form-control-wrap">
+                    <input type="hidden" value="{{ $isEdit ? $category->id : '' }}" id="id">
                     <input type="text" class="form-control" id="full-name-1" name="name"
                         value="{{ $isEdit ? $category->name : '' }}" required>
                 </div>
@@ -28,14 +29,14 @@
                             @if ($isEdit && count($parent->childs))
                                 @include('admin-dashboard.categories.child_input', [
                                     'childs' => $parent->childs,
-                                    'isEdit' => 0,
+                                    'isEdit' => $isEdit,
                                     'category' => $category,
                                     'dashes' => '~',
                                 ])
                             @elseif (count($parent->childs))
                                 @include('admin-dashboard.categories.child_input', [
                                     'childs' => $parent->childs,
-                                    'isEdit' => 0,
+                                    'isEdit' => $isEdit,
                                     'dashes' => '~',
                                 ])
                             @endif
@@ -48,9 +49,9 @@
             <div class="form-group">
                 <div class="custom-control custom-control-sm custom-checkbox notext">
                     <input type="checkbox" class="custom-control-input" name="is_map_enable"
-                        value="{{ $isEdit ? $category->is_map_enable : '' }}" id="uid1"
+                        value="{{ $isEdit ?? $category->is_map_enable }}" id="is_map_enable"
                         {{ $isEdit && $category->is_map_enable == 1 ? 'checked' : '' }}>
-                    <label class="custom-control-label" for="uid1">Enable Google Map</label>
+                    <label class="custom-control-label" for="is_map_enable">Enable Google Map</label>
                 </div>
             </div>
         </div>

@@ -201,6 +201,7 @@
     <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
     <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
     <script>
+        var quill = null;
         $(document).ready(function() {
             // Show create modal
             $('#show-modal').on('click', function (event) {
@@ -242,7 +243,7 @@
             });
 
             function quillEditor() {
-                var quill = new Quill('#editor-container', {
+                quill = new Quill('#editor-container', {
                     modules: {
                         toolbar: [
                             ['bold', 'italic'],
@@ -309,8 +310,17 @@
                 $('#category-form').on('submit', function(event) {
                     event.preventDefault();
                     let url = $(this).attr('action');
+                    // Populate hidden form on submit
+                    let desc = document.querySelector('input[name=description]');
+                    desc.value = quill.root.innerHTML;
+
                     let method = 'POST';
                     let formData = new FormData(this);
+                    let id = $('#id').val();
+                    if(id){
+                        url = $(this).attr('action');
+                        formData.append('_method', 'PUT');
+                    }
                     $.ajax({
                         url: url,
                         type: method,
@@ -318,8 +328,8 @@
                         contentType: false,
                         data: formData,
                         success: function(response) {
-                            console.log(response);
                             $('#modal').modal('hide');
+                            $('#tree1').load(location.href + ' #tree1');
                             (function(NioApp, $){
                                 'use strict';
                                 toastr.clear();
@@ -327,7 +337,6 @@
                             })(NioApp, jQuery);
                         },
                         error: function(error) {
-                            console.log(error);
                             if (error.responseJSON.error) {
                                 (function(NioApp, $){
                                     'use strict';
@@ -427,7 +436,6 @@
                             $(this).children('ul').children().toggle();
                         }
                     })
-                    // branch.children().children().toggle();
                 });
                 /* fire event from the dynamically added icon */
                 tree.find('.branch .indicator').each(function() {
@@ -456,23 +464,15 @@
 
         function initializeSelect2() {
             $('.select-2').select2({
-                // maximumSelectionLength: 5,
                 placeholder: function() {
                     $(this).data('placeholder');
 
                 }
             });
         }
-        $(".category_form").submit(function(e) {
-
-            // Populate hidden form on submit
-            var desc = document.querySelector('input[name=description]');
-            desc.value = quill.root.innerHTML;
-        });
     </script>
     <script>
         $(document).ready(function() {
-
             $(document).on('click', '.category-delete', function(event) {
                 var form_id = $(this).attr('form_id');
                 Swal.fire({
