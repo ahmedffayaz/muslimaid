@@ -261,9 +261,9 @@
                         $('#save-btn').text('Update');
                         $('#modal').modal('show');
                         initializeSelect2();
+                        storePicks();
                     }
                 });
-
             });
 
             function quillEditor() {
@@ -330,6 +330,7 @@
                 });
             }
 
+            // update category
             function store() {
                 $('#category-form').on('submit', function(event) {
                     event.preventDefault();
@@ -345,6 +346,47 @@
                         url = $(this).attr('action');
                         formData.append('_method', 'PUT');
                     }
+                    $.ajax({
+                        url: url,
+                        type: method,
+                        processData: false,
+                        contentType: false,
+                        data: formData,
+                        success: function(response) {
+                            $('#modal').modal('hide');
+                            $('#tree1').load(location.href + ' #tree1');
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(response.success, 'success');
+                            })(NioApp, jQuery);
+                        },
+                        error: function(error) {
+                            if (error.responseJSON.error) {
+                                (function(NioApp, $){
+                                    'use strict';
+                                    toastr.clear();
+                                    NioApp.Toast(error.responseJSON.error, 'error');
+                                })(NioApp, jQuery);
+                            } else {
+                                (function(NioApp, $){
+                                    'use strict';
+                                    toastr.clear();
+                                    NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                                })(NioApp, jQuery);
+                            }
+                        }
+                    });
+                });
+            }
+
+            // Update category picks
+            function storePicks() {
+                $('#category-picks-form').on('submit', function(event) {
+                    event.preventDefault();
+                    let url = $(this).attr('action');
+                    let method = 'POST';
+                    let formData = new FormData(this);
                     $.ajax({
                         url: url,
                         type: method,

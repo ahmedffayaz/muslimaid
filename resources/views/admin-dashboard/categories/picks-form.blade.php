@@ -1,5 +1,5 @@
-<form action="{{ route('admin.stores.create_editor_picks') }}" class="gy-3 form-validate is-alter category_form"
-    method="POST" enctype="multipart/form-data">
+<form action="{{ route('admin.stores.create_editor_picks') }}" class="gy-3 form-validate is-alter"
+    method="POST" enctype="multipart/form-data" id="category-picks-form">
     @csrf
     <div class="row g-4">
         <div class="col-lg-6">
