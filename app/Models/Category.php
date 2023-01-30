@@ -11,26 +11,40 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Category extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = [ 'name','is_map_enable','slug','description','sort','logo_type','logo_upload','logo_link','banner_type','banner_upload','banner_link', 'status','parent_id','mapped_to', 'network_id','feature_homepage','feature_sidebar','meta_description','meta_keyword'];
-    public function stores(){
+    protected $fillable = ['name', 'is_map_enable', 'slug', 'description', 'sort', 'logo_type', 'logo_upload', 'logo_link', 'banner_type', 'banner_upload', 'banner_link', 'status', 'parent_id', 'mapped_to', 'network_id', 'feature_homepage', 'feature_sidebar', 'meta_description', 'meta_keyword'];
 
+    public function stores()
+    {
         return $this->belongsToMany(Store::class);
     }
-    public function mappedTo(){
 
+    public function mappedTo()
+    {
         return $this->belongsTo(SiteCategory::class, 'mapped_to');
     }
-    public function parent(){
 
+    public function parent()
+    {
         return $this->belongsTo(Category::class, 'parent_id');
+    }
 
+    public function childs()
+    {
+        return $this->hasMany(Category::class, 'parent_id', 'id');
     }
-    public function childs() {
-        return $this->hasMany(Category::class,'parent_id','id');
-    }
-    public function picks() {
+
+    public function picks()
+    {
         return $this->hasMany(EditorPick::class);
+    }
+
+    public function enableGoogleMap()
+    {
+        $html = '';
+        if ($this->is_map_enable == 1)
+            $html = '<span class="badge badge-dim badge-pill badge-info text-capitalize"><em class="icon ni ni-done"></em>Map Enabled</span>';
+        return $html;
     }
 }

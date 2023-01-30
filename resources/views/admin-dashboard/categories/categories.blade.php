@@ -155,13 +155,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <form action="{{ route('admin.categories.destroy', $category) }}"
-                                                            id="delete-form-{{ $category->id }}" method="POST"
-                                                            class="m-0">
-                                                            @method('DELETE')
-                                                            @csrf
-
-                                                        </form>
                                                     </span>
                                                     <em class="icon ni ni-db-fill text-primary"></em> {{ $category->name }}
                                                     <span class="ml-1">
@@ -171,6 +164,9 @@
                                                                 <em class="icon ni ni-done"></em> Editor Picks
                                                             </span>
                                                         @endif
+                                                    </span>
+                                                    <span class="ml-1">
+                                                        {!! $category->enableGoogleMap() !!}
                                                     </span>
                                                     @if (count($category->childs))
                                                         @include('admin-dashboard.categories.child', [
@@ -204,7 +200,7 @@
         var quill = null;
         $(document).ready(function() {
             // Show create modal
-            $('#show-modal').on('click', function (event) {
+            $(document).on('click', '#show-modal', function (event) {
                 event.preventDefault();
                 $.ajax({
                     url: "{{ route('admin.categories.create') }}",
@@ -224,13 +220,13 @@
             });
 
             // Show edit modal
-            $('.category-edit').on('click', function(event) {
+            $(document).on('click', '.category-edit', function(event) {
                 event.preventDefault();
                 $.ajax({
                     url: $(this).attr('href'),
                     type: 'GET',
                     success: function (response) {
-                        $('.title').text('Create Category');
+                        $('.title').text('Edit Category');
                         $('#form-wrapper').html(response);
                         $('#save-btn').text('Update');
                         $('#modal').modal('show');
@@ -244,7 +240,7 @@
             });
 
             // Show editor picks modal
-            $('.picks-edit').on('click', function(event) {
+            $(document).on('click', '.picks-edit', function(event) {
                 event.preventDefault();
                 var id = $(this).attr('category-id');
                 url = $(this).attr('href');
@@ -336,6 +332,9 @@
             function store() {
                 $('#category-form').on('submit', function(event) {
                     event.preventDefault();
+                    let btn = $('#save-btn')
+                    btn.attr('disabled', 'disabled')
+                        .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
                     let url = $(this).attr('action');
                     // Populate hidden form on submit
                     let desc = document.querySelector('input[name=description]');
@@ -356,6 +355,8 @@
                         data: formData,
                         success: function(response) {
                             $('#modal').modal('hide');
+                            btn.removeAttr('disabled', 'disabled').button('refresh');
+                            btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                             $('#tree1').load(location.href + ' #tree1');
                             (function(NioApp, $){
                                 'use strict';
@@ -364,6 +365,8 @@
                             })(NioApp, jQuery);
                         },
                         error: function(error) {
+                            btn.removeAttr('disabled', 'disabled').button('refresh');
+                            btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                             if (error.responseJSON.error) {
                                 (function(NioApp, $){
                                     'use strict';
@@ -386,6 +389,9 @@
             function storePicks() {
                 $('#category-picks-form').on('submit', function(event) {
                     event.preventDefault();
+                    let btn = $('#save-btn')
+                    btn.attr('disabled', 'disabled')
+                        .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
                     let url = $(this).attr('action');
                     let method = 'POST';
                     let formData = new FormData(this);
@@ -397,6 +403,8 @@
                         data: formData,
                         success: function(response) {
                             $('#modal').modal('hide');
+                            btn.removeAttr('disabled', 'disabled').button('refresh');
+                            btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                             $('#tree1').load(location.href + ' #tree1');
                             (function(NioApp, $){
                                 'use strict';
@@ -405,6 +413,8 @@
                             })(NioApp, jQuery);
                         },
                         error: function(error) {
+                            btn.removeAttr('disabled', 'disabled').button('refresh');
+                            btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                             if (error.responseJSON.error) {
                                 (function(NioApp, $){
                                     'use strict';
@@ -515,7 +525,7 @@
         }
 
         // Delete category
-        $('.category-delete').on('click', function(event) {
+        $(document).on('click', '.category-delete', function(event) {
                 event.preventDefault();
                 id = $(this).data('id')
                 url = $(this).data('action');

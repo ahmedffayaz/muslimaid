@@ -505,15 +505,7 @@ function getBannerImageUrl($url, $type = NULL, $row = null)
 {
     $defaultBanner = asset('frontend/images/banners/categories/cashback.png');
 
-    if (empty($url)) {
-        return $defaultBanner;
-    }
-
-    if (!empty($url) && !isFileExist($url)) {
-        return $defaultBanner;
-    }
-
-    if ($row && $type && $row->banner_type != $type) {
+    if (empty($url) || (!empty($url) && !isFileExist($url)) || ($row && $type && $row->banner_type != $type)) {
         return $defaultBanner;
     }
 
