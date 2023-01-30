@@ -284,6 +284,7 @@
                 $(document).ready(function() {
                     if ($('#logo_type').val() == 'upload') {
                         $('.logo_upload').show();
+                        NioApp.BS.fileinput('.custom-file-input');
                         $('.logo_link').hide();
                         $('#logo_link').removeAttr('required').val('');
                     } else if ($('#logo_type').val() == 'link') {
@@ -295,6 +296,7 @@
                 $(document.body).on("change","#logo_type",function(){
                     if (this.value == 'upload') {
                         $('.logo_upload').show();
+                        NioApp.BS.fileinput('.custom-file-input');
                         $('.logo_link').hide();
                         $('#logo_link').removeAttr('required').val('');
                     } else if (this.value == 'link') {
