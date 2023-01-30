@@ -61,9 +61,9 @@ class CommissionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'exit_click_id' => 'required|integer||gte:1',
-            'order_value' => 'nullable|numeric||gte:1',
-            'network_commission' => 'required|numeric||gte:1',
+            'exit_click_id' => 'required|integer|min:1',
+            'order_value' => 'nullable|numeric|min:1',
+            'network_commission' => 'required|numeric|min:1',
             'amount' => 'nullable|numeric',
             'status' => 'required|integer'
         ], [
@@ -135,9 +135,9 @@ class CommissionController extends Controller
     public function update(Request $request, UserCashback $commission)
     {
         $request->validate([
-            'exit_click_id' => 'required|integer',
-            'order_value' => 'nullable|numeric',
-            'network_commission' => 'required|numeric',
+            'exit_click_id' => 'required|integer |min:1',
+            'order_value' => 'nullable|numeric|min:1',
+            'network_commission' => 'required|numeric|min:1',
             'amount' => 'nullable|numeric',
             'status' => 'required|integer'
         ], [
@@ -232,10 +232,10 @@ class CommissionController extends Controller
     public function storeMultiple(Request $request)
     {
         $request->validate([
-            'exit_click_id.*' => 'required|integer',
-            'order_value.*' => 'nullable|numeric',
-            'network_commission.*' => 'required|numeric',
-            'amount.*' => 'nullable|numeric',
+            'exit_click_id.*' => 'required|integer |min:1',
+            'order_value.*' => 'nullable|numeric |min:1',
+            'network_commission.*' => 'required|numeric|min:1',
+            'amount.*' => 'nullable|numeric |min:1',
             'event_date.*' => 'required|date_format:m/d/Y'
         ], [
             'exit_click_id.*.required' => 'All exit clicks are required',

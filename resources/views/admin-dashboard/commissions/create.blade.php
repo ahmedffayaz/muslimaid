@@ -10,7 +10,7 @@
             <div class="form-group">
                 <label class="form-label" for="exit_click_id">Exit Click</label>
                 <div class="form-control-wrap ">
-                    <input type="number" class="form-control" id="exit_click_id" value="{{ $isEdit ? $commission->exit_click_id : '' }}" name="exit_click_id" placeholder="Exit Click ID" required>
+                    <input type="number" min="0.0" step="1" class="form-control" id="exit_click_id" value="{{ $isEdit ? $commission->exit_click_id : '' }}" name="exit_click_id" placeholder="Exit Click ID" required>
                 </div>
             </div>
         </div>
@@ -18,7 +18,7 @@
             <div class="form-group">
                 <label class="form-label" for="order_value">Order Value</label>
                 <div class="form-control-wrap">
-                    <input type="number" class="form-control" id="order_value" value="{{ $isEdit ? $commission->order_value : '' }}" name="order_value" step="0.01" placeholder="Order Value">
+                    <input type="number" class="form-control" min="0.0" step="1" id="order_value" value="{{ $isEdit ? $commission->order_value : '' }}" name="order_value" placeholder="Order Value">
                 </div>
             </div>
         </div>
@@ -27,7 +27,7 @@
                 <label class="form-label" for="network_commission">Network Commission</label>
                 <div class="form-control-wrap">
                     <input type="number" class="form-control" id="network_commission" value="{{ $isEdit ? $commission->network_commission : '' }}" name="network_commission"
-                        placeholder="Network Commission" step="0.01" required>
+                        placeholder="Network Commission"  min="0.0" step="1" required>
                 </div>
             </div>
         </div>
