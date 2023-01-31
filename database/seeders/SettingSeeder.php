@@ -41,6 +41,7 @@ class SettingSeeder extends Seeder
             'Mail Port' => '2525',
             'Mail Username' => '07f4dbf61b8122',
             'Mail Password' => 'd7fc5d57bc6eac',
+            'Mail Encryption' => '',
             'Mail Email' => 'support@cashback-reborn.com',
             'Mail Name' => 'Cashback Reborn Support',
             'Currency' => 1,
