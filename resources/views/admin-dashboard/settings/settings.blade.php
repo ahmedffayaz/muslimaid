@@ -333,7 +333,7 @@
                                         <div class="tab-pane" id="tabItem6">
                                             <div class="nk-block">
                                                 <div class="nk-block-head">
-                                                    <h5 class="title">Mailer Settings Duh!</h5>
+                                                    <h5 class="title">Mailer Settings</h5>
                                                 </div><!-- .nk-block-head -->
                                                 <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
                                                     @csrf
