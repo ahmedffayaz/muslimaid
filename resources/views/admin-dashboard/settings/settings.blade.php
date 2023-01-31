@@ -333,7 +333,7 @@
                                         <div class="tab-pane" id="tabItem6">
                                             <div class="nk-block">
                                                 <div class="nk-block-head">
-                                                    <h5 class="title">Mailer Settings</h5>
+                                                    <h5 class="title">Mailer Settings Duh!</h5>
                                                 </div><!-- .nk-block-head -->
                                                 <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
                                                     @csrf
@@ -414,6 +414,22 @@
                                                                 <div class="form-control-wrap">
                                                                     <input type="text" class="form-control" name="mail_password" value="{{ $settings['mail_password'] }}"
                                                                         placeholder="password">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-3 align-center">
+                                                        <div class="col-lg-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Encryption <em class="icon ni ni-question form-label" data-toggle="tooltip"
+                                                                        data-placement="top" title=" Enter password of mail service."></em></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <div class="form-group">
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="mail_encryption" value="{{ $settings['mail_encryption'] }}"
+                                                                        placeholder="encryption">
                                                                 </div>
                                                             </div>
                                                         </div>
