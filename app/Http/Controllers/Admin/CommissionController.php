@@ -62,8 +62,8 @@ class CommissionController extends Controller
     {
         $request->validate([
             'exit_click_id' => 'required|integer|min:1',
-            'order_value' => 'nullable|numeric|min:1',
-            'network_commission' => 'required|numeric|min:1',
+            'order_value' => 'nullable|numeric',
+            'network_commission' => 'required|numeric',
             'amount' => 'nullable|numeric',
             'status' => 'required|integer'
         ], [
@@ -136,8 +136,8 @@ class CommissionController extends Controller
     {
         $request->validate([
             'exit_click_id' => 'required|integer |min:1',
-            'order_value' => 'nullable|numeric|min:1',
-            'network_commission' => 'required|numeric|min:1',
+            'order_value' => 'nullable|numeric',
+            'network_commission' => 'required|numeric',
             'amount' => 'nullable|numeric',
             'status' => 'required|integer'
         ], [
@@ -233,9 +233,9 @@ class CommissionController extends Controller
     {
         $request->validate([
             'exit_click_id.*' => 'required|integer |min:1',
-            'order_value.*' => 'nullable|numeric |min:1',
-            'network_commission.*' => 'required|numeric|min:1',
-            'amount.*' => 'nullable|numeric |min:1',
+            'order_value.*' => 'nullable|numeric',
+            'network_commission.*' => 'required|numeric',
+            'amount.*' => 'nullable|numeric',
             'event_date.*' => 'required|date_format:m/d/Y'
         ], [
             'exit_click_id.*.required' => 'All exit clicks are required',

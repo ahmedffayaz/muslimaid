@@ -119,7 +119,7 @@ class PaymentController extends Controller
         $method = $user->paymentInfo()->where('payment_method',$request->payment_method)->first();
         if(!$method && $request->payment_method !='charity')
         {
-            flash()->error('Payment method not found, please add your payment method information');
+            flash()->error('Payment method not found, please add your payment method information', $lifetime = 600);
             return redirect()->back();
         } 
         $balance = $user->availableBalance();
