@@ -45,7 +45,7 @@ class SendEmailToAdmin implements ShouldQueue
             'subject' => $emailTemplate['subject']
         );
 
-        $email = SiteSetting()['email'] ? SiteSetting()['email'] : env('MAIL_EMAIL');
+        $email = SiteSetting()['email'] ? SiteSetting()['email'] : env('ADMIN_EMAIL');
         // Send to admin
         Mail::send('emails.email_template', $data, function ($message) use ($email, $data) {
             $message->to($email, $data['name'])
