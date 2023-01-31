@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Page;
 use Illuminate\Support\Str;
+
 class PagesController extends Controller
 {
     /**
@@ -15,10 +16,10 @@ class PagesController extends Controller
      */
     public function index()
     {
-       
-        $route='index';
+
+        $route = 'index';
         $pages = Page::latest()->paginate(20);
-        return view('admin-dashboard.pages.index',compact('pages','route'));
+        return view('admin-dashboard.pages.index', compact('pages', 'route'));
     }
 
     /**
@@ -39,14 +40,13 @@ class PagesController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
         $page = new Page;
         $page->title = $request->title;
         $page->slug = Str::slug($request->title);
         $page->excerpt = $request->excerpt;
         $page->lb_content = $request->content;
         $page->status = $request->status;
-        $page->banner_image = $request->filepath;
+        $page->banner_image = parse_url($request->filepath)['path'];
         $page->description = $request->short_description;
         $page->meta_description = $request->meta_description;
         $page->meta_keyword = $request->meta_keyword;
@@ -75,7 +75,7 @@ class PagesController extends Controller
      */
     public function edit(Page $page)
     {
-        return view('admin-dashboard.pages.edit',compact('page'));
+        return view('admin-dashboard.pages.edit', compact('page'));
     }
 
     /**
@@ -87,13 +87,12 @@ class PagesController extends Controller
      */
     public function update(Request $request, Page $page)
     {
-        
         $page->title = $request->title;
         $page->excerpt = $request->excerpt;
         $page->lb_content = $request->content;
         $page->status = $request->status;
-        if(isset($request->filepath)){
-            $page->banner_image = $request->filepath;
+        if (isset($request->filepath)) {
+            $page->banner_image = parse_url($request->filepath)['path'];
         }
         $page->description = $request->short_description;
         $page->meta_description = $request->meta_description;
@@ -114,8 +113,8 @@ class PagesController extends Controller
         $page->delete();
         flash()->success('Page deleted');
         return redirect()->route('admin.pages.index');
-
     }
+
     public function runValidation($request)
     {
         return $request->validate([
