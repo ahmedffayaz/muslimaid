@@ -26,6 +26,7 @@
                         </div><!-- .nk-block-head-content -->
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
+                @include('flash::message')
                 <div class="components-preview mx-auto">
                     <div class="nk-block nk-block-lg">
                         <div class="card">
@@ -128,7 +129,7 @@
     }
 
     $(document).ready(function(){
-
+        // show default 5 fields
         $.ajax({
             url: "{{ route('admin.commissions.form') }}",
             type: 'GET',
@@ -203,6 +204,7 @@
             });
         }
 
+        // Multiple cashbacks submit confirmation
         function confirmMultipleCashbacks () {
             $('#save_form').on("submit", function(event){
                 event.preventDefault();
@@ -225,6 +227,7 @@
             });
         }
 
+        // Insert multiple cashbacks in db
         function storeMultipleCashbacks(url, formData) {
             $.ajax({
                 url: url,
