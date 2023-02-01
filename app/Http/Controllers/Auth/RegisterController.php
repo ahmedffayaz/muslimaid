@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Traits\UserBonus;
 use Illuminate\Http\Request;
+use App\Jobs\SendEmailToUser;
 use App\Models\EmailTemplate;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -96,22 +97,14 @@ class RegisterController extends Controller
         $bonusStatus = 1;
 
         $this->welcomBonus($user, $bonusStatus);
+        $data['name'] = $data['firstname'];
+        unset($data['firstname']);
+        $merge_subject = ['subject' => null, 'message' => null];
+        $data = array_merge($data, $merge_subject);
 
-        $email_template = EmailTemplate::where('key', 'user_welcome')->first();
-
-        $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}'], [SiteSetting()['website_title'], url('/'), $user->first_name, $user->email], $email_template->message);
-
-        $email_data = array(
-            'name' =>  $data['firstname'],
-            'email' => $data['email'],
-            'email_message' => $filtered_message,
-            'subject' => $email_template->subject
-        );
-
-        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-            $message->to($email_data['email'], $email_data['name'])
-                ->subject($email_data['subject']);
-        });
+        // Welcome email
+        $userEmailTemplateKey = 'user_welcome';
+        SendEmailToUser::dispatch($userEmailTemplateKey, $data);
 
         //send email to user to verify email address
         dispatch(new \App\Jobs\SendEmailJob($user));
