@@ -69,10 +69,21 @@
                                             <div class="nk-block-head">
                                                 <h5 class="title">User Information</h5>
                                             </div>
-                                            <form action="{{ route('admin.users.update', $user) }}" class="gy-3 form-validate is-alter user-form" method="POST">
+                                            <form action="{{ route('admin.users.update', $user) }}" enctype="multipart/form-data" class="gy-3 form-validate is-alter user-form" id="user-edit-form" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="row g-4">
+                                                    <div class="col-lg-12 text-center">
+                                                        <label class="form-label" for="pay-amount-1">Avatar</label>
+                                                        <div class="profile-card__avatar text-center">
+                                                            @if($user->avatar == 'default.png')
+                                                            <img src="{{asset('admin-dashboard/images/avatar.png')}}" id="image_avatar" width="100">
+                                                            @else
+                                                            <img src="{{asset('storage/users/images/avatar/'.$user->avatar)}}" id="image_avatar" width="100" style="border-radius: 50%; height: 100px">
+                                                            @endif
+                                                            <input type="file" class="form-control mt-3 w-50 mx-auto" name="avatar" accept="image/*" value="{{ old('avatar') ?? null }}" onchange="readURL(this);">
+                                                        </div>
+                                                    </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
                                                             <label class="form-label" for="firstname">First Name</label>
@@ -99,7 +110,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
                                                             <label class="form-label" for="phone-no-1">Phone</label>
@@ -389,6 +399,18 @@
                 }
             });
         }
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#image_avatar')
+                        .attr('src', e.target.result)
+                        .css('border-radius','50%').css('height',100);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
 
         function fetchClicks(page) {
             pageurl = "{{ route('admin.users.clicks') }}?page=" + page
@@ -431,7 +453,6 @@
         $(document).ready(function() {
             $(document).on('submit', '.user-form', function(event) {
                 event.preventDefault();
-
                 let form = $(this);
                 let submitBtn = form.find('[type="submit"]');
                 let submitBtnHtml = submitBtn.html();
@@ -440,9 +461,12 @@
                     .append(`<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>`);
 
                 $.ajax({
-                    type: 'PUT',
+                    type: 'POST',
                     url: $(this).attr('action'),
-                    data: $(this).serialize(),
+                    data: new FormData(this),
+                    contentType: false,
+                    cache: false,
+                    processData: false,
                     success: function(data) {
                         if (data.success) {
                             (function(NioApp, $) {

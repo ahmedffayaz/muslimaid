@@ -14,6 +14,10 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use File;
+use Storage;
+use Carbon\Carbon;
+use Intervention\Image\ImageManagerStatic as Image;
 
 class UserController extends Controller
 {
@@ -60,6 +64,10 @@ class UserController extends Controller
                 'updated' => 'error'
             );
         }
+        $avatar_image = "default.png";
+        if ($request->hasFile('avatar')) {
+            $avatar_image = store_user_avatar($request->file('avatar'), $avatar_image);
+        }
     
         $user =  User::create([
             'first_name' => $request->firstname,
@@ -69,7 +77,8 @@ class UserController extends Controller
             'registration_type' => 'sign up',
             'phone' => $request->phone,
             'address' => $request->address,
-            'intro' => $request->intro
+            'intro' => $request->intro,
+            'avatar' => $avatar_image
         ]);
 
         $user->assignRole('user');
@@ -77,6 +86,7 @@ class UserController extends Controller
         flash()->success('New user added successfully');
         return redirect()->route('admin.users.index');
     }
+
 
     public function show(User $user)
     {
@@ -113,6 +123,11 @@ class UserController extends Controller
                 );
             }
 
+            $avatar_image = $user->avatar;
+            if ($request->hasFile('avatar')) {
+                $avatar_image = store_user_avatar($request->file('avatar') , $avatar_image);
+            }
+
             $user->update([
                 'first_name' => $request->input('firstname'),
                 'last_name' => $request->input('lastname'),
@@ -121,6 +136,7 @@ class UserController extends Controller
                 'address' => $request->input('address'),
                 'intro' => $request->input('intro'),
                 'status' => $request->input('status'),
+                'avatar' => $avatar_image
             ]);
 
             $user->syncRoles($request->input('roles'));
