@@ -61,7 +61,7 @@ class CommissionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'exit_click_id' => 'required|integer',
+            'exit_click_id' => 'required|integer|min:1',
             'order_value' => 'nullable|numeric',
             'network_commission' => 'required|numeric',
             'amount' => 'nullable|numeric',
@@ -135,7 +135,7 @@ class CommissionController extends Controller
     public function update(Request $request, UserCashback $commission)
     {
         $request->validate([
-            'exit_click_id' => 'required|integer',
+            'exit_click_id' => 'required|integer |min:1',
             'order_value' => 'nullable|numeric',
             'network_commission' => 'required|numeric',
             'amount' => 'nullable|numeric',
@@ -232,7 +232,7 @@ class CommissionController extends Controller
     public function storeMultiple(Request $request)
     {
         $request->validate([
-            'exit_click_id.*' => 'required|integer',
+            'exit_click_id.*' => 'required|integer |min:1',
             'order_value.*' => 'nullable|numeric',
             'network_commission.*' => 'required|numeric',
             'amount.*' => 'nullable|numeric',
@@ -352,6 +352,16 @@ class CommissionController extends Controller
 
     public function fileDownload()
     {
-        return response()->download(asset('storage/files/cashbacks.csv'));
+        try {
+            $headers = array(
+                'Content-Type' => 'text/csv',
+            );
+            $filename = 'cashbacks.csv';
+            $file = storage_path('app/public/files/' . $filename);
+            return Response::download($file, $filename, $headers);
+        } catch (Exception $exception) {
+            flash()->error('File does not exist.');
+            return redirect()->route('admin.commissions.create_multiple');
+        }
     }
 }

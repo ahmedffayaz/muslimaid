@@ -26,6 +26,7 @@
                         </div><!-- .nk-block-head-content -->
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
+                @include('flash::message')
                 <div class="components-preview mx-auto">
                     <div class="nk-block nk-block-lg">
                         <div class="card">
@@ -57,7 +58,7 @@
                         <div class="form-group">
                             <label class="form-label" for="exit_click_id">Exit Click</label>
                             <div class="form-control-wrap ">
-                                <input type="number" class="form-control" id="exit_click_id" name="exit_click_id[]" placeholder="Exit Click ID" required>
+                                <input type="number" class="form-control" min="0.0" step="1" id="exit_click_id" name="exit_click_id[]" placeholder="Exit Click ID" required>
                             </div>
                         </div>
                     </div>
@@ -66,7 +67,7 @@
                         <div class="form-group">
                             <label class="form-label" for="phone-no-1">Order Value</label>
                             <div class="form-control-wrap">
-                                <input type="number" class="form-control" id="phone-no-1" step="0.01" placeholder="Order Value" name="order_value[]">
+                                <input type="number" class="form-control" min="0.0" step="1" id="phone-no-1" placeholder="Order Value" name="order_value[]">
                             </div>
                         </div>
                     </div>
@@ -74,7 +75,7 @@
                         <div class="form-group">
                             <label class="form-label" for="phone-no-1">Network Commission</label>
                             <div class="form-control-wrap">
-                                <input type="number" class="form-control" id="phone-no-1" step="0.01" placeholder="Network Commission" name="network_commission[]" >
+                                <input type="number" class="form-control" step="1"  min="0.0" id="phone-no-1"  placeholder="Network Commission" name="network_commission[]" >
                             </div>
                         </div>
                     </div>
@@ -82,7 +83,7 @@
                         <div class="form-group">
                             <label class="form-label" for="phone-no-1">Cashback Amount</label>
                             <div class="form-control-wrap">
-                                <input type="number" class="form-control" id="phone-no-1" step="0.01" placeholder="Cashback Amount" name="amount[]" >
+                                <input type="number" class="form-control" min="0.0"  id="phone-no-1"  placeholder="Cashback Amount" name="amount[]" >
                             </div>
                         </div>
                     </div>
@@ -128,7 +129,7 @@
     }
 
     $(document).ready(function(){
-
+        // show default 5 fields
         $.ajax({
             url: "{{ route('admin.commissions.form') }}",
             type: 'GET',
@@ -203,6 +204,7 @@
             });
         }
 
+        // Multiple cashbacks submit confirmation
         function confirmMultipleCashbacks () {
             $('#save_form').on("submit", function(event){
                 event.preventDefault();
@@ -225,6 +227,7 @@
             });
         }
 
+        // Insert multiple cashbacks in db
         function storeMultipleCashbacks(url, formData) {
             $.ajax({
                 url: url,

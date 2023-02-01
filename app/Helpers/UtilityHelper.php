@@ -473,7 +473,10 @@ function getImageUrl($url)
  */
 function isFileExist($url)
 {
-    $file = file_exists(public_path(parse_url($url)['path']));
+    $file = '';
+    if (!empty(parse_url($url)['path'])) {
+        $file = file_exists(public_path(parse_url($url)['path']));
+    }
     return $file;
 }
 
@@ -493,6 +496,20 @@ function dbDate($date)
 function convertDateFormat($date)
 {
     return Carbon::parse($date)->format('m/d/Y');
+}
+
+/**
+ * Get banner image if not exist show default
+ */
+function getBannerImageUrl($url, $type = NULL, $row = null)
+{
+    $defaultBanner = asset('frontend/images/banners/categories/cashback.png');
+
+    if (empty($url) || (!empty($url) && !isFileExist($url)) || ($row && $type && $row->banner_type != $type)) {
+        return $defaultBanner;
+    }
+
+    return asset(parse_url($url)['path']);
 }
 
 function emailTemplate($key, $details, $filteredMessage = NULL, $requestFilteredMessage = NULL)

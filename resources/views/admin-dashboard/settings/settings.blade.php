@@ -421,6 +421,22 @@
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
+                                                                <label class="form-label">Encryption <em class="icon ni ni-question form-label" data-toggle="tooltip"
+                                                                        data-placement="top" title=" Enter password of mail service."></em></label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <div class="form-group">
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="mail_encryption" value="{{ $settings['mail_encryption'] }}"
+                                                                        placeholder="encryption">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-3 align-center">
+                                                        <div class="col-lg-3">
+                                                            <div class="form-group">
                                                                 <label class="form-label" for="mail_email">From Email</label>
                                                             </div>
                                                         </div>

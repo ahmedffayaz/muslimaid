@@ -21,7 +21,7 @@
                 <div class="col-lg-12">
                     <div class="form-group">
                         <span class="badge badge-dot badge-danger">
-                            <a href="{!! route('admin.commissions.download.file') !!}" target="_blank">Download CSV demo file</a>
+                            <a href="{{ route('admin.commissions.download.file') }}">Download CSV demo file</a>
                         </span>
                     </div>
                 </div>
