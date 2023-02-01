@@ -6,43 +6,65 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 class Ticket extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'user_id', 'category_id', 'ticket_id', 'title', 'priority','ticket_type','claim_type','claim_amount', 'store_id','click_id', 'message','new_ticket','closing_time','closed_by', 'status'
+        'user_id',
+        'category_id',
+        'ticket_id',
+        'title',
+        'priority',
+        'ticket_type',
+        'claim_type',
+        'claim_amount',
+        'store_id',
+        'click_id',
+        'message',
+        'new_ticket',
+        'closing_time',
+        'closed_by',
+        'status',
     ];
 
     public function category()
     {
         return $this->belongsTo(TicketCategory::class);
     }
-    public function user(){
+
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    
+
     public function replies()
     {
         return $this->hasMany(TicketReply::class);
     }
 
-    public function closedByUser(){
+    public function closedByUser()
+    {
         return $this->belongsTo(User::class, 'closed_by');
     }
 
-    public function newReply(){
-        return $this->replies()->where('checked',0);
+    public function newReply()
+    {
+        return $this->replies()->where('checked', 0);
     }
-    
-    public function lastReply(){
+
+    public function lastReply()
+    {
         return $this->hasOne(TicketReply::class)->latest();
     }
-    public function store(){
+
+    public function store()
+    {
         return $this->belongsTo(Store::class);
     }
-    public function click(){
+
+    public function click()
+    {
         return $this->belongsTo(ExitClick::class);
     }
 }

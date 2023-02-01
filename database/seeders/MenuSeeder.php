@@ -2,9 +2,10 @@
 
 namespace Database\Seeders;
 
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Schema;
 
 class MenuSeeder extends Seeder
 {
@@ -15,69 +16,45 @@ class MenuSeeder extends Seeder
      */
     public function run()
     {
-        $menus = array(
-            array('id' => '1','name' => 'Main Menu','title' => 'Main Menu','created_at' => '2021-06-10 13:52:11','updated_at' => '2021-06-10 13:52:11'),
-            array('id' => '2','name' => 'Footer Menu-column 1','title' => 'About','created_at' => '2021-07-14 05:07:05','updated_at' => '2021-07-14 05:07:05'),
-            array('id' => '3','name' => 'Footer Menu-column 2','title' => 'Here to help','created_at' => '2021-07-14 05:10:43','updated_at' => '2021-07-14 05:10:43'),
-            array('id' => '4','name' => 'Footer Menu-column 3','title' => 'Hot offers','created_at' => '2021-07-14 05:10:54','updated_at' => '2021-07-14 05:10:54'),
-            array('id' => '5','name' => 'Footer Menu-column 4','title' => 'Policies','created_at' => '2021-07-14 05:11:06','updated_at' => '2021-07-14 05:11:06'),
-            array('id' => '6','name' => 'Footer Menu-column 5','title' => 'Legal','created_at' => '2021-07-14 05:11:06','updated_at' => '2021-07-14 05:11:06')
-          );
+        Schema::disableForeignKeyConstraints();
+        DB::table('admin_menus')->truncate();
+        DB::table('admin_menu_items')->truncate();
+        Schema::enableForeignKeyConstraints();
 
+        $menusArray = csvToArray('resources\\views\\frontend\\seeders\\admin_menus.csv');
+        $menuItemsArray = csvToArray('resources\\views\\frontend\\seeders\\admin_menu_items.csv');
 
-        foreach ($menus as $menu) {
-            DB::table('admin_menus')->insert([
-                'name'=>$menu['name'],
-                'title'=>$menu['title'],
-             ]);
+        $menus = [];
+        $menuItems = [];
+
+        $now = Carbon::now();
+
+        foreach ($menusArray as $key => $menu) {
+            $menus[] = [
+                'id' => isset($menu['id']) && !empty($menu['id']) ? $menu['id'] : $key,
+                'name' => $menu['name'],
+                'title' => $menu['title'],
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
         }
 
-        $admin_menu_items = array(
-            array('id' => '1','label' => 'Home','link' => '/','parent' => '0','sort' => '0','class' => NULL,'menu' => '1','depth' => '0','created_at' => '2021-06-10 13:52:22','updated_at' => '2021-06-14 12:13:37'),
-            array('id' => '2','label' => 'Offers','link' => '/pages/offers','parent' => '0','sort' => '1','class' => NULL,'menu' => '1','depth' => '0','created_at' => '2021-06-10 13:52:30','updated_at' => '2021-06-15 13:11:23'),
-            array('id' => '3','label' => 'Vouchers','link' => '/pages/vouchers','parent' => '0','sort' => '2','class' => NULL,'menu' => '1','depth' => '0','created_at' => '2021-06-11 09:35:16','updated_at' => '2021-06-15 13:11:33'),
-            array('id' => '4','label' => 'About','link' => '/pages/about','parent' => '0','sort' => '3','class' => NULL,'menu' => '1','depth' => '0','created_at' => '2021-06-11 09:35:38','updated_at' => '2021-06-11 09:35:38'),
-            array('id' => '5','label' => 'Blog','link' => '/blog','parent' => '0','sort' => '4','class' => NULL,'menu' => '1','depth' => '0','created_at' => '2021-06-11 09:35:56','updated_at' => '2021-06-11 09:35:56'),
-            array('id' => '6','label' => 'Contact','link' => '/pages/contact','parent' => '0','sort' => '5','class' => NULL,'menu' => '1','depth' => '0','created_at' => '2021-06-11 09:36:15','updated_at' => '2021-06-11 09:36:15'),
-            array('id' => '9','label' => 'About us','link' => '/pages/about','parent' => '0','sort' => '0','class' => NULL,'menu' => '2','depth' => '0','created_at' => '2021-07-14 05:07:54','updated_at' => '2021-07-14 05:08:45'),
-            array('id' => '10','label' => 'Advertising & Partnerships','link' => '/pages/advertising-partnerships','parent' => '0','sort' => '1','class' => NULL,'menu' => '2','depth' => '0','created_at' => '2021-07-14 05:08:44','updated_at' => '2021-07-14 05:09:35'),
-            array('id' => '11','label' => 'Careers','link' => '/pages/careers','parent' => '0','sort' => '2','class' => NULL,'menu' => '2','depth' => '0','created_at' => '2021-07-14 05:09:34','updated_at' => '2021-07-14 05:10:14'),
-            array('id' => '12','label' => 'Getting Started','link' => '/pages/getting-started','parent' => '0','sort' => '0','class' => NULL,'menu' => '3','depth' => '0','created_at' => '2021-07-14 05:12:27','updated_at' => '2021-07-14 05:12:49'),
-            array('id' => '13','label' => 'Customer Service','link' => '/pages/customer-service','parent' => '0','sort' => '1','class' => NULL,'menu' => '3','depth' => '0','created_at' => '2021-07-14 05:12:48','updated_at' => '2021-07-14 05:13:11'),
-            array('id' => '14','label' => 'Donate to Charity','link' => '/pages/donate-to-charity','parent' => '0','sort' => '2','class' => NULL,'menu' => '3','depth' => '0','created_at' => '2021-07-14 05:13:10','updated_at' => '2021-07-14 05:13:29'),
-            array('id' => '15','label' => 'FAQs','link' => '/pages/faqs','parent' => '0','sort' => '3','class' => NULL,'menu' => '3','depth' => '0','created_at' => '2021-07-14 05:13:29','updated_at' => '2021-07-14 05:13:35'),
-            array('id' => '16','label' => 'Privacy Policy','link' => '/pages/privacy-policy','parent' => '0','sort' => '0','class' => NULL,'menu' => '5','depth' => '0','created_at' => '2021-07-14 05:15:21','updated_at' => '2021-07-14 05:15:43'),
-            array('id' => '17','label' => 'Cookies Policy','link' => '/pages/cookie-policy','parent' => '0','sort' => '1','class' => NULL,'menu' => '5','depth' => '0','created_at' => '2021-07-14 05:15:42','updated_at' => '2021-07-14 05:16:10'),
-            array('id' => '18','label' => 'Terms and Conditions','link' => '/pages/terms-and-conditions','parent' => '0','sort' => '2','class' => NULL,'menu' => '5','depth' => '0','created_at' => '2021-07-14 05:16:09','updated_at' => '2021-07-14 05:16:13'),
-            array('id' => '19','label' => 'Trending','link' => '/pages/trending','parent' => '0','sort' => '0','class' => NULL,'menu' => '4','depth' => '0','created_at' => '2021-07-14 05:20:48','updated_at' => '2021-07-14 05:22:26'),
-            array('id' => '20','label' => 'Top cashback deals','link' => '#','parent' => '0','sort' => '1','class' => NULL,'menu' => '4','depth' => '0','created_at' => '2021-07-14 05:22:25','updated_at' => '2021-07-14 05:22:56'),
-            array('id' => '21','label' => 'Top voucher codes','link' => '#','parent' => '0','sort' => '3','class' => NULL,'menu' => '4','depth' => '0','created_at' => '2021-07-14 05:22:55','updated_at' => '2021-07-14 05:22:55'),
-            array('id' => '23','label' => 'Cashback To Your Door','link' => '/categories/cashback-to-your-door','parent' => '0','sort' => '3','class' => NULL,'menu' => '4','depth' => '0','created_at' => '2021-06-10 13:52:30','updated_at' => '2021-06-15 13:11:23'),
-            array('id' => '24','label' => 'Mobile App','link' => '/pages/our-apps','parent' => '0','sort' => '3','class' => NULL,'menu' => '5','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
-            array('id' => '25','label' => 'Browser extension policy','link' => '/pages/browser-extension-policy','parent' => '0','sort' => '3','class' => NULL,'menu' => '5','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
-            array('id' => '26','label' => 'Cashback A.F.R.O.B.O.T','link' => '/pages/extensions','parent' => '0','sort' => '4','class' => NULL,'menu' => '3','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
-            array('id' => '27','label' => 'Appointed Representative','link' => '/pages/appointed-representative','parent' => '0','sort' => '0','class' => NULL,'menu' => '6','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
-            array('id' => '28','label' => 'Modern Slavery Extension','link' => '/pages/modern-slavery-extension','parent' => '0','sort' => '1','class' => NULL,'menu' => '6','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
-            array('id' => '29','label' => 'Cookies Policy About Us','link' => '/pages/cookies-policy-about-us','parent' => '0','sort' => '2','class' => NULL,'menu' => '6','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
-            array('id' => '30','label' => 'Terms & Condition','link' => '/pages/terms-condition','parent' => '0','sort' => '3','class' => NULL,'menu' => '6','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
-            array('id' => '31','label' => 'Refer and Earn','link' => '/pages/refer-and-earn','parent' => '0','sort' => '4','class' => NULL,'menu' => '6','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
-            array('id' => '32','label' => 'Help','link' => '/pages/help','parent' => '0','sort' => '5','class' => NULL,'menu' => '6','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
-        );
-
-          foreach ($admin_menu_items as $item) {
-            DB::table('admin_menu_items')->insert([
-                'label'=>$item['label'],
-                'link'=>$item['link'],
-                'parent'=>$item['parent'],
-                'sort'=>$item['sort'],
-                'class'=>$item['class'],
-                'menu'=>$item['menu'],
-                'depth'=>$item['depth'],
-             ]);
+        foreach ($menuItemsArray as $key => $menuItem) {
+            $menuItems[] = [
+                'id' => isset($menuItem['id']) && !empty($menuItem['id']) ? $menuItem['id'] : $key,
+                'label' => $menuItem['label'],
+                'link' => $menuItem['link'],
+                'parent' => isset($menuItem['parent']) && !empty($menuItem['parent']) ? $menuItem['parent'] : 0,
+                'sort' => isset($menuItem['sort']) && !empty($menuItem['sort']) ? $menuItem['sort'] : 0,
+                'class' => isset($menuItem['class']) && !empty($menuItem['class']) ? $menuItem['class'] : null,
+                'menu' => isset($menuItem['menu']) && !empty($menuItem['menu']) ? $menuItem['menu'] : 1,
+                'depth' => isset($menuItem['depth']) && !empty($menuItem['depth']) ? $menuItem['depth'] : 0,
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
         }
 
-
-
-
+        DB::table('admin_menus')->insert($menus);
+        DB::table('admin_menu_items')->insert($menuItems);
     }
 }

@@ -16,7 +16,9 @@ class TestimonialFactory extends Factory
     public function definition()
     {
         $users = User::all()->pluck('id')->toArray();
+        
         $positions = ['CEO', 'HR', 'CFO', 'Vice-president'];
+
         return [
             'title' => $this->faker->title,
             'user_id' => Arr::random($users),
@@ -27,7 +29,7 @@ class TestimonialFactory extends Factory
             'company' => 'Cashback',
             'status' => 'active',
             'url' => null,
-            'order_no' => mt_rand(1,10)
+            'order_no' => mt_rand(1, 10)
         ];
     }
 }
