@@ -14,7 +14,8 @@
                             </div><!-- .nk-block-head-content -->
                             <div class="nk-block-head-content">
                                 <div class="toggle-wrap nk-block-tools-toggle">
-                                    <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
+                                    <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1"
+                                        data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
                                             <li class="nk-block-tools-opt">
@@ -36,9 +37,11 @@
                                 <div class="col-sm-6 col-lg-4 col-xxl-3" id="slide_{{ $slide->id }}" style="cursor: move;">
                                     <div class="card h-100">
                                         @if ($slide->banner == 'default1.png' || $slide->banner == 'default2.png' || $slide->banner == 'default3.png')
-                                            <img src="{{ asset('frontend/images/slides/' . $slide->banner) }}" class="card-img-top" alt="" style="height:200px">
+                                            <img src="{{ asset('frontend/images/slides/' . $slide->banner) }}"
+                                                class="card-img-top" alt="" style="height:200px">
                                         @else
-                                            <img src="{{ asset('storage/slider/slides/images/' . $slide->banner) }}" class="card-img-top" alt="" style="height:200px">
+                                            <img src="{{ asset('storage/slider/slides/images/' . $slide->banner) }}"
+                                                class="card-img-top" alt="" style="height:200px">
                                         @endif
                                         <div class="card-inner">
                                             <div class="project">
@@ -47,11 +50,11 @@
                                                         <div class="project-info">
                                                             <h6 class="title mb-2">{{ $slide->name }}</h6>
                                                             @if ($slide->logo == 'default1.png' || $slide->logo == 'default2.png' || $slide->logo == 'default3.png')
-                                                                <img src="{{ asset('frontend/images/slides/logo/' . $slide->logo) }}" class="float-right" alt=""
-                                                                    style="max-height: 50px">
+                                                                <img src="{{ asset('frontend/images/slides/logo/' . $slide->logo) }}"
+                                                                    class="float-right" alt="" style="max-height: 50px">
                                                             @else
-                                                                <img src="{{ asset('storage/slider/slides/images/' . $slide->logo) }}" class="float-right" alt=""
-                                                                    style="max-height: 50px">
+                                                                <img src="{{ asset('storage/slider/slides/images/' . $slide->logo) }}"
+                                                                    class="float-right" alt="" style="max-height: 50px">
                                                             @endif
                                                         </div>
                                                     </span>
@@ -64,9 +67,7 @@
                                                                 @if ($slide->store->cashback->type == 'fixed')
                                                                     {{ $slide->store->cashback->currency }}
                                                                 @endif
-                                                                {{ $slide->store->cashback->sale_commission }}@if ($slide->store->cashback->type == 'percentage')
-                                                                    %
-                                                                @endif Cashback
+                                                                {{ $slide->store->cashback->sale_commission }}@if ($slide->store->cashback->type == 'percentage')%@endif Cashback
                                                             </p>
                                                         @endif
                                                     @endif
@@ -85,12 +86,11 @@
                                                             <em class="icon ni ni-edit"></em>
                                                         </a>
                                                         @if (count($slider->slides) > 1)
-                                                            <a class="btn btn-danger btn-sm text-white" onclick="$('#delete-slide-{{ $slide->id }}').submit();"
-                                                                style="cursor: pointer">
+                                                            <a class="btn btn-danger btn-sm text-white" onclick="$('#delete-slide-{{ $slide->id }}').submit();" style="cursor: pointer">
                                                                 <em class="icon ni ni-trash"></em>
                                                             </a>
-                                                            <form action="{{ route('admin.slides.destroy', $slide) }}" id="delete-slide-{{ $slide->id }}" method="POST"
-                                                                class="m-0">
+                                                            <form action="{{ route('admin.slides.destroy', $slide) }}"
+                                                                id="delete-slide-{{ $slide->id }}" method="POST" class="m-0">
                                                                 @method('DELETE')
                                                                 @csrf
                                                             </form>
@@ -121,7 +121,8 @@
                     <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
                 </div>
                 <div id="" class=" p-4">
-                    <form action="{{ route('admin.slides.store') }}" class="gy-3 form-validate is-alter category_form" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.slides.store') }}" class="gy-3 form-validate is-alter category_form"
+                        method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="slider_id" value="{{ $slider->id }}">
                         <div class="row g-4">
@@ -139,8 +140,8 @@
                                     <div class="form-control-wrap ">
                                         <div class="">
                                             <select class="form-control form-select" id="slider_type" name="slider_type" required data-search="on">
-                                                <option value="link">Link</option>
-                                                <option value="store">Store</option>
+                                                    <option value="link">Link</option>
+                                                    <option value="store">Store</option>
                                             </select>
                                         </div>
                                     </div>
@@ -151,9 +152,9 @@
                                     <label class="form-label" for="store_id">Store</label>
                                     <div class="form-control-wrap ">
                                         <div class="">
-                                            <select class="form-control form-select" name="store_id" id="store_id" required data-search="on">
+                                            <select class="form-control form-select"  name="store_id" id="store_id" required data-search="on">
                                                 @foreach ($stores as $store)
-                                                    <option value="">Select store</option>
+                                                <option value="">Select store</option>
                                                     <option value="{{ $store->id }}">{{ $store->id }} -
                                                         {{ $store->name }}</option>
                                                 @endforeach
@@ -165,7 +166,7 @@
                             <div class="col-lg-6 sliderlink">
                                 <div class="form-group">
                                     <label class="form-label" for="link">Link</label>
-                                    <input name="link" id="link" class="form-control" value="" required>
+                                    <input name="link" id="link" class="form-control" value=""  required>
 
                                 </div>
                             </div>
@@ -285,50 +286,51 @@
         });
     </script>
     <script>
-        function linkType() {
+        // function linkType() {
             $(document).ready(function() {
                 if ($('#slider_type').val() == 'link') {
                     $('.sliderlink').show();
                     $('.store').hide();
                     $('#store_id').removeAttr('required').val('');
-                } else if ($('#slider_type').val() == 'store') {
+                }
+                else if ($('#slider_type').val() == 'store') {
                     $('.store').show();
                     $('.sliderlink').hide();
                     $('#store_id').attr('required', 'required');
                 }
             });
-        }
-
-        function storeType() {
-            $(document.body).on("change", "#slider_type", function() {
+        // }
+        // function storeType() {
+            $(document.body).on("change","#slider_type",function(){
                 if (this.value == 'store') {
                     $('.store').show();
                     $('.sliderlink').hide();
                     $('#sliderlink').removeAttr('required').val('');
-                } else if (this.value == 'link') {
+                }
+                else if (this.value == 'link') {
                     $('.sliderlink').show();
                     $('.store').hide();
-                    $('#link').attr('required', 'required');
+                    $('#link').attr('required', 'required'); 
                 }
-
+        
             });
-        }
+        // }
     </script>
-    <script>
+      <script>
         jQuery.validator.addMethod("regex", function(value, element) {
-            return this.optional(element) || /^[\w. ]+$/i.test(value);
+          return this.optional(element) || /^[\w. ]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
         $('.form-validate').validate({
-            rules: {
-                name: {
-                    required: true,
-                    regex: true
-                },
-                link: {
-                    url: true
-                },
-            }
+          rules: {
+            name: {
+              required: true,
+              regex: true
+            },
+            link:{
+                url: true
+            },
+          }
         });
-    </script>
+  </script>
 @endpush
