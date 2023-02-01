@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Jobs\SendInvitationMail;
+use App\Jobs\SendEmail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -118,7 +118,7 @@ class ReferController extends Controller
                 'email'=>$request->referral_email
             );
 
-            SendInvitationMail::dispatch($emailData);
+            SendEmail::dispatch($emailData);
 
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,

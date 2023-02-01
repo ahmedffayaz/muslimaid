@@ -3,17 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
+use App\Jobs\SendEmail;
 use App\Models\Network;
 use App\Models\ExitClick;
 use App\Models\SiteSetting;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
+use App\Models\EmailTemplate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use  Illuminate\Support\Facades\Response;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CommissionController extends Controller
 {
@@ -99,6 +101,28 @@ class CommissionController extends Controller
                 'user_cashback_id' => $commission->id,
                 'cashback_status_id' => $commission->status
             ]);
+
+            if ($click->user_id != 0) {
+                $emailTemplate = EmailTemplate::where('key', 'user_new_cashback_tracked')->first();
+
+                $filteredMessage = str_replace(
+                    ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{STORE}}', '{{AMOUNT}}'],
+                    [
+                        SiteSetting()['website_title'], url('/'),
+                        $commission->user->first_name . ' ' . $commission->user->last_name,
+                        $commission->user->email, $commission->store->name, $commission->amount
+                    ],
+                    $emailTemplate->message
+                );
+
+                $data = array(
+                    'subject' => $emailTemplate->subject,
+                    'email_message' => $filteredMessage,
+                    'email' => $commission->user->email
+                );
+
+                SendEmail::dispatch($data);
+            }
 
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,
