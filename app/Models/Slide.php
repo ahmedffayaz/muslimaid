@@ -9,9 +9,17 @@ class Slide extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slider_id','store_id', 'logo', 'banner', 'cashback_title' ,'description','order','slider_type','link'];
-
-
+    protected $fillable = [
+        'name',
+        'slider_id', 'store_id',
+        'logo',
+        'banner',
+        'cashback_title',
+        'description',
+        'order',
+        'slider_type',
+        'link',
+    ];
 
     public function slider()
     {
