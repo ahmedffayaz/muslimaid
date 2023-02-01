@@ -3,18 +3,11 @@
     @csrf
     @method('PUT')
     <div class="row g-4">
-        {{-- <div class="col-lg-12">
-            <div class="form-group">
-                <label class="form-label" for="default-06">Exit Click</label>
-                {{$commission->exit_click_id}} - {{$commission->exitClick->user->first_name}} {{$commission->exitClick->user->last_name}} - {{$commission->exitClick->store->name}}
-               
-            </div>
-        </div> --}}
         <div class="col-lg-6">
             <div class="form-group">
                 <label class="form-label" for="phone-no-1">Order Value</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="phone-no-1" value="{{$commission->order_value}}" name="order_value">
+                    <input type="text" class="form-control" step="1" min="0.0" id="phone-no-1" value="{{$commission->order_value}}" name="order_value">
                 </div>
             </div>
         </div>
@@ -22,7 +15,7 @@
             <div class="form-group">
                 <label class="form-label" for="phone-no-1">Network Commission</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="phone-no-1" value="{{$commission->network_commission}}" name="network_commission" >
+                    <input type="text" class="form-control" step="1" min="0.0" id="phone-no-1" value="{{$commission->network_commission}}" name="network_commission" >
                 </div>
             </div>
         </div>
@@ -31,7 +24,7 @@
             <div class="form-group">
                 <label class="form-label" for="phone-no-1">Cashback Amount</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="phone-no-1" value="{{$commission->amount}}" name="amount" >
+                    <input type="text" class="form-control"  step="1" min="0.0"  id="phone-no-1" value="{{$commission->amount}}" name="amount" >
                 </div>
             </div>
         </div>

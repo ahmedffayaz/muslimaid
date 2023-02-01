@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
-use Throwable;
 use App\Models\Blog;
 use App\Models\Store;
 use App\Models\Category;
@@ -187,7 +186,7 @@ class CategoryController extends Controller
             if ($request->input('banner_type') == 'upload') {
                 if ($request->has('banner_upload')) {
                     $imageName = Str::slug($request->input('name')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
-                    $request->logo_upload->storeAs('public/categories/images', $imageName);
+                    $request->banner_upload->storeAs('public/categories/images', $imageName);
 
                     $category->banner_upload = $this->imagePath . $imageName;
                     $category->update();
