@@ -15,30 +15,14 @@ class RegionSeeder extends Seeder
     public function run()
     {
         $regions = array(
-            array(
-                'name' => 'Africa'
-            ),
-            array(
-                'name' => 'Asia'
-            ),
-            array(
-                'name' => 'The Caribbean'
-            ),
-            array(
-                'name' => 'Central America'
-            ),
-            array(
-                'name' => 'North America'
-            ),
-            array(
-                'name' => 'Europe'
-            ),
-            array(
-                'name' => 'Oceania'
-            ),
-            array(
-                'name' => 'South America'
-            ),
+            array('name' => 'Africa'),
+            array('name' => 'Asia'),
+            array('name' => 'The Caribbean'),
+            array('name' => 'Central America'),
+            array('name' => 'North America'),
+            array('name' => 'Europe'),
+            array('name' => 'Oceania'),
+            array('name' => 'South America'),
         );
 
         Region::insert($regions);

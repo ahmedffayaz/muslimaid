@@ -9,7 +9,10 @@ class SeoRule extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['url', 'is_enabled'];
+    protected $fillable = [
+        'url',
+        'is_enabled',
+    ];
 
     public function ruleData()
     {

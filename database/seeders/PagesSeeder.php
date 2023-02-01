@@ -22,6 +22,9 @@ class PagesSeeder extends Seeder
         Schema::enableForeignKeyConstraints();
 
         $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\pages.csv');
+
+        $pages = [];
+
         $now = Carbon::now();
 
         foreach ($csvToArray as $page) {

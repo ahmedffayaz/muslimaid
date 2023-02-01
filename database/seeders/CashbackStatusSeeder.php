@@ -18,16 +18,17 @@ class CashbackStatusSeeder extends Seeder
         $faker = Faker::create();
 
         $statuses = [
-            ['status'=>'pending','details'=>'Assigned when the cashback is penidng'],
-            ['status'=>'failed','details'=>'Assigned when the cashback is failed'],
-            ['status'=>'confirmed','details'=>'Assigned when the cashback is confirmed'],
-            ['status'=> 'paid','details'=>'Assigned when the cashback is paid'],
-            ['status'=>'processing','details'=>'Assigned when the cashback is in process of cashout'],
-            ['status'=>'processing donation','details'=>'Assigned when the cashback is in process of processing donation'],
-            ['status'=>'donated','details'=>'Assigned when the cashback is in process of donated to organization']
+            ['status' => 'pending', 'details' => 'Assigned when the cashback is penidng'],
+            ['status' => 'failed', 'details' => 'Assigned when the cashback is failed'],
+            ['status' => 'confirmed', 'details' => 'Assigned when the cashback is confirmed'],
+            ['status' => 'paid', 'details' => 'Assigned when the cashback is paid'],
+            ['status' => 'processing', 'details' => 'Assigned when the cashback is in process of cashout'],
+            ['status' => 'processing donation', 'details' => 'Assigned when the cashback is in process of processing donation'],
+            ['status' => 'donated', 'details' => 'Assigned when the cashback is in process of donated to organization']
         ];
-        foreach($statuses as $status){
-            $st = CashbackStatus::create($status);
+
+        foreach ($statuses as $status) {
+            CashbackStatus::create($status);
         }
     }
 }

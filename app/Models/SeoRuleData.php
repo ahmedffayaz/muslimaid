@@ -8,5 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class SeoRuleData extends Model
 {
     use HasFactory;
-    protected $fillable = ['seo_rule_id', 'type', 'key', 'value'];
+
+    protected $fillable = [
+        'seo_rule_id',
+        'type',
+        'key',
+        'value',
+    ];
 }
