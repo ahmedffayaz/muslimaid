@@ -21,9 +21,16 @@
                                     <div class="card-head">
                                         <h5 class="card-title">User Info</h5>
                                     </div>
-                                    <form action="{{ route('admin.users.store') }}" class="gy-3 form-validate user-form is-alter" method="POST">
+                                    <form action="{{ route('admin.users.store') }}" enctype="multipart/form-data" class="gy-3 form-validate user-form is-alter" method="POST">
                                         @csrf
                                         <div class="row g-4">
+                                            <div class="col-lg-12 text-center">
+                                                <label class="form-label" for="pay-amount-1">Avatar</label>
+                                                <div class="profile-card__avatar text-center">
+                                                    <img src="{{asset('admin-dashboard/images/avatar.png')}}" id="image_avatar" width="100">
+                                                    <input type="file" class="form-control mt-3 w-50 mx-auto" name="avatar" accept="image/*" value="{{ old('avatar') ?? null }}"  onchange="readURL(this);" >
+                                                </div>
+                                            </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-label" for="full-name-1">First Name</label>
@@ -56,7 +63,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label class="form-label" for="pay-amount-1">Address</label>
                                                     <div class="form-control-wrap">
@@ -116,5 +123,18 @@
             var desc = document.querySelector('input[name=intro]');
             desc.value = quill.root.innerHTML;
         });
+
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#image_avatar')
+                        .attr('src', e.target.result)
+                        .css('border-radius','50%').css('height',100);
+                };
+
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     </script>
 @endpush

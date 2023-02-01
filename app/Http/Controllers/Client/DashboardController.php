@@ -91,17 +91,24 @@ class DashboardController extends Controller
             'lastname.required' => 'Last name is required.'
         ]);
 
+        $avatar_image = $user->avatar;
+        if ($request->hasFile('avatar')) {
+            $avatar_image = store_user_avatar($request->file('avatar') , $avatar_image);
+        }
+
         $user->update([
             'first_name' => $request->firstname,
             'last_name' => $request->lastname,
             'phone' => $request->phone,
             'address' => $request->address,
             'intro' => $request->intro,
+            'avatar' => $avatar_image
         ]);
         flash()->success('User updated successfully');
         return redirect()->back();
     }
 
+    
     /**
      * Remove the specified resource from storage.
      *
