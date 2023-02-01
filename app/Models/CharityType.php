@@ -10,17 +10,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class CharityType extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-    'title',
-    'status'
+        'title',
+        'status',
     ];
 
-    public function charities(){
-
+    public function charities()
+    {
         return $this->HasMany(Charity::class);
     }
-    public function cashouts(){
 
+    public function cashouts()
+    {
         return $this->HasMany(UserCashback::class);
     }
 }

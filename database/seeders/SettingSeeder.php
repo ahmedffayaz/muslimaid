@@ -77,19 +77,18 @@ class SettingSeeder extends Seeder
         );
 
         foreach ($settings as $key => $value) {
-            $set = SiteSetting::create([
+            SiteSetting::create([
                 'title' => $key,
                 'type' => str_replace([' ', '-', '.'], '_', strtolower($key)),
                 'value' => $value,
                 'default' => 1
-
             ]);
         }
 
         $networks = Network::all();
 
         foreach ($networks as $network) {
-            $imp = ImporterSetting::create([
+            ImporterSetting::create([
                 'network_id' => $network->id,
                 'import_stores' => 1,
                 'import_vouchers' => 1,
@@ -98,12 +97,12 @@ class SettingSeeder extends Seeder
             ]);
         }
 
-        $language = Language::create([
+        Language::create([
             'name' => 'English',
             'code' => 'en'
         ]);
 
-        $currency = Currency::create([
+        Currency::create([
             'name' => 'Pounds',
             'short_name' => 'GBP',
             'symbol' => '£'
