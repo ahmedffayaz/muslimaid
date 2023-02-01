@@ -6,14 +6,20 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 class StoreReview extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = ['store_id', 'user_id', 'review', 'rating', 'status'];
+    protected $fillable = [
+        'store_id',
+        'user_id',
+        'review',
+        'rating',
+        'status',
+    ];
 
-    public function store(){
+    public function store()
+    {
         return $this->belongsTo(Store::class);
     }
 
@@ -21,5 +27,4 @@ class StoreReview extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 }

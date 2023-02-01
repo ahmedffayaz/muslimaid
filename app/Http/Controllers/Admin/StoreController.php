@@ -13,10 +13,11 @@ use App\Models\StoreImage;
 use App\Models\StoreReview;
 use Illuminate\Support\Str;
 use App\Models\StoreAddress;
+use App\Models\StoreSeoData;
 use Illuminate\Http\Request;
 use App\Models\StoreCashback;
 use Illuminate\Http\Response;
-use App\Models\StoreSeoData;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
@@ -397,7 +398,7 @@ class StoreController extends Controller
                     'store_id' => $request->input('store_id'),
                     'category_id' => $category,
                 ]);
-            } 
+            }
         }
     }
 
@@ -452,20 +453,32 @@ class StoreController extends Controller
 
     public function createEditorPick(Request $request)
     {
-        foreach ($request->input('picks') as $pick) {
-            EditorPick::firstOrCreate(
-                [
-                    'category_id' => $request->input('category_id'),
-                    'store_id' => $pick,
-                ],
-                [
-                    'category_id' => $request->input('category_id'),
-                    'store_id' => $pick,
-                ]
-            );
+        try {
+            DB::beginTransaction();
+            foreach ($request->input('picks') as $pick) {
+                EditorPick::firstOrCreate(
+                    [
+                        'category_id' => $request->input('category_id'),
+                        'store_id' => $pick,
+                    ],
+                    [
+                        'category_id' => $request->input('category_id'),
+                        'store_id' => $pick,
+                    ]
+                );
+            }
+            DB::commit();
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'success' => 'Category updated'
+            ], JsonResponse::HTTP_OK);
+        } catch (Exception $exception) {
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $exception->getMessage() . 'Error while updating the category'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-        flash()->success('Category updated');
-        return redirect()->back();
     }
 
     public function overrideCategories(Request $request, Store $store)

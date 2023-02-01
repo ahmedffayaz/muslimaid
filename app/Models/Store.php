@@ -12,87 +12,100 @@ class Store extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['network_id',
-     'name',
-     'slug',
-     'advertiser_id',
-     'tracking_url',
-     'store_url',
-     'description',
-     'terms_conditions',
-     'extra_info',
-     'network_status',
-     'status_description',
-     'override_cashback',
-     'override_categories',
-     'feature_sidebar',
-     'feature_homepage',
-     'editor_pick',
-     'custom_cashback_percentage',
-     'status',
-     'is_fake',
-     'address',
-     'city',
-     'postal_code',
-     'latitude',
-     'longitude'
+    protected $fillable = [
+        'network_id',
+        'name',
+        'slug',
+        'advertiser_id',
+        'tracking_url',
+        'store_url',
+        'description',
+        'terms_conditions',
+        'extra_info',
+        'network_status',
+        'status_description',
+        'override_cashback',
+        'override_categories',
+        'feature_sidebar',
+        'feature_homepage',
+        'editor_pick',
+        'custom_cashback_percentage',
+        'status',
+        'is_fake',
+        'address',
+        'city',
+        'postal_code',
+        'latitude',
+        'longitude',
     ];
 
-    public function network(){
-
+    public function network()
+    {
         return $this->belongsTo(Network::class);
     }
+
     public function categories()
     {
         return $this->belongsToMany(Category::class);
     }
-    public function cashback(){
 
-        return $this->hasOne(StoreCashback::class)->where('default',1);
+    public function cashback()
+    {
+        return $this->hasOne(StoreCashback::class)->where('default', 1);
     }
-    public function cashbacks(){
 
+    public function cashbacks()
+    {
         return $this->hasMany(StoreCashback::class);
     }
-    public function images(){
 
+    public function images()
+    {
         return $this->hasMany(StoreImage::class);
     }
-    public function logo(){
 
-        return $this->images()->where('title','logo');
+    public function logo()
+    {
+        return $this->images()->where('title', 'logo');
     }
-    public function vouchers(){
 
+    public function vouchers()
+    {
         return $this->hasMany(Voucher::class);
     }
-    public function reviews(){
 
+    public function reviews()
+    {
         return $this->hasMany(StoreReview::class)->orderBy('rating', 'DESC');
     }
-    public function activeReviews(){
 
+    public function activeReviews()
+    {
         return $this->reviews()->where('status', 'active');
     }
-    public function commissions(){
 
+    public function commissions()
+    {
         return $this->hasMany(UserCashback::class);
     }
-    public function editorPicks(){
+
+    public function editorPicks()
+    {
         return $this->hasMany(EditorPick::class);
     }
-    public function clicks(){
+    
+    public function clicks()
+    {
         return $this->hasMany(ExitClick::class);
     }
 
     public function storeRuleData()
     {
-        return $this->hasMany(StoreSeoData::class,'store_id','id');
+        return $this->hasMany(StoreSeoData::class, 'store_id', 'id');
     }
 
     public function storeAddress()
     {
-        return $this->hasMany(StoreAddress::class,'store_id','id');
+        return $this->hasMany(StoreAddress::class, 'store_id', 'id');
     }
-
 }

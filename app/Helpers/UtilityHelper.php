@@ -262,6 +262,7 @@ function getEvents()
     $events = Event::where('status', 'active')->get();
     return $events;
 }
+
 function getEventsForMenu()
 {
     $events = Event::where('menu_status', 'active')->get();
@@ -489,7 +490,10 @@ function getImageUrl($url)
  */
 function isFileExist($url)
 {
-    $file = file_exists(public_path(parse_url($url)['path']));
+    $file = '';
+    if (!empty(parse_url($url)['path'])) {
+        $file = file_exists(public_path(parse_url($url)['path']));
+    }
     return $file;
 }
 
@@ -509,6 +513,20 @@ function dbDate($date)
 function convertDateFormat($date)
 {
     return Carbon::parse($date)->format('m/d/Y');
+}
+
+/**
+ * Get banner image if not exist show default
+ */
+function getBannerImageUrl($url, $type = NULL, $row = null)
+{
+    $defaultBanner = asset('frontend/images/banners/categories/cashback.png');
+
+    if (empty($url) || (!empty($url) && !isFileExist($url)) || ($row && $type && $row->banner_type != $type)) {
+        return $defaultBanner;
+    }
+
+    return asset(parse_url($url)['path']);
 }
 
 function emailTemplate($key, $details, $filteredMessage = NULL, $requestFilteredMessage = NULL)
@@ -539,4 +557,25 @@ function emailTemplate($key, $details, $filteredMessage = NULL, $requestFiltered
         'message' => $filteredAdminMessage,
         'subject' => $subject
     );
+}
+
+function csvToArray($path)
+{
+    try {
+        $header = null;
+        $csvToArray = [];
+
+        if (($handle = fopen(convertPathForOS(base_path($path)), 'r')) !== false) {
+            while (($row = fgetcsv($handle, null, ',')) !== false) {
+                if (!$header) $header = $row;
+                else $csvToArray[] = array_combine($header, $row);
+            }
+
+            fclose($handle);
+        }
+
+        return $csvToArray;
+    } catch (Exception $e) {
+        return [];
+    }
 }
