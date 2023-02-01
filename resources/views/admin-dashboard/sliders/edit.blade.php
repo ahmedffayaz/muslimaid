@@ -14,18 +14,19 @@
                             </div><!-- .nk-block-head-content -->
                             <div class="nk-block-head-content">
                                 <div class="toggle-wrap nk-block-tools-toggle">
-                                    <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1"
-                                        data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
+                                    <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
                                             <li class="nk-block-tools-opt">
-                                                <a href="#" data-toggle="modal" data-target="#slide-modal" class="btn btn-primary">
+                                                <a href="#" id="slide-modal" class="btn btn-primary">
                                                     <em class="icon ni ni-plus"></em>
                                                     <span>Add Slide</span>
                                                 </a>
                                             </li>
                                         </ul>
+                                        <input type="hidden" name="slider_id" id="slider_id" value="{{ $slider->id }}">
                                     </div>
+
                                 </div><!-- .toggle-wrap -->
                             </div><!-- .nk-block-head-content -->
                         </div><!-- .nk-block-between -->
@@ -37,24 +38,22 @@
                                 <div class="col-sm-6 col-lg-4 col-xxl-3" id="slide_{{ $slide->id }}" style="cursor: move;">
                                     <div class="card h-100">
                                         @if ($slide->banner == 'default1.png' || $slide->banner == 'default2.png' || $slide->banner == 'default3.png')
-                                            <img src="{{ asset('frontend/images/slides/' . $slide->banner) }}"
-                                                class="card-img-top" alt="" style="height:200px">
+                                            <img src="{{ asset('frontend/images/slides/' . $slide->banner) }}" class="card-img-top" alt="" style="height:200px">
                                         @else
-                                            <img src="{{ asset('storage/slider/slides/images/' . $slide->banner) }}"
-                                                class="card-img-top" alt="" style="height:200px">
+                                            <img src="{{ asset('storage/slider/slides/images/' . $slide->banner) }}" class="card-img-top" alt="" style="height:200px">
                                         @endif
                                         <div class="card-inner">
                                             <div class="project">
                                                 <div class="project-head">
                                                     <span class="project-title">
                                                         <div class="project-info">
-                                                            <h6 class="title mb-2">{{ $slide->name }}</h6>
+                                                            <h6 class=" mb-2">{{ $slide->name }}</h6>
                                                             @if ($slide->logo == 'default1.png' || $slide->logo == 'default2.png' || $slide->logo == 'default3.png')
-                                                                <img src="{{ asset('frontend/images/slides/logo/' . $slide->logo) }}"
-                                                                    class="float-right" alt="" style="max-height: 50px">
+                                                                <img src="{{ asset('frontend/images/slides/logo/' . $slide->logo) }}" class="float-right" alt=""
+                                                                    style="max-height: 50px">
                                                             @else
-                                                                <img src="{{ asset('storage/slider/slides/images/' . $slide->logo) }}"
-                                                                    class="float-right" alt="" style="max-height: 50px">
+                                                                <img src="{{ asset('storage/slider/slides/images/' . $slide->logo) }}" class="float-right" alt=""
+                                                                    style="max-height: 50px">
                                                             @endif
                                                         </div>
                                                     </span>
@@ -67,7 +66,9 @@
                                                                 @if ($slide->store->cashback->type == 'fixed')
                                                                     {{ $slide->store->cashback->currency }}
                                                                 @endif
-                                                                {{ $slide->store->cashback->sale_commission }}@if ($slide->store->cashback->type == 'percentage')%@endif Cashback
+                                                                {{ $slide->store->cashback->sale_commission }}@if ($slide->store->cashback->type == 'percentage')
+                                                                    %
+                                                                @endif Cashback
                                                             </p>
                                                         @endif
                                                     @endif
@@ -86,11 +87,12 @@
                                                             <em class="icon ni ni-edit"></em>
                                                         </a>
                                                         @if (count($slider->slides) > 1)
-                                                            <a class="btn btn-danger btn-sm text-white" onclick="$('#delete-slide-{{ $slide->id }}').submit();" style="cursor: pointer">
+                                                            <a class="btn btn-danger btn-sm text-white" onclick="$('#delete-slide-{{ $slide->id }}').submit();"
+                                                                style="cursor: pointer">
                                                                 <em class="icon ni ni-trash"></em>
                                                             </a>
-                                                            <form action="{{ route('admin.slides.destroy', $slide) }}"
-                                                                id="delete-slide-{{ $slide->id }}" method="POST" class="m-0">
+                                                            <form action="{{ route('admin.slides.destroy', $slide) }}" id="delete-slide-{{ $slide->id }}" method="POST"
+                                                                class="m-0">
                                                                 @method('DELETE')
                                                                 @csrf
                                                             </form>
@@ -108,129 +110,33 @@
             </div>
         </div>
     </div>
-    <!-- @@ Create Slide Modal @e -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="slide-modal">
-        <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content">
-                <div class="modal-header align-center">
-                    <div class="nk-file-title">
-                        <div class="nk-file-name">
-                            <div class="nk-file-name-text"><span class="title">Add new slide</span></div>
-                        </div>
-                    </div>
-                    <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
-                </div>
-                <div id="" class=" p-4">
-                    <form action="{{ route('admin.slides.store') }}" class="gy-3 form-validate is-alter category_form"
-                        method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" name="slider_id" value="{{ $slider->id }}">
-                        <div class="row g-4">
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="form-label" for="full-name-1">Slide name</label>
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control" id="full-name-1" name="name" value="" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label class="form-label" for="slider_type">Slider Type</label>
-                                    <div class="form-control-wrap ">
-                                        <div class="">
-                                            <select class="form-control form-select" id="slider_type" name="slider_type" required data-search="on">
-                                                    <option value="link">Link</option>
-                                                    <option value="store">Store</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 store">
-                                <div class="form-group">
-                                    <label class="form-label" for="store_id">Store</label>
-                                    <div class="form-control-wrap ">
-                                        <div class="">
-                                            <select class="form-control form-select"  name="store_id" id="store_id" required data-search="on">
-                                                @foreach ($stores as $store)
-                                                <option value="">Select store</option>
-                                                    <option value="{{ $store->id }}">{{ $store->id }} -
-                                                        {{ $store->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 sliderlink">
-                                <div class="form-group">
-                                    <label class="form-label" for="link">Link</label>
-                                    <input name="link" id="link" class="form-control" value=""  required>
-
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="card">
-                                    <label class="form-label" for="phone-no-1">Description</label>
-                                    <textarea name="description" class="form-control" rows="5" required></textarea>
-
-                                </div>
-                            </div>
-                            <div class="col-lg-6 logo_upload">
-                                <div class="form-group">
-                                    <label class="form-label" for="logo">Logo</label>
-                                    <div class="form-control-wrap">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" name='logo' id="logo">
-                                            <label class="custom-file-label" for="logo">Choose file</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-6 banner_upload">
-                                <div class="form-group">
-                                    <label class="form-label" for="banner">Banner</label>
-                                    <div class="form-control-wrap">
-                                        <div class="custom-file">
-                                            <input type="file" class="custom-file-input" name="banner" id="banner" required>
-                                            <label class="custom-file-label" for="banner">Choose file</label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <button type="submit" class="btn btn-lg btn-primary">Save</button>
-                                </div>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div><!-- .modal-content -->
-        </div><!-- .modla-dialog -->
-    </div><!-- .modal -->
-    <!-- @@ Edit Slide Modal @e -->
-    <div class="modal fade" tabindex="-1" role="dialog" id="edit-slide-modal">
-        <div class="modal-dialog modal-md" role="document">
-            <div class="modal-content">
-                <div class="modal-header align-center">
-                    <div class="nk-file-title">
-                        <div class="nk-file-name">
-                            <div class="nk-file-name-text"><span class="title">Edit new slide</span></div>
-                        </div>
-                    </div>
-                    <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
-                </div>
-                <div id="edit-slide-form" class=" p-4">
-                </div>
-            </div><!-- .modal-content -->
-        </div><!-- .modla-dialog -->
-    </div><!-- .modal -->
+    <x-admin-dashboard.modal modalSize="modal-lg" headerAlignment="align-center" formWrapperClass="" />
 @endsection
 @push('scripts')
     <script>
         $(document).ready(function() {
+            $(document).on('click', '#slide-modal', function(event) {
+                event.preventDefault();
+                slider_id = $('#slider_id').val();
+                $.ajax({
+                    url: "{{ route('admin.slides.create') }}",
+                    type: 'GET',
+                    data: {
+                        slider_id: slider_id
+                    },
+                    success: function(response) {
+                        $('.title').text('Create New Slider');
+                        $('#form-wrapper').html(response);
+                        $('#save-btn').text('Create');
+                        $('#modal').modal('show');
+                        initializeSelect2();
+                        linkType();
+                        storeType();
+                        validation();
+                    }
+                });
+            });
+
             $(document).on('click', '.edit-slide', function(event) {
                 event.preventDefault();
                 pageurl = $(this).attr('href');
@@ -241,12 +147,15 @@
                     data: {
                         _token: _token
                     },
-                    success: function(data) {
-                        $('#edit-slide-modal').modal('show');
-                        $('#edit-slide-form').html(data);
+                    success: function(response) {
+                        $('.title').text('Edit Slider');
+                        $('#form-wrapper').html(response);
+                        $('#save-btn').text('Edit');
+                        $('#modal').modal('show');
                         initializeSelect2();
                         linkType();
                         storeType();
+                        validation();
                     }
                 });
             });
@@ -266,8 +175,6 @@
             $("#sortable").sortable({
                 update: function(event, ui) {
                     var data = $(this).sortable('serialize');
-                    console.log(data);
-                    // POST to server using $.post or $.ajax
                     $.ajax({
                         data: data,
                         type: 'POST',
@@ -286,51 +193,55 @@
         });
     </script>
     <script>
-        // function linkType() {
+        function linkType() {
             $(document).ready(function() {
                 if ($('#slider_type').val() == 'link') {
                     $('.sliderlink').show();
                     $('.store').hide();
                     $('#store_id').removeAttr('required').val('');
-                }
-                else if ($('#slider_type').val() == 'store') {
+                } else if ($('#slider_type').val() == 'store') {
+                    $('#slider_type').val();
                     $('.store').show();
                     $('.sliderlink').hide();
-                    $('#store_id').attr('required', 'required');
+                     $('#store_id').attr('required', 'required');
                 }
             });
-        // }
-        // function storeType() {
-            $(document.body).on("change","#slider_type",function(){
+        }
+
+        function storeType() {
+            $(document.body).on("change", "#slider_type", function() {
                 if (this.value == 'store') {
                     $('.store').show();
                     $('.sliderlink').hide();
-                    $('#sliderlink').removeAttr('required').val('');
-                }
-                else if (this.value == 'link') {
+                    $('#link').removeAttr('required').val('');
+                    $("#store_id").val("").trigger('change');
+                } else if (this.value == 'link') {
                     $('.sliderlink').show();
                     $('.store').hide();
-                    $('#link').attr('required', 'required'); 
+                    $('#link').attr('required', 'required');
                 }
-        
-            });
-        // }
-    </script>
-      <script>
-        jQuery.validator.addMethod("regex", function(value, element) {
-          return this.optional(element) || /^[\w. ]+$/i.test(value);
-        }, "Letters, numbers, and underscores only please");
 
-        $('.form-validate').validate({
-          rules: {
-            name: {
-              required: true,
-              regex: true
-            },
-            link:{
-                url: true
-            },
-          }
-        });
-  </script>
+            });
+        }
+    </script>
+    <script>
+        function validation() {
+            $('#form-validate').validate({
+                errorClass: 'invalid-feedback d-block',
+                rules: {
+                    name: {
+                        required: true
+                    },
+                    link: {
+                        url: true
+                    },
+                },
+                submitHandler: function(form) {
+                    if ($(form).valid())
+                    form.submit();
+                    return false;
+                }
+            });
+        }
+    </script>
 @endpush
