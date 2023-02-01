@@ -7,23 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Store;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 class Network extends Model
 {
-    use HasFactory , SoftDeletes;
+    use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'description', 'click_ref', 'logo'];
+    protected $fillable = [
+        'name',
+        'description',
+        'click_ref',
+        'logo',
+    ];
 
-
-    public function stores(){
-
+    public function stores()
+    {
         return $this->hasMany(Store::class);
     }
 
     public function importerSetting()
     {
         return $this->hasOne(ImporterSetting::class);
-
     }
-
 }

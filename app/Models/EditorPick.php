@@ -9,12 +9,19 @@ class EditorPick extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['category_id','store_id','priority'];
+    protected $fillable = [
+        'category_id',
+        'store_id',
+        'priority',
+    ];
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class);
     }
-    public function store(){
+
+    public function store()
+    {
         return $this->belongsTo(Store::class);
     }
 }

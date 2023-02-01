@@ -8,12 +8,31 @@ use App\Models\Store;
 use App\Models\SiteCategory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-
 class Category extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['name', 'is_map_enable', 'slug', 'description', 'sort', 'logo_type', 'logo_upload', 'logo_link', 'banner_type', 'banner_upload', 'banner_link', 'status', 'parent_id', 'mapped_to', 'network_id', 'feature_homepage', 'feature_sidebar', 'meta_description', 'meta_keyword'];
+    protected $fillable = [
+        'name',
+        'is_map_enable',
+        'slug',
+        'description',
+        'sort',
+        'logo_type',
+        'logo_upload',
+        'logo_link',
+        'banner_type',
+        'banner_upload',
+        'banner_link',
+        'status',
+        'parent_id',
+        'mapped_to',
+        'network_id',
+        'feature_homepage',
+        'feature_sidebar',
+        'meta_description',
+        'meta_keyword',
+    ];
 
     public function stores()
     {

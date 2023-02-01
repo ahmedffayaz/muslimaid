@@ -34,10 +34,5 @@ class NetworkSeeder extends Seeder
 				'logo' => 'awin-logo.svg',
 			],
 		]);
-
-		//slice
-		// $network->token = '1jkkfyp5r28p43ghpsx4p1h588';
-		// $network->requestor_cid = '5499477';
-		// $network->website_id = '100179843';
 	}
 }
