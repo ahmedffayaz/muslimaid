@@ -20,7 +20,8 @@ class MenuSeeder extends Seeder
             array('id' => '2','name' => 'Footer Menu-column 1','title' => 'About','created_at' => '2021-07-14 05:07:05','updated_at' => '2021-07-14 05:07:05'),
             array('id' => '3','name' => 'Footer Menu-column 2','title' => 'Here to help','created_at' => '2021-07-14 05:10:43','updated_at' => '2021-07-14 05:10:43'),
             array('id' => '4','name' => 'Footer Menu-column 3','title' => 'Hot offers','created_at' => '2021-07-14 05:10:54','updated_at' => '2021-07-14 05:10:54'),
-            array('id' => '5','name' => 'Footer Menu-column 4','title' => 'Policies','created_at' => '2021-07-14 05:11:06','updated_at' => '2021-07-14 05:11:06')
+            array('id' => '5','name' => 'Footer Menu-column 4','title' => 'Policies','created_at' => '2021-07-14 05:11:06','updated_at' => '2021-07-14 05:11:06'),
+            array('id' => '6','name' => 'Footer Menu-column 5','title' => 'Legal','created_at' => '2021-07-14 05:11:06','updated_at' => '2021-07-14 05:11:06')
           );
 
 
@@ -55,6 +56,12 @@ class MenuSeeder extends Seeder
             array('id' => '24','label' => 'Mobile App','link' => '/pages/our-apps','parent' => '0','sort' => '3','class' => NULL,'menu' => '5','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
             array('id' => '25','label' => 'Browser extension policy','link' => '/pages/browser-extension-policy','parent' => '0','sort' => '3','class' => NULL,'menu' => '5','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
             array('id' => '26','label' => 'Cashback A.F.R.O.B.O.T','link' => '/pages/extensions','parent' => '0','sort' => '4','class' => NULL,'menu' => '3','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
+            array('id' => '27','label' => 'Appointed Representative','link' => '/pages/appointed-representative','parent' => '0','sort' => '0','class' => NULL,'menu' => '6','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
+            array('id' => '28','label' => 'Modern Slavery Extension','link' => '/pages/modern-slavery-extension','parent' => '0','sort' => '1','class' => NULL,'menu' => '6','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
+            array('id' => '29','label' => 'Cookies Policy About Us','link' => '/pages/cookies-policy-about-us','parent' => '0','sort' => '2','class' => NULL,'menu' => '6','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
+            array('id' => '30','label' => 'Terms & Condition','link' => '/pages/terms-condition','parent' => '0','sort' => '3','class' => NULL,'menu' => '6','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
+            array('id' => '31','label' => 'Refer and Earn','link' => '/pages/refer-and-earn','parent' => '0','sort' => '4','class' => NULL,'menu' => '6','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
+            array('id' => '32','label' => 'Help','link' => '/pages/help','parent' => '0','sort' => '5','class' => NULL,'menu' => '6','depth' => '0','created_at' => '2022-12-28 12:25:54','updated_at' => '2022-12-28 12:25:54'),
         );
 
           foreach ($admin_menu_items as $item) {
