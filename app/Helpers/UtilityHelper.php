@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use App\Models\EmailTemplate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
@@ -512,22 +513,20 @@ function getBannerImageUrl($url, $type = NULL, $row = null)
     return asset(parse_url($url)['path']);
 }
 
-function emailTemplate($key, $details, $filteredMessage = NULL, $requestFilteredMessage = NULL)
+function emailTemplate($key, $details, $filteredMessage = [], $requestFilteredMessage = [])
 {
     $emailTemplate = EmailTemplate::where('key', $key)->first();
 
+    $variables = ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}'];
+    $variablesMerge = array_merge($variables, $filteredMessage);
+
+    $data = [SiteSetting()['website_title'], url('/'), $details['name'], $details['email'], $details['subject'], $details['message']];
+    $dataMerge = array_merge($data, $requestFilteredMessage);
+
     if ($filteredMessage && $requestFilteredMessage) {
-        $filteredAdminMessage  = str_replace(
-            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', $filteredMessage, '{{MESSAGE}}'],
-            [SiteSetting()['website_title'], url('/'), $details['name'], $details['email'], $details['subject'], $requestFilteredMessage, $details['message']],
-            $emailTemplate->message
-        );
+        $filteredAdminMessage  = str_replace($variablesMerge, $dataMerge, $emailTemplate->message);
     } else {
-        $filteredAdminMessage  = str_replace(
-            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}'],
-            [SiteSetting()['website_title'], url('/'), $details['name'], $details['email'], $details['subject'], $details['message']],
-            $emailTemplate->message
-        );
+        $filteredAdminMessage  = str_replace($variables, $data, $emailTemplate->message);
     }
 
     $subject = str_replace(

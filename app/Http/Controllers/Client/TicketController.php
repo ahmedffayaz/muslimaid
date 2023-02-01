@@ -2,13 +2,15 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use App\Models\Ticket;
 use App\Models\ExitClick;
+use Illuminate\Support\Str;
 use App\Models\UserCashback;
+use Illuminate\Http\Request;
+use App\Jobs\SendEmailToUser;
 use App\Models\EmailTemplate;
+use App\Jobs\SendEmailToAdmin;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 
@@ -140,6 +142,7 @@ class TicketController extends Controller
         $click_id = $request->input('click_id');
         $click = ExitClick::where('id', $click_id)->first();
         $claim_type = $request->input('claim_type');
+        $message = 'l';
         $claim = new Ticket;
         $claim->store_id = $click->store_id;
         $claim->user_id = $click->user_id;
@@ -170,40 +173,20 @@ class TicketController extends Controller
 
     public function sendEmailNotification(Ticket $ticket)
     {
-        $user_email_template = EmailTemplate::where('key', 'user_new_claim')->first();
-        $admin_email_template = EmailTemplate::where('key', 'admin_new_claim')->first();
+        $userEmailTemplateKey = 'user_new_claim';
+        $adminEmailTemplateKey= 'admin_new_claim';
+        $filterMessageVariables = ['{{TICKET_ID}}', '{{CLAIMTYPE}}'];
+        $requestFilteredMessage = [$ticket->ticket_id, $ticket->claim_type];
 
-        $filtered_user_message  = str_replace(
-            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{TICKET_ID}}', '{{CLAIMTYPE}}', '{{MESSAGE}}'],
-            [SiteSetting()['website_title'], url('/'), $ticket->user->first_name . ' ' . $ticket->user->last_name, $ticket->user->email, $ticket->ticket_id, $ticket->claim_type, $ticket->message],
-            $user_email_template->message
-        );
-        $filtered_admin_message  = str_replace(
-            ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{TICKET_ID}}', '{{CLAIMTYPE}}', '{{MESSAGE}}'],
-            [SiteSetting()['website_title'], url('/'), $ticket->user->first_name . ' ' . $ticket->user->last_name, $ticket->user->email, $ticket->ticket_id, $ticket->claim_type, $ticket->message],
-            $admin_email_template->message
-        );
-
-        $email_data = array(
-            'name' =>  $ticket->user->first_name . ' ' . $ticket->user->last_name,
+        $subject = ['subject' => null];
+        $data = [
+            'name' => $ticket->user->first_name . ' ' . $ticket->user->last_name,
             'email' => $ticket->user->email,
-            'email_message' => $filtered_user_message,
-            'subject' => $user_email_template->subject
-        );
-        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-            $message->to($email_data['email'], $email_data['name'])
-                ->subject($email_data['subject']);
-        });
+            'message' => $ticket->message,
+        ];
+        $data = array_merge($data, $subject);
 
-        $email_data = array(
-            'name' =>  $ticket->user->first_name . ' ' . $ticket->user->last_name,
-            'email' => $ticket->user->email,
-            'email_message' => $filtered_admin_message,
-            'subject' => $admin_email_template->subject
-        );
-        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-            $message->to('admin@trs.com', $email_data['name'])
-                ->subject($email_data['subject']);
-        });
+        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+        SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
     }
 }

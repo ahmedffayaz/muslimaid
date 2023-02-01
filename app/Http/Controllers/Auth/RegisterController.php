@@ -7,11 +7,9 @@ use App\Models\User;
 use App\Traits\UserBonus;
 use Illuminate\Http\Request;
 use App\Jobs\SendEmailToUser;
-use App\Models\EmailTemplate;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -104,7 +102,9 @@ class RegisterController extends Controller
 
         // Welcome email
         $userEmailTemplateKey = 'user_welcome';
-        SendEmailToUser::dispatch($userEmailTemplateKey, $data);
+        $filterMessageVariables = [];
+        $requestFilteredMessage = [];
+        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
 
         //send email to user to verify email address
         dispatch(new \App\Jobs\SendEmailJob($user));
