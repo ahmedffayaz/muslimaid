@@ -8,11 +8,9 @@ use Illuminate\Support\Str;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Jobs\SendEmailToUser;
-use App\Models\EmailTemplate;
 use App\Jobs\SendEmailToAdmin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Mail;
 
 class TicketController extends Controller
 {

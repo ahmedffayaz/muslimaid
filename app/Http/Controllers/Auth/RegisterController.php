@@ -6,9 +6,9 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Traits\UserBonus;
 use Illuminate\Http\Request;
-use App\Jobs\SendEmailToUser;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Traits\WelcomeEmail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Session;
@@ -28,8 +28,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
-    use UserBonus;
+    use RegistersUsers, UserBonus, WelcomeEmail;
 
     /**
      * Where to redirect users after registration.
@@ -95,16 +94,13 @@ class RegisterController extends Controller
         $bonusStatus = 1;
 
         $this->welcomBonus($user, $bonusStatus);
+
+        // Send welcome email to user
         $data['name'] = $data['firstname'];
         unset($data['firstname']);
         $merge_subject = ['subject' => null, 'message' => null];
         $data = array_merge($data, $merge_subject);
-
-        // Welcome email
-        $userEmailTemplateKey = 'user_welcome';
-        $filterMessageVariables = [];
-        $requestFilteredMessage = [];
-        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+        $this->welcomeEmail($data);
 
         //send email to user to verify email address
         dispatch(new \App\Jobs\SendEmailJob($user));

@@ -6,9 +6,9 @@ use Exception;
 use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Mail;
+use App\Jobs\SendInvitationMail;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -107,21 +107,18 @@ class ReferController extends Controller
         }
 
         try {
-            $email_template = EmailTemplate::where('key','referral_link')->first();
-            $link = url('').'/register-form?referby='.base64_encode($user =\Auth::user()->id);
+            $emailTemplate = EmailTemplate::where('key','referral_link')->first();
+            $link = url('').'/register-form?referby='.base64_encode($user = Auth::user()->id);
             $button = '<a href="'.$link.'" target="_blank"><input type="button" class="btn btn-success" value="Register"></a>';
-            $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{BUTTON}}'],[SiteSetting()['website_title'], url('/'), $button],$email_template->message );
+            $filteredMessage  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{BUTTON}}'],[SiteSetting()['website_title'], url('/'), $button],$emailTemplate->message );
 
-            $email_data = array(
-                'subject'=>$email_template->subject,
-                'email_message'=>$filtered_message,
+            $emailData = array(
+                'subject'=>$emailTemplate->subject,
+                'email_message'=>$filteredMessage,
                 'email'=>$request->referral_email
             );
 
-            Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-                $message->to($email_data['email'])
-                    ->subject($email_data['subject']);
-            });
+            SendInvitationMail::dispatch($emailData);
 
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,
