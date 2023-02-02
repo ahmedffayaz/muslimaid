@@ -102,7 +102,6 @@
                 @can('view users')
                 <div class="dropdown">
                     <a href="{{route('admin.users.index')}}"  class="dropbtn user-name"><em class="icon ni ni-users-fill"></em> Users</a>
-
                 </div>
                 @endcan
                 <div class="dropdown">
@@ -257,6 +256,11 @@
                         </div>
                     </div>
                 </div>
+                @if(Auth::user()->hasRole('admin'))
+                <div class="dropdown">
+                    <a href="{{url('docs')}}"  class="dropbtn user-name"><em class="icon ni ni-file-doc"></em> API Docs</a>
+                </div>
+                @endif
 
 
             </div><!-- .nk-header-news -->
