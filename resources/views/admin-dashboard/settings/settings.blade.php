@@ -428,8 +428,8 @@
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="mail_encryption" value="{{ $settings['mail_encryption'] }}"
-                                                                        placeholder="encryption">
+                                                                    <input type="text" class="form-control" name="mail_encryption"
+                                                                        value="{{ $settings['mail_encryption'] }}" placeholder="encryption">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -907,7 +907,7 @@
                                         <div class="tab-pane" id="tabItem10">
                                             <div class="nk-block">
                                                 <div class="nk-block-head">
-                                                    <h5 class="title">Google Recaptcha key Settings</h5>
+                                                    <h5 class="title">Google Recaptcha Settings</h5>
                                                 </div><!-- .nk-block-head -->
                                                 <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
                                                     @csrf
@@ -915,29 +915,35 @@
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
-                                                                <label class="form-label">Site Key <em class="icon ni ni-question form-label" data-toggle="tooltip"
-                                                                        data-placement="top" title=" Enter google map API key."></em></label>
+                                                                <label class="form-label">
+                                                                    Site Key
+                                                                    <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
+                                                                        title="Enter Google Recaptcha site key."></em>
+                                                                </label>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="site_key" value=""
-                                                                        placeholder="Recaptcha Site Key">
+                                                                    <input type="text" class="form-control" name="g_recaptcha_site_key"
+                                                                        value="{{ $settings['g_recaptcha_site_key'] ?? '' }}" placeholder="Recaptcha Site Key">
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
-                                                                <label class="form-label">Secret Key <em class="icon ni ni-question form-label" data-toggle="tooltip"
-                                                                        data-placement="top" title=" Enter google map API key."></em></label>
+                                                                <label class="form-label">
+                                                                    Secret Key
+                                                                    <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
+                                                                        title="Enter Google Recaptcha secret key."></em>
+                                                                </label>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="secret" value=""
-                                                                        placeholder="Recaptcha Secret Key">
+                                                                    <input type="text" class="form-control" name="g_recaptcha_secret_key"
+                                                                        value="{{ $settings['g_recaptcha_secret_key'] ?? '' }}" placeholder="Recaptcha Secret Key">
                                                                 </div>
                                                             </div>
                                                         </div>
