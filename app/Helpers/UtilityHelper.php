@@ -274,24 +274,6 @@ function getCategories()
     $categories = Category::where('parent_id', 0)->orderBy('name', 'ASC')->get();
     return $categories;
 }
-function getCategoryStore($store)
-{
-    $show_store = 0;
-    foreach ($store->categories as $category){
-        foreach ($category->childs as $child){
-            if(in_array($child->id, $store->categories->pluck('id')->toArray())){
-                if($child->status == 1){
-                    $show_store = 1;
-                    break;
-                }
-            }
-        }
-        if($show_store == 1){
-            break;
-        }
-    }
-    return $show_store;
-}
 function SiteSetting()
 {
     return SiteSetting::latest()->get()->pluck('value', 'type');
