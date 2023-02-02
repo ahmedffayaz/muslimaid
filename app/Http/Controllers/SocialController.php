@@ -6,15 +6,14 @@ use Socialite;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Traits\UserBonus;
-use App\Models\EmailTemplate;
+use App\Traits\WelcomeEmail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
 
 class SocialController extends Controller
 {
-    use UserBonus;
+    use UserBonus, WelcomeEmail;
 
     public function redirect($provider)
     {
@@ -68,21 +67,10 @@ class SocialController extends Controller
                 $this->referralBonus($user->referred_by, $bonusStatus);
             }
 
-            $email_template = EmailTemplate::where('key', 'user_welcome')->first();
+            // Send welcome email to user
+            $data = ['name' => $fisrt_name[0], 'email' => $userSocial->getEmail(), 'subject' => null, 'message' => null];
+            $this->welcomeEmail($data);
 
-            $filtered_message  = str_replace(['%SITE_TITLE%', '%SITE_URL%', '%NAME%', '%EMAIL%'], [SiteSetting()['website_title'], url('/'), $fisrt_name[0], $userSocial->getEmail()], $email_template->message);
-
-            $email_data = array(
-                'name' =>  $fisrt_name[0],
-                'email' => $userSocial->getEmail(),
-                'email_message' => $filtered_message,
-                'subject' => $email_template->subject
-            );
-
-            Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-                $message->to($email_data['email'], $email_data['name'])
-                    ->subject($email_data['subject']);
-            });
             Auth::login($user);
             Session::forget('refCode');
             Session::flash('welcome', 'welcome message');

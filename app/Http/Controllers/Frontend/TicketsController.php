@@ -2,18 +2,16 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use App\Models\Ticket;
 use App\Models\Language;
 use App\Mailers\AppMailer;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\EmailTemplate;
+use App\Jobs\SendEmailToUser;
+use App\Jobs\SendEmailToAdmin;
 use App\Models\TicketCategory;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Mail;
-
-
+use Illuminate\Support\Facades\Auth;
 
 class TicketsController extends Controller
 {
@@ -21,64 +19,44 @@ class TicketsController extends Controller
     {
         $categories = TicketCategory::all();
         $languages = Language::orderBy('id', 'desc')->get();
-        return view('frontend.tickets.create', compact('categories','languages'));
+        return view('frontend.tickets.create', compact('categories', 'languages'));
     }
+
     public function store(Request $request, AppMailer $mailer)
     {
         $this->validate($request, [
-                'title'     => 'required',
-                // 'category'  => 'required',
-                'message'   => 'required'
-            ]);
+            'title'     => 'required',
+            'message'   => 'required'
+        ]);
 
-            $ticket = new Ticket([
-                'title'     => $request->input('title'),
-                'user_id'   => Auth::user()->id,
-                'ticket_id' => strtoupper(Str::random(12)),
-                'category_id'  => $request->input('category'),
-                'priority'  => 'high',
-                'ticket_type'  => 'ticket',
-                'message'   => $request->input('message'),
-                'status'    => "open",
-            ]);
+        $ticket = new Ticket([
+            'title'     => $request->input('title'),
+            'user_id'   => Auth::user()->id,
+            'ticket_id' => strtoupper(Str::random(12)),
+            'category_id'  => $request->input('category'),
+            'priority'  => 'high',
+            'ticket_type'  => 'ticket',
+            'message'   => $request->input('message'),
+            'status'    => "open",
+        ]);
 
-            $ticket->save();
+        $ticket->save();
 
-            $user_email_template = EmailTemplate::where('key','user_new_ticket')->first(); 
-            $admin_email_template = EmailTemplate::where('key','admin_new_ticket')->first(); 
+        $userEmailTemplateKey = 'user_new_ticket';
+        $adminEmailTemplateKey = 'admin_new_ticket';
+        $filterMessageVariables = ['{{TICKET_ID}}', '{{CLAIMTYPE}}', '{{CATEGORY}}'];
+        $requestFilteredMessage = [$ticket->ticket_id, $ticket->claim_type, $ticket->category->name ?? ''];
 
-            $filtered_user_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}','{{TICKET_ID}}', '{{CATEGORY}}','{{MESSAGE}}'],
-                                        [SiteSetting()['website_title'], url('/') ,$ticket->user->first_name.' '.$ticket->user->last_name,$ticket->user->email,$ticket->ticket_id,$ticket->category->name ?? '',$ticket->message],
-                                        $user_email_template->message );
-            $filtered_admin_message  = str_replace(['{{SITE_TITLE}}', '[{SITE_URL}}', '{{NAME}}', '{{EMAIL}}','{{TICKET_ID}}', '{{CATEGORY}}','{{MESSAGE}}'],
-                                        [SiteSetting()['website_title'], url('/') ,$ticket->user->first_name.' '.$ticket->user->last_name,$ticket->user->email,$ticket->ticket_id,$ticket->category->name ?? '',$ticket->message],
-                                        $admin_email_template->message );
+        $data = [
+            'name' => $ticket->user->first_name . ' ' . $ticket->user->last_name,
+            'email' => $ticket->user->email,
+            'message' => $ticket->message,
+        ];
 
+        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+        SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
 
-            $email_data = array(
-                'name' =>  $ticket->user->first_name.' '.$ticket->user->last_name,
-                'email' => $ticket->user->email,
-                'email_message'=>$filtered_user_message,
-                'subject'=>$user_email_template->subject
-            );
-            Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-                $message->to($email_data['email'], $email_data['name'])
-                    ->subject($email_data['subject']);
-            });
-            $email_data = array(
-                'name' =>  $ticket->user->first_name.' '.$ticket->user->last_name,
-                'email' => $ticket->user->email,
-                'email_message'=>$filtered_admin_message,
-                'subject'=>$admin_email_template->subject
-            );
-            Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-                $message->to('admin@trs.com', $email_data['name'])
-                    ->subject($email_data['subject']);
-            });
-
-
-            flash()->success("A ticket with ID: #$ticket->ticket_id has been opened.");
-
-            return redirect()->back();
+        flash()->success("A ticket with ID: #$ticket->ticket_id has been opened.");
+        return redirect()->back();
     }
 }

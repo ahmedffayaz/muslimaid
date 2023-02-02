@@ -7,6 +7,7 @@ use App\Models\Bonus;
 use App\Models\EmailTemplate;
 use App\Models\User;
 use App\Traits\ApiResponser;
+use App\Traits\WelcomeEmail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    use ApiResponser;
+    use ApiResponser, WelcomeEmail;
 
     public function register(Request $request)
     {
@@ -38,16 +39,6 @@ class AuthController extends Controller
         ]);
 
         $user->assignRole('user');
-        $email_template = EmailTemplate::where('key', 'user_welcome')->first();
-
-        $filtered_message = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}'], [SiteSetting()['website_title'], url('/'), $user->first_name, $user->email], $email_template->message);
-
-        $email_data = array(
-            'name' => $user->firstname,
-            'email' => $user->email,
-            'email_message' => $filtered_message,
-            'subject' => $email_template->subject,
-        );
 
         $bonus = array_key_exists('welcome_bonus', SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
 
@@ -56,10 +47,15 @@ class AuthController extends Controller
             'amount' => $bonus,
         ]);
 
-        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-            $message->to($email_data['email'], $email_data['name'])
-                ->subject($email_data['subject']);
-        });
+        // Send welcome email to user
+        $data = array(
+            'name' => $user->first_name,
+            'email' => $user->email
+        );
+        $merge_subject = ['subject' => null, 'message' => null];
+        $data = array_merge($data, $merge_subject);
+        $this->welcomeEmail($data);
+
         return $this->success([
             'token' => $user->createToken('API Token')->plainTextToken,
             'id' => $user->id,
@@ -219,16 +215,6 @@ class AuthController extends Controller
         ]);
 
         $user->assignRole('user');
-        $email_template = EmailTemplate::where('key', 'user_welcome')->first();
-
-        $filtered_message = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}'], [SiteSetting()['website_title'], url('/'), $user->first_name, $user->email], $email_template->message);
-
-        $email_data = array(
-            'name' => $user->firstname,
-            'email' => $user->email,
-            'email_message' => $filtered_message,
-            'subject' => $email_template->subject,
-        );
 
         $bonus = array_key_exists('welcome_bonus', SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
 
@@ -236,10 +222,16 @@ class AuthController extends Controller
             'user_id' => $user->id,
             'amount' => $bonus,
         ]);
-        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-            $message->to($email_data['email'], $email_data['name'])
-                ->subject($email_data['subject']);
-        });
+
+        // Send welcome email to user
+        $data = array(
+            'name' => $user->first_name,
+            'email' => $user->email
+        );
+        $merge_subject = ['subject' => null, 'message' => null];
+        $data = array_merge($data, $merge_subject);
+        $this->welcomeEmail($data);
+
         return $this->success([
             'token' => $user->createToken('API Token')->plainTextToken,
             "first_name" => $user->first_name,
@@ -273,14 +265,14 @@ class AuthController extends Controller
                     'intro' => $request->intro,
                 ]);
                 if($request->has('profile_image')){
-               
-                    $imageName = $request->firstname.'_user_avatar_'.time().'.png'; 
-                    $file = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',$request->input('profile_image'))); 
+
+                    $imageName = $request->firstname.'_user_avatar_'.time().'.png';
+                    $file = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',$request->input('profile_image')));
                     \Storage::put('public/users/images/avatar/'.$imageName, $file);
                     $user->update([
                        'avatar'=>$imageName
                    ]);
-        
+
                 }
                 $data = [
                     'id' => auth()->user()->id,
