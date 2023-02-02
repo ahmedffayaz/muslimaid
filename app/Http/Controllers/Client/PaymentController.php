@@ -9,6 +9,8 @@ use App\Models\CharityType;
 use App\Models\PaymentInfo;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
+use App\Jobs\SendEmailToUser;
+use App\Jobs\SendEmailToAdmin;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
 use Illuminate\Support\Facades\Auth;
@@ -167,6 +169,21 @@ class PaymentController extends Controller
             ]);
         }
 
+        $userEmailTemplateKey = 'user_new_cashout_request';
+        $adminEmailTemplateKey = 'admin_new_cashout_request';
+        $filterMessageVariables = ['{{AMOUNT}}', '{{METHOD}}'];
+        $requestFilteredMessage = [$cashout->amount, $cashout->payment_method];
+
+        $data = [
+            'name' => $cashout->user->first_name . ' ' . $cashout->user->last_name,
+            'email' => $cashout->user->email,
+            'subject' => null,
+            'message' => null
+        ];
+
+        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+        SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+
         flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $balance . " to reach your " . $request->payment_method . " account.");
         return redirect()->back();
     }
@@ -216,12 +233,28 @@ class PaymentController extends Controller
         $cashback->statusHistory()->create([
             'cashback_status_id' => $cashback->status
         ]);
+
         if ($user->bonus && $user->bonus->status == 'unpaid') {
             $user->bonus->update([
                 'status' => 'paid',
                 'cashout_id' => $cashout->id
             ]);
         }
+
+        $userEmailTemplateKey = 'user_new_cashout_request';
+        $adminEmailTemplateKey = 'admin_new_cashout_request';
+        $filterMessageVariables = ['{{AMOUNT}}', '{{METHOD}}'];
+        $requestFilteredMessage = [$cashout->amount, $cashout->payment_method];
+
+        $data = [
+            'name' => $cashout->user->first_name . ' ' . $cashout->user->last_name,
+            'email' => $cashout->user->email,
+            'subject' => null,
+            'message' => null
+        ];
+
+        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+        SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
 
         flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $balance . " to reach your " . $request->payment_method . " account.");
         return redirect()->back();
