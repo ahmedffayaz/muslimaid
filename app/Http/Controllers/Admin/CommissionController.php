@@ -384,7 +384,7 @@ class CommissionController extends Controller
     public function importCashBacks(Request $request)
     {
         $validator = $request->validate([
-            'import_cashback' => 'required|file|mimes:csv'
+            'import_cashback' => 'required|file|mimes:csv,txt'
         ], [
             'import_cashback.required' => 'Upload CSV file.'
         ]);
