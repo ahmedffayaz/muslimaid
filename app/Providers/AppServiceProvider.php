@@ -31,8 +31,8 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(125);
 
         if (Schema::hasTable('site_settings')) {
-            $recaptchaSiteKey = SiteSetting::whereType('g_recaptcha_site_key')->first();
-            $recaptchaSecretKey = SiteSetting::whereType('g_recaptcha_secret_key')->first();
+            $recaptchaSiteKey = SiteSetting::whereType('google_recaptcha_site_key')->first();
+            $recaptchaSecretKey = SiteSetting::whereType('google_recaptcha_secret_key')->first();
 
             if (!empty($recaptchaSiteKey) && !empty($recaptchaSecretKey)) {
                 Config::set('captcha.sitekey', $recaptchaSiteKey->value);
