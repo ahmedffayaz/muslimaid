@@ -27,8 +27,8 @@ class EmailTemplatesSeeder extends Seeder
                 'title' => 'New ticket email to admin',
                 'detail' => 'Sent to admin when a new ticket opened',
                 'key' => 'admin_new_ticket',
-                'subject' => 'New Claim Ticket',
-                'message' => '<p>You have a new claim ticket pending.<p><p>TIcket ID: {{TICKET_ID}}</p><p>Name: {{NAME}}</p><p>Email: {{EMAIL}}</p><p>Claim: {{TICKETTYPE}}</p><p></p><p>Message: {{MESSAGE}} </p>',
+                'subject' => 'New Ticket',
+                'message' => '<p>You have a new ticket pending.<p><p>TIcket ID: {{TICKET_ID}}</p><p>Name: {{NAME}}</p><p>Email: {{EMAIL}}</p><p>Ticket Type: {{TICKETTYPE}}</p><p></p><p>Message: {{MESSAGE}} </p>',
                 'keywords' => '{{SITE_TITLE}}, {{SITE_URL}}, {{NAME}}, {{EMAIL}}, {{TICKET_ID}},  {{TICKETTYPE}}'
 
             ),

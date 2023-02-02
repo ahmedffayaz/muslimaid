@@ -171,8 +171,8 @@ class TicketController extends Controller
 
     public function sendEmailNotification(Ticket $ticket)
     {
-        $userEmailTemplateKey = 'user_new_claim';
-        $adminEmailTemplateKey= 'admin_new_claim';
+        $userEmailTemplateKey = 'user_new_ticket';
+        $adminEmailTemplateKey= 'admin_new_ticket';
         $filterMessageVariables = ['{{TICKET_ID}}', '{{TICKETTYPE}}'];
         $requestFilteredMessage = [$ticket->ticket_id, $ticket->claim_type];
 
