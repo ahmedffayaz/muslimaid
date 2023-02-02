@@ -149,8 +149,8 @@ class PagesController extends Controller
 
             $data = $request->all();
 
-            SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data);
-            SendEmailToUser::dispatch($userEmailTemplateKey, $data);
+            SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables = [], $requestFilteredMessage = []);
+            SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables = [], $requestFilteredMessage = []);
 
             return redirect()->back()->with('success', 'Thanks for contact us.');
         } catch (Exception $exception) {
