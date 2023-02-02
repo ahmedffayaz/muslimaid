@@ -925,8 +925,8 @@
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="g_recaptcha_site_key"
-                                                                        value="{{ $settings['g_recaptcha_site_key'] ?? '' }}" placeholder="Recaptcha Site Key">
+                                                                    <input type="text" class="form-control" name="google_recaptcha_site_key"
+                                                                        value="{{ $settings['google_recaptcha_site_key'] ?? '' }}" placeholder="Recaptcha Site Key">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -942,8 +942,8 @@
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="g_recaptcha_secret_key"
-                                                                        value="{{ $settings['g_recaptcha_secret_key'] ?? '' }}" placeholder="Recaptcha Secret Key">
+                                                                    <input type="text" class="form-control" name="google_recaptcha_secret_key"
+                                                                        value="{{ $settings['google_recaptcha_secret_key'] ?? '' }}" placeholder="Recaptcha Secret Key">
                                                                 </div>
                                                             </div>
                                                         </div>
