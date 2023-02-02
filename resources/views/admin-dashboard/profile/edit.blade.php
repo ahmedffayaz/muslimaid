@@ -74,18 +74,13 @@
                                                     <div class="col-lg-4">
                                                         <div class="form-group">
                                                             <label class="form-label" for="dashboard_title">Avatar</label>
-                                                          
                                                         </div>
                                                         
                                                     </div>
                                                     <div class="col-lg-8">
                                                         <div class="form-group">
-                                                            <div class=" logo">
-                                                                <label for="logo-input">
-                                                                <img id="logo" src="@if($profile->avatar != 'default.png'){{asset('storage/users/images/avatar/'.$profile->avatar)}}@else{{asset('admin-dashboard/images/avatar.png')}}@endif" alt="store logo" class="" style="max-width:100px;max-height:120px"/>
-                                                                <input id="logo-input" preview="#logo" name="avatar" class="d-none" type='file' onchange="readURL(this);" />
-                                                                </label>
-                                                            </div>
+                                                            <img id="image_avatar" src="@if($profile->avatar != 'default.png'){{asset('storage/users/images/avatar/'.$profile->avatar)}}@else{{asset('admin-dashboard/images/avatar.png')}}@endif" alt="store logo" class=""  width="100" style="border-radius: 50%; height: 100px"/>
+                                                            <input type="file" class="form-control mt-3" name="avatar" accept="image/*" value="{{ old('avatar') ?? null }}" onchange="readURL(this);">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -307,21 +302,17 @@ $(document).ready( function() {
 
     });
 });
-</script>
-<script>
-    function readURL(input) {
-  if (input.files && input.files[0]) {
-      var reader = new FileReader();
-      reader.onload = function (e) {
-          var preview = $(input).attr('preview');
-          console.log(preview);
-          $(preview)
-              .attr('src', e.target.result)
-              .css('max-width',150).css('max-height',120);
-      };
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            $('#image_avatar')
+                .attr('src', e.target.result)
+                .css('border-radius','50%').css('height',100);
+        };
 
-      reader.readAsDataURL(input.files[0]);
-  }
+        reader.readAsDataURL(input.files[0]);
+    }
 }
 </script>
 

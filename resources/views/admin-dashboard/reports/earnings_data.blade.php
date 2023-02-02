@@ -59,11 +59,17 @@
                         @if(($com->statusMap->status ?? $com->status) == "confirmed")
                             <span class="tb-status badge badge-success">{{ $com->statusMap->status ?? $com->status}}</span>
                         @elseif(($com->statusMap->status ?? $com->status) == "paid")
-                            <span class="tb-status badge badge-success">{{ $com->statusMap->status ?? $com->status}}</span>
+                            <span class="tb-status badge badge-info">{{ $com->statusMap->status ?? $com->status}}</span>
                         @elseif(($com->statusMap->status ?? $com->status) == "failed")
                             <span class="tb-status badge badge-danger">{{ $com->statusMap->status ?? $com->status}}</span>
                         @elseif(($com->statusMap->status ?? $com->status) == "pending")
-                            <span class="tb-status badge badge-info">{{ $com->statusMap->status ?? $com->status}}</span>
+                            <span class="tb-status badge badge-warning">{{ $com->statusMap->status ?? $com->status}}</span>
+                        @elseif(($com->statusMap->status ?? $com->status) == "processing donation")
+                            <span class="tb-status badge badge-light">{{ $com->statusMap->status ?? $com->status}}</span>
+                        @elseif(($com->statusMap->status ?? $com->status) == "donated")
+                            <span class="tb-status badge badge-light">{{ $com->statusMap->status ?? $com->status}}</span>
+                        @elseif(($com->statusMap->status ?? $com->status) == "processing")
+                            <span class="tb-status badge badge-success">{{ $com->statusMap->status ?? $com->status}}</span>
                         @endif
                     </div>
                 </div><!-- .nk-tb-item -->

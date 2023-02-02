@@ -9,11 +9,18 @@ class Slider extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'slider_type','auto_paly', 'slides_per_page', 'slider_height', 'slider_width' ,'is_active'];
-
+    protected $fillable = [
+        'name',
+        'slider_type',
+        'auto_paly',
+        'slides_per_page',
+        'slider_height',
+        'slider_width',
+        'is_active',
+    ];
 
     public function slides()
     {
-        return $this->hasMany(Slide::class)->orderBy('order','ASC');
+        return $this->hasMany(Slide::class)->orderBy('order', 'ASC');
     }
 }

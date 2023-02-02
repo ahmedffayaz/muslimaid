@@ -10,5 +10,8 @@ class RedeemedVoucher extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $fillable = ['user_id','voucher_id'];
+    protected $fillable = [
+        'user_id',
+        'voucher_id',
+    ];
 }

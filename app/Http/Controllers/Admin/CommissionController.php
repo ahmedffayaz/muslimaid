@@ -63,7 +63,7 @@ class CommissionController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'exit_click_id' => 'required|integer',
+            'exit_click_id' => 'required|integer|min:1',
             'order_value' => 'nullable|numeric',
             'network_commission' => 'required|numeric',
             'amount' => 'nullable|numeric',
@@ -159,7 +159,7 @@ class CommissionController extends Controller
     public function update(Request $request, UserCashback $commission)
     {
         $request->validate([
-            'exit_click_id' => 'required|integer',
+            'exit_click_id' => 'required|integer |min:1',
             'order_value' => 'nullable|numeric',
             'network_commission' => 'required|numeric',
             'amount' => 'nullable|numeric',
@@ -256,7 +256,7 @@ class CommissionController extends Controller
     public function storeMultiple(Request $request)
     {
         $request->validate([
-            'exit_click_id.*' => 'required|integer',
+            'exit_click_id.*' => 'required|integer |min:1',
             'order_value.*' => 'nullable|numeric',
             'network_commission.*' => 'required|numeric',
             'amount.*' => 'nullable|numeric',

@@ -16,7 +16,9 @@ class CreateSlidesTable extends Migration
         Schema::create('slides', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('slider_id');
-            $table->unsignedBigInteger('store_id'); 
+            $table->unsignedBigInteger('store_id')->nullable(); 
+            $table->string('slider_type')->nullable();
+            $table->string('link')->nullable();
             $table->string('name')->nullable();
             $table->string('logo')->nullable();
             $table->string('banner')->nullable();
