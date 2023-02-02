@@ -1,7 +1,7 @@
 <?php
 return [
-    'secret' => '6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe',
-    'sitekey' => '6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI',
+    'sitekey' => '', // this setting is supposed to be added form admin panel
+    'secret' => '', // this setting is supposed to be added form admin panel
     'options' => [
         'timeout' => 30,
     ],
