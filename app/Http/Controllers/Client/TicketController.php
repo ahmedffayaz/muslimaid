@@ -173,7 +173,7 @@ class TicketController extends Controller
     {
         $userEmailTemplateKey = 'user_new_claim';
         $adminEmailTemplateKey= 'admin_new_claim';
-        $filterMessageVariables = ['{{TICKET_ID}}', '{{CLAIMTYPE}}'];
+        $filterMessageVariables = ['{{TICKET_ID}}', '{{TICKETTYPE}}'];
         $requestFilteredMessage = [$ticket->ticket_id, $ticket->claim_type];
 
         $subject = ['subject' => null];
