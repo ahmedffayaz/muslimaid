@@ -14,16 +14,20 @@ class SendEmailToAdmin implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
     protected $emailTemplateKey;
     protected $details;
+    protected $filterMessageVariables;
+    protected $requestFilteredMessage;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($emailTemplateKey, $details)
+    public function __construct($emailTemplateKey, $details, $filterMessageVariables, $requestFilteredMessage)
     {
         $this->emailTemplateKey = $emailTemplateKey;
         $this->details = $details;
+        $this->filterMessageVariables = $filterMessageVariables;
+        $this->requestFilteredMessage = $requestFilteredMessage;
     }
 
     /**
@@ -35,8 +39,10 @@ class SendEmailToAdmin implements ShouldQueue
     {
         $templateKey = $this->emailTemplateKey;
         $details = $this->details;
+        $filterMessageVariables = $this->filterMessageVariables;
+        $requestFilteredMessage = $this->requestFilteredMessage;
 
-        $emailTemplate = emailTemplate($templateKey, $details);
+        $emailTemplate = emailTemplate($templateKey, $details, $filterMessageVariables, $requestFilteredMessage);
         $data = array(
             'name' =>  $details['name'],
             'email' => $details['email'],
@@ -45,7 +51,7 @@ class SendEmailToAdmin implements ShouldQueue
             'subject' => $emailTemplate['subject']
         );
 
-        $email = SiteSetting()['email'] ? SiteSetting()['email'] : env('MAIL_EMAIL');
+        $email = SiteSetting()['email'] ? SiteSetting()['email'] : env('ADMIN_EMAIL');
         // Send to admin
         Mail::send('emails.email_template', $data, function ($message) use ($email, $data) {
             $message->to($email, $data['name'])

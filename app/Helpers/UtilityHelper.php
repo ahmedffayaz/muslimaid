@@ -10,9 +10,11 @@ use Illuminate\Support\Str;
 use App\Models\EmailTemplate;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
+use Illuminate\Support\Facades\File;
 
 /**
  * get User Full name
@@ -25,6 +27,26 @@ function getFullName($user)
     return ucwords($user->first_name . ' ' . $user->last_name);
 }
 
+function store_user_avatar($file , $existing_file){
+    if($existing_file != "default.png"){
+        if (File::exists(public_path('storage/users/images/avatar/'.$existing_file))) {
+            File::delete(public_path('storage/users/images/avatar/'.$existing_file));
+        }
+    }
+
+    $current_timestamp = Carbon::now()->timestamp;
+    $ext = $file->getClientOriginalExtension();
+    $filename = 'avatar_' . $current_timestamp . '.' . $ext;
+    $dir = 'storage/users/images/avatar/';
+    if(!Storage::disk('public')->exists('users/images/avatar')) {
+        Storage::disk('public')->makeDirectory('users/images/avatar', 0775, true); //creates directory
+    }
+    $avatar_image = Image::make($file)->resize(512, 512);
+    $avatar_image->save($dir . $filename, 100);
+    $image = \File::get($dir . '/' . $filename);
+    Storage::put('users/images/avatar/' . $filename, $image);
+    return $filename;
+}
 /**
  * get User role
  *
@@ -511,22 +533,20 @@ function getBannerImageUrl($url, $type = NULL, $row = null)
     return asset(parse_url($url)['path']);
 }
 
-function emailTemplate($key, $details, $filteredMessage = NULL, $requestFilteredMessage = NULL)
+function emailTemplate($key, $details, $filteredMessage = [], $requestFilteredMessage = [])
 {
     $emailTemplate = EmailTemplate::where('key', $key)->first();
 
+    $variables = ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}'];
+    $variablesMerge = array_merge($variables, $filteredMessage);
+
+    $data = [SiteSetting()['website_title'], url('/'), $details['name'], $details['email'], $details['subject'], $details['message']];
+    $dataMerge = array_merge($data, $requestFilteredMessage);
+
     if ($filteredMessage && $requestFilteredMessage) {
-        $filteredAdminMessage  = str_replace(
-            ['{{ SITE_TITLE }}', '{{ SITE_URL }}', '{{ NAME }}', '{{ EMAIL }}', '{{ SUBJECT }}', $filteredMessage, '{{ MESSAGE }}'],
-            [SiteSetting()['website_title'], url('/'), $details['name'], $details['email'], $details['subject'], $requestFilteredMessage, $details['message']],
-            $emailTemplate->message
-        );
+        $filteredAdminMessage  = str_replace($variablesMerge, $dataMerge, $emailTemplate->message);
     } else {
-        $filteredAdminMessage  = str_replace(
-            ['{{ SITE_TITLE }}', '{{ SITE_URL }}', '{{ NAME }}', '{{ EMAIL }}', '{{ SUBJECT }}', '{{ MESSAGE }}'],
-            [SiteSetting()['website_title'], url('/'), $details['name'], $details['email'], $details['subject'], $details['message']],
-            $emailTemplate->message
-        );
+        $filteredAdminMessage  = str_replace($variables, $data, $emailTemplate->message);
     }
 
     $subject = str_replace(

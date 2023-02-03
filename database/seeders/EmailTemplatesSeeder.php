@@ -24,39 +24,21 @@ class EmailTemplatesSeeder extends Seeder
                 'keywords' => '{{SITE_TITLE}}, {{SITE_URL}}, {{NAME}}, {{EMAIL}},'
             ),
             array(
+                'title' => 'New ticket email to admin',
+                'detail' => 'Sent to admin when a new ticket opened',
+                'key' => 'admin_new_ticket',
+                'subject' => 'New Ticket',
+                'message' => '<p>You have a new ticket pending.<p><p>TIcket ID: {{TICKET_ID}}</p><p>Name: {{NAME}}</p><p>Email: {{EMAIL}}</p><p>Ticket Type: {{TICKETTYPE}}</p><p></p><p>Message: {{MESSAGE}} </p>',
+                'keywords' => '{{SITE_TITLE}}, {{SITE_URL}}, {{NAME}}, {{EMAIL}}, {{TICKET_ID}},  {{TICKETTYPE}}'
+
+            ),
+            array(
                 'title' => 'New ticket email to user',
                 'detail' => 'Sent to user when they open a new ticket',
                 'key' => 'user_new_ticket',
                 'subject' => 'Thank you for contacting our support team',
                 'message' => '<p>Hello {{NAME}},</p><p>Thank you for contacting our support team. A support ticket has been opened for you with ID {{TICKET_ID}}. You will be notified when a response is made by email.<p>',
-                'keywords' => '{{SITE_TITLE}}, {{SITE_URL}}, {{NAME}}, {{EMAIL}}, {{TICKET_ID}}, {{CATEGORY}}'
-
-            ),
-            array(
-                'title' => 'New ticket email to admin',
-                'detail' => 'Sent to admin when a new ticket opened',
-                'key' => 'admin_new_ticket',
-                'subject' => 'New Ticket',
-                'message' => '<p>You have a new ticket pending.<p><p>TIcket ID: {{TICKET_ID}}</p><p>Name: {{NAME}}</p><p>Email: {{EMAI}}</p><p>Category: {{CATEGORY}} </p><p>Message: {{MESSAGE}} </p>',
-                'keywords' => '{{SITE_TITLE}}, {{SITE_URL}}, {{NAME}}, {{EMAIL}}, {{TICKET_ID}}, {{CATEGORY}}'
-
-            ),
-            array(
-                'title' => 'New claim email to admin',
-                'detail' => 'Sent to admin when a new claim ticket opened',
-                'key' => 'admin_new_claim',
-                'subject' => 'New Claim Ticket',
-                'message' => '<p>You have a new claim ticket pending.<p><p>TIcket ID: {{TICKET_ID}}</p><p>Name: {{NAME}}</p><p>Email: {{EMAIL}}</p><p>Claim: {{CLAIMTYPE}}</p><p></p><p>Message: {{MESSAGE}} </p>',
-                'keywords' => '{{SITE_TITLE}}, {{SITE_URL}}, {{NAME}}, {{EMAIL}}, {{TICKET_ID}},  {{CLAIMTYPE}}'
-
-            ),
-            array(
-                'title' => 'New claim email to user',
-                'detail' => 'Sent to user when they open a new claim ticket',
-                'key' => 'user_new_claim',
-                'subject' => 'Thank you for contacting our support team',
-                'message' => '<p>Hello {{NAME}},</p><p>Thank you for contacting our support team. A support ticket has been opened for you with ID {{TICKET_ID}}. You will be notified when a response is made by email.<p>',
-                'keywords' => '{{SITE_TITLE}}, {{SITE_URL}}, {{NAME}}, {{EMAIL}}, {{TICKET_ID}}, {{CLAIMTYPE}}'
+                'keywords' => '{{SITE_TITLE}}, {{SITE_URL}}, {{NAME}}, {{EMAIL}}, {{TICKET_ID}}, {{TICKETTYPE}}'
 
             ),
             array(

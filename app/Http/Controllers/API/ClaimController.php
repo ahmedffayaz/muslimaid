@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Ticket;
 use App\Models\ExitClick;
 use App\Models\UserCashback;
-use Illuminate\Support\Facades\Mail;
-use App\Models\EmailTemplate;
 use App\Traits\ApiResponser;
+use Illuminate\Http\Request;
+use App\Jobs\SendEmailToUser;
+use App\Models\EmailTemplate;
+use App\Jobs\SendEmailToAdmin;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Mail;
 
 
 class ClaimController extends Controller
@@ -20,7 +22,7 @@ class ClaimController extends Controller
         $claims = $claims->transform(function ($claim, $key) {
 
             if($claim->status =='open')  $status =  'Pending';
-            
+
             elseif($claim->status=='pending')
             {
                 if($claim->lastReply->user_id ==\Auth::user()->id) $status = 'Replied';
@@ -43,31 +45,31 @@ class ClaimController extends Controller
        return \Response::json($arr);
 
     }
-    
+
 
     public function step1()
     {
         $user = \Auth::user();
         $clicks = ExitClick::select('store_id')->where('user_id',$user->id)->distinct()->get();
-        
-        
+
+
         $clicks = $clicks->transform(function ($click, $key) {
             return [
                 'store_id'   => $click->store_id,
                 'store_name' => $click->store->name,
                 ];
         });
-        
+
         $arr = array("status" => 200, "message" => "Select Store", "data" => $clicks);
         return \Response::json($arr);
-   
+
     }
     public function step2(Request $request)
     {
         $store_id = $request->input('store_id');
         $claim    = $request->input('claim_type');
         $user     = \Auth::user();
-        $clicks   = ExitClick::where('user_id',$user->id)->where('store_id', $store_id)->get();       
+        $clicks   = ExitClick::where('user_id',$user->id)->where('store_id', $store_id)->get();
         if($claim  =='missing cashback'){
 
             $data = [
@@ -90,7 +92,7 @@ class ClaimController extends Controller
 
             if(count($cashbacks)){
 
-                $data = [   
+                $data = [
                     'store_id'   => $store_id,
                     'claim_type' => $claim,
                     'cashbacks'  => $cashbacks->transform(function ($cashback, $key) {
@@ -137,13 +139,13 @@ class ClaimController extends Controller
                 $arr = array("status" => 400, "message" =>"We have no record of a pending, confirmed or paid transaction with this retailer.", "data" =>[]);
                 return \Response::json($arr);
             }
-            
+
         }
 
     }
 
     public function step3(Request $request){
-       
+
         $click_id = $request->input('click_id');
         $click = ExitClick::where('id',$click_id)->first();
         $claim_type = $request->input('claim_type');
@@ -181,44 +183,25 @@ class ClaimController extends Controller
 
     }
 
-    public function sendEmailNotification(Ticket $ticket){
+    public function sendEmailNotification(Ticket $ticket)
+    {
+        $userEmailTemplateKey = 'user_new_claim';
+        $adminEmailTemplateKey= 'admin_new_claim';
+        $filterMessageVariables = ['{{TICKET_ID}}', '{{CLAIMTYPE}}'];
+        $requestFilteredMessage = [$ticket->ticket_id, $ticket->claim_type];
 
-
-        $user_email_template = EmailTemplate::where('key','user_new_claim')->first(); 
-        $admin_email_template = EmailTemplate::where('key','admin_new_claim')->first(); 
-
-        $filtered_user_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}','{{TICKET_ID}}', '{{CLAIMTYPE}}','{{MESSAGE}}'],
-                                    [SiteSetting()['website_title'], url('/') ,$ticket->user->first_name.' '.$ticket->user->last_name,$ticket->user->email,$ticket->ticket_id,$ticket->claim_type,$ticket->message],
-                                    $user_email_template->message );
-        $filtered_admin_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}','{{TICKET_ID}}', '{{CLAIMTYPE}}','{{MESSAGE}}'],
-                                    [SiteSetting()['website_title'], url('/') ,$ticket->user->first_name.' '.$ticket->user->last_name,$ticket->user->email,$ticket->ticket_id,$ticket->claim_type,$ticket->message],
-                                    $admin_email_template->message );
-
-
-        $email_data = array(
-            'name' =>  $ticket->user->first_name.' '.$ticket->user->last_name,
+        $subject = ['subject' => null];
+        $data = [
+            'name' => $ticket->user->first_name . ' ' . $ticket->user->last_name,
             'email' => $ticket->user->email,
-            'email_message'=> $filtered_user_message,
-            'subject' => $user_email_template->subject
-        );
-        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-            $message->to($email_data['email'], $email_data['name'])
-                ->subject($email_data['subject']);
-        });
+            'message' => $ticket->message,
+        ];
+        $data = array_merge($data, $subject);
 
-        $email_data = array(
-            'name' =>  $ticket->user->first_name.' '.$ticket->user->last_name,
-            'email' => $ticket->user->email,
-            'email_message' => $filtered_admin_message,
-            'subject' => $admin_email_template->subject
-        );
-        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-            $message->to('admin@trs.com', $email_data['name'])
-                ->subject($email_data['subject']);
-        });
-
+        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+        SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
     }
 
-    
+
 
 }

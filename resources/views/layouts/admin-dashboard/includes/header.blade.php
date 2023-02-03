@@ -102,7 +102,6 @@
                 @can('view users')
                 <div class="dropdown">
                     <a href="{{route('admin.users.index')}}"  class="dropbtn user-name"><em class="icon ni ni-users-fill"></em> Users</a>
-
                 </div>
                 @endcan
                 <div class="dropdown">
@@ -257,6 +256,11 @@
                         </div>
                     </div>
                 </div>
+                @if(Auth::user()->hasRole('admin'))
+                <div class="dropdown">
+                    <a href="{{url('docs')}}"  class="dropbtn user-name"><em class="icon ni ni-file-doc"></em> API Docs</a>
+                </div>
+                @endif
 
 
             </div><!-- .nk-header-news -->
@@ -271,7 +275,7 @@
                         <a class="dropdown-toggle mr-n1">
                             <div class="user-toggle">
                                 <div class="user-avatar sm">
-                                    @if(Auth::user()->avatar == 'default.png')
+                                @if(Auth::user()->avatar == 'default.png')
                                     <img src="{{asset('admin-dashboard/images/avatar.png')}}"
                                      alt="store logo" class="" style="max-width:50px;max-height:50px"/>
                                 @else

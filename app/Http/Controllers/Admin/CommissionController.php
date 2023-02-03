@@ -3,17 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
+use App\Jobs\SendEmail;
 use App\Models\Network;
 use App\Models\ExitClick;
 use App\Models\SiteSetting;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
+use App\Models\EmailTemplate;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use  Illuminate\Support\Facades\Response;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CommissionController extends Controller
 {
@@ -99,6 +101,28 @@ class CommissionController extends Controller
                 'user_cashback_id' => $commission->id,
                 'cashback_status_id' => $commission->status
             ]);
+
+            if ($click->user_id != 0) {
+                $emailTemplate = EmailTemplate::where('key', 'user_new_cashback_tracked')->first();
+
+                $filteredMessage = str_replace(
+                    ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{STORE}}', '{{AMOUNT}}'],
+                    [
+                        SiteSetting()['website_title'], url('/'),
+                        $commission->user->first_name . ' ' . $commission->user->last_name,
+                        $commission->user->email, $commission->store->name, $commission->amount
+                    ],
+                    $emailTemplate->message
+                );
+
+                $data = array(
+                    'subject' => $emailTemplate->subject,
+                    'email_message' => $filteredMessage,
+                    'email' => $commission->user->email
+                );
+
+                SendEmail::dispatch($data);
+            }
 
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,
@@ -235,13 +259,11 @@ class CommissionController extends Controller
             'exit_click_id.*' => 'required|integer |min:1',
             'order_value.*' => 'nullable|numeric',
             'network_commission.*' => 'required|numeric',
-            'amount.*' => 'nullable|numeric',
             'event_date.*' => 'required|date_format:m/d/Y'
         ], [
             'exit_click_id.*.required' => 'All exit clicks are required',
             'exit_click_id.*.integer' => 'All exit clicks should be integer',
             'order_value.*.numeric' => 'All order values should be number',
-            'amount.*.numeric' => 'All cashbacks amounts should be number',
             'event_date.*.required' => 'All cashbacks event dates are required',
             'event_date.*.date_format' => 'All cashbacks event dates should be match the format 01/25/2000'
         ]);
@@ -249,11 +271,19 @@ class CommissionController extends Controller
         try {
             foreach ($request->exit_click_id as $key => $value) {
                 $click = ExitClick::findOrFail($value);
+                $customCashbackPercentage = $click->store->custom_cashback_percentage;
+
+                if ($customCashbackPercentage) {
+                    $cashback_percent = $customCashbackPercentage;
+                } else {
+                    $cashback_percent = SiteSetting::where('type', 'cashback_percentage')->first()->value;
+                }
+
                 $commission = UserCashback::create([
                     'store_id' => $click->store_id,
                     'user_id'  => $click->user_id ?? 0,
                     'exit_click_id' => $click->id,
-                    'amount' => round($request->amount[$key], 3),
+                    'amount' => round(($request->network_commission[$key] / 100) * $cashback_percent, 3),
                     'network_commission' => round($request->network_commission[$key], 3),
                     'order_value' => round($request->order_value[$key], 3),
                     'status' => $request->status[$key],
@@ -265,6 +295,28 @@ class CommissionController extends Controller
                     'user_cashback_id' => $commission->id,
                     'cashback_status_id' => $commission->status
                 ]);
+
+                if ($commission->user_id != 0) {
+                    $emailTemplate = EmailTemplate::where('key', 'user_new_cashback_tracked')->first();
+
+                    $filteredMessage = str_replace(
+                        ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{STORE}}', '{{AMOUNT}}'],
+                        [
+                            SiteSetting()['website_title'], url('/'),
+                            $commission->user->first_name . ' ' . $commission->user->last_name,
+                            $commission->user->email, $commission->store->name, $commission->amount
+                        ],
+                        $emailTemplate->message
+                    );
+
+                    $data = array(
+                        'subject' => $emailTemplate->subject,
+                        'email_message' => $filteredMessage,
+                        'email' => $commission->user->email
+                    );
+
+                    SendEmail::dispatch($data);
+                }
             }
 
             flash()->success('New cashbacks added');
@@ -332,7 +384,7 @@ class CommissionController extends Controller
     public function importCashBacks(Request $request)
     {
         $validator = $request->validate([
-            'import_cashback' => 'required|file|mimes:csv'
+            'import_cashback' => 'required|file|mimes:csv,txt'
         ], [
             'import_cashback.required' => 'Upload CSV file.'
         ]);
@@ -357,7 +409,7 @@ class CommissionController extends Controller
                 'Content-Type' => 'text/csv',
             );
             $filename = 'cashbacks.csv';
-            $file = storage_path('app/public/files/' . $filename);
+            $file = public_path('admin-dashboard/sample-files/csv/' . $filename);
             return Response::download($file, $filename, $headers);
         } catch (Exception $exception) {
             flash()->error('File does not exist.');

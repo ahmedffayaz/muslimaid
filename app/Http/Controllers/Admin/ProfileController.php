@@ -84,18 +84,17 @@ class ProfileController extends Controller
             'first_name.required' => 'First name is required.',
             'last_name.required' => 'Last name is required.'
         ]);
+
         $profile->update($request->input());
 
-        if($request->has('avatar')){
-
-            $imageName = 'admin_avatar_'.time().'.'.$request->avatar->extension();          
-            $request->avatar->storeAs('public/users/images/avatar',$imageName);
-
-           $profile->update([
-               'avatar'=>$imageName
-           ]);
-
+        $avatar_image = $profile->avatar;
+        if ($request->hasFile('avatar')) {
+            $avatar_image = store_user_avatar($request->file('avatar') , $avatar_image);
+            $profile->update([
+                'avatar'=>$avatar_image
+            ]);
         }
+
         flash()->success('Profle Updated');
         return redirect()->back();
     }

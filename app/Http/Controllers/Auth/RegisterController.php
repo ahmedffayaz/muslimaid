@@ -6,11 +6,10 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Traits\UserBonus;
 use Illuminate\Http\Request;
-use App\Models\EmailTemplate;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Traits\WelcomeEmail;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
@@ -29,8 +28,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
-    use UserBonus;
+    use RegistersUsers, UserBonus, WelcomeEmail;
 
     /**
      * Where to redirect users after registration.
@@ -97,21 +95,12 @@ class RegisterController extends Controller
 
         $this->welcomBonus($user, $bonusStatus);
 
-        $email_template = EmailTemplate::where('key', 'user_welcome')->first();
-
-        $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}'], [SiteSetting()['website_title'], url('/'), $user->first_name, $user->email], $email_template->message);
-
-        $email_data = array(
-            'name' =>  $data['firstname'],
-            'email' => $data['email'],
-            'email_message' => $filtered_message,
-            'subject' => $email_template->subject
-        );
-
-        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-            $message->to($email_data['email'], $email_data['name'])
-                ->subject($email_data['subject']);
-        });
+        // Send welcome email to user
+        $data['name'] = $data['firstname'];
+        unset($data['firstname']);
+        $merge_subject = ['subject' => null, 'message' => null];
+        $data = array_merge($data, $merge_subject);
+        $this->welcomeEmail($data);
 
         //send email to user to verify email address
         dispatch(new \App\Jobs\SendEmailJob($user));

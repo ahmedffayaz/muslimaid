@@ -20,6 +20,7 @@ class SettingsController extends Controller
         $this->middleware('permission:view settings', ['only' => ['index', 'show']]);
         $this->middleware('permission:edit settings', ['only' => ['edit', 'update']]);
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -110,11 +111,13 @@ class SettingsController extends Controller
             flash()->error('default settings can not be deleted');
             return redirect()->route('admin.settings.index');
         }
+
         $setting->delete();
 
         flash()->success('setting deleted successfully');
         return redirect()->route('admin.settings.index');
     }
+
     function fetch(Request $request)
     {
         if ($request->ajax()) {
@@ -124,40 +127,41 @@ class SettingsController extends Controller
             return view('admin-dashboard.settings.index_data', compact('settings', 'route'))->render();
         }
     }
+
     public function searchSettings(Request $request, SiteSetting $settings)
     {
-
         $settings = $settings->newQuery();
 
         // Search by title.
         if ($request->input('title')) {
             $settings->where('title', 'like', '%' . $request->input('title') . '%');
         }
+
         // Search by key.
         if ($request->input('key')) {
             $settings->where('type', 'like', '%' . $request->input('key') . '%');
         }
+
         $settings = $settings->latest()->paginate(20);
         $route = 'search';
+
         return view('admin-dashboard.settings.index_data', compact('settings', 'route'))->render();
     }
 
     public function mailerSettings()
     {
-
         $settings = SiteSetting::latest()->get()->pluck('value', 'type');
         return view('admin-dashboard.settings.mailer_settings', compact('settings'));
     }
+
     public function saveSettings(Request $request)
     {
-
         try {
-
             $request->offsetUnset('_method');
             $request->offsetUnset('_token');
-            foreach ($request->input() as $key => $value) {
 
-                $settings = SiteSetting::updateOrCreate([
+            foreach ($request->input() as $key => $value) {
+                SiteSetting::updateOrCreate([
                     'type'   => $key,
                     'title'  => ucwords(
                         str_replace('_', ' ', $key)
@@ -166,21 +170,24 @@ class SettingsController extends Controller
                     'value'     => $value
                 ]);
             }
-            $settings = SiteSetting::updateOrCreate([
+
+            SiteSetting::updateOrCreate([
                 'type'   => 'payment_method_paypal',
                 'title'  => 'Payment Method Paypal',
 
             ], [
                 'value'     =>  $request->has('payment_method_paypal') ? 1 : 0
             ]);
-            $settings = SiteSetting::updateOrCreate([
+
+            SiteSetting::updateOrCreate([
                 'type'   => 'payment_method_bank',
                 'title'  => 'Payment Method Bank',
 
             ], [
                 'value'     =>  $request->has('payment_method_bank') ? 1 : 0
             ]);
-            $settings = SiteSetting::updateOrCreate([
+
+            SiteSetting::updateOrCreate([
                 'type'   => 'payment_method_charity',
                 'title'  => 'Payment Method Charity',
 
@@ -188,13 +195,11 @@ class SettingsController extends Controller
                 'value'     =>  $request->has('payment_method_charity') ? 1 : 0
             ]);
 
-
             if ($request->has('dashboard_logo')) {
-
                 $imageName = 'dashboard_logo_' . time() . '.' . $request->dashboard_logo->extension();
                 $request->dashboard_logo->storeAs('public/dashboard/images/logo', $imageName);
 
-                $settings = SiteSetting::updateOrCreate([
+                SiteSetting::updateOrCreate([
                     'type'   => 'dashboard_logo',
                     'title'  => 'Dashboard Logo',
 
@@ -202,12 +207,12 @@ class SettingsController extends Controller
                     'value'     =>  $imageName
                 ]);
             }
-            if ($request->has('website_logo')) {
 
+            if ($request->has('website_logo')) {
                 $imageName = 'website_logo_' . time() . '.' . $request->website_logo->extension();
                 $request->website_logo->storeAs('public/dashboard/images/logo', $imageName);
 
-                $settings = SiteSetting::updateOrCreate([
+                SiteSetting::updateOrCreate([
                     'type'   => 'website_logo',
                     'title'  => 'Website Logo',
 
@@ -215,12 +220,12 @@ class SettingsController extends Controller
                     'value'     =>  $imageName
                 ]);
             }
-            if ($request->has('favicon')) {
 
+            if ($request->has('favicon')) {
                 $imageName = 'favicon_' . time() . '.' . $request->favicon->extension();
                 $request->favicon->storeAs('public/dashboard/images/logo', $imageName);
 
-                $settings = SiteSetting::updateOrCreate([
+                SiteSetting::updateOrCreate([
                     'type'   => 'favicon',
                     'title'  => 'Favicon',
 
@@ -228,12 +233,12 @@ class SettingsController extends Controller
                     'value'     =>  $imageName
                 ]);
             }
-            if ($request->has('dashboard_small_logo')) {
 
+            if ($request->has('dashboard_small_logo')) {
                 $imageName = 'dashboard_small_logo_' . time() . '.' . $request->dashboard_small_logo->extension();
                 $request->dashboard_small_logo->storeAs('public/dashboard/images/logo', $imageName);
 
-                $settings = SiteSetting::updateOrCreate([
+                SiteSetting::updateOrCreate([
                     'type'   => 'dashboard_small_logo',
                     'title'  => 'Small Dashboare Logo',
 
@@ -241,6 +246,7 @@ class SettingsController extends Controller
                     'value'     =>  $imageName
                 ]);
             }
+
             return array(
                 'message' => 'Settings saved',
                 'response' => 'success'
@@ -260,6 +266,7 @@ class SettingsController extends Controller
         } else {
             $roles = Role::whereNotIn('name', ['admin'])->get();
         }
+
         $permissions = Permission::all();
 
         return view('admin-dashboard.settings.permissions', compact('roles', 'permissions'));
@@ -267,24 +274,23 @@ class SettingsController extends Controller
 
     public function updatePermissions(Request $request)
     {
-
-
         try {
             $request->offsetUnset('_method');
             $request->offsetUnset('_token');
+
             foreach ($request->input() as $key => $permissions) {
                 $role = Role::findByName($key);
                 $role->syncPermissions($permissions);
             }
-            flash()->success('Permissions updated successfully');
 
+            flash()->success('Permissions updated successfully');
             return redirect()->back();
         } catch (\Throwable $th) {
-
             flash()->error('Something went wrong!');
             return redirect()->back();
         }
     }
+
     public function menu()
     {
         return view('admin-dashboard.menus.index');
@@ -298,24 +304,20 @@ class SettingsController extends Controller
 
     public function saveCashbackStatuses(Request $request)
     {
-
         foreach ($request->input('status') as $key => $status) {
             CashbackStatus::find($key)->update([
                 'status' => $status
             ]);
         }
-        flash()->success('Cashback status titles updated successfully');
 
+        flash()->success('Cashback status titles updated successfully');
         return redirect()->back();
     }
 
-
     public function maintenance(Request $request)
     {
-
         try {
             if ($request->input('maintenance')) {
-
                 Artisan::call('down');
                 return array(
                     'message' => 'Maintenance Mode enabled',
