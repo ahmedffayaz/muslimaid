@@ -550,7 +550,7 @@ function emailTemplate($key, $details, $filteredMessage = [], $requestFilteredMe
     }
 
     $subject = str_replace(
-        ['{{ SUBJECT }}'],
+        ['{{SUBJECT}}'],
         [$details['subject']],
         $emailTemplate->subject
     );
