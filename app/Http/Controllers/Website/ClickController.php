@@ -41,6 +41,7 @@ class ClickController extends Controller
      */
     public function store(Request $request)
     {
+        $deeplink_url = '';
         $store = Store::where('id', $request->input('store_id'))->first();
 
         $custom_cashback_percentage = $store->custom_cashback_percentage;
@@ -64,11 +65,15 @@ class ClickController extends Controller
             'current_cashback_percentage' => $cashback_percent
         ]);
 
+        if (!empty($store->deeplink_url)) {
+            $deeplink_url = '&' . $store->network->deeplink_identifier . '=' . $store->deeplink_url;
+        }
+
         if ($store->network->id == 1) {
-            $click->exit_url = $request->input('url') . '?' . $store->network->click_ref . '=' . $click->id;
+            $click->exit_url = $request->input('url') . '?' . $store->network->click_ref . '=' . $click->id . $deeplink_url;
             $click->update();
         } else if ($store->network->id == 2) {
-            $click->exit_url = $request->input('url') . '&' . $store->network->click_ref . '=' . $click->id;
+            $click->exit_url = $request->input('url') . '&' . $store->network->click_ref . '=' . $click->id . $deeplink_url;
             $click->update();
         }
 

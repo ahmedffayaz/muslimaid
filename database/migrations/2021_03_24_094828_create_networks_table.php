@@ -18,6 +18,7 @@ class CreateNetworksTable extends Migration
             $table->string('name');
             $table->text('description');
             $table->string('click_ref');
+            $table->string('deeplink_identifier')->default('u');
             $table->string('logo');
             $table->timestamps();
             $table->softDeletes();

@@ -34,7 +34,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="full-name-1">Store Name</label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="full-name-1" name="store_name" required>
+                                                        <input type="text" class="form-control" id="full-name-1" name="store_name" placeholder="Store name" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -54,15 +54,23 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="pay-amount-1">Store url</label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="pay-amount-1" name="store_url" required>
+                                                        <input type="text" class="form-control" id="pay-amount-1" name="store_url" placeholder="Store url" required>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="tracking_url">Tracking url</label>
+                                                    <label class="form-label" for="tracking_url">Tracking URL</label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="tracking_url" name="tracking_url" required>
+                                                        <input type="text" class="form-control" id="tracking_url" name="tracking_url" placeholder="Tracking URL" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="deeplink_url">Deeplink URL</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" id="deeplink_url" name="deeplink_url" placeholder="Deeplink URL">
                                                     </div>
                                                 </div>
                                             </div>

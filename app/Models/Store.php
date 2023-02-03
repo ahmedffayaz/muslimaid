@@ -18,6 +18,7 @@ class Store extends Model
         'slug',
         'advertiser_id',
         'tracking_url',
+        'deeplink_url',
         'store_url',
         'description',
         'terms_conditions',
@@ -93,7 +94,7 @@ class Store extends Model
     {
         return $this->hasMany(EditorPick::class);
     }
-    
+
     public function clicks()
     {
         return $this->hasMany(ExitClick::class);
