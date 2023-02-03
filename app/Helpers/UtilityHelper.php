@@ -296,7 +296,6 @@ function getCategories()
     $categories = Category::where('parent_id', 0)->orderBy('name', 'ASC')->get();
     return $categories;
 }
-
 function SiteSetting()
 {
     return SiteSetting::latest()->get()->pluck('value', 'type');
@@ -434,7 +433,7 @@ function sendVerificationEmail($user)
 
     $link = url('') . '/account/verify/' . $token;
     $button = '<a href="' . $link . '" target="_blank"><input type="button" class="btn btn-success" value="Verify"></a>';
-    $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{BUTTON}}'], [SiteSetting()['website_title'], url('/'), $button], $verification_email_temp->message);
+    $filtered_message  = str_replace(['{{ SITE_TITLE }}', '{{ SITE_URL }}', '{{ BUTTON }}'], [SiteSetting()['website_title'], url('/'), $button], $verification_email_temp->message);
     $data = array(
         'email' => $user->email,
         'email_message' => $filtered_message,
