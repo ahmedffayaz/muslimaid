@@ -7,6 +7,7 @@ use App\Models\Blog;
 use App\Models\Page;
 use App\Models\Store;
 use App\Models\Charity;
+use App\Models\Category;
 use App\Models\ContactForm;
 use Illuminate\Http\Request;
 use App\Jobs\SendEmailToUser;
@@ -25,16 +26,22 @@ class PagesController extends Controller
         if ($slug == 'vouchers') {
             $stores = Store::has('vouchers')->latest()->paginate(10);
             $term = null;
-
             return view('frontend.pages.vouchers', compact('stores', 'term', 'page'));
         }
 
         if ($slug == 'donate-to-charity') {
             $HomePageCharities = Charity::where('status', '=', '1')->orderBy('id', 'DESC')->paginate(10);
-
             return view('frontend.pages.charities', compact('page', 'HomePageCharities'));
         }
-
+        if($slug == 'offers')
+        { 
+            $categories = Category::where('parent_id', 0)->with(['stores' => function($query)  { 
+                $query->withCount(['categories' => function($query){
+                    $query->whereStatus(0);
+                }])->having('categories_count', 0);
+            }])->get();
+            return view('frontend.pages.offers', compact('page', 'categories'));
+        }
         if ($slug == 'trending') {
             $stores =  Store::has('clicks')->with('clicks')->get()->sortByDesc(function ($store) {
                 return $store->clicks->count();
@@ -48,12 +55,6 @@ class PagesController extends Controller
         }
 
         return view('frontend.pages.single-page', compact('page'));
-    }
-
-    public function offers()
-    {
-        $stores = Store::latest()->get();
-        return view('frontend.pages.offers', compact('stores'));
     }
 
     public function topStores()
