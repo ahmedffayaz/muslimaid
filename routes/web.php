@@ -233,12 +233,8 @@ Route::namespace('App\Http\Controllers\Admin')
     });
 
 // Front Website Routes
-Route::get('vouchers', [App\Http\Controllers\Frontend\PagesController::class, 'vouchers'])->name('vouchers');
-Route::get('about', [App\Http\Controllers\Frontend\PagesController::class, 'about'])->name('about');
-Route::get('contact', [App\Http\Controllers\Frontend\PagesController::class, 'contact'])->name('contact');
 Route::get('blog', [App\Http\Controllers\Frontend\PagesController::class, 'blog'])->name('blog');
 Route::get('search', [App\Http\Controllers\Frontend\PagesController::class, 'search'])->name('search');
-Route::get('top-cashback', [App\Http\Controllers\Frontend\PagesController::class, 'topStores'])->name('top_stores');
 Route::get('cashback/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
 Route::get('categories/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
 Route::get('stores/reviews/{id}', [App\Http\Controllers\Frontend\StoreController::class, 'showReviews'])->name('store.reviews.show');
