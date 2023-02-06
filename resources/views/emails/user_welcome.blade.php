@@ -7,16 +7,14 @@
     <meta name="author" content="Softnio">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
-  
+
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="{{ asset('admin-dashboard/css/dashlite.css?ver=2.2.0')}}">
     <link id="skin-default" rel="stylesheet" href="{{ asset('admin-dashboard/css/theme.css?ver=2.2.0')}}">
     <link rel="stylesheet" href="{{asset('vendor/laraberg/css/laraberg.css')}}">
-    <script src="https://unpkg.com/react@16.8.6/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@16.8.6/umd/react-dom.production.min.js"></script>
     <script src="{{ asset('vendor/laraberg/js/laraberg.js') }}"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" rel="stylesheet">
-    
+
 </head>
 <style>
     /*! Email Template */
@@ -78,8 +76,8 @@
 
 @media (max-width: 480px) { .email-preview-page .card { border-radius: 0; margin-left: -20px; margin-right: -20px; }
   .email-ul-col2 li { width: 100%; } }
-  
-  
+
+
 .p-3 {
     padding: 1rem !important;
 }
@@ -132,7 +130,7 @@ ul.email-social li a {padding:inherit}
                     <tr>
                         <td class="text-center pb-4">
                             <a href="{{url('/')}}"><img class="email-logo" src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif" alt="logo"></a>
-                           
+
                         </td>
                     </tr>
                 </tbody>
