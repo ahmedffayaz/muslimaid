@@ -34,22 +34,7 @@
                                 class="suggestions__item-name">{!! $store->name !!}</a>
                         </div>
                         <div class="suggestions__item-price">
-                            @if ($store->cashback)
-                                @if ($store->custom_cashback_percentage)
-                                    @if ($store->cashback->type == 'fixed')
-                                        {{ $store->cashback->currency }}
-                                    @endif
-                                    {{ ($store->custom_cashback_percentage / 100) * $store->cashback->sale_commission }}
-                                    @if ($store->cashback->type == 'percentage')%@endif
-                                @else
-                                    @if ($store->cashback->type == 'fixed')
-                                        {{ $store->cashback->currency }}
-                                    @endif
-                                    {{ (SiteSetting()['cashback_percentage'] / 100) * $store->cashback->sale_commission }}
-                                    @if ($store->cashback->type == 'percentage')%@endif
-                                @endif
-                                Cashback
-                            @endif
+                            {{ $store->getCashback() }}
                         </div>
                     </li>
                 @endforeach

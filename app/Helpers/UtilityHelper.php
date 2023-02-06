@@ -4,17 +4,17 @@ use Carbon\Carbon;
 use App\Models\Store;
 use App\Models\SeoRule;
 use App\Models\Category;
+use App\Models\Currency;
 use App\Models\UserVerify;
 use App\Models\SiteSetting;
 use Illuminate\Support\Str;
 use App\Models\EmailTemplate;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
-use Illuminate\Support\Facades\File;
 
 /**
  * get User Full name
@@ -316,7 +316,7 @@ function getRecaptchaSecretKey()
 function currency()
 {
     $settings = SiteSetting();
-    $currency = \App\Models\Currency::where('id', $settings['currency'])->pluck('symbol')->first();
+    $currency = Currency::where('id', $settings['currency'])->pluck('symbol')->first();
     return $currency;
 }
 
