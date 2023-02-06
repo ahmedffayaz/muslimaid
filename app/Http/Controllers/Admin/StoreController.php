@@ -87,6 +87,7 @@ class StoreController extends Controller
                 'name' => $request->input('store_name'),
                 'network_id' => $request->input('network_id'),
                 'tracking_url' => $request->input('tracking_url'),
+                'deeplink_url' => $request->input('deeplink_url'),
                 'store_url' => $request->input('store_url'),
                 'description' => $request->input('description'),
                 'status' => 'active',
@@ -98,7 +99,7 @@ class StoreController extends Controller
             return redirect()->route('admin.stores.show_store','slug=' . $store->slug);
         } catch (Exception $exception) {
 
-            flash()->error('Error while adding new store');
+            flash()->error($exception->getMessage() . 'Error while adding new store');
             return redirect()->route('admin.stores.index');
         }
     }
@@ -151,6 +152,7 @@ class StoreController extends Controller
                 'name' => $request->input('store_name'),
                 'network_id' => $request->input('network_id'),
                 'tracking_url' => $request->input('tracking_url'),
+                'deeplink_url' => $request->input('deeplink_url'),
                 'store_url' => $request->input('store_url'),
                 'description' => $request->input('description'),
                 'extra_info' => $request->input('extra_info'),

@@ -23,6 +23,7 @@ class CreateStoresTable extends Migration
             $table->longText('terms_conditions')->nullable();
             $table->longText('extra_info')->nullable();
             $table->longText('tracking_url');
+            $table->longText('deeplink_url')->nullable();
             $table->string('store_url')->nullable();
             $table->string('network_status')->nullable();
             $table->string('status_description')->nullable();

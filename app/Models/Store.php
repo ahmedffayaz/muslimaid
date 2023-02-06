@@ -18,6 +18,7 @@ class Store extends Model
         'slug',
         'advertiser_id',
         'tracking_url',
+        'deeplink_url',
         'store_url',
         'description',
         'terms_conditions',
