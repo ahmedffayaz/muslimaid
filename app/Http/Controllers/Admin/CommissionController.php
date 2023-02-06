@@ -64,8 +64,8 @@ class CommissionController extends Controller
     {
         $request->validate([
             'exit_click_id' => 'required|integer|min:1',
-            'order_value' => 'nullable|numeric',
-            'network_commission' => 'required|numeric',
+            'order_value' => 'nullable|numeric|min:0',
+            'network_commission' => 'required|numeric|min:0',
             'amount' => 'nullable|numeric',
             'status' => 'required|integer'
         ], [
@@ -76,6 +76,9 @@ class CommissionController extends Controller
         ]);
 
         try {
+            if( $request->order_value < 0)
+            return "Error: Value must be greater than or equal to zero.";
+
             $click = ExitClick::findOrFail($request->exit_click_id);
             $customCashbackPercentage = $click->store->custom_cashback_percentage;
 

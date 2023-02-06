@@ -20,11 +20,16 @@
                                             <li class="nk-block-tools-opt"><a href="{{ route('admin.charities.create') }}" class="btn btn-primary btn-sm"><em
                                                         class="icon ni ni-plus"></em><span>Add Charity</span></a></li>
                                             <li class="nk-block-tools-opt"><a href="#add-charity-modal" class="btn btn-primary btn-sm" data-toggle="modal"><em
-                                                        class="icon ni ni-plus"></em><span>Create Charity Type</span></a></li>
+                                                        class="icon ni ni-plus"></em><span>Create Charity Type</span></a>
+                                            </li>
                                             <li class="nk-block-tools-opt"><a href="{{ route('admin.charities.charity_type_view') }}" class="btn btn-primary btn-sm"><em
                                                         class="icon ni ni-plus"></em><span>View Charity Type</span></a></li>
 
-                                            {{-- <li><a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
+                                            {{-- <li><a href="{{route('admin.stores.export')}}" id="export"
+                                                class="btn btn-success btn-sm"
+                                                class="btn btn-white btn-outline-light"><em
+                                                    class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
+                                        --}}
                                         </ul>
                                     </div>
                                 </div><!-- .toggle-wrap -->
@@ -33,7 +38,7 @@
                     </div><!-- .nk-block-head -->
                     <div class="card card-preview mb-4">
                         <div class="card-inner">
-                            <form action="{{ route('admin.charities.search') }}" class="form-validate is-alter search_form" method="POST">
+                            <form action="{{ route('admin.charities.search') }}" class="is-alter search_form" method="POST">
                                 @csrf
                                 <div class="row g-4">
                                     {{-- <div class="col-lg-2"></div> --}}
@@ -123,16 +128,16 @@
                                     </div>
                                     <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
                                 </div>
-                                <div id="add-voucher-form" class=" p-4">
-                                    <form action="{{ route('admin.admin-charities-store') }}" class="gy-3 form-validate is-alter voucher_form" method="POST">
+                                <div class="p-4">
+                                    <form action="{{ route('admin.admin-charities-store') }}" class="gy-3 form-validate is-alter " id="add-charity-form" method="POST">
                                         @csrf
                                         <div class="row g-4">
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <label class="form-label">Title</label>
                                                     <div class="form-control-wrap">
-                                                        <input id="ticket-name" type="text" class="form-control" name="title" placeholder="Title"
-                                                            value="{{ old('name') }}">
+                                                        <input id="title" type="text" class="form-control" name="title" placeholder="Title"
+                                                            value="{{ old('title') }}" required>
                                                         @error('title')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -154,9 +159,10 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            
                                             <div class="col-12">
                                                 <div class="form-group">
-                                                    <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                                                    <button type="submit" class="btn-lg btn-primary" id="save-btn">Save</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -171,6 +177,54 @@
     </div>
 @endsection
 @push('scripts')
+    <script>
+        $('#add-charity-form').on('submit', function(event) {
+            event.preventDefault();
+            let btn = $('#save-btn')
+            btn.attr('disabled', 'disabled')
+                .append('<span class="spinner-border spinner-border-sm ml-1" role="status"></span>');
+            let url = "{{ route('admin.admin-charities-store') }}";
+            let method = 'POST';
+            let form = $('#add-charity-form');
+            let formData = new FormData(form[0]);
+            $.ajax({
+                url: url,
+                type: method,
+                processData: false,
+                contentType: false,
+                data: formData,
+                success: function(response) {
+                    $('#add-charity-modal').modal('hide');
+                    form.trigger('reset');
+                    btn.removeAttr('disabled', 'disabled').button('refresh');
+                },
+                error: function(error) {
+
+                    btn.removeAttr('disabled', 'disabled').button('refresh');
+                    btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
+                }
+            });
+        });
+
+        $('.form-validate').validate({
+            errorClass: 'invalid-feedback d-block',
+            rules: {
+                title: {
+                    required: true,
+
+                },
+                status: {
+                    required: true,
+
+                },
+            },
+            submitHandler: function(form) {
+                if ($(form).valid())
+                    form.submit();
+                return false;
+            }
+        });
+    </script>
     <script>
         $(document).ready(function() {
             $(document).on('click', '.delete', function(event) {
