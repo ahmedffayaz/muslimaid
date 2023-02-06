@@ -6,8 +6,6 @@
         
     
     <div class="nk-tb-col pl-0"><span class="sub-text">Store</span></div>
-    {{-- <div class="nk-tb-col text-center"><span class="sub-text">Order Value ({{ currency() }})</span></div> --}}
-    {{-- <div class="nk-tb-col text-center"><span class="sub-text">Network Commission ({{ currency() }})</span></div> --}}
     <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Network Commission ({{ currency() }})</span></div>
     <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Cashback ({{ currency() }})</span></div>
     <div class="nk-tb-col  text-center"><span class="sub-text">Exit Click Id</span></div>
