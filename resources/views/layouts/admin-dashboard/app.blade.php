@@ -27,8 +27,6 @@
     <link rel="stylesheet" href="{{ asset('admin-dashboard/css/dashlite.css?ver=2.2.0') }}">
     <link id="skin-default" rel="stylesheet" href="{{ asset('admin-dashboard/css/theme.css?ver=2.2.0') }}">
     <link rel="stylesheet" href="{{ asset('vendor/laraberg/css/laraberg.css') }}">
-    <script src="https://unpkg.com/react@16.8.6/umd/react.production.min.js"></script>
-    <script src="https://unpkg.com/react-dom@16.8.6/umd/react-dom.production.min.js"></script>
     <script src="{{ asset('vendor/laraberg/js/laraberg.js') }}"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" rel="stylesheet">
     @livewireStyles
