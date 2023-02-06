@@ -23,13 +23,16 @@
                     <div class="nk-tb-col text-right"><span>Status</span></div>
                 </div><!-- .nk-tb-head -->
                 @foreach($coms as $com)
-                
                 <div class="nk-tb-item">
                     <div class="nk-tb-col">
-                        <div class="icon-text"><a href="{{route('admin.stores.show_store')}}?slug={{$com->store->slug}}">
-                            
-                            <span class="tb-lead"> <em class="text-primary icon ni ni-cart-fill mr-2"></em>{{$com->store->name}}</span></a>
-                        </div>
+                        @if ($com->store_id)
+                            <div class="icon-text"><a href="{{route('admin.stores.show_store')}}?slug={{$com->store->slug}}">
+                                
+                                <span class="tb-lead"> <em class="text-primary icon ni ni-cart-fill mr-2"></em>{{$com->store->name}}</span></a>
+                            </div>
+                        @else
+                            <span class="profile-ud-value"> {{ ucfirst(str_replace('_', ' ', $com->type)) }}</span>
+                        @endif 
                     </div>
                     <div class="nk-tb-col">
                         <span class="tb-sub"><span>{{$com->user->first_name ?? ''}} {{$com->user->last_name ?? ''}}</span></span>

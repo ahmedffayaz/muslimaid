@@ -777,7 +777,7 @@
                                                 <div class="nk-block-head">
                                                     <h5 class="title">Cashback Settings</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings form-validate" method="POST">
+                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" id="form-validate" method="POST">
                                                     @csrf
                                                     @method('POST')
                                                     <div class="row g-3 align-center">
@@ -852,7 +852,7 @@
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" id="min_cashout_amount" name="min_cashout_amount"
+                                                                    <input type="number" class="form-control" min="0.0" step="0.1" id="min_cashout_amount" name="min_cashout_amount"
                                                                         value="{{ $settings['min_cashout_amount'] ?? '' }}" placeholder="Min Cashout Amount">
                                                                 </div>
                                                             </div>
@@ -868,7 +868,7 @@
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" id="welcome_bonus" name="welcome_bonus"
+                                                                    <input type="number" class="form-control" id="welcome_bonus"  min= "0.0" step="0.1"  name="welcome_bonus"
                                                                         value="{{ $settings['welcome_bonus'] ?? '' }}" placeholder="Welcome Bonus">
                                                                 </div>
                                                             </div>
@@ -885,7 +885,7 @@
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="number" class="form-control" id="referral_bonus" name="referral_bonus"
+                                                                    <input type="number" class="form-control" id="referral_bonus" min= "0.0" step="0.1"  name="referral_bonus"
                                                                         value="{{ $settings['referral_bonus'] ?? '' }}" placeholder="Referral Bonus">
                                                                 </div>
                                                             </div>
@@ -1029,10 +1029,16 @@
             return this.optional(element) || value >= param;
         }, "Value must be equal to or greater than {0}.");
 
-        $('.form-validate').validate({
+        $('#form-validate').validate({
             rules: {
                 referral_bonus: {
-                    minValue: 1
+                    minValue: 0
+                },
+                welcome_bonus: {
+                    minValue: 0 
+                },
+                min_cashout_amount: {
+                    minValue: 0 
                 }
             }
         });
