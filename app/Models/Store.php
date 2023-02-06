@@ -109,4 +109,20 @@ class Store extends Model
     {
         return $this->hasMany(StoreAddress::class, 'store_id', 'id');
     }
+
+    public function getCashback()
+    {
+        $currency = null;
+        $percentage = null;
+        if ($this->cashback) {
+            $this->cashback->type == 'fixed' ? ($this->cashback->currency ? $currency = $this->cashback->currency : $currency = currency()) : '';
+            $this->cashback->type == 'percentage' ? $percentage = '%' : '';
+            if ($this->custom_cashback_percentage) {
+                return $currency . ($this->custom_cashback_percentage / 100) * $this->cashback->sale_commission . $percentage . ' Cashback';
+            } else {
+                return $currency . (SiteSetting()['cashback_percentage'] / 100) * $this->cashback->sale_commission . $percentage . ' Cashback';
+            }
+        }
+        return null;
+    }
 }
