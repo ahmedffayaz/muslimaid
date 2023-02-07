@@ -225,13 +225,13 @@ d-xl-none
                     @endcanany
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
-                            <span class="nk-menu-icon {{ getNewIndicatorClassForAdmin('ticket') }}"><em class="icon ni ni-layout-alt-fill"></em></span>
+                            <span class="nk-menu-icon {{ getNewIndicatorClassForAdmin('tickets') }}"><em class="icon ni ni-layout-alt-fill"></em></span>
                             <span class="nk-menu-text">CMS</span>
                         </a>
                         <ul class="nk-menu-sub">
                             @can('view tickets')
                             <li class="nk-menu-item ">
-                                <a href="{{ route('admin.tickets.index') }}" class="nk-menu-link {{ getNewIndicatorClassForAdmin('ticket') }}">
+                                <a href="{{ route('admin.tickets.index') }}" class="nk-menu-link {{ getNewIndicatorClassForAdmin('tickets') }}">
                                     <span class="nk-menu-icon "><em class="icon ni ni-chat-fill"></em></span>
                                     <span class="nk-menu-text">Tickets</span>
                                 </a>

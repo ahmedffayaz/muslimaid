@@ -20,12 +20,9 @@
                         <div class="dropdown">
                             <a href="{{ route('admin.home.index') }}" class="dropbtn user-name"><em class="icon ni ni-home-fill"></em> Dashboard</a>
                         </div>
-                        @php
-                            $new_reviews = \App\Models\StoreReview::where('status', 'pending')->get();
-                        @endphp
                         <div class="dropdown">
                             <a href="{{ route('admin.stores.index') }}"
-                                class="dropbtn user-name dropdown-indicator @if (count($new_reviews)) icon-status-before icon-status-info-before @endif"><em
+                                class="dropbtn user-name dropdown-indicator {{ getNewIndicatorClassForAdmin('reviews', 'before') }}"><em
                                     class="icon ni ni-db-fill"></em> Data</a>
                             <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-content">
                                 <div class="dropdown-inner px-4">
@@ -48,7 +45,7 @@
                                         @endcan
                                         @can('view reviews')
                                             <li class="">
-                                                <a href="{{ route('admin.reviews.index') }}" class="@if (count($new_reviews)) icon-status icon-status-info @endif">
+                                                <a href="{{ route('admin.reviews.index') }}" class="{{ getNewIndicatorClassForAdmin('reviews') }}">
                                                     <span class="nk-menu-icon"><em class="icon ni ni-notice"></em></span>
                                                     <span class="nk-menu-text">Store Reviews</span>
                                                 </a>
@@ -66,12 +63,9 @@
                                 </div>
                             </div>
                         </div>
-                        @php
-                            $new_cashouts = \App\Models\Cashout::where('new_cashout', 1)->get();
-                        @endphp
                         <div class="dropdown">
                             <a href="{{ route('admin.commissions.index') }}"
-                                class="dropbtn user-name dropdown-indicator  @if (count($new_cashouts)) icon-status-before icon-status-info-before @endif"><em
+                                class="dropbtn user-name dropdown-indicator {{ getNewIndicatorClassForAdmin('sales', 'before') }}"><em
                                     class="icon ni ni-sign-gbp"></em> Sales</a>
                             <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-content">
                                 <div class="dropdown-inner px-4">
@@ -86,7 +80,7 @@
                                         @endcan
                                         @can('view cashouts')
                                             <li class="">
-                                                <a href="{{ route('admin.cashouts.index') }}" class="@if (count($new_cashouts)) icon-status icon-status-info @endif">
+                                                <a href="{{ route('admin.cashouts.index') }}" class="{{ getNewIndicatorClassForAdmin('sales') }}">
                                                     <span class="nk-menu-icon"><em class="icon ni ni-cc-alt2-fill"></em></span>
                                                     <span class="nk-menu-text">Cashouts</span>
                                                 </a>
@@ -207,19 +201,16 @@
                                 </div>
                             </div>
                         </div>
-                        @php
-                            $new_tickets = \App\Models\Ticket::where('new_ticket', 1)->get();
-                        @endphp
                         <div class="dropdown">
                             <a href="{{ route('admin.pages.index') }}"
-                                class="dropbtn user-name dropdown-indicator @if (count($new_tickets)) icon-status-before icon-status-info-before @endif"><em
+                                class="dropbtn user-name dropdown-indicator {{ getNewIndicatorClassForAdmin('tickets', 'before') }}"><em
                                     class="icon ni ni-layout-alt-fill"></em> CMS</a>
                             <div class="dropdown-menu dropdown-menu-md dropdown-menu-right dropdown-content ">
                                 <div class="dropdown-inner px-4">
                                     <ul class="link-list">
                                         @can('view tickets')
                                             <li class=" ">
-                                                <a href="{{ route('admin.tickets.index') }}" class=" @if (count($new_tickets)) icon-status icon-status-info @endif">
+                                                <a href="{{ route('admin.tickets.index') }}" class="{{ getNewIndicatorClassForAdmin('tickets') }}">
                                                     <span class="nk-menu-icon "><em class="icon ni ni-chat-fill"></em></span>
                                                     <span class="nk-menu-text">Tickets</span>
                                                 </a>

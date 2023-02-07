@@ -585,7 +585,7 @@ function csvToArray($path)
     }
 }
 
-function getNewIndicatorClassForAdmin($type)
+function getNewIndicatorClassForAdmin($type, $class = null)
 {
     if ($type == 'reviews')
         $records = StoreReview::whereStatus('pending')->count();
@@ -593,8 +593,11 @@ function getNewIndicatorClassForAdmin($type)
     if ($type == 'sales')
         $records = Cashout::whereNewCashout(1)->count();
 
-    if ($type == 'ticket')
+    if ($type == 'tickets')
         $records = Ticket::whereNewTicket(1)->count();
+
+    if ($class != null)
+        return $records ? 'icon-status-' . $class . ' icon-status-info-' . $class : '';
 
     return $records ? 'icon-status icon-status-info' : '';
 }
