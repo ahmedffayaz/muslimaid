@@ -2,11 +2,14 @@
 
 use Carbon\Carbon;
 use App\Models\Store;
+use App\Models\Ticket;
+use App\Models\Cashout;
 use App\Models\SeoRule;
 use App\Models\Category;
 use App\Models\Currency;
 use App\Models\UserVerify;
 use App\Models\SiteSetting;
+use App\Models\StoreReview;
 use Illuminate\Support\Str;
 use App\Models\EmailTemplate;
 use Illuminate\Support\Facades\File;
@@ -580,4 +583,18 @@ function csvToArray($path)
     } catch (Exception $e) {
         return [];
     }
+}
+
+function getNewIndicatorClassForAdmin($type)
+{
+    if ($type == 'reviews')
+        $records = StoreReview::whereStatus('pending')->count();
+
+    if ($type == 'sales')
+        $records = Cashout::whereNewCashout(1)->count();
+
+    if ($type == 'ticket')
+        $records = Ticket::whereNewTicket(1)->count();
+
+    return $records ? 'icon-status icon-status-info' : '';
 }

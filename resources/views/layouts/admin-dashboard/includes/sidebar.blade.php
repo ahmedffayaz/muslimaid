@@ -1,8 +1,3 @@
-@php
-    $newStoreReviews = \App\Models\StoreReview::where('status', 'pending')->get();
-    $newCashouts = \App\Models\Cashout::where('new_cashout',1)->get();
-    $newTickets = \App\Models\Ticket::where('new_ticket',1)->get();
-@endphp
 <div class="nk-sidebar nk-sidebar-fixed is-light is-compact
 @isset($settings['dashboard_menu_type']) @if ($settings['dashboard_menu_type'] == 'top')
 d-xl-none
@@ -47,7 +42,7 @@ d-xl-none
                     @canany(['view categories', 'view stores', 'view reviews', 'view vouchers'])
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
-                            <span class="nk-menu-icon {{ count($newStoreReviews) ? 'icon-status icon-status-info' : '' }}"><em class="icon ni ni-db-fill"></em></span>
+                            <span class="nk-menu-icon {{ getNewIndicatorClassForAdmin('reviews') }}"><em class="icon ni ni-db-fill"></em></span>
                             <span class="nk-menu-text">Data</span>
                         </a>
                         <ul class="nk-menu-sub">
@@ -70,7 +65,7 @@ d-xl-none
                             @can('view reviews')
                             <li class="nk-menu-item">
                                 <a href="{{ route('admin.reviews.index') }}" class="nk-menu-link">
-                                    <span class="nk-menu-icon {{ count($newStoreReviews) ? 'icon-status icon-status-info' : '' }}"><em class="icon ni ni-notice"></em></span>
+                                    <span class="nk-menu-icon {{ getNewIndicatorClassForAdmin('reviews') }}"><em class="icon ni ni-notice"></em></span>
                                     <span class="nk-menu-text">Store Reviews</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
@@ -89,7 +84,7 @@ d-xl-none
                     @canany(['view cashbacks', 'add cashbacks', 'view cashouts'])
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
-                            <span class="nk-menu-icon {{ count($newCashouts) ? 'icon-status icon-status-info' : '' }}"> <em class="icon ni ni-sign-gbp"></em></span>
+                            <span class="nk-menu-icon {{ getNewIndicatorClassForAdmin('sales') }}"> <em class="icon ni ni-sign-gbp"></em></span>
                             <span class="nk-menu-text">Sales</span>
                         </a>
                         <ul class="nk-menu-sub">
@@ -104,7 +99,7 @@ d-xl-none
                             @can('view cashbouts')
                             <li class="nk-menu-item">
                                 <a href="{{ route('admin.cashouts.index') }}" class="nk-menu-link">
-                                    <span class="nk-menu-icon {{ count($newCashouts) ? 'icon-status icon-status-info' : '' }}"> <em class="icon ni ni-cc-alt2-fill"></em></span>
+                                    <span class="nk-menu-icon {{ getNewIndicatorClassForAdmin('sales') }}"> <em class="icon ni ni-cc-alt2-fill"></em></span>
                                     <span class="nk-menu-text">Cashouts</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
@@ -230,13 +225,13 @@ d-xl-none
                     @endcanany
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
-                            <span class="nk-menu-icon {{ count($newTickets) ? 'icon-status icon-status-info' : '' }}"><em class="icon ni ni-layout-alt-fill"></em></span>
+                            <span class="nk-menu-icon {{ getNewIndicatorClassForAdmin('ticket') }}"><em class="icon ni ni-layout-alt-fill"></em></span>
                             <span class="nk-menu-text">CMS</span>
                         </a>
                         <ul class="nk-menu-sub">
                             @can('view tickets')
                             <li class="nk-menu-item ">
-                                <a href="{{ route('admin.tickets.index') }}" class="nk-menu-link {{ count($newTickets) ? 'icon-status icon-status-info' : '' }}">
+                                <a href="{{ route('admin.tickets.index') }}" class="nk-menu-link {{ getNewIndicatorClassForAdmin('ticket') }}">
                                     <span class="nk-menu-icon "><em class="icon ni ni-chat-fill"></em></span>
                                     <span class="nk-menu-text">Tickets</span>
                                 </a>
