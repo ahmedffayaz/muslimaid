@@ -59,9 +59,6 @@ class StoreController extends Controller
             return abort(404);
         }
         $categories = Category::with(['stores.storeAddress'])->whereParentId($mainCategory['id'])->orderBy('name', 'ASC')->get();
-        if ($categories->count() == 0) {
-            return abort(404);
-        }
         $location_array = array();
         foreach ($categories as $category) {
             foreach ($category->stores as $store) {

@@ -23,7 +23,7 @@ class CharityController extends Controller
     public function index()
     {
         $charities = Charity::latest()->paginate(30);
-        $charitiestypes = CharityType::latest()->get();
+        $charitiestypes = CharityType::where('status', '1')->get();
         return view('admin-dashboard.charities.index', compact('charities', 'charitiestypes'));
     }
     public function searchCharities(Request $request)
@@ -56,7 +56,7 @@ class CharityController extends Controller
      */
     public function create()
     {
-        $charitiestypes = CharityType::latest()->get();
+        $charitiestypes = CharityType::where('status', '1')->get();
         return view('admin-dashboard.charities.create', compact('charitiestypes'));
     }
 
@@ -82,7 +82,6 @@ class CharityController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-        // try {
         $charity = Charity::create([
             'title' => $request->input('title'),
             'charity_types_id' => $request->input('charity_types_id'),
@@ -124,27 +123,36 @@ class CharityController extends Controller
                 $charity->update();
             }
         }
+
         flash()->success('New Charity added');
         return redirect()->route('admin.charities.index');
     }
     //  charity index function
     public function charityTypeView()
     {
-        $CharityType = CharityType::latest()->get();
+        $CharityType = CharityType::latest()->paginate(15);
         return view('admin-dashboard.charities.charity_type_view', compact('CharityType'));
     }
     //  charity store function
     public function charityTypeStore(Request $request)
     {
-        $request->validate([
-            'title' => 'required',
+        $validated = $request->validate([
+            'title' => 'required|regex:/^[\w. ]+$/',
             'status' => 'required',
+        ], $messages = [
+            'title.required' => 'The Title field is required.',
+            'status.required' => 'The Status is required.',
         ]);
         CharityType::create([
             'title' =>  $request->title,
             'status' => $request->status,
         ]);
-
+        if ($request->ajax()) {
+            return array(
+                'message' => 'Charity added successfully.',
+                'success' => 'Charity added successfully',
+            );
+        }
         flash()->success('New Charity Type added');
         return redirect()->route('admin.charities.charity_type_view');
     }
