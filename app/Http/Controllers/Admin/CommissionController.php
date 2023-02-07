@@ -14,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
-use  Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CommissionController extends Controller
@@ -76,8 +76,8 @@ class CommissionController extends Controller
         ]);
 
         try {
-            if( $request->order_value < 0)
-            return "Error: Value must be greater than or equal to zero.";
+            if ($request->order_value < 0)
+                return "Error: Value must be greater than or equal to zero.";
 
             $click = ExitClick::findOrFail($request->exit_click_id);
             $customCashbackPercentage = $click->store->custom_cashback_percentage;
