@@ -96,7 +96,7 @@ class StoreController extends Controller
             ]);
 
             flash()->success('New store added');
-            return redirect()->route('admin.stores.show_store','slug=' . $store->slug);
+            return redirect()->route('admin.stores.show_store', 'slug=' . $store->slug);
         } catch (Exception $exception) {
 
             flash()->error($exception->getMessage() . 'Error while adding new store');
@@ -240,7 +240,7 @@ class StoreController extends Controller
     {
         $validation = $request->validate([
             'image' => 'required|mimes:jpeg,jpg,png,gif|max:2048',
-       ]);
+        ]);
         if ($request->has('image')) {
 
             $img_exist = StoreImage::where(['store_id' => $store->id, 'title' => $request->title])->first();
@@ -394,7 +394,7 @@ class StoreController extends Controller
     {
 
         DB::table('category_store')->where('store_id', $request->input('store_id'))->delete();
-        if($request->input('category_id')!=null){
+        if ($request->input('category_id') != null) {
             foreach ($request->input('category_id') as $category) {
                 DB::table('category_store')->insert([
                     'store_id' => $request->input('store_id'),
