@@ -16,12 +16,12 @@ use App\Models\StoreAddress;
 use App\Models\StoreSeoData;
 use Illuminate\Http\Request;
 use App\Models\StoreCashback;
-use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class StoreController extends Controller
@@ -179,7 +179,6 @@ class StoreController extends Controller
                 return true;
             }
         } catch (\Throwable $th) {
-
             return $th;
         }
     }
