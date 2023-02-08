@@ -13,9 +13,8 @@ class TicketsController extends Controller
 {
     function __construct()
     {
-        
-         $this->middleware('permission:view tickets', ['only' => ['index','show']]);
-         $this->middleware('permission:close tickets', ['only' => ['closeTicket']]);
+        $this->middleware('permission:view tickets', ['only' => ['index','show']]);
+        $this->middleware('permission:close tickets', ['only' => ['closeTicket']]);
 
     }
     /**
@@ -30,27 +29,6 @@ class TicketsController extends Controller
         $categories = TicketCategory::latest()->get();
         $users = User::role('user')->latest()->get();
         return view('admin-dashboard.tickets.index', compact('users','categories','tickets','route'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -70,46 +48,11 @@ class TicketsController extends Controller
                 $reply->update();
             }
         }
-        return view('admin-dashboard.tickets.show',compact('ticket')); 
+        return view('admin-dashboard.tickets.show',compact('ticket'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+    public function closeTicket(Ticket $ticket)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-
-    public function closeTicket(Ticket $ticket){
-
         $ticket->update(['status'=>'closed',
         'closing_time'=> Carbon::now(),
         'closed_by'=>auth()->user()->id]);
@@ -128,7 +71,6 @@ class TicketsController extends Controller
     }
     public function searchTickets(Request $request, Ticket $tickets)
     {
-        // dd($request->all());
         $tickets = $tickets->newQuery();
 
         // Search by ticket_id
@@ -147,7 +89,7 @@ class TicketsController extends Controller
         // Search by title.
         if ($request->input('title')) {
             $tickets->where('title','like', '%'.$request->input('title').'%');
-           
+
         }
 
         // Search by status.
@@ -155,14 +97,8 @@ class TicketsController extends Controller
             $tickets->where('status', $request->input('status'));
         }
 
-        // Search by priority.
-        // if ($request->input('priority')!=-1) {
-        //     $tickets->where('priority', $request->input('priority'));
-        // }
-        
         $tickets = $tickets->orderBy('new_ticket','DESC')->latest()->paginate(30);
         $route='search';
-        // dd($tickets);
         return view('admin-dashboard.tickets.index_data', compact('tickets','route'))->render();
     }
 }

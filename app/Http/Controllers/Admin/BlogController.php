@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Blog;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\DB;
 
 class BlogController extends Controller
 {
@@ -30,7 +29,6 @@ class BlogController extends Controller
     public function create()
     {
         return view('admin-dashboard.blogs.create');
-
     }
 
     /**
@@ -72,20 +70,8 @@ class BlogController extends Controller
             }
         }
 
-
         flash()->success('New blog post created successfully');
         return redirect()->route('admin.blogs.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -130,6 +116,7 @@ class BlogController extends Controller
         flash()->success('blog deleted successfully');
         return redirect()->route('admin.blogs.index');
     }
+
     public function runValidation($request)
     {
         return $request->validate([

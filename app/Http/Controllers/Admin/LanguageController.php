@@ -5,13 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Language;
-use Illuminate\Http\JsonResponse;
 use \Illuminate\Support\Facades\Validator;
 use Config;
 
 class LanguageController extends Controller
 {
-
     /**
      * Create a new controller instance.
      *
@@ -37,17 +35,7 @@ class LanguageController extends Controller
         $all_languages = Config::get('languages.languages');
         $languages = Language::orderBy('id', 'desc')->paginate(20);
         return view('admin-dashboard.languages.index', compact('all_languages','languages','route'));
-       
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -88,42 +76,8 @@ class LanguageController extends Controller
             flash()->error('Something went wrong!');
 
             return redirect()->route('admin.languages.index');
-           
+
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**
@@ -135,7 +89,7 @@ class LanguageController extends Controller
     public function destroy($id)
     {
         try {
-            
+
             $language = Language::findOrFail($id);
 
             if ($language->code === 'en')
@@ -175,15 +129,15 @@ class LanguageController extends Controller
         // Search by name.
         if ($request->input('name')) {
             $languages->where('name','like', '%'.$request->input('name').'%');
-           
+
         }
 
-       
-        
+
+
         $languages = $languages->latest()->paginate(20);
         $route='search';
         return view('admin-dashboard.languages.index_data', compact('languages','route'))->render();
-        
+
 
     }
     public function comingSoon(){

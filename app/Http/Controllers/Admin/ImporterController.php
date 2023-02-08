@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Exception;
 use App\Models\Store;
 use App\Jobs\Importer;
 use App\Models\Network;
@@ -9,6 +10,7 @@ use App\Models\Voucher;
 use App\Models\ExitClick;
 use App\Jobs\AwinImporter;
 use App\Models\SiteSetting;
+use Illuminate\Support\Str;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Models\StoreCashback;
@@ -23,7 +25,6 @@ class ImporterController extends Controller
 {
     function __construct()
     {
-
         $this->middleware('permission:run importer', ['only' => ['import']]);
     }
 
@@ -61,8 +62,6 @@ class ImporterController extends Controller
 
     public function import_commissions()
     {
-
-        // $cashback_percent = \Config::get('app.cashback_percent');
         $total_callback = 0;
         $beforePostingDate = date('Y-m-d\TH:i:s\z', strtotime('-91 days'));
         $sincePostingDate = date('Y-m-d\TH:i:s\z', strtotime('-121 days'));
@@ -90,16 +89,12 @@ class ImporterController extends Controller
         curl_close($curl);
         $result_array = json_decode($result, TRUE);
 
-        dd($result_array);
-
         if (
             array_key_exists('data', $result_array)
             && array_key_exists('publisherCommissions', $result_array['data'])
             && array_key_exists('records', $result_array['data']['publisherCommissions'])
         ) {
-
             foreach ($result_array['data']['publisherCommissions']['records'] as $cashback) {
-
                 $store = Store::where('advertiser_id', $cashback['advertiserId'])->first();
                 $click = ExitClick::where('id', $cashback['shopperId'])->first();
 
@@ -117,7 +112,6 @@ class ImporterController extends Controller
                     $status = 2;
                 }
                 if (!$commission_exist) {
-
                     $commission = UserCashback::create([
                         'store_id' => $store->id,
                         'user_id' => $click->user_id ?? 0,
@@ -158,17 +152,14 @@ class ImporterController extends Controller
 
     public function import_coupons()
     {
-
         ini_set('max_execution_time', 3000); // 5 minutes
 
         //importing coupons
-
         $total_records = 1;
         $fetched_records = 0;
         $page = 1;
 
         while ($fetched_records < $total_records) {
-
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&promotion-type=coupon&advertiser-ids=joined&records-per-page=100&page-number=' . $page);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -188,7 +179,6 @@ class ImporterController extends Controller
                 if (array_key_exists(0, $link_array['links']['link'])) {
                     $links = $link_array['links']['link'];
                     foreach ($links as $link) {
-
                         $store = Store::where('advertiser_id', $link['advertiser-id'])->first();
                         if (array_key_exists('link-code-html', $link)) {
                             $html = $link['link-code-html'];
@@ -211,11 +201,9 @@ class ImporterController extends Controller
                             "promotion_start_date" => empty($link['promotion-start-date']) ? NULL : $link['promotion-start-date'],
                             "promotion_type" => empty($link['promotion-type']) ? NULL : $link['promotion-type'],
                             "coupon_code" => empty($link['coupon-code']) ? NULL : $link['coupon-code'],
-
                         ]);
                     }
                 } else {
-
                     $link = $link_array['links']['link'];
                     $store = Store::where('advertiser_id', $link['advertiser-id'])->first();
                     if (array_key_exists('link-code-html', $link)) {
@@ -226,7 +214,6 @@ class ImporterController extends Controller
                         $img_src = $xpath->evaluate("string(//img/@src)");
                     }
                     $voucher = Voucher::create([
-
                         'image'           => $img_src,
                         'click_url'       => empty($link['clickUrl']) ? '#' : $link['clickUrl'],
                         'sale_commission' => empty($link['sale-commission']) ? NULL : $link['sale-commission'],
@@ -254,7 +241,6 @@ class ImporterController extends Controller
         $page = 1;
 
         while ($fetched_records < $total_records) {
-
             $ch = curl_init();
             curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&promotion-type=sale/discount&advertiser-ids=joined&records-per-page=100&page-number=' . $page);
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -272,13 +258,10 @@ class ImporterController extends Controller
             $link_data = simplexml_load_string($link_result);
             $link_array = json_decode(json_encode($link_data), TRUE);
 
-            // dd($link_array);
-
             if (array_key_exists('links', $link_array) && array_key_exists('link', $link_array['links'])) {
                 if (array_key_exists(0, $link_array['links']['link'])) {
                     $links = $link_array['links']['link'];
                     foreach ($links as $link) {
-
                         $store = Store::where('advertiser_id', $link['advertiser-id'])->first();
 
                         if (array_key_exists('link-code-html', $link)) {
@@ -305,7 +288,6 @@ class ImporterController extends Controller
                         ]);
                     }
                 } else {
-
                     $link = $link_array['links']['link'];
                     $store = Store::where('advertiser_id', $link['advertiser-id'])->first();
                     if (array_key_exists('link-code-html', $link)) {
@@ -347,7 +329,6 @@ class ImporterController extends Controller
      */
     public function create()
     {
-
         ini_set('max_execution_time', 3000); // 5 minutes
 
         $setting = ImporterSetting::where('network_id', 1)->first();
@@ -360,7 +341,6 @@ class ImporterController extends Controller
             $page = 1;
 
             while ($fetched_records < $total_records) {
-
                 $ch = curl_init();
 
                 curl_setopt($ch, CURLOPT_URL, 'https://advertiser-lookup.api.cj.com/v2/advertiser-lookup?requestor-cid=5499477&advertiser-ids=2746196&records-per-page=50&page-number=' . $page);
@@ -380,17 +360,12 @@ class ImporterController extends Controller
                 $data = simplexml_load_string($result);
                 $array = json_decode(json_encode($data), TRUE);
 
-                // dd($data->advertisers->advertiser->actions); 
-
                 $adverts = $data->advertisers->advertiser;
 
                 foreach ($adverts as $advertiser) {
-
                     try {
-
                         $store = Store::where('advertiser_id', $advertiser->{'advertiser-id'})->first();
                         if (true) {
-
                             $store = Store::create([
                                 'name'         => $advertiser->{'advertiser-name'},
                                 'advertiser_id' => $advertiser->{'advertiser-id'},
@@ -399,8 +374,6 @@ class ImporterController extends Controller
                                 'store_url'    => $advertiser->{'program-url'},
                             ]);
 
-
-
                             //importing cashbacks for current advertiser/store/merchent
 
                             $ch = curl_init();
@@ -408,7 +381,6 @@ class ImporterController extends Controller
                             curl_setopt($ch, CURLOPT_URL, 'https://link-search.api.cj.com/v2/link-search?website-id=100179843&link-type=banner&advertiser-ids=' . $advertiser->{'advertiser-id'});
                             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
                             curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');
-
 
                             $headers = array();
                             $headers[] = 'Authorization: Bearer 1jkkfyp5r28p43ghpsx4p1h588';
@@ -423,7 +395,6 @@ class ImporterController extends Controller
                             $link_data = simplexml_load_string($link_result);
                             $link_array = json_decode(json_encode($link_data), TRUE);
 
-                            // dd($link_data);
                             $destination_url = $advertiser->{'program-url'};
 
                             $link_found = 0;
@@ -431,7 +402,6 @@ class ImporterController extends Controller
 
                             if ($link_data->links->link) {
                                 foreach ($link_data->links->link as $link) {
-
                                     if (!strcmp($link->destination, $destination_url)) {
                                         $link_found = 1;
                                         $link_url = $link->clickUrl;
@@ -444,25 +414,18 @@ class ImporterController extends Controller
                                     $store->tracking_url = $link_data->links->link[0]->clickUrl;
                                 }
 
-                                // $store->tracking_url = $link_url;
                                 $store->update();
                             }
 
-
-
                             foreach ($advertiser->actions->action as $action) {
-
-
                                 if ($action->commission->default) {
-                                    $c_type = \Str::contains($action->commission->default, '%') ? 'percentage' : 'fixed';
+                                    $c_type = Str::contains($action->commission->default, '%') ? 'percentage' : 'fixed';
                                     if ($c_type == 'percentage') {
                                         $sale_commission =  str_replace('%', '', $action->commission->default);
                                     } else {
                                         $splited = explode(" ", $action->commission->default);
                                         $sale_commission = $splited[1];
                                     }
-                                    //   dd($sale_commission);
-
 
                                     $cb = StoreCashback::where('store_id', $store->id)->where('type', $c_type)->where('sale_commission', $action->commission->default)->first();
                                     if ($cb) {
@@ -481,12 +444,11 @@ class ImporterController extends Controller
                                             'network_detail' => $action->name . ' default',
                                             'store_id' => $store->id,
                                         ]);
-                                        dd($cashback);
                                     }
                                 }
                                 if ($action->commission->itemlist) {
                                     foreach ($action->commission->itemlist as $item) {
-                                        $c_type = \Str::contains($item, '%') ? 'percentage' : 'fixed';
+                                        $c_type = Str::contains($item, '%') ? 'percentage' : 'fixed';
                                         if ($c_type == 'percentage') {
                                             $sale_commission =  str_replace('%', '', $item);
                                         } else {
@@ -494,16 +456,13 @@ class ImporterController extends Controller
                                             $sale_commission = $splited[1];
                                         }
 
-
                                         $cb = StoreCashback::where('store_id', $store->id)->where('type', $c_type)->where('sale_commission', $item)->first();
                                         if ($cb) {
                                             $cb->update([
-
                                                 'detail' => $cb->detail . ', ' . $action->name . ' ' . $item->attributes()->name,
                                                 'network_detail' => $cb->network_detail . ', ' . $action->name . ' ' . $item->attributes()->name,
                                             ]);
                                         } else {
-
                                             $cashback = StoreCashback::create([
                                                 'type' => $c_type,
                                                 'image'           => '#',
@@ -520,7 +479,6 @@ class ImporterController extends Controller
                             }
 
                             if (!empty($advertiser->{'primary-category'}->{'parent'})) {
-
                                 $category_parent = ImportedCategory::where('name', $advertiser->{'primary-category'}->{'parent'})->first();
 
                                 if (!$category_parent) {
@@ -534,16 +492,13 @@ class ImporterController extends Controller
                                     'store_id' => $store->id,
                                     'category_id' => $category_parent->mapped_to ?? 0,
                                     'network_category_id' => $category_parent->id,
-
                                 ]);
                             }
 
                             if (!empty($advertiser->{'primary-category'}->{'child'})) {
-
                                 $category_child = ImportedCategory::where('name', $advertiser->{'primary-category'}->{'child'})->first();
 
                                 if (!$category_child) {
-
                                     $category_child = new ImportedCategory();
                                     $category_child->name = $advertiser->{'primary-category'}->{'child'};
                                     $category_child->parent_id = $category_parent->id ?? 0;
@@ -557,7 +512,7 @@ class ImporterController extends Controller
                                 ]);
                             }
                         }
-                    } catch (\Execption $e) {
+                    } catch (Exception $e) {
                         flash()->error('Error while running importer');
                         return redirect()->route('admin.stores.index');
                     }
@@ -568,17 +523,6 @@ class ImporterController extends Controller
                 $page++;
             }
         }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -593,51 +537,14 @@ class ImporterController extends Controller
         dispatch($importer);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
     public function saveSettings(Request $request)
     {
-
         $settings = ImporterSetting::updateOrCreate([
             'network_id'   => $request->network_id,
         ], [
             'import_stores'    => $request->has('stores') ? 1 : 0,
             'import_vouchers'  => $request->has('vouchers') ? 1 : 0,
             'import_cashbacks' => $request->has('cashback') ? 1 : 0,
-
-
         ]);
 
         return 'Settings saved';
