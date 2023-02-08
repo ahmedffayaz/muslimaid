@@ -2,24 +2,25 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\ExitClick;
-use App\Models\UserCashback;
+use Carbon\Carbon;
 use App\Models\Store;
 use App\Models\Network;
+use App\Models\ExitClick;
+use App\Models\UserCashback;
+use Illuminate\Http\Request;
 use App\Models\CashbackStatus;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class ReportsController extends Controller
 {
 
     function __construct()
     {
-         $this->middleware('permission:view performance', ['only' => ['store_performance','search_performance','fetchPerformance']]);
-         $this->middleware('permission:view earings', ['only' => ['earnings','search_earnings','fetchEarnings']]);
-         
+        $this->middleware('permission:view performance', ['only' => ['store_performance','search_performance','fetchPerformance']]);
+        $this->middleware('permission:view earings', ['only' => ['earnings','search_earnings','fetchEarnings']]);
     }
-   
+
     public function store_performance()
     {
         $paid_total_commission = UserCashback::where('status','4')->sum('network_commission');
@@ -31,14 +32,12 @@ class ReportsController extends Controller
         $coms = UserCashback::latest()->get();
         $total_clicks = ExitClick::latest()->get()->count();
 
-
-
         $stores = Store::latest()->get();
-        $clicks = ExitClick::select(\DB::raw('count(*) as count, store_id'))->groupBy('store_id')->orderBy('count','DESC')->paginate(20);       
-        $route = 'index'; 
+        $clicks = ExitClick::select(DB::raw('count(*) as count, store_id'))->groupBy('store_id')->orderBy('count','DESC')->paginate(20);
+        $route = 'index';
         return view('admin-dashboard.reports.store_performance',compact('clicks','stores','total_revenue','pending_total_revenue','clicks','coms','total_clicks','route'));
     }
-    
+
     public function search_performance(Request $request, ExitClick $clicks)
     {
         $clicks = $clicks->newQuery();
@@ -51,29 +50,28 @@ class ReportsController extends Controller
         // Search by range start date.
         if ($request->input('start_date')) {
 
-            $start_date =  \Carbon\Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
+            $start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
             $clicks->whereDate('created_at', '>=' ,$start_date);
         }
 
         //search by range end date
         if ($request->input('end_date')) {
-            
-            $end_date =  \Carbon\Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
+
+            $end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
             $clicks->whereDate('created_at', '<=' ,$end_date);
          }
-        
+
         $stores = Store::latest()->get();
-        $clicks = $clicks->select(\DB::raw('count(*) as count, store_id'))->groupBy('store_id')->orderBy('count','DESC')->paginate(20);
+        $clicks = $clicks->select(DB::raw('count(*) as count, store_id'))->groupBy('store_id')->orderBy('count','DESC')->paginate(20);
         $route='search';
         return view('admin-dashboard.reports.store_performance_data', compact('clicks','stores','route'))->render();
     }
 
     function fetchPerformance(Request $request)
-        {$route = 'index'; 
+        {$route = 'index';
         if($request->ajax())
         {
-            $clicks = ExitClick::select(\DB::raw('count(*) as count, store_id'))->groupBy('store_id')->orderBy('count','DESC')->paginate(20);        
-
+            $clicks = ExitClick::select(DB::raw('count(*) as count, store_id'))->groupBy('store_id')->orderBy('count','DESC')->paginate(20);
             return view('admin-dashboard.reports.store_performance_data',compact('clicks','route'));
         }
     }
@@ -95,6 +93,7 @@ class ReportsController extends Controller
         $route = 'index';
         return view('admin-dashboard.reports.earnings',compact('coms','networks','statuses','stores','total_revenue','pending_total_revenue','clicks','route'));
     }
+
     public function search_earnings(Request $request, UserCashback $coms)
     {
         $coms = $coms->newQuery();
@@ -111,18 +110,16 @@ class ReportsController extends Controller
 
         // Search by range start date.
         if ($request->start_date) {
-
-            $start_date =  \Carbon\Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
+            $start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i:s');
             $coms->whereDate('event_date', '>=' ,$start_date);
         }
 
         //search by range end date
         if ($request->end_date) {
-            
-            $end_date =  \Carbon\Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
+            $end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i:s');
             $coms->whereDate('event_date', '<=' ,$end_date);
          }
-        
+
         $stores = Store::latest()->get();
         $coms = $coms->latest()->paginate(20);
         $route = 'search';
@@ -138,8 +135,4 @@ class ReportsController extends Controller
             return view('admin-dashboard.reports.earnings_data', compact('coms','route'))->render();
         }
     }
-    
-
-
-
 }

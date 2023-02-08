@@ -16,7 +16,6 @@ class PagesController extends Controller
      */
     public function index()
     {
-
         $route = 'index';
         $pages = Page::latest()->paginate(20);
         return view('admin-dashboard.pages.index', compact('pages', 'route'));
@@ -54,17 +53,6 @@ class PagesController extends Controller
         $page->save();
         flash()->success('New Page created successfully');
         return redirect()->route('admin.pages.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**

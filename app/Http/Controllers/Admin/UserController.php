@@ -14,10 +14,6 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use File;
-use Storage;
-use Carbon\Carbon;
-use Intervention\Image\ImageManagerStatic as Image;
 
 class UserController extends Controller
 {
@@ -68,7 +64,7 @@ class UserController extends Controller
         if ($request->hasFile('avatar')) {
             $avatar_image = store_user_avatar($request->file('avatar'), $avatar_image);
         }
-    
+
         $user =  User::create([
             'first_name' => $request->firstname,
             'last_name' => $request->lastname,
@@ -86,7 +82,6 @@ class UserController extends Controller
         flash()->success('New user added successfully');
         return redirect()->route('admin.users.index');
     }
-
 
     public function show(User $user)
     {

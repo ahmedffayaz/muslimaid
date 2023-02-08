@@ -33,15 +33,17 @@ class PagesController extends Controller
             $HomePageCharities = Charity::where('status', '=', '1')->orderBy('id', 'DESC')->paginate(10);
             return view('frontend.pages.charities', compact('page', 'HomePageCharities'));
         }
+
         if($slug == 'offers')
-        { 
-            $categories = Category::where('parent_id', 0)->with(['stores' => function($query)  { 
+        {
+            $categories = Category::where('parent_id', 0)->with(['stores' => function($query)  {
                 $query->withCount(['categories' => function($query){
                     $query->whereStatus(0);
                 }])->having('categories_count', 0);
             }])->get();
             return view('frontend.pages.offers', compact('page', 'categories'));
         }
+
         if ($slug == 'trending') {
             $stores =  Store::has('clicks')->with('clicks')->get()->sortByDesc(function ($store) {
                 return $store->clicks->count();
@@ -55,23 +57,6 @@ class PagesController extends Controller
         }
 
         return view('frontend.pages.single-page', compact('page'));
-    }
-
-    public function topStores()
-    {
-        $stores = Store::withCount('clicks')
-            ->orderBy('clicks', 'desc')->paginate(20);
-        return view('frontend.pages.top_cashback', compact('stores'));
-    }
-
-    public function about()
-    {
-        return view('frontend.pages.about');
-    }
-
-    public function contact()
-    {
-        return view('frontend.pages.contact');
     }
 
     public function blog()
@@ -119,13 +104,6 @@ class PagesController extends Controller
         }
         $stores = $stores->latest()->get();
         return view('frontend.components.search_suggestions', compact('stores', 'term'))->render();
-    }
-
-    public function vouchers()
-    {
-        $stores = Store::has('vouchers')->latest()->paginate(10);
-        $term = null;
-        return view('frontend.pages.vouchers', compact('stores', 'term'));
     }
 
     public function blogPost($slug)

@@ -37,17 +37,6 @@ class TicketController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -57,17 +46,6 @@ class TicketController extends Controller
     {
         $ticket = Ticket::where('ticket_id', $id)->firstOrFail();
         return view('frontend.client-dashboard.tickets.show', compact('ticket'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -93,17 +71,6 @@ class TicketController extends Controller
         $this->sendEmailNotification($ticket);
         flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
         return redirect()->route('account.tickets.index');
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     public function step2(Request $request)

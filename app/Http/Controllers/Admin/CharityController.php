@@ -2,10 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Image;
-use Exception;
 use App\Models\Charity;
-use App\Models\Category;
 use Illuminate\Support\Facades\File;
 use App\Models\CharityType;
 use Illuminate\Support\Str;
@@ -26,10 +23,10 @@ class CharityController extends Controller
         $charitiestypes = CharityType::where('status', '1')->get();
         return view('admin-dashboard.charities.index', compact('charities', 'charitiestypes'));
     }
+
     public function searchCharities(Request $request)
     {
         $charitiestypes = CharityType::latest()->get();
-
         $charities = (new Charity())->newQuery();
 
         if ($request->input('charity_types_id')) {
@@ -110,12 +107,9 @@ class CharityController extends Controller
         }
 
         if ($request->input('banner_type') == 'upload') {
-
             if ($request->has('banner_upload')) {
-
                 $imageName = $request->input('name') . '_banner_' . time() . '.' . $request->banner_upload->extension();
                 $request->banner_upload->storeAs('public/charities/images', $imageName);
-
                 $charity->banner_upload = $imageName;
                 $charity->update();
             } else {
@@ -127,12 +121,14 @@ class CharityController extends Controller
         flash()->success('New Charity added');
         return redirect()->route('admin.charities.index');
     }
+
     //  charity index function
     public function charityTypeView()
     {
         $CharityType = CharityType::latest()->paginate(15);
         return view('admin-dashboard.charities.charity_type_view', compact('CharityType'));
     }
+
     //  charity store function
     public function charityTypeStore(Request $request)
     {
@@ -160,6 +156,7 @@ class CharityController extends Controller
         $charityType = CharityType::find($id);
         return view('admin-dashboard.charities.charity_type_edit', compact('charityType'));
     }
+
     public function charityTypeUpdate($id, Request $request)
     {
         CharityType::where('id', $id)->update([
@@ -170,21 +167,13 @@ class CharityController extends Controller
 
         return redirect()->route('admin.charities.charity_type_view');
     }
+
     //  charity destroy function
     public function charityTypeDestroy($id)
     {
         CharityType::where('id', $id)->delete();
         flash()->success('Charity Type deleted');
         return redirect()->back();
-    }
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
     }
 
     /**
@@ -208,7 +197,6 @@ class CharityController extends Controller
      */
     public function update(Request $request, Charity $charity)
     {
-
         $charity->update([
             'title' => $request->input('title'),
             'country' => $request->input('country'),
@@ -221,14 +209,9 @@ class CharityController extends Controller
             'status' => $request->input('status'),
         ]);
         if ($request->input('logo_type') == 'upload') {
-
             if ($request->has('logo_upload')) {
-
-                // Storage::delete(['public/categories/images/'. $category->logo_upload]);
-
                 $imageName = Str::slug($request->input('name')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
                 $request->logo_upload->storeAs('public/charities/images', $imageName);
-
                 $charity->logo_upload = $imageName;
                 $charity->update();
             }
@@ -237,7 +220,6 @@ class CharityController extends Controller
             if ($request->has('banner_upload')) {
                 $imageName = Str::slug($request->input('name')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
                 $request->logo_upload->storeAs('public/charities/images', $imageName);
-
                 $charity->banner_upload = $imageName;
                 $charity->update();
             }
@@ -245,7 +227,6 @@ class CharityController extends Controller
 
         if (!$request->ajax()) {
             flash()->success('Charities updated');
-
             return redirect()->route('admin.charities.index');
         } else {
             return 1;

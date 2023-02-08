@@ -7,7 +7,6 @@ use App\Models\User;
 use App\Models\ExitClick;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -24,38 +23,6 @@ class DashboardController extends Controller
         $user = Auth::user();
         $items = $user->cashbacks()->latest()->limit(5)->get();
         return view('frontend.client-dashboard.dashboard', compact('user', 'items'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -79,13 +46,9 @@ class DashboardController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        // dd($request->all());
-
         $validated = $request->validate([
             'firstname' => 'required|regex:/^[A-Za-z ]+$/',
             'lastname' => 'required|regex:/^[A-Za-z ]+$/',
-            // 'phone' => 'min:10|numeric|max:15',
-            // 'address' => 'min:10'
         ], $messages = [
             'firstname.required' => 'First name is required.',
             'lastname.required' => 'Last name is required.'
@@ -93,7 +56,7 @@ class DashboardController extends Controller
 
         $avatar_image = $user->avatar;
         if ($request->hasFile('avatar')) {
-            $avatar_image = store_user_avatar($request->file('avatar') , $avatar_image);
+            $avatar_image = store_user_avatar($request->file('avatar'), $avatar_image);
         }
 
         $user->update([
@@ -108,42 +71,31 @@ class DashboardController extends Controller
         return redirect()->back();
     }
 
-    
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
     public function cashback()
     {
-
         $user = Auth::user();
         $cashbacks = UserCashback::where('user_id', $user->id)->latest()->get();
         return view('frontend.client-dashboard.cashback', compact('user', 'cashbacks'));
     }
+
     public function clicks()
     {
-
         $user = Auth::user();
         $clicks = ExitClick::where('user_id', $user->id)->latest()->get();
         return view('frontend.client-dashboard.clicks', compact('user', 'clicks'));
     }
+
     public function changePassword()
     {
         return view('frontend.client-dashboard.change-password');
     }
+
     public function savePassword(Request $request)
     {
         $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
-
 
         if ($validator->fails()) {
             flash()->error($validator->errors()->first());
