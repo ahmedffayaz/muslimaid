@@ -17,28 +17,10 @@
         </div>
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="custom_cashback_percentage">Cashback Percentage</label>
-                <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="custom_cashback_percentagee"
-                        value="{{ $cashback->store->custom_cashback_percentage ?? SiteSetting()['cashback_percentage'] }}" name="custom_cashback_percentage" required
-                        oninput="calcCashback()">
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="form-group">
                 <label class="form-label" for="sale_commission">Network Commission</label>
                 <div class="form-control-wrap">
                     <input type="text" class="form-control" id="sale_commission" value="{{ $cashback->sale_commission }}" name="sale_commission" required
                         oninput="calcPercentage()">
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="form-group">
-                <label class="form-label" for="cashback">Cashback</label>
-                <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="cashback" value="{{ $cashback->cashback }}" name="cashback" required oninput="calcPercentage()">
                 </div>
             </div>
         </div>

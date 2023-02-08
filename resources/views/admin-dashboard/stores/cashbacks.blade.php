@@ -18,9 +18,7 @@
                     <span>
                         @if ($cashback->type == 'fixed')
                             {{ $cashback->currency }}
-                            @endif{{ $cashback->sale_commission }}@if ($cashback->type == 'percentage')
-                                %
-                            @endif
+                        @endif{{ $cashback->sale_commission }}@if ($cashback->type == 'percentage')%@endif
                     </span>
                 </div>
                 <div class="nk-tb-col  pl-1">
@@ -33,9 +31,7 @@
                         @else
                             {{ (SiteSetting()['cashback_percentage'] / 100) * $cashback->sale_commission }}
                         @endif
-                        @if ($cashback->type == 'percentage')
-                            %
-                        @endif
+                        @if ($cashback->type == 'percentage')%@endif
                     </span>
                 </div>
 
