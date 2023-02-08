@@ -128,7 +128,6 @@ class TicketsController extends Controller
     }
     public function searchTickets(Request $request, Ticket $tickets)
     {
-        // dd($request->all());
         $tickets = $tickets->newQuery();
 
         // Search by ticket_id
@@ -162,7 +161,6 @@ class TicketsController extends Controller
         
         $tickets = $tickets->orderBy('new_ticket','DESC')->latest()->paginate(30);
         $route='search';
-        // dd($tickets);
         return view('admin-dashboard.tickets.index_data', compact('tickets','route'))->render();
     }
 }

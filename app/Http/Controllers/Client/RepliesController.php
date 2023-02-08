@@ -37,12 +37,12 @@ class RepliesController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
+        $request->validate([
             'reply' => 'required|max:255'
         ]);
 
         $reply = TicketReply::create([
-            'reply' => $validatedData['reply'],
+            'reply' =>  $request->input('reply'),
             'user_id' => Auth::user()->id,
             'ticket_id' => $request->input('ticket_id'),
             'reply_by'=>'user'

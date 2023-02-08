@@ -137,24 +137,21 @@ class CharityController extends Controller
     public function charityTypeStore(Request $request)
     {
         $validated = $request->validate([
-            'title' => 'required|regex:/^[\w. ]+$/',
+            'title' => 'required',
             'status' => 'required',
         ], $messages = [
             'title.required' => 'The Title field is required.',
             'status.required' => 'The Status is required.',
         ]);
-        CharityType::create([
-            'title' =>  $request->title,
-            'status' => $request->status,
-        ]);
-        if ($request->ajax()) {
-            return array(
-                'message' => 'Charity added successfully.',
-                'success' => 'Charity added successfully',
-            );
+        if (!$request->ajax()) {
+            $charity = new CharityType();
+                $charity->create([
+                    'title' =>  $request->title,
+                    'status' => $request->status,
+                ]);
         }
         flash()->success('New Charity Type added');
-        return redirect()->route('admin.charities.charity_type_view');
+        return redirect()->back();
     }
 
     //  charity edit function

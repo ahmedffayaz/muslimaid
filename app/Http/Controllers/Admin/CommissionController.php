@@ -76,9 +76,6 @@ class CommissionController extends Controller
         ]);
 
         try {
-            if( $request->order_value < 0)
-            return "Error: Value must be greater than or equal to zero.";
-
             $click = ExitClick::findOrFail($request->exit_click_id);
             $customCashbackPercentage = $click->store->custom_cashback_percentage;
 
