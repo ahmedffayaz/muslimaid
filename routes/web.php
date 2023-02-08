@@ -263,8 +263,8 @@ Route::namespace('App\Http\Controllers\Client')
         Route::get('clicks', [App\Http\Controllers\Client\DashboardController::class, 'clicks'])->name('clicks');
         Route::get('change_password', [App\Http\Controllers\Client\DashboardController::class, 'changePassword'])->name('change_password');
         Route::post('users/passwordsave/', [App\Http\Controllers\Client\DashboardController::class, 'savePassword'])->name('save_password');
-        Route::resource('withdraw', PaymentController::class);
-        Route::resource('replies', RepliesController::class)->only(['store']);
+        Route::resource('withdraw', App\Http\Controllers\Client\PaymentController::class)->only(['index']);
+        Route::resource('replies', App\Http\Controllers\Client\RepliesController::class)->only(['store']);
         Route::get('payment-details', [App\Http\Controllers\Client\PaymentController::class, 'paymentDetails'])->name('payment_details');
         Route::get('statement', [App\Http\Controllers\Client\PaymentController::class, 'statement'])->name('statement');
         Route::get('payment-methods', [App\Http\Controllers\Client\PaymentController::class, 'paymentDetails'])->name('payment_details');
@@ -273,8 +273,8 @@ Route::namespace('App\Http\Controllers\Client')
         Route::post('CharityCashout', [App\Http\Controllers\Client\PaymentController::class,'CharityCashout'])->name('CharityCashout');
         Route::post('ticket/step2', [App\Http\Controllers\Client\TicketController::class, 'step2'])->name('tickets.step2');
         Route::post('ticket/step3', [App\Http\Controllers\Client\TicketController::class, 'step3'])->name('tickets.step3');
-        Route::resource('tickets', TicketController::class);
-        Route::resource('referral', ReferController::class);
+        Route::resource('tickets', App\Http\Controllers\Client\TicketController::class)->only(['create', 'show', 'update']);
+        Route::resource('referral', App\Http\Controllers\Client\ReferController::class)->only('index');
         Route::post('send-referral-link', [App\Http\Controllers\Client\ReferController::class, 'sendReferralLink'])->name('send-referral-link');
         Route::get('CharityWithdraw',[App\Http\Controllers\Client\PaymentController::class,'CharityWithdraw'])->name('CharityWithdraw');
     });
