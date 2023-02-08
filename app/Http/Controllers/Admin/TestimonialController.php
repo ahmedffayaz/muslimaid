@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Testimonial;
 use App\Models\User;
-use Response;
+use App\Models\Testimonial;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Response;
 
 class TestimonialController extends Controller
 {
@@ -39,8 +39,8 @@ class TestimonialController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
-        
+    {
+
         $validated = $request->validate([
             'title' => 'required|regex:/^[\w. ]+$/',
             'user_image' => 'required|file|mimes:jpg,png|max:' . 1 * 1024, // 1024 KB = 1 MB',
@@ -61,7 +61,7 @@ class TestimonialController extends Controller
 
         if($request->has('user_image')){
 
-            $imageName = 'testimonial'.time().'.'.$request->user_image->extension();          
+            $imageName = 'testimonial'.time().'.'.$request->user_image->extension();
             $request->user_image->storeAs('public/users/images/avatar',$imageName);
         }
 
@@ -79,17 +79,6 @@ class TestimonialController extends Controller
 
             flash()->success('Testimonial added successfully.');
             return redirect()->route('admin.testimonials.index');;
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -133,10 +122,10 @@ class TestimonialController extends Controller
         $imageName = $testimonial['image'];
         if($request->has('user_image')){
 
-            $imageName = 'testimonial'.time().'.'.$request->user_image->extension();          
+            $imageName = 'testimonial'.time().'.'.$request->user_image->extension();
             $request->user_image->storeAs('public/users/images/avatar',$imageName);
         }
-       
+
         $testimonial->title = $request->title;
         $testimonial->description = $request->description;
         $testimonial->image = $imageName;

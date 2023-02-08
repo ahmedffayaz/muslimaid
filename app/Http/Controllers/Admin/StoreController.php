@@ -26,7 +26,6 @@ use Illuminate\Support\Facades\Validator;
 
 class StoreController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('permission:view stores', ['only' => ['index']]);
@@ -98,7 +97,6 @@ class StoreController extends Controller
             flash()->success('New store added');
             return redirect()->route('admin.stores.show_store', 'slug=' . $store->slug);
         } catch (Exception $exception) {
-
             flash()->error($exception->getMessage() . 'Error while adding new store');
             return redirect()->route('admin.stores.index');
         }
@@ -112,7 +110,6 @@ class StoreController extends Controller
      */
     public function show(Store $store)
     {
-
         $networks = Network::all();
         $categories = Category::where('parent_id', 0)->get();
         $stores = Store::latest()->get();
@@ -231,7 +228,6 @@ class StoreController extends Controller
 
     public function storeImages(Store $store)
     {
-
         return view('admin-dashboard.stores.images', compact('store'));
     }
 
@@ -241,7 +237,6 @@ class StoreController extends Controller
             'image' => 'required|mimes:jpeg,jpg,png,gif|max:2048',
         ]);
         if ($request->has('image')) {
-
             $img_exist = StoreImage::where(['store_id' => $store->id, 'title' => $request->title])->first();
             $imageName = Str::slug($store->name) . '_' . $request->title . '_' . time() . '.' . $request->image->extension();
             $request->image->storeAs('public/stores/images', $imageName);
@@ -297,7 +292,6 @@ class StoreController extends Controller
 
     public function searchStores(Request $request, Store $stores)
     {
-        // dd($request->all());
         $stores = $stores->newQuery();
 
         // Search by network.
@@ -391,7 +385,6 @@ class StoreController extends Controller
 
     public function updateCategories(Request $request)
     {
-
         DB::table('category_store')->where('store_id', $request->input('store_id'))->delete();
         if ($request->input('category_id') != null) {
             foreach ($request->input('category_id') as $category) {
@@ -425,7 +418,6 @@ class StoreController extends Controller
 
     public function searchEditorPicks(Request $request, Store $picks)
     {
-        // dd($request->all());
         $picks = $picks->newQuery();
 
         // Search by network.
@@ -518,7 +510,6 @@ class StoreController extends Controller
 
     public function showStore()
     {
-
         return view('admin-dashboard.stores.show');
     }
 
@@ -526,7 +517,6 @@ class StoreController extends Controller
     {
         if ($request->ajax()) {
             $store = Store::with('storeAddress')->where('id', $request->store)->first();
-
             return view('admin-dashboard.stores.store_address', compact('store'))->render();
         }
     }
@@ -535,14 +525,12 @@ class StoreController extends Controller
     {
         if ($request->ajax()) {
             $store = Store::with('storeRuleData')->where('id', $request->store)->first();
-
             return view('admin-dashboard.stores.store_seo_rule', compact('store'))->render();
         }
     }
 
     public function storeSeoRule(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'key' => 'required',
             'value' => 'required',
@@ -555,7 +543,6 @@ class StoreController extends Controller
         }
 
         try {
-
             $url = url('/');
             $store = Store::whereId($request->input('store_id'))->first();
 
@@ -571,7 +558,6 @@ class StoreController extends Controller
             flash()->success('Store Seo rule added');
             return redirect()->back();
         } catch (Exception $exception) {
-
             flash()->error('Error while adding new Seo rule');
             return redirect()->back();
         }
@@ -584,7 +570,6 @@ class StoreController extends Controller
             'latitude' => 'required',
             'longitude' => 'required',
             'address' => 'required',
-
         ]);
 
         if ($validator->fails()) {
@@ -606,7 +591,6 @@ class StoreController extends Controller
             flash()->success('store address added');
             return redirect()->back();
         } catch (Exception $exception) {
-
             flash()->error('Error while adding store address.');
             return redirect()->back();
         }
@@ -638,7 +622,6 @@ class StoreController extends Controller
             'address' => $request->input('address'),
             'latitude' => $request->input('latitude'),
             'longitude' => $request->input('longitude'),
-
         ]);
         if (!$request->ajax()) {
             flash()->success('Address updated successfully');

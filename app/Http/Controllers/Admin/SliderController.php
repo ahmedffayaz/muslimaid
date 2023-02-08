@@ -19,17 +19,7 @@ class SliderController extends Controller
     {
         $sliders = Slider::all();
         return view('admin-dashboard.sliders.index',compact('sliders'));
-        
-    }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -46,17 +36,6 @@ class SliderController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -68,34 +47,11 @@ class SliderController extends Controller
         return view('admin-dashboard.sliders.edit',compact('slider','stores'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
+    public function sortSlides(Request $request)
     {
-        
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
-
-    public function sortSlides(Request $request){
-
         try {
             foreach($request->input('slide') as $order=>$slide){
-            
+
                 $slidex = Slide::where('id',$slide)->first();
                 $slidex->update(['order'=>$order]);
             }
@@ -105,6 +61,5 @@ class SliderController extends Controller
             return array('message'=>'Something went wrong!',
                         'updated'=>'error');
         }
-       
     }
 }

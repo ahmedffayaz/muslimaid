@@ -13,16 +13,6 @@ use Illuminate\Support\Facades\Validator;
 class SlidesController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -50,13 +40,13 @@ class SlidesController extends Controller
 
         if ($validator->fails()) {
             if(!$request->ajax())
-               {
-                 flash()->error($validator->errors()->first());
-                 return redirect()->back();
-                }else{
-                 return array('message' => $validator->errors()->first(),
+            {
+                flash()->error($validator->errors()->first());
+                return redirect()->back();
+            }else{
+                return array('message' => $validator->errors()->first(),
                 'created'=>'error');
-                }
+            }
         }
         $slide = Slide::create([
             'slider_id' => $request->input('slider_id'),
@@ -66,18 +56,19 @@ class SlidesController extends Controller
             'store_id' => $request->input('store_id'),
             'slider_type' => $request->input('slider_type'),
         ]);
+
         if($request->has('logo')){
-            $imageName = Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo->extension();          
+            $imageName = Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo->extension();
             $request->logo->storeAs('public/slider/slides/images',$imageName);
-            
+
             $slide->logo = $imageName;
             $slide->update();
         }
 
-        if($request->has('banner')){       
-            $imageName = Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner->extension();          
+        if($request->has('banner')){
+            $imageName = Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner->extension();
             $request->banner->storeAs('public/slider/slides/images',$imageName);
-            
+
             $slide->banner = $imageName;
             $slide->update();
         }
@@ -90,24 +81,13 @@ class SlidesController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Slide $slide)
-    {   
+    {
         $stores = Store::latest()->get();
         return view('admin-dashboard.sliders.edit-slide',compact('slide','stores'))->render();
     }
@@ -129,13 +109,13 @@ class SlidesController extends Controller
 
         if ($validator->fails()) {
             if(!$request->ajax())
-               {
-                 flash()->error($validator->errors()->first());
-                 return redirect()->back();
-                }else{
-                 return array('message' => $validator->errors()->first(),
+            {
+                flash()->error($validator->errors()->first());
+                return redirect()->back();
+            }else{
+                return array('message' => $validator->errors()->first(),
                 'created'=>'error');
-                }
+            }
         }
         $slide->update([
             'name'=>$request->input('name'),
@@ -144,22 +124,22 @@ class SlidesController extends Controller
             'link' => $request->input('link'),
             'slider_type' => $request->input('slider_type'),
         ]);
+
         if($request->has('logo')){
-            $imageName = Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo->extension();          
+            $imageName = Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo->extension();
             $request->logo->storeAs('public/slider/slides/images',$imageName);
-            
+
             $slide->logo = $imageName;
             $slide->update();
         }
 
-        if($request->has('banner')){       
-            $imageName = Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner->extension();          
+        if($request->has('banner')){
+            $imageName = Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner->extension();
             $request->banner->storeAs('public/slider/slides/images',$imageName);
-            
+
             $slide->banner = $imageName;
             $slide->update();
         }
-
 
         flash()->success('Slide updated successfully');
         return redirect()->back();
