@@ -270,7 +270,7 @@ Route::namespace('App\Http\Controllers\Client')
         Route::post('CharityCashout', [App\Http\Controllers\Client\PaymentController::class,'CharityCashout'])->name('CharityCashout');
         Route::post('ticket/step2', [App\Http\Controllers\Client\TicketController::class, 'step2'])->name('tickets.step2');
         Route::post('ticket/step3', [App\Http\Controllers\Client\TicketController::class, 'step3'])->name('tickets.step3');
-        Route::resource('tickets', TicketController::class)->only(['create', 'show', 'update']);
+        Route::resource('tickets', TicketController::class)->only(['index', 'create', 'show', 'update']);
         Route::resource('referral', ReferController::class)->only('index');
         Route::post('send-referral-link', [App\Http\Controllers\Client\ReferController::class, 'sendReferralLink'])->name('send-referral-link');
         Route::get('CharityWithdraw',[App\Http\Controllers\Client\PaymentController::class,'CharityWithdraw'])->name('CharityWithdraw');
