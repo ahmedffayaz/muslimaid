@@ -26,38 +26,6 @@ class DashboardController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
@@ -78,13 +46,9 @@ class DashboardController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        // dd($request->all());
-
         $validated = $request->validate([
             'firstname' => 'required|regex:/^[A-Za-z ]+$/',
             'lastname' => 'required|regex:/^[A-Za-z ]+$/',
-            // 'phone' => 'min:10|numeric|max:15',
-            // 'address' => 'min:10'
         ], $messages = [
             'firstname.required' => 'First name is required.',
             'lastname.required' => 'Last name is required.'
@@ -107,16 +71,6 @@ class DashboardController extends Controller
         return redirect()->back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
     public function cashback()
     {
         $user = Auth::user();
