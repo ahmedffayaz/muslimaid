@@ -294,11 +294,16 @@ function getEventsForMenu()
     return $events;
 }
 
-function getCategories()
+function getCategories($limit = null, $offset = 0)
 {
-    $categories = Category::where('parent_id', 0)->orderBy('name', 'ASC')->get();
+    $categories = Category::where('parent_id', 0)
+        ->limit($limit)
+        ->offset($offset)
+        ->get();
+
     return $categories;
 }
+
 function SiteSetting()
 {
     return SiteSetting::latest()->get()->pluck('value', 'type');
@@ -572,7 +577,14 @@ function csvToArray($path)
 
         if (($handle = fopen(convertPathForOS(base_path($path)), 'r')) !== false) {
             while (($row = fgetcsv($handle, null, ',')) !== false) {
-                if (!$header) $header = $row;
+                if (!$header) {
+                    $cleansedRow = [];
+                    foreach ($row as $column) {
+                        $cleansedRow[] = trim($column);
+                    }
+
+                    $header = $cleansedRow;
+                }
                 else $csvToArray[] = array_combine($header, $row);
             }
 
@@ -600,4 +612,9 @@ function getNewIndicatorClassForAdmin($type, $class = null)
         return $records ? 'icon-status-' . $class . ' icon-status-info-' . $class : '';
 
     return $records ? 'icon-status icon-status-info' : '';
+}
+
+function arrayValueExists($array, $key)
+{
+    return isset($array[$key]) && !empty($array[$key]);
 }
