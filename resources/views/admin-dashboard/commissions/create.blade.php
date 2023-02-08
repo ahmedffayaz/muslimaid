@@ -48,7 +48,7 @@
         </div>
         <div class="col-12">
             <div class="form-group">
-                <button type="submit" class="btn btn-lg btn-primary" id="save-btn"></button>
+                <button type="submit" class="btn-lg btn-primary" id="save-btn"></button>
             </div>
         </div>
     </div>

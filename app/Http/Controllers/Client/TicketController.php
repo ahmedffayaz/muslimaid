@@ -57,6 +57,14 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
+        $request->validate([
+            'amount' => 'required|integer',
+            'product' => 'required',
+        ], [
+            'amount.required' => 'Amount is required',
+            'amount.integer' => 'Amount should be integer',
+            'product.required' => 'Product is required',
+        ]);
         $ticket->update([
             'claim_amount' => $request->input('amount')
         ]);
@@ -67,6 +75,13 @@ class TicketController extends Controller
 
     public function step2(Request $request)
     {
+        $request->validate([
+            'store_id' => 'required',
+            'claim_type' => 'required',
+        ], [
+            'store_id.required' => 'Store name is required',
+            'claim_type.required' => 'Product is required',
+        ]);
         $store_id = $request->input('store_id');
         $claim = $request->input('claim_type');
         $user = Auth::user();
@@ -104,6 +119,13 @@ class TicketController extends Controller
 
     public function step3(Request $request)
     {
+        $request->validate([
+            'click_id' => 'required',
+            'claim_type' => 'required',
+        ], [
+            'click_id.required' => 'This field is required',
+            'claim_type.required' => 'This field is required',
+        ]);
         $click_id = $request->input('click_id');
         $click = ExitClick::where('id', $click_id)->first();
         $claim_type = $request->input('claim_type');
@@ -139,7 +161,7 @@ class TicketController extends Controller
     public function sendEmailNotification(Ticket $ticket)
     {
         $userEmailTemplateKey = 'user_new_ticket';
-        $adminEmailTemplateKey= 'admin_new_ticket';
+        $adminEmailTemplateKey = 'admin_new_ticket';
         $filterMessageVariables = ['{{TICKET_ID}}', '{{TICKETTYPE}}'];
         $requestFilteredMessage = [$ticket->ticket_id, $ticket->claim_type];
 

@@ -23,13 +23,14 @@ class RepliesController extends Controller
         ]);
 
         $reply = TicketReply::create([
-            'reply' => $validatedData['reply'],
+            'reply' =>  $request->input('reply'),
             'user_id' => Auth::user()->id,
             'ticket_id' => $request->input('ticket_id'),
             'reply_by'=>'admin'
         ]);
 
-        $reply->ticket->update(['status'=>'pending']);
+        $reply->ticket->update(['status' => 'pending']);
+
         return back();
     }
 }

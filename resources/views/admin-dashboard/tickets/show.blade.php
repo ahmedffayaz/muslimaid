@@ -143,12 +143,17 @@
                                             <div class="tab-content">
                                                 <div class="tab-pane active" id="reply-form">
                                                     <div class="nk-reply-form-editor">
-                                                        <form method="POST" action="{{route('admin.replies.store')}}">
+                                                        <form method="POST" action="{{route('admin.replies.store')}}" class="form-validate">
                                                             @csrf
                                                             <input type="hidden" name="ticket_id" value="{{$ticket->id}}">
                                                         <div class="nk-reply-form-field">
                                                             <textarea class="form-control form-control-simple no-resize" name="reply" placeholder="Hello" required></textarea>
                                                         </div>
+                                                        @error('reply')
+                                                            <span class="invalid-feedback d-block" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
                                                         <div class="nk-reply-form-tools">
                                                             <ul class="nk-reply-form-actions g-1">
                                                                 <li class="mr-2"><button class="btn btn-primary" type="submit">Reply</button></li>
@@ -180,3 +185,20 @@
 </div>
 
 @endsection
+@push('scripts')
+<script>
+    $('.form-validate').validate({
+            errorClass: 'invalid-feedback d-block',
+            rules: {
+                reply: {
+                    required: true,
+                },
+            },
+            submitHandler: function(form) {
+                if ($(form).valid())
+                    form.submit();
+                return false;
+            }
+    });
+</script>
+@endpush

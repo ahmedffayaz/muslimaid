@@ -195,8 +195,9 @@
                 data: formData,
                 success: function(response) {
                     $('#add-charity-modal').modal('hide');
-                    form.trigger('reset');
                     btn.removeAttr('disabled', 'disabled').button('refresh');
+                    form.trigger('reset');
+                   
                 },
                 error: function(error) {
 
@@ -211,11 +212,9 @@
             rules: {
                 title: {
                     required: true,
-
                 },
                 status: {
                     required: true,
-
                 },
             },
             submitHandler: function(form) {
