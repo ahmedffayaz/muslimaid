@@ -247,8 +247,8 @@ Route::get('all_stores/{letter}', [App\Http\Controllers\Frontend\PagesController
 Route::get('all_stores', [App\Http\Controllers\Frontend\PagesController::class, 'allStores'])->name('all_stores');
 Route::post('showCharity', [App\Http\Controllers\Frontend\PagesController::class, 'showCharity'])->name('showCharity');
 
-Route::resource('newsletter', App\Http\Controllers\Frontend\NewsletterController::class);
-Route::resource('categories', App\Http\Controllers\Frontend\CategoryController::class);
+Route::resource('newsletter', App\Http\Controllers\Frontend\NewsletterController::class)->only(['index', 'store']);
+Route::resource('categories', App\Http\Controllers\Frontend\CategoryController::class)->only(['index', 'show']);
 
 // CLient Dashboard routes
 Route::namespace('App\Http\Controllers\Client')
