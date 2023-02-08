@@ -76,9 +76,6 @@ class CommissionController extends Controller
         ]);
 
         try {
-            if ($request->order_value < 0)
-                return "Error: Value must be greater than or equal to zero.";
-
             $click = ExitClick::findOrFail($request->exit_click_id);
             $customCashbackPercentage = $click->store->custom_cashback_percentage;
 
@@ -188,8 +185,8 @@ class CommissionController extends Controller
                 'network_commission' => round($request->network_commission, 3),
                 'order_value' => round($request->order_value, 3),
                 'status' => $request->status,
-
             ]);
+
             return array(
                 'message' => 'Cashback updated',
                 'updated' => 'success'
@@ -222,6 +219,7 @@ class CommissionController extends Controller
             return view('admin-dashboard.commissions.index_data', compact('coms', 'route'))->render();
         }
     }
+
     public function exportCsv(Request $request)
     {
         try {
@@ -249,6 +247,7 @@ class CommissionController extends Controller
             return redirect()->route('admin.commissions.index');
         }
     }
+
     public function createMultiple()
     {
         $clicks = ExitClick::latest()->get();

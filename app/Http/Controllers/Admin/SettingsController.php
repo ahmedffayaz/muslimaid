@@ -53,24 +53,12 @@ class SettingsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    { 
-       
+    {
         $inputs = $request->all();
         $inputs['type'] = str_replace([' ', '-', '.'], '_', $request->input('type'));
         $setting = SiteSetting::create($inputs);
         flash()->success('setting saved successfully');
         return redirect()->route('admin.settings.index');
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -159,13 +147,13 @@ class SettingsController extends Controller
     {
         try {
             $validated = $request->validate([
-                'referral_bonus' => 'min:0|numeric', 
-                'welcome_bonus' => 'min:0|numeric', 
+                'referral_bonus' => 'min:0|numeric',
+                'welcome_bonus' => 'min:0|numeric',
                 'min_cashout_amount'=> 'min:0|numeric',
             ], $messages = [
-                'referral_bonus' => 'Value must be equal to or greater than 0.',  
-                'welcome_bonus' => 'Value must be equal to or greater than 0.', 
-                'min_cashout_amount' => 'Value must be equal to or greater than 0.',  
+                'referral_bonus' => 'Value must be equal to or greater than 0.',
+                'welcome_bonus' => 'Value must be equal to or greater than 0.',
+                'min_cashout_amount' => 'Value must be equal to or greater than 0.',
             ]);
             $request->offsetUnset('_method');
             $request->offsetUnset('_token');
@@ -251,7 +239,6 @@ class SettingsController extends Controller
                 SiteSetting::updateOrCreate([
                     'type'   => 'dashboard_small_logo',
                     'title'  => 'Small Dashboare Logo',
-
                 ], [
                     'value'     =>  $imageName
                 ]);

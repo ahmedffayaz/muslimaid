@@ -31,7 +31,6 @@ Route::namespace('App\Http\Controllers\Admin')
     ->as('admin.')
     ->prefix('admin')
     ->group(function () {
-
         Route::get('home/{period?}', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
         Route::get('/', function () {
             return Redirect::to('admin/home');
@@ -40,11 +39,10 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('dataByPeriod', [App\Http\Controllers\HomeController::class, 'dataByPeriod'])->name('home.index_data');
 
         // Networks
-        Route::post('networks/fetch', [App\Http\Controllers\Admin\NetworkController::class, 'fetch'])->name('networks.fetch');
         Route::get('networks/categories/{network}', [App\Http\Controllers\Admin\NetworkController::class, 'categories'])->name('networks.categories');
         Route::post('networks/categories_import/{network}', [App\Http\Controllers\Admin\NetworkController::class, 'importCategories'])->name('networks.categories.import');
         Route::get('networks/categories_export/{network}', [App\Http\Controllers\Admin\NetworkController::class, 'exportCsv'])->name('networks.categories.export');
-        Route::resource('networks', NetworkController::class);
+        Route::resource('networks', NetworkController::class)->only(['index', 'create', 'store', 'edit']);
 
         // Stores
         Route::post('stores/import-fake-data', [App\Http\Controllers\Admin\StoreController::class, 'importFakeData'])->name('stores.import-fake-data');
@@ -81,7 +79,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::put('stores/address/update',  [App\Http\Controllers\Admin\StoreController::class, 'updateStoreAddress'])->name('stores.update_address');
         Route::get('stores/address/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreAddress'])->name('stores.address.delete');
         Route::resource('stores', StoreController::class);
-        Route::resource('storecashbacks', StoreCashbackController::class);
+        Route::resource('storecashbacks', StoreCashbackController::class)->only('index');
 
         // Vouchers
         Route::resource('vouchers', VouchersController::class)->except(['show']);
@@ -99,7 +97,7 @@ Route::namespace('App\Http\Controllers\Admin')
         // Imported Network Categories
         Route::post('importedcategories/fetch', [App\Http\Controllers\Admin\ImportedCategoryController::class, 'fetch'])->name('importedcategories.fetch');
         Route::post('importedcategories/search_importedcategories',  [App\Http\Controllers\Admin\ImportedCategoryController::class, 'searcImportedCategories'])->name('importedcategories.search_importedcategories');
-        Route::resource('importedcategories', ImportedCategoryController::class);
+        Route::resource('importedcategories', ImportedCategoryController::class)->except('show');
 
         // Users
         Route::post('users/cashbacks', [App\Http\Controllers\Admin\UserController::class, 'fetchCashbacks'])->name('users.cashbacks');
@@ -120,13 +118,13 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::get('importer/vouchers', [App\Http\Controllers\Admin\ImporterController::class, 'import_coupons'])->name('importer.vouchers');
         Route::post('importer/save_settings', [App\Http\Controllers\Admin\ImporterController::class, 'saveSettings'])->name('importer.save_settings');
         Route::get('importer/importer_setting_form/{id}', [App\Http\Controllers\Admin\ImporterController::class, 'importerSettingForm'])->name('importer.importer_setting_form');
-        Route::resource('importer', ImporterController::class);
+        Route::resource('importer', ImporterController::class)->only(['index', 'create', 'show']);
 
         // Clicks
         Route::get('clicks/export', [App\Http\Controllers\Admin\ClickController::class, 'exportCsv'])->name('clicks.export');
         Route::post('clicks/fetch', [App\Http\Controllers\Admin\ClickController::class, 'fetch'])->name('clicks.fetch');
         Route::post('clicks/search_clicks',  [App\Http\Controllers\Admin\ClickController::class, 'searchClicks'])->name('clicks.search_clicks');
-        Route::resource('clicks', ClickController::class);
+        Route::resource('clicks', ClickController::class)->only('index');
 
         // Cashbacks
         Route::get('commissionss/export', [App\Http\Controllers\Admin\CommissionController::class, 'exportCsv'])->name('commissions.export');
@@ -136,14 +134,14 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('commissions/store-multiple-cashbacks', [App\Http\Controllers\Admin\CommissionController::class, 'storeMultiple'])->name('commissions.store_multiple');
         Route::post('commissions/search_commissions',  [App\Http\Controllers\Admin\CommissionController::class, 'searchCommissions'])->name('commissions.search_commissions');
         Route::get('commissions/status_history/{commission}',  [App\Http\Controllers\Admin\CommissionController::class, 'statusHistory'])->name('commissions.history');
-        Route::resource('commissions', CommissionController::class);
-        Route::resource('cashouts', CashoutController::class);
+        Route::resource('commissions', CommissionController::class)->except('show');
+        Route::resource('cashouts', CashoutController::class)->only(['index', 'show', 'update']);
         Route::get('commissions/import/form', [App\Http\Controllers\Admin\CommissionController::class, 'importCashBacksForm'])->name('commissions.import.form');
         Route::post('commissions/import', [App\Http\Controllers\Admin\CommissionController::class, 'importCashBacks'])->name('commissions.import');
         Route::get('download-csv-file/multiple-cashbacks', [App\Http\Controllers\Admin\CommissionController::class, 'fileDownload'])->name('commissions.download.file');
 
         // Reviews
-        Route::resource('reviews', StoreReviewsController::class);
+        Route::resource('reviews', StoreReviewsController::class)->except(['show']);
         Route::post('reviews/fetch', [App\Http\Controllers\Admin\StoreReviewsController::class, 'fetch'])->name('reviews.fetch');
         Route::post('reviews/search_reviews',  [App\Http\Controllers\Admin\StoreReviewsController::class, 'searchReviews'])->name('reviews.search_reviews');
 
@@ -168,14 +166,13 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('settings/fetch', [App\Http\Controllers\Admin\SettingsController::class, 'fetch'])->name('settings.fetch');
         Route::post('settings/search_settings',  [App\Http\Controllers\Admin\SettingsController::class, 'searchSettings'])->name('settings.search_settings');
         Route::post('maintenance', [App\Http\Controllers\Admin\SettingsController::class, 'maintenance'])->name('settings.maintenance');
-        Route::resource('settings', SettingsController::class);
-        Route::resource('charities', CharityController::class);
+        Route::resource('settings', SettingsController::class)->except(['show']);
+        Route::resource('charities', CharityController::class)->except(['show']);
         Route::get('charity-type-view', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeView'])->name('charities.charity_type_view');
         Route::get('charity-type-edit/{id}', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeEdit'])->name('charities.charity_type_edit');
         Route::post('admin_charities_store', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeStore'])->name('admin-charities-store');
         Route::put('charity_type_update/{id}', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeUpdate'])->name('charitiestype-update');
         Route::post('charities/search',  [App\Http\Controllers\Admin\CharityController::class, 'searchCharities'])->name('charities.search');
-
         Route::get('charity_type_delete/{id}', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeDestroy'])->name('charity_type_delete');
 
         // Menus
@@ -205,23 +202,23 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('tickets/fetch', [App\Http\Controllers\Admin\TicketsController::class, 'fetch'])->name('tickets.fetch');
         Route::post('tickets/search',  [App\Http\Controllers\Admin\TicketsController::class, 'searchTickets'])->name('tickets.search');
         Route::put('tickets/close_ticket/{ticket}', [App\Http\Controllers\Admin\TicketsController::class, 'closeTicket'])->name('tickets.close');
-        Route::resource('tickets',  TicketsController::class);
-        Route::resource('replies', RepliesController::class);
+        Route::resource('tickets',  TicketsController::class)->only(['index', 'show']);
+        Route::resource('replies', RepliesController::class)->only('store');
 
         Route::put('profile/passwordsave/{profile}', [App\Http\Controllers\Admin\ProfileController::class, 'savePassword'])->name('profile.save_password');
-        Route::resource('profile', ProfileController::class);
+        Route::resource('profile', ProfileController::class)->only(['index', 'update']);
 
         Route::post('sliders/sort_slides', [App\Http\Controllers\Admin\SliderController::class, 'sortSlides'])->name('sort_slides');
-        Route::resource('sliders', SliderController::class);
-        Route::resource('slides', SlidesController::class);
-        Route::resource('pages', PagesController::class);
-        Route::resource('blogs', BlogController::class);
-        Route::resource('testimonials', TestimonialController::class);
-        Route::resource('seo', SeoController::class);
-        Route::resource('email_templates', EmailTemplatesController::class);
+        Route::resource('sliders', SliderController::class)->only(['index', 'store', 'edit']);
+        Route::resource('slides', SlidesController::class)->except(['index', 'show']);
+        Route::resource('pages', PagesController::class)->except(['show']);
+        Route::resource('blogs', BlogController::class)->except(['show']);
+        Route::resource('testimonials', TestimonialController::class)->except('show');
+        Route::resource('seo', SeoController::class)->except('show');
+        Route::resource('email_templates', EmailTemplatesController::class)->only(['index', 'edit', 'update']);
 
         // Countries
-        Route::resource('countries', CountryController::class);
+        Route::resource('countries', CountryController::class)->except(['show', 'destroy']);
 
         Route::get('site/shutdown', function () {
             return Artisan::call('down');
@@ -233,12 +230,8 @@ Route::namespace('App\Http\Controllers\Admin')
     });
 
 // Front Website Routes
-Route::get('vouchers', [App\Http\Controllers\Frontend\PagesController::class, 'vouchers'])->name('vouchers');
-Route::get('about', [App\Http\Controllers\Frontend\PagesController::class, 'about'])->name('about');
-Route::get('contact', [App\Http\Controllers\Frontend\PagesController::class, 'contact'])->name('contact');
 Route::get('blog', [App\Http\Controllers\Frontend\PagesController::class, 'blog'])->name('blog');
 Route::get('search', [App\Http\Controllers\Frontend\PagesController::class, 'search'])->name('search');
-Route::get('top-cashback', [App\Http\Controllers\Frontend\PagesController::class, 'topStores'])->name('top_stores');
 Route::get('cashback/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
 Route::get('categories/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
 Route::get('stores/reviews/{id}', [App\Http\Controllers\Frontend\StoreController::class, 'showReviews'])->name('store.reviews.show');
@@ -251,8 +244,8 @@ Route::get('all_stores/{letter}', [App\Http\Controllers\Frontend\PagesController
 Route::get('all_stores', [App\Http\Controllers\Frontend\PagesController::class, 'allStores'])->name('all_stores');
 Route::post('showCharity', [App\Http\Controllers\Frontend\PagesController::class, 'showCharity'])->name('showCharity');
 
-Route::resource('newsletter', App\Http\Controllers\Frontend\NewsletterController::class);
-Route::resource('categories', App\Http\Controllers\Frontend\CategoryController::class);
+Route::resource('newsletter', App\Http\Controllers\Frontend\NewsletterController::class)->only(['index', 'store']);
+Route::resource('categories', App\Http\Controllers\Frontend\CategoryController::class)->only(['index', 'show']);
 
 // CLient Dashboard routes
 Route::namespace('App\Http\Controllers\Client')
@@ -267,7 +260,7 @@ Route::namespace('App\Http\Controllers\Client')
         Route::get('clicks', [App\Http\Controllers\Client\DashboardController::class, 'clicks'])->name('clicks');
         Route::get('change_password', [App\Http\Controllers\Client\DashboardController::class, 'changePassword'])->name('change_password');
         Route::post('users/passwordsave/', [App\Http\Controllers\Client\DashboardController::class, 'savePassword'])->name('save_password');
-        Route::resource('withdraw', PaymentController::class);
+        Route::resource('withdraw', PaymentController::class)->only(['index']);
         Route::resource('replies', RepliesController::class)->only(['store']);
         Route::get('payment-details', [App\Http\Controllers\Client\PaymentController::class, 'paymentDetails'])->name('payment_details');
         Route::get('statement', [App\Http\Controllers\Client\PaymentController::class, 'statement'])->name('statement');
@@ -277,8 +270,8 @@ Route::namespace('App\Http\Controllers\Client')
         Route::post('CharityCashout', [App\Http\Controllers\Client\PaymentController::class,'CharityCashout'])->name('CharityCashout');
         Route::post('ticket/step2', [App\Http\Controllers\Client\TicketController::class, 'step2'])->name('tickets.step2');
         Route::post('ticket/step3', [App\Http\Controllers\Client\TicketController::class, 'step3'])->name('tickets.step3');
-        Route::resource('tickets', TicketController::class);
-        Route::resource('referral', ReferController::class);
+        Route::resource('tickets', TicketController::class)->only(['index', 'create', 'show', 'update']);
+        Route::resource('referral', ReferController::class)->only('index');
         Route::post('send-referral-link', [App\Http\Controllers\Client\ReferController::class, 'sendReferralLink'])->name('send-referral-link');
         Route::get('CharityWithdraw',[App\Http\Controllers\Client\PaymentController::class,'CharityWithdraw'])->name('CharityWithdraw');
     });

@@ -147,7 +147,7 @@ class CategoryController extends Controller
      */
     public function update(CategoryRequest $request, Category $category)
     {
-         try {
+        try {
             DB::beginTransaction();
             $category->update([
                 'name' => $request->input('name'),
@@ -252,6 +252,7 @@ class CategoryController extends Controller
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
     function fetch(Request $request)
     {
         if ($request->ajax()) {
@@ -260,6 +261,7 @@ class CategoryController extends Controller
             return view('admin-dashboard.categories.index_data', compact('categories', 'route'))->render();
         }
     }
+
     public function exportCsv(Request $request)
     {
         try {
@@ -284,6 +286,7 @@ class CategoryController extends Controller
             return redirect()->route('admin.categories.index');
         }
     }
+
     public function searcCategories(Request $request, Category $categories)
     {
         $categories = $categories->newQuery();

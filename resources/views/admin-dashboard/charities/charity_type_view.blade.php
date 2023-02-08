@@ -1,5 +1,6 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
+
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
@@ -18,10 +19,12 @@
                 </div><!-- .nk-block-head -->
                 @include('flash::message')
                 <div class="nk-block">
+
                     <div class="card card-stretch">
                         <div class="card-inner-group">
 
                             <div class="card-inner px-0">
+                                @if (count($CharityType))
                                 <div class="nk-tb-list nk-tb-ulist" id="table-data">
 
                                     <div class="nk-tb-item nk-tb-head">
@@ -34,55 +37,60 @@
                                     </div><!-- .nk-tb-item -->
 
                                     @foreach ($CharityType as $charity)
-                                    <div class="nk-tb-item">
-                                        <div class="nk-tb-col">
-                                            <div class="tb-lead"><span><a class="edit-charity"
-                                                        href="{{ route('admin.charities.charity_type_edit', $charity) }}"
-                                                        class="a_link">{{ $charity->title }}</a></span></div>
-                                        </div>
-                                        <div class="nk-tb-col">
-                                            {!! $charity->status == 1 ? '<span
-                                                class="tb-status badge badge-success">Active</span>' : '<span
-                                                class="tb-status badge badge-warning">In-active</span>' !!}
+                                        <div class="nk-tb-item">
+                                            <div class="nk-tb-col">
+                                                <div class="tb-lead"><span><a class="edit-charity"
+                                                            href="{{ route('admin.charities.charity_type_edit', $charity) }}"
+                                                            class="a_link">{{ $charity->title }}</a></span></div>
+                                            </div>
+                                            <div class="nk-tb-col">
+                                                {!! $charity->status == 1 ? '<span
+                                                    class="tb-status badge badge-success">Active</span>' : '<span
+                                                    class="tb-status badge badge-warning">In-active</span>' !!}
 
-                                        </div>
-                                        <div class="nk-tb-col nk-tb-col-tools">
-                                            <ul class="nk-tb-actions gx-1">
-                                                <li>
-                                                    <div class="drodown">
-                                                        <a href="#" class="dropdown-toggle btn btn-icon btn-trigger"
-                                                            data-toggle="dropdown"><em
-                                                                class="icon ni ni-more-h"></em></a>
-                                                        <div class="dropdown-menu dropdown-menu-right">
-                                                            <ul class="link-list-opt no-bdr">
-                                                                <li><a class="edit-charity"
-                                                                        href="{{ route('admin.charities.charity_type_edit', $charity) }}"><em
-                                                                            class="icon ni ni-edit"></em><span>Edit
-                                                                        </span></a></li>
-                                                                <li><a class='delete'
-                                                                        form_id="delete-{{ $charity->id }}"
-                                                                        style="cursor: pointer"> <em
-                                                                            class="icon ni ni-trash-fill"></em><span>Delete</span></a>
-                                                                    <form
-                                                                        action="{{ route('admin.charity_type_delete', $charity->id) }}"
-                                                                        id="delete-{{ $charity->id }}" method=""
-                                                                        class="m-0">
-                                                                        @csrf
-                                                                    </form>
-                                                                </li>
-                                                            </ul>
+                                            </div>
+                                            <div class="nk-tb-col nk-tb-col-tools">
+                                                <ul class="nk-tb-actions gx-1">
+                                                    <li>
+                                                        <div class="drodown">
+                                                            <a href="#" class="dropdown-toggle btn btn-icon btn-trigger"
+                                                                data-toggle="dropdown"><em
+                                                                    class="icon ni ni-more-h"></em></a>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                <ul class="link-list-opt no-bdr">
+                                                                    <li><a class="edit-charity"
+                                                                            href="{{ route('admin.charities.charity_type_edit', $charity) }}"><em
+                                                                                class="icon ni ni-edit"></em><span>Edit
+                                                                            </span></a></li>
+                                                                    <li><a class='delete'
+                                                                            form_id="delete-{{ $charity->id }}"
+                                                                            style="cursor: pointer"> <em
+                                                                                class="icon ni ni-trash-fill"></em><span>Delete</span></a>
+                                                                        <form
+                                                                            action="{{ route('admin.charity_type_delete', $charity->id) }}"
+                                                                            id="delete-{{ $charity->id }}" method=""
+                                                                            class="m-0">
+                                                                            @csrf
+                                                                        </form>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div><!-- .nk-tb-item -->
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div><!-- .nk-tb-item -->
                                     @endforeach
+
                                 </div><!-- .nk-tb-list -->
+                                @else
+                                 <h3 class="m-auto text-center py-5">No results found</h3>
+                                @endif
                             </div><!-- .card-inner -->
 
                         </div><!-- .card-inner-group -->
                     </div><!-- .card -->
+
                 </div><!-- .nk-block -->
                 <!-- Edit Charity Modal -->
                 <div class="modal fade" tabindex="-1" id="charity-modal">
