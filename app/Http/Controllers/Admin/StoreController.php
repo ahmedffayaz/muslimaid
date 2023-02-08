@@ -16,12 +16,12 @@ use App\Models\StoreAddress;
 use App\Models\StoreSeoData;
 use Illuminate\Http\Request;
 use App\Models\StoreCashback;
-use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class StoreController extends Controller
@@ -96,7 +96,7 @@ class StoreController extends Controller
             ]);
 
             flash()->success('New store added');
-            return redirect()->route('admin.stores.show_store','slug=' . $store->slug);
+            return redirect()->route('admin.stores.show_store', 'slug=' . $store->slug);
         } catch (Exception $exception) {
 
             flash()->error($exception->getMessage() . 'Error while adding new store');
@@ -179,7 +179,6 @@ class StoreController extends Controller
                 return true;
             }
         } catch (\Throwable $th) {
-
             return $th;
         }
     }
@@ -240,7 +239,7 @@ class StoreController extends Controller
     {
         $validation = $request->validate([
             'image' => 'required|mimes:jpeg,jpg,png,gif|max:2048',
-       ]);
+        ]);
         if ($request->has('image')) {
 
             $img_exist = StoreImage::where(['store_id' => $store->id, 'title' => $request->title])->first();
@@ -394,7 +393,7 @@ class StoreController extends Controller
     {
 
         DB::table('category_store')->where('store_id', $request->input('store_id'))->delete();
-        if($request->input('category_id')!=null){
+        if ($request->input('category_id') != null) {
             foreach ($request->input('category_id') as $category) {
                 DB::table('category_store')->insert([
                     'store_id' => $request->input('store_id'),

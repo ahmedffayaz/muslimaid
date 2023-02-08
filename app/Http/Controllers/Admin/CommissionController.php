@@ -14,7 +14,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
-use  Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CommissionController extends Controller
@@ -231,7 +231,7 @@ class CommissionController extends Controller
                 $fname = $row->user->first_name ?? '';
                 $lname = $row->user->last_name ?? '';
                 fputcsv($handle, array(
-                    $fname . ' ' . $lname, $row->user->email ?? '', $row->amount, $row->store->name,
+                    $fname . ' ' . $lname, $row->user->email ?? '', $row->amount, $row->store->name ?? '',
                     $row->exit_click_id,  $row->event_date, $row->status
                 ));
             }
