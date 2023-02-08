@@ -145,10 +145,10 @@ class CharityController extends Controller
         ]);
         if (!$request->ajax()) {
             $charity = new CharityType();
-                $charity->create([
-                    'title' =>  $request->title,
-                    'status' => $request->status,
-                ]);
+            $charity->create([
+                'title' =>  $request->title,
+                'status' => $request->status,
+            ]);
         }
         flash()->success('New Charity Type added');
         return redirect()->back();
