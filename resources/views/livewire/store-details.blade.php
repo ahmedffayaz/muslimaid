@@ -1491,6 +1491,7 @@
                     data: $(this).serialize(),
                     success: function(data) {
                         $('#add-address-modal').modal('hide');
+                        $('.add_address_form').trigger('reset');
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
