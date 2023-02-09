@@ -34,10 +34,9 @@ class StoreCashback extends Model
 
     public function getDeeplinkUrl()
     {
-        if ($this->deeplink_url) {
+        if (!empty($this->deeplink_url)) {
             return $this->deeplink_url;
-        } else {
-            return $this->store->deeplink_url;
         }
+        return $this->store->deeplink_url;
     }
 }
