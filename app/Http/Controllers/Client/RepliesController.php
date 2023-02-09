@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Client;
 
-use Illuminate\Support\Facades\Auth;
 use App\Models\TicketReply;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class RepliesController extends Controller
 {
@@ -17,18 +18,23 @@ class RepliesController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'reply' => 'required|max:255'
         ]);
-
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('error', 'Please ensure that the line is no longer than 225 characters.');
+        }
         $reply = TicketReply::create([
             'reply' =>  $request->input('reply'),
             'user_id' => Auth::user()->id,
             'ticket_id' => $request->input('ticket_id'),
-            'reply_by'=>'user'
+            'reply_by' => 'user'
         ]);
 
-        $reply->ticket->update(['status'=>'pending']);
+        $reply->ticket->update(['status' => 'pending']);
 
         return back();
     }

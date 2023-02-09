@@ -63,7 +63,7 @@
                         </div>
                     </div>
 
-                    <div class="col-lg-2">
+                    <div class="col-lg-3">
                         <div class="form-group">
                             <label class="form-label" for="phone-no-1">Order Value</label>
                             <div class="form-control-wrap">
@@ -71,19 +71,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-2">
+                    <div class="col-lg-3">
                         <div class="form-group">
                             <label class="form-label" for="phone-no-1">Network Commission</label>
                             <div class="form-control-wrap">
                                 <input type="number" class="form-control" step="1"  min="0.0" id="phone-no-1"  placeholder="Network Commission" name="network_commission[]" >
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-2">
-                        <div class="form-group">
-                            <label class="form-label" for="phone-no-1">Cashback Amount</label>
-                            <div class="form-control-wrap">
-                                <input type="number" class="form-control" min="0.0"  id="phone-no-1"  placeholder="Cashback Amount" name="amount[]" >
                             </div>
                         </div>
                     </div>
@@ -112,6 +104,7 @@
                 </div>`;
 
         $('.fields-container').append(row);
+        NioApp.Picker.date('.date-picker');
         initializeSelect2()
     }
 

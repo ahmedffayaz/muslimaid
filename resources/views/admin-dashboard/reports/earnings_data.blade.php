@@ -1,7 +1,7 @@
 
 @if(count($coms))
 <div class="row g-gs">
-    <div class="col-xxl-6">
+    <div class="col-xxl-12">
         <div class="card h-100">
             <div class="card-inner mb-n2">
                 <div class="card-title-group">
@@ -27,19 +27,26 @@
                     <div class="nk-tb-col">
                         @if ($com->store_id)
                             <div class="icon-text"><a href="{{route('admin.stores.show_store')}}?slug={{$com->store->slug}}">
-                                
                                 <span class="tb-lead"> <em class="text-primary icon ni ni-cart-fill mr-2"></em>{{$com->store->name}}</span></a>
                             </div>
                         @else
-                            <span class="profile-ud-value"> {{ ucfirst(str_replace('_', ' ', $com->type)) }}</span>
-                        @endif 
+                            <div class="icon-text">
+                                <span class="tb-lead"> <em class="text-primary icon ni ni-coin-alt mr-2"></em>{{ ucfirst(str_replace('_', ' ', $com->type)) }}</span>
+                            </div>
+                         @endif 
                     </div>
                     <div class="nk-tb-col">
                         <span class="tb-sub"><span>{{$com->user->first_name ?? ''}} {{$com->user->last_name ?? ''}}</span></span>
                     </div>
-                    <div class="nk-tb-col">
-                        <span class="tb-sub"><span>{{$com->store->network->name}}</span></span>
-                    </div>
+                    @if($com->network)
+                        <div class="nk-tb-col">
+                            <span class="tb-sub"><span>{{$com->store->network->name}}</span></span>
+                        </div>
+                    @else
+                        <div class="nk-tb-col">
+                            <span class="profile-ud-value"> {{ ucfirst(str_replace('_', ' ', $com->type)) }}</span>
+                        </div>
+                    @endif
                     <div class="nk-tb-col ">
                         <span>{{$com->exit_click_id}}</span>
                     </div>
