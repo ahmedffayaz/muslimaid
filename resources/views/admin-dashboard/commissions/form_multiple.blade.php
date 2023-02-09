@@ -18,8 +18,8 @@
                         <div class="form-group">
                             <label class="form-label" for="exit_click_id">Exit Click</label>
                             <div class="form-control-wrap ">
-                                <input type="number" class="form-control" id="exit_click_id" min="0"
-                                    value="{{ $row[0] }}" name="exit_click_id[]" placeholder="Exit Click ID"
+                                <input type="number" class="form-control" id="exit_click_id" min="0.0"
+                                    value="{{  $row[0] }}" name="exit_click_id[]" placeholder="Exit Click ID"
                                     required>
                             </div>
                         </div>
@@ -29,7 +29,7 @@
                             <label class="form-label" for="order_value">Order Value</label>
                             <div class="form-control-wrap">
                                 <input type="number" class="form-control" min="0" id="order_value"
-                                    value="{{ $row[1] }}" name="order_value[]" step="0.01"
+                                    value="{{  $row[1] }}" name="order_value[]" step="0.01"
                                     placeholder="Order Value">
                             </div>
                         </div>
@@ -368,7 +368,7 @@
     <span class="btn btn-sm btn-success float-right" onclick="addRows();">Add Row</span>
     <div class="row ">
         <div class="form-group">
-            <button type="submit" class="btn btn-lg btn-primary" id="multiple-cashbacks-form-btn">Save</button>
+            <button type="submit" class="btn-lg btn-primary" id="multiple-cashbacks-form-btn">Save</button>
         </div>
     </div>
 </form>

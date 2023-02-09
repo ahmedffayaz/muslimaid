@@ -86,3 +86,25 @@
         </div>
     </div>
 </form>
+<script>
+    function validation() { 
+        banner_required = true;
+        
+        $('#form-validate').validate({
+            errorClass: 'invalid-feedback d-block',
+            rules: {
+                name: {
+                    required: true
+                },
+                link: {
+                    url: true
+                },
+            },
+            submitHandler: function(form) {
+                if ($(form).valid())
+                form.submit();
+                return false;
+            }
+        });
+    }
+</script>
