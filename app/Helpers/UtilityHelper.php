@@ -30,10 +30,11 @@ function getFullName($user)
     return ucwords($user->first_name . ' ' . $user->last_name);
 }
 
-function store_user_avatar($file , $existing_file){
-    if($existing_file != "default.png"){
-        if (File::exists(public_path('storage/users/images/avatar/'.$existing_file))) {
-            File::delete(public_path('storage/users/images/avatar/'.$existing_file));
+function store_user_avatar($file, $existing_file)
+{
+    if ($existing_file != "default.png") {
+        if (File::exists(public_path('storage/users/images/avatar/' . $existing_file))) {
+            File::delete(public_path('storage/users/images/avatar/' . $existing_file));
         }
     }
 
@@ -41,7 +42,7 @@ function store_user_avatar($file , $existing_file){
     $ext = $file->getClientOriginalExtension();
     $filename = 'avatar_' . $current_timestamp . '.' . $ext;
     $dir = 'storage/users/images/avatar/';
-    if(!Storage::disk('public')->exists('users/images/avatar')) {
+    if (!Storage::disk('public')->exists('users/images/avatar')) {
         Storage::disk('public')->makeDirectory('users/images/avatar', 0775, true); //creates directory
     }
     $avatar_image = Image::make($file)->resize(512, 512);
@@ -294,11 +295,20 @@ function getEventsForMenu()
     return $events;
 }
 
-function getCategories()
+function getCategories($limit = null, $offset = 0)
 {
-    $categories = Category::where('parent_id', 0)->orderBy('name', 'ASC')->get();
+    $categories = Category::where('parent_id', 0)
+        ->when(!empty($limit), function ($q) use ($limit) {
+            $q->limit($limit);
+        })
+        ->when(!empty($offset), function ($q) use ($offset) {
+            $q->offset($offset);
+        })
+        ->get();
+
     return $categories;
 }
+
 function SiteSetting()
 {
     return SiteSetting::latest()->get()->pluck('value', 'type');
@@ -572,8 +582,14 @@ function csvToArray($path)
 
         if (($handle = fopen(convertPathForOS(base_path($path)), 'r')) !== false) {
             while (($row = fgetcsv($handle, null, ',')) !== false) {
-                if (!$header) $header = $row;
-                else $csvToArray[] = array_combine($header, $row);
+                if (!$header) {
+                    $cleansedRow = [];
+                    foreach ($row as $column) {
+                        $cleansedRow[] = trim($column);
+                    }
+
+                    $header = $cleansedRow;
+                } else $csvToArray[] = array_combine($header, $row);
             }
 
             fclose($handle);
@@ -600,4 +616,9 @@ function getNewIndicatorClassForAdmin($type, $class = null)
         return $records ? 'icon-status-' . $class . ' icon-status-info-' . $class : '';
 
     return $records ? 'icon-status icon-status-info' : '';
+}
+
+function arrayValueExists($array, $key)
+{
+    return isset($array[$key]) && !empty($array[$key]);
 }
