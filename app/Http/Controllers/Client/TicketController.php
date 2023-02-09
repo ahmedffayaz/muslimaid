@@ -67,15 +67,10 @@ class TicketController extends Controller
             'product.required' => 'Product description is required',
         ]);
         if ($validator->fails()) {
-            if (!$request->ajax()) {
-                flash()->error($validator->errors()->first());
-                return redirect()->back();
-            } else {
-                return array(
-                    'message' => $validator->errors()->first(),
-                    'updated' => 'error'
-                );
-            }
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('error', $validator->errors()->first());
         }
         $ticket->update([
             'claim_amount' => $request->input('amount'),
@@ -95,6 +90,7 @@ class TicketController extends Controller
         ]);
         if ($validator->fails()) {
             return redirect()->back()
+                ->withErrors($validator)
                 ->withInput()
                 ->with('error', $validator->errors()->first());
         }
