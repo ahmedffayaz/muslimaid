@@ -20,7 +20,7 @@ class CreateStoreCashbacksTable extends Migration
             $table->string('cashback_name')->nullable();
             $table->string('image')->nullable();
             $table->text('click_url')->nullable();
-            $table->text('deeplink_url')->nullable();
+            $table->longText('deeplink_url')->nullable();
             $table->text('sale_commission')->nullable();
             $table->text('currency')->nullable();
             $table->longText('detail')->nullable();

@@ -18,6 +18,7 @@ class StoreCashback extends Model
         'value',
         'image',
         'click_url',
+        'deeplink_url',
         'sale_commission',
         'cashback',
         'currency',
@@ -29,5 +30,14 @@ class StoreCashback extends Model
     public function store()
     {
         return $this->belongsTo(Store::class);
+    }
+
+    public function getDeeplinkUrl()
+    {
+        if ($this->deeplink_url) {
+            return $this->deeplink_url;
+        } else {
+            return $this->store->deeplink_url;
+        }
     }
 }

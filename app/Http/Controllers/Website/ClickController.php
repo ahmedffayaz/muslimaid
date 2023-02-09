@@ -55,8 +55,8 @@ class ClickController extends Controller
             'current_cashback_percentage' => $cashback_percent
         ]);
 
-        if (!empty($store->deeplink_url)) {
-            $deeplink_url = '&' . $store->network->deeplink_identifier . '=' . $store->deeplink_url;
+        if (!empty($request->deeplink_url)) {
+            $deeplink_url = '&' . $store->network->deeplink_identifier . '=' . $request->input('deeplink_url');
         }
 
         if ($store->network->id == 1) {
