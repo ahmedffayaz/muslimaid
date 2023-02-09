@@ -35,7 +35,7 @@ class SlidesController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'store_id'=>'nullable',
-            'link' =>'nullable |active_url'
+            'link' =>'nullable |active_url',
         ]);
 
         if ($validator->fails()) {
@@ -117,6 +117,7 @@ class SlidesController extends Controller
                 'created'=>'error');
             }
         }
+
         $slide->update([
             'name'=>$request->input('name'),
             'description' => $request->input('description'),

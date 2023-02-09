@@ -11,6 +11,7 @@ use App\Jobs\SendEmailToUser;
 use App\Jobs\SendEmailToAdmin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class TicketController extends Controller
 {
@@ -57,31 +58,46 @@ class TicketController extends Controller
      */
     public function update(Request $request, Ticket $ticket)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'amount' => 'required|integer',
-            'product' => 'required',
+            'product' => 'required|max:255',
         ], [
             'amount.required' => 'Amount is required',
             'amount.integer' => 'Amount should be integer',
-            'product.required' => 'Product is required',
+            'product.required' => 'Product description is required',
         ]);
+        if ($validator->fails()) {
+            if (!$request->ajax()) {
+                flash()->error($validator->errors()->first());
+                return redirect()->back();
+            } else {
+                return array(
+                    'message' => $validator->errors()->first(),
+                    'updated' => 'error'
+                );
+            }
+        }
         $ticket->update([
-            'claim_amount' => $request->input('amount')
+            'claim_amount' => $request->input('amount'),
+            'message' => $request->input('product'),
+
         ]);
         $this->sendEmailNotification($ticket);
         flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
         return redirect()->route('account.tickets.index');
     }
-
     public function step2(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'store_id' => 'required',
-            'claim_type' => 'required',
         ], [
-            'store_id.required' => 'Store name is required',
-            'claim_type.required' => 'Product is required',
+            'store_id.required' => 'Store name is required.',
         ]);
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $validator->errors()->first());
+        }
         $store_id = $request->input('store_id');
         $claim = $request->input('claim_type');
         $user = Auth::user();
@@ -119,13 +135,17 @@ class TicketController extends Controller
 
     public function step3(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'click_id' => 'required',
-            'claim_type' => 'required',
         ], [
             'click_id.required' => 'This field is required',
-            'claim_type.required' => 'This field is required',
         ]);
+        if ($validator->fails()) {
+            return redirect()->route('account.tickets.step2')
+                ->withErrors($validator)
+                ->withInput()
+                ->with('error',  $validator->errors()->first());
+        }
         $click_id = $request->input('click_id');
         $click = ExitClick::where('id', $click_id)->first();
         $claim_type = $request->input('claim_type');
