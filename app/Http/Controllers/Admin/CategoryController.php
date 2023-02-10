@@ -167,7 +167,7 @@ class CategoryController extends Controller
                 'meta_description' => $request->input('meta_description')
 
             ]);
-            if($category->parent_id === 0){
+            if($category->parent_id == 0){
                 foreach ($request->input('tags') as $tag) {
                     $category->update([
                         $tag => 1

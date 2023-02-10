@@ -541,6 +541,17 @@
                             </div>
                         </div>
                         <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="form-label" for="sale_commission">Deeplink URL</label>
+                                <div class="form-control-wrap">
+                                    <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
+                                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u={{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : $store->deeplink_url }})">&{{ $store->network->deeplink_identifier }}=</span>
+                                    <input type="text" class="form-control" id="deeplink_url" value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}"
+                                        name="deeplink_url" style="position: relative; left:30px; width: 97%">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
                             <div class="card">
                                 <label class="form-label" for="phone-no-1">Detail</label>
                                 <textarea name="detail" class="form-control "></textarea>

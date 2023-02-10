@@ -360,9 +360,7 @@ class StoreController extends Controller
     public function updateCashback(Request $request, StoreCashback $cashback)
     {
         $cashback->update($request->all());
-        $store = $cashback->store;
-        $store->update(['custom_cashback_percentage' => $request->input('custom_cashback_percentage')]);
-        return ['percentage' => $store->custom_cashback_percentage, 'updated' => true];
+        return true;
     }
 
     public function createCashback(Request $request)
