@@ -147,6 +147,9 @@
                 tracking_url: {
                     required: true,
                     url: true
+                },
+                deeplink_url: {
+                    url: true
                 }
             },
             submitHandler: function(form) {
