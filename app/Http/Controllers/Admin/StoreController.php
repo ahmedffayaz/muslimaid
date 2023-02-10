@@ -72,6 +72,7 @@ class StoreController extends Controller
             'store_name' => 'required|max:255',
             'network_id' => 'required',
             'tracking_url' => 'required|url',
+            'deeplink_url' => 'nullable|url',
             'store_url' => 'required|url',
         ]);
 
@@ -144,6 +145,14 @@ class StoreController extends Controller
      */
     public function update(Request $request, Store $store)
     {
+        $request->validate([
+            'store_name' => 'required|max:255',
+            'network_id' => 'required',
+            'tracking_url' => 'required|url',
+            'deeplink_url' => 'nullable|url',
+            'store_url' => 'required|url',
+        ]);
+
         try {
             $store->update([
                 'name' => $request->input('store_name'),

@@ -1463,8 +1463,11 @@
                         })(NioApp, jQuery);
                     },
                     error: function(data) {
-                        console.log("error");
-                        console.log(data);
+                        (function(NioApp, $){
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(Object.values(data.responseJSON.errors)[0], 'error');
+                        })(NioApp, jQuery);
                     }
                 });
             });
