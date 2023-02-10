@@ -32,7 +32,7 @@ class NetworkSeeder extends Seeder
 			[
 				'name' => 'Awin',
 				'description' => 'Awin Affiliate Network',
-				'click_ref' => 'clickref',
+				'click_ref' => 'pref1',
                 'deeplink_identifier' => 'u',
 				'logo' => 'awin-logo.svg',
 			],
