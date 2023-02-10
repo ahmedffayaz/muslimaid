@@ -146,15 +146,6 @@ class SettingsController extends Controller
     public function saveSettings(Request $request)
     {
         try {
-            $validated = $request->validate([
-                'referral_bonus' => 'min:0|numeric',
-                'welcome_bonus' => 'min:0|numeric',
-                'min_cashout_amount'=> 'min:0|numeric',
-            ], $messages = [
-                'referral_bonus' => 'Value must be equal to or greater than 0.',
-                'welcome_bonus' => 'Value must be equal to or greater than 0.',
-                'min_cashout_amount' => 'Value must be equal to or greater than 0.',
-            ]);
             $request->offsetUnset('_method');
             $request->offsetUnset('_token');
 
