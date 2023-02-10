@@ -309,6 +309,27 @@ function getCategories($limit = null, $offset = 0)
     return $categories;
 }
 
+function getStores($limit = null, $offset = 0)
+{
+    $categories = Category::where('parent_id', 0)
+        ->when(!empty($limit), function ($q) use ($limit) {
+            $q->limit($limit);
+        })
+        ->when(!empty($offset), function ($q) use ($offset) {
+            $q->offset($offset);
+        })
+        ->get();
+
+    return $categories;
+}
+
+function getPaginatedStores($perPage = 12, $letter = null)
+{
+    return Store::when(!empty($letter), function($q) use ($letter) {
+        $q->where('name', 'like', $letter . '%');
+    })->orderBy('name', 'asc')->paginate($perPage);
+}
+
 function SiteSetting()
 {
     return SiteSetting::latest()->get()->pluck('value', 'type');
