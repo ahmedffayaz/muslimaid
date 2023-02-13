@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Store;
 use App\Models\Ticket;
 use App\Models\Cashout;
