@@ -21,12 +21,19 @@
     
     
         <div class="nk-tb-col pl-1">
-            <span><b>{{$commission->store->name ?? ''}}</b></span>
-            
+            @if($commission->store)
+             <span><b>{{$commission->store->name ?? ''}}</b></span>
+            @else
+             <span><b>{{$commission->type}}</b></span>
+            @endif
         </div>
         
         <div class="nk-tb-col  text-center">
+            @if($commission->network_commission)
             <span><span class="currency">{{ currency() }} </span>{{$commission->network_commission}}</span>
+            @else
+            <span>-</span>
+            @endif
         </div>
         <div class="nk-tb-col  text-center">
             <span><span class="currency">{{ currency() }} </span>{{$commission->amount}}</span>
