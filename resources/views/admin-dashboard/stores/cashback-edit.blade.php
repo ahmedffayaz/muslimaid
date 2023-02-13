@@ -19,7 +19,7 @@
             <div class="form-group">
                 <label class="form-label" for="sale_commission">Network Commission</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="sale_commission" value="{{ $cashback->sale_commission }}" name="sale_commission" required
+                    <input type="number" class="form-control" min="0" step="0.01" id="sale_commission" value="{{ $cashback->sale_commission }}" name="sale_commission" required
                         oninput="calcPercentage()">
                 </div>
             </div>

@@ -26,6 +26,7 @@ class CreateStoreCashbacksTable extends Migration
             $table->longText('detail')->nullable();
             $table->longText('network_detail')->nullable();
             $table->string('default')->default(0)->nullable();
+            $table->enum('is_api', ['yes', 'no'])->default('yes');
             $table->timestamps();
             $table->softDeletes();
         });

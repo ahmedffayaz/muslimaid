@@ -502,6 +502,7 @@
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
+
 <!-- @@ Add Cashback Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="cashback-modal">
     <div class="modal-dialog modal-md" role="document">
@@ -536,7 +537,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="sale_commission">Commission</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="sale_commission" value="" name="sale_commission" required>
+                                    <input type="number" class="form-control" min="0" step="0.01" id="sale_commission" value="" name="sale_commission" required>
                                 </div>
                             </div>
                         </div>
@@ -569,6 +570,7 @@
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
+
 <!-- @@ Review Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="review-modal">
     <div class="modal-dialog modal-md" role="document">
@@ -586,6 +588,7 @@
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
+
 <!-- @@ Review Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="add-review-modal">
     <div class="modal-dialog modal-md" role="document">
@@ -657,6 +660,7 @@
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
 
+<!-- @@ Add SEO Rule Modal @e -->
 <div class="modal fade" tabindex="-1" id="add-seorule-modal">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -703,7 +707,9 @@
             </div>
         </div>
     </div>
-</div>
+</div><!-- .modal -->
+
+<!-- @@ Edit SEO Rule Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="seo-modal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
@@ -721,7 +727,7 @@
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
 
-{{-- Add Address --}}
+<!-- @@ Add Address Modal @e -->
 <div class="modal fade" tabindex="-1" id="add-address-modal">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -790,8 +796,9 @@
             </div>
         </div>
     </div>
-</div>
+</div><!-- .modal -->
 
+<!-- @@ Edit Address Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="edit-address-modal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
@@ -1039,6 +1046,7 @@
                 });
             });
 
+            // Edit SEO
             $(document).on('click', '.seo-edit', function(event) {
                 event.preventDefault();
                 var id = $(this).attr('seo-id');
@@ -1124,7 +1132,7 @@
 
         });
 
-        // Update store
+        // Update store address
         $(document).ready(function() {
             $(document).on('submit', '.address_form', function(event) {
                 event.preventDefault();
@@ -1143,13 +1151,13 @@
                     },
                     error: function(error) {
                         if (error.responseJSON.error) {
-                            (function(NioApp, $) {
+                            (function(NioApp, $){
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(error.responseJSON.error, 'error');
                             })(NioApp, jQuery);
                         } else {
-                            (function(NioApp, $) {
+                            (function(NioApp, $){
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
@@ -1201,7 +1209,6 @@
                         calcCashback();
                     }
                 });
-
             });
         });
 
@@ -1222,6 +1229,21 @@
                             $('#custom_cashback_percentage').val(data['percentage']);
                         })(NioApp, jQuery);
                         fetchCashbacks();
+                    },
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
                 });
             });
@@ -1243,6 +1265,21 @@
                             NioApp.Toast('Cashback Added Successfully.', 'success');
                         })(NioApp, jQuery);
                         fetchCashbacks();
+                    },
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
                 });
             });
@@ -1467,7 +1504,7 @@
             });
         });
 
-        //Update Store
+        // Update Store
         $(document).ready(function() {
             $(document).on('submit', '#store_form', function(event) {
                 event.preventDefault();
@@ -1482,16 +1519,25 @@
                             NioApp.Toast('Store updated Successfully.', 'success');
                         })(NioApp, jQuery);
                     },
-                    error: function(data) {
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(Object.values(data.responseJSON.errors)[0], 'error');
-                        })(NioApp, jQuery);
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
                 });
             });
         });
+
         // Update categories
         $(document).ready(function() {
             $(document).on('submit', '#store_cat_form', function(event) {
@@ -1701,6 +1747,7 @@
                 $('#coupon_code').removeAttr('required').val('');
             }
         }
+
         $(document.body).on("change", "#promotion_type", function() {
             checkVoucherType()
         });

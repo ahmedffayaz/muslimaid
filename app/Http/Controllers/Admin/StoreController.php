@@ -19,6 +19,7 @@ use App\Models\StoreCashback;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
@@ -83,6 +84,7 @@ class StoreController extends Controller
         }
 
         try {
+            DB::beginTransaction();
             $store = Store::create([
                 'name' => $request->input('store_name'),
                 'network_id' => $request->input('network_id'),
@@ -93,13 +95,16 @@ class StoreController extends Controller
                 'status' => 'active',
                 'override_cashback' => 1,
                 'slug' => Str::slug($request->input('store_name')),
+                'is_api' => 'no',
             ]);
+            DB::commit();
 
             flash()->success('New store added');
             return redirect()->route('admin.stores.show_store', 'slug=' . $store->slug);
-        } catch (Exception $exception) {
-            flash()->error($exception->getMessage() . 'Error while adding new store');
-            return redirect()->route('admin.stores.index');
+        } catch (Exception $e) {
+            DB::rollBack();
+            flash()->error('Error while adding new store');
+            return redirect()->back();
         }
     }
 
@@ -154,6 +159,7 @@ class StoreController extends Controller
         ]);
 
         try {
+            DB::beginTransaction();
             $store->update([
                 'name' => $request->input('store_name'),
                 'network_id' => $request->input('network_id'),
@@ -177,15 +183,32 @@ class StoreController extends Controller
                     $tag => 1,
                 ]);
             }
+            DB::commit();
 
             if (!$request->ajax()) {
                 flash()->success('Store info updated successfully');
                 return redirect()->back();
-            } else {
-                return true;
             }
-        } catch (\Throwable $th) {
-            return $th;
+            return true;
+        } catch (ModelNotFoundException $e) {
+            if (!$request->ajax()) {
+                flash()->error('Error while updating store');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'error' => 'Error while updating store'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while updating store');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Error while updating store'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -368,18 +391,79 @@ class StoreController extends Controller
 
     public function updateCashback(Request $request, StoreCashback $cashback)
     {
-        $cashback->update($request->all());
-        return true;
+        $request->validate([
+            'type' => 'required',
+            'sale_commission' => 'required|numeric|min:0',
+            'deeplink_url' => 'nullable|url'
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $cashback->update($request->all());
+            DB::commit();
+            return true;
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while updating cashback.');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'error' => 'Error while updating cashback.'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while updating cashback.');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Error while updating cashback.'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function createCashback(Request $request)
     {
-        $cashback = StoreCashback::create($request->all());
-        $existing_cashbacks = StoreCashback::where('store_id', $request->store_id)->get();
-        if (count($existing_cashbacks) == 1) {
-            $cashback->update(['default' => '1']);
+        $request->validate([
+            'type' => 'required',
+            'sale_commission' => 'required|numeric|min:0',
+            'deeplink_url' => 'nullable|url'
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $request->merge(['is_api' => 'no']);
+            $cashback = StoreCashback::create($request->all());
+            $existing_cashbacks = StoreCashback::where('store_id', $request->store_id)->get();
+            if (count($existing_cashbacks) == 1) {
+                $cashback->update(['default' => '1']);
+            }
+            DB::commit();
+            return true;
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while creating cashback.');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'error' => 'Error while creating cashback.'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while creating cashback.');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Error while creating cashback.'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return true;
     }
 
     public function fetchImages(Request $request)
