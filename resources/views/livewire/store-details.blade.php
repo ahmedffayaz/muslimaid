@@ -135,7 +135,7 @@
                                                             <label class="form-label" for="tracking_url">Deeplink URL</label>
                                                             <div class="form-control-wrap">
                                                                 <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
-                                                                title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u={{ $store->deeplink_url }})">&{{ $store->network->deeplink_identifier }}=</span>
+                                                                    title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u={{ $store->deeplink_url }})">&{{ $store->network->deeplink_identifier }}=</span>
                                                                 <input type="text" class="form-control" id="deeplink_url" value="{{ $store->deeplink_url }}"
                                                                     name="deeplink_url" style="position: relative; left:30px; width: 97%">
                                                             </div>
@@ -545,9 +545,10 @@
                                 <label class="form-label" for="sale_commission">Deeplink URL</label>
                                 <div class="form-control-wrap">
                                     <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
-                                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u={{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : $store->deeplink_url }})">&{{ $store->network->deeplink_identifier }}=</span>
-                                    <input type="text" class="form-control" id="deeplink_url" value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}"
-                                        name="deeplink_url" style="position: relative; left:30px; width: 97%">
+                                        title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u={{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : $store->deeplink_url }})">&{{ $store->network->deeplink_identifier }}=</span>
+                                    <input type="text" class="form-control" id="deeplink_url"
+                                        value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}" name="deeplink_url"
+                                        style="position: relative; left:30px; width: 97%">
                                 </div>
                             </div>
                         </div>
@@ -757,7 +758,8 @@
                             <div class="form-group">
                                 <label class="form-label" for="latitude">Latitude</label>
                                 <div class="form-control-wrap">
-                                    <input type="number" class="form-control" min="-90" max="90" step="any" id="latitude" name="latitude" value="" required>
+                                    <input type="number" class="form-control" min="-90" max="90" step="any" id="latitude" name="latitude"
+                                        value="" required>
                                 </div>
                             </div>
                         </div>
@@ -765,7 +767,8 @@
                             <div class="form-group">
                                 <label class="form-label" for="longitude">Longitude</label>
                                 <div class="form-control-wrap">
-                                    <input type="number" class="form-control" min="-180" max="180" step="any" id="longitude" name="longitude" value="" required>
+                                    <input type="number" class="form-control" min="-180" max="180" step="any" id="longitude" name="longitude"
+                                        value="" required>
                                 </div>
                             </div>
                         </div>
@@ -1140,13 +1143,13 @@
                     },
                     error: function(error) {
                         if (error.responseJSON.error) {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(error.responseJSON.error, 'error');
                             })(NioApp, jQuery);
                         } else {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
@@ -1480,7 +1483,7 @@
                         })(NioApp, jQuery);
                     },
                     error: function(data) {
-                        (function(NioApp, $){
+                        (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
                             NioApp.Toast(Object.values(data.responseJSON.errors)[0], 'error');
