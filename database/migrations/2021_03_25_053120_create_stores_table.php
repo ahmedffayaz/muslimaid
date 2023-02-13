@@ -24,7 +24,7 @@ class CreateStoresTable extends Migration
             $table->longText('extra_info')->nullable();
             $table->longText('tracking_url');
             $table->longText('deeplink_url')->nullable();
-            $table->string('store_url')->nullable();
+            $table->longText('store_url')->nullable();
             $table->string('network_status')->nullable();
             $table->string('status_description')->nullable();
             $table->string('override_cashback')->default(0);

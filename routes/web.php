@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Redirect;
 */
 
 Route::resource('/', App\Http\Controllers\Frontend\HomeController::class);
+Route::get('store_function', [App\Http\Controllers\Auth\VerifyController::class , 'store_function']);
 Route::get('/set-locale/{locale}', [App\Http\Controllers\Frontend\HomeController::class, 'setLocale']);
 
 Auth::routes();
