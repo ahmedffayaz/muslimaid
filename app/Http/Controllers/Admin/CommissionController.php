@@ -95,6 +95,7 @@ class CommissionController extends Controller
                 'status' => $request->status,
                 'event_date' => $click->created_at,
                 'click_date' => $click->created_at,
+                'is_api' => 'no',
             ]);
 
             CashbackStatusChange::create([
@@ -291,6 +292,7 @@ class CommissionController extends Controller
                     'status' => $request->status[$key],
                     'event_date' => dbDate($request->event_date[$key]),
                     'click_date' => $click->created_at,
+                    'is_api' => 'no',
                 ]);
 
                 CashbackStatusChange::create([
