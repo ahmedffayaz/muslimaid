@@ -381,7 +381,7 @@
             // Store cashback
             function store() {
                 $(document).ready(function() {
-                $('#save_modal_form').on('submit', function(event) {
+                $('#update_cashback_form').on('submit', function(event) {
                    
                     event.preventDefault();
                     let btn = $('#save-btn')
@@ -402,7 +402,7 @@
                         data: formData,
                         success: function(response) {
                             $('#modal').modal('hide');
-                             $('#save_modal_form').trigger('reset');
+                             $('#update_cashback_form').trigger('reset');
                             btn.removeAttr('disabled', 'disabled').button('refresh');
                             btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                             $('#table-data').load(location.href + ' #table-data');

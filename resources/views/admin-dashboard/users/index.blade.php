@@ -47,22 +47,6 @@
                                         </div>
                                     </div>
                                 </div>
-                            
-                            
-                                {{-- <div class="col-lg-3">
-                                    <div class="form-group">
-                                        <label class="form-label" for="type">Regestration Type</label>
-                                        <div class="form-control-wrap ">
-                                            
-                                            <select class="form-select form-control" id="type" name="type">
-                                                <option value="-1">Any</option>
-                                                <option value="sign up">Sign up</option>
-                                                <option value="social">Social</option>
-                                            </select>
-                                        
-                                        </div>
-                                    </div>
-                                </div> --}}
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-label" for="status">Status</label>
@@ -167,7 +151,6 @@
             </div></div>`);
               
             var _token = $("input[name=_token]").val();
-            // var type = $("select[name=type]").val();
             var status = $("select[name=status").val();
             var name = $("input[name=name]").val();
             var email = $("input[name=email]").val();

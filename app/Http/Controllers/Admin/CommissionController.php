@@ -193,7 +193,6 @@ class CommissionController extends Controller
                 'order_value' => round($request->order_value, 3),
                 'status' => $request->status,
             ]);
-
             return array(
                 'message' => 'Cashback updated',
                 'updated' => 'success'

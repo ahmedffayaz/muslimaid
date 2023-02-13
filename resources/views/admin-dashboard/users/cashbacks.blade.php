@@ -47,6 +47,13 @@
                     <span class="badge badge-danger">{{ $commission->statusMap->status}}</span>
                 @elseif($commission->statusMap->status == "pending")
                     <span class="badge badge-info">{{ $commission->statusMap->status}}</span>
+                @elseif($commission->statusMap->status == "processing")
+                    <span class="badge badge-success">{{ $commission->statusMap->status}}</span>
+                @elseif($commission->statusMap->status == "processing donation")
+                    <span class="badge badge-info">{{ $commission->statusMap->status}}</span>
+                @elseif($commission->statusMap->status == "donated")
+                    <span class="badge badge-success">{{ $commission->statusMap->status}}</span>
+                
                 @endif
             </span>
         </div>
@@ -99,7 +106,6 @@
 
                     <div class="nk-file-name">
                         <div class="nk-file-name-text"><span class="title">Edit Cashback</span></div>
-                        {{-- <div class="nk-file-name-sub">Project</div> --}}
                     </div>
                 </div>
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
@@ -133,6 +139,7 @@
                 {
                     $('#cashback-modal').modal('show');
                     $('#cashback').html(data);
+                    initializeSelect2()
                 }
             });
         });
@@ -140,7 +147,7 @@
 </script>
 <script>
     $(document).ready(function(){
-        $(document).on('submit', '.update_cashback_form',function(e){
+        $(document).on('submit', '#update_cashback_form',function(e){
             e.preventDefault();
             var form_action = $(this).attr('action');
             var formdata = new FormData(this);
@@ -151,8 +158,8 @@
                 processData: false,
                 contentType: false,
                 success:function(data){
+                 
                     $('#cashback-modal').modal('hide');
-                    
                     (function(NioApp, $){
                     'use strict';
                     toastr.clear();
@@ -163,4 +170,11 @@
             });
         });
     });
+    function initializeSelect2() {
+                $('.form-select').select2({
+                    placeholder: function() {
+                        $(this).data('placeholder');
+                    }
+                });
+            }
 </script>

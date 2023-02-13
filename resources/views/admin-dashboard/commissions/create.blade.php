@@ -1,7 +1,7 @@
 @php
     $isEdit = isset($commission) ? true: false;
 @endphp
-<form action="{{ $isEdit ? route('admin.commissions.update', $commission->id) : route('admin.commissions.store') }}" class="gy-3 form-validate is-alter" method="POST" id="save_modal_form">
+<form action="{{ $isEdit ? route('admin.commissions.update', $commission->id) : route('admin.commissions.store') }}" class="gy-3 form-validate is-alter " method="POST" id="update_cashback_form">
     @csrf
         @if ($isEdit)
             @method('PUT')
@@ -50,7 +50,7 @@
         </div>
         <div class="col-12">
             <div class="form-group">
-                <button type="submit" class="btn-lg btn-primary" id="save-btn"></button>
+                <button type="submit" class="btn-lg btn-primary" id="save-btn">Save</button>
             </div>
         </div>
     </div>
