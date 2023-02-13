@@ -271,7 +271,6 @@
                 var pageurl = $(this).attr('href');
                 var _token = $("input[name=_token]").val();
                 $.ajax({
-
                     url: pageurl,
                     method: "GET",
                     data: {
@@ -363,7 +362,7 @@
             });
 
             // Edit Cashback
-            $('.cashback-edit').on('click', function(event) {
+            $(document).on("click", ".cashback-edit", function(event) {
                 event.preventDefault();
                 $.ajax({
                     url: $(this).attr('href'),
@@ -381,13 +380,15 @@
 
             // Store cashback
             function store() {
+                $(document).ready(function() {
                 $('#save_modal_form').on('submit', function(event) {
+                   
                     event.preventDefault();
                     let btn = $('#save-btn')
                     btn.attr('disabled', 'disabled')
                         .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
                     let url = $(this).attr('action');
-                    let id = $('#id').val()
+                    let id = $('#id').val();
                     let method = 'POST';
                     let formData = new FormData(this);
                     if (id) {
@@ -401,6 +402,7 @@
                         data: formData,
                         success: function(response) {
                             $('#modal').modal('hide');
+                             $('#save_modal_form').trigger('reset');
                             btn.removeAttr('disabled', 'disabled').button('refresh');
                             btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                             $('#table-data').load(location.href + ' #table-data');
@@ -430,6 +432,7 @@
                         }
                     });
                 });
+               });
             }
 
             // Re-initialize Select2

@@ -3,8 +3,10 @@
 @endphp
 <form action="{{ $isEdit ? route('admin.commissions.update', $commission->id) : route('admin.commissions.store') }}" class="gy-3 form-validate is-alter" method="POST" id="save_modal_form">
     @csrf
-    @method('POST')
-    <input type="hidden" id="id" value="{{ $isEdit ? $commission->id : '' }}">
+        @if ($isEdit)
+            @method('PUT')
+        @endif
+    <input type="hidden"  name="id"  id="id"  value="{{ $isEdit ? $commission->id : '' }}">
     <div class="row g-4">
         <div class="col-lg-6">
             <div class="form-group">

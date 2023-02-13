@@ -179,9 +179,16 @@ class CommissionController extends Controller
                     'cashback_status_id' => $request->status
                 ]);
             }
+            $click = ExitClick::findOrFail($request->exit_click_id);
+            $customCashbackPercentage = $click->store->custom_cashback_percentage;
 
+            if ($customCashbackPercentage) {
+                $cashback_percent = $customCashbackPercentage;
+            } else {
+                $cashback_percent = SiteSetting::where('type', 'cashback_percentage')->first()->value;
+            }
             $commission->update([
-                'amount' => round($request->amount, 3),
+                'amount' =>  round(($request->network_commission / 100) * $cashback_percent, 3),
                 'network_commission' => round($request->network_commission, 3),
                 'order_value' => round($request->order_value, 3),
                 'status' => $request->status,

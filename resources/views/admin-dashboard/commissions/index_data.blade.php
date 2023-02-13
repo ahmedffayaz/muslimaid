@@ -46,8 +46,8 @@
                         @if ($commission->store_id)
                         <span class="tb-lead">{{ $commission->exitClick->user->id ?? '' }} @if ($commission->user->first_name != 'unnamed' || $commission->user->last_name != 'unnamed')
                             - {{ $commission->user->first_name }} {{ $commission->user->last_name }}
-                        @endif
-                    </span>
+                           @endif
+                       </span>
                     <span>{{ $commission->exitClick->user->email ?? '' }}</span>
                         @else
                         <span class="tb-lead">{{$commission->user->id}} @if($commission->user->first_name != 'unnamed' || $commission->user->last_name != 'unnamed')- {{$commission->user->first_name}} {{$commission->user->last_name}} @endif

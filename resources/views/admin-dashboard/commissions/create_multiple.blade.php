@@ -171,6 +171,7 @@
                         NioApp.Picker.date('.date-picker');
                         initializeSelect2();
                         $('#modal').modal('hide');
+                        $('#save_modal_form').trigger('reset');
                         btn.removeAttr('disabled', 'disabled').button('refresh');
                         btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                         confirmMultipleCashbacks();
