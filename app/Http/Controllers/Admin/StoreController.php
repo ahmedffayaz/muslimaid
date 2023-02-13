@@ -178,10 +178,13 @@ class StoreController extends Controller
                 'feature_sidebar' => 0,
                 'editor_pick' => 0,
             ]);
-            foreach ($request->input('tags') as $tag) {
-                $store->update([
-                    $tag => 1,
-                ]);
+
+            if ($request->has('tags')) {
+                foreach ($request->input('tags') as $tag) {
+                    $store->update([
+                        $tag => 1,
+                    ]);
+                }
             }
             DB::commit();
 
@@ -207,7 +210,7 @@ class StoreController extends Controller
             }
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'error' => 'Error while updating store'
+                'error' => $e->getMessage() . 'Error while updating store'
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
