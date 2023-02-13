@@ -757,7 +757,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="latitude">Latitude</label>
                                 <div class="form-control-wrap">
-                                    <input type="number" class="form-control" id="latitude" name="latitude" value="" required>
+                                    <input type="number" class="form-control" min="-90" max="90" step="any" id="latitude" name="latitude" value="" required>
                                 </div>
                             </div>
                         </div>
@@ -765,7 +765,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="longitude">Longitude</label>
                                 <div class="form-control-wrap">
-                                    <input type="number" class="form-control" id="longitude" name="longitude" value="" required>
+                                    <input type="number" class="form-control" min="-180" max="180" step="any" id="longitude" name="longitude" value="" required>
                                 </div>
                             </div>
                         </div>
@@ -1099,6 +1099,7 @@
             });
         });
 
+        // Store lat long address edit
         $(document).on('click', '.address-edit', function(event) {
             event.preventDefault();
             var id = $(this).attr('address-id');
@@ -1120,6 +1121,7 @@
 
         });
 
+        // Update store
         $(document).ready(function() {
             $(document).on('submit', '.address_form', function(event) {
                 event.preventDefault();
@@ -1135,6 +1137,21 @@
                             NioApp.Toast('Address Updated Successfully.', 'success');
                         })(NioApp, jQuery);
                         fetchAddress();
+                    },
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
                 });
             });
@@ -1499,6 +1516,7 @@
         $(document).ready(function() {
             $(document).on('submit', '.add_address_form', function(event) {
                 event.preventDefault();
+                console.log($(this).attr('action'))
                 $.ajax({
                     url: $(this).attr('action'),
                     type: "POST",
@@ -1512,6 +1530,21 @@
                             NioApp.Toast('Address Added Successfully.', 'success');
                         })(NioApp, jQuery);
                         fetchAddress();
+                    },
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
                 });
             });

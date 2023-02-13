@@ -24,7 +24,7 @@
                 <div class="form-group">
                     <label class="form-label" for="latitude">Latitude</label>
                     <div class="form-control-wrap">
-                        <input type="number" step="any" class="form-control" id="latitude" name="latitude" value="{{ $address->latitude }}" required>
+                        <input type="number" min="-90" max="90" step="any" class="form-control" id="latitude" name="latitude" value="{{ $address->latitude }}" required>
                     </div>
                 </div>
             </div>
@@ -32,7 +32,7 @@
                 <div class="form-group">
                     <label class="form-label" for="longitude">Longitude</label>
                     <div class="form-control-wrap">
-                    <input type="number"  class="form-control" id="longitude" name="longitude" value="{{ $address->longitude }}" required>
+                    <input type="number" min="-180" max="180" step="any" class="form-control" id="longitude" name="longitude" value="{{ $address->longitude }}" required>
                     </div>
                 </div>
             </div>
@@ -50,6 +50,6 @@
             </div>
         </div>
     </div>
-        
+
     </div>
 </form>

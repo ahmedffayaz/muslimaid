@@ -572,20 +572,18 @@ class StoreController extends Controller
 
     public function addStoreAddress(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'city' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
+            'latitude' => ['required','numeric','min:-90', 'max:90'],
+            'longitude' => ['required','numeric','min:-180', 'max:180'],
             'address' => 'required',
+        ],[
+            'latitude.regex' => 'Latitude should be between -90 to 90',
+            'longitude.regex' => 'Longitude should be between -180 to 180'
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
         try {
+            DB::beginTransaction();
             StoreAddress::create([
                 'store_id' => $request->input('store_id'),
                 'city' => $request->input('city'),
@@ -595,11 +593,18 @@ class StoreController extends Controller
                 'longitude' => $request->input('longitude'),
             ]);
 
-            flash()->success('store address added');
-            return redirect()->back();
-        } catch (Exception $exception) {
-            flash()->error('Error while adding store address.');
-            return redirect()->back();
+            DB::commit();
+
+            if (!$request->ajax()) {
+                flash()->success('store address added.');
+                return redirect()->back();
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while adding store address.');
+                return redirect()->back();
+            }
         }
     }
 
@@ -611,28 +616,37 @@ class StoreController extends Controller
 
     public function updateStoreAddress(Request $request, StoreAddress $store_address)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'city' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
+            'latitude' => ['required','numeric','min:-90', 'max:90'],
+            'longitude' => ['required','numeric','min:-180', 'max:180'],
             'address' => 'required',
+        ],[
+            'latitude.regex' => 'Latitude should be between -90 to 90',
+            'longitude.regex' => 'Longitude should be between -180 to 180'
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-        $address = StoreAddress::where('id', $request->input('address_id'))->update([
-            'city' => $request->input('city'),
-            'postal_code' => $request->input('postal_code'),
-            'address' => $request->input('address'),
-            'latitude' => $request->input('latitude'),
-            'longitude' => $request->input('longitude'),
-        ]);
-        if (!$request->ajax()) {
-            flash()->success('Address updated successfully');
-            return redirect()->back();
+        try {
+            DB::beginTransaction();
+            $address = StoreAddress::where('id', $request->input('address_id'))->update([
+                'city' => $request->input('city'),
+                'postal_code' => $request->input('postal_code'),
+                'address' => $request->input('address'),
+                'latitude' => $request->input('latitude'),
+                'longitude' => $request->input('longitude'),
+            ]);
+            DB::commit();
+
+            if (!$request->ajax()) {
+                flash()->success('Address updated successfully.');
+                return redirect()->back();
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error("Error while update store address.");
+                return redirect()->back();
+            }
         }
     }
 
