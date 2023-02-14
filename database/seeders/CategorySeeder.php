@@ -32,7 +32,7 @@ class CategorySeeder extends Seeder
             if (!arrayValueExists($category, 'id')) continue;
             if (!arrayValueExists($category, 'name')) continue;
 
-            $categories[] = [
+            $categories = [
                 'id' => $category['id'],
                 'parent_id' => arrayValueExists($category, 'parent_id') ? $category['parent_id'] : 0,
                 'name' => $category['name'],
@@ -55,8 +55,8 @@ class CategorySeeder extends Seeder
                 'created_at' => isset($category['created_at']) ? $category['created_at'] : $now,
                 'updated_at' => isset($category['updated_at']) ? $category['updated_at'] : $now,
             ];
+            Category::insert($categories);
         }
 
-        Category::insert($categories);
     }
 }
