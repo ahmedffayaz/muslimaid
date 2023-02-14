@@ -661,10 +661,10 @@ class StoreController extends Controller
     {
         $request->validate([
             'city' => 'required',
-            'latitude' => ['required','numeric','min:-90', 'max:90'],
-            'longitude' => ['required','numeric','min:-180', 'max:180'],
+            'latitude' => ['required', 'numeric', 'min:-90', 'max:90'],
+            'longitude' => ['required', 'numeric', 'min:-180', 'max:180'],
             'address' => 'required',
-        ],[
+        ], [
             'latitude.regex' => 'Latitude should be between -90 to 90',
             'longitude.regex' => 'Longitude should be between -180 to 180'
         ]);
@@ -705,10 +705,10 @@ class StoreController extends Controller
     {
         $request->validate([
             'city' => 'required',
-            'latitude' => ['required','numeric','min:-90', 'max:90'],
-            'longitude' => ['required','numeric','min:-180', 'max:180'],
+            'latitude' => ['required', 'numeric', 'min:-90', 'max:90'],
+            'longitude' => ['required', 'numeric', 'min:-180', 'max:180'],
             'address' => 'required',
-        ],[
+        ], [
             'latitude.regex' => 'Latitude should be between -90 to 90',
             'longitude.regex' => 'Longitude should be between -180 to 180'
         ]);
