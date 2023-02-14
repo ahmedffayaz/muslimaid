@@ -231,8 +231,8 @@ d-xl-none
                         <ul class="nk-menu-sub">
                             @can('view tickets')
                             <li class="nk-menu-item ">
-                                <a href="{{ route('admin.tickets.index') }}" class="nk-menu-link {{ getNewIndicatorClassForAdmin('tickets') }}">
-                                    <span class="nk-menu-icon "><em class="icon ni ni-chat-fill"></em></span>
+                                <a href="{{ route('admin.tickets.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon {{ getNewIndicatorClassForAdmin('tickets') }}"><em class="icon ni ni-chat-fill"></em></span>
                                     <span class="nk-menu-text">Tickets</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
