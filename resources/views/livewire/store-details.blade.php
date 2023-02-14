@@ -224,7 +224,7 @@
                                                         </div>
                                                     </div>
                                                 </form>
-                                                <h5 class="title mt-3">Categoires</h5>
+                                                <h5 class="title mt-3">Categories</h5>
                                                 <form action="{{ route('admin.stores.categories.update') }}" id="store_cat_form" class="gy-3 form-validate is-alter"
                                                     method="POST" enctype="multipart/form-data">
                                                     @csrf
@@ -1620,7 +1620,7 @@
             });
         });
 
-        // Categoires child parent selector
+        // Categories child parent selector
         $('input[type="checkbox"]').change(function(e) {
             var checked = $(this).prop("checked"),
                 container = $(this).parent(),
@@ -1678,7 +1678,7 @@
             checkCashbackType();
         });
 
-        // Override Categoires
+        // Override Categories
         $("#override-categories").change(function() {
             var value = $(this).val();
             $.ajax({
