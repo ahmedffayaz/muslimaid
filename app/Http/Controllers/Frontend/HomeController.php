@@ -14,96 +14,37 @@ use App\Models\Testimonial;
 
 class HomeController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        $stores = Store::where('feature_homepage',1)->latest()->get();
+        $stores = Store::where('feature_homepage', 1)->latest()->get();
         $languages = Language::orderBy('id', 'desc')->get();
-        $featured_categories = Category::where('feature_homepage',1)->orderBy('name', 'ASC')->latest()->get();
-        $slider = Slider::where('name','Home')->first();
+        $featured_categories = Category::where('feature_homepage', 1)->orderBy('name', 'ASC')->latest()->get();
+        $slider = Slider::where('name', 'Home')->first();
         $testimonials = Testimonial::where('status', 'active')->orderByDesc('id')->take(5)->get();
 
-        return view('frontend.pages.home',compact('stores','languages','featured_categories','slider', 'testimonials'));
+        return view('frontend.pages.home', compact('stores', 'languages', 'featured_categories', 'slider', 'testimonials'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function quickSearch(Request $request)
     {
-        //
+        if (empty($request->input('search'))) return null;
+
+        $stores = Store::where('name', 'like', '%' . $request->input('search') . '%')
+            ->orWhereHas('storeRuleData', function ($query) use ($request) {
+                $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $request->input('search') . '%');
+            })->whereStatus('active')->get();
+
+        return view('frontend.components.search-suggestions', compact('stores'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
     public function setLocale($locale)
     {
-        // dd($locale);
         App::setLocale($locale);
-        session()->put('locale', $locale );
+        session()->put('locale', $locale);
 
         return response()->json([
             'status' => true,
             'message' => 'Language changed!'
         ]);
-        }
+    }
 }

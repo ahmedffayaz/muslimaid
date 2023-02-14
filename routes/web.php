@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\Redirect;
 |
 */
 
-Route::resource('/', App\Http\Controllers\Frontend\HomeController::class);
+Route::get('/', [App\Http\Controllers\Frontend\HomeController::class, 'index']);
+Route::post('/quick-search', [App\Http\Controllers\Frontend\HomeController::class, 'quickSearch']);
 Route::get('/set-locale/{locale}', [App\Http\Controllers\Frontend\HomeController::class, 'setLocale']);
 
 Auth::routes();
