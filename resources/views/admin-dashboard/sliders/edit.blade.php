@@ -130,9 +130,10 @@
                         $('#save-btn').text('Create');
                         $('#modal').modal('show');
                         initializeSelect2();
+                        NioApp.BS.fileinput('.custom-file-input');
                         linkType();
                         storeType();
-                        validation();
+                        formValidation();
                     }
                 });
             });
@@ -151,11 +152,12 @@
                         $('.title').text('Edit Slider');
                         $('#form-wrapper').html(response);
                         $('#save-btn').text('Edit');
+                        NioApp.BS.fileinput('.custom-file-input');
                         $('#modal').modal('show');
                         initializeSelect2();
                         linkType();
                         storeType();
-                        validation();
+                        formValidation();
                     }
                 });
             });
@@ -170,6 +172,7 @@
         }
     </script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="http://jqueryvalidation.org/files/dist/additional-methods.min.js"></script>
     <script>
         $(function() {
             $("#sortable").sortable({
@@ -224,8 +227,10 @@
             });
         }
     </script>
+
     <script>
-        function validation() {
+        function formValidation() {
+            let slideId = $('#slide_id').val();
             $('#form-validate').validate({
                 errorClass: 'invalid-feedback d-block',
                 rules: {
@@ -235,10 +240,22 @@
                     link: {
                         url: true
                     },
+                    logo: {
+                        extension: "jpg,jpeg,png,bmp",
+                    },
+                    banner: {
+                        required: slideId ? false : true,
+                        extension: "jpg,jpeg,png,bmp",
+                    },
+                },
+                messages: {
+                    banner: {
+                        extension: "only accepted jpg, jpeg, png, bmp images"
+                    },
                 },
                 submitHandler: function(form) {
                     if ($(form).valid())
-                    form.submit();
+                        form.submit();
                     return false;
                 }
             });
