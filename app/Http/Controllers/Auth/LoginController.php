@@ -67,7 +67,7 @@ class LoginController extends Controller
     
         if ($emailCheck->status != 1) {
             return redirect()->back()->with(['error' => 'Your account is inactive']);
-    }
+        }
         if (!is_null($emailCheck) && $emailCheck->provider != 'email') {
             Session::flash('social-login');
             return redirect()->route('login');
@@ -127,8 +127,8 @@ class LoginController extends Controller
                 Session::flash('email-not-verified');
                 return route('login');
             }
-                    Session::flash('login-welcome');
-                    return '/';
+            Session::flash('login-welcome');
+            return '/';
         }
     }
 }

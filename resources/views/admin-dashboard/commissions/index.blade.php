@@ -381,57 +381,55 @@
             // Store cashback
             function store() {
                 $(document).ready(function() {
-                $('#update_cashback_form').on('submit', function(event) {
-                   
-                    event.preventDefault();
-                    let btn = $('#save-btn')
-                    btn.attr('disabled', 'disabled')
-                        .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
-                    let url = $(this).attr('action');
-                    let id = $('#id').val();
-                    let method = 'POST';
-                    let formData = new FormData(this);
-                    if (id) {
-                        formData.append('_method', 'PUT');
-                    }
-                    $.ajax({
-                        url: url,
-                        type: method,
-                        processData: false,
-                        contentType: false,
-                        data: formData,
-                        success: function(response) {
-                            $('#modal').modal('hide');
-                             $('#update_cashback_form').trigger('reset');
-                            btn.removeAttr('disabled', 'disabled').button('refresh');
-                            btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
-                            $('#table-data').load(location.href + ' #table-data');
-                            (function(NioApp, $) {
-                                'use strict';
-                                toastr.clear();
-                                NioApp.Toast(response.message, 'success');
-                            })(NioApp, jQuery);
-                        },
-                        error: function(error) {
-                            btn.removeAttr('disabled', 'disabled').button('refresh');
-                            btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
-                            if (error.responseJSON.error) {
-                                (function(NioApp, $) {
-                                    'use strict';
-                                    toastr.clear();
-                                    NioApp.Toast(error.responseJSON.error, 'error');
-                                })(NioApp, jQuery);
-                            } else {
-                                (function(NioApp, $) {
-                                    'use strict';
-                                    toastr.clear();
-                                    NioApp.Toast(Object.values(error.responseJSON.errors)[
-                                        0], 'error');
-                                })(NioApp, jQuery);
-                            }
+                    $('#update_cashback_form').on('submit', function(event) {
+                        event.preventDefault();
+                        let btn = $('#save-btn')
+                        btn.attr('disabled', 'disabled').append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
+                        let url = $(this).attr('action');
+                        let id = $('#id').val();
+                        let method = 'POST';
+                        let formData = new FormData(this);
+                        if (id) {
+                            formData.append('_method', 'PUT');
                         }
+                        $.ajax({
+                            url: url,
+                            type: method,
+                            processData: false,
+                            contentType: false,
+                            data: formData,
+                            success: function(response) {
+                                $('#modal').modal('hide');
+                                $('#update_cashback_form').trigger('reset');
+                                btn.removeAttr('disabled', 'disabled').button('refresh');
+                                btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
+                                $('#table-data').load(location.href + ' #table-data');
+                                (function(NioApp, $) {
+                                    'use strict';
+                                    toastr.clear();
+                                    NioApp.Toast(response.message, 'success');
+                                })(NioApp, jQuery);
+                            },
+                            error: function(error) {
+                                btn.removeAttr('disabled', 'disabled').button('refresh');
+                                btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
+                                if (error.responseJSON.error) {
+                                    (function(NioApp, $) {
+                                        'use strict';
+                                        toastr.clear();
+                                        NioApp.Toast(error.responseJSON.error, 'error');
+                                    })(NioApp, jQuery);
+                                } else {
+                                    (function(NioApp, $) {
+                                        'use strict';
+                                        toastr.clear();
+                                        NioApp.Toast(Object.values(error.responseJSON.errors)[
+                                            0], 'error');
+                                    })(NioApp, jQuery);
+                                }
+                            }
+                        });
                     });
-                });
                });
             }
 
