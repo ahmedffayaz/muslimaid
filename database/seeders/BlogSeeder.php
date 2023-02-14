@@ -23,23 +23,23 @@ class BlogSeeder extends Seeder
         Schema::enableForeignKeyConstraints();
 
         $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\blogs.csv');
-        $charity_types = [];
+        $blogs = [];
         $now = Carbon::now();
-        foreach($csvToArray as $charity_type){
-            !isset($charity_type['id']) ?  ($charity_type['id'] = reset($charity_type)) : '' ;
-            $charity_types[] = [
-                'id' => $charity_type['id'],
-                'title' => $charity_type['title'],
-                'slug' => Str::slug($charity_type['title']),
-                'featured_image' => $charity_type['featured_image'],
-                'excerpt' => $charity_type['excerpt'],
-                'url' => $charity_type['url'],
-                'meta_keyword' => $charity_type['meta_keyword'],
-                'meta_description' => $charity_type['meta_description'],
-                'created_at' => isset($charity_type['created_at']) ? $charity_type['created_at'] : $now,
-                'updated_at' => isset($charity_type['updated_at']) ? $charity_type['updated_at'] : $now,
+        foreach($csvToArray as $blog){
+            !isset($blog['id']) ?  ($blog['id'] = reset($blog)) : '' ;
+            $blogs[] = [
+                'id' => $blog['id'],
+                'title' => $blog['title'],
+                'slug' => Str::slug($blog['title']),
+                'featured_image' => $blog['featured_image'],
+                'excerpt' => arrayValueExists($blog, 'excerpt') ? $blog['excerpt'] : null,
+                'url' => $blog['url'],
+                'meta_keyword' => arrayValueExists($blog, 'meta_keyword') ? $blog['meta_keyword'] : null,
+                'meta_description' => arrayValueExists($blog, 'meta_description') ? $blog['meta_description']: null,
+                'created_at' => arrayValueExists($blog, 'created_at') ? Carbon::parse($blog['created_at'])->format('Y-m-d H:i:s') : $now,
+                'updated_at' => arrayValueExists($blog, 'updated_at') ? Carbon::parse($blog['updated_at'])->format('Y-m-d H:i:s') : $now,
             ];
         }
-        Blog::insert($charity_types);
+        Blog::insert($blogs);
     }
 }

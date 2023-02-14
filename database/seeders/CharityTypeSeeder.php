@@ -18,25 +18,29 @@ class CharityTypeSeeder extends Seeder
      */
     public function run()
     {
-        //
-
         Schema::disableForeignKeyConstraints();
         DB::table('charity_types')->truncate();
         Schema::enableForeignKeyConstraints();
 
         $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\charity_types.csv');
-        $charity_types = [];
+        $charityTypes = [];
         $now = Carbon::now();
-        foreach($csvToArray as $charity_type){
-            !isset($charity_type['id']) ?  ($charity_type['id'] = reset($charity_type)) : '' ;
-            $charity_types[] = [
-                'id' => $charity_type['id'],
-                'title' => $charity_type['title'],
-                'status' => $charity_type['status'],
-                'created_at' => isset($charity_type['created_at']) ? $charity_type['created_at'] : $now,
-                'updated_at' => isset($charity_type['updated_at']) ? $charity_type['updated_at'] : $now,
+        foreach ($csvToArray as $charityType) {
+            !isset($charityType['id']) ?  ($charityType['id'] = reset($charityType)) : '';
+            if (
+                !arrayValueExists($charityType, 'id')
+                || !arrayValueExists($charityType, 'title')
+            ) {
+                continue;
+            }
+            $charityTypes[] = [
+                'id' => $charityType['id'],
+                'title' => $charityType['title'],
+                'status' => arrayValueExists($charityType, 'status') ? $charityType['status'] :  1,
+                'created_at' => arrayValueExists($charityType, 'created_at') ? Carbon::parse($charityType['created_at'])->format('Y-m-d H:i:s') : $now,
+                'updated_at' => arrayValueExists($charityType, 'updated_at') ? Carbon::parse($charityType['updated_at'])->format('Y-m-d H:i:s') : $now,
             ];
         }
-        CharityType::insert($charity_types);
+        CharityType::insert($charityTypes);
     }
 }

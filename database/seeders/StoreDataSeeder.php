@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use App\Models\StoreImage;
 use App\Models\StoreReview;
 use App\Models\StoreSeoData;
-
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Seeder;
@@ -20,6 +20,7 @@ class StoreDataSeeder extends Seeder
     public function run()
     {
         // Store Images
+        $now = Carbon::parse(now())->format('Y-m-d H:i:s');
         Schema::disableForeignKeyConstraints();
         DB::table('store_images')->truncate();
         Schema::enableForeignKeyConstraints();
@@ -28,6 +29,15 @@ class StoreDataSeeder extends Seeder
             $storeImages = [];
             foreach ($csvToArray as $storeImage) {
                 $storeImage['id'] = (!isset($storeImage['id']) ? reset($storeImage) : $storeImage['id']);
+                if (
+                    !arrayValueExists($storeImage, 'id')
+                    || !arrayValueExists($storeImage, 'store_id')
+                    || !arrayValueExists($storeImage, 'title')
+                    || !arrayValueExists($storeImage, 'image')
+                    || !arrayValueExists($storeImage, 'image_type')
+                ) {
+                    continue;
+                }
                 $storeImages[] = [
                     'id' => $storeImage['id'],
                     'store_id' => $storeImage['store_id'],
@@ -36,9 +46,8 @@ class StoreDataSeeder extends Seeder
                     'image_type' => $storeImage['image_type'],
                     'is_uploaded' => $storeImage['is_uploaded'],
                     'is_fake' => 0,
-                    'created_at' => $storeImage['created_at'],
-                    'updated_at' => $storeImage['updated_at'],
-
+                    'created_at' => arrayValueExists($storeImage, 'created_at') ? Carbon::parse($storeImage['created_at'])->format('Y-m-d H:i:s') : $now,
+                    'updated_at' => arrayValueExists($storeImage, 'updated_at') ? Carbon::parse($storeImage['updated_at'])->format('Y-m-d H:i:s') : $now,
                 ];
             }
         }
@@ -55,16 +64,22 @@ class StoreDataSeeder extends Seeder
             $storeReviews = [];
             foreach ($csvToArray as $storeReview) {
                 $storeReview['id'] = (!isset($storeReview['id']) ? reset($storeReview) : $storeReview['id']);
+                if (
+                    !arrayValueExists($storeReview, 'id')
+                    || !arrayValueExists($storeReview, 'store_id')
+                    || !arrayValueExists($storeReview, 'user_id')
+                ) {
+                    continue;
+                }
                 $storeReviews[] = [
                     'id' => $storeReview['id'],
                     'store_id' => $storeReview['store_id'],
                     'user_id' => $storeReview['user_id'],
-                    'review' => $storeReview['review'],
-                    'rating' => $storeReview['rating'],
-                    'status' => $storeReview['status'],
-                    'created_at' => $storeReview['created_at'],
-                    'updated_at' => $storeReview['updated_at'],
-
+                    'review' => arrayValueExists($storeReview, 'review') ? $storeReview['review']: null,
+                    'rating' => arrayValueExists($storeReview, 'rating') ? $storeReview['rating']: 5,
+                    'status' => arrayValueExists($storeReview, 'status') ? $storeReview['status']: 'active',
+                    'created_at' => arrayValueExists($storeReview, 'created_at') ? Carbon::parse($storeReview['created_at'])->format('Y-m-d H:i:s') : $now,
+                    'updated_at' => arrayValueExists($storeReview, 'updated_at') ? Carbon::parse($storeReview['updated_at'])->format('Y-m-d H:i:s') : $now,
                 ];
             }
         }
@@ -81,6 +96,16 @@ class StoreDataSeeder extends Seeder
             $storeSeoRows = [];
             foreach ($csvToArray as $storeSeoData) {
                 $storeSeoData['id'] = (!isset($storeSeoData['id']) ? reset($storeSeoData) : $storeSeoData['id']);
+                if (
+                    !arrayValueExists($storeSeoData, 'id')
+                    || !arrayValueExists($storeSeoData, 'store_id')
+                    || !arrayValueExists($storeSeoData, 'url')
+                    || !arrayValueExists($storeSeoData, 'type')
+                    || !arrayValueExists($storeSeoData, 'key')
+                    || !arrayValueExists($storeSeoData, 'value')
+                ) {
+                    continue;
+                }
                 $storeSeoRows[] = [
                     'id' => $storeSeoData['id'],
                     'store_id' => $storeSeoData['store_id'],
@@ -88,8 +113,8 @@ class StoreDataSeeder extends Seeder
                     'type' => $storeSeoData['type'],
                     'key' => $storeSeoData['key'],
                     'value' => $storeSeoData['value'],
-                    'created_at' => $storeSeoData['created_at'],
-                    'updated_at' => $storeSeoData['updated_at'],
+                    'created_at' => arrayValueExists($storeSeoData, 'created_at') ? Carbon::parse($storeSeoData['created_at'])->format('Y-m-d H:i:s') : $now,
+                    'updated_at' => arrayValueExists($storeSeoData, 'updated_at') ? Carbon::parse($storeSeoData['updated_at'])->format('Y-m-d H:i:s') : $now,
                 ];
             }
         }

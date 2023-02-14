@@ -27,7 +27,7 @@ class CategorySeeder extends Seeder
         $now = Carbon::now();
 
         foreach ($csvToArray as $category) {
-            $category['id'] = (!isset($category['id']) ? reset($category) : $category['id']);
+            $category['id'] = !isset($category['id']) ? reset($category) : $category['id'];
 
             if (!arrayValueExists($category, 'id')) continue;
             if (!arrayValueExists($category, 'name')) continue;
@@ -37,7 +37,7 @@ class CategorySeeder extends Seeder
                 'parent_id' => arrayValueExists($category, 'parent_id') ? $category['parent_id'] : 0,
                 'name' => $category['name'],
                 'slug' => Str::slug($category['name']),
-                'description' => $category['description'],
+                'description' => arrayValueExists($category, 'description') ? $category['description'] : null,
                 'sort' => arrayValueExists($category, 'sort') ? $category['sort'] : null,
                 'logo_type' => arrayValueExists($category, 'logo_type') ? $category['logo_type'] : null,
                 'logo_upload' => arrayValueExists($category, 'logo_upload') ? $category['logo_upload'] : null,

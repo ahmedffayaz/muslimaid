@@ -11,6 +11,7 @@ use App\Models\StoreCashback;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Carbon;
 
 class StoreSeeder extends Seeder
 {
@@ -29,8 +30,16 @@ class StoreSeeder extends Seeder
         $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\stores.csv');
         if (isset($csvToArray[0])) {
             $stores = [];
+            $now = Carbon::parse(now())->format('Y-m-d H:i:s');
             foreach ($csvToArray as $store) {
                 $store['id'] = (!isset($store['id']) ? reset($store) : $store['id']);
+                if (
+                    !arrayValueExists($store, 'id')
+                    || !arrayValueExists($store, 'name')
+                    || !arrayValueExists($store, 'network_id')
+                ) {
+                    continue;
+                }
                 $stores[] = [
                     'id' => $store['id'],
                     'network_id' => $store['network_id'] == '' ? 0 : $store['network_id'],
@@ -44,8 +53,8 @@ class StoreSeeder extends Seeder
                     'store_url' => $store['store_url'],
                     'network_status' => null,
                     'status_description' => null,
-                    'override_cashback' => 0,
-                    'override_categories' => 0,
+                    'override_cashback' => 1,
+                    'override_categories' => 1,
                     'feature_homepage' => 0,
                     'feature_sidebar' => 0,
                     'editor_pick' => 0,
@@ -57,8 +66,8 @@ class StoreSeeder extends Seeder
                     'latitude' => $store['latitude'],
                     'longitude' => $store['longitude'],
                     'rating' => 0,
-                    'created_at' => $store['created_at'],
-                    'updated_at' => $store['updated_at'],
+                    'created_at' => arrayValueExists($store, 'created_at') ? Carbon::parse($store['created_at'])->format('Y-m-d H:i:s') : $now,
+                    'updated_at' => arrayValueExists($store, 'updated_at') ? Carbon::parse($store['updated_at'])->format('Y-m-d H:i:s') : $now,
                     'deleted_at' => null,
 
                 ];
