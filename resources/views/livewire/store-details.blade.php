@@ -76,7 +76,7 @@
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="row g-4">
-                                                    <div class="col-lg-4">
+                                                    <div class="col-lg-6">
                                                         <div class="form-group">
                                                             <label class="form-label" for="store_name">Store Name</label>
                                                             <div class="form-control-wrap">
@@ -85,7 +85,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-4">
+                                                    <div class="col-lg-6">
                                                         <div class="form-group">
                                                             <label class="form-label" for="slug">Slug</label>
                                                             <div class="form-control-wrap">
@@ -94,7 +94,28 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-4">
+                                                    <div class="col-lg-12">
+                                                        <div class="card">
+                                                            <input name="description" type="hidden">
+                                                            <label class="form-label" for="description">Description</label>
+                                                            <!-- Create the editor container -->
+                                                            <div id="editor-container">
+                                                                {!! $store->description !!}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="preview-block">
+                                                            <span class="preview-title overline-title">Override Network</span>
+                                                            <div class="custom-control custom-switch">
+                                                                <input type="checkbox" class="custom-control-input" id="store_override_network"
+                                                                    name="store_override_network" @if ($store->override_network == 1) checked @endif>
+                                                                <label class="custom-control-label" for="store_override_network"></label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 sote-override-network"
+                                                        @if ($store->override_network) style="display: none;" @else style="display: block;" @endif>
                                                         <div class="form-group">
                                                             <label class="form-label" for="default-06">Network</label>
                                                             <div class="form-control-wrap ">
@@ -109,35 +130,27 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="card">
-                                                            <input name="description" type="hidden">
-                                                            <label class="form-label" for="description">Description</label>
-                                                            <!-- Create the editor container -->
-                                                            <div id="editor-container">
-                                                                {!! $store->description !!}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
+                                                    <div class="col-lg-6 sote-override-network"
+                                                        @if ($store->override_network) style="display: none;" @else style="display: block;" @endif>
                                                         <div class="form-group">
                                                             <label class="form-label" for="tracking_url">Tracking URL</label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="tracking_url" value="{{ $store->tracking_url }}"
-                                                                    name="tracking_url" required style="width: 90%">
-                                                                <span style="position: absolute; right:0; top:5px; width:10%" data-toggle="tooltip" data-placement="left"
+                                                                    name="tracking_url" required style="width: 86%">
+                                                                <span style="position: absolute; right:0; top:5px; width:13%" data-toggle="tooltip" data-placement="left"
                                                                     title="This parameter containing ID of the click will be concatenated with tracking URL of the store ({{ $store->tracking_url }}?ref=XXX)">?{{ $store->network->click_ref }}=XXX</span>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-12">
+                                                    <div class="col-lg-6 sote-override-network"
+                                                        @if ($store->override_network) style="display: none;" @else style="display: block;" @endif>
                                                         <div class="form-group">
                                                             <label class="form-label" for="tracking_url">Deeplink URL</label>
                                                             <div class="form-control-wrap">
-                                                                <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
+                                                                <span style="position:absolute; left:0; top:5px; width:7%" data-toggle="tooltip" data-placement="right"
                                                                     title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u={{ $store->deeplink_url }})">&{{ $store->network->deeplink_identifier }}=</span>
                                                                 <input type="text" class="form-control" id="deeplink_url" value="{{ $store->deeplink_url }}"
-                                                                    name="deeplink_url" style="position: relative; left:30px; width: 97%">
+                                                                    name="deeplink_url" style="position: relative; left:30px; width: 93%">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -537,22 +550,47 @@
                             <div class="form-group">
                                 <label class="form-label" for="sale_commission">Commission</label>
                                 <div class="form-control-wrap">
-                                    <input type="number" class="form-control" min="0" step="0.01" id="sale_commission" value="" name="sale_commission" required>
+                                    <input type="number" class="form-control" min="0" step="0.01" id="sale_commission" value="" name="sale_commission"
+                                        required>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="form-label" for="sale_commission">Deeplink URL</label>
-                                <div class="form-control-wrap">
-                                    <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
-                                        title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u={{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : $store->deeplink_url }})">&{{ $store->network->deeplink_identifier }}=</span>
-                                    <input type="text" class="form-control" id="deeplink_url"
-                                        value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}" name="deeplink_url"
-                                        style="position: relative; left:30px; width: 97%">
+                        @if ($store->override_network)
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="network_id">Network</label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-control form-select select-2" id="network_id" name="network_id">
+                                            @foreach ($networks as $network)
+                                                <option value="{{ $network->id }}">{{ $network->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="tracking_url">Tracking URL</label>
+                                    <div class="form-control-wrap">
+                                        <input type="text" class="form-control" id="tracking_url" name="tracking_url" required style="width: 89%">
+                                        <span style="position: absolute; right:0; top:5px; width:11%" data-toggle="tooltip" data-placement="left"
+                                            title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">?{{ $store->network->click_ref }}=XXX</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="sale_commission">Deeplink URL</label>
+                                    <div class="form-control-wrap">
+                                        <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
+                                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">&{{ $store->network->deeplink_identifier }}=</span>
+                                        <input type="text" class="form-control" id="deeplink_url"
+                                            value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}" name="deeplink_url"
+                                            style="position: relative; left:30px; width: 95%">
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                         <div class="col-lg-12">
                             <div class="card">
                                 <label class="form-label" for="phone-no-1">Detail</label>
@@ -1151,13 +1189,13 @@
                     },
                     error: function(error) {
                         if (error.responseJSON.error) {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(error.responseJSON.error, 'error');
                             })(NioApp, jQuery);
                         } else {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
@@ -1232,13 +1270,13 @@
                     },
                     error: function(error) {
                         if (error.responseJSON.error) {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(error.responseJSON.error, 'error');
                             })(NioApp, jQuery);
                         } else {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
@@ -1268,13 +1306,13 @@
                     },
                     error: function(error) {
                         if (error.responseJSON.error) {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(error.responseJSON.error, 'error');
                             })(NioApp, jQuery);
                         } else {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
@@ -1521,13 +1559,13 @@
                     },
                     error: function(error) {
                         if (error.responseJSON.error) {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(error.responseJSON.error, 'error');
                             })(NioApp, jQuery);
                         } else {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
@@ -1770,6 +1808,14 @@
                     </div>
                 </div>`;
             $('.key_value').append(html);
+        });
+
+        $(document.body).on("change", "#store_override_network", function() {
+            if ($('#store_override_network').is(":checked")) {
+                $('.sote-override-network').hide();
+            } else {
+                $('.sote-override-network').show();
+            }
         });
     </script>
 @endpush

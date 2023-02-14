@@ -162,6 +162,7 @@ class StoreController extends Controller
             DB::beginTransaction();
             $store->update([
                 'name' => $request->input('store_name'),
+                'override_network' => $request->has('store_override_network') ? 1 : 0,
                 'network_id' => $request->input('network_id'),
                 'tracking_url' => $request->input('tracking_url'),
                 'deeplink_url' => $request->input('deeplink_url'),
@@ -388,8 +389,9 @@ class StoreController extends Controller
 
     public function editCashback(Request $request, StoreCashback $cashback)
     {
+        $networks = Network::all();
         $currencies = Currency::all();
-        return view('admin-dashboard.stores.cashback-edit', compact('cashback', 'currencies'))->render();
+        return view('admin-dashboard.stores.cashback-edit', compact('cashback', 'currencies', 'networks'))->render();
     }
 
     public function updateCashback(Request $request, StoreCashback $cashback)
@@ -397,6 +399,8 @@ class StoreController extends Controller
         $request->validate([
             'type' => 'required',
             'sale_commission' => 'required|numeric|min:0',
+            'network_id' => 'nullable|integer',
+            'tracking_url' => 'nullable|url',
             'deeplink_url' => 'nullable|url'
         ]);
 

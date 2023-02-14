@@ -13,11 +13,13 @@ class StoreCashback extends Model
 
     protected $fillable = [
         'store_id',
+        'network_id',
         'cashback_name',
         'type',
         'value',
         'image',
         'click_url',
+        'tracking_url',
         'deeplink_url',
         'sale_commission',
         'cashback',
@@ -26,6 +28,7 @@ class StoreCashback extends Model
         'network_detail',
         'default',
         'is_api',
+        'override_network',
     ];
 
     public function store()
@@ -35,9 +38,19 @@ class StoreCashback extends Model
 
     public function getDeeplinkUrl()
     {
-        if (!empty($this->deeplink_url)) {
+        if (!empty($this->deeplink_url))
             return $this->deeplink_url;
-        }
         return $this->store->deeplink_url;
+    }
+
+    public function getTrackingUrl()
+    {
+        if ($this->store->tracking_url) {
+            if (!empty($this->tracking_url))
+                return $this->tracking_url;
+            if (!empty($this->click_url))
+                return $this->click_url;
+        }
+        return $this->store->tracking_url;
     }
 }
