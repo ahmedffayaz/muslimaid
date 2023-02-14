@@ -135,7 +135,7 @@
                                                             <label class="form-label" for="tracking_url">Deeplink URL</label>
                                                             <div class="form-control-wrap">
                                                                 <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
-                                                                title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u={{ $store->deeplink_url }})">&{{ $store->network->deeplink_identifier }}=</span>
+                                                                    title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u={{ $store->deeplink_url }})">&{{ $store->network->deeplink_identifier }}=</span>
                                                                 <input type="text" class="form-control" id="deeplink_url" value="{{ $store->deeplink_url }}"
                                                                     name="deeplink_url" style="position: relative; left:30px; width: 97%">
                                                             </div>
@@ -502,6 +502,7 @@
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
+
 <!-- @@ Add Cashback Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="cashback-modal">
     <div class="modal-dialog modal-md" role="document">
@@ -536,7 +537,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="sale_commission">Commission</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="sale_commission" value="" name="sale_commission" required>
+                                    <input type="number" class="form-control" min="0" step="0.01" id="sale_commission" value="" name="sale_commission" required>
                                 </div>
                             </div>
                         </div>
@@ -545,9 +546,10 @@
                                 <label class="form-label" for="sale_commission">Deeplink URL</label>
                                 <div class="form-control-wrap">
                                     <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
-                                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u={{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : $store->deeplink_url }})">&{{ $store->network->deeplink_identifier }}=</span>
-                                    <input type="text" class="form-control" id="deeplink_url" value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}"
-                                        name="deeplink_url" style="position: relative; left:30px; width: 97%">
+                                        title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u={{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : $store->deeplink_url }})">&{{ $store->network->deeplink_identifier }}=</span>
+                                    <input type="text" class="form-control" id="deeplink_url"
+                                        value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}" name="deeplink_url"
+                                        style="position: relative; left:30px; width: 97%">
                                 </div>
                             </div>
                         </div>
@@ -568,6 +570,7 @@
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
+
 <!-- @@ Review Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="review-modal">
     <div class="modal-dialog modal-md" role="document">
@@ -585,6 +588,7 @@
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
+
 <!-- @@ Review Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="add-review-modal">
     <div class="modal-dialog modal-md" role="document">
@@ -656,6 +660,7 @@
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
 
+<!-- @@ Add SEO Rule Modal @e -->
 <div class="modal fade" tabindex="-1" id="add-seorule-modal">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -702,7 +707,9 @@
             </div>
         </div>
     </div>
-</div>
+</div><!-- .modal -->
+
+<!-- @@ Edit SEO Rule Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="seo-modal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
@@ -720,7 +727,7 @@
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
 
-{{-- Add Address --}}
+<!-- @@ Add Address Modal @e -->
 <div class="modal fade" tabindex="-1" id="add-address-modal">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
@@ -757,7 +764,8 @@
                             <div class="form-group">
                                 <label class="form-label" for="latitude">Latitude</label>
                                 <div class="form-control-wrap">
-                                    <input type="number" class="form-control" id="latitude" name="latitude" value="" required>
+                                    <input type="number" class="form-control" min="-90" max="90" step="any" id="latitude" name="latitude"
+                                        value="" required>
                                 </div>
                             </div>
                         </div>
@@ -765,7 +773,8 @@
                             <div class="form-group">
                                 <label class="form-label" for="longitude">Longitude</label>
                                 <div class="form-control-wrap">
-                                    <input type="number" class="form-control" id="longitude" name="longitude" value="" required>
+                                    <input type="number" class="form-control" min="-180" max="180" step="any" id="longitude" name="longitude"
+                                        value="" required>
                                 </div>
                             </div>
                         </div>
@@ -787,8 +796,9 @@
             </div>
         </div>
     </div>
-</div>
+</div><!-- .modal -->
 
+<!-- @@ Edit Address Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="edit-address-modal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
@@ -1036,6 +1046,7 @@
                 });
             });
 
+            // Edit SEO
             $(document).on('click', '.seo-edit', function(event) {
                 event.preventDefault();
                 var id = $(this).attr('seo-id');
@@ -1099,6 +1110,7 @@
             });
         });
 
+        // Store lat long address edit
         $(document).on('click', '.address-edit', function(event) {
             event.preventDefault();
             var id = $(this).attr('address-id');
@@ -1120,6 +1132,7 @@
 
         });
 
+        // Update store address
         $(document).ready(function() {
             $(document).on('submit', '.address_form', function(event) {
                 event.preventDefault();
@@ -1135,6 +1148,21 @@
                             NioApp.Toast('Address Updated Successfully.', 'success');
                         })(NioApp, jQuery);
                         fetchAddress();
+                    },
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
                 });
             });
@@ -1181,7 +1209,6 @@
                         calcCashback();
                     }
                 });
-
             });
         });
 
@@ -1202,6 +1229,21 @@
                             $('#custom_cashback_percentage').val(data['percentage']);
                         })(NioApp, jQuery);
                         fetchCashbacks();
+                    },
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
                 });
             });
@@ -1223,6 +1265,21 @@
                             NioApp.Toast('Cashback Added Successfully.', 'success');
                         })(NioApp, jQuery);
                         fetchCashbacks();
+                    },
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
                 });
             });
@@ -1447,7 +1504,7 @@
             });
         });
 
-        //Update Store
+        // Update Store
         $(document).ready(function() {
             $(document).on('submit', '#store_form', function(event) {
                 event.preventDefault();
@@ -1462,13 +1519,25 @@
                             NioApp.Toast('Store updated Successfully.', 'success');
                         })(NioApp, jQuery);
                     },
-                    error: function(data) {
-                        console.log("error");
-                        console.log(data);
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
                 });
             });
         });
+
         // Update categories
         $(document).ready(function() {
             $(document).on('submit', '#store_cat_form', function(event) {
@@ -1496,6 +1565,7 @@
         $(document).ready(function() {
             $(document).on('submit', '.add_address_form', function(event) {
                 event.preventDefault();
+                console.log($(this).attr('action'))
                 $.ajax({
                     url: $(this).attr('action'),
                     type: "POST",
@@ -1509,6 +1579,21 @@
                             NioApp.Toast('Address Added Successfully.', 'success');
                         })(NioApp, jQuery);
                         fetchAddress();
+                    },
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
                 });
             });
@@ -1662,6 +1747,7 @@
                 $('#coupon_code').removeAttr('required').val('');
             }
         }
+
         $(document.body).on("change", "#promotion_type", function() {
             checkVoucherType()
         });

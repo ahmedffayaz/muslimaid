@@ -42,7 +42,8 @@ trait UserBonus
                 'user_id' => $user,
                 'amount' => $referralBonus,
                 'status' => $status,
-                'type' => 'referral_bonus'
+                'type' => 'referral_bonus',
+                'is_api' => 'no',
             ]);
 
             CashbackStatusChange::create([

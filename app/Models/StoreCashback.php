@@ -25,6 +25,7 @@ class StoreCashback extends Model
         'detail',
         'network_detail',
         'default',
+        'is_api',
     ];
 
     public function store()

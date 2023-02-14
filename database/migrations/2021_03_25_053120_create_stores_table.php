@@ -41,6 +41,7 @@ class CreateStoresTable extends Migration
             $table->decimal('latitude', 10,8)->nullable();
             $table->decimal('longitude', 10,8)->nullable();
             $table->integer('rating')->default(0);
+            $table->enum('is_api', ['yes', 'no'])->default('yes');
             $table->timestamps();
             $table->softDeletes();
         });

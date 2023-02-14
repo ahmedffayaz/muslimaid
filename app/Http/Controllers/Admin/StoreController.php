@@ -19,6 +19,7 @@ use App\Models\StoreCashback;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
@@ -72,6 +73,7 @@ class StoreController extends Controller
             'store_name' => 'required|max:255',
             'network_id' => 'required',
             'tracking_url' => 'required|url',
+            'deeplink_url' => 'nullable|url',
             'store_url' => 'required|url',
         ]);
 
@@ -82,6 +84,7 @@ class StoreController extends Controller
         }
 
         try {
+            DB::beginTransaction();
             $store = Store::create([
                 'name' => $request->input('store_name'),
                 'network_id' => $request->input('network_id'),
@@ -92,13 +95,16 @@ class StoreController extends Controller
                 'status' => 'active',
                 'override_cashback' => 1,
                 'slug' => Str::slug($request->input('store_name')),
+                'is_api' => 'no',
             ]);
+            DB::commit();
 
             flash()->success('New store added');
             return redirect()->route('admin.stores.show_store', 'slug=' . $store->slug);
-        } catch (Exception $exception) {
-            flash()->error($exception->getMessage() . 'Error while adding new store');
-            return redirect()->route('admin.stores.index');
+        } catch (Exception $e) {
+            DB::rollBack();
+            flash()->error('Error while adding new store');
+            return redirect()->back();
         }
     }
 
@@ -144,7 +150,16 @@ class StoreController extends Controller
      */
     public function update(Request $request, Store $store)
     {
+        $request->validate([
+            'store_name' => 'required|max:255',
+            'network_id' => 'required',
+            'tracking_url' => 'required|url',
+            'deeplink_url' => 'nullable|url',
+            'store_url' => 'required|url',
+        ]);
+
         try {
+            DB::beginTransaction();
             $store->update([
                 'name' => $request->input('store_name'),
                 'network_id' => $request->input('network_id'),
@@ -163,20 +178,40 @@ class StoreController extends Controller
                 'feature_sidebar' => 0,
                 'editor_pick' => 0,
             ]);
-            foreach ($request->input('tags') as $tag) {
-                $store->update([
-                    $tag => 1,
-                ]);
+
+            if ($request->has('tags')) {
+                foreach ($request->input('tags') as $tag) {
+                    $store->update([
+                        $tag => 1,
+                    ]);
+                }
             }
+            DB::commit();
 
             if (!$request->ajax()) {
                 flash()->success('Store info updated successfully');
                 return redirect()->back();
-            } else {
-                return true;
             }
-        } catch (\Throwable $th) {
-            return $th;
+            return true;
+        } catch (ModelNotFoundException $e) {
+            if (!$request->ajax()) {
+                flash()->error('Error while updating store');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'error' => 'Error while updating store'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while updating store');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $e->getMessage() . 'Error while updating store'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -359,18 +394,79 @@ class StoreController extends Controller
 
     public function updateCashback(Request $request, StoreCashback $cashback)
     {
-        $cashback->update($request->all());
-        return true;
+        $request->validate([
+            'type' => 'required',
+            'sale_commission' => 'required|numeric|min:0',
+            'deeplink_url' => 'nullable|url'
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $cashback->update($request->all());
+            DB::commit();
+            return true;
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while updating cashback.');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'error' => 'Error while updating cashback.'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while updating cashback.');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Error while updating cashback.'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function createCashback(Request $request)
     {
-        $cashback = StoreCashback::create($request->all());
-        $existing_cashbacks = StoreCashback::where('store_id', $request->store_id)->get();
-        if (count($existing_cashbacks) == 1) {
-            $cashback->update(['default' => '1']);
+        $request->validate([
+            'type' => 'required',
+            'sale_commission' => 'required|numeric|min:0',
+            'deeplink_url' => 'nullable|url'
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $request->merge(['is_api' => 'no']);
+            $cashback = StoreCashback::create($request->all());
+            $existing_cashbacks = StoreCashback::where('store_id', $request->store_id)->get();
+            if (count($existing_cashbacks) == 1) {
+                $cashback->update(['default' => '1']);
+            }
+            DB::commit();
+            return true;
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while creating cashback.');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'error' => 'Error while creating cashback.'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while creating cashback.');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Error while creating cashback.'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return true;
     }
 
     public function fetchImages(Request $request)
@@ -563,20 +659,18 @@ class StoreController extends Controller
 
     public function addStoreAddress(Request $request)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'city' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
+            'latitude' => ['required', 'numeric', 'min:-90', 'max:90'],
+            'longitude' => ['required', 'numeric', 'min:-180', 'max:180'],
             'address' => 'required',
+        ], [
+            'latitude.regex' => 'Latitude should be between -90 to 90',
+            'longitude.regex' => 'Longitude should be between -180 to 180'
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
         try {
+            DB::beginTransaction();
             StoreAddress::create([
                 'store_id' => $request->input('store_id'),
                 'city' => $request->input('city'),
@@ -586,11 +680,18 @@ class StoreController extends Controller
                 'longitude' => $request->input('longitude'),
             ]);
 
-            flash()->success('store address added');
-            return redirect()->back();
-        } catch (Exception $exception) {
-            flash()->error('Error while adding store address.');
-            return redirect()->back();
+            DB::commit();
+
+            if (!$request->ajax()) {
+                flash()->success('store address added.');
+                return redirect()->back();
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while adding store address.');
+                return redirect()->back();
+            }
         }
     }
 
@@ -602,28 +703,37 @@ class StoreController extends Controller
 
     public function updateStoreAddress(Request $request, StoreAddress $store_address)
     {
-        $validator = Validator::make($request->all(), [
+        $request->validate([
             'city' => 'required',
-            'latitude' => 'required',
-            'longitude' => 'required',
+            'latitude' => ['required', 'numeric', 'min:-90', 'max:90'],
+            'longitude' => ['required', 'numeric', 'min:-180', 'max:180'],
             'address' => 'required',
+        ], [
+            'latitude.regex' => 'Latitude should be between -90 to 90',
+            'longitude.regex' => 'Longitude should be between -180 to 180'
         ]);
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-        $address = StoreAddress::where('id', $request->input('address_id'))->update([
-            'city' => $request->input('city'),
-            'postal_code' => $request->input('postal_code'),
-            'address' => $request->input('address'),
-            'latitude' => $request->input('latitude'),
-            'longitude' => $request->input('longitude'),
-        ]);
-        if (!$request->ajax()) {
-            flash()->success('Address updated successfully');
-            return redirect()->back();
+        try {
+            DB::beginTransaction();
+            $address = StoreAddress::where('id', $request->input('address_id'))->update([
+                'city' => $request->input('city'),
+                'postal_code' => $request->input('postal_code'),
+                'address' => $request->input('address'),
+                'latitude' => $request->input('latitude'),
+                'longitude' => $request->input('longitude'),
+            ]);
+            DB::commit();
+
+            if (!$request->ajax()) {
+                flash()->success('Address updated successfully.');
+                return redirect()->back();
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error("Error while update store address.");
+                return redirect()->back();
+            }
         }
     }
 
