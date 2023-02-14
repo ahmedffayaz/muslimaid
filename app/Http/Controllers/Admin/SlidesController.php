@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Slide;
 use App\Models\Store;
-use App\Models\Slider;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -35,7 +34,9 @@ class SlidesController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'store_id'=>'nullable',
-            'link' =>'nullable |active_url',
+            'link' =>'nullable|active_url',
+            'logo' => 'nullable|mimes:jpeg,jpg,png,gif|max:2048',
+            'banner' => 'required|mimes:jpeg,jpg,png,gif|max:2048'
         ]);
 
         if ($validator->fails()) {
@@ -49,7 +50,7 @@ class SlidesController extends Controller
             }
         }
         $slide = Slide::create([
-            'slider_id' => $request->input('slider_id'),
+            'slider_id' => $request->input('slide_id') ? $request->input('slide_id') : $request->input('slider_id'),
             'name' => $request->input('name'),
             'description' => $request->input('description'),
             'link' => $request->input('link'),
@@ -104,7 +105,9 @@ class SlidesController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'store_id'=>'nullable',
-            'link' =>'nullable |active_url'
+            'link' =>'nullable|active_url',
+            'logo' => 'nullable|mimes:jpeg,jpg,png,gif|max:2048',
+            'banner' => 'nullable|mimes:jpeg,jpg,png,gif|max:2048'
         ]);
 
         if ($validator->fails()) {

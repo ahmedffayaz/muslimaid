@@ -1,18 +1,19 @@
 @php
     $isEdit = isset($slide) ? true : false;
-@endphp 
+@endphp
 <form action="{{ $isEdit ? route('admin.slides.update', $slide) : route('admin.slides.store') }}" id="form-validate" class="gy-3 is-alter category_form" method="POST" enctype="multipart/form-data">
     @csrf
     @if($isEdit)
     @method('PUT')
     @endif
+    <input type="hidden" value="{{ $isEdit ? $slide->id : null }}" id="slide_id" name="slide_id">
+    <input type="hidden" value="{{ $slider }}" id="slider_id" name="slider_id">
     <div class="row g-4">
         <div class="col-lg-12">
             <div class="form-group">
-                <label class="form-label" for="full-name-1">Slide name</label>
+                <label class="form-label" for="name">Slide name</label>
                 <div class="form-control-wrap">
-                    <input type="hidden" value="{{ $isEdit ? $slide->id : $slider}}" id="slider_id" name="slider_id">
-                    <input type="text" class="form-control" id="full-name-1" name="name" value=" {{ $isEdit ?  $slide->name : '' }}" required>
+                    <input type="text" class="form-control" id="name" name="name" value="{{ $isEdit ?  $slide->name : '' }}" required>
                 </div>
             </div>
         </div>
@@ -54,17 +55,18 @@
         <div class="col-lg-12">
             <div class="card">
                 <label class="form-label" for="phone-no-1">Description</label>
-                <textarea name="description" class="form-control" rows="5" required>{{$isEdit ? $slide->description : ''}}</textarea>
+                <textarea name="description" class="form-control" rows="5">{{$isEdit ? $slide->description : ''}}</textarea>
 
             </div>
         </div>
-        
+
         <div class="col-lg-6 logo_upload">
             <div class="form-group">
                 <label class="form-label" for="logo">Logo</label>
                 <div class="form-control-wrap">
                     <div class="custom-file">
-                        <input type="file" class="" name='logo' id="logo">
+                        <input type="file" class="custom-file-input" name='logo' id="logo">
+                        <label class="custom-file-label" for="logo">Choose file</label>
                     </div>
                 </div>
             </div>
@@ -74,7 +76,8 @@
                 <label class="form-label" for="banner">Banner</label>
                 <div class="form-control-wrap">
                     <div class="custom-file">
-                        <input type="file" class="" name="banner" id="banner">
+                        <input type="file" class="custom-file-input" name="banner" id="banner">
+                        <label class="custom-file-label" for="banner">Choose file</label>
                     </div>
                 </div>
             </div>
@@ -86,25 +89,3 @@
         </div>
     </div>
 </form>
-<script>
-    function validation() { 
-        banner_required = true;
-        
-        $('#form-validate').validate({
-            errorClass: 'invalid-feedback d-block',
-            rules: {
-                name: {
-                    required: true
-                },
-                link: {
-                    url: true
-                },
-            },
-            submitHandler: function(form) {
-                if ($(form).valid())
-                form.submit();
-                return false;
-            }
-        });
-    }
-</script>
