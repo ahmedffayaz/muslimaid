@@ -28,6 +28,7 @@ class UserCashback extends Model
         'click_date',
         'event_date',
         'type',
+        'is_api',
     ];
 
     public function store()

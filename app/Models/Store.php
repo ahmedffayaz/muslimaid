@@ -38,6 +38,7 @@ class Store extends Model
         'postal_code',
         'latitude',
         'longitude',
+        'is_api',
     ];
 
     public function network()

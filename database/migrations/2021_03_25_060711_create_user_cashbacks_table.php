@@ -29,6 +29,7 @@ class CreateUserCashbacksTable extends Migration
             $table->string('amount');
             $table->string('status');
             $table->enum('type', ['cashback', 'welcome_bonus', 'referral_bonus'])->default('cashback');
+            $table->enum('is_api', ['yes', 'no'])->default('yes');
             $table->timestamps();
             $table->softDeletes();
         });
