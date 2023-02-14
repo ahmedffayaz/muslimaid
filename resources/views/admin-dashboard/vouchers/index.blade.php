@@ -31,7 +31,7 @@
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
                                             <li class="nk-block-tools-opt">
-                                                <a href="#add-voucher-modal" data-toggle="modal" class="btn btn-primary btn-sm">
+                                                <a href="{{ route('admin.vouchers.create') }}" data-toggle="modal" class="btn btn-primary btn-sm add-voucher">
                                                     <em class="icon ni ni-plus"></em>
                                                     <span>Add Voucher</span>
                                                 </a>
@@ -129,109 +129,7 @@
                     </div>
                     <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
                 </div>
-                <form action="{{ route('admin.vouchers.store') }}" class="gy-3 is-alter p-4" id="add-voucher-form" method="POST">
-                    @csrf
-                    <div class="row g-4">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="full-name-1">Title</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="full-name-1" name="link_name" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="default-06">Store</label>
-                                <div class="form-control-wrap">
-                                    <select class="form-select form-control" data-search="on" id="default-06" name="store_id" required>
-                                        @foreach ($stores as $store)
-                                            <option value="{{ $store->id }}">{{ $store->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="pay-amount-1">Click url</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="pay-amount-1" name="click_url" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="phone-no-1">Destination url</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="phone-no-1" name="destination" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <input name="description" type="hidden">
-                                <label class="form-label" for="phone-no-1">Description</label>
-                                <textarea name="description" class="form-control "></textarea>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <label class="form-label" for="promotion_type">Promotion Type</label>
-                                    <div class="form-control-wrap">
-                                        <select class="form-select form-control select-2" data-search="on" id="promotion_type" name="promotion_type" required>
-                                            <option value="Coupon">Coupon</option>
-                                            <option value="Sale/Discount">Sale/Discount</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 coupon-div">
-                            <div class="form-group">
-                                <label class="form-label" for="coupon_code">Coupon Code</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="coupon_code" name="coupon_code" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="sale_commission">Sale commission</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="sale_commission" name="sale_commission" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="promotion_start_date">Promotion Start Date</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control date-picker promotion_start_date" id="promotion_start_date" name="promotion_start_date"
-                                        autocomplete="off" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="promotion_end_date">Promotion End Date</label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control date-picker promotion_end_date" id="promotion_end_date" name="promotion_end_date"
-                                        autocomplete="off" required>
-                                </div>
-                                @if ($errors->has('promotion_end_date'))
-                                    <span class="invalid-feedback d-block" role="alert">End date must be greater than start date.</span>
-                                @endif
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-lg btn-primary"><span>Save</span></button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
+                <div id="add-voucher-form-placeholder" class=" p-4"></div>
             </div>
         </div>
     </div>
@@ -285,61 +183,8 @@
             });
         });
 
-        $(document).on('submit', '#add-voucher-form', function(e) {
+        $(document).on('submit', '#create-edit-voucher-form', function(e) {
             e.preventDefault();
-
-            let form = $(this);
-            let submitBtn = form.find('[type="submit"]');
-            let submitBtnHtml = submitBtn.html();
-
-            submitBtn.attr('disabled', 'disabled')
-                .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
-
-            $.ajax({
-                url: form.attr('action'),
-                method: 'post',
-                data: form.serialize(),
-                success: function(data) {
-                    submitBtn.removeAttr('disabled').html(submitBtnHtml);
-
-                    if (data.success) {
-                        form.trigger('reset');
-                        $('#add-voucher-modal').modal('hide');
-
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(data.message, 'success');
-                        })(NioApp, jQuery);
-
-                        fetchVouchers();
-                    } else {
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(data.message, 'error');
-                        })(NioApp, jQuery);
-                    }
-                },
-                error: function(data) {
-                    submitBtn.removeAttr('disabled').html(submitBtnHtml);
-
-                    (function(NioApp, $) {
-                        'use strict';
-                        toastr.clear();
-                        NioApp.Toast('Something went wrong.', 'error');
-                    })(NioApp, jQuery);
-                },
-                complete: function(data) {
-                    // Just in case something breaks
-                    submitBtn.removeAttr('disabled').html(submitBtnHtml);
-                }
-            });
-        });
-
-        $(document).on('submit', '#edit-voucher-form', function(e) {
-            e.preventDefault();
-
             let form = $(this);
             let submitBtn = form.find('[type="submit"]');
             let submitBtnHtml = submitBtn.html();
@@ -356,7 +201,7 @@
 
                     if (data.success) {
                         $('#edit-voucher-modal').modal('hide');
-
+                        $('#add-voucher-modal').modal('hide');
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
@@ -388,6 +233,33 @@
             });
         });
 
+        $(document).on('click', '.add-voucher', function(e) {
+            e.preventDefault();
+
+            let modal = $('#add-voucher-modal');
+            let formPlaceholder = $('#add-voucher-form-placeholder');
+
+            $.ajax({
+                url: $(this).attr('href'),
+                method: "GET",
+                data: {
+                    _token: $("input[name=_token]").val()
+                },
+                success: function(data) {
+
+                    modal.modal('show');
+                    formPlaceholder.html(data);
+                    $('.select-2').each(function() {
+                        initializeSelect2($(this));
+                    });
+
+                    formPlaceholder.find(".promotion_end_date").datepicker();
+                    formPlaceholder.find(".promotion_start_date").datepicker();
+                    checkVoucherType();
+                    attachFormValidator($(document).find('#create-edit-voucher-form'));
+                }
+            });
+        });
         $(document).on('click', '.edit-voucher', function(e) {
             e.preventDefault();
 
@@ -401,6 +273,7 @@
                     _token: $("input[name=_token]").val()
                 },
                 success: function(data) {
+
                     modal.modal('show');
                     formPlaceholder.html(data);
 
@@ -410,20 +283,18 @@
 
                     formPlaceholder.find(".promotion_end_date").datepicker();
                     formPlaceholder.find(".promotion_start_date").datepicker();
-
                     checkVoucherType();
-                    attachFormValidator($(document).find('#edit-voucher-form'));
+                    attachFormValidator($(document).find('#create-edit-voucher-form'));
                 }
             });
         });
 
         $(document).on("change", "#promotion_type", function() {
-            checkVoucherType()
+            checkVoucherType();
         });
 
-        $(document).on('click', '.delete', function(e) {
-            e.preventDefault();
-
+        $(document).on('click', '.delete', function(event) {
+            var form_id = $(this).attr('form_id');
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -432,8 +303,9 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then(function(result) {
                 if (result.value) {
-                    $('#' + $(this).attr('form_id')).submit();
+                    $('#' + form_id).submit();
                 }
+                event.preventDefault();
             });
         });
 
@@ -527,6 +399,9 @@
         }
 
         function attachFormValidator(form) {
+            jQuery.validator.addMethod("minValue", function(value, element, param) {
+                return this.optional(element) || value >= param;
+                }, "Value must be equal to or greater than {0}.");
             form.validate({
                 rules: {
                     promotion_start_date: {
@@ -543,6 +418,13 @@
                     destination: {
                         required: true,
                         url: true
+                    },
+                    description: {
+                        required: true,
+                    },
+                    sale_commission:{
+                        required:true,
+                        minValue: 1 ,
                     }
                 },
                 messages: {
@@ -557,6 +439,8 @@
                 var endDate = new Date(value);
                 return this.optional(element) || (startDate < endDate);
             });
+                
+
         }
 
         attachFormValidator($(document).find('#add-voucher-form'));
