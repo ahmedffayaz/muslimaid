@@ -3,11 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\StoreAddress;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Carbon;
 
 class StoreAddressSeeder extends Seeder
 {
@@ -23,24 +21,25 @@ class StoreAddressSeeder extends Seeder
         DB::table('store_addresses')->truncate();
         Schema::enableForeignKeyConstraints();
         $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\store_addresses.csv');
-        if(isset($csvToArray[0])){
-            $store_addresses = [];
-            $now = Carbon::now();
-            foreach ($csvToArray as $store_address) {
-                !isset($store_address['id']) ?  ($store_address['id'] = reset($store_address)) : '' ;
-                $store_addresses = [
-                    'id' => $store_address['id'],
-                    'store_id' => $store_address['store_id'],
-                    'city' => $store_address['city'],
-                    'postal_code' => $store_address['postal_code'],
-                    'latitude' => $store_address['latitude'],
-                    'longitude' => $store_address['longitude'],
-                    'address' => $store_address['address'], 
-                    'created_at' => $store_address['created_at'],
-                    'updated_at' => $store_address['updated_at'],
-                  
+        if (isset($csvToArray[0])) {
+            $storeAddresses = [];
+            foreach ($csvToArray as $storeAddress) {
+                $storeAddress['id'] = (!isset($storeAddress['id']) ? reset($storeAddress) : $storeAddress['id']);
+                $storeAddresses[] = [
+                    'id' => $storeAddress['id'],
+                    'store_id' => $storeAddress['store_id'],
+                    'city' => $storeAddress['city'],
+                    'postal_code' => $storeAddress['postal_code'],
+                    'latitude' => $storeAddress['latitude'],
+                    'longitude' => $storeAddress['longitude'],
+                    'address' => $storeAddress['address'],
+                    'created_at' => $storeAddress['created_at'],
+                    'updated_at' => $storeAddress['updated_at'],
+
                 ];
-                StoreAddress::insert($store_addresses);
+            }
+            foreach (array_chunk($storeAddresses, 500) as $storeAddressesChunk) {
+                StoreAddress::insert($storeAddressesChunk);
             }
         }
     }

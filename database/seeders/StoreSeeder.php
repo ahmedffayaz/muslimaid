@@ -11,7 +11,7 @@ use App\Models\StoreCashback;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Carbon;
+
 class StoreSeeder extends Seeder
 {
     private $count = 50;
@@ -22,20 +22,19 @@ class StoreSeeder extends Seeder
      * @return void
      */
     public function run()
-    {       
+    {
         Schema::disableForeignKeyConstraints();
         DB::table('stores')->truncate();
         Schema::enableForeignKeyConstraints();
         $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\stores.csv');
-        if(isset($csvToArray[0])){
+        if (isset($csvToArray[0])) {
             $stores = [];
-            $now = Carbon::now();
             foreach ($csvToArray as $store) {
-                !isset($store['id']) ?  ($store['id'] = reset($store)) : '' ;
-                $stores = [
+                $store['id'] = (!isset($store['id']) ? reset($store) : $store['id']);
+                $stores[] = [
                     'id' => $store['id'],
                     'network_id' => $store['network_id'] == '' ? 0 : $store['network_id'],
-                    'advertiser_id' => null  ,
+                    'advertiser_id' => null,
                     'name' => $store['name'],
                     'description' => $store['description'],
                     'slug' => Str::slug($store['name']),
@@ -44,7 +43,7 @@ class StoreSeeder extends Seeder
                     'tracking_url' => $store['tracking_url'],
                     'store_url' => $store['store_url'],
                     'network_status' => null,
-                    'status_description' => null, 
+                    'status_description' => null,
                     'override_cashback' => 0,
                     'override_categories' => 0,
                     'feature_homepage' => 0,
@@ -52,7 +51,7 @@ class StoreSeeder extends Seeder
                     'editor_pick' => 0,
                     'status' => $store['status'],
                     'is_fake' =>  0,
-                    'address' => $store['address'], 
+                    'address' => $store['address'],
                     'city' => $store['city'],
                     'postal_code' => $store['postal_code'],
                     'latitude' => $store['latitude'],
@@ -61,20 +60,22 @@ class StoreSeeder extends Seeder
                     'created_at' => $store['created_at'],
                     'updated_at' => $store['updated_at'],
                     'deleted_at' => null,
-                  
+
                 ];
-                Store::insert($stores);
             }
-        }else{
+            foreach (array_chunk($stores, 500) as $storesChunk) {
+                Store::insert($storesChunk);
+            }
+        } else {
             $faker = Faker::create();
             $stores = [];
             $storesImages = [];
             $storesCashbacks = [];
             $categoriesStores = [];
-    
+
             for ($i = 1; $i <= $this->count; $i++) {
                 $storeName = $faker->company;
-    
+
                 $stores[] = [
                     'network_id' => 1,
                     'name' => $storeName,
@@ -87,7 +88,7 @@ class StoreSeeder extends Seeder
                     'feature_homepage' => $faker->randomElement([1, 0]),
                     'feature_sidebar' => $faker->randomElement([1, 0]),
                 ];
-    
+
                 $storesImages[] = [
                     'store_id' => $i,
                     'title' => 'logo',
@@ -96,7 +97,7 @@ class StoreSeeder extends Seeder
                     'is_uploaded' => 1,
                     'is_fake' => 1,
                 ];
-    
+
                 foreach (range(1, 10) as $index) {
                     $storesCashbacks[] = [
                         'store_id' => $i,
@@ -108,25 +109,25 @@ class StoreSeeder extends Seeder
                         'click_url' => $faker->url,
                     ];
                 }
-    
+
                 $categoriesStores[] = [
                     'store_id' => $i,
                     'category_id' => $faker->numberBetween(1, 5)
                 ];
             }
-    
+
             foreach (array_chunk($stores, 500) as $storesChunk) {
                 Store::insert($storesChunk);
             }
-    
+
             foreach (array_chunk($storesImages, 500) as $storesImagesChunk) {
                 StoreImage::insert($storesImagesChunk);
             }
-    
+
             foreach (array_chunk($storesCashbacks, 500) as $storesCashbacksChunk) {
                 StoreCashback::insert($storesCashbacksChunk);
             }
-    
+
             foreach (array_chunk($categoriesStores, 500) as $categoriesStoresChunk) {
                 DB::table('category_store')->insert($categoriesStoresChunk);
             }

@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use Carbon\Carbon;
 use App\Models\Category;
-use Faker\Factory as Faker;
 use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -28,11 +27,12 @@ class CategorySeeder extends Seeder
         $now = Carbon::now();
 
         foreach ($csvToArray as $category) {
-            !isset($category['id']) ?  ($category['id'] = reset($category)) : '' ;
+            $category['id'] = (!isset($category['id']) ? reset($category) : $category['id']);
+
             if (!arrayValueExists($category, 'id')) continue;
             if (!arrayValueExists($category, 'name')) continue;
 
-            $categories = [
+            $categories[] = [
                 'id' => $category['id'],
                 'parent_id' => arrayValueExists($category, 'parent_id') ? $category['parent_id'] : 0,
                 'name' => $category['name'],
@@ -55,8 +55,10 @@ class CategorySeeder extends Seeder
                 'created_at' => isset($category['created_at']) ? $category['created_at'] : $now,
                 'updated_at' => isset($category['updated_at']) ? $category['updated_at'] : $now,
             ];
-            Category::insert($categories);
         }
-
+        
+        foreach (array_chunk($categories, 500) as $categoriesChunk) {
+            Category::insert($categoriesChunk);
+        }
     }
 }
