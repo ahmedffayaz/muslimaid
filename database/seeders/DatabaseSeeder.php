@@ -14,10 +14,16 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            CategorySeeder::class,
+            BlogSeeder::class,
+            StoreSeeder::class,
+            StoreAddressSeeder::class,
+            StoreDataSeeder::class,
+            ExitClickSeeder::class,
+            UserCashbackSeeder::class,
             RolesPermissionsSeeder::class,
             UserSeeder::class,
             NetworkSeeder::class,
-            CategorySeeder::class,
             CashbackStatusSeeder::class,
             SettingSeeder::class,
             PagesSeeder::class,
@@ -26,7 +32,9 @@ class DatabaseSeeder extends Seeder
             EmailTemplatesSeeder::class,
             TestimonialSeeder::class,
             TicketCategorySeeder::class,
-            RegionSeeder::class
+            RegionSeeder::class,
+            CharitySeeder::class,
+            CharityTypeSeeder::class,
         ]);
     }
 }

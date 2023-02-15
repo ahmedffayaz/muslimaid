@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\UserVerify;
 use App\Traits\UserBonus;
+use Illuminate\Support\Str;
+use DB;
 
 class VerifyController extends Controller
 {
