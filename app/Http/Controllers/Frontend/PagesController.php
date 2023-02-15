@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use Exception;
 use App\Models\Blog;
 use App\Models\Page;
+use App\Models\User;
 use App\Models\Store;
 use App\Models\Charity;
 use App\Models\Category;

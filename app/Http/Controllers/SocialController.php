@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Socialite;
+
 use Carbon\Carbon;
 use App\Models\User;
 use App\Traits\UserBonus;
@@ -10,6 +10,7 @@ use App\Traits\WelcomeEmail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use Laravel\Socialite\Facades\Socialite;
 
 class SocialController extends Controller
 {
