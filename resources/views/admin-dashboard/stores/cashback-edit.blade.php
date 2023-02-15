@@ -19,43 +19,45 @@
             <div class="form-group">
                 <label class="form-label" for="sale_commission">Network Commission</label>
                 <div class="form-control-wrap">
-                    <input type="number" class="form-control" min="0" step="0.01" id="sale_commission" value="{{ $cashback->sale_commission }}" name="sale_commission" required
-                        oninput="calcPercentage()">
+                    <input type="number" class="form-control" min="0" step="0.01" id="sale_commission" value="{{ $cashback->sale_commission }}"
+                        name="sale_commission" required oninput="calcPercentage()">
                 </div>
             </div>
         </div>
-        @if($cashback->store->override_network)
-        <div class="col-lg-12">
-            <div class="form-group">
-                <label class="form-label" for="network_id">Network</label>
-                <div class="form-control-wrap">
-                    <select class="form-control form-select select-2" id="network_id" name="network_id">
-                        @foreach ($networks as $network)
-                            <option @if($cashback->network_id == $network->id) selected @endif value="{{ $network->id }}">{{ $network->name }}</option>
-                        @endforeach
-                    </select>
+        @if ($cashback->store->override_network)
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label class="form-label" for="network_id">Network</label>
+                    <div class="form-control-wrap">
+                        <select class="form-control form-select select-2" id="network_id" name="network_id">
+                            @foreach ($networks as $network)
+                                <option @if ($cashback->network_id == $network->id) selected @endif value="{{ $network->id }}">{{ $network->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-12">
-            <div class="form-group">
-                <label class="form-label" for="tracking_url">Tracking URL</label>
-                <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="tracking_url" name="tracking_url" value="{{ $cashback->tracking_url }}" required style="width: 89%">
-                    <span style="position: absolute; right:0; top:5px; width:11%" data-toggle="tooltip" data-placement="left"
-                        title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">?{{ $cashback->network->click_ref ?? 'ref' }}=XXX</span>
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label class="form-label" for="tracking_url">Tracking URL</label>
+                    <div class="form-control-wrap">
+                        <input type="text" class="form-control" id="tracking_url" name="tracking_url" value="{{ $cashback->tracking_url }}" required style="width: 89%">
+                        <span style="position: absolute; right:0; top:5px; width:11%" data-toggle="tooltip" data-placement="left"
+                            title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">?{{ $cashback->network->click_ref ?? 'ref' }}=XXX</span>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-12">
-            <div class="form-group">
-                <label class="form-label" for="sale_commission">Deeplink URL</label>
-                <div class="form-control-wrap">
-                    <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right" title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">&{{ $cashback->network->deeplink_identifier ?? 'u' }}=</span>
-                    <input type="text" class="form-control" id="deeplink_url" value="{{ isset($cashback->deeplink_url) ? $cashback->deeplink_url : '' }}" name="deeplink_url" value="{{ $cashback->deeplink_url }}" style="position: relative; left:30px; width: 95%">
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <label class="form-label" for="sale_commission">Deeplink URL</label>
+                    <div class="form-control-wrap">
+                        <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
+                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">&{{ $cashback->network->deeplink_identifier ?? 'u' }}=</span>
+                        <input type="text" class="form-control" id="deeplink_url" value="{{ isset($cashback->deeplink_url) ? $cashback->deeplink_url : '' }}"
+                            name="deeplink_url" value="{{ $cashback->deeplink_url }}" style="position: relative; left:30px; width: 95%">
+                    </div>
                 </div>
             </div>
-        </div>
         @endif
         <div class="col-lg-6 currency-div">
             <div class="form-group">
