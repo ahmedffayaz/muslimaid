@@ -71,7 +71,8 @@ class CharityController extends Controller
             'country' => 'required',
             'logo_type' => 'required|max:255',
             'banner_type' => 'required',
-
+            'logo_upload' =>  $request->input('logo_type') === 'upload' ? 'required|image:jpeg,png,jpg,gif' : '' ,
+            'banner_upload' =>  $request->input('banner_type') === 'upload' ? 'required|image:jpeg,png,jpg,gif' : '',
         ]);
 
         if ($validator->fails()) {
@@ -85,8 +86,10 @@ class CharityController extends Controller
             'description' => $request->input('description'),
             'logo_type' => $request->input('logo_type'),
             'logo_link' => $request->input('logo_link'),
+           
             'banner_type' => $request->input('banner_type'),
-            'banner_link' => $request->input('banner_link'),
+           
+            'logo_link' => $request->input('logo_link'),
             'country' => $request->input('country'),
             'status' => $request->input('status'),
         ]);
@@ -197,6 +200,21 @@ class CharityController extends Controller
      */
     public function update(Request $request, Charity $charity)
     {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:255',
+            'charity_types_id' => 'required',
+            'country' => 'required',
+            'logo_type' => 'required|max:255',
+            'banner_type' => 'required',
+            'logo_upload' =>  'nullable|image:jpeg,png,jpg,gif',
+            'banner_upload' =>  'nullable|image:jpeg,png,jpg,gif,'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
         $charity->update([
             'title' => $request->input('title'),
             'country' => $request->input('country'),

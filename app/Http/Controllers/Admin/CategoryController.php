@@ -168,11 +168,13 @@ class CategoryController extends Controller
 
             ]);
             if($category->parent_id == 0){
-                foreach ($request->input('tags') as $tag) {
-                    $category->update([
-                        $tag => 1
-                    ]);
-                }
+                if($request->has('tags')){
+                    foreach ($request->input('tags') as $tag) {
+                        $category->update([
+                            $tag => 1
+                        ]);
+                    }
+                }  
             }
             if ($request->input('logo_type') == 'upload') {
                 if ($request->has('logo_upload')) {
