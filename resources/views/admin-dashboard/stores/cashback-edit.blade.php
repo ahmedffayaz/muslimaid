@@ -59,6 +59,17 @@
                 </div>
             </div>
         @endif
+        <div class="col-lg-12">
+            <div class="form-group">
+                <label class="form-label" for="cashback_icon">Icon Upload</label>
+                <div class="form-control-wrap">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name='cashback_icon' id="cashback_icon">
+                        <label class="custom-file-label" for="cashback_icon">Choose file</label>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="col-lg-6 currency-div">
             <div class="form-group">
                 <label class="form-label" for="currency">Currency</label>

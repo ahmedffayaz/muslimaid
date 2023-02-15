@@ -107,8 +107,7 @@
                                                     <div class="col-lg-6">
                                                         <div class="preview-block">
                                                             <span class="preview-title form-label">Override Network <em class="icon ni ni-question" data-toggle="tooltip"
-                                                                    data-placement="top"
-                                                                    title=" If checked, admin will be in charge, cashbacks will not auto-update."></em></span>
+                                                                    data-placement="top" title="If checked, store cashback level network settings will be used."></em></span>
                                                             <div class="custom-control custom-switch">
                                                                 <input type="checkbox" class="custom-control-input" id="store_override_network"
                                                                     name="store_override_network" @if ($store->override_network == 1) checked @endif>
@@ -591,6 +590,17 @@
                                 </div>
                             </div>
                         @endif
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="form-label" for="cashback_icon">Icon Upload</label>
+                                <div class="form-control-wrap">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name='cashback_icon' id="cashback_icon">
+                                        <label class="custom-file-label" for="cashback_icon">Choose file</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-lg-12">
                             <div class="card">
                                 <label class="form-label" for="phone-no-1">Detail</label>
@@ -1254,10 +1264,13 @@
         $(document).ready(function() {
             $(document).on('submit', '.cashback_form', function(event) {
                 event.preventDefault();
+                var formData = new FormData($(this)[0]);
                 $.ajax({
                     url: $(this).attr('action'),
-                    type: "PUT",
-                    data: $(this).serialize(),
+                    type: "POST",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
                     success: function(data) {
                         $('#edit-cashback-modal').modal('hide');
                         (function(NioApp, $) {
@@ -1294,7 +1307,9 @@
                 $.ajax({
                     url: $(this).attr('action'),
                     type: "POST",
-                    data: $(this).serialize(),
+                    data: new FormData($(this)[0]),
+                    processData: false,
+                    contentType: false,
                     success: function(data) {
                         $('#cashback-modal').modal('hide');
                         (function(NioApp, $) {

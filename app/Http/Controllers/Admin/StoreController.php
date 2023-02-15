@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Validator;
 
 class StoreController extends Controller
 {
+    private $iconPath = 'stores/cashbacks/';
     public function __construct()
     {
         $this->middleware('permission:view stores', ['only' => ['index']]);
@@ -401,12 +402,20 @@ class StoreController extends Controller
             'sale_commission' => 'required|numeric|min:0',
             'network_id' => 'nullable|integer',
             'tracking_url' => 'nullable|url',
-            'deeplink_url' => 'nullable|url'
+            'deeplink_url' => 'nullable|url',
+            'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
         ]);
 
         try {
             DB::beginTransaction();
             $cashback->update($request->all());
+
+            if ($request->hasFile('cashback_icon')) {
+                $cashbackIcon = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
+                $cashback->image = $cashbackIcon;
+                $cashback->update();
+            }
+
             DB::commit();
             return true;
         } catch (ModelNotFoundException $e) {
@@ -437,13 +446,21 @@ class StoreController extends Controller
         $request->validate([
             'type' => 'required',
             'sale_commission' => 'required|numeric|min:0',
-            'deeplink_url' => 'nullable|url'
+            'deeplink_url' => 'nullable|url',
+            'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
         ]);
 
         try {
             DB::beginTransaction();
             $request->merge(['is_api' => 'no']);
             $cashback = StoreCashback::create($request->all());
+
+            if ($request->hasFile('cashback_icon')) {
+                $cashbackIcon = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
+                $cashback->image = $cashbackIcon;
+                $cashback->update();
+            }
+
             $existing_cashbacks = StoreCashback::where('store_id', $request->store_id)->get();
             if (count($existing_cashbacks) == 1) {
                 $cashback->update(['default' => '1']);
