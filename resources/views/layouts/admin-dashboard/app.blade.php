@@ -96,7 +96,6 @@
         color: #526484;
         /* padding: 12px 16px; */
         text-decoration: none;
-        display: block;
     }
 
     /* Change color of dropdown links on hover */
@@ -160,6 +159,14 @@
     .modal-corsi {
         height: 335px;
         overflow-y: auto;
+    }
+
+    .nk-header-search .nk-menu-icon, .nk-header-search .nk-menu-text {
+        line-height: 1rem !important;
+    }
+
+    .nk-header-search .nk-menu-icon {
+        width: 27px;
     }
 </style>
 

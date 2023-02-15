@@ -34,7 +34,7 @@ class VouchersController extends Controller
     public function create()
     {
         $stores = Store::latest()->get();
-        return view('admin-dashboard.vouchers.create', compact('stores'));
+        return view('admin-dashboard.vouchers.edit-voucher', compact('stores'));
     }
 
     public function store(Request $request)
@@ -43,8 +43,8 @@ class VouchersController extends Controller
             'link_name' => 'required|max:255',
             'description' => 'required|max:255',
             'click_url' => 'required|url',
-            'sale_commission' => 'required',
-            'coupon_code' => 'required',
+            'coupon_code' => $request->input('promotion_type') === 'Coupon' ? 'required' : '',
+            'sale_commission' => 'required|integer',
             'destination' => 'required|url',
             'promotion_type' => 'required',
             'promotion_start_date' => 'required',
@@ -58,7 +58,7 @@ class VouchersController extends Controller
                     'success' => false
                 );
             }
-            
+
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
@@ -117,8 +117,8 @@ class VouchersController extends Controller
             'link_name' => 'required|max:255',
             'description' => 'required|max:255',
             'click_url' => 'required|url',
-            'sale_commission' => 'required',
-            'coupon_code' => 'required',
+            'sale_commission' => 'required|integer',
+            'coupon_code' => $request->input('promotion_type') === 'Coupon' ? 'required' : '',
             'destination' => 'required|url',
             'promotion_type' => 'required',
             'promotion_start_date' => 'required',
@@ -132,7 +132,7 @@ class VouchersController extends Controller
                     'success' => false
                 );
             }
-            
+
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
@@ -156,7 +156,6 @@ class VouchersController extends Controller
                     'success' => true
                 );
             }
-            
             flash()->success('Voucher updated successfully');
             return redirect()->route('admin.vouchers.index');
         } catch (Exception $e) {
