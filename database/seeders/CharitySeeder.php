@@ -40,7 +40,7 @@ class CharitySeeder extends Seeder
                 'logo_type' => arrayValueExists($charity, 'logo_type') ? $charity['logo_type'] : null,
                 'logo_upload' => arrayValueExists($charity, 'logo_upload') ? $charity['logo_upload'] : null,
                 'logo_link' => null,
-                'charity_types_id' => $charity['charity_types_id'] == 0 ? $charity['charity_types_id'] : 7,
+                'charity_types_id' => $charity['charity_types_id'] != 0 ? $charity['charity_types_id'] : 2,
                 'banner_type' => arrayValueExists($charity, 'banner_type') ? $charity['banner_type'] : null,
                 'banner_upload' => arrayValueExists($charity, 'banner_upload') ? $charity['banner_upload'] : null,
                 'banner_link' => arrayValueExists($charity, 'banner_link') ? $charity['banner_link'] : null,

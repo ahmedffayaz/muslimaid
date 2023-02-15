@@ -15,12 +15,12 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             CategorySeeder::class,
-            CharitySeeder::class,
-            CharityTypeSeeder::class,
             BlogSeeder::class,
             StoreSeeder::class,
             StoreAddressSeeder::class,
             StoreDataSeeder::class,
+            ExitClickSeeder::class,
+            UserCashbackSeeder::class,
             RolesPermissionsSeeder::class,
             UserSeeder::class,
             NetworkSeeder::class,
@@ -32,7 +32,9 @@ class DatabaseSeeder extends Seeder
             EmailTemplatesSeeder::class,
             TestimonialSeeder::class,
             TicketCategorySeeder::class,
-            RegionSeeder::class
+            RegionSeeder::class,
+            CharitySeeder::class,
+            CharityTypeSeeder::class,
         ]);
     }
 }
