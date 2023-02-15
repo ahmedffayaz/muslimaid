@@ -7,6 +7,8 @@ use App\Models\Store;
 use App\Models\StoreReview;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+
 
 class StoreReviewsController extends Controller
 {
@@ -51,8 +53,27 @@ class StoreReviewsController extends Controller
      */
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'store_id' => 'required',
+            'review' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return array(
+                    'message' => $validator->errors()->first(),
+                    'success' => false
+                );
+            }
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
         try {
-            $review = StoreReview::create($request->all());
+            $review = StoreReview::create([
+                'user_id' => $request->input('user_id'),
+                'store_id' => $request->input('store_id'),
+                'review' => $request->input('review'),
+            ]);
 
             // Get average rating against active reviews
             $averageRating = $review->where('store_id', $review->store_id)->where('status', 'active')->avg('rating');

@@ -1,6 +1,7 @@
 <?php
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Store;
 use App\Models\Ticket;
 use App\Models\Cashout;
@@ -610,7 +611,12 @@ function csvToArray($path)
                     }
 
                     $header = $cleansedRow;
-                } else $csvToArray[] = array_combine($header, $row);
+                } else{
+                    if(count($row) != count($header)){
+                        dd($row);
+                    }
+                    $csvToArray[] = array_combine($header, $row);
+                }
             }
 
             fclose($handle);
