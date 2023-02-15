@@ -53,9 +53,9 @@ class StoreDataSeeder extends Seeder
                     'updated_at' => arrayValueExists($storeImage, 'updated_at') ? Carbon::parse($storeImage['updated_at'])->format('Y-m-d H:i:s') : $now,
                 ];
             }
-        }
-        foreach (array_chunk($storeImages, 500) as $storeImagesChunk) {
-            StoreImage::insert($storeImagesChunk);
+            foreach (array_chunk($storeImages, 500) as $storeImagesChunk) {
+                StoreImage::insert($storeImagesChunk);
+            }
         }
 
         // Store Reviews
@@ -85,9 +85,9 @@ class StoreDataSeeder extends Seeder
                     'updated_at' => arrayValueExists($storeReview, 'updated_at') ? Carbon::parse($storeReview['updated_at'])->format('Y-m-d H:i:s') : $now,
                 ];
             }
-        }
-        foreach (array_chunk($storeReviews, 500) as $storeReviewsChunk) {
-            StoreReview::insert($storeReviewsChunk);
+            foreach (array_chunk($storeReviews, 500) as $storeReviewsChunk) {
+                StoreReview::insert($storeReviewsChunk);
+            }
         }
 
         // Store SEO Data
@@ -120,9 +120,9 @@ class StoreDataSeeder extends Seeder
                     'updated_at' => arrayValueExists($storeSeoData, 'updated_at') ? Carbon::parse($storeSeoData['updated_at'])->format('Y-m-d H:i:s') : $now,
                 ];
             }
-        }
-        foreach (array_chunk($storeSeoRows, 500) as $storeSeoRowsChunk) {
-            StoreSeoData::insert($storeSeoRowsChunk);
+            foreach (array_chunk($storeSeoRows, 500) as $storeSeoRowsChunk) {
+                StoreSeoData::insert($storeSeoRowsChunk);
+            }
         }
 
         // Store Category 
@@ -179,9 +179,9 @@ class StoreDataSeeder extends Seeder
                     'deleted_at' => null,
                 ];
             }
-        }
-        foreach (array_chunk($storeCashbackData, 500) as $storeCashbackDataChunk) {
-            StoreCashback::insert($storeCashbackDataChunk);
+            foreach (array_chunk($storeCashbackData, 500) as $storeCashbackDataChunk) {
+                StoreCashback::insert($storeCashbackDataChunk);
+            }
         }
     }
 }
