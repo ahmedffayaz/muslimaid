@@ -21,7 +21,7 @@
         <div class="tb-lead"><span><a href="{{route('admin.charities.edit',$charity)}}" class="a_link">{{$charity->title}}</a></span></div>
     </div>
     <div class="nk-tb-col">
-        <span>{{strip_tags($charity->description)}}</span>
+        <span>{{ substr(strip_tags($charity->description),0,50) }}..</span>
     </div>
     <div class="nk-tb-col text-center">
         {!!$charity->status ==1  ? '<span class="tb-status badge badge-success">Active</span>' : '<span class="tb-status badge badge-warning">In-active</span>'!!}
