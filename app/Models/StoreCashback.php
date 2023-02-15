@@ -28,7 +28,6 @@ class StoreCashback extends Model
         'network_detail',
         'default',
         'is_api',
-        'override_network',
     ];
 
     public function store()
@@ -38,18 +37,22 @@ class StoreCashback extends Model
 
     public function getDeeplinkUrl()
     {
-        if (!empty($this->deeplink_url))
-            return $this->deeplink_url;
+        if ($this->store->override_network) {
+            if (!empty($this->deeplink_url))
+                return $this->deeplink_url;
+            return $this->store->deeplink_url;
+        }
         return $this->store->deeplink_url;
     }
 
     public function getTrackingUrl()
     {
-        if ($this->store->tracking_url) {
+        if ($this->store->override_network) {
             if (!empty($this->tracking_url))
                 return $this->tracking_url;
             if (!empty($this->click_url))
                 return $this->click_url;
+            return $this->store->tracking_url;
         }
         return $this->store->tracking_url;
     }

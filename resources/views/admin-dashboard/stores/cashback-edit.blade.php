@@ -41,8 +41,8 @@
                 <div class="form-group">
                     <label class="form-label" for="tracking_url">Tracking URL</label>
                     <div class="form-control-wrap">
-                        <input type="text" class="form-control" id="tracking_url" name="tracking_url" value="{{ $cashback->tracking_url }}" required style="width: 89%">
-                        <span style="position: absolute; right:0; top:5px; width:11%" data-toggle="tooltip" data-placement="left"
+                        <input type="text" class="form-control" id="tracking_url" name="tracking_url" value="{{ $cashback->tracking_url }}" required style="width: 83%">
+                        <span style="position: absolute; right:0; top:5px; width:17%" data-toggle="tooltip" data-placement="left"
                             title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">?{{ $cashback->network->click_ref ?? 'ref' }}=XXX</span>
                     </div>
                 </div>

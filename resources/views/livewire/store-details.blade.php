@@ -106,7 +106,9 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="preview-block">
-                                                            <span class="preview-title overline-title">Override Network</span>
+                                                            <span class="preview-title form-label">Override Network <em class="icon ni ni-question" data-toggle="tooltip"
+                                                                    data-placement="top"
+                                                                    title=" If checked, admin will be in charge, cashbacks will not auto-update."></em></span>
                                                             <div class="custom-control custom-switch">
                                                                 <input type="checkbox" class="custom-control-input" id="store_override_network"
                                                                     name="store_override_network" @if ($store->override_network == 1) checked @endif>
@@ -136,8 +138,8 @@
                                                             <label class="form-label" for="tracking_url">Tracking URL</label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="tracking_url" value="{{ $store->tracking_url }}"
-                                                                    name="tracking_url" required style="width: 86%">
-                                                                <span style="position: absolute; right:0; top:5px; width:13%" data-toggle="tooltip" data-placement="left"
+                                                                    name="tracking_url" required style="width: 79%">
+                                                                <span style="position: absolute; right:0; top:5px; width:20%" data-toggle="tooltip" data-placement="left"
                                                                     title="This parameter containing ID of the click will be concatenated with tracking URL of the store ({{ $store->tracking_url }}?ref=XXX)">?{{ $store->network->click_ref }}=XXX</span>
                                                             </div>
                                                         </div>
@@ -537,12 +539,10 @@
                             <div class="form-group">
                                 <label class="form-label" for="type">Type</label>
                                 <div class="form-control-wrap ">
-                                    <div class="form-control-select">
-                                        <select class="form-control" id="type" name="type" required>
-                                            <option value="percentage">Percentage</option>
-                                            <option value="fixed">Fixed</option>
-                                        </select>
-                                    </div>
+                                    <select class="form-control form-select select-2" id="type" name="type" required>
+                                        <option value="percentage">Percentage</option>
+                                        <option value="fixed">Fixed</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -572,8 +572,8 @@
                                 <div class="form-group">
                                     <label class="form-label" for="tracking_url">Tracking URL</label>
                                     <div class="form-control-wrap">
-                                        <input type="text" class="form-control" id="tracking_url" name="tracking_url" required style="width: 89%">
-                                        <span style="position: absolute; right:0; top:5px; width:11%" data-toggle="tooltip" data-placement="left"
+                                        <input type="text" class="form-control" id="tracking_url" name="tracking_url" required style="width: 83%">
+                                        <span style="position: absolute; right:0; top:5px; width:17%" data-toggle="tooltip" data-placement="left"
                                             title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">?{{ $store->network->click_ref }}=XXX</span>
                                     </div>
                                 </div>
@@ -1448,6 +1448,7 @@
                 });
             });
         });
+
         // Delete Image
         $(document).ready(function() {
             $(document).on('click', '.delete-img', function(event) {

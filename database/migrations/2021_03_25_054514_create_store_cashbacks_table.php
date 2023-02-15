@@ -18,7 +18,7 @@ class CreateStoreCashbacksTable extends Migration
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('network_id')->default(0);
             $table->string('type')->nullable();
-            $table->string('cashback_name')->nullable();
+            $table->text('cashback_name')->nullable();
             $table->string('image')->nullable();
             $table->text('click_url')->nullable();
             $table->longText('tracking_url')->nullable();
@@ -29,7 +29,6 @@ class CreateStoreCashbacksTable extends Migration
             $table->longText('network_detail')->nullable();
             $table->string('default')->default(0)->nullable();
             $table->enum('is_api', ['yes', 'no'])->default('yes');
-            $table->boolean('override_network')->default(0);
             $table->timestamps();
             $table->softDeletes();
         });
