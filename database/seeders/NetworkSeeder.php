@@ -34,7 +34,6 @@ class NetworkSeeder extends Seeder
 					|| !arrayValueExists($network, 'description')
 					|| !arrayValueExists($network, 'click_ref')
 					|| !arrayValueExists($network, 'deeplink_identifier')
-					|| !arrayValueExists($network, 'logo')
 				) {
 					continue;
 				}
@@ -44,7 +43,7 @@ class NetworkSeeder extends Seeder
 					'description' => $network['description'],
 					'click_ref' => $network['click_ref'],
 					'deeplink_identifier' => $network['deeplink_identifier'],
-					'logo' => $network['logo'],
+					'logo' => arrayValueExists($network, 'logo') ? $network['logo']: '',
 					'created_at' => arrayValueExists($network, 'created_at') ? Carbon::parse($network['created_at'])->format('Y-m-d H:i:s') : $now,
 					'updated_at' => arrayValueExists($network, 'updated_at') ? Carbon::parse($network['updated_at'])->format('Y-m-d H:i:s') : $now,
 					'deleted_at' => null,

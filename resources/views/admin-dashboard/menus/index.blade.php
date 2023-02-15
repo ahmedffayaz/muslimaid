@@ -12,9 +12,7 @@
                     <div class="nk-block nk-block-lg">
                         <div class="nk-block-head">
                             <div class="nk-block-head-content">
-                                {{-- <h4 class="title nk-block-title">Menu</h4> --}}
                                 <div class="nk-block-des">
-                                    {{-- <p>You can make style out your....</p> --}}
                                 </div>
                             </div>
                         </div>

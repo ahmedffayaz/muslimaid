@@ -155,7 +155,7 @@
 
         // Import CSV file
         function importCSV() {
-            $('#save_modal_form').on('submit', function (event) {
+            $('#update_cashback_form').on('submit', function (event) {
                 event.preventDefault();
                 let btn = $('#show-modal')
                     btn.attr('disabled', 'disabled')
