@@ -27,6 +27,7 @@ class Store extends Model
         'status_description',
         'override_cashback',
         'override_categories',
+        'override_network',
         'feature_sidebar',
         'feature_homepage',
         'editor_pick',
