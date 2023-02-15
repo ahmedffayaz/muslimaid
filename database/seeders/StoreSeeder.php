@@ -54,6 +54,7 @@ class StoreSeeder extends Seeder
                     'network_status' => null,
                     'status_description' => null,
                     'override_cashback' => 1,
+                    'override_network' => 1,
                     'override_categories' => 1,
                     'feature_homepage' => 0,
                     'feature_sidebar' => 0,
