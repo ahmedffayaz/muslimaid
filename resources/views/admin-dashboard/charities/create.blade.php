@@ -65,7 +65,7 @@
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="card">
-                                                    <label class="form-label" for="description">Description <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="description">Description</label>
                                                     <!-- Create the editor container -->
                                                     <div id="editor-container"> </div>
                                                     <input name="description" value ="{{ old('description') }}" type="hidden">
