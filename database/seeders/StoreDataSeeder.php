@@ -172,7 +172,7 @@ class StoreDataSeeder extends Seeder
                     'network_detail' => arrayValueExists($storeCashback, 'network_detail') ? $storeCashback['network_detail']: null,
                     'deeplink_url' => arrayValueExists($storeCashback, 'deeplink_url') ? $storeCashback['deeplink_url']: null,
                     'tracking_url' => arrayValueExists($storeCashback, 'tracking_url') ? $storeCashback['tracking_url']: null,
-                    'network_id' => arrayValueExists($storeCashback, 'network_id') ? $storeCashback['network_id']: null,
+                    'network_id' => arrayValueExists($storeCashback, 'network_id') ? $storeCashback['network_id']: 0,
                     'default' => arrayValueExists($storeCashback, 'default') ? $storeCashback['default']: null,
                     'created_at' => arrayValueExists($storeCashback, 'created_at') ? Carbon::parse($storeCashback['created_at'])->format('Y-m-d H:i:s') : $now,
                     'updated_at' => arrayValueExists($storeCashback, 'updated_at') ? Carbon::parse($storeCashback['updated_at'])->format('Y-m-d H:i:s') : $now,
