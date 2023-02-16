@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\StoreAddress;
 use Carbon\Carbon;
+use App\Models\Store;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Seeder;
@@ -26,6 +27,7 @@ class StoreAddressSeeder extends Seeder
             $now = Carbon::now();
             foreach ($csvToArray as $i => $storeAddress) {
                 $storeAddress['id'] = (!isset($storeAddress['id']) ? reset($storeAddress) : $storeAddress['id']);
+                $store_data = Store::where('id',$storeAddress['store_id'])->first();
                 if (
                     !arrayValueExists($storeAddress, 'store_id')
                     || !arrayValueExists($storeAddress, 'city')
@@ -33,6 +35,7 @@ class StoreAddressSeeder extends Seeder
                     || !arrayValueExists($storeAddress, 'latitude')
                     || !arrayValueExists($storeAddress, 'longitude')
                     || !arrayValueExists($storeAddress, 'address')
+                    || !isset($store_data)
                 ) {
                     continue;
                 }

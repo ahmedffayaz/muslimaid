@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\UserCashback;
 use Carbon\Carbon;
+use App\Models\Store;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -27,9 +28,11 @@ class UserCashbackSeeder extends Seeder
         if (isset($csvToArray[0])) {
             foreach ($csvToArray as $userCashback) {
                 !isset($userCashback['id']) ?  ($userCashback['id'] = reset($userCashback)) : '';
+                $store_data = Store::where('id',$userCashback['store_id'])->first();
                 if (
                     !arrayValueExists($userCashback, 'id')
                     || !arrayValueExists($userCashback, 'user_id')
+                    || !isset($store_data)
                 ) {
                     continue;
                 }

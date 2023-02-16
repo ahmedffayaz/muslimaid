@@ -59,7 +59,7 @@ class StoreSeeder extends Seeder
                     'feature_homepage' => 0,
                     'feature_sidebar' => 0,
                     'editor_pick' => 0,
-                    'status' => $store['status'],
+                    'status' => ($store['status'] == 1) ? 'active': 'inactive',
                     'is_fake' =>  0,
                     'address' => $store['address'],
                     'city' => $store['city'],

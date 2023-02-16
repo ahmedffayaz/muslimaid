@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\ExitClick;
+use App\Models\Store;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -27,10 +28,12 @@ class ExitClickSeeder extends Seeder
         if (isset($csvToArray[0])) {
             foreach ($csvToArray as $exitClick) {
                 !isset($exitClick['id']) ?  ($exitClick['id'] = reset($exitClick)) : '';
+                $store_data = Store::where('id',$exitClick['store_id'])->first();
                 if (
                     !arrayValueExists($exitClick, 'id')
                     || !arrayValueExists($exitClick, 'store_id')
                     || !arrayValueExists($exitClick, 'user_id')
+                    || !isset($store_data)
                 ) {
                     continue;
                 }

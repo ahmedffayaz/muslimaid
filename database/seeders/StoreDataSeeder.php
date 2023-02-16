@@ -32,12 +32,14 @@ class StoreDataSeeder extends Seeder
             $storeImages = [];
             foreach ($csvToArray as $storeImage) {
                 $storeImage['id'] = (!isset($storeImage['id']) ? reset($storeImage) : $storeImage['id']);
+                $store_data = Store::where('id',$storeImage['store_id'])->first();
                 if (
                     !arrayValueExists($storeImage, 'id')
                     || !arrayValueExists($storeImage, 'store_id')
                     || !arrayValueExists($storeImage, 'title')
                     || !arrayValueExists($storeImage, 'image')
                     || !arrayValueExists($storeImage, 'image_type')
+                    || !isset($store_data)
                 ) {
                     continue;
                 }
@@ -67,10 +69,12 @@ class StoreDataSeeder extends Seeder
             $storeReviews = [];
             foreach ($csvToArray as $storeReview) {
                 $storeReview['id'] = (!isset($storeReview['id']) ? reset($storeReview) : $storeReview['id']);
+                $store_data = Store::where('id',$storeReview['store_id'])->first();
                 if (
                     !arrayValueExists($storeReview, 'id')
                     || !arrayValueExists($storeReview, 'store_id')
                     || !arrayValueExists($storeReview, 'user_id')
+                    || !isset($store_data)
                 ) {
                     continue;
                 }
@@ -99,6 +103,7 @@ class StoreDataSeeder extends Seeder
             $storeSeoRows = [];
             foreach ($csvToArray as $storeSeoData) {
                 $storeSeoData['id'] = (!isset($storeSeoData['id']) ? reset($storeSeoData) : $storeSeoData['id']);
+                $store_data = Store::where('id',$storeSeoData['store_id'])->first();
                 if (
                     !arrayValueExists($storeSeoData, 'id')
                     || !arrayValueExists($storeSeoData, 'store_id')
@@ -106,6 +111,7 @@ class StoreDataSeeder extends Seeder
                     || !arrayValueExists($storeSeoData, 'type')
                     || !arrayValueExists($storeSeoData, 'key')
                     || !arrayValueExists($storeSeoData, 'value')
+                    || !isset($store_data)
                 ) {
                     continue;
                 }
@@ -153,9 +159,11 @@ class StoreDataSeeder extends Seeder
             $storeCashbackData = [];
             foreach ($csvToArray as $storeCashback) {
                 $storeCashback['id'] = (!isset($storeCashback['id']) ? reset($storeCashback) : $storeCashback['id']);
+                $store_data = Store::where('id',$storeCashback['store_id'])->first();
                 if (
                     !arrayValueExists($storeCashback, 'id')
                     || !arrayValueExists($storeCashback, 'store_id')
+                    || !isset($store_data)
                 ) {
                     continue;
                 }
