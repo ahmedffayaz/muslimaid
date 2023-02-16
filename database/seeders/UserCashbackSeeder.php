@@ -49,8 +49,8 @@ class UserCashbackSeeder extends Seeder
                     'amount' =>  arrayValueExists($userCashback, 'amount') ? $userCashback['amount'] : 0,
                     'status' => arrayValueExists($userCashback, 'status') ? $userCashback['status'] : null,
                     'type' => arrayValueExists($userCashback, 'type') ? $userCashback['type'] : null,
-                    'created_at' =>  arrayValueExists($userCashback, 'created_at') ? Carbon::parse($userCashback['created_at'])->format('Y-m-d H:i:s') : $now,
-                    'updated_at' =>  arrayValueExists($userCashback, 'updated_at') ? Carbon::parse($userCashback['updated_at'])->format('Y-m-d H:i:s') : $now,
+                    'created_at' =>  arrayValueExists($userCashback, 'created_at') ? dbDate($userCashback['created_at']) : $now,
+                    'updated_at' =>  arrayValueExists($userCashback, 'updated_at') ? dbDate($userCashback['updated_at']) : $now,
                 ];
             }
             foreach (array_chunk($userCashbacks, 500) as $userCashbacksChunk) {

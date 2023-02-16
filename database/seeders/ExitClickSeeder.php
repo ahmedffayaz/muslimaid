@@ -41,8 +41,8 @@ class ExitClickSeeder extends Seeder
                     'network_id' => arrayValueExists($exitClick, 'network_id') ? $exitClick['network_id'] : null,
                     'conversion' => isset($exitClick['conversion']) && $exitClick['conversion'] == 'No' ? 0 : 1,
                     'current_cashback_percentage' => arrayValueExists($exitClick, 'commission_percentage') ? $exitClick['commission_percentage'] : null,
-                    'created_at' =>  arrayValueExists($exitClick, 'created_at') ? Carbon::parse($exitClick['created_at'])->format('Y-m-d H:i:s') : $now,
-                    'updated_at' =>  arrayValueExists($exitClick, 'updated_at') ? Carbon::parse($exitClick['updated_at'])->format('Y-m-d H:i:s') : $now,
+                    'created_at' =>  arrayValueExists($exitClick, 'created_at') ? dbDate($exitClick['created_at']) : $now,
+                    'updated_at' =>  arrayValueExists($exitClick, 'updated_at') ? dbDate($exitClick['updated_at']) : $now,
                 ];
             }
             foreach (array_chunk($exitClicks, 500) as $exitClicksChunk) {

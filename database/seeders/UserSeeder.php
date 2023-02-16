@@ -29,6 +29,16 @@ class UserSeeder extends Seeder
         $now = Carbon::parse(now())->format('Y-m-d H:i:s');
 
         foreach ($csvToArray as $row) {
+            if (
+                !arrayValueExists($row, 'id')
+                || !arrayValueExists($row, 'first_name')
+                || !arrayValueExists($row, 'last_name')
+                || !arrayValueExists($row, 'email')
+                || !arrayValueExists($row, 'roles')
+            ) {
+                continue;
+            }
+
             foreach (explode(',', $row['roles']) as $role) {
                 $roles[trim($role)][] = $row['id'];
             }
@@ -50,8 +60,8 @@ class UserSeeder extends Seeder
                 'referred_by' => isset($row['referred_by']) ? $row['referred_by'] : null,
                 'referred_at' => isset($row['referred_at']) ? $row['referred_at'] : null,
                 'remember_token' => isset($row['remember_token']) ? $row['remember_token'] : null,
-                'created_at' => arrayValueExists($row, 'created_at') ? Carbon::parse($row['created_at'])->format('Y-m-d H:i:s') : $now,
-                'updated_at' => arrayValueExists($row, 'updated_at') ? Carbon::parse($row['updated_at'])->format('Y-m-d H:i:s') : $now,
+                'created_at' => arrayValueExists($row, 'created_at') ? dbDate($row['created_at']) : $now,
+                'updated_at' => arrayValueExists($row, 'updated_at') ? dbDate($row['updated_at']) : $now,
                 'deleted_at' => null,
                 'provider' => isset($row['provider']) ? $row['provider'] : 'email',
                 'provider_id' => isset($row['provider_id']) ? $row['provider_id'] : null,

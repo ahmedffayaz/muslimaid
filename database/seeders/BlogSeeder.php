@@ -36,8 +36,8 @@ class BlogSeeder extends Seeder
                 'url' => $blog['url'],
                 'meta_keyword' => arrayValueExists($blog, 'meta_keyword') ? $blog['meta_keyword'] : null,
                 'meta_description' => arrayValueExists($blog, 'meta_description') ? $blog['meta_description']: null,
-                'created_at' => arrayValueExists($blog, 'created_at') ? Carbon::parse($blog['created_at'])->format('Y-m-d H:i:s') : $now,
-                'updated_at' => arrayValueExists($blog, 'updated_at') ? Carbon::parse($blog['updated_at'])->format('Y-m-d H:i:s') : $now,
+                'created_at' => arrayValueExists($blog, 'created_at') ? dbDate($blog['created_at']) : $now,
+                'updated_at' => arrayValueExists($blog, 'updated_at') ? dbDate($blog['updated_at']) : $now,
             ];
         }
         Blog::insert($blogs);

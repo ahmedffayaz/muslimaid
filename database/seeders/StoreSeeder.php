@@ -67,8 +67,8 @@ class StoreSeeder extends Seeder
                     'latitude' => $store['latitude'],
                     'longitude' => $store['longitude'],
                     'rating' => 0,
-                    'created_at' => arrayValueExists($store, 'created_at') ? Carbon::parse($store['created_at'])->format('Y-m-d H:i:s') : $now,
-                    'updated_at' => arrayValueExists($store, 'updated_at') ? Carbon::parse($store['updated_at'])->format('Y-m-d H:i:s') : $now,
+                    'created_at' => arrayValueExists($store, 'created_at') ? dbDate($store['created_at']) : $now,
+                    'updated_at' => arrayValueExists($store, 'updated_at') ? dbDate($store['updated_at']) : $now,
                     'deleted_at' => null,
 
                 ];

@@ -44,8 +44,8 @@ class StoreAddressSeeder extends Seeder
                     'latitude' => $storeAddress['latitude'],
                     'longitude' => $storeAddress['longitude'],
                     'address' => $storeAddress['address'],
-                    'created_at' => arrayValueExists($storeAddress, 'created_at') ? Carbon::parse($storeAddress['created_at'])->format('Y-m-d H:i:s') : $now,
-                    'updated_at' => arrayValueExists($storeAddress, 'updated_at') ? Carbon::parse($storeAddress['updated_at'])->format('Y-m-d H:i:s') : $now,
+                    'created_at' => arrayValueExists($storeAddress, 'created_at') ? dbDate($storeAddress['created_at']) : $now,
+                    'updated_at' => arrayValueExists($storeAddress, 'updated_at') ? dbDate($storeAddress['updated_at']) : $now,
 
                 ];
             }
