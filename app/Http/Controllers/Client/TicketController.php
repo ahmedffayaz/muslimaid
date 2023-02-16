@@ -32,8 +32,7 @@ class TicketController extends Controller
      */
     public function create()
     {
-        $user = Auth::user();
-        $clicks = $user->clicks;
+        $clicks = auth()->user()->clicks()->whereHas('store')->get();
         return view('frontend.client-dashboard.tickets.create', compact('clicks'));
     }
 
