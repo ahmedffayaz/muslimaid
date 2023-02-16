@@ -25,18 +25,23 @@ class CategorySeeder extends Seeder
         $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\categories.csv');
         $categories = [];
         $now = Carbon::now();
-
+        $slug_array = array();
         foreach ($csvToArray as $category) {
             $category['id'] = !isset($category['id']) ? reset($category) : $category['id'];
 
             if (!arrayValueExists($category, 'id')) continue;
             if (!arrayValueExists($category, 'name')) continue;
-
+            $slug = Str::slug($category['name']);
+            if(in_array($slug, $slug_array)){
+                $slug = $slug . $category['id'];
+            }
+            array_push($slug_array, $slug);
+           
             $categories[] = [
                 'id' => $category['id'],
                 'parent_id' => arrayValueExists($category, 'parent_id') ? $category['parent_id'] : 0,
                 'name' => $category['name'],
-                'slug' => Str::slug($category['name']),
+                'slug' =>  $slug,
                 'description' => arrayValueExists($category, 'description') ? $category['description'] : null,
                 'sort' => arrayValueExists($category, 'sort') ? $category['sort'] : null,
                 'logo_type' => arrayValueExists($category, 'logo_type') ? $category['logo_type'] : null,
@@ -52,11 +57,11 @@ class CategorySeeder extends Seeder
                 'url' => arrayValueExists($category, 'url') ? $category['url'] : null,
                 'meta_keyword' => arrayValueExists($category, 'meta_keyword') ? $category['meta_keyword'] : null,
                 'meta_description' => arrayValueExists($category, 'meta_description') ? $category['meta_description'] : null,
-                'created_at' => isset($category['created_at']) ? $category['created_at'] : $now,
-                'updated_at' => isset($category['updated_at']) ? $category['updated_at'] : $now,
+                'created_at' => isset($category['created_at']) ? dbDate($category['created_at']) : $now,
+                'updated_at' => isset($category['updated_at']) ? dbDate($category['updated_at']) : $now,
             ];
         }
-        
+
         foreach (array_chunk($categories, 500) as $categoriesChunk) {
             Category::insert($categoriesChunk);
         }

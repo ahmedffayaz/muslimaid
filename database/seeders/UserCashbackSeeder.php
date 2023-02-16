@@ -22,17 +22,17 @@ class UserCashbackSeeder extends Seeder
         DB::table('charities')->truncate();
         Schema::enableForeignKeyConstraints();
 
+        $store_id_data = Store::pluck('id')->toArray();
         $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\user_cashbacks.csv');
         $userCashbacks = [];
         $now = Carbon::now();
         if (isset($csvToArray[0])) {
             foreach ($csvToArray as $userCashback) {
                 !isset($userCashback['id']) ?  ($userCashback['id'] = reset($userCashback)) : '';
-                $store_data = Store::where('id',$userCashback['store_id'])->first();
                 if (
                     !arrayValueExists($userCashback, 'id')
                     || !arrayValueExists($userCashback, 'user_id')
-                    || !isset($store_data)
+                    || !in_array($userCashback['store_id'], $store_id_data)
                 ) {
                     continue;
                 }

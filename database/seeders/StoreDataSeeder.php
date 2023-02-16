@@ -23,6 +23,7 @@ class StoreDataSeeder extends Seeder
     public function run()
     {
         // Store Images
+        $store_id_data = Store::pluck('id')->toArray();
         $now = Carbon::parse(now())->format('Y-m-d H:i:s');
         Schema::disableForeignKeyConstraints();
         DB::table('store_images')->truncate();
@@ -32,14 +33,13 @@ class StoreDataSeeder extends Seeder
             $storeImages = [];
             foreach ($csvToArray as $storeImage) {
                 $storeImage['id'] = (!isset($storeImage['id']) ? reset($storeImage) : $storeImage['id']);
-                $store_data = Store::where('id',$storeImage['store_id'])->first();
                 if (
                     !arrayValueExists($storeImage, 'id')
                     || !arrayValueExists($storeImage, 'store_id')
                     || !arrayValueExists($storeImage, 'title')
                     || !arrayValueExists($storeImage, 'image')
                     || !arrayValueExists($storeImage, 'image_type')
-                    || !isset($store_data)
+                    || !in_array($storeImage['store_id'], $store_id_data)
                 ) {
                     continue;
                 }
@@ -69,12 +69,11 @@ class StoreDataSeeder extends Seeder
             $storeReviews = [];
             foreach ($csvToArray as $storeReview) {
                 $storeReview['id'] = (!isset($storeReview['id']) ? reset($storeReview) : $storeReview['id']);
-                $store_data = Store::where('id',$storeReview['store_id'])->first();
                 if (
                     !arrayValueExists($storeReview, 'id')
                     || !arrayValueExists($storeReview, 'store_id')
                     || !arrayValueExists($storeReview, 'user_id')
-                    || !isset($store_data)
+                    || !in_array($storeReview['store_id'], $store_id_data)
                 ) {
                     continue;
                 }
@@ -103,7 +102,6 @@ class StoreDataSeeder extends Seeder
             $storeSeoRows = [];
             foreach ($csvToArray as $storeSeoData) {
                 $storeSeoData['id'] = (!isset($storeSeoData['id']) ? reset($storeSeoData) : $storeSeoData['id']);
-                $store_data = Store::where('id',$storeSeoData['store_id'])->first();
                 if (
                     !arrayValueExists($storeSeoData, 'id')
                     || !arrayValueExists($storeSeoData, 'store_id')
@@ -111,7 +109,7 @@ class StoreDataSeeder extends Seeder
                     || !arrayValueExists($storeSeoData, 'type')
                     || !arrayValueExists($storeSeoData, 'key')
                     || !arrayValueExists($storeSeoData, 'value')
-                    || !isset($store_data)
+                    || !in_array($storeSeoData['store_id'], $store_id_data)
                 ) {
                     continue;
                 }
@@ -132,20 +130,34 @@ class StoreDataSeeder extends Seeder
         }
 
         // Store Category 
+        $category_id_data = Category::pluck('id')->toArray();
         Schema::disableForeignKeyConstraints();
         DB::table('category_store')->truncate();
         Schema::enableForeignKeyConstraints();
         $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\category_store.csv');
         if (isset($csvToArray[0])) {
             $categoryStores = [];
-            foreach ($csvToArray as $categoryStores) {
-                $categoryStores['id'] = (!isset($categoryStores['id']) ? reset($categoryStores) : $categoryStores['id']);
-                if ($categoryStores['category_id'] != '') {
-                    $category = Category::find($categoryStores['category_id']);
-                    $store = Store::find($categoryStores['store_id']);
-                    if (isset($store) && isset($category)) {
-                        $store->categories()->attach($category, ['network_category_id' => 1, 'created_at' => $categoryStores['created_at'], 'updated_at' => $categoryStores['updated_at']]);
+            foreach ($csvToArray as $row) {
+                $row['id'] = (!isset($row['id']) ? reset($row) : $row['id']);
+                if ($row['category_id'] != '') {
+                    if (
+                        !in_array($row['store_id'], $store_id_data)
+                        || !in_array($row['category_id'], $category_id_data)
+                    ) {
+                        continue;
                     }
+                    $categoryStores[] = [
+                        'category_id' => $row['category_id'],
+                        'store_id' => $row['store_id'],
+                        'network_category_id' => 1,
+                        'created_at' => $row['created_at'],
+                        'updated_at' => $row['updated_at'],
+                    ];
+                }
+            }
+            if (!empty($categoryStores)) {
+                foreach (array_chunk($categoryStores, 500) as $categoryStoresChunk) {
+                    DB::table('category_store')->insert($categoryStoresChunk);
                 }
             }
         }
@@ -159,11 +171,10 @@ class StoreDataSeeder extends Seeder
             $storeCashbackData = [];
             foreach ($csvToArray as $storeCashback) {
                 $storeCashback['id'] = (!isset($storeCashback['id']) ? reset($storeCashback) : $storeCashback['id']);
-                $store_data = Store::where('id',$storeCashback['store_id'])->first();
                 if (
                     !arrayValueExists($storeCashback, 'id')
                     || !arrayValueExists($storeCashback, 'store_id')
-                    || !isset($store_data)
+                    || !in_array($storeCashback['store_id'], $store_id_data)
                 ) {
                     continue;
                 }

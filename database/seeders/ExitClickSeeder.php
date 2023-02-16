@@ -22,18 +22,18 @@ class ExitClickSeeder extends Seeder
         DB::table('charities')->truncate();
         Schema::enableForeignKeyConstraints();
 
+        $store_id_data = Store::pluck('id')->toArray();
         $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\exit_clicks.csv');
         $exitClicks = [];
         $now = Carbon::now();
         if (isset($csvToArray[0])) {
             foreach ($csvToArray as $exitClick) {
                 !isset($exitClick['id']) ?  ($exitClick['id'] = reset($exitClick)) : '';
-                $store_data = Store::where('id',$exitClick['store_id'])->first();
                 if (
                     !arrayValueExists($exitClick, 'id')
                     || !arrayValueExists($exitClick, 'store_id')
                     || !arrayValueExists($exitClick, 'user_id')
-                    || !isset($store_data)
+                    || !in_array($exitClick['store_id'], $store_id_data)
                 ) {
                     continue;
                 }

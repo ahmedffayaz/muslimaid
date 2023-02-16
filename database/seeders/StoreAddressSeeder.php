@@ -18,6 +18,7 @@ class StoreAddressSeeder extends Seeder
      */
     public function run()
     {
+        $store_id_data = Store::pluck('id')->toArray();
         Schema::disableForeignKeyConstraints();
         DB::table('store_addresses')->truncate();
         Schema::enableForeignKeyConstraints();
@@ -27,7 +28,6 @@ class StoreAddressSeeder extends Seeder
             $now = Carbon::now();
             foreach ($csvToArray as $i => $storeAddress) {
                 $storeAddress['id'] = (!isset($storeAddress['id']) ? reset($storeAddress) : $storeAddress['id']);
-                $store_data = Store::where('id',$storeAddress['store_id'])->first();
                 if (
                     !arrayValueExists($storeAddress, 'store_id')
                     || !arrayValueExists($storeAddress, 'city')
@@ -35,7 +35,7 @@ class StoreAddressSeeder extends Seeder
                     || !arrayValueExists($storeAddress, 'latitude')
                     || !arrayValueExists($storeAddress, 'longitude')
                     || !arrayValueExists($storeAddress, 'address')
-                    || !isset($store_data)
+                    || !in_array($storeAddress['store_id'], $store_id_data)
                 ) {
                     continue;
                 }
