@@ -32,7 +32,7 @@ class HomeController extends Controller
         $stores = Store::where('name', 'like', '%' . $request->input('search') . '%')
             ->orWhereHas('storeRuleData', function ($query) use ($request) {
                 $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $request->input('search') . '%');
-            })->whereStatus('active')->get();
+            })->whereStatus('active')->limit(20)->get();
 
         return view('frontend.components.search-suggestions', compact('stores'));
     }
