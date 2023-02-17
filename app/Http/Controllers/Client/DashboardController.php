@@ -21,7 +21,7 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $items = $user->cashbacks()->latest()->limit(5)->get();
+        $items = $user->cashbacks()->whereHas('store')->latest()->limit(5)->get();
         return view('frontend.client-dashboard.dashboard', compact('user', 'items'));
     }
 
@@ -81,7 +81,7 @@ class DashboardController extends Controller
     public function clicks()
     {
         $user = Auth::user();
-        $clicks = ExitClick::where('user_id', $user->id)->latest()->get();
+        $clicks = ExitClick::where('user_id', $user->id)->whereHas('store')->latest()->get();
         return view('frontend.client-dashboard.clicks', compact('user', 'clicks'));
     }
 

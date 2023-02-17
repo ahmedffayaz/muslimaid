@@ -646,3 +646,15 @@ function arrayValueExists($array, $key)
 {
     return isset($array[$key]) && !empty($array[$key]);
 }
+
+function getMinimumCashoutAmount()
+{
+    return arrayValueExists(SiteSetting(), 'min_cashout_amount') ? SiteSetting()['min_cashout_amount'] : 1;
+}
+
+function isWithdrawalAllowed()
+{
+    $cashoutStatuses = auth()->user()->cashouts()->pluck('status')->all();
+
+    return auth()->user()->availableBalance() >= getMinimumCashoutAmount() && !in_array('pending', $cashoutStatuses) && !in_array('processing donation', $cashoutStatuses);
+}
