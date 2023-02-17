@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\UserCashback;
 use Carbon\Carbon;
+use App\Models\Store;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -21,6 +22,7 @@ class UserCashbackSeeder extends Seeder
         DB::table('charities')->truncate();
         Schema::enableForeignKeyConstraints();
 
+        $store_id_data = Store::pluck('id')->toArray();
         $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\user_cashbacks.csv');
         $userCashbacks = [];
         $now = Carbon::now();
@@ -30,6 +32,7 @@ class UserCashbackSeeder extends Seeder
                 if (
                     !arrayValueExists($userCashback, 'id')
                     || !arrayValueExists($userCashback, 'user_id')
+                    || !in_array($userCashback['store_id'], $store_id_data)
                 ) {
                     continue;
                 }
@@ -49,8 +52,8 @@ class UserCashbackSeeder extends Seeder
                     'amount' =>  arrayValueExists($userCashback, 'amount') ? $userCashback['amount'] : 0,
                     'status' => arrayValueExists($userCashback, 'status') ? $userCashback['status'] : null,
                     'type' => arrayValueExists($userCashback, 'type') ? $userCashback['type'] : null,
-                    'created_at' =>  arrayValueExists($userCashback, 'created_at') ? Carbon::parse($userCashback['created_at'])->format('Y-m-d H:i:s') : $now,
-                    'updated_at' =>  arrayValueExists($userCashback, 'updated_at') ? Carbon::parse($userCashback['updated_at'])->format('Y-m-d H:i:s') : $now,
+                    'created_at' =>  arrayValueExists($userCashback, 'created_at') ? dbDate($userCashback['created_at']) : $now,
+                    'updated_at' =>  arrayValueExists($userCashback, 'updated_at') ? dbDate($userCashback['updated_at']) : $now,
                 ];
             }
             foreach (array_chunk($userCashbacks, 500) as $userCashbacksChunk) {

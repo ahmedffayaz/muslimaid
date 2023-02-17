@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\StoreAddress;
 use Carbon\Carbon;
+use App\Models\Store;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Seeder;
@@ -17,6 +18,7 @@ class StoreAddressSeeder extends Seeder
      */
     public function run()
     {
+        $store_id_data = Store::pluck('id')->toArray();
         Schema::disableForeignKeyConstraints();
         DB::table('store_addresses')->truncate();
         Schema::enableForeignKeyConstraints();
@@ -33,6 +35,7 @@ class StoreAddressSeeder extends Seeder
                     || !arrayValueExists($storeAddress, 'latitude')
                     || !arrayValueExists($storeAddress, 'longitude')
                     || !arrayValueExists($storeAddress, 'address')
+                    || !in_array($storeAddress['store_id'], $store_id_data)
                 ) {
                     continue;
                 }
@@ -44,8 +47,8 @@ class StoreAddressSeeder extends Seeder
                     'latitude' => $storeAddress['latitude'],
                     'longitude' => $storeAddress['longitude'],
                     'address' => $storeAddress['address'],
-                    'created_at' => arrayValueExists($storeAddress, 'created_at') ? Carbon::parse($storeAddress['created_at'])->format('Y-m-d H:i:s') : $now,
-                    'updated_at' => arrayValueExists($storeAddress, 'updated_at') ? Carbon::parse($storeAddress['updated_at'])->format('Y-m-d H:i:s') : $now,
+                    'created_at' => arrayValueExists($storeAddress, 'created_at') ? dbDate($storeAddress['created_at']) : $now,
+                    'updated_at' => arrayValueExists($storeAddress, 'updated_at') ? dbDate($storeAddress['updated_at']) : $now,
 
                 ];
             }

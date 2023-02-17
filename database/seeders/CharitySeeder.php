@@ -46,8 +46,8 @@ class CharitySeeder extends Seeder
                 'banner_link' => arrayValueExists($charity, 'banner_link') ? $charity['banner_link'] : null,
                 'description' => arrayValueExists($charity, 'description') ? $charity['description'] : null,
                 'status' => arrayValueExists($charity, 'status') ? $charity['status'] :  1,
-                'created_at' =>  arrayValueExists($charity, 'created_at') ? Carbon::parse($charity['created_at'])->format('Y-m-d H:i:s') : $now,
-                'updated_at' =>  arrayValueExists($charity, 'updated_at') ? Carbon::parse($charity['updated_at'])->format('Y-m-d H:i:s') : $now,
+                'created_at' =>  arrayValueExists($charity, 'created_at') ? dbDate($charity['created_at']) : $now,
+                'updated_at' =>  arrayValueExists($charity, 'updated_at') ? dbDate($charity['updated_at']) : $now,
             ];
         }
         Charity::insert($charities);

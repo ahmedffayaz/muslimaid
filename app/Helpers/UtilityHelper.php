@@ -612,9 +612,6 @@ function csvToArray($path)
 
                     $header = $cleansedRow;
                 } else{
-                    if(count($row) != count($header)){
-                        dd($row);
-                    }
                     $csvToArray[] = array_combine($header, $row);
                 }
             }

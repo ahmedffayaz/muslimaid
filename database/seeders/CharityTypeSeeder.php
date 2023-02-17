@@ -37,8 +37,8 @@ class CharityTypeSeeder extends Seeder
                 'id' => $charityType['id'],
                 'title' => $charityType['title'],
                 'status' => arrayValueExists($charityType, 'status') ? $charityType['status'] :  1,
-                'created_at' => arrayValueExists($charityType, 'created_at') ? Carbon::parse($charityType['created_at'])->format('Y-m-d H:i:s') : $now,
-                'updated_at' => arrayValueExists($charityType, 'updated_at') ? Carbon::parse($charityType['updated_at'])->format('Y-m-d H:i:s') : $now,
+                'created_at' => arrayValueExists($charityType, 'created_at') ? dbDate($charityType['created_at']) : $now,
+                'updated_at' => arrayValueExists($charityType, 'updated_at') ? dbDate($charityType['updated_at']) : $now,
             ];
         }
         CharityType::insert($charityTypes);
