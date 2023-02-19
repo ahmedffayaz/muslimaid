@@ -115,9 +115,6 @@
                         value="{{ $isEdit ? \Carbon\Carbon::parse($voucher->promotion_end_date)->format('m/d/Y') : '' }}" name="promotion_end_date" autocomplete="off"
                         required>
                 </div>
-                @if ($errors->has('promotion_end_date'))
-                    <span class="invalid-feedback d-block" role="alert">End date must be greater than start date.</span>
-                @endif
             </div>
         </div>
 

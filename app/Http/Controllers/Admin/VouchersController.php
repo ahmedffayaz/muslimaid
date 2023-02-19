@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Exception;
 use App\Models\Store;
 use App\Models\Network;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use Exception;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
@@ -39,6 +41,7 @@ class VouchersController extends Controller
 
     public function store(Request $request)
     {
+        
         $validator = Validator::make($request->all(), [
             'link_name' => 'required|max:255',
             'description' => 'required|max:255',
@@ -81,6 +84,10 @@ class VouchersController extends Controller
                     'message' => 'Voucher added successfully.',
                     'success' => true
                 );
+                return array(
+                    'message' => $validator->errors()->first(),
+                    'success' => true
+                );
             }
 
             flash()->success('Voucher added successfully.');
@@ -91,11 +98,10 @@ class VouchersController extends Controller
             if ($request->ajax()) {
                 return array(
                     'message' => $message,
-                    'success' => true
+                    'success' => false
                 );
             }
-
-            flash()->error($message);
+            flash()->error($message); 
             return redirect()->route('admin.vouchers.index');
         }
     }
@@ -112,7 +118,7 @@ class VouchersController extends Controller
     }
 
     public function update(Request $request, Voucher $voucher)
-    {
+    {  
         $validator = Validator::make($request->all(), [
             'link_name' => 'required|max:255',
             'description' => 'required|max:255',
@@ -137,9 +143,10 @@ class VouchersController extends Controller
         }
 
         try {
+            $storeId = $request->input('store_id') ? $request->input('store_id') : $voucher->store_id;
             $voucher->update([
                 'link_name' => $request->input('link_name'),
-                'store_id' => $request->input('store_id'),
+                'store_id' => $storeId,
                 'description' => $request->input('description'),
                 'click_url' => $request->input('click_url'),
                 'sale_commission' => $request->input('sale_commission'),
@@ -164,7 +171,7 @@ class VouchersController extends Controller
             if ($request->ajax()) {
                 return array(
                     'message' => $message,
-                    'success' => true
+                    'success' => false
                 );
             }
 

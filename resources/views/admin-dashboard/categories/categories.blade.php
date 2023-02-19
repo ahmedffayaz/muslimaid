@@ -95,16 +95,13 @@
                                 </div><!-- .nk-block-head-content -->
                                 <div class="nk-block-head-content">
                                     <div class="toggle-wrap nk-block-tools-toggle">
-                                        <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1"
-                                            data-target="pageMenu">
+                                        <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu">
                                             <em class="icon ni ni-menu-alt-r"></em>
                                         </a>
                                         <div class="toggle-expand-content" data-content="pageMenu">
                                             <ul class="nk-block-tools g-3">
                                                 <li>
-                                                    <a href="javascript:void(0)" id="show-modal"
-                                                        class="btn btn-primary btn-sm"
-                                                        class="btn btn-white btn-outline-light">
+                                                    <a href="javascript:void(0)" id="show-modal" class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light">
                                                         <em class="icon ni ni-plus"></em>
                                                         <span>Add category</span>
                                                     </a>
@@ -127,27 +124,22 @@
                                                     <span class="float-right">
                                                         <div class="actions">
                                                             <div class="drodown d-inline">
-                                                                <a href="#"
-                                                                    class="dropdown-toggle badge badge-info text-white"
-                                                                    data-toggle="dropdown">
+                                                                <a href="#" class="dropdown-toggle badge badge-info text-white" data-toggle="dropdown">
                                                                     <em class="icon ni ni-plus mr-1"></em>Options
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
                                                                     <ul class="link-list-opt no-bdr d-block ml-0">
-                                                                        <a href="{{ route('admin.categories.picks', $category) }}"
-                                                                            category-id='{{ $category->id }}'
+                                                                        <a href="{{ route('admin.categories.picks', $category) }}" category-id='{{ $category->id }}'
                                                                             class='picks-edit'>
                                                                             <em class="icon ni ni-cart-fill"></em>
                                                                             Editor Picks
                                                                         </a>
-                                                                        <a href="{{ route('admin.categories.edit', $category) }}"
-                                                                            category-id='{{ $category->id }}'
+                                                                        <a href="{{ route('admin.categories.edit', $category) }}" category-id='{{ $category->id }}'
                                                                             class='category-edit'>
                                                                             <em class="icon ni ni-edit"></em> Edit
                                                                         </a>
                                                                         <a class='category-delete' data-action="{{ route('admin.categories.destroy', $category) }}"
-                                                                            data-id="{{ $category->id }}"
-                                                                            style="cursor: pointer">
+                                                                            data-id="{{ $category->id }}" style="cursor: pointer">
                                                                             <em class="icon ni ni-trash-fill"></em>
                                                                             Delete
                                                                         </a>
@@ -159,8 +151,7 @@
                                                     <em class="icon ni ni-db-fill text-primary"></em> {{ $category->name }}
                                                     <span class="ml-1">
                                                         @if ($category->picks->count())
-                                                            <span
-                                                                class="badge badge-dim badge-pill badge-primary text-capitalize">
+                                                            <span class="badge badge-dim badge-pill badge-primary text-capitalize">
                                                                 <em class="icon ni ni-done"></em> Editor Picks
                                                             </span>
                                                         @endif
@@ -186,11 +177,7 @@
         </div>
     </div>
 
-    <x-admin-dashboard.modal
-        modalSize="modal-lg"
-        headerAlignment="align-center"
-        formWrapperClass=""
-    />
+    <x-admin-dashboard.modal modalSize="modal-lg" headerAlignment="align-center" formWrapperClass="" />
 @endsection
 @push('scripts')
     <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
@@ -200,12 +187,12 @@
         var quill = null;
         $(document).ready(function() {
             // Show create modal
-            $(document).on('click', '#show-modal', function (event) {
+            $(document).on('click', '#show-modal', function(event) {
                 event.preventDefault();
                 $.ajax({
                     url: "{{ route('admin.categories.create') }}",
                     type: 'GET',
-                    success: function (response) {
+                    success: function(response) {
                         $('.title').text('Create Category');
                         $('#form-wrapper').html(response);
                         $('#save-btn').text('Create');
@@ -215,6 +202,7 @@
                         logoType()
                         bannerType()
                         store()
+                        validation()
                     }
                 });
             });
@@ -225,7 +213,7 @@
                 $.ajax({
                     url: $(this).attr('href'),
                     type: 'GET',
-                    success: function (response) {
+                    success: function(response) {
                         $('.title').text('Edit Category');
                         $('#form-wrapper').html(response);
                         $('#save-btn').text('Update');
@@ -235,6 +223,7 @@
                         logoType()
                         bannerType()
                         store()
+                        validation()
                     }
                 });
             });
@@ -268,7 +257,11 @@
                         toolbar: [
                             ['bold', 'italic'],
                             ['link', 'blockquote', 'code-block', 'image'],
-                            [{ list: 'ordered' }, { list: 'bullet' }]
+                            [{
+                                list: 'ordered'
+                            }, {
+                                list: 'bullet'
+                            }]
                         ]
                     },
                     placeholder: 'Compose an epic...',
@@ -289,7 +282,7 @@
                         $('.logo_upload').hide();
                     }
                 });
-                $(document.body).on("change","#logo_type",function(){
+                $(document.body).on("change", "#logo_type", function() {
                     if (this.value == 'upload') {
                         $('.logo_upload').show();
                         NioApp.BS.fileinput('.custom-file-input');
@@ -315,7 +308,7 @@
                         $('.banner_upload').hide();
                     }
                 });
-                $(document.body).on("change","#banner_type",function(){
+                $(document.body).on("change", "#banner_type", function() {
                     if (this.value == 'upload') {
                         $('.banner_upload').show();
                         $('.banner_link').hide();
@@ -343,7 +336,7 @@
                     let method = 'POST';
                     let formData = new FormData(this);
                     let id = $('#id').val();
-                    if(id){
+                    if (id) {
                         url = $(this).attr('action');
                         formData.append('_method', 'PUT');
                     }
@@ -358,7 +351,7 @@
                             btn.removeAttr('disabled', 'disabled').button('refresh');
                             btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                             $('#tree1').load(location.href + ' #tree1');
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(response.success, 'success');
@@ -368,13 +361,13 @@
                             btn.removeAttr('disabled', 'disabled').button('refresh');
                             btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                             if (error.responseJSON.error) {
-                                (function(NioApp, $){
+                                (function(NioApp, $) {
                                     'use strict';
                                     toastr.clear();
                                     NioApp.Toast(error.responseJSON.error, 'error');
                                 })(NioApp, jQuery);
                             } else {
-                                (function(NioApp, $){
+                                (function(NioApp, $) {
                                     'use strict';
                                     toastr.clear();
                                     NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
@@ -406,7 +399,7 @@
                             btn.removeAttr('disabled', 'disabled').button('refresh');
                             btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                             $('#tree1').load(location.href + ' #tree1');
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(response.success, 'success');
@@ -416,13 +409,13 @@
                             btn.removeAttr('disabled', 'disabled').button('refresh');
                             btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
                             if (error.responseJSON.error) {
-                                (function(NioApp, $){
+                                (function(NioApp, $) {
                                     'use strict';
                                     toastr.clear();
                                     NioApp.Toast(error.responseJSON.error, 'error');
                                 })(NioApp, jQuery);
                             } else {
-                                (function(NioApp, $){
+                                (function(NioApp, $) {
                                     'use strict';
                                     toastr.clear();
                                     NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
@@ -526,49 +519,95 @@
 
         // Delete category
         $(document).on('click', '.category-delete', function(event) {
-                event.preventDefault();
-                id = $(this).data('id')
-                url = $(this).data('action');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!'
-                }).then(function(result) {
-                    if (result.value) {
-                        $.ajax({
-                            url: url,
-                            type: 'DELETE',
-                            data: {
-                                '_token': "{{ csrf_token() }}",
-                                'id': id
-                            },
-                            success: function(response){
-                                $('#tree1').load(location.href + ' #tree1');
-                                (function(NioApp, $){
-                                    'use strict';
-                                    toastr.clear();
-                                    NioApp.Toast(response.success, 'success');
-                                })(NioApp, jQuery);
-                            },
-                            error: function(error){
-                                (function(NioApp, $){
-                                    'use strict';
-                                    toastr.clear();
-                                    NioApp.Toast(error.responseJSON.error, 'error');
-                                })(NioApp, jQuery);
-                            }
-                        });
-                    }else{
-                        (function(NioApp, $){
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast('Something went wrong, try again', 'error');
-                        })(NioApp, jQuery);
-                    }
-                });
-                // event.preventDefault();
+            event.preventDefault();
+            id = $(this).data('id')
+            url = $(this).data('action');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function(result) {
+                if (result.value) {
+                    $.ajax({
+                        url: url,
+                        type: 'DELETE',
+                        data: {
+                            '_token': "{{ csrf_token() }}",
+                            'id': id
+                        },
+                        success: function(response) {
+                            $('#tree1').load(location.href + ' #tree1');
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(response.success, 'success');
+                            })(NioApp, jQuery);
+                        },
+                        error: function(error) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        }
+                    });
+                } else {
+                    (function(NioApp, $) {
+                        'use strict';
+                        toastr.clear();
+                        NioApp.Toast('Something went wrong, try again', 'error');
+                    })(NioApp, jQuery);
+                }
             });
+            // event.preventDefault();
+        });
+
+        function validation() {
+            $('.form-validate').validate({
+                errorClass: 'invalid-feedback d-block',
+                rules: {
+                    name: {
+                        required: true
+                    },
+                    parent_id: {
+                        required: true
+                    },
+                    logo_type: {
+                        required: true
+                    },
+                    logo_link: {
+                        required: true,
+                        url: true
+                    },
+                    logo_upload: {
+                        required: true
+                    },
+                    banner_type: {
+                        required: true
+                    },
+                    banner_link: {
+                        required: true,
+                        url: true
+                    },
+                    banner_upload: {
+                        required: true
+                    },
+                    sort: {
+                        required: true
+                    },
+                    status: {
+                        required: true
+                    },
+                    meta_description: {
+                        required: true
+                    },
+                    meta_keyword: {
+                        required: true
+                    }
+                }
+            });
+        }
     </script>
 @endpush

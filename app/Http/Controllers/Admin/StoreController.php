@@ -661,6 +661,7 @@ class StoreController extends Controller
     {
         $request->validate([
             'city' => 'required',
+            'postal_code' => 'required',
             'latitude' => ['required', 'numeric', 'min:-90', 'max:90'],
             'longitude' => ['required', 'numeric', 'min:-180', 'max:180'],
             'address' => 'required',
@@ -705,6 +706,7 @@ class StoreController extends Controller
     {
         $request->validate([
             'city' => 'required',
+            'postal_code' => 'required',
             'latitude' => ['required', 'numeric', 'min:-90', 'max:90'],
             'longitude' => ['required', 'numeric', 'min:-180', 'max:180'],
             'address' => 'required',

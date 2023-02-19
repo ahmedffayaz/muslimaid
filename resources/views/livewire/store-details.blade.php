@@ -392,7 +392,7 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="add-voucher-form" class=" p-4">
-                <form action="{{ route('admin.vouchers.store') }}" class="gy-3 form-validate is-alter add_voucher_form" method="POST">
+                <form action="{{ route('admin.vouchers.store') }}" class="gy-3 form-validate is-alter add_voucher_form" id="add_voucher_validation" method="POST">
                     @csrf
                     <input type="hidden" name="store_id" value="{{ $store->id }}">
                     <div class="row g-4">
@@ -400,7 +400,12 @@
                             <div class="form-group">
                                 <label class="form-label" for="full-name-1">Title</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="full-name-1" name="link_name" required>
+                                    <input type="text" class="form-control" id="full-name-1" name="link_name" value="{{ old('link_name') }}" required>
+                                    @error('link_name')
+                                        <span class="invalid-feedback d-block" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -408,7 +413,13 @@
                             <div class="form-group">
                                 <label class="form-label" for="vsale_commission">Sale commission</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="vsale_commission" value="" name="sale_commission" required>
+                                    <input type="number" min="1" step="1" class="form-control" id="vsale_commission" name="sale_commission"
+                                        value="{{ old('sale_commission') }}" required>
+                                    @error('vsale_commission')
+                                        <span class="invalid-feedback d-block" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -416,7 +427,12 @@
                             <div class="form-group">
                                 <label class="form-label" for="click_url">Click url</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="click_url" name="click_url" required>
+                                    <input type="url" class="form-control" id="click_url" name="click_url" value="{{ old('click_url') }}" required>
+                                    @error('click_url')
+                                        <span class="invalid-feedback d-block" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -424,7 +440,12 @@
                             <div class="form-group">
                                 <label class="form-label" for="phone-no-1">Destination url</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="phone-no-1" name="destination" required>
+                                    <input type="url" class="form-control" id="phone-no-1" name="destination" value="{{ old('destination') }}" required>
+                                    @error('destination')
+                                        <span class="invalid-feedback d-block" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -432,7 +453,7 @@
                             <div class="card">
                                 <input name="description" type="hidden">
                                 <label class="form-label" for="phone-no-1">Description</label>
-                                <textarea name="description" class="form-control "></textarea>
+                                <textarea name="description" class="form-control "> {{ old('description') }}</textarea required>
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -440,7 +461,8 @@
                                 <div class="form-group">
                                     <label class="form-label" for="promotion_type">Promotion Type</label>
                                     <div class="form-control-wrap ">
-                                        <select class="form-select form-control select-2" data-search="on" id="promotion_type" name="promotion_type" required>
+                                        <select class="form-select form-control select-2" data-search="on" id="promotion_type" name="promotion_type"
+                                            value="{{ old('promotion_type') }}" required>
                                             <option value="Coupon">Coupon</option>
                                             <option value="Sale/Discount">Sale/Discount</option>
                                         </select>
@@ -452,7 +474,12 @@
                             <div class="form-group">
                                 <label class="form-label" for="coupon_code">Coupon Code</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="coupon_code" value="" name="coupon_code" required>
+                                    <input type="text" class="form-control" id="coupon_code" name="coupon_code" value="{{ old('coupon_code') }}" required>
+                                    @error('coupon_code')
+                                        <span class="invalid-feedback d-block" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                   @enderror
                                 </div>
                             </div>
                         </div>
@@ -460,7 +487,13 @@
                             <div class="form-group">
                                 <label class="form-label" for="promotion_start_date">Promotion Start Date</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control date-picker" id="promotion_start_date" value="" name="promotion_start_date" required>
+                                    <input type="text" class="form-control date-picker promotion_start_date" value="{{ old('promotion_start_date') }}"
+                                        id="promotion_start_date" name="promotion_start_date" autocomplete="off" required>
+                                    @error('promotion_start_date')
+                                        <span class="invalid-feedback d-block" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -468,7 +501,13 @@
                             <div class="form-group">
                                 <label class="form-label" for="promotion_end_date">Promotion End Date</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control date-picker" id="promotion_end_date" value="" name="promotion_end_date" required>
+                                    <input type="text" class="form-control date-picker promotion_end_date" value="{{ old('promotion_end_date') }}"
+                                        id="promotion_end_date" name="promotion_end_date" required>
+                                    @error('promotion_end_date')
+                                        <span class="invalid-feedback d-block" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -537,7 +576,8 @@
                             <div class="form-group">
                                 <label class="form-label" for="sale_commission">Commission</label>
                                 <div class="form-control-wrap">
-                                    <input type="number" class="form-control" min="0" step="0.01" id="sale_commission" value="" name="sale_commission" required>
+                                    <input type="number" class="form-control" min="0" step="0.01" id="sale_commission" value="" name="sale_commission"
+                                        required>
                                 </div>
                             </div>
                         </div>
@@ -748,7 +788,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="full-name-1">City</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="city" name="city" value="">
+                                    <input type="text" class="form-control" id="city" name="city" value="" required>
                                 </div>
                             </div>
                         </div>
@@ -756,7 +796,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="vsale_commission">Postal code</label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="postal_code" name="postal_code" value="">
+                                    <input type="text" class="form-control" id="postal_code" name="postal_code" value="" required>
                                 </div>
                             </div>
                         </div>
@@ -1023,7 +1063,6 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
-
         // Edit Voucher popup
         $(document).ready(function() {
             $(document).on('click', '.voucher-edit', function(event) {
@@ -1042,31 +1081,84 @@
                     success: function(data) {
                         $('#voucher-modal').modal('show');
                         $('#voucher').html(data);
+                        $('.select-2').each(function() {
+                            initializeSelect2($(this));
+                        });
+                        $('#voucher').find(".promotion_end_date").datepicker();
+                        $('#voucher').find(".promotion_start_date").datepicker();
+                        checkVoucherType();
+                        attachFormValidator($(document).find('#model_edit'));
                     }
                 });
             });
+        });
 
-            // Edit SEO
-            $(document).on('click', '.seo-edit', function(event) {
-                event.preventDefault();
-                var id = $(this).attr('seo-id');
-                pageurl = "stores/seo/" + id + ""
-                store_editor = 1;
-                var _token = $("input[name=_token]").val();
-                $.ajax({
-                    url: pageurl,
-                    method: "GET",
-                    data: {
-                        _token: _token,
-                        store_editor: store_editor
+        function attachFormValidator(form) {
+            jQuery.validator.addMethod("minValue", function(value, element, param) {
+                return this.optional(element) || value >= param;
+            }, "Value must be equal to or greater than {0}.");
+            form.validate({
+                rules: {
+                    promotion_start_date: {
+                        required: true,
                     },
-                    success: function(data) {
-                        $('#seo-modal').modal('show');
-                        $('#seo').html(data);
+                    promotion_end_date: {
+                        required: true,
+                        customdate: true,
+                    },
+                    click_url: {
+                        required: true,
+                        url: true
+                    },
+                    destination: {
+                        required: true,
+                        url: true
+                    },
+                    description: {
+                        required: true,
+                    },
+                    sale_commission: {
+                        required: true,
+                        minValue: 1,
                     }
-                });
-
+                },
+                messages: {
+                    promotion_end_date: {
+                        customdate: 'End date must be greater than start date',
+                    }
+                }
             });
+
+            $.validator.addMethod('customdate', function(value, element) {
+                var startDate = new Date($(element).closest('form').find('.promotion_start_date').val());
+                var endDate = new Date(value);
+                return this.optional(element) || (startDate < endDate);
+            });
+
+
+        }
+
+
+        // Edit SEO
+        $(document).on('click', '.seo-edit', function(event) {
+            event.preventDefault();
+            var id = $(this).attr('seo-id');
+            pageurl = "stores/seo/" + id + ""
+            store_editor = 1;
+            var _token = $("input[name=_token]").val();
+            $.ajax({
+                url: pageurl,
+                method: "GET",
+                data: {
+                    _token: _token,
+                    store_editor: store_editor
+                },
+                success: function(data) {
+                    $('#seo-modal').modal('show');
+                    $('#seo').html(data);
+                }
+            });
+
         });
 
         // Voucher update
@@ -1078,13 +1170,33 @@
                     type: "PUT",
                     data: $(this).serialize(),
                     success: function(data) {
-                        $('#voucher-modal').modal('hide');
+                        if (data.success) {
+                            $('#voucher-modal').modal('hide');
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast('Cashback Updated Successfully.', 'success');
+                                $('#custom_cashback_percentage').val(data['percentage']);
+                            })(NioApp, jQuery);
+                            fetchVouchers();
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                if (data.errors && Object.values(data.errors).length > 0) {
+                                    NioApp.Toast(Object.values(data.errors)[0], 'error');
+                                } else {
+                                    NioApp.Toast(data['message'], 'error');
+                                }
+                            })(NioApp, jQuery);
+                        }
+                    },
+                    error: function(error) {
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
-                            NioApp.Toast('Voucher Updated Successfully.', 'success');
+                            NioApp.Toast('An error occurred.', 'error');
                         })(NioApp, jQuery);
-                        fetchVouchers();
                     }
                 });
             });
@@ -1127,10 +1239,35 @@
                 success: function(data) {
                     $('#edit-address-modal').modal('show');
                     $('#edit_address').html(data);
+                    editAddress()
                 }
             });
 
         });
+
+        function editAddress() {
+            $('.address_form').validate({
+                errorClass: 'invalid-feedback d-block',
+                rules: {
+                    city: {
+                        required: true,
+                    },
+                    postal_code: {
+                        required: true,
+                    },
+                    latitude: {
+                        required: true,
+                    },
+                    longitude: {
+                        required: true,
+                    },
+                    address: {
+                        required: true,
+                    },
+                }
+            });
+        }
+
 
         // Update store address
         $(document).ready(function() {
@@ -1151,13 +1288,13 @@
                     },
                     error: function(error) {
                         if (error.responseJSON.error) {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(error.responseJSON.error, 'error');
                             })(NioApp, jQuery);
                         } else {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
@@ -1177,17 +1314,39 @@
                     type: "POST",
                     data: $(this).serialize(),
                     success: function(data) {
-                        $('#add-voucher-modal').modal('hide');
+                        if (data.success) {
+                            $('#add-voucher-modal').modal('hide');
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast('Cashback Created Successfully.', 'success');
+                                $('#custom_cashback_percentage').val(data['percentage']);
+                            })(NioApp, jQuery);
+                            fetchVouchers();
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                if (data.errors && Object.values(data.errors).length > 0) {
+                                    NioApp.Toast(Object.values(data.errors)[0], 'error');
+                                } else {
+                                    NioApp.Toast(data['message'], 'error');
+                                }
+                            })(NioApp, jQuery);
+                        }
+                    },
+                    error: function(error) {
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
-                            NioApp.Toast('Voucher Added Successfullys.', 'success');
+                            NioApp.Toast('An error occurred.', 'error');
                         })(NioApp, jQuery);
-                        fetchVouchers();
                     }
+
                 });
             });
         });
+
 
         // Edit Cashback Popup
         $(document).ready(function() {
@@ -1212,6 +1371,8 @@
             });
         });
 
+
+
         // Cashback Update
         $(document).ready(function() {
             $(document).on('submit', '.cashback_form', function(event) {
@@ -1232,13 +1393,13 @@
                     },
                     error: function(error) {
                         if (error.responseJSON.error) {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(error.responseJSON.error, 'error');
                             })(NioApp, jQuery);
                         } else {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
@@ -1248,7 +1409,6 @@
                 });
             });
         });
-
         // Add Cashback
         $(document).ready(function() {
             $(document).on('submit', '.cashback_form_add', function(event) {
@@ -1268,13 +1428,13 @@
                     },
                     error: function(error) {
                         if (error.responseJSON.error) {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(error.responseJSON.error, 'error');
                             })(NioApp, jQuery);
                         } else {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
@@ -1521,13 +1681,13 @@
                     },
                     error: function(error) {
                         if (error.responseJSON.error) {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(error.responseJSON.error, 'error');
                             })(NioApp, jQuery);
                         } else {
-                            (function(NioApp, $){
+                            (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
@@ -1537,7 +1697,20 @@
                 });
             });
         });
-
+        $('#store_form').validate({
+            errorClass: 'invalid-feedback d-block',
+            rules: {
+                tracking_url: {
+                    url: true
+                },
+                deeplink_url: {
+                    url: true
+                },
+                store_url: {
+                    url: true
+                }
+            }
+        });
         // Update categories
         $(document).ready(function() {
             $(document).on('submit', '#store_cat_form', function(event) {
@@ -1565,7 +1738,6 @@
         $(document).ready(function() {
             $(document).on('submit', '.add_address_form', function(event) {
                 event.preventDefault();
-                console.log($(this).attr('action'))
                 $.ajax({
                     url: $(this).attr('action'),
                     type: "POST",

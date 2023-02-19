@@ -60,6 +60,7 @@
                                                         </span>
                                                     @enderror
                                                 </div>
+
                                             </div>
 
                                             <div class="col-12">
@@ -97,7 +98,8 @@
                 ]
             },
             placeholder: 'Compose an epic...',
-            theme: 'snow'
+            theme: 'snow',
+
         });
         $(".review_form").submit(function(e) {
             var desc = document.querySelector('input[name=review]');
@@ -117,6 +119,7 @@
             rules: {
                 review: {
                     required: true,
+                    maxlength: 255,
                     quillContent: true
                 }
             },
@@ -127,6 +130,7 @@
                 var desc = document.querySelector('input[name=review]');
                 desc.value = quill.root.innerHTML.trim();
                 form.submit();
+                $(document).trigger('myEvent');
             }
         });
     </script>
