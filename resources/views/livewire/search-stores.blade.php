@@ -18,25 +18,27 @@
         <ul class="suggestions__list sugesstion_dropdown_list">
             @if (count($stores))
                 @foreach ($stores->take(8) as $key => $store)
-                    <li class="suggestions__item @if ($key == 0) selected @endif">
-                        <div class="suggestions__item-image product-image">
-                            <div class="product-image__body">
-                                <img class="product-image__img"
-                                    @if ($store->logo->first()) @if ($store->logo->first()->is_fake)
-                                            src="{{ asset('frontend/images/logos/' . $store->logo->first()->image) }}"
-                                        @else
-                                            src="{{ asset('storage/stores/images/' . $store->logo->first()->image) }}" @endif
-                                @else src="{{ asset('frontend/images/products/product-16.jpg') }}" @endif alt="">
+                    @if($store->status == 'active')
+                        <li class="suggestions__item @if ($key == 0) selected @endif">
+                            <div class="suggestions__item-image product-image">
+                                <div class="product-image__body">
+                                    <img class="product-image__img"
+                                        @if ($store->logo->first()) @if ($store->logo->first()->is_fake)
+                                                src="{{ asset('frontend/images/logos/' . $store->logo->first()->image) }}"
+                                            @else
+                                                src="{{ asset('storage/stores/images/' . $store->logo->first()->image) }}" @endif
+                                    @else src="{{ asset('frontend/images/products/product-16.jpg') }}" @endif alt="">
+                                </div>
                             </div>
-                        </div>
-                        <div class="suggestions__item-info">
-                            <a href="{{ route('store.show', $store->slug) }}"
-                                class="suggestions__item-name">{!! $store->name !!}</a>
-                        </div>
-                        <div class="suggestions__item-price">
-                            {{ $store->getCashback() }}
-                        </div>
-                    </li>
+                            <div class="suggestions__item-info">
+                                <a href="{{ route('store.show', $store->slug) }}"
+                                    class="suggestions__item-name">{!! $store->name !!}</a>
+                            </div>
+                            <div class="suggestions__item-price">
+                                {{ $store->getCashback() }}
+                            </div>
+                        </li>
+                    @endif
                 @endforeach
             @endif
         </ul>

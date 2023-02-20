@@ -18,7 +18,7 @@
         <div class="nk-tb-col">
             <div class="tb-lead">
                 <span>
-                    <a href="{{route('admin.seo.edit', $seo)}}" class="a_link">{{$seo->url}}</a>
+                    <a href="javascript:void(0)" class="a_link edit-form" data-id="{{ $seo->id }}">{{$seo->url}}</a>
                 </span>
             </div>
         </div>
@@ -62,14 +62,6 @@
     </div><!-- .nk-tb-item -->
 
 @endforeach
-{{-- <div class="nk-block-between-md g-3 card-inner">
-    <div class="pagination g" route="{{$route}}">
-        {!! $testimonial->links()!!}
-
-        </div>
-
-
-</div><!-- .nk-block-between -->                                  --}}
 
 @else
 <h3 class="m-auto text-center py-5">No record found</h3>
