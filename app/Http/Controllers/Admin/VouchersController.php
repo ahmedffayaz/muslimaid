@@ -84,10 +84,6 @@ class VouchersController extends Controller
                     'message' => 'Voucher added successfully.',
                     'success' => true
                 );
-                return array(
-                    'message' => $validator->errors()->first(),
-                    'success' => true
-                );
             }
 
             flash()->success('Voucher added successfully.');
