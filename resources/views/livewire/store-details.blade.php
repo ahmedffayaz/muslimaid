@@ -1239,11 +1239,19 @@
                         }
                     },
                     error: function(error) {
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast('An error occurred.', 'error');
-                        })(NioApp, jQuery);
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
                 });
             });
