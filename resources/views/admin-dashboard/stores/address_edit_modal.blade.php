@@ -7,7 +7,7 @@
             <div class="form-group">
                 <label class="form-label" for="full-name-1">City</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="city" name="city" value="{{ $address->city }}">
+                    <input type="text" class="form-control" id="city" name="city" value="{{ $address->city }}" required>
                 </div>
             </div>
         </div>
@@ -15,7 +15,7 @@
             <div class="form-group">
                 <label class="form-label" for="vsale_commission">Postal code</label>
                 <div class="form-control-wrap">
-                    <input type="text" step="any" class="form-control" id="postal_code" name="postal_code" value="{{ $address->postal_code }}">
+                    <input type="text" step="any" class="form-control" id="postal_code" name="postal_code" value="{{ $address->postal_code }}" required>
                 </div>
             </div>
         </div>
@@ -41,7 +41,7 @@
             <div class="form-group">
                 <label class="form-label" for="vsale_commission">Address</label>
                 <div class="form-control-wrap">
-                    <textarea class="form-control" id="address" value="" name="address" required>{{ $address->address }}</textarea>
+                    <textarea class="form-control" id="address" value="" name="address" required>{{ $address->address }}</textarea required>
                 </div>
             </div>
         </div>
