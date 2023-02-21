@@ -23,7 +23,7 @@ class StoreDataSeeder extends Seeder
     public function run()
     {
         // Store Images
-        $store_id_data = Store::pluck('id')->toArray();
+        $storeIdData = Store::pluck('id')->toArray();
         $now = Carbon::parse(now())->format('Y-m-d H:i:s');
         Schema::disableForeignKeyConstraints();
         DB::table('store_images')->truncate();
@@ -39,7 +39,7 @@ class StoreDataSeeder extends Seeder
                     || !arrayValueExists($storeImage, 'title')
                     || !arrayValueExists($storeImage, 'image')
                     || !arrayValueExists($storeImage, 'image_type')
-                    || !in_array($storeImage['store_id'], $store_id_data)
+                    || !in_array($storeImage['store_id'], $storeIdData)
                 ) {
                     continue;
                 }
@@ -73,7 +73,7 @@ class StoreDataSeeder extends Seeder
                     !arrayValueExists($storeReview, 'id')
                     || !arrayValueExists($storeReview, 'store_id')
                     || !arrayValueExists($storeReview, 'user_id')
-                    || !in_array($storeReview['store_id'], $store_id_data)
+                    || !in_array($storeReview['store_id'], $storeIdData)
                 ) {
                     continue;
                 }
@@ -109,7 +109,7 @@ class StoreDataSeeder extends Seeder
                     || !arrayValueExists($storeSeoData, 'type')
                     || !arrayValueExists($storeSeoData, 'key')
                     || !arrayValueExists($storeSeoData, 'value')
-                    || !in_array($storeSeoData['store_id'], $store_id_data)
+                    || !in_array($storeSeoData['store_id'], $storeIdData)
                 ) {
                     continue;
                 }
@@ -130,7 +130,7 @@ class StoreDataSeeder extends Seeder
         }
 
         // Store Category 
-        $category_id_data = Category::pluck('id')->toArray();
+        $categoryIdData = Category::pluck('id')->toArray();
         Schema::disableForeignKeyConstraints();
         DB::table('category_store')->truncate();
         Schema::enableForeignKeyConstraints();
@@ -141,8 +141,8 @@ class StoreDataSeeder extends Seeder
                 $row['id'] = (!isset($row['id']) ? reset($row) : $row['id']);
                 if ($row['category_id'] != '') {
                     if (
-                        !in_array($row['store_id'], $store_id_data)
-                        || !in_array($row['category_id'], $category_id_data)
+                        !in_array($row['store_id'], $storeIdData)
+                        || !in_array($row['category_id'], $categoryIdData)
                     ) {
                         continue;
                     }
@@ -174,7 +174,7 @@ class StoreDataSeeder extends Seeder
                 if (
                     !arrayValueExists($storeCashback, 'id')
                     || !arrayValueExists($storeCashback, 'store_id')
-                    || !in_array($storeCashback['store_id'], $store_id_data)
+                    || !in_array($storeCashback['store_id'], $storeIdData)
                 ) {
                     continue;
                 }
@@ -191,7 +191,7 @@ class StoreDataSeeder extends Seeder
                     'network_detail' => arrayValueExists($storeCashback, 'network_detail') ? $storeCashback['network_detail'] : null,
                     'deeplink_url' => arrayValueExists($storeCashback, 'deeplink_url') ? $storeCashback['deeplink_url'] : null,
                     'tracking_url' => arrayValueExists($storeCashback, 'tracking_url') ? $storeCashback['tracking_url'] : null,
-                    'network_id' => (arrayValueExists($storeCashback, 'network_id') &&  $storeCashback['network_id'] != '') ? $storeCashback['network_id'] : 0,
+                    'network_id' => arrayValueExists($storeCashback, 'network_id') ? $storeCashback['network_id'] : 0,
                     'default' => arrayValueExists($storeCashback, 'default') ? $storeCashback['default'] : null,
                     'created_at' => arrayValueExists($storeCashback, 'created_at') ? dbDate($storeCashback['created_at']) : $now,
                     'updated_at' => arrayValueExists($storeCashback, 'updated_at') ? dbDate($storeCashback['updated_at']) : $now,

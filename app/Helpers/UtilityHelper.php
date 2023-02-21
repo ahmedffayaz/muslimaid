@@ -326,7 +326,7 @@ function getStores($limit = null, $offset = 0)
 
 function getPaginatedStores($perPage = 12, $letter = null)
 {
-    return Store::when(!empty($letter), function($q) use ($letter) {
+    return Store::when(!empty($letter), function ($q) use ($letter) {
         $q->where('name', 'like', $letter . '%');
     })->orderBy('name', 'asc')->paginate($perPage);
 }
@@ -611,7 +611,7 @@ function csvToArray($path)
                     }
 
                     $header = $cleansedRow;
-                } else{
+                } else {
                     $csvToArray[] = array_combine($header, $row);
                 }
             }
