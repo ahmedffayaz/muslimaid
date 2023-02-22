@@ -178,6 +178,11 @@ class StoreDataSeeder extends Seeder
                 ) {
                     continue;
                 }
+                if(arrayValueExists($storeCashback, 'network_id')){
+                    $networkId = $storeCashback['network_id'];
+                }else{
+                    $networkId = Store::where('id', $storeCashback['store_id'])->pluck('network_id')->first();
+                }
                 $storeCashbackData[] = [
                     'id' => $storeCashback['id'],
                     'store_id' => $storeCashback['store_id'],
@@ -191,7 +196,7 @@ class StoreDataSeeder extends Seeder
                     'network_detail' => arrayValueExists($storeCashback, 'network_detail') ? $storeCashback['network_detail'] : null,
                     'deeplink_url' => arrayValueExists($storeCashback, 'deeplink_url') ? $storeCashback['deeplink_url'] : null,
                     'tracking_url' => arrayValueExists($storeCashback, 'tracking_url') ? $storeCashback['tracking_url'] : null,
-                    'network_id' => arrayValueExists($storeCashback, 'network_id') ? $storeCashback['network_id'] : 0,
+                    'network_id' => $networkId,
                     'default' => arrayValueExists($storeCashback, 'default') ? $storeCashback['default'] : null,
                     'created_at' => arrayValueExists($storeCashback, 'created_at') ? dbDate($storeCashback['created_at']) : $now,
                     'updated_at' => arrayValueExists($storeCashback, 'updated_at') ? dbDate($storeCashback['updated_at']) : $now,
