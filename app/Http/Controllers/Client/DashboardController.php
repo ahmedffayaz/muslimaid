@@ -53,10 +53,10 @@ class DashboardController extends Controller
             'firstname.required' => 'First name is required.',
             'lastname.required' => 'Last name is required.'
         ]);
-        $user= auth()->user(); 
-        $avatar_image = $user->avatar;
+        $user = auth()->user();
+        $avatarImage = $user->avatar;
         if ($request->hasFile('avatar')) {
-            $avatar_image = store_user_avatar($request->file('avatar'), $avatar_image);
+            $avatarImage = store_user_avatar($request->file('avatar'), $avatarImage);
         }
 
         $user->update([
@@ -65,7 +65,7 @@ class DashboardController extends Controller
             'phone' => $request->phone,
             'address' => $request->address,
             'intro' => $request->intro,
-            'avatar' => $avatar_image
+            'avatar' => $avatarImage
         ]);
         flash()->success('User updated successfully');
         return redirect()->back();

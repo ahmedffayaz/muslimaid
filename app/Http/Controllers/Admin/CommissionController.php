@@ -108,7 +108,7 @@ class CommissionController extends Controller
                 $emailTemplate = EmailTemplate::where('key', 'user_new_cashback_tracked')->first();
 
                 $filteredMessage = str_replace(
-                    ['{{ SITE_TITLE }}', '{{ SITE_URL }}', '{{ NAME }}', '{{ EMAIL }}', '{{ STORE }}', '{{ AMOUNT }}'],
+                    ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{STORE}}', '{{AMOUNT}}'],
                     [
                         SiteSetting()['website_title'], url('/'),
                         $commission->user->first_name . ' ' . $commission->user->last_name,
@@ -327,7 +327,7 @@ class CommissionController extends Controller
                     $emailTemplate = EmailTemplate::where('key', 'user_new_cashback_tracked')->first();
 
                     $filteredMessage = str_replace(
-                        ['{{ SITE_TITLE }}', '{{ SITE_URL }}', '{{ NAME }}', '{{ EMAIL }}', '{{ STORE }}', '{{ AMOUNT }}'],
+                        ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{STORE}}', '{{AMOUNT}}'],
                         [
                             SiteSetting()['website_title'], url('/'),
                             $commission->user->first_name . ' ' . $commission->user->last_name,
