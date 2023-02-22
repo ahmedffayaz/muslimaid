@@ -62,7 +62,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="tracking_url">Tracking URL</label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="tracking_url" name="tracking_url" placeholder="Tracking URL" required>
+                                                        <input type="text" class="form-control" id="tracking_url" name="tracking_url" placeholder="https://example.com/item/abc-id-1345" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -70,7 +70,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="deeplink_url">Deeplink URL</label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="deeplink_url" name="deeplink_url" placeholder="Deeplink URL">
+                                                        <input type="text" class="form-control" id="deeplink_url" name="deeplink_url" placeholder="https://example.com/item/abc-id-1345">
                                                     </div>
                                                 </div>
                                             </div>
