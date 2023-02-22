@@ -155,7 +155,7 @@
 
         // Import CSV file
         function importCSV() {
-            $('#update_cashback_form').on('submit', function (event) {
+            $('#save_modal_form').on('submit', function (event) {
                 event.preventDefault();
                 let btn = $('#show-modal')
                     btn.attr('disabled', 'disabled')
@@ -167,6 +167,7 @@
                     processData: false,
                     contentType: false,
                     success: function (response) {
+                        console.log(response);
                         $('#multiple_cashbacks_form').html(response);
                         NioApp.Picker.date('.date-picker');
                         initializeSelect2();
@@ -176,20 +177,29 @@
                         confirmMultipleCashbacks();
                     },
                     error: function (error) {
-                        console.log(error);
                         btn.removeAttr('disabled', 'disabled').button('refresh');
                         btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
+                        if (error.responseJSON.errors) {
+                            (function(NioApp, $){
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
+
                         if (error.responseJSON.error) {
                             (function(NioApp, $){
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(error.responseJSON.error, 'error');
                             })(NioApp, jQuery);
-                        } else {
+                        }
+
+                        if (error.responseJSON.message) {
                             (function(NioApp, $){
                                 'use strict';
                                 toastr.clear();
-                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                                NioApp.Toast('Date format not found, check CSV file', 'error');
                             })(NioApp, jQuery);
                         }
                     }

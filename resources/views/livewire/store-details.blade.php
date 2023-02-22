@@ -137,7 +137,7 @@
                                                             <label class="form-label" for="tracking_url">Tracking URL</label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="tracking_url" value="{{ $store->tracking_url }}"
-                                                                    name="tracking_url" required style="width: 79%">
+                                                                    name="tracking_url" placeholder="https://example.com/item/abc-id-1345" required style="width: 79%">
                                                                 <span style="position: absolute; right:0; top:5px; width:20%" data-toggle="tooltip" data-placement="left"
                                                                     title="This parameter containing ID of the click will be concatenated with tracking URL of the store ({{ $store->tracking_url }}?ref=XXX)">?{{ $store->network->click_ref }}=XXX</span>
                                                             </div>
@@ -151,7 +151,8 @@
                                                                 <span style="position:absolute; left:0; top:5px; width:7%" data-toggle="tooltip" data-placement="right"
                                                                     title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u={{ $store->deeplink_url }})">&{{ $store->network->deeplink_identifier }}=</span>
                                                                 <input type="text" class="form-control" id="deeplink_url" value="{{ $store->deeplink_url }}"
-                                                                    name="deeplink_url" style="position: relative; left:30px; width: 93%">
+                                                                    name="deeplink_url" placeholder="https://example.com/item/abc-id-1345"
+                                                                    style="position: relative; left:30px; width: 93%">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -160,7 +161,7 @@
                                                             <label class="form-label" for="store_url">Store url</label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="store_url" value="{{ $store->store_url }}"
-                                                                    name="store_url" required>
+                                                                    name="store_url" placeholder="https://example.com/item/abc-id-1345" required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -493,7 +494,7 @@
                                         <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-                                   @enderror
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -610,7 +611,8 @@
                                 <div class="form-group">
                                     <label class="form-label" for="tracking_url">Tracking URL</label>
                                     <div class="form-control-wrap">
-                                        <input type="text" class="form-control" id="tracking_url" name="tracking_url" required style="width: 83%">
+                                        <input type="text" class="form-control" id="tracking_url" name="tracking_url"
+                                            placeholder="https://example.com/item/abc-id-1345" required style="width: 83%">
                                         <span style="position: absolute; right:0; top:5px; width:17%" data-toggle="tooltip" data-placement="left"
                                             title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">?{{ $store->network->click_ref }}=XXX</span>
                                     </div>
@@ -623,7 +625,7 @@
                                         <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
                                             title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">&{{ $store->network->deeplink_identifier }}=</span>
                                         <input type="text" class="form-control" id="deeplink_url"
-                                            value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}" name="deeplink_url"
+                                            value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}" name="deeplink_url" placeholder="https://example.com/item/abc-id-1345"
                                             style="position: relative; left:30px; width: 95%">
                                     </div>
                                 </div>
