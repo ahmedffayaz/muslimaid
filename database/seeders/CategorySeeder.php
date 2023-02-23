@@ -29,7 +29,7 @@ class CategorySeeder extends Seeder
         foreach ($csvToArray as $category) {
             $category['id'] = !isset($category['id']) ? reset($category) : $category['id'];
 
-            if (!arrayValueExists($category, 'id') || !arrayValueExists($category, 'name') || $category['id'] = 145) continue;
+            if (!arrayValueExists($category, 'id') || !arrayValueExists($category, 'name') || $category['id'] == 145) continue;
             $slug = Str::slug($category['name']);
             if (in_array($slug, $slugArray)) {
                 $slug = $slug . $category['id'];
