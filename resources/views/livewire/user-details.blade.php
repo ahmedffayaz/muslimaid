@@ -26,12 +26,13 @@
                                         <div class="">
                                             <select class="form-control form-select select-2" data-search="on" name="open_store" id="user_select" required>
                                                 @foreach ($users as $item)
-                                                    <option @if ($user->id == $item->id) selected @endif value="{{ $item->id }}">
-                                                        {{ $user->id }} -
-                                                        {{ $user->first_name != 'unnamed' || $user->last_name != 'unnamed' ? $user->first_name . ' ' . $user->last_name : $user->email }}
+                                                    <option @if ($user->id == $item->id) selected  @endif value="{{ $item->id }}">
+                                                        {{ $item->id }} -
+                                                        {{ $item->first_name != 'unnamed' || $item->last_name != 'unnamed' ? $item->first_name . ' ' . $item->last_name : $item->email }}
                                                     </option>
                                                 @endforeach
                                             </select>
+                                           
                                         </div>
                                     </div>
                                 </div>
@@ -114,7 +115,7 @@
                                                         <div class="form-group">
                                                             <label class="form-label" for="phone-no-1">Phone</label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="phone-no-1" value="{{ $user->phone }}" name="phone">
+                                                                <input type="text" class="form-control" id="phone-no-1" value="{{ $user->phone }}" name="phone" required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -603,5 +604,27 @@
                 }
             });
         }
+        $('#user-edit-form').validate({
+                errorClass: 'invalid-feedback d-block',
+                rules: {
+                    firstname: {
+                        required: true
+                    },
+                    lastname: {
+                        required: true
+                    },
+                    email: {
+                        required: true
+                    },
+                    phone: {
+                        required: true,
+                    },
+                },
+                submitHandler: function(form) {
+                    if ($(form).valid())
+                        form.submit();
+                    return false;
+                }
+            });
     </script>
 @endpush
