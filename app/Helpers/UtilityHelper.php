@@ -31,11 +31,11 @@ function getFullName($user)
     return ucwords($user->first_name . ' ' . $user->last_name);
 }
 
-function store_user_avatar($file, $existing_file)
+function storeUserAvatar($file, $existingFile)
 {
-    if ($existing_file != "default.png") {
-        if (File::exists(public_path('storage/users/images/avatar/' . $existing_file))) {
-            File::delete(public_path('storage/users/images/avatar/' . $existing_file));
+    if ($existingFile != "default.png") {
+        if (File::exists(public_path('storage/users/images/avatar/' . $existingFile))) {
+            File::delete(public_path('storage/users/images/avatar/' . $existingFile));
         }
     }
 
@@ -48,10 +48,11 @@ function store_user_avatar($file, $existing_file)
     }
     $avatar_image = Image::make($file)->resize(512, 512);
     $avatar_image->save($dir . $filename, 100);
-    $image = \File::get($dir . '/' . $filename);
+    $image = File::get($dir . '/' . $filename);
     Storage::put('users/images/avatar/' . $filename, $image);
     return $filename;
 }
+
 /**
  * get User role
  *
@@ -73,8 +74,7 @@ function getUserRole($user)
 function convertDate($date, $format = true)
 {
     if ($date !== null) {
-        if ($format)
-            return Carbon::parse($date)->format('d M, Y');
+        if ($format) return Carbon::parse($date)->format('d M, Y');
 
         return Carbon::parse($date);
     }
@@ -98,6 +98,7 @@ function addEllipsis($text, $max = 30)
 function statusClasses($status)
 {
     $class = "info";
+
     switch ($status) {
         case 'confirmed':
         case 'completed':
@@ -112,6 +113,7 @@ function statusClasses($status)
             $class = 'primary';
             break;
     }
+
     return $class;
 }
 
@@ -165,8 +167,10 @@ function saveDocument($file, $directory)
 function getImage($image, $isAvatar = false)
 {
     $errorImage = $isAvatar ? url('/images/no_avatar.jpg') : url('/images/no_image.png');
+
     return !empty($image) && Storage::disk('public')->exists($image)
-        ? Storage::url($image) : $errorImage;
+        ? Storage::url($image)
+        : $errorImage;
 }
 
 
@@ -261,7 +265,7 @@ function convertTimeTo24($time)
 function generateAcronyms($name)
 {
     $name = explode(' ', $name);
-    return $intials = $name[0][0] . (array_key_exists(1, $name) ? $name[1][0] : "");
+    return $name[0][0] . (array_key_exists(1, $name) ? $name[1][0] : "");
 }
 
 /**
@@ -366,6 +370,7 @@ function sidebarStores()
     $stores = Store::where('feature_sidebar', 1)->latest()->get();
     return $stores;
 }
+
 function textHighlight($text, $search, $highlightColor = '#3366cc', $casesensitive = false)
 {
     return preg_replace('/(' . $search . ')/i', "<span class='color-primary'>$1</span>", $text);
@@ -387,8 +392,9 @@ function maintenance()
 {
     if (file_exists(storage_path('framework/down'))) {
         return true;
-    } else
+    } else {
         return false;
+    }
 }
 
 function isFacebookEnabled()
@@ -506,9 +512,7 @@ function convertPathForOS($path)
 
 function getImageUrl($url)
 {
-    if (empty($url) || (isset($url->image) && empty($url->image))) {
-        return asset('frontend/images/products/product-16.jpg');
-    }
+    if (empty($url) || (isset($url->image) && empty($url->image))) return null;
 
     if (isset($url->image)) {
         $baseDir = $url->is_fake ? 'frontend/images/logos/' : 'storage/stores/images/';
@@ -646,7 +650,6 @@ function arrayValueExists($array, $key)
 {
     return isset($array[$key]) && !empty($array[$key]);
 }
-
 
 function getMinimumCashoutAmount()
 {

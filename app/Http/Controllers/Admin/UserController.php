@@ -60,9 +60,10 @@ class UserController extends Controller
                 'updated' => 'error'
             );
         }
-        $avatar_image = "default.png";
+
+        $avatarImage = "default.png";
         if ($request->hasFile('avatar')) {
-            $avatar_image = store_user_avatar($request->file('avatar'), $avatar_image);
+            $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
         }
 
         $user =  User::create([
@@ -74,7 +75,7 @@ class UserController extends Controller
             'phone' => $request->phone,
             'address' => $request->address,
             'intro' => $request->intro,
-            'avatar' => $avatar_image
+            'avatar' => $avatarImage
         ]);
 
         $user->assignRole('user');
@@ -118,9 +119,9 @@ class UserController extends Controller
                 );
             }
 
-            $avatar_image = $user->avatar;
+            $avatarImage = $user->avatar;
             if ($request->hasFile('avatar')) {
-                $avatar_image = store_user_avatar($request->file('avatar') , $avatar_image);
+                $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
             }
 
             $user->update([
@@ -131,7 +132,7 @@ class UserController extends Controller
                 'address' => $request->input('address'),
                 'intro' => $request->input('intro'),
                 'status' => $request->input('status'),
-                'avatar' => $avatar_image
+                'avatar' => $avatarImage
             ]);
 
             $user->syncRoles($request->input('roles'));
