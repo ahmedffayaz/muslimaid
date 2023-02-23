@@ -506,9 +506,7 @@ function convertPathForOS($path)
 
 function getImageUrl($url)
 {
-    if (empty($url) || (isset($url->image) && empty($url->image))) {
-        return asset('frontend/images/products/product-16.jpg');
-    }
+    if (empty($url) || (isset($url->image) && empty($url->image))) return null;
 
     if (isset($url->image)) {
         $baseDir = $url->is_fake ? 'frontend/images/logos/' : 'storage/stores/images/';

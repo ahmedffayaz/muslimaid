@@ -36,10 +36,18 @@
                     <span><span class="currency">{{ currency() }} </span>{{ $commission->amount }}</span>
                 </div>
                 <div class="nk-tb-col  text-center">
-                    <span>{{ $commission->exit_click_id }}</span>
+                    @if ($commission->exit_click_id)
+                        <span>{{ $commission->exit_click_id }}</span>
+                    @else
+                        <span>-</span>
+                    @endif
                 </div>
                 <div class="nk-tb-col  text-right">
-                    <span>{{ $commission->event_date }}</span>
+                    @if ($commission->event_date)
+                        <span>{{ $commission->event_date }}</span>
+                    @else
+                        <span>{{ $commission->created_at }}</span>
+                    @endif
                 </div>
                 <div class="nk-tb-col  text-right">
                     <span class="tb-status text-info">
@@ -154,13 +162,40 @@
                 processData: false,
                 contentType: false,
                 success: function(data) {
-                    $('#cashback-modal').modal('hide');
-                    (function(NioApp, $) {
-                        'use strict';
-                        toastr.clear();
-                        NioApp.Toast(data.message, data.updated);
-                    })(NioApp, jQuery);
-                    fetchCashbacks();
+                    if (data.updated) {
+                        $('#cashback-modal').modal('hide');
+                        (function(NioApp, $) {
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast('Cashback Updated Successfully.', 'success');
+                        })(NioApp, jQuery);
+                        fetchCashbacks();
+                    } else {
+                        (function(NioApp, $) {
+                            'use strict';
+                            toastr.clear();
+                            if (data.message) {
+                                NioApp.Toast(data.message, 'error');
+                            } else {
+                                NioApp.Toast('Something went wrong! Unable to update the cashback.', 'error');
+                            }
+                        })(NioApp, jQuery);
+                    }
+                },
+                error: function(error) {
+                    if (error.responseJSON.error) {
+                        (function(NioApp, $) {
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(error.responseJSON.error, 'error');
+                        })(NioApp, jQuery);
+                    } else {
+                        (function(NioApp, $) {
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                        })(NioApp, jQuery);
+                    }
                 }
             });
         });

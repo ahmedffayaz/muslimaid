@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class CommissionController extends Controller
@@ -159,18 +160,25 @@ class CommissionController extends Controller
      */
     public function update(Request $request, UserCashback $commission)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'exit_click_id' => 'required|integer |min:1',
             'order_value' => 'nullable|numeric|min:0',
             'network_commission' => 'required|numeric|min:0',
             'amount' => 'nullable|numeric',
             'status' => 'required|integer'
-        ], [
-            'exit_click_id.required' => 'Exit click is required',
-            'exit_click_id.integer' => 'Exit click should be integer',
-            'order_value.numeric' => 'Order values should be number',
-            'amount.numeric' => 'Cashback amount should be number',
         ]);
+
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return response()->json([
+                    'message' => $validator->errors()->first(),
+                    'updated' => 'error'
+                ]);
+            } else {
+                flash()->error($validator->errors()->first());
+                return redirect()->back();
+            }
+        }
 
         try {
             //track status change of the cashback
@@ -194,15 +202,24 @@ class CommissionController extends Controller
                 'order_value' => round($request->order_value, 3),
                 'status' => $request->status,
             ]);
-            return array(
-                'message' => 'Cashback updated',
-                'updated' => 'success'
-            );
+            if ($request->ajax()) {
+                return array(
+                    'message' => 'Cashback Updated Successfully ',
+                    'updated' => 'success'
+                );
+            }
+            flash()->success('Cashback updated successfully');
+            return redirect()->back();
         } catch (Exception $exception) {
-            return array(
-                'message' => 'Something went wrong!',
-                'updated' => 'error'
-            );
+            $message = 'Something went wrong! Unable to update the cashback.';
+            if ($request->ajax()) {
+                return response()->json([
+                    'message' => $message,
+                    'updated' => 'error'
+                ]);
+            }
+            flash()->error($message);
+            return redirect()->back();
         }
     }
 
