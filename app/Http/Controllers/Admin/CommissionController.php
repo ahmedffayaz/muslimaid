@@ -399,17 +399,24 @@ class CommissionController extends Controller
             'import_cashback.required' => 'Upload CSV file.'
         ]);
 
-        if (($open = fopen($request->import_cashback, "r")) !== FALSE) {
-            while (($data = fgetcsv($open, 1000, ",")) !== FALSE) {
-                $csvData[] = $data;
+        try {
+            if (($open = fopen($request->import_cashback, "r")) !== FALSE) {
+                while (($data = fgetcsv($open, 1000, ",")) !== FALSE) {
+                    $csvData[] = $data;
+                }
+                fclose($open);
             }
-            fclose($open);
-        }
-        $csvData = array_values(array_filter($csvData));
-        unset($csvData[0]);
+            $csvData = array_values(array_filter($csvData));
+            unset($csvData[0]);
 
-        $statuses = DB::table('cashback_statuses')->latest()->get();
-        return view('admin-dashboard.commissions.form_multiple', compact('csvData', 'statuses'));
+            $statuses = DB::table('cashback_statuses')->latest()->get();
+            return view('admin-dashboard.commissions.form_multiple', compact('csvData', 'statuses'));
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Something went wrong'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function fileDownload()
@@ -418,7 +425,7 @@ class CommissionController extends Controller
             $headers = array(
                 'Content-Type' => 'text/csv',
             );
-            $filename = 'cashbacks.csv';
+            $filename = 'multiple_cashbacks.csv';
             $file = public_path('admin-dashboard/sample-files/csv/' . $filename);
             return Response::download($file, $filename, $headers);
         } catch (Exception $exception) {

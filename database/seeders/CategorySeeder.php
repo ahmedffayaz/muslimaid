@@ -25,18 +25,17 @@ class CategorySeeder extends Seeder
         $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\categories.csv');
         $categories = [];
         $now = Carbon::now();
-        $slug_array = array();
+        $slugArray = array();
         foreach ($csvToArray as $category) {
             $category['id'] = !isset($category['id']) ? reset($category) : $category['id'];
 
-            if (!arrayValueExists($category, 'id')) continue;
-            if (!arrayValueExists($category, 'name')) continue;
+            if (!arrayValueExists($category, 'id') || !arrayValueExists($category, 'name') || $category['id'] = 145) continue;
             $slug = Str::slug($category['name']);
-            if(in_array($slug, $slug_array)){
+            if (in_array($slug, $slugArray)) {
                 $slug = $slug . $category['id'];
             }
-            array_push($slug_array, $slug);
-           
+            array_push($slugArray, $slug);
+
             $categories[] = [
                 'id' => $category['id'],
                 'parent_id' => arrayValueExists($category, 'parent_id') ? $category['parent_id'] : 0,
