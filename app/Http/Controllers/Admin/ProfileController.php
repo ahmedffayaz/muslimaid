@@ -19,7 +19,7 @@ class ProfileController extends Controller
     public function index()
     {
         $profile = Auth::user();
-        return view('admin-dashboard.profile.edit',compact('profile'));
+        return view('admin-dashboard.profile.edit', compact('profile'));
     }
 
     /**
@@ -31,25 +31,25 @@ class ProfileController extends Controller
      */
     public function update(Request $request, User $profile)
     {
-        $validated = $request->validate([
+        $request->validate([
             'first_name' => 'required|regex:/^[A-Za-z ]+$/',
             'last_name' => 'required|regex:/^[A-Za-z ]+$/',
-        ],$messages = [
+        ], [
             'first_name.required' => 'First name is required.',
             'last_name.required' => 'Last name is required.'
         ]);
 
         $profile->update($request->input());
 
-        $avatar_image = $profile->avatar;
+        $avatarImage = $profile->avatar;
         if ($request->hasFile('avatar')) {
-            $avatar_image = store_user_avatar($request->file('avatar') , $avatar_image);
+            $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
             $profile->update([
-                'avatar'=>$avatar_image
+                'avatar' => $avatarImage
             ]);
         }
 
-        flash()->success('Profle Updated');
+        flash()->success('Profile Updated');
         return redirect()->back();
     }
 
@@ -60,13 +60,14 @@ class ProfileController extends Controller
         ]);
 
         if ($validator->fails()) {
-            if(!$request->ajax())
-            {
+            if (!$request->ajax()) {
                 flash()->error($validator->errors()->first());
                 return redirect()->back();
-            }else{
-                return array('message' => $validator->errors()->first(),
-                                'updated'=>'error');
+            } else {
+                return array(
+                    'message' => $validator->errors()->first(),
+                    'updated' => 'error'
+                );
             }
         }
 
@@ -74,12 +75,14 @@ class ProfileController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        if(!$request->ajax()){
+        if (!$request->ajax()) {
             flash()->success('Password changed successfully');
             return redirect()->route('admin.profile.index');
-        }else{
-            return array('message' => 'Password updated successfully',
-                                'updated'=>'success');
+        } else {
+            return array(
+                'message' => 'Password updated successfully',
+                'updated' => 'success'
+            );
         }
     }
 }

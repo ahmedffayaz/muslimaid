@@ -46,17 +46,19 @@ class DashboardController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
+        $request->validate([
             'firstname' => 'required|regex:/^[A-Za-z ]+$/',
             'lastname' => 'required|regex:/^[A-Za-z ]+$/',
-        ], $messages = [
+        ], [
             'firstname.required' => 'First name is required.',
             'lastname.required' => 'Last name is required.'
         ]);
+
         $user = auth()->user();
+
         $avatarImage = $user->avatar;
         if ($request->hasFile('avatar')) {
-            $avatarImage = store_user_avatar($request->file('avatar'), $avatarImage);
+            $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
         }
 
         $user->update([
@@ -67,6 +69,7 @@ class DashboardController extends Controller
             'intro' => $request->intro,
             'avatar' => $avatarImage
         ]);
+
         flash()->success('User updated successfully');
         return redirect()->back();
     }
