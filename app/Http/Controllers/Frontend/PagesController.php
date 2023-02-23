@@ -31,14 +31,12 @@ class PagesController extends Controller
         }
 
         if ($slug == 'donate-to-charity') {
-            $HomePageCharities = Charity::where('status', '=', '1')->orderBy('id', 'DESC')->paginate(10);
-            return view('frontend.pages.charities', compact('page', 'HomePageCharities'));
+            $charities = Charity::whereStatus(1)->orderBy('id', 'DESC')->paginate(12);
+            return view('frontend.pages.donate-to-charity', compact('page', 'charities'));
         }
-
-        if($slug == 'offers')
-        {
-            $categories = Category::where('parent_id', 0)->with(['stores' => function($query)  {
-                $query->withCount(['categories' => function($query){
+        if ($slug == 'offers') {
+            $categories = Category::where('parent_id', 0)->with(['stores' => function ($query) {
+                $query->withCount(['categories' => function ($query) {
                     $query->whereStatus(0);
                 }])->having('categories_count', 0);
             }])->get();
