@@ -1,8 +1,8 @@
 @php
     $isEdit = isset($category) ? true : false;
 @endphp
-<form action="{{ $isEdit ? route('admin.categories.update', $category) : route('admin.categories.store') }}"
-    class="gy-3 form-validate is-alter" method="POST" enctype="multipart/form-data" id="category-form">
+<form action="{{ $isEdit ? route('admin.categories.update', $category) : route('admin.categories.store') }}" class="gy-3 form-validate is-alter" method="POST"
+    enctype="multipart/form-data" id="category-form">
     @csrf
     <div class="row g-4">
         <div class="col-lg-6">
@@ -10,21 +10,20 @@
                 <label class="form-label" for="full-name-1">Category Name</label>
                 <div class="form-control-wrap">
                     <input type="hidden" value="{{ $isEdit ? $category->id : '' }}" id="id">
-                    <input type="text" class="form-control" id="full-name-1" name="name"
-                        value="{{ $isEdit ? $category->name : '' }}" required>
+                    <input type="text" class="form-control" id="full-name-1" name="name" value="{{ $isEdit ? $category->name : '' }}" required>
                 </div>
             </div>
         </div>
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="default-06">Parent Category</label>
-                <div class="form-control-wrap ">
-                    <select class="form-select" data-search="on" id="default-06" name="parent_id" required>
-                        <option value="0">None</option>
+                <label class="form-label" for="parent_id">Parent Category</label>
+                <div class="form-control-wrap">
+
+                    <select class="form-select" data-search="on" id="parent_id" name="parent_id">
+                        <option value="">None</option>
                         @foreach ($categories as $parent)
-                            <option value="{{ $parent->id }}"
-                                {{ $isEdit && $category->parent_id == $parent->id ? 'selected' : '' }}
-                                style="font-weight:bold">{{ $parent->name }}
+                            <option value="{{ $parent->id }}" {{ $isEdit && $category->parent_id == $parent->id ? 'selected' : '' }} style="font-weight:bold">
+                                {{ $parent->name }}
                             </option>
                             @if ($isEdit && count($parent->childs))
                                 @include('admin-dashboard.categories.child_input', [
@@ -48,8 +47,7 @@
         <div class="col-lg-6">
             <div class="form-group">
                 <div class="custom-control custom-control-sm custom-checkbox notext">
-                    <input type="checkbox" class="custom-control-input" name="is_map_enable"
-                        value="{{ $isEdit ?? $category->is_map_enable }}" id="is_map_enable"
+                    <input type="checkbox" class="custom-control-input" name="is_map_enable" value="{{ $isEdit ?? $category->is_map_enable }}" id="is_map_enable"
                         {{ $isEdit && $category->is_map_enable == 1 ? 'checked' : '' }}>
                     <label class="custom-control-label" for="is_map_enable">Enable Google Map</label>
                 </div>
@@ -67,8 +65,7 @@
             <div class="col-lg-12 ">
                 <label class="form-label">Logo/Icon</label><br>
                 @if ($category->logo_type == 'upload')
-                    <img src="{{ asset($category->logo_upload) }}" style="max-height: 60px;max-width:60px"
-                        alt="">
+                    <img src="{{ asset($category->logo_upload) }}" style="max-height: 60px;max-width:60px" alt="">
                 @elseif($category->logo_type == 'link')
                     <img src="{{ $category->logo_link }}" style="max-height: 60px;max-width:60px" alt="">
                 @endif
@@ -93,8 +90,7 @@
             <div class="form-group">
                 <label class="form-label" for="logo_link">Logo Link</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="logo_link" name="logo_link"
-                        value="{{ $isEdit ? $category->logo_link : '' }}" required>
+                    <input type="text" class="form-control" id="logo_link" name="logo_link" value="{{ $isEdit ? $category->logo_link : '' }}" required>
                 </div>
             </div>
         </div>
@@ -125,10 +121,8 @@
                 <div class="form-control-wrap ">
                     <div class="form-control-select">
                         <select class="form-control" name="banner_type" id='banner_type' required>
-                            <option value="upload"
-                                {{ $isEdit && $category->banner_type == 'upload' ? 'selected' : '' }}>Upload</option>
-                            <option value="link"
-                                {{ $isEdit && $category->banner_type == 'link' ? 'selected' : '' }}>Link</option>
+                            <option value="upload" {{ $isEdit && $category->banner_type == 'upload' ? 'selected' : '' }}>Upload</option>
+                            <option value="link" {{ $isEdit && $category->banner_type == 'link' ? 'selected' : '' }}>Link</option>
                         </select>
                     </div>
                 </div>
@@ -138,8 +132,7 @@
             <div class="form-group">
                 <label class="form-label" for="banner_link">Banner Link</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="banner_link" name="banner_link"
-                        value="{{ $isEdit ? $category->banner_link : '' }}" required>
+                    <input type="text" class="form-control" id="banner_link" name="banner_link" value="{{ $isEdit ? $category->banner_link : '' }}" required>
                 </div>
             </div>
         </div>
@@ -158,8 +151,7 @@
             <div class="form-group">
                 <label class="form-label" for="full-name-1">Sort</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="full-name-1" name="sort"
-                        value="{{ $isEdit ? $category->sort : '' }}">
+                    <input type="text" class="form-control" id="full-name-1" name="sort" value="{{ $isEdit ? $category->sort : '' }}">
                 </div>
             </div>
         </div>
@@ -175,6 +167,7 @@
                                 In-active</option>
                         </select>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -203,14 +196,13 @@
             <div class="form-group">
                 <label class="form-label" for="reviewer">Meta Keywords</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" name="meta_keyword" placeholder="Meta keyword"
-                        value="{{ $isEdit ? $category->meta_keyword : '' }}">
+                    <input type="text" class="form-control" name="meta_keyword" placeholder="Meta keyword" value="{{ $isEdit ? $category->meta_keyword : '' }}">
                 </div>
             </div>
         </div>
         <div class="col-12">
             <div class="form-group">
-                <button type="submit" class="btn btn-lg btn-primary" id="save-btn"></button>
+                <button type="submit" class="btn-lg btn-primary" id="save-btn"></button>
             </div>
         </div>
     </div>

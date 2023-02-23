@@ -324,7 +324,7 @@ class StoreController extends Controller
         Storage::delete(['public/stores/images/' . $storeimage->image]);
         $storeimage->delete();
         flash()->success('Image deleted');
-        return redirect()->route('admin.stores.show', $store);
+        return redirect()->back();
     }
 
     public function searchStores(Request $request, Store $stores)
