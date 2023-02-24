@@ -23,7 +23,6 @@
                                     @endif
                                     <h4 class="title nk-block-title">{{$isEdit ? 'Edit Seo' : 'Add Seo'}}</h4>
                                     <div class="nk-block-des">
-                                        {{-- <p>You can make style out your....</p> --}}
                                     </div>
                                 </div>
                             </div>
@@ -38,7 +37,7 @@
                                         <div class="row g-4">
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="reviewer">Url</label>
+                                                    <label class="form-label" for="reviewer">Url <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
                                                         <input id="blog-title" type="text" class="form-control "
                                                             name="url" placeholder="Url" value="{{ $isEdit ? $seoData->url :  url('/') }}"
@@ -48,7 +47,7 @@
                                             </div>
                                             <div class="col-lg-6 ">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="reviewer">Title</label>
+                                                    <label class="form-label" for="reviewer">Title <span class="text-danger">*</span></label>
                                                     <input class="form-control " name="title" placeholder="Title"
                                                         value="{{ $isEdit ? $seoData->title : ''}}" required>
                                                 </div>

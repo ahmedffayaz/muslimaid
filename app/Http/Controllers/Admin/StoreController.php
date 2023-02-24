@@ -193,8 +193,12 @@ class StoreController extends Controller
             if (!$request->ajax()) {
                 flash()->success('Store info updated successfully');
                 return redirect()->back();
+            } else {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'Store info updated successfully'
+                ], JsonResponse::HTTP_OK);
             }
-            return true;
         } catch (ModelNotFoundException $e) {
             if (!$request->ajax()) {
                 flash()->error('Error while updating store');
@@ -652,11 +656,15 @@ class StoreController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+            if ($request->ajax()) {
+                return array(
+                    'message' => $validator->errors()->first(),
+                    'success' => false
+                );
+            } else {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
         }
-
         try {
             $url = url('/');
             $store = Store::whereId($request->input('store_id'))->first();
@@ -669,11 +677,23 @@ class StoreController extends Controller
                 'key' => $request->input('key'),
                 'value' => $request->input('value'),
             ]);
-
+            if ($request->ajax()) {
+                return array(
+                    'message' => 'Store Seo rule added',
+                    'success' => true
+                );
+            }
             flash()->success('Store Seo rule added');
             return redirect()->back();
         } catch (Exception $exception) {
-            flash()->error('Error while adding new Seo rule');
+            $message = 'Error while adding new Seo rule';
+            if ($request->ajax()) {
+                return array(
+                    'message' => $message,
+                    'success' => false
+                );
+            }
+            flash()->error($message);
             return redirect()->back();
         }
     }
@@ -780,20 +800,42 @@ class StoreController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
+            if ($request->ajax()) {
+                return array(
+                    'message' => $validator->errors()->first(),
+                    'success' => false
+                );
+            } else {
+                return redirect()->back()->withErrors($validator)->withInput();
+            }
         }
-
-        StoreSeoData::where('id', $request->input('seo_id'))->update([
-            'key' => $request->input('key'),
-            'value' => $request->input('value'),
-        ]);
-        if (!$request->ajax()) {
-            flash()->success('Seo rule updated successfully');
+        try {
+            StoreSeoData::where('id', $request->input('seo_id'))->update([
+                'key' => $request->input('key'),
+                'value' => $request->input('value'),
+            ]);
+            if ($request->ajax()) {
+                return array(
+                    'message' => 'Seo rule updated successfully',
+                    'success' => true
+                );
+                flash()->success('Seo rule updated successfully');
+                return redirect()->back();
+            }
+        } catch (Exception $exception) {
+            $message = 'Error while updating  Seo rule';
+            if ($request->ajax()) {
+                return array(
+                    'message' => $message,
+                    'success' => false
+                );
+            }
+            flash()->error($message);
             return redirect()->back();
         }
     }
+
+
 
     public function deleteStoreSeoRule($id)
     {

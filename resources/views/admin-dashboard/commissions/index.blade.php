@@ -14,16 +14,14 @@
                             </div><!-- .nk-block-head-content -->
                             <div class="nk-block-head-content">
                                 <div class="toggle-wrap nk-block-tools-toggle">
-                                    <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1"
-                                        data-target="pageMenu">
+                                    <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu">
                                         <em class="icon ni ni-menu-alt-r"></em>
                                     </a>
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
                                             <li class="nk-block-tools-opt">
                                                 <div class="drodown d-inline">
-                                                    <a href="#" class="dropdown-toggle btn btn-primary btn-sm"
-                                                        data-toggle="dropdown">
+                                                    <a href="#" class="dropdown-toggle btn btn-primary btn-sm" data-toggle="dropdown">
                                                         <em class="icon ni ni-plus mr-1"></em>
                                                         <span>Add Cashback</span>
                                                     </a>
@@ -42,9 +40,8 @@
                                                 </div>
                                             </li>
                                             <li>
-                                                <a href="{{ route('admin.commissions.export') }}" data-toggle="tooltip"
-                                                    data-placement="top" title="Export cashbacks to CSV" id="export"
-                                                    class="btn btn-success btn-sm" class="btn btn-white btn-outline-light">
+                                                <a href="{{ route('admin.commissions.export') }}" data-toggle="tooltip" data-placement="top" title="Export cashbacks to CSV"
+                                                    id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light">
                                                     <em class="icon ni ni-download-cloud"></em><span>Export</span>
                                                 </a>
                                             </li>
@@ -56,16 +53,14 @@
                     </div><!-- .nk-block-head -->
                     <div class="card card-preview mb-4">
                         <div class="card-inner">
-                            <form action="{{ route('admin.stores.search_stores') }}"
-                                class="form-validate is-alter search_form" method="POST">
+                            <form action="{{ route('admin.stores.search_stores') }}" class="form-validate is-alter search_form" method="POST">
                                 @csrf
                                 <div class="row g-4">
                                     <div class="col-lg-3 col-md-9">
                                         <div class="form-group">
                                             <label class="form-label" for="click_id">Click ID/ User ID/ Store ID</label>
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control" id="click_id" value=""
-                                                    name="click_id">
+                                                <input type="text" class="form-control" id="click_id" value="" name="click_id">
                                             </div>
                                         </div>
                                     </div>
@@ -73,8 +68,7 @@
                                         <div class="form-group">
                                             <label class="form-label" for="user">User Name/ Store Name</label>
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control" id="user" value=""
-                                                    name="user">
+                                                <input type="text" class="form-control" id="user" value="" name="user">
                                             </div>
                                         </div>
                                     </div>
@@ -82,8 +76,7 @@
                                         <div class="form-group">
                                             <label class="form-label" for="network_id">Network</label>
                                             <div class="form-control-wrap ">
-                                                <select class="form-select form-control" data-search="on" id="network_id"
-                                                    name="network_id">
+                                                <select class="form-select form-control" data-search="on" id="network_id" name="network_id">
                                                     <option value="0">All</option>
                                                     @foreach ($networks as $network)
                                                         <option value="{{ $network->id }}">{{ $network->name }}</option>
@@ -357,6 +350,7 @@
                         $('#modal').modal('show');
                         initializeSelect2();
                         store();
+                        validation();
                     }
                 });
             });
@@ -374,6 +368,7 @@
                         $('#modal').modal('show');
                         initializeSelect2();
                         store();
+                        validation();
                     }
                 });
             })
@@ -384,7 +379,8 @@
                     $('#update_cashback_form').on('submit', function(event) {
                         event.preventDefault();
                         let btn = $('#save-btn')
-                        btn.attr('disabled', 'disabled').append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
+                        btn.attr('disabled', 'disabled').append(
+                            '<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
                         let url = $(this).attr('action');
                         let id = $('#id').val();
                         let method = 'POST';
@@ -430,7 +426,7 @@
                             }
                         });
                     });
-               });
+                });
             }
 
             // Re-initialize Select2
@@ -438,6 +434,24 @@
                 $('.form-select').select2({
                     placeholder: function() {
                         $(this).data('placeholder');
+                    }
+                });
+            }
+
+            function validation() {
+                $('#form-validate').validate({
+                    errorClass: 'invalid-feedback d-block',
+                    rules: {
+                        exit_click_id: {
+                            required: true
+                        },
+                        order_value: {
+                            required: true
+                        },
+                        network_commission: {
+                            required: true
+                        },
+
                     }
                 });
             }

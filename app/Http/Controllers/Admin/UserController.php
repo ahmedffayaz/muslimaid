@@ -120,7 +120,7 @@ class UserController extends Controller
 
             $avatar_image = $user->avatar;
             if ($request->hasFile('avatar')) {
-                $avatar_image = store_user_avatar($request->file('avatar') , $avatar_image);
+                $avatar_image = store_user_avatar($request->file('avatar'), $avatar_image);
             }
 
             $user->update([
@@ -218,9 +218,30 @@ class UserController extends Controller
 
     public function paymentSave(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'payment_method' => 'required',
+            'paypal_email' => $request->input('payment_method') === 'paypal' ? 'required' : '',
+
+            'account_name' => $request->input('payment_method') === 'bank' ? 'required' : '',
+            'bank_title' => $request->input('payment_method') === 'bank' ? 'required' : '',
+            'account_number' => $request->input('payment_method') === 'bank' ? 'required' : '',
+            'bank_sort_code' => $request->input('payment_method') === 'bank' ? 'required' : '',
+            'bic' => $request->input('payment_method') === 'bank' ? 'required' : '',
+        ]);
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return array(
+                    'message' => $validator->errors()->first(),
+                    'success' => false
+                );
+            }
+
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
         PaymentInfo::updateOrCreate([
             'user_id'   => $request->user_id,
         ], $request->all());
+
 
         if (!$request->ajax()) {
             flash()->success('Payment method added successfully');
@@ -229,7 +250,7 @@ class UserController extends Controller
 
         return array(
             'message' => 'payment method saved',
-            'updated' => 'success'
+            'success' => true
         );
     }
 

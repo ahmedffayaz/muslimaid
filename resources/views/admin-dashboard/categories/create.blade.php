@@ -7,7 +7,7 @@
     <div class="row g-4">
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="full-name-1">Category Name</label>
+                <label class="form-label" for="full-name-1">Category Name <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
                     <input type="hidden" value="{{ $isEdit ? $category->id : '' }}" id="id">
                     <input type="text" class="form-control" id="full-name-1" name="name" value="{{ $isEdit ? $category->name : '' }}" required>
@@ -16,7 +16,7 @@
         </div>
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="parent_id">Parent Category</label>
+                <label class="form-label" for="parent_id">Parent Category <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
 
                     <select class="form-select" data-search="on" id="parent_id" name="parent_id">
@@ -73,7 +73,7 @@
         @endif
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="logo_type">Logo Type</label>
+                <label class="form-label" for="logo_type">Logo Type <span class="text-danger">*</span></label>
                 <div class="form-control-wrap ">
                     <div class="form-control-select">
                         <select class="form-control" name="logo_type" id='logo_type' required>
@@ -88,7 +88,7 @@
         </div>
         <div class="col-lg-6 logo_link">
             <div class="form-group">
-                <label class="form-label" for="logo_link">Logo Link</label>
+                <label class="form-label" for="logo_link">Logo Link </label>
                 <div class="form-control-wrap">
                     <input type="text" class="form-control" id="logo_link" name="logo_link" value="{{ $isEdit ? $category->logo_link : '' }}" required>
                 </div>
@@ -96,7 +96,7 @@
         </div>
         <div class="col-lg-6 logo_upload">
             <div class="form-group">
-                <label class="form-label" for="logo_upload">Logo Upload</label>
+                <label class="form-label" for="logo_upload">Logo Upload </label>
                 <div class="form-control-wrap">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" name='logo_upload' id="logo_upload">
@@ -117,7 +117,7 @@
         @endif
         <div class="col-lg-6 ">
             <div class="form-group">
-                <label class="form-label" for="banner_type">Banner Type</label>
+                <label class="form-label" for="banner_type">Banner Type <span class="text-danger">*</span></label>
                 <div class="form-control-wrap ">
                     <div class="form-control-select">
                         <select class="form-control" name="banner_type" id='banner_type' required>
@@ -157,7 +157,7 @@
         </div>
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="default-06">Status</label>
+                <label class="form-label" for="default-06">Status <span class="text-danger">*</span></label>
                 <div class="form-control-wrap ">
                     <div class="form-control-select">
                         <select class="form-control" id="default-06" name="status" required>

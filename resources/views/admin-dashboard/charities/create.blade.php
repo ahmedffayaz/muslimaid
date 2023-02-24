@@ -33,9 +33,9 @@
                                         <div class="row g-4">
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="title">Title <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="title">Title <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="title" name="title"  value ="{{ old('title') }}" required>
+                                                        <input type="text" class="form-control" id="title" name="title" value="{{ old('title') }}" required>
                                                         @error('title')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -46,10 +46,11 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="charity_types_id">Charity Type <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="charity_types_id">Charity Type <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
                                                         <div class="form-control-select">
-                                                            <select class="form-control form-select" id="charity_types_id" name="charity_types_id" value ="{{ old('charity_types_id') }}" required>
+                                                            <select class="form-control form-select" id="charity_types_id" name="charity_types_id"
+                                                                value="{{ old('charity_types_id') }}" required>
                                                                 @foreach ($charitiestypes as $types)
                                                                     <option value="{{ $types->id }}" style="font-weight:bold">{{ $types->title }}</option>
                                                                 @endforeach
@@ -68,16 +69,16 @@
                                                     <label class="form-label" for="description">Description</label>
                                                     <!-- Create the editor container -->
                                                     <div id="editor-container"> </div>
-                                                    <input name="description" value ="{{ old('description') }}" type="hidden">
+                                                    <input name="description" value="{{ old('description') }}" type="hidden">
                                                 </div>
                                             </div>
 
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="logo_type">Logo <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="logo_type">Logo <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
                                                         <div class="form-control-select">
-                                                            <select class="form-control" name="logo_type" id='logo_type' value ="{{ old('logo_type') }}" required>
+                                                            <select class="form-control" name="logo_type" id='logo_type' value="{{ old('logo_type') }}" required>
                                                                 <option value="upload">Upload</option>
                                                                 <option value="link">Link</option>
                                                             </select>
@@ -92,9 +93,10 @@
                                             </div>
                                             <div class="col-lg-6 logo_link">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="logo_link">Logo Link <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="logo_link">Logo Link <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" id="logo_link" class="form-control" id="logo_link" name="logo_link" value ="{{ old('logo_link') }}" required>
+                                                        <input type="text" id="logo_link" class="form-control" id="logo_link" name="logo_link" value="{{ old('logo_link') }}"
+                                                            required>
                                                         @error('logo_link')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -105,26 +107,28 @@
                                             </div>
                                             <div class="col-lg-6 logo_upload">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="logo_upload">Logo Upload <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="logo_upload">Logo Upload <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
                                                         <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" name='logo_upload' id="logo_upload" value ="{{ old('logo_upload') }}" required>
+                                                            <input type="file" class="custom-file-input" name='logo_upload' id="logo_upload"
+                                                                value="{{ old('logo_upload') }}" required>
                                                             @error('logo_upload')
                                                                 <span class="invalid-feedback d-block" role="alert">
                                                                     <strong>{{ $message }}</strong>
                                                                 </span>
                                                             @enderror
-                                                            <label class="custom-file-label" for="logo_upload">Choose file</label>
+                                                            <label class="custom-file-label" for="logo_upload">Choose
+                                                                file</label>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 ">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="banner_type">Banner <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="banner_type">Banner <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
                                                         <div class="form-control-select">
-                                                            <select class="form-control" name="banner_type" id='banner_type'  value ="{{ old('banner_type') }}"required>
+                                                            <select class="form-control" name="banner_type" id='banner_type' value="{{ old('banner_type') }}" required>
                                                                 <option value="upload">Upload</option>
                                                                 <option value="link">Link</option>
                                                             </select>
@@ -139,9 +143,10 @@
                                             </div>
                                             <div class="col-lg-6 banner_link">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="banner_link">Banner Link <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="banner_link">Banner Link <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="banner_link" name="banner_link" value ="{{ old('banner_link') }}" required>
+                                                        <input type="text" class="form-control" id="banner_link" name="banner_link" value="{{ old('banner_link') }}"
+                                                            required>
                                                         @error('banner_link')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -152,11 +157,13 @@
                                             </div>
                                             <div class="col-lg-6 banner_upload">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="banner_upload">Banner Upload <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="banner_upload">Banner Upload <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
                                                         <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload" value ="{{ old('banner_upload') }}" required>
-                                                            <label class="custom-file-label" for="banner_upload">Choose file</label>
+                                                            <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload"
+                                                                value="{{ old('banner_upload') }}" required>
+                                                            <label class="custom-file-label" for="banner_upload">Choose
+                                                                file</label>
                                                             @error('banner_upload')
                                                                 <span class="invalid-feedback d-block" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -168,9 +175,9 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="country">Country <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="country">Country <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="country" name="country" value ="{{ old('country') }}" required>
+                                                        <input type="text" class="form-control" id="country" name="country" value="{{ old('country') }}" required>
                                                         @error('country')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -181,10 +188,10 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="status">Status <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="status">Status <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
                                                         <div class="form-control-select">
-                                                            <select class="form-control form-select" id="status" name="status" value ="{{ old('status') }}" required>
+                                                            <select class="form-control form-select" id="status" name="status" value="{{ old('status') }}" required>
                                                                 <option value="1">Active</option>
                                                                 <option value="0">In-active</option>
                                                             </select>
@@ -302,10 +309,11 @@
                 $('.banner_upload').hide();
             }
         });
+
         function initializeSelect2() {
-             $('.form-select').select2({
+            $('.form-select').select2({
                 placeholder: function() {
-                $(this).data('placeholder');
+                    $(this).data('placeholder');
                 }
             });
         }
@@ -313,10 +321,10 @@
         $('.form-validate').validate({
             rules: {
                 logo_link: {
-                    url: true,      
+                    url: true,
                 },
-                banner_link:{
-                    url:true
+                banner_link: {
+                    url: true
                 },
             }
         });

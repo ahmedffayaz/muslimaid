@@ -44,11 +44,12 @@ class CategoryRequest extends FormRequest
     public function messages()
     {
         return [
-            'name' => 'Name is required',
+            'name' => 'Name field is required',
             'parent_id.required' => 'Parent category must be select',
             'logo_type.required' => 'Logo/Icon type must be select',
             'logo_upload.max' => 'Logo max size should be 1MB',
-            'banner_upload.max' => 'Banner max size should be 1MB'
+            'banner_upload.max' => 'Banner max size should be 1MB',
+            'status' => 'Status field is required',
         ];
     }
 }

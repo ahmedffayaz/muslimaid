@@ -10,16 +10,13 @@
                     <div class="nk-block nk-block-lg">
                         <div class="nk-block-head">
                             <div class="nk-block-head-content">
-                                {{-- <h4 class="title nk-block-title">Create Blog</h4> --}}
                                 <div class="nk-block-des">
-                                    {{-- <p>You can make style out your....</p> --}}
                                 </div>
                             </div>
                         </div>
                         <div class="card">
                             <div class="card-inner">
                                 <div class="card-head">
-                                    {{-- <h5 class="card-title">Blog</h5> --}}
                                 </div>
                                 <form action="{{route('admin.blogs.update',$blog)}}" class="" method="POST">
                                     @csrf
@@ -27,7 +24,7 @@
                                     <div class="row g-4">
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Title</label>
+                                                <label class="form-label" for="reviewer">Title <span class="text-danger">*</span></label>
                                                 <div class="form-control-wrap">
                                                     <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="{{ $blog->title }}" required>
                                                 </div>

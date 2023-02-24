@@ -86,7 +86,7 @@
                             <div class="row gy-4">
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="form-label" for="key-${counter}">Choose Key</label>
+                                        <label class="form-label" for="key-${counter}">Choose Key <span class="text-danger">*</span></label>
                                         <div class="form-control-wrap">
                                             <select class="form-select form-control" id="key-${counter}" name="type[${counter}][key]" required>
                                                 <option Selected disabled>Choose key</option>
@@ -99,7 +99,7 @@
 
                                 <div class="col-sm-12">
                                     <div class="form-group">
-                                        <label class="form-label" for="default-01">Value</label>
+                                        <label class="form-label" for="default-01">Value <span class="text-danger">*</span></label>
                                         <div class="form-control-wrap">
                                             <textarea class="form-control" id="default-01" name="type[${counter}][value]" rows="3" placeholder="Value" required></textarea>
                                         </div>

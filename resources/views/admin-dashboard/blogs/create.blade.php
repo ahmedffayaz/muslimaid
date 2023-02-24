@@ -31,7 +31,7 @@
                                         <div class="row g-4">
                                             <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="reviewer">Title</label>
+                                                    <label class="form-label" for="reviewer">Title <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
                                                         <input id="blog-title" type="text" class="form-control "
                                                             name="title" placeholder="Title" value="" required>
@@ -50,7 +50,7 @@
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="reviewer">Banner Image</label>
+                                                    <label class="form-label" for="reviewer">Banner Image <span class="text-danger">*</span></label>
                                                     <div class="input-group">
                                                         <span class="input-group-btn">
                                                             <a id="lfm" data-input="thumbnail" data-preview="holder"

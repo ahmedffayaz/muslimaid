@@ -4,7 +4,7 @@
     <div class="row g-4">
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="type">Type</label>
+                <label class="form-label" for="type">Type <span class="text-danger">*</span></label>
                 <div class="form-control-wrap ">
                     <div class="form-control-select">
                         <select class="form-control" id="type" name="type" required>
@@ -17,7 +17,7 @@
         </div>
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="sale_commission">Network Commission</label>
+                <label class="form-label" for="sale_commission">Network Commission <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
                     <input type="number" class="form-control" min="0" step="0.01" id="sale_commission" value="{{ $cashback->sale_commission }}"
                         name="sale_commission" required oninput="calcPercentage()">
@@ -39,7 +39,7 @@
             </div>
             <div class="col-lg-12">
                 <div class="form-group">
-                    <label class="form-label" for="tracking_url">Tracking URL</label>
+                    <label class="form-label" for="tracking_url">Tracking URL <span class="text-danger">*</span></label>
                     <div class="form-control-wrap">
                         <input type="text" class="form-control" id="tracking_url" name="tracking_url" value="{{ $cashback->tracking_url }}"
                             placeholder="https://example.com/item/abc-id-1345" required style="width: 83%">
@@ -55,7 +55,8 @@
                         <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
                             title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">&{{ $cashback->network->deeplink_identifier ?? 'u' }}=</span>
                         <input type="text" class="form-control" id="deeplink_url" value="{{ isset($cashback->deeplink_url) ? $cashback->deeplink_url : '' }}"
-                            name="deeplink_url" value="{{ $cashback->deeplink_url }}" placeholder="https://example.com/item/abc-id-1345" style="position: relative; left:30px; width: 95%">
+                            name="deeplink_url" value="{{ $cashback->deeplink_url }}" placeholder="https://example.com/item/abc-id-1345"
+                            style="position: relative; left:30px; width: 95%">
                     </div>
                 </div>
             </div>

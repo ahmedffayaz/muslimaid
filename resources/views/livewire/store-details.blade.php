@@ -78,7 +78,7 @@
                                                 <div class="row g-4">
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="store_name">Store Name</label>
+                                                            <label class="form-label" for="store_name">Store Name <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="store_name" value="{{ $store->name }}" name="store_name"
                                                                     required>
@@ -87,7 +87,7 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="slug">Slug</label>
+                                                            <label class="form-label" for="slug">Slug <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="slug" value="{{ $store->slug }}" name="slug"
                                                                     required>
@@ -118,7 +118,7 @@
                                                     <div class="col-lg-6 sote-override-network"
                                                         @if ($store->override_network) style="display: none;" @else style="display: block;" @endif>
                                                         <div class="form-group">
-                                                            <label class="form-label" for="default-06">Network</label>
+                                                            <label class="form-label" for="default-06">Network <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap ">
                                                                 <div class="">
                                                                     <select class="form-control form-select select-2" id="" name="network_id" required>
@@ -134,7 +134,7 @@
                                                     <div class="col-lg-6 sote-override-network"
                                                         @if ($store->override_network) style="display: none;" @else style="display: block;" @endif>
                                                         <div class="form-group">
-                                                            <label class="form-label" for="tracking_url">Tracking URL</label>
+                                                            <label class="form-label" for="tracking_url">Tracking URL <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="tracking_url" value="{{ $store->tracking_url }}"
                                                                     name="tracking_url" placeholder="https://example.com/item/abc-id-1345" required style="width: 79%">
@@ -158,7 +158,7 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="store_url">Store url</label>
+                                                            <label class="form-label" for="store_url">Store url <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="store_url" value="{{ $store->store_url }}"
                                                                     name="store_url" placeholder="https://example.com/item/abc-id-1345" required>
@@ -341,7 +341,7 @@
                                     <label for="logo-input">
                                         <img id="blah" src="{{ asset('admin-dashboard/images/cloud-uploading.png') }}" alt="store logo" width="150px" />
                                         <input id="logo-input" name="image" class="d-none" type='file' onchange="readURL(this);" required />
-                                        <br> <br><span>Click here to select image</span>
+                                        <br> <br><span>Click here to select image <span class="text-danger">*</span></span>
                                     </label>
                                 </div>
                             </div>
@@ -413,7 +413,7 @@
                     <div class="row g-4">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="full-name-1">Title</label>
+                                <label class="form-label" for="full-name-1">Title <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="full-name-1" name="link_name" value="{{ old('link_name') }}" required>
                                     @error('link_name')
@@ -426,7 +426,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="vsale_commission">Sale commission</label>
+                                <label class="form-label" for="vsale_commission">Sale commission <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <input type="number" min="1" step="1" class="form-control" id="vsale_commission" name="sale_commission"
                                         value="{{ old('sale_commission') }}" required>
@@ -440,7 +440,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="click_url">Click url</label>
+                                <label class="form-label" for="click_url">Click url <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <input type="url" class="form-control" id="click_url" name="click_url" value="{{ old('click_url') }}" required>
                                     @error('click_url')
@@ -453,7 +453,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="phone-no-1">Destination url</label>
+                                <label class="form-label" for="phone-no-1">Destination url <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <input type="url" class="form-control" id="phone-no-1" name="destination" value="{{ old('destination') }}" required>
                                     @error('destination')
@@ -467,14 +467,14 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <input name="description" type="hidden">
-                                <label class="form-label" for="phone-no-1">Description</label>
+                                <label class="form-label" for="phone-no-1">Description <span class="text-danger">*</span></label>
                                 <textarea name="description" class="form-control "> {{ old('description') }}</textarea required>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <div class="form-group">
-                                    <label class="form-label" for="promotion_type">Promotion Type</label>
+                                    <label class="form-label" for="promotion_type">Promotion Type <span class="text-danger">*</span></label>
                                     <div class="form-control-wrap ">
                                         <select class="form-select form-control select-2" data-search="on" id="promotion_type" name="promotion_type"
                                             value="{{ old('promotion_type') }}" required>
@@ -487,42 +487,42 @@
                         </div>
                         <div class="col-lg-6 coupon-div">
                             <div class="form-group">
-                                <label class="form-label" for="coupon_code">Coupon Code</label>
+                                <label class="form-label" for="coupon_code">Coupon Code <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="coupon_code" name="coupon_code" value="{{ old('coupon_code') }}" required>
                                     @error('coupon_code')
-                                        <span class="invalid-feedback d-block" role="alert">
+<span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-                                    @enderror
+@enderror
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="promotion_start_date">Promotion Start Date</label>
+                                <label class="form-label" for="promotion_start_date">Promotion Start Date <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control date-picker promotion_start_date" value="{{ old('promotion_start_date') }}"
                                         id="promotion_start_date" name="promotion_start_date" autocomplete="off" required>
                                     @error('promotion_start_date')
-                                        <span class="invalid-feedback d-block" role="alert">
+<span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-                                    @enderror
+@enderror
                                 </div>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="promotion_end_date">Promotion End Date</label>
+                                <label class="form-label" for="promotion_end_date">Promotion End Date <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control date-picker promotion_end_date" value="{{ old('promotion_end_date') }}"
                                         id="promotion_end_date" name="promotion_end_date" required>
                                     @error('promotion_end_date')
-                                        <span class="invalid-feedback d-block" role="alert">
+<span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-                                    @enderror
+@enderror
                                 </div>
                             </div>
                         </div>
@@ -576,7 +576,7 @@
                     <div class="row g-4">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="type">Type</label>
+                                <label class="form-label" for="type">Type <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap ">
                                     <select class="form-control form-select select-2" id="type" name="type" required>
                                         <option value="percentage">Percentage</option>
@@ -587,7 +587,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="sale_commission">Commission</label>
+                                <label class="form-label" for="sale_commission">Commission <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <input type="number" class="form-control" min="0" step="0.01" id="sale_commission" value="" name="sale_commission"
                                         required>
@@ -595,14 +595,14 @@
                             </div>
                         </div>
                         @if ($store->override_network)
-                            <div class="col-lg-12">
+<div class="col-lg-12">
                                 <div class="form-group">
                                     <label class="form-label" for="network_id">Network</label>
                                     <div class="form-control-wrap">
                                         <select class="form-control form-select select-2" id="network_id" name="network_id">
                                             @foreach ($networks as $network)
-                                                <option value="{{ $network->id }}">{{ $network->name }}</option>
-                                            @endforeach
+<option value="{{ $network->id }}">{{ $network->name }}</option>
+@endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -630,7 +630,7 @@
                                     </div>
                                 </div>
                             </div>
-                        @endif
+@endif
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label class="form-label" for="cashback_icon">Icon Upload</label>
@@ -762,13 +762,13 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="add-seorule-form" class=" p-4">
-                <form action="{{ route('admin.stores.save_seo_rule') }}" class="gy-3 form-validate is-alter add_seorule_form" id="theform" method="POST">
+                <form action="{{ route('admin.stores.save_seo_rule') }}" class="gy-3 form-validate is-alter add_seorule_form" id="theForm" method="POST">
                     @csrf
                     <input type="hidden" name="store_id" value="{{ $store->id }}">
                     <div class="row g-4">
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label class="form-label" for="full-name-1">Key</label>
+                                <label class="form-label" for="full-name-1">Key <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <select class="form-control key" id="key" name="key" required>
                                         <option selected disabled>Select Key</option>
@@ -780,7 +780,7 @@
                         </div>
                         <div class="col-lg-12 key_value">
                             <div class="form-group">
-                                <label class="form-label" for="vsale_commission">Value</label>
+                                <label class="form-label" for="vsale_commission">Value <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <textarea class="form-control" id="value" value="" name="value" required></textarea>
                                 </div>
@@ -835,7 +835,7 @@
                     <div class="row g-4">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="full-name-1">City</label>
+                                <label class="form-label" for="full-name-1">City <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="city" name="city" value="" required>
                                 </div>
@@ -843,7 +843,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="vsale_commission">Postal code</label>
+                                <label class="form-label" for="vsale_commission">Postal code <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="postal_code" name="postal_code" value="" required>
                                 </div>
@@ -851,7 +851,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="latitude">Latitude</label>
+                                <label class="form-label" for="latitude">Latitude <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <input type="number" class="form-control" min="-90" max="90" step="any" id="latitude" name="latitude"
                                         value="" required>
@@ -860,7 +860,7 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="longitude">Longitude</label>
+                                <label class="form-label" for="longitude">Longitude <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <input type="number" class="form-control" min="-180" max="180" step="any" id="longitude" name="longitude"
                                         value="" required>
@@ -869,7 +869,7 @@
                         </div>
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label class="form-label" for="vsale_commission">Address</label>
+                                <label class="form-label" for="vsale_commission">Address <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <textarea class="form-control" id="address" value="" name="address" required></textarea>
                                 </div>
@@ -1153,7 +1153,6 @@
                     },
                     promotion_end_date: {
                         required: true,
-                        customdate: true,
                     },
                     click_url: {
                         required: true,
@@ -1171,19 +1170,7 @@
                         minValue: 1,
                     }
                 },
-                messages: {
-                    promotion_end_date: {
-                        customdate: 'End date must be greater than start date',
-                    }
-                }
             });
-
-            $.validator.addMethod('customdate', function(value, element) {
-                var startDate = new Date($(element).closest('form').find('.promotion_start_date').val());
-                var endDate = new Date(value);
-                return this.optional(element) || (startDate < endDate);
-            });
-
 
         }
 
@@ -1224,7 +1211,7 @@
                             (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
-                                NioApp.Toast('Cashback Updated Successfully.', 'success');
+                                NioApp.Toast('Vouchers Updated Successfully.', 'success');
                                 $('#custom_cashback_percentage').val(data['percentage']);
                             })(NioApp, jQuery);
                             fetchVouchers();
@@ -1267,14 +1254,42 @@
                     type: "PUT",
                     data: $(this).serialize(),
                     success: function(data) {
-                        $('#seo-modal').modal('hide');
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast('SEO rule Updated Successfully.', 'success');
-                        })(NioApp, jQuery);
-                        fetchSeoRules();
+                        if (data.success) {
+                            $('#seo-modal').modal('hide');
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(data.message, 'success');
+                            })(NioApp, jQuery);
+                            fetchSeoRules();
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                if (data.errors && Object.values(data.errors).length > 0) {
+                                    NioApp.Toast(Object.values(data.errors)[0], 'error');
+                                } else {
+                                    NioApp.Toast(data['message'], 'error');
+                                }
+                            })(NioApp, jQuery);
+                        }
+                    },
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
+
                 });
             });
         });
@@ -1739,7 +1754,7 @@
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
-                            NioApp.Toast('Store updated Successfully.', 'success');
+                            NioApp.Toast(data.message, 'success');
                         })(NioApp, jQuery);
                     },
                     error: function(error) {
@@ -1835,7 +1850,7 @@
         });
 
         $(document).ready(function() {
-            const form = document.getElementById('theForm');
+            const form = $('#theForm');
             $(document).on('submit', '.add_seorule_form', function(event) {
                 event.preventDefault();
                 $.ajax({
@@ -1843,17 +1858,47 @@
                     type: "POST",
                     data: $(this).serialize(),
                     success: function(data) {
-                        $('#add-seorule-modal').modal('hide');
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast('SEO rule Added Successfully.', 'success');
-                        })(NioApp, jQuery);
-                        fetchSeoRules();
+                        if (data.success) {
+                            form.trigger('reset');
+                            $('#add-seorule-modal').modal('hide');
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(data.message, 'success');
+                            })(NioApp, jQuery);
+                            fetchSeoRules();
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                if (data.errors && Object.values(data.errors).length > 0) {
+                                    NioApp.Toast(Object.values(data.errors)[0], 'error');
+                                } else {
+                                    NioApp.Toast(data['message'], 'error');
+                                }
+                            })(NioApp, jQuery);
+                        }
+                    },
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
-                });
+
+                })
             });
         });
+        // });
 
         // Categories child parent selector
         $('input[type="checkbox"]').change(function(e) {

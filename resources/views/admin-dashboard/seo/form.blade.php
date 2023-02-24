@@ -12,7 +12,7 @@
         <div class="row g-4">
             <div class="col-lg-12">
                 <div class="form-group">
-                    <label class="form-label" for="reviewer">URL</label>
+                    <label class="form-label" for="reviewer">URL <span class="text-danger">*</span></label>
                     <div class="form-control-wrap">
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -64,7 +64,7 @@
 
                                     <div class="col-sm-12">
                                         <div class="form-group">
-                                            <label class="form-label" for="default-01">Value</label>
+                                            <label class="form-label" for="default-01">Value <span class="text-danger">*</span></label>
                                             <div class="form-control-wrap">
                                                 <textarea class="form-control" id="default-01" name="type[{{ $loop->index + 1 }}][value]" rows="3" placeholder="Value" required>{{$rule_data->value}}</textarea>
                                             </div>
