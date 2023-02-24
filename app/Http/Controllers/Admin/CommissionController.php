@@ -108,7 +108,7 @@ class CommissionController extends Controller
                 $emailTemplate = EmailTemplate::where('key', 'user_new_cashback_tracked')->first();
 
                 $filteredMessage = str_replace(
-                    ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{STORE}}', '{{AMOUNT}}'],
+                    ['{{ SITE_TITLE }}', '{{ SITE_URL }}', '{{ NAME }}', '{{ EMAIL }}', '{{ STORE }}', '{{ AMOUNT }}'],
                     [
                         SiteSetting()['website_title'], url('/'),
                         $commission->user->first_name . ' ' . $commission->user->last_name,
@@ -125,11 +125,14 @@ class CommissionController extends Controller
 
                 SendEmail::dispatch($data);
             }
-
-            return response()->json([
-                'status' => JsonResponse::HTTP_OK,
-                'message' => 'New Cashback Added'
-            ], JsonResponse::HTTP_OK);
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'New Cashback Added'
+                ], JsonResponse::HTTP_OK);
+            }
+            flash()->success('New Cashback Added');
+            return redirect()->back();
         } catch (Exception $exception) {
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
@@ -327,7 +330,7 @@ class CommissionController extends Controller
                     $emailTemplate = EmailTemplate::where('key', 'user_new_cashback_tracked')->first();
 
                     $filteredMessage = str_replace(
-                        ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{STORE}}', '{{AMOUNT}}'],
+                        ['{{ SITE_TITLE }}', '{{ SITE_URL }}', '{{ NAME }}', '{{ EMAIL }}', '{{ STORE }}', '{{ AMOUNT }}'],
                         [
                             SiteSetting()['website_title'], url('/'),
                             $commission->user->first_name . ' ' . $commission->user->last_name,

@@ -21,7 +21,7 @@
                                     </div>
                                 </div>
                             </div>
-                     
+
                             @include('flash::message')
                             <div class="card">
                                 <div class="card-inner">
@@ -35,7 +35,7 @@
                                         <div class="row g-4">
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="title">Title <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="title">Title <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
                                                         <input type="text" class="form-control" id="title" name="title" value="{{ $charity->title }}" required>
                                                         @error('title')
@@ -48,7 +48,7 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="charity_types_id">Charity Type <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="charity_types_id">Charity Type <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
                                                         <div class="form-control-select">
                                                             <select class="form-control form-select" id="charity_types_id" name="charity_types_id" required>
@@ -78,12 +78,12 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="logo_type">Logo <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="logo_type">Logo <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
                                                         <div class="form-control-select">
                                                             <select class="form-control" name="logo_type" id='logo_type' required>
                                                                 <option value="upload" @if ($charity->logo_type == 'upload') selected @endif>Upload</option>
-                                                                <option value="link"  @if ($charity->logo_type == 'link') selected @endif>Link</option>
+                                                                <option value="link" @if ($charity->logo_type == 'link') selected @endif>Link</option>
                                                             </select>
                                                             @error('logo_type')
                                                                 <span class="invalid-feedback d-block" role="alert">
@@ -96,9 +96,9 @@
                                             </div>
                                             <div class="col-lg-6 logo_link">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="logo_link">Logo Link <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="logo_link">Logo Link <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="logo_link" name="logo_link" value= {{ $charity->logo_link}} required>
+                                                        <input type="text" class="form-control" id="logo_link" name="logo_link" value={{ $charity->logo_link }} required>
                                                         @error('logo_link')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -109,11 +109,12 @@
                                             </div>
                                             <div class="col-lg-6 logo_upload">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="logo_upload">Logo Upload <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="logo_upload">Logo Upload <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
                                                         <div class="custom-file">
                                                             <input type="file" class="custom-file-input" name='logo_upload' id="logo_upload">
-                                                            <label class="custom-file-label" for="logo_upload">Choose file</label>
+                                                            <label class="custom-file-label" for="logo_upload">Choose
+                                                                file</label>
                                                             @error('logo_upload')
                                                                 <span class="invalid-feedback d-block" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -125,12 +126,12 @@
                                             </div>
                                             <div class="col-lg-6 ">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="banner_type">Banner <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="banner_type">Banner <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
                                                         <div class="form-control-select">
                                                             <select class="form-control" name="banner_type" id='banner_type' required>
                                                                 <option value="upload" @if ($charity->banner_type == 'upload') selected @endif>Upload</option>
-                                                                <option value="link"  @if ($charity->banner_type == 'link') selected @endif>Link</option>
+                                                                <option value="link" @if ($charity->banner_type == 'link') selected @endif>Link</option>
 
                                                             </select>
                                                             @error('banner_type')
@@ -145,9 +146,10 @@
                                             </div>
                                             <div class="col-lg-6 banner_link">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="banner_link">Banner Link <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="banner_link">Banner Link <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="banner_link" name="banner_link" value="{{ $charity->banner_link }}"  required>
+                                                        <input type="text" class="form-control" id="banner_link" name="banner_link" value="{{ $charity->banner_link }}"
+                                                            required>
                                                         @error('banner_link')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -158,11 +160,12 @@
                                             </div>
                                             <div class="col-lg-6 banner_upload">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="banner_upload">Banner Upload <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="banner_upload">Banner Upload <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
                                                         <div class="custom-file">
                                                             <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload">
-                                                            <label class="custom-file-label" for="banner_upload">Choose file</label>
+                                                            <label class="custom-file-label" for="banner_upload">Choose
+                                                                file</label>
                                                             @error('banner_upload')
                                                                 <span class="invalid-feedback d-block" role="alert">
                                                                     <strong>{{ $message }}</strong>
@@ -175,7 +178,7 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="country">Country <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="country">Country <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
                                                         <input type="text" class="form-control" id="country" name="country" value="{{ $charity->country }}">
                                                         @error('country')
@@ -188,7 +191,7 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="status">Status <span class="text-primary">*</span></label>
+                                                    <label class="form-label" for="status">Status <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
                                                         <div class="form-control-select">
                                                             <select class="form-control form-select" id="status" name="status" required>
@@ -219,7 +222,6 @@
             </div>
         </div>
     </div>
-
 @endsection
 @push('scripts')
     <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
@@ -320,10 +322,10 @@
         $('.form-validate').validate({
             rules: {
                 logo_link: {
-                    url: true,      
+                    url: true,
                 },
-                banner_link:{
-                    url:true
+                banner_link: {
+                    url: true
                 },
             }
         });

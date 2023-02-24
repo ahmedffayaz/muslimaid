@@ -282,17 +282,16 @@
                     });
 
                     formPlaceholder.find(".promotion_end_date").datepicker();
+                    console.log(formPlaceholder.find(".promotion_end_date").datepicker());
                     formPlaceholder.find(".promotion_start_date").datepicker();
                     checkVoucherType();
                     attachFormValidator($(document).find('#create-edit-voucher-form'));
                 }
             });
         });
-
         $(document).on("change", "#promotion_type", function() {
             checkVoucherType();
         });
-
         $(document).on('click', '.delete', function(event) {
             var form_id = $(this).attr('form_id');
             Swal.fire({
@@ -401,7 +400,7 @@
         function attachFormValidator(form) {
             jQuery.validator.addMethod("minValue", function(value, element, param) {
                 return this.optional(element) || value >= param;
-                }, "Value must be equal to or greater than {0}.");
+            }, "Value must be equal to or greater than {0}.");
             form.validate({
                 rules: {
                     promotion_start_date: {
@@ -419,12 +418,9 @@
                         required: true,
                         url: true
                     },
-                    description: {
+                    sale_commission: {
                         required: true,
-                    },
-                    sale_commission:{
-                        required:true,
-                        minValue: 1 ,
+                        minValue: 1,
                     }
                 },
                 messages: {
@@ -439,7 +435,7 @@
                 var endDate = new Date(value);
                 return this.optional(element) || (startDate < endDate);
             });
-                
+
 
         }
 

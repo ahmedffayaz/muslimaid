@@ -20,17 +20,6 @@
                                         data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
-                                            {{-- <li class="nk-block-tools-opt"><a
-                                                    href="{{route('admin.stores.edit',$store)}}"
-                                                    class="btn btn-primary btn-sm"><em
-                                                        class="icon ni ni-edit"></em><span>Edit Store</span></a></li>
-                                            --}}
-
-                                            {{-- <li><a href="{{route('admin.stores.export')}}" id="export"
-                                                    class="btn btn-success btn-sm"
-                                                    class="btn btn-white btn-outline-light"><em
-                                                        class="icon ni ni-download-cloud"></em><span>Export</span></a>
-                                            </li> --}}
 
                                         </ul>
                                     </div>
@@ -79,7 +68,8 @@
                                                     <button href="#" class="btn btn-sm btn-success" disabled> <em
                                                             class="icon ni ni-check"></em><span>Closed</span></button><br>
                                                     <div class="mt-1">Closed by:
-                                                        {{ $ticket->closedByUser->first_name ?? 'admin' }} at
+                                                        {{ $ticket->closedByUser->first_name  ?? 'super' }}
+                                                        {{ $ticket->closedByUser->second_name  ?? 'admin' }} at
                                                         {{ $ticket->closing_time ?? '' }}</div>
                                                     @endif
 

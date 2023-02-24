@@ -24,11 +24,13 @@
                                         <div class="row g-4">
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="reviewer">Reviewer Name</label>
+                                                    <label class="form-label" for="reviewer">Reviewer Name <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
                                                         <select class="form-select form-control" data-search="on" name="user_id" required>
                                                             @foreach ($users as $user)
-                                                                <option value="{{ $user->id }}">{{ $user->first_name . ' ' . $user->last_name }}</option>
+                                                                <option value="{{ $user->id }}">
+                                                                    {{ $user->first_name . ' ' . $user->last_name }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -36,7 +38,7 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="default-06">Store</label>
+                                                    <label class="form-label" for="default-06">Store <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
 
                                                         <select class="form-select form-control" data-search="on" id="default-06" name="store_id" required>
@@ -51,7 +53,7 @@
 
                                             <div class="col-lg-12">
                                                 <div class="card">
-                                                    <label class="form-label" for="phone-no-1">Review</label>
+                                                    <label class="form-label" for="phone-no-1">Review <span class="text-danger">*</span></label>
                                                     <div id="editor-container" name="review" contenteditable="true"></div>
                                                     <input name="review" type="hidden">
                                                     @error('review')

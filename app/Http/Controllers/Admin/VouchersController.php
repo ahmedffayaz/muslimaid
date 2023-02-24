@@ -41,10 +41,10 @@ class VouchersController extends Controller
 
     public function store(Request $request)
     {
-        
+
         $validator = Validator::make($request->all(), [
             'link_name' => 'required|max:255',
-            'description' => 'required|max:255',
+            'description' => 'nullable|max:255',
             'click_url' => 'required|url',
             'coupon_code' => $request->input('promotion_type') === 'Coupon' ? 'required' : '',
             'sale_commission' => 'required|integer',
@@ -97,7 +97,7 @@ class VouchersController extends Controller
                     'success' => false
                 );
             }
-            flash()->error($message); 
+            flash()->error($message);
             return redirect()->route('admin.vouchers.index');
         }
     }
@@ -114,10 +114,10 @@ class VouchersController extends Controller
     }
 
     public function update(Request $request, Voucher $voucher)
-    {  
+    {
         $validator = Validator::make($request->all(), [
             'link_name' => 'required|max:255',
-            'description' => 'required|max:255',
+            'description' => 'nullable|max:255',
             'click_url' => 'required|url',
             'sale_commission' => 'required|integer',
             'coupon_code' => $request->input('promotion_type') === 'Coupon' ? 'required' : '',
