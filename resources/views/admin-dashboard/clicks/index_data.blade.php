@@ -8,6 +8,7 @@
 
         <div class="nk-tb-col " style="width: 10%"><span class="sub-text">Click ID</span></div>
         <div class="nk-tb-col "><span class="sub-text">User</span></div>
+        <div class="nk-tb-col text-center"><span class="sub-text">Network</span></div>
         <div class="nk-tb-col text-center"><span class="sub-text">Store</span></div>
         <div class="nk-tb-col text-right"><span class="sub-text">Exit Url</span></div>
         <div class="nk-tb-col  text-right"><span class="sub-text">Time</span></div>
@@ -51,11 +52,13 @@
                         <span>{{ $click->user->email ?? '' }}</span>
                     </div>
                 </div>
+            </div>
 
+            <div class="nk-tb-col text-center">
+                <span class="tb-status badge badge-primary"><b>{{$click->network->name}}</b></span>
             </div>
             <div class="nk-tb-col text-center">
                 <span><b>{{ $click->store->id }} - {{ $click->store->name ?? '' }}</b></span>
-
             </div>
 
             <div class="nk-tb-col text-right">
