@@ -571,9 +571,6 @@
                     name: {
                         required: true
                     },
-                    parent_id: {
-                        required: true
-                    },
                     logo_type: {
                         required: true
                     },

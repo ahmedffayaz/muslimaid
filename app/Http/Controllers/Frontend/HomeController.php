@@ -34,7 +34,7 @@ class HomeController extends Controller
                 $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $request->input('search') . '%');
             })->whereStatus('active')->limit(20)->get();
 
-        return view('frontend.components.search-suggestions', compact('stores'));
+        return view('frontend.layouts.includes.search-suggestions', compact('stores'));
     }
 
     public function setLocale($locale)

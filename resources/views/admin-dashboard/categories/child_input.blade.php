@@ -1,6 +1,8 @@
 @foreach ($childs as $child)
-    <option @if ($isEdit) @if ($category->parent_id == $child->id) selected @endif
-        @if ($category->id == $child->id) disabled @endif @endif
+    <option @if ($isEdit) 
+                @if ($category->parent_id == $child->id) selected @endif
+                @if ($category->id == $child->id) disabled @endif 
+            @endif
         value="{{ $child->id }}">{{ $dashes }}{{ $child->name }}</option>
     @if (count($child->childs))
         @php $newdashes = $dashes.'~'; @endphp
