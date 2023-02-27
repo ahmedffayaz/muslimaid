@@ -25,60 +25,6 @@
                         </div><!-- .nk-block-head-content -->
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
-                {{-- <div class="card card-preview mb-4">
-                    <div class="card-inner">
-                        <div id="accordion-1" class="accordion accordion-s2">
-                            <div class="accordion-item">
-                                <a href="#" class="accordion-head collapsed" data-toggle="collapse" data-target="#accordion-item-1-1">
-                                    <h6 class="title">Search</h6>
-                                    <span class="accordion-icon"></span>
-                                </a>
-                                <div class="accordion-body collapse" id="accordion-item-1-1" data-parent="#accordion-1">
-                                    <div class="accordion-inner">
-                                        <div><form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
-                                            @csrf
-                                            <div class="row g-4">
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <div class="form-control-wrap ">
-                                                            <label class="form-label" for="reviewer">Reviewer Name</label>
-                                                            <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="reviewer" value="" name="reviewer">
-                                                            </div>
-                                                                
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                            
-                                                    
-                                                <div class="col-lg-3">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="status">Status</label>
-                                                        <div class="form-control-wrap ">
-                                                            
-                                                            <select class="form-control form-select" name="status" required>
-                                                                <option value="-1">Any</option>
-                                                                <option value="active">Active</option>
-                                                                <option value="pending">Pending</option>
-                                                            </select>
-                                                        
-                                                        </div>
-                                                    </div>
-                                                </div>                  
-                                                <div class="col-3 align-self-end">
-                                                    <div class="form-group">
-                                                        <button type="submit" class="btn btn-success btn-block">Search</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
                 @include('flash::message')
                 <div class="nk-block">
                     <div class="card card-stretch">

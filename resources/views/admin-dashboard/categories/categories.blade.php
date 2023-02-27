@@ -578,34 +578,17 @@
                         required: true
                     },
                     logo_link: {
-                        required: true,
                         url: true
-                    },
-                    logo_upload: {
-                        required: true
                     },
                     banner_type: {
                         required: true
                     },
                     banner_link: {
-                        required: true,
                         url: true
-                    },
-                    banner_upload: {
-                        required: true
-                    },
-                    sort: {
-                        required: true
                     },
                     status: {
                         required: true
                     },
-                    meta_description: {
-                        required: true
-                    },
-                    meta_keyword: {
-                        required: true
-                    }
                 }
             });
         }

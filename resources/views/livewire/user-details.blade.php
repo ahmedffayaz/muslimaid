@@ -26,13 +26,13 @@
                                         <div class="">
                                             <select class="form-control form-select select-2" data-search="on" name="open_store" id="user_select" required>
                                                 @foreach ($users as $item)
-                                                    <option @if ($user->id == $item->id) selected  @endif value="{{ $item->id }}">
+                                                    <option @if ($user->id == $item->id) selected @endif value="{{ $item->id }}">
                                                         {{ $item->id }} -
                                                         {{ $item->first_name != 'unnamed' || $item->last_name != 'unnamed' ? $item->first_name . ' ' . $item->last_name : $item->email }}
                                                     </option>
                                                 @endforeach
                                             </select>
-                                           
+
                                         </div>
                                     </div>
                                 </div>
@@ -70,19 +70,22 @@
                                             <div class="nk-block-head">
                                                 <h5 class="title">User Information</h5>
                                             </div>
-                                            <form action="{{ route('admin.users.update', $user) }}" enctype="multipart/form-data" class="gy-3 form-validate is-alter user-form" id="user-edit-form" method="POST">
+                                            <form action="{{ route('admin.users.update', $user) }}" enctype="multipart/form-data" class="gy-3 form-validate is-alter user-form"
+                                                id="user-edit-form" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="row g-4">
                                                     <div class="col-lg-12 text-center">
                                                         <label class="form-label" for="pay-amount-1">Avatar</label>
                                                         <div class="profile-card__avatar text-center">
-                                                            @if($user->avatar == 'default.png')
-                                                            <img src="{{asset('admin-dashboard/images/avatar.png')}}" id="image_avatar" width="100">
+                                                            @if ($user->avatar == 'default.png')
+                                                                <img src="{{ asset('admin-dashboard/images/avatar.png') }}" id="image_avatar" width="100">
                                                             @else
-                                                            <img src="{{asset('storage/users/images/avatar/'.$user->avatar)}}" id="image_avatar" width="100" style="border-radius: 50%; height: 100px">
+                                                                <img src="{{ asset('storage/users/images/avatar/' . $user->avatar) }}" id="image_avatar" width="100"
+                                                                    style="border-radius: 50%; height: 100px">
                                                             @endif
-                                                            <input type="file" class="form-control mt-3 w-50 mx-auto" name="avatar" accept="image/*" value="{{ old('avatar') ?? null }}" onchange="readURL(this);">
+                                                            <input type="file" class="form-control mt-3 w-50 mx-auto" name="avatar" accept="image/*"
+                                                                value="{{ old('avatar') ?? null }}" onchange="readURL(this);">
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
@@ -107,7 +110,8 @@
                                                         <div class="form-group">
                                                             <label class="form-label" for="email">Email</label>
                                                             <div class="form-control-wrap">
-                                                                <input type="email" class="form-control" id="email" value="{{ $user->email }}" name="email" required>
+                                                                <input type="email" class="form-control" id="email" value="{{ $user->email }}" name="email"
+                                                                    required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -115,7 +119,8 @@
                                                         <div class="form-group">
                                                             <label class="form-label" for="phone-no-1">Phone</label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="phone-no-1" value="{{ $user->phone }}" name="phone" required>
+                                                                <input type="text" class="form-control" id="phone-no-1" value="{{ $user->phone }}" name="phone"
+                                                                    required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -400,13 +405,14 @@
                 }
             });
         }
+
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     $('#image_avatar')
                         .attr('src', e.target.result)
-                        .css('border-radius','50%').css('height',100);
+                        .css('border-radius', '50%').css('height', 100);
                 };
 
                 reader.readAsDataURL(input.files[0]);
@@ -530,12 +536,19 @@
                     url: $(this).attr('action'),
                     data: $(this).serialize(),
                     success: function(data) {
-
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(data.message, data.updated);
-                        })(NioApp, jQuery);
+                        if (data.success) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(data.message, 'success');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(data.message, 'error');
+                            })(NioApp, jQuery);
+                        }
                     },
                     error: function(data) {
                         console.log("error");
@@ -605,26 +618,26 @@
             });
         }
         $('#user-edit-form').validate({
-                errorClass: 'invalid-feedback d-block',
-                rules: {
-                    firstname: {
-                        required: true
-                    },
-                    lastname: {
-                        required: true
-                    },
-                    email: {
-                        required: true
-                    },
-                    phone: {
-                        required: true,
-                    },
+            errorClass: 'invalid-feedback d-block',
+            rules: {
+                firstname: {
+                    required: true
                 },
-                submitHandler: function(form) {
-                    if ($(form).valid())
-                        form.submit();
-                    return false;
-                }
-            });
+                lastname: {
+                    required: true
+                },
+                email: {
+                    required: true
+                },
+                phone: {
+                    required: true,
+                },
+            },
+            submitHandler: function(form) {
+                if ($(form).valid())
+                    form.submit();
+                return false;
+            }
+        });
     </script>
 @endpush

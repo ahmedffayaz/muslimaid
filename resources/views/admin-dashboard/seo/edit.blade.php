@@ -8,9 +8,7 @@
                     <div class="nk-block nk-block-lg">
                         <div class="nk-block-head">
                             <div class="nk-block-head-content">
-                                {{-- <h4 class="title nk-block-title">Create Blog</h4> --}}
                                 <div class="nk-block-des">
-                                    {{-- <p>You can make style out your....</p> --}}
                                 </div>
                             </div>
                         </div>
@@ -34,7 +32,7 @@
                                     <div class="row g-4">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Url</label>
+                                                <label class="form-label" for="reviewer">Url <span class="text-danger">*</span></label>
                                                 <div class="form-control-wrap">
                                                     <input id="blog-title" type="text" class="form-control " name="url" placeholder="Url" value="{{ $seo->url }}" readonly> 
                                                 </div>
@@ -42,7 +40,7 @@
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                            <label class="form-label" for="reviewer">Title</label>
+                                            <label class="form-label" for="reviewer">Title <span class="text-danger">*</span></label>
                                             <input  class="form-control " name="title" placeholder="Title" value="{{ $seo->title }}" required>
                                         </div>
                                         </div>
@@ -52,7 +50,7 @@
                                             <div class="rule-type-container remove" data-count="{{ $seo->ruleData->count() }}">
                                                 @foreach ($seo->ruleData as $key => $rule_data)
                                                     <div class="form-group">
-                                                        <label class="form-label" for="default-06">Type</label>
+                                                        <label class="form-label" for="default-06">Type <span class="text-danger">*</span></label>
                                                         <div class="form-control-wrap ">
                                                             <div class="form-control-select">
                                                                 <select class="form-control rule_type" data-type_count="{{$key}}" id="rule_type" name="type[{{$key}}][rule_type]" required>

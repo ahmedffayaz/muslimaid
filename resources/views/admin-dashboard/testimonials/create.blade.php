@@ -62,7 +62,7 @@
                                     <div class="row g-4">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">User</label>
+                                                <label class="form-label" for="reviewer">User <span class="text-danger">*</span></label>
                                                         <select class=" select-user" id="user" name="user"  required>
                                                             <option value="" disabled selected>Select user</option>
                                                             @foreach($users as $user)
@@ -73,7 +73,7 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="form-label" for="reviewer">User Name</label>
+                                            <label class="form-label" for="reviewer">User Name <span class="text-danger">*</span></label>
                                             <div class="form-control-wrap">
                                                 <input id="user-name" type="text" class="form-control " name="name" placeholder="User Name" value="" required>
                                             </div>
@@ -82,7 +82,7 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Title</label>
+                                                <label class="form-label" for="reviewer">Title <span class="text-danger">*</span></label>
                                                 <div class="form-control-wrap">
                                                     <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="" required>
                                                     </div>
@@ -90,7 +90,7 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="reviewer">Company Name</label>
+                                                    <label class="form-label" for="reviewer">Company Name <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
                                                         <input id="blog-title" type="text" class="form-control " name="company_name" placeholder="Company Name" value="" required>
                                                     </div>
@@ -99,7 +99,7 @@
 
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                            <label class="form-label" for="reviewer">Description</label>
+                                            <label class="form-label" for="reviewer">Description <span class="text-danger">*</span></label>
                                             <textarea  class="form-control " name="description" placeholder="Description" value="" required></textarea>
                                         </div>
                                         </div>
@@ -107,7 +107,7 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Job Position</label>
+                                                <label class="form-label" for="reviewer">Job Position <span class="text-danger">*</span></label>
                                                 <div class="form-control-wrap">
                                                     <input id="blog-title" type="text" class="form-control " name="position" placeholder="Job Position" value="" required>
                                                 </div>
@@ -116,7 +116,7 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Order No</label>
+                                                <label class="form-label" for="reviewer">Order No <span class="text-danger">*</span></label>
                                                 <div class="form-control-wrap">
                                                     <input id="blog-title" type="number" class="form-control " name="order_no" placeholder="Order No" value="" required>
                                                 </div>
@@ -138,10 +138,10 @@
                                     <div class="col-lg-2">
                                         <div class="form-group">
                                             <div class=" logo">
-                                            <label class="form-label" for="reviewer">User Image</label>
+                                            <label class="form-label" for="reviewer">User Image <span class="text-danger">*</span></label>
                                             <div class="btn-choose form-control">
                                                 Choose Image
-                                               <input preview="#logo" type="file" name="user_image" class="hide_file form-control" onchange="readURL(this);">
+                                               <input preview="#logo" type="file" name="user_image" class="hide_file form-control" onchange="readURL(this);" required>
                                               </div>
                                         </div>
                                     </div>

@@ -21,43 +21,46 @@
                                     <div class="card-head">
                                         <h5 class="card-title">User Info</h5>
                                     </div>
-                                    <form action="{{ route('admin.users.store') }}" enctype="multipart/form-data" class="gy-3 form-validate user-form is-alter" method="POST">
+                                    <form action="{{ route('admin.users.store') }}" enctype="multipart/form-data" class="gy-3 user-form is-alter" id="form-validate"
+                                        method="POST">
                                         @csrf
                                         <div class="row g-4">
                                             <div class="col-lg-12 text-center">
                                                 <label class="form-label" for="pay-amount-1">Avatar</label>
                                                 <div class="profile-card__avatar text-center">
-                                                    <img src="{{asset('admin-dashboard/images/avatar.png')}}" id="image_avatar" width="100">
-                                                    <input type="file" class="form-control mt-3 w-50 mx-auto" name="avatar" accept="image/*" value="{{ old('avatar') ?? null }}"  onchange="readURL(this);" >
+                                                    <img src="{{ asset('admin-dashboard/images/avatar.png') }}" id="image_avatar" width="100">
+                                                    <input type="file" class="form-control mt-3 w-50 mx-auto" name="avatar" accept="image/*"
+                                                        value="{{ old('avatar') ?? null }}" onchange="readURL(this);">
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="full-name-1">First Name</label>
+                                                    <label class="form-label" for="full-name-1">First Name <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="full-name-1" name="firstname" value="{{ old('firstname') ?? null }}" required>
+                                                        <input type="text" class="form-control" id="full-name-1" name="firstname" value="{{ old('firstname') ?? null }}"
+                                                            required>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="full-name-1">Last Name</label>
+                                                    <label class="form-label" for="lastname">Last Name <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="full-name-1" name="lastname" value="{{ old('lastname') ?? null }}" required>
+                                                        <input type="text" class="form-control" id="lastname" name="lastname" value="{{ old('lastname') ?? null }}" required>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="full-name-1">Email</label>
+                                                    <label class="form-label" for="email">Email <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="email" class="form-control" id="full-name-1" name="email" value="{{ old('email') ?? null }}" required>
+                                                        <input type="email" class="form-control" id="email" name="email" value="{{ old('email') ?? null }}" required>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="phone-no-1">Phone</label>
+                                                    <label class="form-label" for="phone-no-1">Phone <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
                                                         <input type="text" class="form-control" id="phone-no-1" name="phone" value="{{ old('phone') ?? null }}" required>
                                                     </div>
@@ -65,7 +68,7 @@
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="pay-amount-1">Address</label>
+                                                    <label class="form-label" for="pay-amount-1">Address <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
                                                         <input type="text" class="form-control" id="pay-amount-1" name="address" value="{{ old('address') ?? null }}" required>
                                                     </div>
@@ -127,14 +130,34 @@
         function readURL(input) {
             if (input.files && input.files[0]) {
                 var reader = new FileReader();
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     $('#image_avatar')
                         .attr('src', e.target.result)
-                        .css('border-radius','50%').css('height',100);
+                        .css('border-radius', '50%').css('height', 100);
                 };
 
                 reader.readAsDataURL(input.files[0]);
             }
         }
+        $('#form-validate').validate({
+            errorClass: 'invalid-feedback d-block',
+            rules: {
+                firstname: {
+                    required: true
+                },
+                lastname: {
+                    required: true
+                },
+                email: {
+                    required: true
+                },
+                phone: {
+                    required: true
+                },
+                address: {
+                    required: true
+                },
+            }
+        });
     </script>
 @endpush
