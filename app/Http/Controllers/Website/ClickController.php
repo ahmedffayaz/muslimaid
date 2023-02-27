@@ -2,27 +2,20 @@
 
 namespace App\Http\Controllers\Website;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\ExitClick;
+use Exception;
+use Throwable;
 use App\Models\Store;
+use App\Models\ExitClick;
 use App\Models\SiteSetting;
+use Illuminate\Http\Request;
 use App\Models\RedeemedVoucher;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ClickController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $store = Store::findOrFail(74);
-        $url = 'danishmemon.com';
-        return view('frontend.pages.exit', compact('store', 'url'));
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -31,71 +24,137 @@ class ClickController extends Controller
      */
     public function store(Request $request)
     {
-        $deeplinkUrl = '';
-        $store = Store::where('id', $request->input('store_id'))->first();
-
-        // Get network ID
-        if ($store->override_network) {
-            $networkId = $request->input('network_id');
-        } else {
-            $networkId = $store->network->id;
-        }
-
-        // Cashback percentage
-        $customCashbackPercentage = $store->custom_cashback_percentage;
-
-        if ($customCashbackPercentage) {
-            $cashbackPercent = $customCashbackPercentage;
-        } else {
-            $cashbackPercent = SiteSetting::where('type', 'cashback_percentage')->first()->value;
-        }
-
-        if (!$cashbackPercent) {
-            $cashbackPercent = 0;
-        }
-
-        $click = ExitClick::create([
-            'store_id' => $request->input('store_id'),
-            'user_id' => $request->input('user_id'),
-            'network_id' => $networkId,
-            'status' => 'pending',
-            'exit_url' => '#',
-            'current_cashback_percentage' => $cashbackPercent
+        $request->validate([
+            'store_id' => 'required',
+            'cashback_type' => 'required'
         ]);
 
-        // Get click ref & deeplink identifier
-        if ($store->override_network) {
-            $clickRef = $click->network->click_ref;
-            $deeplinkIdentifier = $click->network->deeplink_identifier;
-        } else {
-            $clickRef = $store->network->click_ref;
-            $deeplinkIdentifier = $store->network->deeplink_identifier;
-        }
+        try {
+            DB::beginTransaction();
+            $deeplinkUrl = '';
+            $storeId = decrypt($request->input('store_id'));
+            $store = Store::findOrFail($storeId);
 
-        // Get deeplink URl
-        if (!empty($request->deeplink_url)) {
-            $deeplinkUrl = '&' . $deeplinkIdentifier . '=' . $request->input('deeplink_url');
-        }
+            // Get network ID
+            if ($store->override_network) {
+                if ($request->cashback_type == 'bonus_cashback') {
+                    $cashbackId = decrypt($request->input('cashback_id'));
+                    if (!empty($cashbackId)) {
+                        $storeCashback = $store->cashback->findOrFail($cashbackId);
+                        if (empty($storeCashback)) {
+                            if ($request->ajax()) {
+                                return response()->json([
+                                    'status' => JsonResponse::HTTP_NOT_FOUND,
+                                    'error' => 'Something went wrong. Try again'
+                                ], JsonResponse::HTTP_NOT_FOUND);
+                            }
+                            flash()->error('Something went wrong. Try again');
+                            return redirect()->back();
+                        }
+                        $networkId = $storeCashback->network_id;
 
-        if ($store->network->id == 1) {
-            $click->exit_url = $request->input('url') . '?' . $clickRef . '=' . $click->id . $deeplinkUrl;
-            $click->update();
-        }
+                        if (!empty($storeCashback->tracking_url)) {
+                            $trackingUrl = $storeCashback->tracking_url;
+                        }
 
-        if ($store->network->id == 2) {
-            $click->exit_url = $request->input('url') . '&' . $clickRef . '=' . $click->id . $deeplinkUrl;
-            $click->update();
-        }
+                        if (!empty($storeCashback->click_url)) {
+                            $trackingUrl = $storeCashback->click_url;
+                        }
 
-        $url = $click->exit_url;
+                        $deeplinkUrl = !empty($storeCashback->deeplink_url) ? $storeCashback->deeplink_url : $store->deeplink_url;
+                    }
+                } elseif ($request->cashback_type == 'cashback') {
+                    $networkId = $store->network->id;
+                    $trackingUrl = $store->tracking_url;
+                    $deeplinkUrl = $store->deeplink_url;
+                }
+            } else {
+                $networkId = $store->network->id;
+                $trackingUrl = $store->tracking_url;
+                $deeplinkUrl = $store->deeplink_url;
+            }
 
-        if ($request->input('voucher_id')) {
-            $redeemed = RedeemedVoucher::create([
-                'user_id' => $request->input('user_id'),
-                'voucher_id' => $request->input('voucher_id'),
+            // Cashback percentage
+            $customCashbackPercentage = $store->custom_cashback_percentage;
+
+            $cashbackPercent = $customCashbackPercentage ? $customCashbackPercentage : SiteSetting::where('type', 'cashback_percentage')->first()->value;
+
+            if (!$cashbackPercent) {
+                $cashbackPercent = 0;
+            }
+
+            $click = ExitClick::create([
+                'store_id' => $storeId,
+                'user_id' => auth()->user()->id ?? 1,
+                'network_id' => $networkId,
+                'status' => 'pending',
+                'exit_url' => '#',
+                'current_cashback_percentage' => $cashbackPercent
             ]);
-        }
 
-        return view('frontend.pages.exit', compact('store', 'url'));
+            // Get click ref & deeplink identifier
+            if ($store->override_network) {
+                $clickIdentifier = $click->network->click_ref;
+                $deeplinkIdentifier = $click->network->deeplink_identifier;
+            } else {
+                $clickIdentifier = optional($store)->tracking_url ? $store->network->click_ref : '';
+                $deeplinkIdentifier  = optional($store)->deeplink_url ? $store->network->deeplink_identifier : '';
+            }
+
+            $click->exit_url = $trackingUrl . $clickIdentifier . $click->id . $deeplinkIdentifier. $deeplinkUrl;
+            $click->update();
+
+            $url = encrypt($click->exit_url);
+
+            if ($request->input('voucher_id')) {
+                $redeemed = RedeemedVoucher::create([
+                    'user_id' => auth()->user()->id ?? 1,
+                    'voucher_id' => $request->input('voucher_id'),
+                ]);
+            }
+            $hashStoreId = encrypt($store->id);
+            DB::commit();
+            if ($request->ajax()) {
+                return array(
+                    'status' => JsonResponse::HTTP_OK,
+                    'url' => route('site.cashback', [$hashStoreId, $url])
+                );
+            }
+            return redirect()->route('site.cashback', $hashStoreId, $url);
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_NOT_FOUND,
+                    'error' => 'Something went wrong. Try again'
+                ], JsonResponse::HTTP_NOT_FOUND);
+            }
+        } catch (Exception $e) {
+            DB::rollBack();
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                    'error' => 'Something went wrong. Try again'
+                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            }
+            flash()->error('Something went wrong. Try again');
+            return redirect()->back();
+        }
+    }
+
+    public function getCashback($hash, $url)
+    {
+        try {
+            $storeId = decrypt($hash);
+            $store = Store::find($storeId);
+            $url = decrypt($url);
+
+            return view('frontend.pages.exit', compact('store', 'url'));
+        } catch (Throwable $th) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $th->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }

@@ -35,6 +35,11 @@ class StoreCashback extends Model
         return $this->belongsTo(Store::class);
     }
 
+    public function network()
+    {
+        return $this->belongsTo(Network::class);
+    }
+
     public function getDeeplinkUrl()
     {
         if ($this->store->override_network) {
