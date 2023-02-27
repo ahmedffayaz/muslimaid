@@ -54,17 +54,18 @@ class CategoryController extends Controller
     {
         try {
             DB::beginTransaction();
+
             $category = Category::create([
                 'name' => $request->input('name'),
-                'parent_id' => $request->input('parent_id'),
+                'parent_id' => !empty($request->input('parent_id')) ? $request->input('parent_id') : 0,
                 'is_map_enable' => $request->input('is_map_enable') == 1 ? 1 : 0,
                 'description' => $request->input('description'),
-                'logo_type' => $request->input('logo_type'),
+                'logo_type' => $request->input('logo_type') == 'upload' ? 'upload' : 'link',
                 'logo_link' => $request->input('logo_link'),
-                'banner_type' => $request->input('banner_type'),
+                'banner_type' => $request->input('banner_type') == 'upload' ? 'upload' : 'link',
                 'banner_link' => $request->input('banner_link'),
                 'sort' => $request->input('sort'),
-                'status' => $request->input('status'),
+                'status' => $request->input('status') == 1 ? 1 : 0,
                 'title' => $request->input('title'),
                 'meta_keyword' => $request->input('meta_keyword'),
                 'meta_description' => $request->input('meta_description'),
@@ -96,13 +97,16 @@ class CategoryController extends Controller
                     $category->update();
                 }
             }
+
             DB::commit();
+
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,
                 'success' => 'New Category added'
             ], JsonResponse::HTTP_OK);
         } catch (Exception $exception) {
             DB::rollBack();
+            
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
                 'error' => $exception->getMessage() . 'Error while adding new category'
