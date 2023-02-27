@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call([
+            EmailTemplatesSeeder::class,
             RolesPermissionsSeeder::class,
             UserSeeder::class,
             CategorySeeder::class,
@@ -29,7 +30,6 @@ class DatabaseSeeder extends Seeder
             PagesSeeder::class,
             MenuSeeder::class,
             SliderSeeder::class,
-            EmailTemplatesSeeder::class,
             TestimonialSeeder::class,
             TicketCategorySeeder::class,
             RegionSeeder::class,
