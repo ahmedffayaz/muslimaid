@@ -41,8 +41,8 @@
 
         <div class="col-lg-12">
             <div class="card">
-                <label class="form-label" for="phone-no-1">Description <span class="text-danger">*</span></label>
-                <textarea name="description" class="form-control ">{!! $voucher->description !!}</textarea required>
+                <label class="form-label" for="phone-no-1">Description </label>
+                <textarea name="description" class="form-control ">{!! $voucher->description !!}</textarea >
 
             </div>
         </div>

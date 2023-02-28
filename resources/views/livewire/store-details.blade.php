@@ -467,8 +467,8 @@
                         <div class="col-lg-12">
                             <div class="card">
                                 <input name="description" type="hidden">
-                                <label class="form-label" for="phone-no-1">Description <span class="text-danger">*</span></label>
-                                <textarea name="description" class="form-control "> {{ old('description') }}</textarea required>
+                                <label class="form-label" for="phone-no-1">Description</label>
+                                <textarea name="description" class="form-control "> {{ old('description') }}</textarea>
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -517,7 +517,7 @@
                                 <label class="form-label" for="promotion_end_date">Promotion End Date <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control date-picker promotion_end_date" value="{{ old('promotion_end_date') }}"
-                                        id="promotion_end_date" name="promotion_end_date" required>
+                                        id="promotion_end_date" name="promotion_end_date" autocomplete="off" required>
                                     @error('promotion_end_date')
 <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -1162,9 +1162,6 @@
                         required: true,
                         url: true
                     },
-                    description: {
-                        required: true,
-                    },
                     sale_commission: {
                         required: true,
                         minValue: 1,
@@ -1211,7 +1208,7 @@
                             (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
-                                NioApp.Toast('Vouchers Updated Successfully.', 'success');
+                                NioApp.Toast(data.message, 'success');
                                 $('#custom_cashback_percentage').val(data['percentage']);
                             })(NioApp, jQuery);
                             fetchVouchers();
@@ -1354,7 +1351,7 @@
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
-                            NioApp.Toast('Address Updated Successfully.', 'success');
+                            NioApp.Toast(data.message, 'success');
                         })(NioApp, jQuery);
                         fetchAddress();
                     },
@@ -1391,7 +1388,7 @@
                             (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
-                                NioApp.Toast('Cashback Created Successfully.', 'success');
+                                NioApp.Toast(data.message, 'success');
                                 $('#custom_cashback_percentage').val(data['percentage']);
                             })(NioApp, jQuery);
                             fetchVouchers();
@@ -1461,7 +1458,7 @@
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
-                            NioApp.Toast('Cashback Updated Successfully.', 'success');
+                            NioApp.Toast(data.message, 'success');
                             $('#custom_cashback_percentage').val(data['percentage']);
                         })(NioApp, jQuery);
                         fetchCashbacks();
@@ -1496,10 +1493,11 @@
                     contentType: false,
                     success: function(data) {
                         $('#cashback-modal').modal('hide');
+                        $('.cashback_form_add').trigger('reset');
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
-                            NioApp.Toast('Cashback Added Successfully.', 'success');
+                            NioApp.Toast(data.message, 'success');
                         })(NioApp, jQuery);
                         fetchCashbacks();
                     },
@@ -1574,7 +1572,7 @@
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
-                            NioApp.Toast('Review Updated Successfully.', 'success');
+                            NioApp.Toast(data.message, 'success');
                         })(NioApp, jQuery);
                         fetchReviews();
                     }
@@ -1826,7 +1824,7 @@
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
-                            NioApp.Toast('Address Added Successfully.', 'success');
+                            NioApp.Toast(data.message, 'success');
                         })(NioApp, jQuery);
                         fetchAddress();
                     },

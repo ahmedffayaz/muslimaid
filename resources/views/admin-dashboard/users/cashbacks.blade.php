@@ -151,6 +151,7 @@
 </script>
 <script>
     $(document).ready(function() {
+       
         $(document).on('submit', '#update_cashback_form', function(e) {
             e.preventDefault();
             var form_action = $(this).attr('action');
@@ -167,7 +168,7 @@
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
-                            NioApp.Toast('Cashback Updated Successfully.', 'success');
+                            NioApp.Toast(data.message, 'success');
                         })(NioApp, jQuery);
                         fetchCashbacks();
                     } else {
