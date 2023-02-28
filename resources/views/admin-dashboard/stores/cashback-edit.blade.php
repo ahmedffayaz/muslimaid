@@ -44,7 +44,7 @@
                         <input type="text" class="form-control" id="tracking_url" name="tracking_url" value="{{ $cashback->tracking_url }}"
                             placeholder="https://example.com/item/abc-id-1345" required style="width: 83%">
                         <span style="position: absolute; right:0; top:5px; width:17%" data-toggle="tooltip" data-placement="left"
-                            title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">{{ $cashback->network->click_ref }}=XXX</span>
+                            title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">{{ optional($cashback->network)->click_ref ?? '?clickref=' }}XXX</span>
                     </div>
                 </div>
             </div>
@@ -53,7 +53,7 @@
                     <label class="form-label" for="sale_commission">Deeplink URL</label>
                     <div class="form-control-wrap">
                         <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
-                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">{{ $cashback->network->deeplink_identifier }}=</span>
+                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">{{ optional($cashback->network)->deeplink_identifier ?? '&u=' }}</span>
                         <input type="text" class="form-control" id="deeplink_url" value="{{ isset($cashback->deeplink_url) ? $cashback->deeplink_url : '' }}"
                             name="deeplink_url" value="{{ $cashback->deeplink_url }}" placeholder="https://example.com/item/abc-id-1345"
                             style="position: relative; left:30px; width: 95%">

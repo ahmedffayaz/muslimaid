@@ -40,6 +40,18 @@ class StoreCashback extends Model
         return $this->belongsTo(Network::class);
     }
 
+    public function getCashback()
+    {
+        $currency = ($this->type == 'fixed') ? $this->currency : '';
+        $percentageSymbol = ($this->type == 'percentage') ? '%' : '';
+
+        if ($this->store->custom_cashback_percentage) {
+            return $currency . ($this->store->custom_cashback_percentage / 100) * $this->sale_commission . $percentageSymbol . ' Cashback';
+        } else {
+            return $currency . (SiteSetting()['cashback_percentage'] / 100) * $this->sale_commission . $percentageSymbol . ' Cashback';
+        }
+    }
+
     public function getDeeplinkUrl()
     {
         if ($this->store->override_network) {

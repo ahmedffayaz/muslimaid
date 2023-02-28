@@ -62,15 +62,15 @@ class NetworkSeeder extends Seeder
 				[
 					'name' => 'Webgains',
 					'description' => 'Webgains Affiliate Network',
-					'click_ref' => '?subId=',
-					'deeplink_identifier' => '&p=',
+					'click_ref' => '?clickref=',
+					'deeplink_identifier' => '&u=',
 					'logo' => 'webgains.png',
 				],
 				[
 					'name' => 'Awin',
 					'description' => 'Awin Affiliate Network',
 					'click_ref' => '&clickref=',
-					'deeplink_identifier' => '&p=',
+					'deeplink_identifier' => '&u=',
 					'logo' => 'awin-logo.svg',
 				],
 			]);

@@ -35,42 +35,31 @@ class ClickController extends Controller
             $storeId = decrypt($request->input('store_id'));
             $store = Store::findOrFail($storeId);
 
-            // Get network ID
-            if ($store->override_network) {
-                if ($request->cashback_type == 'bonus_cashback') {
-                    $cashbackId = decrypt($request->input('cashback_id'));
-                    if (!empty($cashbackId)) {
-                        $storeCashback = $store->cashback->findOrFail($cashbackId);
-                        if (empty($storeCashback)) {
-                            if ($request->ajax()) {
-                                return response()->json([
-                                    'status' => JsonResponse::HTTP_NOT_FOUND,
-                                    'error' => 'Something went wrong. Try again'
-                                ], JsonResponse::HTTP_NOT_FOUND);
-                            }
-                            flash()->error('Something went wrong. Try again');
-                            return redirect()->back();
-                        }
-                        $networkId = $storeCashback->network_id;
+            // Override network's store cashback
+            if ($store->override_network && $request->cashback_type == 'bonus_cashback' && !empty($request->input('cashback_id'))) {
+                $cashback = $store->cashback->findOrFail(decrypt($request->input('cashback_id')));
 
-                        if (!empty($storeCashback->tracking_url)) {
-                            $trackingUrl = $storeCashback->tracking_url;
-                        }
-
-                        if (!empty($storeCashback->click_url)) {
-                            $trackingUrl = $storeCashback->click_url;
-                        }
-
-                        $deeplinkUrl = !empty($storeCashback->deeplink_url) ? $storeCashback->deeplink_url : $store->deeplink_url;
-                    }
-                } elseif ($request->cashback_type == 'cashback') {
+                if (!$cashback->tracking_url) {
                     $networkId = $store->network->id;
                     $trackingUrl = $store->tracking_url;
-                    $deeplinkUrl = $store->deeplink_url;
+                    $clickIdentifier = $store->network->click_ref;
+
+                    $deeplinkIdentifier  = optional($store)->deeplink_url ? $store->network->deeplink_identifier : '';
+                    $deeplinkUrl = optional($store)->deeplink_url ? $store->deeplink_url : '';
+                } else {
+                    $networkId = $cashback->network_id;
+                    $trackingUrl = $cashback->tracking_url;
+                    $clickIdentifier = $cashback->network->click_ref;
+
+                    $deeplinkIdentifier = optional($cashback)->deeplink_url ? $cashback->network->deeplink_identifier : '';
+                    $deeplinkUrl = optional($cashback)->deeplink_url ? $cashback->deeplink_url : '';
                 }
             } else {
                 $networkId = $store->network->id;
+                $clickIdentifier = $store->network->click_ref;
                 $trackingUrl = $store->tracking_url;
+
+                $deeplinkIdentifier  = optional($store)->deeplink_url ? $store->network->deeplink_identifier : '';
                 $deeplinkUrl = $store->deeplink_url;
             }
 
@@ -91,15 +80,6 @@ class ClickController extends Controller
                 'exit_url' => '#',
                 'current_cashback_percentage' => $cashbackPercent
             ]);
-
-            // Get click ref & deeplink identifier
-            if ($store->override_network) {
-                $clickIdentifier = $click->network->click_ref;
-                $deeplinkIdentifier = $click->network->deeplink_identifier;
-            } else {
-                $clickIdentifier = optional($store)->tracking_url ? $store->network->click_ref : '';
-                $deeplinkIdentifier  = optional($store)->deeplink_url ? $store->network->deeplink_identifier : '';
-            }
 
             $click->exit_url = $trackingUrl . $clickIdentifier . $click->id . $deeplinkIdentifier. $deeplinkUrl;
             $click->update();
@@ -151,10 +131,14 @@ class ClickController extends Controller
 
             return view('frontend.pages.exit', compact('store', 'url'));
         } catch (Throwable $th) {
-            return response()->json([
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'error' => $th->getMessage()
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                    'error' => $th->getMessage()
+                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            }
+            flash()->error('Something went wrong. Try again');
+            return redirect()->back();
         }
     }
 }
