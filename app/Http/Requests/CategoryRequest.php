@@ -25,7 +25,7 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name' => 'required',
-            'parent_id' => 'required',
+            'parent_id' => 'exists:categories,id',
             'logo_type' => 'required',
             'logo_upload' => 'nullable|mimes:jpeg,jpg,png,gif|max:1024',
             'logo_link' => 'nullable|url',
@@ -45,7 +45,7 @@ class CategoryRequest extends FormRequest
     {
         return [
             'name' => 'Name field is required',
-            'parent_id.required' => 'Parent category must be select',
+            'parent_id.exists' => 'Select parent category is not valid',
             'logo_type.required' => 'Logo/Icon type must be select',
             'logo_upload.max' => 'Logo max size should be 1MB',
             'banner_upload.max' => 'Banner max size should be 1MB',
