@@ -19,7 +19,6 @@
             <div class="form-group">
                 <label class="form-label" for="default-06">Store <span class="text-danger">*</span></label>
                 <div class="form-control-wrap ">
-
                     <select disabled class="form-select form-control" data-search="on" id="default-06" name="store_id" required>
                         @foreach ($stores as $store)
                             <option @if ($store->id == $review->store_id) selected @endif value="{{ $store->id }}">{{ $store->name }}</option>
