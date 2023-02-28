@@ -4,8 +4,8 @@
     <style>
         .btn-choose{
             padding:7px 10px;
-            background:#8ba7d7;
-            border:1px solid #854fff;
+            background-color: #854fff;
+            border-color: #854fff;
             position:relative;
             color:#fff;
             border-radius:8px;

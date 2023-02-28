@@ -491,10 +491,10 @@
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="coupon_code" name="coupon_code" value="{{ old('coupon_code') }}" required>
                                     @error('coupon_code')
-<span class="invalid-feedback d-block" role="alert">
+                                        <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-@enderror
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -505,10 +505,10 @@
                                     <input type="text" class="form-control date-picker promotion_start_date" value="{{ old('promotion_start_date') }}"
                                         id="promotion_start_date" name="promotion_start_date" autocomplete="off" required>
                                     @error('promotion_start_date')
-<span class="invalid-feedback d-block" role="alert">
+                                        <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-@enderror
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -519,10 +519,10 @@
                                     <input type="text" class="form-control date-picker promotion_end_date" value="{{ old('promotion_end_date') }}"
                                         id="promotion_end_date" name="promotion_end_date" required>
                                     @error('promotion_end_date')
-<span class="invalid-feedback d-block" role="alert">
+                                        <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-@enderror
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -1117,7 +1117,7 @@
             $(document).on('click', '.voucher-edit', function(event) {
                 event.preventDefault();
                 var id = $(this).attr('voucher-id');
-                pageurl = "vouchers/" + id + "/edit"
+                pageurl = "vouchers/" + id + "/edit";
                 store_editor = 1;
                 var _token = $("input[name=_token]").val();
                 $.ajax({
@@ -1134,6 +1134,7 @@
                             initializeSelect2($(this));
                         });
                         $('#voucher').find(".promotion_end_date").datepicker();
+                        console.log(  $('#voucher').find(".promotion_end_date").datepicker());
                         $('#voucher').find(".promotion_start_date").datepicker();
                         checkVoucherType();
                         attachFormValidator($(document).find('#model_edit'));
@@ -1567,16 +1568,43 @@
                 desc.value = editor.children[0].innerHTML
                 $.ajax({
                     url: $(this).attr('action'),
-                    type: "PUT",
+                    type: "POST",
                     data: $(this).serialize(),
                     success: function(data) {
-                        $('#review-modal').modal('hide');
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast('Review Updated Successfully.', 'success');
-                        })(NioApp, jQuery);
-                        fetchReviews();
+                        if (data.success) {
+                            $('#review-modal').modal('hide');
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast('Review Updated Successfully.', 'success');
+                            })(NioApp, jQuery);
+                            fetchReviews();
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                if (data.errors && Object.values(data.errors).length > 0) {
+                                    NioApp.Toast(Object.values(data.errors)[0], 'error');
+                                } else {
+                                    NioApp.Toast(data['message'], 'error');
+                                }
+                            })(NioApp, jQuery);
+                        }
+                    },
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
                 });
             });

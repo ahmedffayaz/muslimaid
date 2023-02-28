@@ -49,14 +49,19 @@
 
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="promotion_type">Promotion Type <span class="text-danger">*</span></label>
-                <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="promotion_type" value="{{ $voucher->promotion_type }}" name="promotion_type" required>
+                <div class="form-group">
+                    <label class="form-label" for="promotion_type">Promotion Type <span class="text-danger">*</span></label>
+                    <div class="form-control-wrap ">
+                        <select class="form-select form-control select-2" data-search="on" id="promotion_type" name="promotion_type" required>
+                            <option value="Coupon" {{  $voucher->promotion_type == 'Coupon' ? 'selected' : '' }}>Coupon</option>
+                            <option value="Sale/Discount" {{  $voucher->promotion_type == 'Sale/Discount' ? 'selected' : '' }}>Sale/Discount</option>
+                        </select>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="col-lg-6">
+        <div class="col-lg-6 coupon-div">
             <div class="form-group">
                 <label class="form-label" for="coupon_code">Coupon Code <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
@@ -69,7 +74,7 @@
             <div class="form-group">
                 <label class="form-label" for="promotion_start_date">Promotion Start Date <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control date-picker" id="promotion_start_date" value="{{ $voucher->promotion_start_date }}" name="promotion_start_date"
+                    <input type="text" class="form-control date-picker promotion_start_date" id="promotion_start_date" value="{{ \Carbon\Carbon::parse($voucher->promotion_start_date)->format('m/d/Y')  }}" name="promotion_start_date" 
                         required>
                 </div>
             </div>
@@ -79,7 +84,7 @@
             <div class="form-group">
                 <label class="form-label" for="promotion_end_date">Promotion End Date <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control date-picker" id="promotion_end_date" value="{{ $voucher->promotion_end_date }}" name="promotion_end_date"
+                    <input type="text" class="form-control date-picker promotion_end_date" id="promotion_end_date" value="{{  \Carbon\Carbon::parse($voucher->promotion_end_date)->format('m/d/Y') }}" name="promotion_end_date"
                         required>
                 </div>
             </div>
