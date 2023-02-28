@@ -139,7 +139,7 @@
                                                                 <input type="text" class="form-control" id="tracking_url" value="{{ $store->tracking_url }}"
                                                                     name="tracking_url" placeholder="https://example.com/item/abc-id-1345" required style="width: 79%">
                                                                 <span style="position: absolute; right:0; top:5px; width:20%" data-toggle="tooltip" data-placement="left"
-                                                                    title="This parameter containing ID of the click will be concatenated with tracking URL of the store ({{ $store->tracking_url }}?ref=XXX)">?{{ $store->network->click_ref }}=XXX</span>
+                                                                    title="This parameter containing ID of the click will be concatenated with tracking URL of the store ({{ $store->tracking_url }})">{{ $store->network->click_ref }}XXX</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -149,7 +149,7 @@
                                                             <label class="form-label" for="tracking_url">Deeplink URL</label>
                                                             <div class="form-control-wrap">
                                                                 <span style="position:absolute; left:0; top:5px; width:7%" data-toggle="tooltip" data-placement="right"
-                                                                    title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u={{ $store->deeplink_url }})">&{{ $store->network->deeplink_identifier }}=</span>
+                                                                    title="This parameter containing URL of the click will be concatenated with deeplink URL of the store ({{ $store->deeplink_url }})">{{ $store->network->deeplink_identifier }}</span>
                                                                 <input type="text" class="form-control" id="deeplink_url" value="{{ $store->deeplink_url }}"
                                                                     name="deeplink_url" placeholder="https://example.com/item/abc-id-1345"
                                                                     style="position: relative; left:30px; width: 93%">
@@ -595,14 +595,14 @@
                             </div>
                         </div>
                         @if ($store->override_network)
-<div class="col-lg-12">
+                            <div class="col-lg-12">
                                 <div class="form-group">
                                     <label class="form-label" for="network_id">Network</label>
                                     <div class="form-control-wrap">
                                         <select class="form-control form-select select-2" id="network_id" name="network_id">
                                             @foreach ($networks as $network)
-<option value="{{ $network->id }}">{{ $network->name }}</option>
-@endforeach
+                                                <option value="{{ $network->id }}">{{ $network->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -614,7 +614,7 @@
                                         <input type="text" class="form-control" id="tracking_url" name="tracking_url"
                                             placeholder="https://example.com/item/abc-id-1345" required style="width: 83%">
                                         <span style="position: absolute; right:0; top:5px; width:17%" data-toggle="tooltip" data-placement="left"
-                                            title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">?{{ $store->network->click_ref }}=XXX</span>
+                                            title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">{{ $store->network->click_ref }}XXX</span>
                                     </div>
                                 </div>
                             </div>
@@ -623,14 +623,14 @@
                                     <label class="form-label" for="sale_commission">Deeplink URL</label>
                                     <div class="form-control-wrap">
                                         <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
-                                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">&{{ $store->network->deeplink_identifier }}=</span>
+                                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">{{ $store->network->deeplink_identifier }}</span>
                                         <input type="text" class="form-control" id="deeplink_url"
                                             value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}" name="deeplink_url" placeholder="https://example.com/item/abc-id-1345"
                                             style="position: relative; left:30px; width: 95%">
                                     </div>
                                 </div>
                             </div>
-@endif
+                        @endif
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label class="form-label" for="cashback_icon">Icon Upload</label>
@@ -1439,6 +1439,7 @@
                         $('#edit-cashback').html(data);
                         checkCashbackType();
                         calcCashback();
+                        NioApp.BS.tooltip('[data-toggle="tooltip"]');
                     }
                 });
             });

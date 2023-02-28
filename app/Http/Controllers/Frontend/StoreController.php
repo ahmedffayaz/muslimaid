@@ -25,7 +25,11 @@ class StoreController extends Controller
     public function show($slug)
     {
         $store = Store::where('slug', $slug)->first();
-        $count = count($store->cashbacks);
+        if (!$store) {
+            // handle scenario where store is not found
+            abort(404);
+        }
+        $count = $store->cashbacks ? count($store->cashbacks) : 0;
         return view('frontend.stores.show', compact('store', 'count'));
     }
 
