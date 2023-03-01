@@ -220,7 +220,11 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::resource('email_templates', EmailTemplatesController::class)->only(['index', 'edit', 'update']);
 
         // Countries
-        Route::resource('countries', CountryController::class)->except(['show', 'destroy']);
+        Route::resource('countries', CountryController::class)->except(['show', 'destroy']);  
+
+        Route::get('/api-docs', function() {
+            return view('scribe.index');
+        })->name('api-docs');
 
         Route::get('site/shutdown', function () {
             return Artisan::call('down');

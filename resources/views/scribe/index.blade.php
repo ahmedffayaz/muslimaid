@@ -6,16 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Cashback Documentation</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="../docs/css/theme-default.style.css" media="screen">
-    <link rel="stylesheet" href="../docs/css/theme-default.print.css" media="print">
+    <link rel="stylesheet" href="{{ asset("/vendor/scribe/css/theme-default.style.css") }}" media="screen">
+    <link rel="stylesheet" href="{{ asset("/vendor/scribe/css/theme-default.print.css") }}" media="print">
 
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
 
     <link rel="stylesheet"
-          href="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/styles/obsidian.min.css">
-    <script src="https://unpkg.com/@highlightjs/cdn-assets@11.6.0/highlight.min.js"></script>
+          href="https://unpkg.com/@highlightjs/cdn-assets@10.7.2/styles/obsidian.min.css">
+    <script src="https://unpkg.com/@highlightjs/cdn-assets@10.7.2/highlight.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jets/0.14.1/jets.min.js"></script>
 
@@ -30,9 +30,9 @@
         var useCsrf = Boolean();
         var csrfUrl = "/sanctum/csrf-cookie";
     </script>
-    <script src="../docs/js/tryitout-4.13.0.js"></script>
+    <script src="{{ asset("/vendor/scribe/js/tryitout-3.37.2.js") }}"></script>
 
-    <script src="../docs/js/theme-default-4.13.0.js"></script>
+    <script src="{{ asset("/vendor/scribe/js/theme-default-3.37.2.js") }}"></script>
 
 </head>
 
@@ -41,7 +41,7 @@
 <a href="#" id="nav-button">
     <span>
         MENU
-        <img src="../docs/images/navbar.png" alt="navbar-image"/>
+        <img src="{{ asset("/vendor/scribe/images/navbar.png") }}" alt="navbar-image" />
     </span>
 </a>
 <div class="tocify-wrapper">
@@ -56,132 +56,136 @@
     </div>
 
     <div id="toc">
-                    <ul id="tocify-header-introduction" class="tocify-header">
-                <li class="tocify-item level-1" data-unique="introduction">
-                    <a href="#introduction">Introduction</a>
-                </li>
-                            </ul>
-                    <ul id="tocify-header-authenticating-requests" class="tocify-header">
-                <li class="tocify-item level-1" data-unique="authenticating-requests">
-                    <a href="#authenticating-requests">Authenticating requests</a>
-                </li>
-                            </ul>
-                    <ul id="tocify-header-endpoints" class="tocify-header">
+                                                                            <ul id="tocify-header-0" class="tocify-header">
+                    <li class="tocify-item level-1" data-unique="introduction">
+                        <a href="#introduction">Introduction</a>
+                    </li>
+                                            
+                                                                    </ul>
+                                                <ul id="tocify-header-1" class="tocify-header">
+                    <li class="tocify-item level-1" data-unique="authenticating-requests">
+                        <a href="#authenticating-requests">Authenticating requests</a>
+                    </li>
+                                            
+                                                </ul>
+                    
+                    <ul id="tocify-header-2" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="endpoints">
                     <a href="#endpoints">Endpoints</a>
                 </li>
                                     <ul id="tocify-subheader-endpoints" class="tocify-subheader">
                                                     <li class="tocify-item level-2" data-unique="endpoints-GETapi-user">
-                                <a href="#endpoints-GETapi-user">GET api/user</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-auth-register">
-                                <a href="#endpoints-POSTapi-auth-register">POST api/auth/register</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-auth-social">
-                                <a href="#endpoints-POSTapi-auth-social">POST api/auth/social</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-auth-login">
-                                <a href="#endpoints-POSTapi-auth-login">POST api/auth/login</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-password-email">
-                                <a href="#endpoints-POSTapi-password-email">POST api/password/email</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-me">
-                                <a href="#endpoints-GETapi-me">GET api/me</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-profile">
-                                <a href="#endpoints-GETapi-user-profile">Show the form for editing the specified resource.</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-PUTapi-user-profile-update">
-                                <a href="#endpoints-PUTapi-user-profile-update">PUT api/user/profile/update</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-cashback">
-                                <a href="#endpoints-GETapi-user-cashback">GET api/user/cashback</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-clicks">
-                                <a href="#endpoints-GETapi-user-clicks">GET api/user/clicks</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-payment_methods">
-                                <a href="#endpoints-GETapi-user-payment_methods">GET api/user/payment_methods</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-user-payment_methods_save">
-                                <a href="#endpoints-POSTapi-user-payment_methods_save">POST api/user/payment_methods_save</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-cashouts">
-                                <a href="#endpoints-GETapi-user-cashouts">GET api/user/cashouts</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-user-withdraw">
-                                <a href="#endpoints-POSTapi-user-withdraw">POST api/user/withdraw</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-claims">
-                                <a href="#endpoints-GETapi-user-claims">GET api/user/claims</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-show-retailers">
-                                <a href="#endpoints-GETapi-user-show-retailers">GET api/user/show-retailers</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-user-claim-step-2">
-                                <a href="#endpoints-POSTapi-user-claim-step-2">POST api/user/claim-step-2</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-user-claim-step-3">
-                                <a href="#endpoints-POSTapi-user-claim-step-3">POST api/user/claim-step-3</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-user-balance">
-                                <a href="#endpoints-GETapi-user-user-balance">GET api/user/user-balance</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-change_password">
-                                <a href="#endpoints-POSTapi-change_password">POST api/change_password</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-auth-logout">
-                                <a href="#endpoints-POSTapi-auth-logout">POST api/auth/logout</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-categories">
-                                <a href="#endpoints-GETapi-categories">GET api/categories</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-categories--id-">
-                                <a href="#endpoints-GETapi-categories--id-">GET api/categories/{id}</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-child_categories--slug-">
-                                <a href="#endpoints-GETapi-child_categories--slug-">GET api/child_categories/{slug}</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-stores">
-                                <a href="#endpoints-GETapi-stores">Display a listing of the resource.</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-stores">
-                                <a href="#endpoints-POSTapi-stores">Store a newly created resource in storage.</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-stores--id-">
-                                <a href="#endpoints-GETapi-stores--id-">Display the specified resource.</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-PUTapi-stores--id-">
-                                <a href="#endpoints-PUTapi-stores--id-">Update the specified resource in storage.</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-stores--id-">
-                                <a href="#endpoints-DELETEapi-stores--id-">Remove the specified resource from storage.</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-featured_cashback">
-                                <a href="#endpoints-GETapi-featured_cashback">GET api/featured_cashback</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-slider">
-                                <a href="#endpoints-GETapi-slider">GET api/slider</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-vouchers">
-                                <a href="#endpoints-GETapi-vouchers">GET api/vouchers</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-click-track">
-                                <a href="#endpoints-POSTapi-click-track">POST api/click/track</a>
-                            </li>
-                                                                        </ul>
+                        <a href="#endpoints-GETapi-user">GET api/user</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-auth-register">
+                        <a href="#endpoints-POSTapi-auth-register">POST api/auth/register</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-auth-social">
+                        <a href="#endpoints-POSTapi-auth-social">POST api/auth/social</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-auth-login">
+                        <a href="#endpoints-POSTapi-auth-login">POST api/auth/login</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-password-email">
+                        <a href="#endpoints-POSTapi-password-email">POST api/password/email</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-me">
+                        <a href="#endpoints-GETapi-me">GET api/me</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-profile">
+                        <a href="#endpoints-GETapi-user-profile">Show the form for editing the specified resource.</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-PUTapi-user-profile-update">
+                        <a href="#endpoints-PUTapi-user-profile-update">PUT api/user/profile/update</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-cashback">
+                        <a href="#endpoints-GETapi-user-cashback">GET api/user/cashback</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-clicks">
+                        <a href="#endpoints-GETapi-user-clicks">GET api/user/clicks</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-payment_methods">
+                        <a href="#endpoints-GETapi-user-payment_methods">GET api/user/payment_methods</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-user-payment_methods_save">
+                        <a href="#endpoints-POSTapi-user-payment_methods_save">POST api/user/payment_methods_save</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-cashouts">
+                        <a href="#endpoints-GETapi-user-cashouts">GET api/user/cashouts</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-user-withdraw">
+                        <a href="#endpoints-POSTapi-user-withdraw">POST api/user/withdraw</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-claims">
+                        <a href="#endpoints-GETapi-user-claims">GET api/user/claims</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-show-retailers">
+                        <a href="#endpoints-GETapi-user-show-retailers">GET api/user/show-retailers</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-user-claim-step-2">
+                        <a href="#endpoints-POSTapi-user-claim-step-2">POST api/user/claim-step-2</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-user-claim-step-3">
+                        <a href="#endpoints-POSTapi-user-claim-step-3">POST api/user/claim-step-3</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-user-user-balance">
+                        <a href="#endpoints-GETapi-user-user-balance">GET api/user/user-balance</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-change_password">
+                        <a href="#endpoints-POSTapi-change_password">POST api/change_password</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-auth-logout">
+                        <a href="#endpoints-POSTapi-auth-logout">POST api/auth/logout</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-categories">
+                        <a href="#endpoints-GETapi-categories">GET api/categories</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-categories--id-">
+                        <a href="#endpoints-GETapi-categories--id-">GET api/categories/{id}</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-child_categories--slug-">
+                        <a href="#endpoints-GETapi-child_categories--slug-">GET api/child_categories/{slug}</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-stores">
+                        <a href="#endpoints-GETapi-stores">Display a listing of the resource.</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-stores">
+                        <a href="#endpoints-POSTapi-stores">Store a newly created resource in storage.</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-stores--id-">
+                        <a href="#endpoints-GETapi-stores--id-">Display the specified resource.</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-PUTapi-stores--id-">
+                        <a href="#endpoints-PUTapi-stores--id-">Update the specified resource in storage.</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-stores--id-">
+                        <a href="#endpoints-DELETEapi-stores--id-">Remove the specified resource from storage.</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-featured_cashback">
+                        <a href="#endpoints-GETapi-featured_cashback">GET api/featured_cashback</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-slider">
+                        <a href="#endpoints-GETapi-slider">GET api/slider</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-GETapi-vouchers">
+                        <a href="#endpoints-GETapi-vouchers">GET api/vouchers</a>
+                    </li>
+                                    <li class="tocify-item level-2" data-unique="endpoints-POSTapi-click-track">
+                        <a href="#endpoints-POSTapi-click-track">POST api/click/track</a>
+                    </li>
+                                                    </ul>
                             </ul>
+        
+                        
             </div>
 
-    <ul class="toc-footer" id="toc-footer">
-                    <li style="padding-bottom: 5px;"><a href="../docs/collection.json">View Postman collection</a></li>
-                            <li style="padding-bottom: 5px;"><a href="../docs/openapi.yaml">View OpenAPI spec</a></li>
-                <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
-    </ul>
-
-    <ul class="toc-footer" id="last-updated">
-        <li>Last updated: February 2, 2023</li>
+            <ul class="toc-footer" id="toc-footer">
+                            <li><a href="{{ route("scribe.postman") }}">View Postman collection</a></li>
+                            <li><a href="{{ route("scribe.openapi") }}">View OpenAPI spec</a></li>
+                            <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
+                    </ul>
+        <ul class="toc-footer" id="last-updated">
+        <li>Last updated: March 1 2023</li>
     </ul>
 </div>
 
@@ -189,12 +193,13 @@
     <div class="dark-box"></div>
     <div class="content">
         <h1 id="introduction">Introduction</h1>
-<aside>
-    <strong>Base URL</strong>: <code>http://127.0.0.1:8000</code>
-</aside>
 <p>This documentation aims to provide all the information you need to work with our API.</p>
 <aside>As you scroll, you'll see code examples for working with the API in different programming languages in the dark area to the right (or as part of the content on mobile).
 You can switch the language used with the tabs at the top right (or from the nav menu at the top left on mobile).</aside>
+<blockquote>
+<p>Base URL</p>
+</blockquote>
+<pre><code class="language-yaml">http://127.0.0.1:8000</code></pre>
 
         <h1 id="authenticating-requests">Authenticating requests</h1>
 <p>This API is not authenticated.</p>
@@ -203,7 +208,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 
     
 
-                                <h2 id="endpoints-GETapi-user">GET api/user</h2>
+            <h2 id="endpoints-GETapi-user">GET api/user</h2>
 
 <p>
 </p>
@@ -243,15 +248,16 @@ fetch(url, {
             <p>Example response (401):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;message&quot;: &quot;Unauthenticated.&quot;
 }</code>
  </pre>
@@ -260,7 +266,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-user"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-user" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-user"></code></pre>
 </span>
 <span id="execution-error-GETapi-user" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -271,6 +277,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-user', this);">
     <h3>
@@ -294,32 +301,9 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/user</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-user"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-user"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-POSTapi-auth-register">POST api/auth/register</h2>
+            <h2 id="endpoints-POSTapi-auth-register">POST api/auth/register</h2>
 
 <p>
 </p>
@@ -336,10 +320,10 @@ access-control-allow-origin: *
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"firstname\": \"ffslqjxfasjqpm\",
-    \"lastname\": \"grpgqctb\",
-    \"email\": \"cedrick96@example.org\",
-    \"password\": \"&gt;$T#qq&amp;exYye9g;3Jz\\\\\"
+    \"firstname\": \"myfaroehlubvppddsyvtfqkhctvwfvqvhdizhrqbdzq\",
+    \"lastname\": \"xzbnuyduqbarkysmtszrsuqqsmucuzvcnitfrcgxtomexmxdbzuncrzhuylxtsxbuqzxfdbdvvibtkwoxv\",
+    \"email\": \"eydfjhndmokpgfvwbxtdppqtxaxqmnbpphvfijzuttxtrhapenanulxdwbcmcvpxocjhankmghlmjcx\",
+    \"password\": \"zfvisd\"
 }"
 </code></pre></div>
 
@@ -355,10 +339,10 @@ const headers = {
 };
 
 let body = {
-    "firstname": "ffslqjxfasjqpm",
-    "lastname": "grpgqctb",
-    "email": "cedrick96@example.org",
-    "password": "&gt;$T#qq&amp;exYye9g;3Jz\\"
+    "firstname": "myfaroehlubvppddsyvtfqkhctvwfvqvhdizhrqbdzq",
+    "lastname": "xzbnuyduqbarkysmtszrsuqqsmucuzvcnitfrcgxtomexmxdbzuncrzhuylxtsxbuqzxfdbdvvibtkwoxv",
+    "email": "eydfjhndmokpgfvwbxtdppqtxaxqmnbpphvfijzuttxtrhapenanulxdwbcmcvpxocjhankmghlmjcx",
+    "password": "zfvisd"
 };
 
 fetch(url, {
@@ -375,7 +359,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-POSTapi-auth-register"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-auth-register" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-POSTapi-auth-register"></code></pre>
 </span>
 <span id="execution-error-POSTapi-auth-register" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -386,6 +370,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('POSTapi-auth-register', this);">
     <h3>
@@ -409,77 +394,50 @@ fetch(url, {
             <small class="badge badge-black">POST</small>
             <b><code>api/auth/register</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="POSTapi-auth-register"
-               value="application/json"
-               data-component="header">
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>firstname</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="firstname"
+               data-endpoint="POSTapi-auth-register"
+               value="myfaroehlubvppddsyvtfqkhctvwfvqvhdizhrqbdzq"
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="POSTapi-auth-register"
-               value="application/json"
-               data-component="header">
+<p>Must not be greater than 255 characters.</p>
+        </p>
+                <p>
+            <b><code>lastname</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="lastname"
+               data-endpoint="POSTapi-auth-register"
+               value="xzbnuyduqbarkysmtszrsuqqsmucuzvcnitfrcgxtomexmxdbzuncrzhuylxtsxbuqzxfdbdvvibtkwoxv"
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>firstname</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="firstname"                data-endpoint="POSTapi-auth-register"
-               value="ffslqjxfasjqpm"
-               data-component="body">
+<p>Must not be greater than 255 characters.</p>
+        </p>
+                <p>
+            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="email"
+               data-endpoint="POSTapi-auth-register"
+               value="eydfjhndmokpgfvwbxtdppqtxaxqmnbpphvfijzuttxtrhapenanulxdwbcmcvpxocjhankmghlmjcx"
+               data-component="body" hidden>
     <br>
-<p>Must not be greater than 255 characters. Example: <code>ffslqjxfasjqpm</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>lastname</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="lastname"                data-endpoint="POSTapi-auth-register"
-               value="grpgqctb"
-               data-component="body">
+<p>Must be a valid email address. Must not be greater than 255 characters.</p>
+        </p>
+                <p>
+            <b><code>password</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="password"
+               data-endpoint="POSTapi-auth-register"
+               value="zfvisd"
+               data-component="body" hidden>
     <br>
-<p>Must not be greater than 255 characters. Example: <code>grpgqctb</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="email"                data-endpoint="POSTapi-auth-register"
-               value="cedrick96@example.org"
-               data-component="body">
-    <br>
-<p>Must be a valid email address. Must not be greater than 255 characters. Example: <code>cedrick96@example.org</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="password"                data-endpoint="POSTapi-auth-register"
-               value=">$T#qq&exYye9g;3Jz\"
-               data-component="body">
-    <br>
-<p>Must be at least 8 characters. Example: <code>&gt;$T#qq&amp;exYye9g;3Jz\</code></p>
-        </div>
+<p>Must be at least 8 characters.</p>
+        </p>
         </form>
 
-                    <h2 id="endpoints-POSTapi-auth-social">POST api/auth/social</h2>
+            <h2 id="endpoints-POSTapi-auth-social">POST api/auth/social</h2>
 
 <p>
 </p>
@@ -496,11 +454,11 @@ fetch(url, {
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"firstname\": \"aeoreotjyxhkcshzu\",
-    \"lastname\": \"dfg\",
-    \"email\": \"dylan.hickle@example.com\",
-    \"provider\": \"harum\",
-    \"provider_id\": \"sit\"
+    \"firstname\": \"mwkyxuozbwyhpuuokuypnrbkzkamplijbfyncksqvzybaoztfzhyzfdqueugnoxo\",
+    \"lastname\": \"qiqlxboyqhkuhbdooqozylkokpwrshzhajeqwpfqvjexlfeorjcndhrakffzchfkzumjsboowpabkosojtnjdrdhcvbwlrcmaujuwxnrttqdmwxelxrsgadvhrgmxcczdscguozwvas\",
+    \"email\": \"omaqnqtrkrtlmgbmapojujvskeqimdivbfkovvbdfhvidsslhrpenajphckkfloialzdphnzgqsansplhyveteiysnczqalprpobzrpysvfgcactywokpkrdupzjemzdhcxnzvkcaftcbaiiciraewemqjdtuzwdzerej\",
+    \"provider\": \"dolores\",
+    \"provider_id\": \"voluptate\"
 }"
 </code></pre></div>
 
@@ -516,11 +474,11 @@ const headers = {
 };
 
 let body = {
-    "firstname": "aeoreotjyxhkcshzu",
-    "lastname": "dfg",
-    "email": "dylan.hickle@example.com",
-    "provider": "harum",
-    "provider_id": "sit"
+    "firstname": "mwkyxuozbwyhpuuokuypnrbkzkamplijbfyncksqvzybaoztfzhyzfdqueugnoxo",
+    "lastname": "qiqlxboyqhkuhbdooqozylkokpwrshzhajeqwpfqvjexlfeorjcndhrakffzchfkzumjsboowpabkosojtnjdrdhcvbwlrcmaujuwxnrttqdmwxelxrsgadvhrgmxcczdscguozwvas",
+    "email": "omaqnqtrkrtlmgbmapojujvskeqimdivbfkovvbdfhvidsslhrpenajphckkfloialzdphnzgqsansplhyveteiysnczqalprpobzrpysvfgcactywokpkrdupzjemzdhcxnzvkcaftcbaiiciraewemqjdtuzwdzerej",
+    "provider": "dolores",
+    "provider_id": "voluptate"
 };
 
 fetch(url, {
@@ -537,7 +495,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-POSTapi-auth-social"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-auth-social" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-POSTapi-auth-social"></code></pre>
 </span>
 <span id="execution-error-POSTapi-auth-social" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -548,6 +506,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('POSTapi-auth-social', this);">
     <h3>
@@ -571,88 +530,60 @@ fetch(url, {
             <small class="badge badge-black">POST</small>
             <b><code>api/auth/social</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="POSTapi-auth-social"
-               value="application/json"
-               data-component="header">
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>firstname</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="firstname"
+               data-endpoint="POSTapi-auth-social"
+               value="mwkyxuozbwyhpuuokuypnrbkzkamplijbfyncksqvzybaoztfzhyzfdqueugnoxo"
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="POSTapi-auth-social"
-               value="application/json"
-               data-component="header">
+<p>Must not be greater than 255 characters.</p>
+        </p>
+                <p>
+            <b><code>lastname</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="lastname"
+               data-endpoint="POSTapi-auth-social"
+               value="qiqlxboyqhkuhbdooqozylkokpwrshzhajeqwpfqvjexlfeorjcndhrakffzchfkzumjsboowpabkosojtnjdrdhcvbwlrcmaujuwxnrttqdmwxelxrsgadvhrgmxcczdscguozwvas"
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>firstname</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="firstname"                data-endpoint="POSTapi-auth-social"
-               value="aeoreotjyxhkcshzu"
-               data-component="body">
+<p>Must not be greater than 255 characters.</p>
+        </p>
+                <p>
+            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="email"
+               data-endpoint="POSTapi-auth-social"
+               value="omaqnqtrkrtlmgbmapojujvskeqimdivbfkovvbdfhvidsslhrpenajphckkfloialzdphnzgqsansplhyveteiysnczqalprpobzrpysvfgcactywokpkrdupzjemzdhcxnzvkcaftcbaiiciraewemqjdtuzwdzerej"
+               data-component="body" hidden>
     <br>
-<p>Must not be greater than 255 characters. Example: <code>aeoreotjyxhkcshzu</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>lastname</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="lastname"                data-endpoint="POSTapi-auth-social"
-               value="dfg"
-               data-component="body">
+<p>Must be a valid email address. Must not be greater than 255 characters.</p>
+        </p>
+                <p>
+            <b><code>provider</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="provider"
+               data-endpoint="POSTapi-auth-social"
+               value="dolores"
+               data-component="body" hidden>
     <br>
-<p>Must not be greater than 255 characters. Example: <code>dfg</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="email"                data-endpoint="POSTapi-auth-social"
-               value="dylan.hickle@example.com"
-               data-component="body">
+
+        </p>
+                <p>
+            <b><code>provider_id</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="provider_id"
+               data-endpoint="POSTapi-auth-social"
+               value="voluptate"
+               data-component="body" hidden>
     <br>
-<p>Must be a valid email address. Must not be greater than 255 characters. Example: <code>dylan.hickle@example.com</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>provider</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="provider"                data-endpoint="POSTapi-auth-social"
-               value="harum"
-               data-component="body">
-    <br>
-<p>Example: <code>harum</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>provider_id</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="provider_id"                data-endpoint="POSTapi-auth-social"
-               value="sit"
-               data-component="body">
-    <br>
-<p>Example: <code>sit</code></p>
-        </div>
+
+        </p>
         </form>
 
-                    <h2 id="endpoints-POSTapi-auth-login">POST api/auth/login</h2>
+            <h2 id="endpoints-POSTapi-auth-login">POST api/auth/login</h2>
 
 <p>
 </p>
@@ -669,8 +600,8 @@ fetch(url, {
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"email\": \"viva.lind@example.com\",
-    \"password\": \"4&amp;eO%41`oI#\"
+    \"email\": \"tmaggio@example.com\",
+    \"password\": \"jj\"
 }"
 </code></pre></div>
 
@@ -686,8 +617,8 @@ const headers = {
 };
 
 let body = {
-    "email": "viva.lind@example.com",
-    "password": "4&amp;eO%41`oI#"
+    "email": "tmaggio@example.com",
+    "password": "jj"
 };
 
 fetch(url, {
@@ -704,7 +635,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-POSTapi-auth-login"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-auth-login" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-POSTapi-auth-login"></code></pre>
 </span>
 <span id="execution-error-POSTapi-auth-login" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -715,6 +646,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('POSTapi-auth-login', this);">
     <h3>
@@ -738,55 +670,30 @@ fetch(url, {
             <small class="badge badge-black">POST</small>
             <b><code>api/auth/login</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="POSTapi-auth-login"
-               value="application/json"
-               data-component="header">
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="email"
+               data-endpoint="POSTapi-auth-login"
+               value="tmaggio@example.com"
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="POSTapi-auth-login"
-               value="application/json"
-               data-component="header">
+<p>Must be a valid email address.</p>
+        </p>
+                <p>
+            <b><code>password</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="password"
+               data-endpoint="POSTapi-auth-login"
+               value="jj"
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="email"                data-endpoint="POSTapi-auth-login"
-               value="viva.lind@example.com"
-               data-component="body">
-    <br>
-<p>Must be a valid email address. Example: <code>viva.lind@example.com</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>password</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="password"                data-endpoint="POSTapi-auth-login"
-               value="4&eO%41`oI#"
-               data-component="body">
-    <br>
-<p>Must be at least 6 characters. Example: <code>4&amp;eO%41</code>oI#`</p>
-        </div>
+<p>Must be at least 6 characters.</p>
+        </p>
         </form>
 
-                    <h2 id="endpoints-POSTapi-password-email">POST api/password/email</h2>
+            <h2 id="endpoints-POSTapi-password-email">POST api/password/email</h2>
 
 <p>
 </p>
@@ -803,7 +710,7 @@ fetch(url, {
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"email\": \"ttorphy@example.net\"
+    \"email\": \"anderson.katarina@example.net\"
 }"
 </code></pre></div>
 
@@ -819,7 +726,7 @@ const headers = {
 };
 
 let body = {
-    "email": "ttorphy@example.net"
+    "email": "anderson.katarina@example.net"
 };
 
 fetch(url, {
@@ -836,7 +743,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-POSTapi-password-email"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-password-email" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-POSTapi-password-email"></code></pre>
 </span>
 <span id="execution-error-POSTapi-password-email" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -847,6 +754,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('POSTapi-password-email', this);">
     <h3>
@@ -870,44 +778,20 @@ fetch(url, {
             <small class="badge badge-black">POST</small>
             <b><code>api/password/email</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="POSTapi-password-email"
-               value="application/json"
-               data-component="header">
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>email</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="email"
+               data-endpoint="POSTapi-password-email"
+               value="anderson.katarina@example.net"
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="POSTapi-password-email"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="email"                data-endpoint="POSTapi-password-email"
-               value="ttorphy@example.net"
-               data-component="body">
-    <br>
-<p>Must be a valid email address. Example: <code>ttorphy@example.net</code></p>
-        </div>
+<p>Must be a valid email address.</p>
+        </p>
         </form>
 
-                    <h2 id="endpoints-GETapi-me">GET api/me</h2>
+            <h2 id="endpoints-GETapi-me">GET api/me</h2>
 
 <p>
 </p>
@@ -947,15 +831,16 @@ fetch(url, {
             <p>Example response (401):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;message&quot;: &quot;Unauthenticated.&quot;
 }</code>
  </pre>
@@ -964,7 +849,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-me"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-me" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-me"></code></pre>
 </span>
 <span id="execution-error-GETapi-me" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -975,6 +860,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-me', this);">
     <h3>
@@ -998,32 +884,9 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/me</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-me"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-me"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-GETapi-user-profile">Show the form for editing the specified resource.</h2>
+            <h2 id="endpoints-GETapi-user-profile">Show the form for editing the specified resource.</h2>
 
 <p>
 </p>
@@ -1063,15 +926,16 @@ fetch(url, {
             <p>Example response (401):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;message&quot;: &quot;Unauthenticated.&quot;
 }</code>
  </pre>
@@ -1080,7 +944,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-user-profile"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-user-profile" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-user-profile"></code></pre>
 </span>
 <span id="execution-error-GETapi-user-profile" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -1091,6 +955,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-user-profile', this);">
     <h3>
@@ -1114,32 +979,9 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/user/profile</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-user-profile"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-user-profile"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-PUTapi-user-profile-update">PUT api/user/profile/update</h2>
+            <h2 id="endpoints-PUTapi-user-profile-update">PUT api/user/profile/update</h2>
 
 <p>
 </p>
@@ -1156,8 +998,8 @@ access-control-allow-origin: *
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"firstname\": \"HGrk\",
-    \"lastname\": \"RrBOI\"
+    \"firstname\": \"jzJG \",
+    \"lastname\": \"ThsWlLo\"
 }"
 </code></pre></div>
 
@@ -1173,8 +1015,8 @@ const headers = {
 };
 
 let body = {
-    "firstname": "HGrk",
-    "lastname": "RrBOI"
+    "firstname": "jzJG ",
+    "lastname": "ThsWlLo"
 };
 
 fetch(url, {
@@ -1191,7 +1033,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-PUTapi-user-profile-update"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-PUTapi-user-profile-update" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-PUTapi-user-profile-update"></code></pre>
 </span>
 <span id="execution-error-PUTapi-user-profile-update" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -1202,6 +1044,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('PUTapi-user-profile-update', this);">
     <h3>
@@ -1225,55 +1068,30 @@ fetch(url, {
             <small class="badge badge-darkblue">PUT</small>
             <b><code>api/user/profile/update</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="PUTapi-user-profile-update"
-               value="application/json"
-               data-component="header">
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>firstname</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="firstname"
+               data-endpoint="PUTapi-user-profile-update"
+               value="jzJG "
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="PUTapi-user-profile-update"
-               value="application/json"
-               data-component="header">
+<p>The value format is invalid.</p>
+        </p>
+                <p>
+            <b><code>lastname</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="lastname"
+               data-endpoint="PUTapi-user-profile-update"
+               value="ThsWlLo"
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>firstname</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="firstname"                data-endpoint="PUTapi-user-profile-update"
-               value="HGrk"
-               data-component="body">
-    <br>
-<p>Must match the regex /^[A-Za-z ]+$/. Example: <code>HGrk</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>lastname</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="lastname"                data-endpoint="PUTapi-user-profile-update"
-               value="RrBOI"
-               data-component="body">
-    <br>
-<p>Must match the regex /^[A-Za-z ]+$/. Example: <code>RrBOI</code></p>
-        </div>
+<p>The value format is invalid.</p>
+        </p>
         </form>
 
-                    <h2 id="endpoints-GETapi-user-cashback">GET api/user/cashback</h2>
+            <h2 id="endpoints-GETapi-user-cashback">GET api/user/cashback</h2>
 
 <p>
 </p>
@@ -1313,15 +1131,16 @@ fetch(url, {
             <p>Example response (401):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;message&quot;: &quot;Unauthenticated.&quot;
 }</code>
  </pre>
@@ -1330,7 +1149,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-user-cashback"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-user-cashback" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-user-cashback"></code></pre>
 </span>
 <span id="execution-error-GETapi-user-cashback" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -1341,6 +1160,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-user-cashback', this);">
     <h3>
@@ -1364,32 +1184,9 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/user/cashback</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-user-cashback"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-user-cashback"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-GETapi-user-clicks">GET api/user/clicks</h2>
+            <h2 id="endpoints-GETapi-user-clicks">GET api/user/clicks</h2>
 
 <p>
 </p>
@@ -1429,15 +1226,16 @@ fetch(url, {
             <p>Example response (401):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;message&quot;: &quot;Unauthenticated.&quot;
 }</code>
  </pre>
@@ -1446,7 +1244,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-user-clicks"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-user-clicks" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-user-clicks"></code></pre>
 </span>
 <span id="execution-error-GETapi-user-clicks" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -1457,6 +1255,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-user-clicks', this);">
     <h3>
@@ -1480,32 +1279,9 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/user/clicks</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-user-clicks"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-user-clicks"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-GETapi-user-payment_methods">GET api/user/payment_methods</h2>
+            <h2 id="endpoints-GETapi-user-payment_methods">GET api/user/payment_methods</h2>
 
 <p>
 </p>
@@ -1522,7 +1298,7 @@ access-control-allow-origin: *
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"payment_method\": \"bank\"
+    \"payment_method\": \"paypal\"
 }"
 </code></pre></div>
 
@@ -1538,7 +1314,7 @@ const headers = {
 };
 
 let body = {
-    "payment_method": "bank"
+    "payment_method": "paypal"
 };
 
 fetch(url, {
@@ -1554,15 +1330,16 @@ fetch(url, {
             <p>Example response (401):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;message&quot;: &quot;Unauthenticated.&quot;
 }</code>
  </pre>
@@ -1571,7 +1348,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-user-payment_methods"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-user-payment_methods" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-user-payment_methods"></code></pre>
 </span>
 <span id="execution-error-GETapi-user-payment_methods" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -1582,6 +1359,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-user-payment_methods', this);">
     <h3>
@@ -1605,44 +1383,20 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/user/payment_methods</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-user-payment_methods"
-               value="application/json"
-               data-component="header">
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>payment_method</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="payment_method"
+               data-endpoint="GETapi-user-payment_methods"
+               value="paypal"
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-user-payment_methods"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>payment_method</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="payment_method"                data-endpoint="GETapi-user-payment_methods"
-               value="bank"
-               data-component="body">
-    <br>
-<p>Must be one of <code>bank</code> or <code>paypal</code>. Example: <code>bank</code></p>
-        </div>
+<p>Must be one of <code>bank</code> or <code>paypal</code>.</p>
+        </p>
         </form>
 
-                    <h2 id="endpoints-POSTapi-user-payment_methods_save">POST api/user/payment_methods_save</h2>
+            <h2 id="endpoints-POSTapi-user-payment_methods_save">POST api/user/payment_methods_save</h2>
 
 <p>
 </p>
@@ -1683,7 +1437,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-POSTapi-user-payment_methods_save"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-user-payment_methods_save" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-POSTapi-user-payment_methods_save"></code></pre>
 </span>
 <span id="execution-error-POSTapi-user-payment_methods_save" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -1694,6 +1448,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('POSTapi-user-payment_methods_save', this);">
     <h3>
@@ -1717,32 +1472,9 @@ fetch(url, {
             <small class="badge badge-black">POST</small>
             <b><code>api/user/payment_methods_save</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="POSTapi-user-payment_methods_save"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="POSTapi-user-payment_methods_save"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-GETapi-user-cashouts">GET api/user/cashouts</h2>
+            <h2 id="endpoints-GETapi-user-cashouts">GET api/user/cashouts</h2>
 
 <p>
 </p>
@@ -1782,15 +1514,16 @@ fetch(url, {
             <p>Example response (401):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;message&quot;: &quot;Unauthenticated.&quot;
 }</code>
  </pre>
@@ -1799,7 +1532,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-user-cashouts"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-user-cashouts" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-user-cashouts"></code></pre>
 </span>
 <span id="execution-error-GETapi-user-cashouts" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -1810,6 +1543,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-user-cashouts', this);">
     <h3>
@@ -1833,32 +1567,9 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/user/cashouts</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-user-cashouts"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-user-cashouts"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-POSTapi-user-withdraw">POST api/user/withdraw</h2>
+            <h2 id="endpoints-POSTapi-user-withdraw">POST api/user/withdraw</h2>
 
 <p>
 </p>
@@ -1875,7 +1586,7 @@ access-control-allow-origin: *
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"payment_method\": \"bank\"
+    \"payment_method\": \"paypal\"
 }"
 </code></pre></div>
 
@@ -1891,7 +1602,7 @@ const headers = {
 };
 
 let body = {
-    "payment_method": "bank"
+    "payment_method": "paypal"
 };
 
 fetch(url, {
@@ -1908,7 +1619,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-POSTapi-user-withdraw"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-user-withdraw" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-POSTapi-user-withdraw"></code></pre>
 </span>
 <span id="execution-error-POSTapi-user-withdraw" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -1919,6 +1630,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('POSTapi-user-withdraw', this);">
     <h3>
@@ -1942,44 +1654,20 @@ fetch(url, {
             <small class="badge badge-black">POST</small>
             <b><code>api/user/withdraw</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="POSTapi-user-withdraw"
-               value="application/json"
-               data-component="header">
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>payment_method</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="payment_method"
+               data-endpoint="POSTapi-user-withdraw"
+               value="paypal"
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="POSTapi-user-withdraw"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>payment_method</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="payment_method"                data-endpoint="POSTapi-user-withdraw"
-               value="bank"
-               data-component="body">
-    <br>
-<p>Must be one of <code>bank</code> or <code>paypal</code>. Example: <code>bank</code></p>
-        </div>
+<p>Must be one of <code>bank</code> or <code>paypal</code>.</p>
+        </p>
         </form>
 
-                    <h2 id="endpoints-GETapi-user-claims">GET api/user/claims</h2>
+            <h2 id="endpoints-GETapi-user-claims">GET api/user/claims</h2>
 
 <p>
 </p>
@@ -2019,15 +1707,16 @@ fetch(url, {
             <p>Example response (401):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;message&quot;: &quot;Unauthenticated.&quot;
 }</code>
  </pre>
@@ -2036,7 +1725,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-user-claims"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-user-claims" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-user-claims"></code></pre>
 </span>
 <span id="execution-error-GETapi-user-claims" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -2047,6 +1736,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-user-claims', this);">
     <h3>
@@ -2070,32 +1760,9 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/user/claims</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-user-claims"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-user-claims"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-GETapi-user-show-retailers">GET api/user/show-retailers</h2>
+            <h2 id="endpoints-GETapi-user-show-retailers">GET api/user/show-retailers</h2>
 
 <p>
 </p>
@@ -2135,15 +1802,16 @@ fetch(url, {
             <p>Example response (401):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;message&quot;: &quot;Unauthenticated.&quot;
 }</code>
  </pre>
@@ -2152,7 +1820,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-user-show-retailers"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-user-show-retailers" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-user-show-retailers"></code></pre>
 </span>
 <span id="execution-error-GETapi-user-show-retailers" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -2163,6 +1831,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-user-show-retailers', this);">
     <h3>
@@ -2186,32 +1855,9 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/user/show-retailers</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-user-show-retailers"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-user-show-retailers"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-POSTapi-user-claim-step-2">POST api/user/claim-step-2</h2>
+            <h2 id="endpoints-POSTapi-user-claim-step-2">POST api/user/claim-step-2</h2>
 
 <p>
 </p>
@@ -2252,7 +1898,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-POSTapi-user-claim-step-2"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-user-claim-step-2" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-POSTapi-user-claim-step-2"></code></pre>
 </span>
 <span id="execution-error-POSTapi-user-claim-step-2" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -2263,6 +1909,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('POSTapi-user-claim-step-2', this);">
     <h3>
@@ -2286,32 +1933,9 @@ fetch(url, {
             <small class="badge badge-black">POST</small>
             <b><code>api/user/claim-step-2</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="POSTapi-user-claim-step-2"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="POSTapi-user-claim-step-2"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-POSTapi-user-claim-step-3">POST api/user/claim-step-3</h2>
+            <h2 id="endpoints-POSTapi-user-claim-step-3">POST api/user/claim-step-3</h2>
 
 <p>
 </p>
@@ -2352,7 +1976,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-POSTapi-user-claim-step-3"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-user-claim-step-3" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-POSTapi-user-claim-step-3"></code></pre>
 </span>
 <span id="execution-error-POSTapi-user-claim-step-3" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -2363,6 +1987,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('POSTapi-user-claim-step-3', this);">
     <h3>
@@ -2386,32 +2011,9 @@ fetch(url, {
             <small class="badge badge-black">POST</small>
             <b><code>api/user/claim-step-3</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="POSTapi-user-claim-step-3"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="POSTapi-user-claim-step-3"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-GETapi-user-user-balance">GET api/user/user-balance</h2>
+            <h2 id="endpoints-GETapi-user-user-balance">GET api/user/user-balance</h2>
 
 <p>
 </p>
@@ -2451,15 +2053,16 @@ fetch(url, {
             <p>Example response (401):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;message&quot;: &quot;Unauthenticated.&quot;
 }</code>
  </pre>
@@ -2468,7 +2071,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-user-user-balance"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-user-user-balance" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-user-user-balance"></code></pre>
 </span>
 <span id="execution-error-GETapi-user-user-balance" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -2479,6 +2082,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-user-user-balance', this);">
     <h3>
@@ -2502,32 +2106,9 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/user/user-balance</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-user-user-balance"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-user-user-balance"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-POSTapi-change_password">POST api/change_password</h2>
+            <h2 id="endpoints-POSTapi-change_password">POST api/change_password</h2>
 
 <p>
 </p>
@@ -2544,9 +2125,9 @@ access-control-allow-origin: *
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"old_password\": \"dolore\",
-    \"new_password\": \"uglfcclbrkrfkzwiodkgoytrehahlriojbyrkyyizvjfu\",
-    \"confirm_password\": \"ab\"
+    \"old_password\": \"repellendus\",
+    \"new_password\": \"\",
+    \"confirm_password\": \"sit\"
 }"
 </code></pre></div>
 
@@ -2562,9 +2143,9 @@ const headers = {
 };
 
 let body = {
-    "old_password": "dolore",
-    "new_password": "uglfcclbrkrfkzwiodkgoytrehahlriojbyrkyyizvjfu",
-    "confirm_password": "ab"
+    "old_password": "repellendus",
+    "new_password": "",
+    "confirm_password": "sit"
 };
 
 fetch(url, {
@@ -2581,7 +2162,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-POSTapi-change_password"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-change_password" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-POSTapi-change_password"></code></pre>
 </span>
 <span id="execution-error-POSTapi-change_password" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -2592,6 +2173,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('POSTapi-change_password', this);">
     <h3>
@@ -2615,66 +2197,40 @@ fetch(url, {
             <small class="badge badge-black">POST</small>
             <b><code>api/change_password</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="POSTapi-change_password"
-               value="application/json"
-               data-component="header">
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>old_password</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="old_password"
+               data-endpoint="POSTapi-change_password"
+               value="repellendus"
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="POSTapi-change_password"
-               value="application/json"
-               data-component="header">
+
+        </p>
+                <p>
+            <b><code>new_password</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="new_password"
+               data-endpoint="POSTapi-change_password"
+               value=""
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>old_password</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="old_password"                data-endpoint="POSTapi-change_password"
-               value="dolore"
-               data-component="body">
+<p>Must be at least 8 characters.</p>
+        </p>
+                <p>
+            <b><code>confirm_password</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="confirm_password"
+               data-endpoint="POSTapi-change_password"
+               value="sit"
+               data-component="body" hidden>
     <br>
-<p>Example: <code>dolore</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>new_password</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="new_password"                data-endpoint="POSTapi-change_password"
-               value="uglfcclbrkrfkzwiodkgoytrehahlriojbyrkyyizvjfu"
-               data-component="body">
-    <br>
-<p>Must be at least 8 characters. Example: <code>uglfcclbrkrfkzwiodkgoytrehahlriojbyrkyyizvjfu</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>confirm_password</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="confirm_password"                data-endpoint="POSTapi-change_password"
-               value="ab"
-               data-component="body">
-    <br>
-<p>The value and <code>new_password</code> must match. Example: <code>ab</code></p>
-        </div>
+<p>The value and <code>new_password</code> must match.</p>
+        </p>
         </form>
 
-                    <h2 id="endpoints-POSTapi-auth-logout">POST api/auth/logout</h2>
+            <h2 id="endpoints-POSTapi-auth-logout">POST api/auth/logout</h2>
 
 <p>
 </p>
@@ -2715,7 +2271,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-POSTapi-auth-logout"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-auth-logout" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-POSTapi-auth-logout"></code></pre>
 </span>
 <span id="execution-error-POSTapi-auth-logout" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -2726,6 +2282,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('POSTapi-auth-logout', this);">
     <h3>
@@ -2749,32 +2306,9 @@ fetch(url, {
             <small class="badge badge-black">POST</small>
             <b><code>api/auth/logout</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="POSTapi-auth-logout"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="POSTapi-auth-logout"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-GETapi-categories">GET api/categories</h2>
+            <h2 id="endpoints-GETapi-categories">GET api/categories</h2>
 
 <p>
 </p>
@@ -2814,7 +2348,7 @@ fetch(url, {
             <p>Example response (200):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
@@ -2822,14 +2356,15 @@ content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 59
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;data&quot;: [
         {
             &quot;name&quot;: &quot;Electronics&quot;,
             &quot;slug&quot;: &quot;electronics&quot;,
-            &quot;description&quot;: &quot;Browse our best offers, including exclusive cashback deals increased for a limited time only.&quot;,
+            &quot;description&quot;: null,
             &quot;logo&quot;: &quot;http://127.0.0.1:8000/storage/categories/images/electronics.png&quot;,
             &quot;banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/categories/images/category_default_banner.png&quot;,
             &quot;parent_id&quot;: 0,
@@ -2838,7 +2373,7 @@ access-control-allow-origin: *
         {
             &quot;name&quot;: &quot;Food &amp; Drink&quot;,
             &quot;slug&quot;: &quot;food-drink&quot;,
-            &quot;description&quot;: &quot;Browse our best offers, including exclusive cashback deals increased for a limited time only.&quot;,
+            &quot;description&quot;: null,
             &quot;logo&quot;: &quot;http://127.0.0.1:8000/storage/categories/images/food-drink.png&quot;,
             &quot;banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/categories/images/category_default_banner.png&quot;,
             &quot;parent_id&quot;: 0,
@@ -2847,7 +2382,7 @@ access-control-allow-origin: *
         {
             &quot;name&quot;: &quot;Fashion&quot;,
             &quot;slug&quot;: &quot;fashion&quot;,
-            &quot;description&quot;: &quot;Browse our best offers, including exclusive cashback deals increased for a limited time only.&quot;,
+            &quot;description&quot;: null,
             &quot;logo&quot;: &quot;http://127.0.0.1:8000/storage/categories/images/fashion.png&quot;,
             &quot;banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/categories/images/category_default_banner.png&quot;,
             &quot;parent_id&quot;: 0,
@@ -2856,7 +2391,7 @@ access-control-allow-origin: *
         {
             &quot;name&quot;: &quot;Health &amp; Beauty&quot;,
             &quot;slug&quot;: &quot;health-beauty&quot;,
-            &quot;description&quot;: &quot;Browse our best offers, including exclusive cashback deals increased for a limited time only.&quot;,
+            &quot;description&quot;: null,
             &quot;logo&quot;: &quot;http://127.0.0.1:8000/storage/categories/images/health-beauty.png&quot;,
             &quot;banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/categories/images/category_default_banner.png&quot;,
             &quot;parent_id&quot;: 0,
@@ -2865,7 +2400,7 @@ access-control-allow-origin: *
         {
             &quot;name&quot;: &quot;Home &amp; DIY&quot;,
             &quot;slug&quot;: &quot;home-diy&quot;,
-            &quot;description&quot;: &quot;Browse our best offers, including exclusive cashback deals increased for a limited time only.&quot;,
+            &quot;description&quot;: null,
             &quot;logo&quot;: &quot;http://127.0.0.1:8000/storage/categories/images/home-diy.png&quot;,
             &quot;banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/categories/images/category_default_banner.png&quot;,
             &quot;parent_id&quot;: 0,
@@ -2874,7 +2409,7 @@ access-control-allow-origin: *
         {
             &quot;name&quot;: &quot;Other&quot;,
             &quot;slug&quot;: &quot;other&quot;,
-            &quot;description&quot;: &quot;Browse our best offers, including exclusive cashback deals increased for a limited time only.&quot;,
+            &quot;description&quot;: null,
             &quot;logo&quot;: &quot;http://127.0.0.1:8000/storage/categories/images/other.png&quot;,
             &quot;banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/categories/images/category_default_banner.png&quot;,
             &quot;parent_id&quot;: 0,
@@ -2883,7 +2418,7 @@ access-control-allow-origin: *
         {
             &quot;name&quot;: &quot;Pets&quot;,
             &quot;slug&quot;: &quot;pets&quot;,
-            &quot;description&quot;: &quot;Browse our best offers, including exclusive cashback deals increased for a limited time only.&quot;,
+            &quot;description&quot;: null,
             &quot;logo&quot;: &quot;http://127.0.0.1:8000/frontend/images/categories/images/category_default_logo.png&quot;,
             &quot;banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/categories/images/category_default_banner.png&quot;,
             &quot;parent_id&quot;: 0,
@@ -2892,7 +2427,7 @@ access-control-allow-origin: *
         {
             &quot;name&quot;: &quot;Sports &amp; Fitness&quot;,
             &quot;slug&quot;: &quot;sports-fitness&quot;,
-            &quot;description&quot;: &quot;Browse our best offers, including exclusive cashback deals increased for a limited time only.&quot;,
+            &quot;description&quot;: null,
             &quot;logo&quot;: &quot;http://127.0.0.1:8000/storage/categories/images/sports-fitness.png&quot;,
             &quot;banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/categories/images/category_default_banner.png&quot;,
             &quot;parent_id&quot;: 0,
@@ -2901,7 +2436,7 @@ access-control-allow-origin: *
         {
             &quot;name&quot;: &quot;Telecoms&quot;,
             &quot;slug&quot;: &quot;telecoms&quot;,
-            &quot;description&quot;: &quot;Browse our best offers, including exclusive cashback deals increased for a limited time only.&quot;,
+            &quot;description&quot;: null,
             &quot;logo&quot;: &quot;http://127.0.0.1:8000/frontend/images/categories/images/category_default_logo.png&quot;,
             &quot;banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/categories/images/category_default_banner.png&quot;,
             &quot;parent_id&quot;: 0,
@@ -2910,7 +2445,7 @@ access-control-allow-origin: *
         {
             &quot;name&quot;: &quot;Gifts&quot;,
             &quot;slug&quot;: &quot;gifts&quot;,
-            &quot;description&quot;: &quot;Browse our best offers, including exclusive cashback deals increased for a limited time only.&quot;,
+            &quot;description&quot;: null,
             &quot;logo&quot;: &quot;http://127.0.0.1:8000/storage/categories/images/gifts.png&quot;,
             &quot;banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/categories/images/category_default_banner.png&quot;,
             &quot;parent_id&quot;: 0,
@@ -2919,7 +2454,7 @@ access-control-allow-origin: *
         {
             &quot;name&quot;: &quot;Travel&quot;,
             &quot;slug&quot;: &quot;travel&quot;,
-            &quot;description&quot;: &quot;Browse our best offers, including exclusive cashback deals increased for a limited time only.&quot;,
+            &quot;description&quot;: null,
             &quot;logo&quot;: &quot;http://127.0.0.1:8000/storage/categories/images/travel.png&quot;,
             &quot;banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/categories/images/category_default_banner.png&quot;,
             &quot;parent_id&quot;: 0,
@@ -2928,7 +2463,7 @@ access-control-allow-origin: *
         {
             &quot;name&quot;: &quot;Cashback To Your Door&quot;,
             &quot;slug&quot;: &quot;cashback-to-your-door&quot;,
-            &quot;description&quot;: &quot;Browse our best offers, including exclusive cashback deals increased for a limited time only.&quot;,
+            &quot;description&quot;: null,
             &quot;logo&quot;: &quot;http://127.0.0.1:8000/storage/categories/images/cashback.png&quot;,
             &quot;banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/categories/images/category_default_banner.png&quot;,
             &quot;parent_id&quot;: 0,
@@ -2942,7 +2477,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-categories"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-categories" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-categories"></code></pre>
 </span>
 <span id="execution-error-GETapi-categories" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -2953,6 +2488,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-categories', this);">
     <h3>
@@ -2976,32 +2512,9 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/categories</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-categories"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-categories"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-GETapi-categories--id-">GET api/categories/{id}</h2>
+            <h2 id="endpoints-GETapi-categories--id-">GET api/categories/{id}</h2>
 
 <p>
 </p>
@@ -3041,7 +2554,7 @@ fetch(url, {
             <p>Example response (500):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
@@ -3049,492 +2562,493 @@ content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 58
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;message&quot;: &quot;Call to a member function stores() on null&quot;,
     &quot;exception&quot;: &quot;Error&quot;,
-    &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\app\\Http\\Controllers\\API\\CategoryController.php&quot;,
+    &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\app\\Http\\Controllers\\API\\CategoryController.php&quot;,
     &quot;line&quot;: 23,
     &quot;trace&quot;: [
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Controller.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Controller.php&quot;,
             &quot;line&quot;: 54,
             &quot;function&quot;: &quot;show&quot;,
             &quot;class&quot;: &quot;App\\Http\\Controllers\\API\\CategoryController&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php&quot;,
             &quot;line&quot;: 45,
             &quot;function&quot;: &quot;callAction&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Controller&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php&quot;,
             &quot;line&quot;: 262,
             &quot;function&quot;: &quot;dispatch&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\ControllerDispatcher&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php&quot;,
             &quot;line&quot;: 205,
             &quot;function&quot;: &quot;runController&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Route&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 721,
             &quot;function&quot;: &quot;run&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Route&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 128,
             &quot;function&quot;: &quot;Illuminate\\Routing\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php&quot;,
             &quot;line&quot;: 50,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\SubstituteBindings&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
             &quot;line&quot;: 127,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
             &quot;line&quot;: 103,
             &quot;function&quot;: &quot;handleRequest&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
             &quot;line&quot;: 55,
             &quot;function&quot;: &quot;handleRequestUsingNamedLimiter&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\sanctum\\src\\Http\\Middleware\\EnsureFrontendRequestsAreStateful.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\sanctum\\src\\Http\\Middleware\\EnsureFrontendRequestsAreStateful.php&quot;,
             &quot;line&quot;: 33,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 128,
             &quot;function&quot;: &quot;Laravel\\Sanctum\\Http\\Middleware\\{closure}&quot;,
             &quot;class&quot;: &quot;Laravel\\Sanctum\\Http\\Middleware\\EnsureFrontendRequestsAreStateful&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 103,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\sanctum\\src\\Http\\Middleware\\EnsureFrontendRequestsAreStateful.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\sanctum\\src\\Http\\Middleware\\EnsureFrontendRequestsAreStateful.php&quot;,
             &quot;line&quot;: 34,
             &quot;function&quot;: &quot;then&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Laravel\\Sanctum\\Http\\Middleware\\EnsureFrontendRequestsAreStateful&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 103,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 723,
             &quot;function&quot;: &quot;then&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 698,
             &quot;function&quot;: &quot;runRouteWithinStack&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 662,
             &quot;function&quot;: &quot;runRoute&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 651,
             &quot;function&quot;: &quot;dispatchToRoute&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;dispatch&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 128,
             &quot;function&quot;: &quot;Illuminate\\Foundation\\Http\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\livewire\\livewire\\src\\DisableBrowserCache.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\livewire\\livewire\\src\\DisableBrowserCache.php&quot;,
             &quot;line&quot;: 19,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Livewire\\DisableBrowserCache&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
             &quot;line&quot;: 21,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php&quot;,
             &quot;line&quot;: 31,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
             &quot;line&quot;: 21,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php&quot;,
             &quot;line&quot;: 40,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TrimStrings&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php&quot;,
             &quot;line&quot;: 27,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php&quot;,
             &quot;line&quot;: 86,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\fruitcake\\laravel-cors\\src\\HandleCors.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\fruitcake\\laravel-cors\\src\\HandleCors.php&quot;,
             &quot;line&quot;: 52,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Fruitcake\\Cors\\HandleCors&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\fideloper\\proxy\\src\\TrustProxies.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\fideloper\\proxy\\src\\TrustProxies.php&quot;,
             &quot;line&quot;: 57,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Fideloper\\Proxy\\TrustProxies&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 103,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
             &quot;line&quot;: 142,
             &quot;function&quot;: &quot;then&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
             &quot;line&quot;: 111,
             &quot;function&quot;: &quot;sendRequestThroughRouter&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
             &quot;line&quot;: 299,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
             &quot;line&quot;: 287,
             &quot;function&quot;: &quot;callLaravelOrLumenRoute&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
-            &quot;line&quot;: 92,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;line&quot;: 89,
             &quot;function&quot;: &quot;makeApiCall&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
             &quot;line&quot;: 45,
             &quot;function&quot;: &quot;makeResponseCall&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
             &quot;line&quot;: 35,
             &quot;function&quot;: &quot;makeResponseCallIfConditionsPass&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
-            &quot;line&quot;: 209,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
+            &quot;line&quot;: 222,
             &quot;function&quot;: &quot;__invoke&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
-            &quot;line&quot;: 166,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
+            &quot;line&quot;: 179,
             &quot;function&quot;: &quot;iterateThroughStrategies&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
-            &quot;line&quot;: 95,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
+            &quot;line&quot;: 116,
             &quot;function&quot;: &quot;fetchResponses&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
-            &quot;line&quot;: 122,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 123,
             &quot;function&quot;: &quot;processRoute&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
-            &quot;line&quot;: 69,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 80,
             &quot;function&quot;: &quot;extractEndpointsInfoFromLaravelApp&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
-            &quot;line&quot;: 47,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 56,
             &quot;function&quot;: &quot;extractEndpointsInfoAndWriteToDisk&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Commands\\GenerateDocumentation.php&quot;,
-            &quot;line&quot;: 51,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Commands\\GenerateDocumentation.php&quot;,
+            &quot;line&quot;: 55,
             &quot;function&quot;: &quot;get&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
             &quot;line&quot;: 36,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Commands\\GenerateDocumentation&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php&quot;,
             &quot;line&quot;: 40,
             &quot;function&quot;: &quot;Illuminate\\Container\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
             &quot;type&quot;: &quot;::&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
             &quot;line&quot;: 93,
             &quot;function&quot;: &quot;unwrapIfClosure&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\Util&quot;,
             &quot;type&quot;: &quot;::&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
             &quot;line&quot;: 37,
             &quot;function&quot;: &quot;callBoundMethod&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
             &quot;type&quot;: &quot;::&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php&quot;,
             &quot;line&quot;: 653,
             &quot;function&quot;: &quot;call&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
             &quot;type&quot;: &quot;::&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
             &quot;line&quot;: 136,
             &quot;function&quot;: &quot;call&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\Container&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\symfony\\console\\Command\\Command.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\symfony\\console\\Command\\Command.php&quot;,
             &quot;line&quot;: 298,
             &quot;function&quot;: &quot;execute&quot;,
             &quot;class&quot;: &quot;Illuminate\\Console\\Command&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
             &quot;line&quot;: 121,
             &quot;function&quot;: &quot;run&quot;,
             &quot;class&quot;: &quot;Symfony\\Component\\Console\\Command\\Command&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
             &quot;line&quot;: 1040,
             &quot;function&quot;: &quot;run&quot;,
             &quot;class&quot;: &quot;Illuminate\\Console\\Command&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
             &quot;line&quot;: 301,
             &quot;function&quot;: &quot;doRunCommand&quot;,
             &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
             &quot;line&quot;: 171,
             &quot;function&quot;: &quot;doRun&quot;,
             &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php&quot;,
             &quot;line&quot;: 94,
             &quot;function&quot;: &quot;run&quot;,
             &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php&quot;,
             &quot;line&quot;: 129,
             &quot;function&quot;: &quot;run&quot;,
             &quot;class&quot;: &quot;Illuminate\\Console\\Application&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\artisan&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\artisan&quot;,
             &quot;line&quot;: 37,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Console\\Kernel&quot;,
@@ -3548,7 +3062,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-categories--id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-categories--id-" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-categories--id-"></code></pre>
 </span>
 <span id="execution-error-GETapi-categories--id-" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -3559,6 +3073,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-categories--id-', this);">
     <h3>
@@ -3582,44 +3097,20 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/categories/{id}</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-categories--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-categories--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               name="id"                data-endpoint="GETapi-categories--id-"
+                    <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="id"
+               data-endpoint="GETapi-categories--id-"
                value="1"
-               data-component="url">
+               data-component="url" hidden>
     <br>
-<p>The ID of the category. Example: <code>1</code></p>
-            </div>
+<p>The ID of the category.</p>
+            </p>
                     </form>
 
-                    <h2 id="endpoints-GETapi-child_categories--slug-">GET api/child_categories/{slug}</h2>
+            <h2 id="endpoints-GETapi-child_categories--slug-">GET api/child_categories/{slug}</h2>
 
 <p>
 </p>
@@ -3632,14 +3123,14 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://127.0.0.1:8000/api/child_categories/explicabo" \
+    --get "http://127.0.0.1:8000/api/child_categories/quidem" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/child_categories/explicabo"
+    "http://127.0.0.1:8000/api/child_categories/quidem"
 );
 
 const headers = {
@@ -3659,7 +3150,7 @@ fetch(url, {
             <p>Example response (500):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
@@ -3667,499 +3158,500 @@ content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 57
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Attempt to read property \&quot;id\&quot; on null&quot;,
+<code class="language-json">{
+    &quot;message&quot;: &quot;Trying to get property 'id' of non-object&quot;,
     &quot;exception&quot;: &quot;ErrorException&quot;,
-    &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\app\\Http\\Controllers\\API\\CategoryController.php&quot;,
+    &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\app\\Http\\Controllers\\API\\CategoryController.php&quot;,
     &quot;line&quot;: 44,
     &quot;trace&quot;: [
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\app\\Http\\Controllers\\API\\CategoryController.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\app\\Http\\Controllers\\API\\CategoryController.php&quot;,
             &quot;line&quot;: 44,
             &quot;function&quot;: &quot;handleError&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Bootstrap\\HandleExceptions&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Controller.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Controller.php&quot;,
             &quot;line&quot;: 54,
             &quot;function&quot;: &quot;childCategories&quot;,
             &quot;class&quot;: &quot;App\\Http\\Controllers\\API\\CategoryController&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\ControllerDispatcher.php&quot;,
             &quot;line&quot;: 45,
             &quot;function&quot;: &quot;callAction&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Controller&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php&quot;,
             &quot;line&quot;: 262,
             &quot;function&quot;: &quot;dispatch&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\ControllerDispatcher&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Route.php&quot;,
             &quot;line&quot;: 205,
             &quot;function&quot;: &quot;runController&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Route&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 721,
             &quot;function&quot;: &quot;run&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Route&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 128,
             &quot;function&quot;: &quot;Illuminate\\Routing\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php&quot;,
             &quot;line&quot;: 50,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\SubstituteBindings&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
             &quot;line&quot;: 127,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
             &quot;line&quot;: 103,
             &quot;function&quot;: &quot;handleRequest&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
             &quot;line&quot;: 55,
             &quot;function&quot;: &quot;handleRequestUsingNamedLimiter&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\sanctum\\src\\Http\\Middleware\\EnsureFrontendRequestsAreStateful.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\sanctum\\src\\Http\\Middleware\\EnsureFrontendRequestsAreStateful.php&quot;,
             &quot;line&quot;: 33,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 128,
             &quot;function&quot;: &quot;Laravel\\Sanctum\\Http\\Middleware\\{closure}&quot;,
             &quot;class&quot;: &quot;Laravel\\Sanctum\\Http\\Middleware\\EnsureFrontendRequestsAreStateful&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 103,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\sanctum\\src\\Http\\Middleware\\EnsureFrontendRequestsAreStateful.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\sanctum\\src\\Http\\Middleware\\EnsureFrontendRequestsAreStateful.php&quot;,
             &quot;line&quot;: 34,
             &quot;function&quot;: &quot;then&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Laravel\\Sanctum\\Http\\Middleware\\EnsureFrontendRequestsAreStateful&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 103,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 723,
             &quot;function&quot;: &quot;then&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 698,
             &quot;function&quot;: &quot;runRouteWithinStack&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 662,
             &quot;function&quot;: &quot;runRoute&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 651,
             &quot;function&quot;: &quot;dispatchToRoute&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;dispatch&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 128,
             &quot;function&quot;: &quot;Illuminate\\Foundation\\Http\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\livewire\\livewire\\src\\DisableBrowserCache.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\livewire\\livewire\\src\\DisableBrowserCache.php&quot;,
             &quot;line&quot;: 19,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Livewire\\DisableBrowserCache&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
             &quot;line&quot;: 21,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php&quot;,
             &quot;line&quot;: 31,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
             &quot;line&quot;: 21,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php&quot;,
             &quot;line&quot;: 40,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TrimStrings&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php&quot;,
             &quot;line&quot;: 27,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php&quot;,
             &quot;line&quot;: 86,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\fruitcake\\laravel-cors\\src\\HandleCors.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\fruitcake\\laravel-cors\\src\\HandleCors.php&quot;,
             &quot;line&quot;: 52,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Fruitcake\\Cors\\HandleCors&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\fideloper\\proxy\\src\\TrustProxies.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\fideloper\\proxy\\src\\TrustProxies.php&quot;,
             &quot;line&quot;: 57,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Fideloper\\Proxy\\TrustProxies&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 103,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
             &quot;line&quot;: 142,
             &quot;function&quot;: &quot;then&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
             &quot;line&quot;: 111,
             &quot;function&quot;: &quot;sendRequestThroughRouter&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
             &quot;line&quot;: 299,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
             &quot;line&quot;: 287,
             &quot;function&quot;: &quot;callLaravelOrLumenRoute&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
-            &quot;line&quot;: 92,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;line&quot;: 89,
             &quot;function&quot;: &quot;makeApiCall&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
             &quot;line&quot;: 45,
             &quot;function&quot;: &quot;makeResponseCall&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
             &quot;line&quot;: 35,
             &quot;function&quot;: &quot;makeResponseCallIfConditionsPass&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
-            &quot;line&quot;: 209,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
+            &quot;line&quot;: 222,
             &quot;function&quot;: &quot;__invoke&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
-            &quot;line&quot;: 166,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
+            &quot;line&quot;: 179,
             &quot;function&quot;: &quot;iterateThroughStrategies&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
-            &quot;line&quot;: 95,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
+            &quot;line&quot;: 116,
             &quot;function&quot;: &quot;fetchResponses&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
-            &quot;line&quot;: 122,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 123,
             &quot;function&quot;: &quot;processRoute&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
-            &quot;line&quot;: 69,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 80,
             &quot;function&quot;: &quot;extractEndpointsInfoFromLaravelApp&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
-            &quot;line&quot;: 47,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 56,
             &quot;function&quot;: &quot;extractEndpointsInfoAndWriteToDisk&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Commands\\GenerateDocumentation.php&quot;,
-            &quot;line&quot;: 51,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Commands\\GenerateDocumentation.php&quot;,
+            &quot;line&quot;: 55,
             &quot;function&quot;: &quot;get&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
             &quot;line&quot;: 36,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Commands\\GenerateDocumentation&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php&quot;,
             &quot;line&quot;: 40,
             &quot;function&quot;: &quot;Illuminate\\Container\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
             &quot;type&quot;: &quot;::&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
             &quot;line&quot;: 93,
             &quot;function&quot;: &quot;unwrapIfClosure&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\Util&quot;,
             &quot;type&quot;: &quot;::&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
             &quot;line&quot;: 37,
             &quot;function&quot;: &quot;callBoundMethod&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
             &quot;type&quot;: &quot;::&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php&quot;,
             &quot;line&quot;: 653,
             &quot;function&quot;: &quot;call&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
             &quot;type&quot;: &quot;::&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
             &quot;line&quot;: 136,
             &quot;function&quot;: &quot;call&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\Container&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\symfony\\console\\Command\\Command.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\symfony\\console\\Command\\Command.php&quot;,
             &quot;line&quot;: 298,
             &quot;function&quot;: &quot;execute&quot;,
             &quot;class&quot;: &quot;Illuminate\\Console\\Command&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
             &quot;line&quot;: 121,
             &quot;function&quot;: &quot;run&quot;,
             &quot;class&quot;: &quot;Symfony\\Component\\Console\\Command\\Command&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
             &quot;line&quot;: 1040,
             &quot;function&quot;: &quot;run&quot;,
             &quot;class&quot;: &quot;Illuminate\\Console\\Command&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
             &quot;line&quot;: 301,
             &quot;function&quot;: &quot;doRunCommand&quot;,
             &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
             &quot;line&quot;: 171,
             &quot;function&quot;: &quot;doRun&quot;,
             &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php&quot;,
             &quot;line&quot;: 94,
             &quot;function&quot;: &quot;run&quot;,
             &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php&quot;,
             &quot;line&quot;: 129,
             &quot;function&quot;: &quot;run&quot;,
             &quot;class&quot;: &quot;Illuminate\\Console\\Application&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\artisan&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\artisan&quot;,
             &quot;line&quot;: 37,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Console\\Kernel&quot;,
@@ -4173,7 +3665,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-child_categories--slug-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-child_categories--slug-" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-child_categories--slug-"></code></pre>
 </span>
 <span id="execution-error-GETapi-child_categories--slug-" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -4184,6 +3676,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-child_categories--slug-', this);">
     <h3>
@@ -4207,44 +3700,20 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/child_categories/{slug}</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-child_categories--slug-"
-               value="application/json"
-               data-component="header">
+                    <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>slug</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="slug"
+               data-endpoint="GETapi-child_categories--slug-"
+               value="quidem"
+               data-component="url" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-child_categories--slug-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>slug</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="slug"                data-endpoint="GETapi-child_categories--slug-"
-               value="explicabo"
-               data-component="url">
-    <br>
-<p>The slug of the child category. Example: <code>explicabo</code></p>
-            </div>
+<p>The slug of the child category.</p>
+            </p>
                     </form>
 
-                    <h2 id="endpoints-GETapi-stores">Display a listing of the resource.</h2>
+            <h2 id="endpoints-GETapi-stores">Display a listing of the resource.</h2>
 
 <p>
 </p>
@@ -4284,7 +3753,7 @@ fetch(url, {
             <p>Example response (200):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
@@ -4292,20 +3761,32 @@ content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 56
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
-    &quot;data&quot;: [],
+<code class="language-json">{
+    &quot;data&quot;: [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    ],
     &quot;links&quot;: {
         &quot;first&quot;: &quot;http://127.0.0.1:8000/api/stores?per_page=10&amp;page=1&quot;,
-        &quot;last&quot;: &quot;http://127.0.0.1:8000/api/stores?per_page=10&amp;page=1&quot;,
+        &quot;last&quot;: &quot;http://127.0.0.1:8000/api/stores?per_page=10&amp;page=5&quot;,
         &quot;prev&quot;: null,
-        &quot;next&quot;: null
+        &quot;next&quot;: &quot;http://127.0.0.1:8000/api/stores?per_page=10&amp;page=2&quot;
     },
     &quot;meta&quot;: {
         &quot;current_page&quot;: 1,
-        &quot;from&quot;: null,
-        &quot;last_page&quot;: 1,
+        &quot;from&quot;: 1,
+        &quot;last_page&quot;: 5,
         &quot;links&quot;: [
             {
                 &quot;url&quot;: null,
@@ -4318,15 +3799,35 @@ access-control-allow-origin: *
                 &quot;active&quot;: true
             },
             {
-                &quot;url&quot;: null,
+                &quot;url&quot;: &quot;http://127.0.0.1:8000/api/stores?per_page=10&amp;page=2&quot;,
+                &quot;label&quot;: &quot;2&quot;,
+                &quot;active&quot;: false
+            },
+            {
+                &quot;url&quot;: &quot;http://127.0.0.1:8000/api/stores?per_page=10&amp;page=3&quot;,
+                &quot;label&quot;: &quot;3&quot;,
+                &quot;active&quot;: false
+            },
+            {
+                &quot;url&quot;: &quot;http://127.0.0.1:8000/api/stores?per_page=10&amp;page=4&quot;,
+                &quot;label&quot;: &quot;4&quot;,
+                &quot;active&quot;: false
+            },
+            {
+                &quot;url&quot;: &quot;http://127.0.0.1:8000/api/stores?per_page=10&amp;page=5&quot;,
+                &quot;label&quot;: &quot;5&quot;,
+                &quot;active&quot;: false
+            },
+            {
+                &quot;url&quot;: &quot;http://127.0.0.1:8000/api/stores?per_page=10&amp;page=2&quot;,
                 &quot;label&quot;: &quot;Next &amp;raquo;&quot;,
                 &quot;active&quot;: false
             }
         ],
         &quot;path&quot;: &quot;http://127.0.0.1:8000/api/stores&quot;,
         &quot;per_page&quot;: 10,
-        &quot;to&quot;: null,
-        &quot;total&quot;: 0
+        &quot;to&quot;: 10,
+        &quot;total&quot;: 50
     }
 }</code>
  </pre>
@@ -4335,7 +3836,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-stores"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-stores" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-stores"></code></pre>
 </span>
 <span id="execution-error-GETapi-stores" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -4346,6 +3847,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-stores', this);">
     <h3>
@@ -4369,32 +3871,9 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/stores</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-stores"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-stores"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-POSTapi-stores">Store a newly created resource in storage.</h2>
+            <h2 id="endpoints-POSTapi-stores">Store a newly created resource in storage.</h2>
 
 <p>
 </p>
@@ -4435,7 +3914,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-POSTapi-stores"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-stores" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-POSTapi-stores"></code></pre>
 </span>
 <span id="execution-error-POSTapi-stores" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -4446,6 +3925,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('POSTapi-stores', this);">
     <h3>
@@ -4469,32 +3949,9 @@ fetch(url, {
             <small class="badge badge-black">POST</small>
             <b><code>api/stores</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="POSTapi-stores"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="POSTapi-stores"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-GETapi-stores--id-">Display the specified resource.</h2>
+            <h2 id="endpoints-GETapi-stores--id-">Display the specified resource.</h2>
 
 <p>
 </p>
@@ -4507,14 +3964,14 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://127.0.0.1:8000/api/stores/13" \
+    --get "http://127.0.0.1:8000/api/stores/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/stores/13"
+    "http://127.0.0.1:8000/api/stores/1"
 );
 
 const headers = {
@@ -4534,7 +3991,7 @@ fetch(url, {
             <p>Example response (200):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
@@ -4542,9 +3999,10 @@ content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 55
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;status&quot;: 404,
     &quot;message&quot;: &quot;Store not found&quot;,
     &quot;data&quot;: []
@@ -4555,7 +4013,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-stores--id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-stores--id-" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-stores--id-"></code></pre>
 </span>
 <span id="execution-error-GETapi-stores--id-" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -4566,6 +4024,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-stores--id-', this);">
     <h3>
@@ -4589,44 +4048,20 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/stores/{id}</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-stores--id-"
-               value="application/json"
-               data-component="header">
+                    <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="id"
+               data-endpoint="GETapi-stores--id-"
+               value="1"
+               data-component="url" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-stores--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               name="id"                data-endpoint="GETapi-stores--id-"
-               value="13"
-               data-component="url">
-    <br>
-<p>The ID of the store. Example: <code>13</code></p>
-            </div>
+<p>The ID of the store.</p>
+            </p>
                     </form>
 
-                    <h2 id="endpoints-PUTapi-stores--id-">Update the specified resource in storage.</h2>
+            <h2 id="endpoints-PUTapi-stores--id-">Update the specified resource in storage.</h2>
 
 <p>
 </p>
@@ -4639,14 +4074,14 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request PUT \
-    "http://127.0.0.1:8000/api/stores/17" \
+    "http://127.0.0.1:8000/api/stores/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/stores/17"
+    "http://127.0.0.1:8000/api/stores/1"
 );
 
 const headers = {
@@ -4667,7 +4102,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-PUTapi-stores--id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-PUTapi-stores--id-" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-PUTapi-stores--id-"></code></pre>
 </span>
 <span id="execution-error-PUTapi-stores--id-" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -4678,6 +4113,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('PUTapi-stores--id-', this);">
     <h3>
@@ -4705,44 +4141,20 @@ fetch(url, {
             <small class="badge badge-purple">PATCH</small>
             <b><code>api/stores/{id}</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="PUTapi-stores--id-"
-               value="application/json"
-               data-component="header">
+                    <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="id"
+               data-endpoint="PUTapi-stores--id-"
+               value="1"
+               data-component="url" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="PUTapi-stores--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               name="id"                data-endpoint="PUTapi-stores--id-"
-               value="17"
-               data-component="url">
-    <br>
-<p>The ID of the store. Example: <code>17</code></p>
-            </div>
+<p>The ID of the store.</p>
+            </p>
                     </form>
 
-                    <h2 id="endpoints-DELETEapi-stores--id-">Remove the specified resource from storage.</h2>
+            <h2 id="endpoints-DELETEapi-stores--id-">Remove the specified resource from storage.</h2>
 
 <p>
 </p>
@@ -4755,14 +4167,14 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request DELETE \
-    "http://127.0.0.1:8000/api/stores/11" \
+    "http://127.0.0.1:8000/api/stores/1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/stores/11"
+    "http://127.0.0.1:8000/api/stores/1"
 );
 
 const headers = {
@@ -4783,7 +4195,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-DELETEapi-stores--id-"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-DELETEapi-stores--id-" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-DELETEapi-stores--id-"></code></pre>
 </span>
 <span id="execution-error-DELETEapi-stores--id-" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -4794,6 +4206,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('DELETEapi-stores--id-', this);">
     <h3>
@@ -4817,44 +4230,20 @@ fetch(url, {
             <small class="badge badge-red">DELETE</small>
             <b><code>api/stores/{id}</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="DELETEapi-stores--id-"
-               value="application/json"
-               data-component="header">
+                    <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
+                    <p>
+                <b><code>id</code></b>&nbsp;&nbsp;<small>integer</small>  &nbsp;
+                <input type="number"
+               name="id"
+               data-endpoint="DELETEapi-stores--id-"
+               value="1"
+               data-component="url" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="DELETEapi-stores--id-"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        <h4 class="fancy-heading-panel"><b>URL Parameters</b></h4>
-                    <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>id</code></b>&nbsp;&nbsp;
-<small>integer</small>&nbsp;
- &nbsp;
-                <input type="number" style="display: none"
-               name="id"                data-endpoint="DELETEapi-stores--id-"
-               value="11"
-               data-component="url">
-    <br>
-<p>The ID of the store. Example: <code>11</code></p>
-            </div>
+<p>The ID of the store.</p>
+            </p>
                     </form>
 
-                    <h2 id="endpoints-GETapi-featured_cashback">GET api/featured_cashback</h2>
+            <h2 id="endpoints-GETapi-featured_cashback">GET api/featured_cashback</h2>
 
 <p>
 </p>
@@ -4894,7 +4283,7 @@ fetch(url, {
             <p>Example response (200):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
@@ -4902,10 +4291,43 @@ content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 54
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
-    &quot;data&quot;: []
+<code class="language-json">{
+    &quot;data&quot;: [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    ]
 }</code>
  </pre>
     </span>
@@ -4913,7 +4335,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-featured_cashback"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-featured_cashback" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-featured_cashback"></code></pre>
 </span>
 <span id="execution-error-GETapi-featured_cashback" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -4924,6 +4346,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-featured_cashback', this);">
     <h3>
@@ -4947,32 +4370,9 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/featured_cashback</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-featured_cashback"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-featured_cashback"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-GETapi-slider">GET api/slider</h2>
+            <h2 id="endpoints-GETapi-slider">GET api/slider</h2>
 
 <p>
 </p>
@@ -5012,7 +4412,7 @@ fetch(url, {
             <p>Example response (500):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
@@ -5020,23 +4420,24 @@ content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 53
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
-    &quot;message&quot;: &quot;Attempt to read property \&quot;cashback\&quot; on null&quot;,
+<code class="language-json">{
+    &quot;message&quot;: &quot;Trying to get property 'type' of non-object&quot;,
     &quot;exception&quot;: &quot;ErrorException&quot;,
-    &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\app\\Http\\Resources\\SliderResource.php&quot;,
+    &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\app\\Http\\Resources\\SliderResource.php&quot;,
     &quot;line&quot;: 29,
     &quot;trace&quot;: [
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\app\\Http\\Resources\\SliderResource.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\app\\Http\\Resources\\SliderResource.php&quot;,
             &quot;line&quot;: 29,
             &quot;function&quot;: &quot;handleError&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Bootstrap\\HandleExceptions&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\HigherOrderCollectionProxy.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\HigherOrderCollectionProxy.php&quot;,
             &quot;line&quot;: 60,
             &quot;function&quot;: &quot;toArray&quot;,
             &quot;class&quot;: &quot;App\\Http\\Resources\\SliderResource&quot;,
@@ -5048,516 +4449,516 @@ access-control-allow-origin: *
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Collection.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\Collection.php&quot;,
             &quot;line&quot;: 695,
             &quot;function&quot;: &quot;array_map&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\HigherOrderCollectionProxy.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Collections\\HigherOrderCollectionProxy.php&quot;,
             &quot;line&quot;: 61,
             &quot;function&quot;: &quot;map&quot;,
             &quot;class&quot;: &quot;Illuminate\\Support\\Collection&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Resources\\Json\\ResourceCollection.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Resources\\Json\\ResourceCollection.php&quot;,
             &quot;line&quot;: 102,
             &quot;function&quot;: &quot;__call&quot;,
             &quot;class&quot;: &quot;Illuminate\\Support\\HigherOrderCollectionProxy&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Resources\\Json\\JsonResource.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Resources\\Json\\JsonResource.php&quot;,
             &quot;line&quot;: 95,
             &quot;function&quot;: &quot;toArray&quot;,
             &quot;class&quot;: &quot;Illuminate\\Http\\Resources\\Json\\ResourceCollection&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Resources\\Json\\ResourceResponse.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Resources\\Json\\ResourceResponse.php&quot;,
             &quot;line&quot;: 39,
             &quot;function&quot;: &quot;resolve&quot;,
             &quot;class&quot;: &quot;Illuminate\\Http\\Resources\\Json\\JsonResource&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Resources\\Json\\JsonResource.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Resources\\Json\\JsonResource.php&quot;,
             &quot;line&quot;: 231,
             &quot;function&quot;: &quot;toResponse&quot;,
             &quot;class&quot;: &quot;Illuminate\\Http\\Resources\\Json\\ResourceResponse&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Resources\\Json\\ResourceCollection.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Http\\Resources\\Json\\ResourceCollection.php&quot;,
             &quot;line&quot;: 117,
             &quot;function&quot;: &quot;toResponse&quot;,
             &quot;class&quot;: &quot;Illuminate\\Http\\Resources\\Json\\JsonResource&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 802,
             &quot;function&quot;: &quot;toResponse&quot;,
             &quot;class&quot;: &quot;Illuminate\\Http\\Resources\\Json\\ResourceCollection&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 789,
             &quot;function&quot;: &quot;toResponse&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;::&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 721,
             &quot;function&quot;: &quot;prepareResponse&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 128,
             &quot;function&quot;: &quot;Illuminate\\Routing\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\SubstituteBindings.php&quot;,
             &quot;line&quot;: 50,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\SubstituteBindings&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
             &quot;line&quot;: 127,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
             &quot;line&quot;: 103,
             &quot;function&quot;: &quot;handleRequest&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Middleware\\ThrottleRequests.php&quot;,
             &quot;line&quot;: 55,
             &quot;function&quot;: &quot;handleRequestUsingNamedLimiter&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Middleware\\ThrottleRequests&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\sanctum\\src\\Http\\Middleware\\EnsureFrontendRequestsAreStateful.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\sanctum\\src\\Http\\Middleware\\EnsureFrontendRequestsAreStateful.php&quot;,
             &quot;line&quot;: 33,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 128,
             &quot;function&quot;: &quot;Laravel\\Sanctum\\Http\\Middleware\\{closure}&quot;,
             &quot;class&quot;: &quot;Laravel\\Sanctum\\Http\\Middleware\\EnsureFrontendRequestsAreStateful&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 103,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\sanctum\\src\\Http\\Middleware\\EnsureFrontendRequestsAreStateful.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\sanctum\\src\\Http\\Middleware\\EnsureFrontendRequestsAreStateful.php&quot;,
             &quot;line&quot;: 34,
             &quot;function&quot;: &quot;then&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Laravel\\Sanctum\\Http\\Middleware\\EnsureFrontendRequestsAreStateful&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 103,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 723,
             &quot;function&quot;: &quot;then&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 698,
             &quot;function&quot;: &quot;runRouteWithinStack&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 662,
             &quot;function&quot;: &quot;runRoute&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Routing\\Router.php&quot;,
             &quot;line&quot;: 651,
             &quot;function&quot;: &quot;dispatchToRoute&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;dispatch&quot;,
             &quot;class&quot;: &quot;Illuminate\\Routing\\Router&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 128,
             &quot;function&quot;: &quot;Illuminate\\Foundation\\Http\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\livewire\\livewire\\src\\DisableBrowserCache.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\livewire\\livewire\\src\\DisableBrowserCache.php&quot;,
             &quot;line&quot;: 19,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Livewire\\DisableBrowserCache&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
             &quot;line&quot;: 21,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull.php&quot;,
             &quot;line&quot;: 31,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\ConvertEmptyStringsToNull&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest.php&quot;,
             &quot;line&quot;: 21,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\TrimStrings.php&quot;,
             &quot;line&quot;: 40,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TransformsRequest&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\TrimStrings&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize.php&quot;,
             &quot;line&quot;: 27,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\ValidatePostSize&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance.php&quot;,
             &quot;line&quot;: 86,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Middleware\\PreventRequestsDuringMaintenance&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\fruitcake\\laravel-cors\\src\\HandleCors.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\fruitcake\\laravel-cors\\src\\HandleCors.php&quot;,
             &quot;line&quot;: 52,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Fruitcake\\Cors\\HandleCors&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\fideloper\\proxy\\src\\TrustProxies.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\fideloper\\proxy\\src\\TrustProxies.php&quot;,
             &quot;line&quot;: 57,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 167,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Fideloper\\Proxy\\TrustProxies&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Pipeline\\Pipeline.php&quot;,
             &quot;line&quot;: 103,
             &quot;function&quot;: &quot;Illuminate\\Pipeline\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
             &quot;line&quot;: 142,
             &quot;function&quot;: &quot;then&quot;,
             &quot;class&quot;: &quot;Illuminate\\Pipeline\\Pipeline&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Http\\Kernel.php&quot;,
             &quot;line&quot;: 111,
             &quot;function&quot;: &quot;sendRequestThroughRouter&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
             &quot;line&quot;: 299,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Http\\Kernel&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
             &quot;line&quot;: 287,
             &quot;function&quot;: &quot;callLaravelOrLumenRoute&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
-            &quot;line&quot;: 92,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;line&quot;: 89,
             &quot;function&quot;: &quot;makeApiCall&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
             &quot;line&quot;: 45,
             &quot;function&quot;: &quot;makeResponseCall&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Strategies\\Responses\\ResponseCalls.php&quot;,
             &quot;line&quot;: 35,
             &quot;function&quot;: &quot;makeResponseCallIfConditionsPass&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
-            &quot;line&quot;: 209,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
+            &quot;line&quot;: 222,
             &quot;function&quot;: &quot;__invoke&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Strategies\\Responses\\ResponseCalls&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
-            &quot;line&quot;: 166,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
+            &quot;line&quot;: 179,
             &quot;function&quot;: &quot;iterateThroughStrategies&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
-            &quot;line&quot;: 95,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Extracting\\Extractor.php&quot;,
+            &quot;line&quot;: 116,
             &quot;function&quot;: &quot;fetchResponses&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
-            &quot;line&quot;: 122,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 123,
             &quot;function&quot;: &quot;processRoute&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Extracting\\Extractor&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
-            &quot;line&quot;: 69,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 80,
             &quot;function&quot;: &quot;extractEndpointsInfoFromLaravelApp&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
-            &quot;line&quot;: 47,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\GroupedEndpoints\\GroupedEndpointsFromApp.php&quot;,
+            &quot;line&quot;: 56,
             &quot;function&quot;: &quot;extractEndpointsInfoAndWriteToDisk&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Commands\\GenerateDocumentation.php&quot;,
-            &quot;line&quot;: 51,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\knuckleswtf\\scribe\\src\\Commands\\GenerateDocumentation.php&quot;,
+            &quot;line&quot;: 55,
             &quot;function&quot;: &quot;get&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\GroupedEndpoints\\GroupedEndpointsFromApp&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
             &quot;line&quot;: 36,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Knuckles\\Scribe\\Commands\\GenerateDocumentation&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Util.php&quot;,
             &quot;line&quot;: 40,
             &quot;function&quot;: &quot;Illuminate\\Container\\{closure}&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
             &quot;type&quot;: &quot;::&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
             &quot;line&quot;: 93,
             &quot;function&quot;: &quot;unwrapIfClosure&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\Util&quot;,
             &quot;type&quot;: &quot;::&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\BoundMethod.php&quot;,
             &quot;line&quot;: 37,
             &quot;function&quot;: &quot;callBoundMethod&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
             &quot;type&quot;: &quot;::&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Container\\Container.php&quot;,
             &quot;line&quot;: 653,
             &quot;function&quot;: &quot;call&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\BoundMethod&quot;,
             &quot;type&quot;: &quot;::&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
             &quot;line&quot;: 136,
             &quot;function&quot;: &quot;call&quot;,
             &quot;class&quot;: &quot;Illuminate\\Container\\Container&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\symfony\\console\\Command\\Command.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\symfony\\console\\Command\\Command.php&quot;,
             &quot;line&quot;: 298,
             &quot;function&quot;: &quot;execute&quot;,
             &quot;class&quot;: &quot;Illuminate\\Console\\Command&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Command.php&quot;,
             &quot;line&quot;: 121,
             &quot;function&quot;: &quot;run&quot;,
             &quot;class&quot;: &quot;Symfony\\Component\\Console\\Command\\Command&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
             &quot;line&quot;: 1040,
             &quot;function&quot;: &quot;run&quot;,
             &quot;class&quot;: &quot;Illuminate\\Console\\Command&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
             &quot;line&quot;: 301,
             &quot;function&quot;: &quot;doRunCommand&quot;,
             &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\symfony\\console\\Application.php&quot;,
             &quot;line&quot;: 171,
             &quot;function&quot;: &quot;doRun&quot;,
             &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Console\\Application.php&quot;,
             &quot;line&quot;: 94,
             &quot;function&quot;: &quot;run&quot;,
             &quot;class&quot;: &quot;Symfony\\Component\\Console\\Application&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\vendor\\laravel\\framework\\src\\Illuminate\\Foundation\\Console\\Kernel.php&quot;,
             &quot;line&quot;: 129,
             &quot;function&quot;: &quot;run&quot;,
             &quot;class&quot;: &quot;Illuminate\\Console\\Application&quot;,
             &quot;type&quot;: &quot;-&gt;&quot;
         },
         {
-            &quot;file&quot;: &quot;C:\\wamp64\\www\\cashback-reborn\\artisan&quot;,
+            &quot;file&quot;: &quot;D:\\Workspace\\cashback-reborn\\artisan&quot;,
             &quot;line&quot;: 37,
             &quot;function&quot;: &quot;handle&quot;,
             &quot;class&quot;: &quot;Illuminate\\Foundation\\Console\\Kernel&quot;,
@@ -5571,7 +4972,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-slider"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-slider" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-slider"></code></pre>
 </span>
 <span id="execution-error-GETapi-slider" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -5582,6 +4983,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-slider', this);">
     <h3>
@@ -5605,32 +5007,9 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/slider</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-slider"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-slider"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-GETapi-vouchers">GET api/vouchers</h2>
+            <h2 id="endpoints-GETapi-vouchers">GET api/vouchers</h2>
 
 <p>
 </p>
@@ -5670,7 +5049,7 @@ fetch(url, {
             <p>Example response (200):</p>
         </blockquote>
                 <details class="annotation">
-            <summary style="cursor: pointer;">
+            <summary>
                 <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
             </summary>
             <pre><code class="language-http">cache-control: no-cache, private
@@ -5678,9 +5057,10 @@ content-type: application/json
 x-ratelimit-limit: 60
 x-ratelimit-remaining: 52
 access-control-allow-origin: *
- </code></pre></details>         <pre>
+ </code></pre>
+        </details>         <pre>
 
-<code class="language-json" style="max-height: 300px;">{
+<code class="language-json">{
     &quot;data&quot;: [],
     &quot;links&quot;: {
         &quot;first&quot;: &quot;http://127.0.0.1:8000/api/vouchers?per_page=10&amp;page=1&quot;,
@@ -5721,7 +5101,7 @@ access-control-allow-origin: *
     <blockquote>Received response<span
                 id="execution-response-status-GETapi-vouchers"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-vouchers" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-GETapi-vouchers"></code></pre>
 </span>
 <span id="execution-error-GETapi-vouchers" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -5732,6 +5112,7 @@ access-control-allow-origin: *
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('GETapi-vouchers', this);">
     <h3>
@@ -5755,32 +5136,9 @@ access-control-allow-origin: *
             <small class="badge badge-green">GET</small>
             <b><code>api/vouchers</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="GETapi-vouchers"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="GETapi-vouchers"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
+                    </form>
 
-                    <h2 id="endpoints-POSTapi-click-track">POST api/click/track</h2>
+            <h2 id="endpoints-POSTapi-click-track">POST api/click/track</h2>
 
 <p>
 </p>
@@ -5797,8 +5155,8 @@ access-control-allow-origin: *
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"store_slug\": \"ipsum\",
-    \"user_id\": \"ut\"
+    \"store_slug\": \"ex\",
+    \"user_id\": \"sed\"
 }"
 </code></pre></div>
 
@@ -5814,8 +5172,8 @@ const headers = {
 };
 
 let body = {
-    "store_slug": "ipsum",
-    "user_id": "ut"
+    "store_slug": "ex",
+    "user_id": "sed"
 };
 
 fetch(url, {
@@ -5832,7 +5190,7 @@ fetch(url, {
     <blockquote>Received response<span
                 id="execution-response-status-POSTapi-click-track"></span>:
     </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-click-track" style="max-height: 400px;"></code></pre>
+    <pre class="json"><code id="execution-response-content-POSTapi-click-track"></code></pre>
 </span>
 <span id="execution-error-POSTapi-click-track" hidden>
     <blockquote>Request failed with error:</blockquote>
@@ -5843,6 +5201,7 @@ fetch(url, {
       data-authed="0"
       data-hasfiles="0"
       data-isarraybody="0"
+      data-headers='{"Content-Type":"application\/json","Accept":"application\/json"}'
       autocomplete="off"
       onsubmit="event.preventDefault(); executeTryOut('POSTapi-click-track', this);">
     <h3>
@@ -5866,55 +5225,30 @@ fetch(url, {
             <small class="badge badge-black">POST</small>
             <b><code>api/click/track</code></b>
         </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Content-Type"                data-endpoint="POSTapi-click-track"
-               value="application/json"
-               data-component="header">
+                            <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <p>
+            <b><code>store_slug</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="store_slug"
+               data-endpoint="POSTapi-click-track"
+               value="ex"
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="Accept"                data-endpoint="POSTapi-click-track"
-               value="application/json"
-               data-component="header">
+
+        </p>
+                <p>
+            <b><code>user_id</code></b>&nbsp;&nbsp;<small>string</small>  &nbsp;
+                <input type="text"
+               name="user_id"
+               data-endpoint="POSTapi-click-track"
+               value="sed"
+               data-component="body" hidden>
     <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>store_slug</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="store_slug"                data-endpoint="POSTapi-click-track"
-               value="ipsum"
-               data-component="body">
-    <br>
-<p>Example: <code>ipsum</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>user_id</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-               name="user_id"                data-endpoint="POSTapi-click-track"
-               value="ut"
-               data-component="body">
-    <br>
-<p>Example: <code>ut</code></p>
-        </div>
+
+        </p>
         </form>
 
-            
+    
 
         
     </div>

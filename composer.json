@@ -15,6 +15,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "harimayco/laravel-menu": "^1.4",
         "intervention/image": "^2.5",
+        "knuckleswtf/scribe": "^3.37",
         "laracasts/flash": "^3.2",
         "laravel/framework": "^8.12",
         "laravel/sanctum": "^2.11",
@@ -32,7 +33,6 @@
     "require-dev": {
         "facade/ignition": "^2.5",
         "fakerphp/faker": "^1.9.1",
-        "knuckleswtf/scribe": "^3.37",
         "laravel/sail": "^1.0.1",
         "mockery/mockery": "^1.4.2",
         "nunomaduro/collision": "^5.0",
