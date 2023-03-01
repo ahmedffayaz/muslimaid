@@ -129,7 +129,7 @@ ul.email-social li a {padding:inherit}
                 <tbody>
                     <tr>
                         <td class="text-center pb-4">
-                            <a href="{{url('/')}}"><img class="email-logo" src="@if(isset($settings['website_logo']) && $settings['website_logo']!='default.png'){{asset('storage/dashboard/images/logo/'.$settings['website_logo'])}}@else{{asset('admin-dashboard/images/logo.png')}}@endif" alt="logo"></a>
+                            <a href="{{url('/')}}"><img class="email-logo" src="{{ getSiteLogo() }}" alt="logo"></a>
 
                         </td>
                     </tr>
@@ -139,9 +139,7 @@ ul.email-social li a {padding:inherit}
                 <tbody>
                     <tr>
                         <td class="p-3 p-sm-5">
-                            <p><strong>Hello</strong>,</p>
-                            <p>You are receiving this email because we received a password reset request for your account.</p>
-                            <a class="btn btn-primary" href="{{$url}}">Reset</a>
+                            {!! $email_message !!}
                         </td>
                     </tr>
                 </tbody>
