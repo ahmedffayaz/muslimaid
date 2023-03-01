@@ -82,7 +82,7 @@ class PagesController extends Controller
         $term = null;
         $search = $request->input('search');
         if ($search) {
-            $stores->where('name', 'like', '%' . $request->input('search') . '%')
+            $stores->where('name', 'like', '%' . str_replace(' ', '%', $request->input('search')) . '%')
                 ->orWhereHas('storeRuleData', function ($query) use ($search) {
                     $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $search . '%');
                 });

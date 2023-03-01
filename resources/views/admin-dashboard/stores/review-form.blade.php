@@ -9,7 +9,7 @@
                 <div class="form-control-wrap ">
                         <select class="form-select form-control" data-search="on" id="default-06" name="status" required>
                             <option @if($review->status == 'active') selected @endif value="active">Active</option>
-                            <option @if($review->status == 'in-active') selected @endif value="in-active">In-active</option>
+                            <option @if($review->status == 'pending') selected @endif value="pending">In-active</option>
                         </select>
                     
                 </div>

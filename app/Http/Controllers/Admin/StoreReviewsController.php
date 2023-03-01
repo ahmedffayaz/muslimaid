@@ -82,7 +82,12 @@ class StoreReviewsController extends Controller
             $review->store()->update([
                 'rating' => $averageRating
             ]);
-
+            if ($request->ajax()) {
+                return array(
+                    'message' => 'Review added successfully',
+                    'success' => true
+                );
+            }
             flash()->success('Review added successfully');
             return redirect()->route('admin.reviews.index');
         } catch (\Throwable $th) {
@@ -114,6 +119,7 @@ class StoreReviewsController extends Controller
      */
     public function update(Request $request, StoreReview $review)
     {
+
         try {
             $review->update($request->all());
 
@@ -121,7 +127,7 @@ class StoreReviewsController extends Controller
             $averageRating = StoreReview::where('store_id', $review->store_id)->where('status', 'active')->avg('rating');
 
             // Update store rating
-            if ($request->status != 'pending') {
+            if ($request->status == 'active') {
                 $store = $review->store()->update([
                     'rating' => $averageRating
                 ]);
@@ -131,10 +137,19 @@ class StoreReviewsController extends Controller
                 flash()->success('Review updated successfully');
                 return redirect()->back();
             } else {
-                return true;
+                return array(
+                    'message' => 'Review updated successfully',
+                    'success' => true
+                );
             }
         } catch (\Throwable $th) {
-            flash()->error('something went wrong! unable to update the review');
+            if ($request->ajax()) {
+                return array(
+                    'message' => 'Something went wrong! unable to update the review',
+                    'success' => false,
+                );
+            }
+            flash()->error('Something went wrong! unable to update the review');
             return redirect()->route('admin.reviews.index');
         }
     }

@@ -139,7 +139,7 @@
                                                                 <input type="text" class="form-control" id="tracking_url" value="{{ $store->tracking_url }}"
                                                                     name="tracking_url" placeholder="https://example.com/item/abc-id-1345" required style="width: 79%">
                                                                 <span style="position: absolute; right:0; top:5px; width:20%" data-toggle="tooltip" data-placement="left"
-                                                                    title="This parameter containing ID of the click will be concatenated with tracking URL of the store ({{ $store->tracking_url }}?ref=XXX)">?{{ $store->network->click_ref }}=XXX</span>
+                                                                    title="This parameter containing ID of the click will be concatenated with tracking URL of the store ({{ $store->tracking_url }})">{{ $store->network->click_ref }}XXX</span>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -149,7 +149,7 @@
                                                             <label class="form-label" for="tracking_url">Deeplink URL</label>
                                                             <div class="form-control-wrap">
                                                                 <span style="position:absolute; left:0; top:5px; width:7%" data-toggle="tooltip" data-placement="right"
-                                                                    title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u={{ $store->deeplink_url }})">&{{ $store->network->deeplink_identifier }}=</span>
+                                                                    title="This parameter containing URL of the click will be concatenated with deeplink URL of the store ({{ $store->deeplink_url }})">{{ $store->network->deeplink_identifier }}</span>
                                                                 <input type="text" class="form-control" id="deeplink_url" value="{{ $store->deeplink_url }}"
                                                                     name="deeplink_url" placeholder="https://example.com/item/abc-id-1345"
                                                                     style="position: relative; left:30px; width: 93%">
@@ -491,10 +491,10 @@
                                 <div class="form-control-wrap">
                                     <input type="text" class="form-control" id="coupon_code" name="coupon_code" value="{{ old('coupon_code') }}" required>
                                     @error('coupon_code')
-<span class="invalid-feedback d-block" role="alert">
+                                        <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-@enderror
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -505,10 +505,10 @@
                                     <input type="text" class="form-control date-picker promotion_start_date" value="{{ old('promotion_start_date') }}"
                                         id="promotion_start_date" name="promotion_start_date" autocomplete="off" required>
                                     @error('promotion_start_date')
-<span class="invalid-feedback d-block" role="alert">
+                                        <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-@enderror
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -519,10 +519,10 @@
                                     <input type="text" class="form-control date-picker promotion_end_date" value="{{ old('promotion_end_date') }}"
                                         id="promotion_end_date" name="promotion_end_date" required>
                                     @error('promotion_end_date')
-<span class="invalid-feedback d-block" role="alert">
+                                        <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
-@enderror
+                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -595,14 +595,14 @@
                             </div>
                         </div>
                         @if ($store->override_network)
-<div class="col-lg-12">
+                            <div class="col-lg-12">
                                 <div class="form-group">
                                     <label class="form-label" for="network_id">Network</label>
                                     <div class="form-control-wrap">
                                         <select class="form-control form-select select-2" id="network_id" name="network_id">
                                             @foreach ($networks as $network)
-<option value="{{ $network->id }}">{{ $network->name }}</option>
-@endforeach
+                                                <option value="{{ $network->id }}">{{ $network->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -614,7 +614,7 @@
                                         <input type="text" class="form-control" id="tracking_url" name="tracking_url"
                                             placeholder="https://example.com/item/abc-id-1345" required style="width: 83%">
                                         <span style="position: absolute; right:0; top:5px; width:17%" data-toggle="tooltip" data-placement="left"
-                                            title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">?{{ $store->network->click_ref }}=XXX</span>
+                                            title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">{{ $store->network->click_ref }}XXX</span>
                                     </div>
                                 </div>
                             </div>
@@ -623,14 +623,14 @@
                                     <label class="form-label" for="sale_commission">Deeplink URL</label>
                                     <div class="form-control-wrap">
                                         <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
-                                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">&{{ $store->network->deeplink_identifier }}=</span>
+                                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">{{ $store->network->deeplink_identifier }}</span>
                                         <input type="text" class="form-control" id="deeplink_url"
                                             value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}" name="deeplink_url" placeholder="https://example.com/item/abc-id-1345"
                                             style="position: relative; left:30px; width: 95%">
                                     </div>
                                 </div>
                             </div>
-@endif
+                        @endif
                         <div class="col-lg-12">
                             <div class="form-group">
                                 <label class="form-label" for="cashback_icon">Icon Upload</label>
@@ -1117,7 +1117,7 @@
             $(document).on('click', '.voucher-edit', function(event) {
                 event.preventDefault();
                 var id = $(this).attr('voucher-id');
-                pageurl = "vouchers/" + id + "/edit"
+                pageurl = "vouchers/" + id + "/edit";
                 store_editor = 1;
                 var _token = $("input[name=_token]").val();
                 $.ajax({
@@ -1134,6 +1134,7 @@
                             initializeSelect2($(this));
                         });
                         $('#voucher').find(".promotion_end_date").datepicker();
+                        console.log(  $('#voucher').find(".promotion_end_date").datepicker());
                         $('#voucher').find(".promotion_start_date").datepicker();
                         checkVoucherType();
                         attachFormValidator($(document).find('#model_edit'));
@@ -1438,6 +1439,7 @@
                         $('#edit-cashback').html(data);
                         checkCashbackType();
                         calcCashback();
+                        NioApp.BS.tooltip('[data-toggle="tooltip"]');
                     }
                 });
             });
@@ -1567,16 +1569,43 @@
                 desc.value = editor.children[0].innerHTML
                 $.ajax({
                     url: $(this).attr('action'),
-                    type: "PUT",
+                    type: "POST",
                     data: $(this).serialize(),
                     success: function(data) {
-                        $('#review-modal').modal('hide');
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast('Review Updated Successfully.', 'success');
-                        })(NioApp, jQuery);
-                        fetchReviews();
+                        if (data.success) {
+                            $('#review-modal').modal('hide');
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast('Review Updated Successfully.', 'success');
+                            })(NioApp, jQuery);
+                            fetchReviews();
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                if (data.errors && Object.values(data.errors).length > 0) {
+                                    NioApp.Toast(Object.values(data.errors)[0], 'error');
+                                } else {
+                                    NioApp.Toast(data['message'], 'error');
+                                }
+                            })(NioApp, jQuery);
+                        }
+                    },
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
                     }
                 });
             });
