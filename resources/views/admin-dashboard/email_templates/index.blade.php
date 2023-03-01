@@ -33,9 +33,7 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td class="text-center pb-4">
-                                                                    <a href="#"><img class="email-logo"
-                                                                            src="@if (isset($settings['website_logo']) && $settings['website_logo'] != 'default.png') {{ asset('storage/dashboard/images/logo/' . $settings['website_logo']) }}@else{{ asset('admin-dashboard/images/logo.png') }} @endif"
-                                                                            alt="logo"></a>
+                                                                    <a href="#"><img class="email-logo" src="{{ getSiteLogo() }}" alt="logo"></a>
 
                                                                 </td>
                                                             </tr>
