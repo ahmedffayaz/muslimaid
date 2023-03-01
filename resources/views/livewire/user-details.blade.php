@@ -78,7 +78,7 @@
                                                     <div class="col-lg-12 text-center">
                                                         <label class="form-label" for="pay-amount-1">Avatar</label>
                                                         <div class="profile-card__avatar text-center">
-                                                            @if ($user->avatar == 'default.png')
+                                                            @if ($user->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . $user->avatar) )
                                                                 <img src="{{ asset('admin-dashboard/images/avatar.png') }}" id="image_avatar" width="100">
                                                             @else
                                                                 <img src="{{ asset('storage/users/images/avatar/' . $user->avatar) }}" id="image_avatar" width="100"
