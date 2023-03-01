@@ -39,6 +39,12 @@ class PagesController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'title' => 'required|regex:/^[\w. ]+$/',
+           
+        ],$messages = [
+            'title.required' => 'The Title field is required.',
+        ]);
         $page = new Page;
         $page->title = $request->title;
         $page->slug = Str::slug($request->title);

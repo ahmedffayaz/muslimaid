@@ -70,7 +70,7 @@
                                             <div class="nk-block-head">
                                                 <h5 class="title">User Information</h5>
                                             </div>
-                                            <form action="{{ route('admin.users.update', $user) }}" enctype="multipart/form-data" class="gy-3 form-validate is-alter user-form"
+                                            <form action="{{ route('admin.users.update', $user) }}" enctype="multipart/form-data" class="gy-3 is-alter user-form"
                                                 id="user-edit-form" method="POST">
                                                 @csrf
                                                 @method('PUT')
@@ -290,7 +290,7 @@
                                             <div class="row g-4">
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label class="form-label" for="password">New Password</label>
+                                                        <label class="form-label" for="password">New Password <span class="text-danger">*</span></label>
                                                         <div class="form-control-wrap">
                                                             <input type="password" class="form-control" id="password" value="" name="password" required>
                                                         </div>
@@ -298,7 +298,7 @@
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label class="form-label" for="password_confirmation">Confirm New Password</label>
+                                                        <label class="form-label" for="password_confirmation">Confirm New Password <span class="text-danger">*</span></label>
                                                         <div class="form-control-wrap">
                                                             <input type="password" class="form-control" id="password_confirmation" value=""
                                                                 name="password_confirmation" required>
@@ -379,13 +379,12 @@
             theme: 'snow'
         });
 
-        //   var form = document.querySelector('form');
-        $(".user-form").submit(function(e) {
-            // Populate hidden form on submit
-            var desc = document.querySelector('input[name=intro]');
-            desc.value = quill.root.innerHTML;
-        });
-
+//   var form = document.querySelector('form');
+// $(".user-form").submit(function(e) {
+//             // Populate hidden form on submit
+//             var desc = document.querySelector('input[name=intro]');
+//             desc.value = quill.root.innerHTML;
+//         });
         function fetchCashbacks(page) {
             pageurl = "{{ route('admin.users.cashbacks') }}?page=" + page
 
@@ -457,50 +456,47 @@
             });
         });
 
-        $(document).ready(function() {
-            $(document).on('submit', '.user-form', function(event) {
-                event.preventDefault();
-                let form = $(this);
-                let submitBtn = form.find('[type="submit"]');
-                let submitBtnHtml = submitBtn.html();
+        $('#user-edit-form').on('submit', function(event) {
+            event.preventDefault();
+            let form = $(this);
+            let submitBtn = form.find('[type="submit"]');
+            let submitBtnHtml = submitBtn.html();
 
-                submitBtn.attr('disabled', 'disabled')
-                    .append(`<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>`);
+            submitBtn.attr('disabled', 'disabled')
+                .append(`<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>`);
 
-                $.ajax({
-                    type: 'POST',
-                    url: $(this).attr('action'),
-                    data: new FormData(this),
-                    contentType: false,
-                    cache: false,
-                    processData: false,
-                    success: function(data) {
-                        if (data.success) {
-                            (function(NioApp, $) {
-                                'use strict';
-                                toastr.clear();
-                                NioApp.Toast('User updated Successfully.', 'success');
-                            })(NioApp, jQuery);
-                        } else {
-                            (function(NioApp, $) {
-                                'use strict';
-                                toastr.clear();
-                                NioApp.Toast(data.message, 'error');
-                            })(NioApp, jQuery);
-                        }
-                    },
-                    error: function(data) {
-                        console.log(data);
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: new FormData(this),
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(data) {
+                    if (data.success) {
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
-                            NioApp.Toast('Something went wrong.', 'error');
+                            NioApp.Toast(data.message, 'success');
                         })(NioApp, jQuery);
-                    },
-                    complete: function(data) {
-                        submitBtn.removeAttr('disabled').html(submitBtnHtml);
+                        submitBtn.removeAttr('disabled').find('.spinner-border').remove();
+                    } else {
+                        (function(NioApp, $) {
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(data.message, 'error');
+                        })(NioApp, jQuery);
                     }
-                });
+                },
+                error: function(data) {
+                    submitBtn.removeAttr('disabled').html(submitBtnHtml);
+                    console.log(data);
+                    (function(NioApp, $) {
+                        'use strict';
+                        toastr.clear();
+                        NioApp.Toast('Something went wrong.', 'error');
+                    })(NioApp, jQuery);
+                }
             });
         });
 
@@ -617,7 +613,7 @@
                 }
             });
         }
-        $('#user-edit-form').validate({
+        $('.user-form').validate({
             errorClass: 'invalid-feedback d-block',
             rules: {
                 firstname: {
@@ -635,7 +631,7 @@
             },
             submitHandler: function(form) {
                 if ($(form).valid())
-                    form.submit();
+                   
                 return false;
             }
         });
