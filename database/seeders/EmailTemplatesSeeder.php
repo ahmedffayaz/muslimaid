@@ -142,6 +142,14 @@ class EmailTemplatesSeeder extends Seeder
                     'keywords' => '{{SITE_TITLE}}, {{SITE_URL}} , {{BUTTON}}'
 
                 ),
+                array(
+                    'title' => 'Email forgot password to user',
+                    'detail' => 'Sent to user to reset password his/her account',
+                    'key' => 'forgot_password',
+                    'subject' => 'Reset Password',
+                    'message' => "<p>Hello {{NAME}},</p><p>You are receiving this email because we received a password reset request for your account.</p>{{LINK}}",
+                    'keywords' => '{{SITE_TITLE}}, {{SITE_URL}}, {{NAME}}, {{EMAIL}}, {{SUBJECT}}, {{MESSAGE}}, {{LINK}}'
+                ),
             );
         }
 

@@ -279,7 +279,7 @@
                             <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                                 <div class="user-card">
                                     <div class="user-avatar">
-                                    @if (Auth::user()->avatar == 'default.png')
+                                    @if (Auth::user()->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' .  Auth::user()->avatar))
                                         <img src="{{ asset('admin-dashboard/images/avatar.png') }}"
                                          alt="store logo" class="" style="max-width:50px;max-height:50px"/>
                                     @else
