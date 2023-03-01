@@ -1,7 +1,7 @@
 @php
     $isEdit = isset($commission) ? true : false;
 @endphp
-<form action="{{ $isEdit ? route('admin.commissions.update', $commission->id) : route('admin.commissions.store') }}" class="gy-3 is-alter" id="form-validate" method="POST"
+<form action="{{ $isEdit ? route('admin.commissions.update', $commission->id) : route('admin.commissions.store') }}" class="gy-3 is-alter forms-validate" method="POST"
     id="update_cashback_form">
     @csrf
     @if ($isEdit)

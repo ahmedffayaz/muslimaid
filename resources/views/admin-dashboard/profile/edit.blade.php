@@ -79,7 +79,7 @@
                                                     </div>
                                                     <div class="col-lg-8">
                                                         <div class="form-group">
-                                                            <img id="image_avatar" src="@if($profile->avatar != 'default.png'){{asset('storage/users/images/avatar/'.$profile->avatar)}}@else{{asset('admin-dashboard/images/avatar.png')}}@endif" alt="store logo" class=""  width="100" style="border-radius: 50%; height: 100px"/>
+                                                            <img id="image_avatar" src="@if($profile->avatar != 'default.png' && Storage::exists('public/users/images/avatar/' . $user->avatar)){{asset('storage/users/images/avatar/'.$profile->avatar)}}@else{{asset('admin-dashboard/images/avatar.png')}}@endif" alt="store logo" class=""  width="100" style="border-radius: 50%; height: 100px"/>
                                                             <input type="file" class="form-control mt-3" name="avatar" accept="image/*" value="{{ old('avatar') ?? null }}" onchange="readURL(this);">
                                                         </div>
                                                     </div>

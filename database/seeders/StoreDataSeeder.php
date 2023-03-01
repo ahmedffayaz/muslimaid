@@ -8,6 +8,7 @@ use App\Models\StoreImage;
 use App\Models\StoreReview;
 use App\Models\StoreSeoData;
 use App\Models\StoreCashback;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -61,6 +62,7 @@ class StoreDataSeeder extends Seeder
         }
 
         // Store Reviews
+        $userIdData = User::pluck('id')->toArray();
         Schema::disableForeignKeyConstraints();
         DB::table('store_reviews')->truncate();
         Schema::enableForeignKeyConstraints();
@@ -80,7 +82,7 @@ class StoreDataSeeder extends Seeder
                 $storeReviews[] = [
                     'id' => $storeReview['id'],
                     'store_id' => $storeReview['store_id'],
-                    'user_id' => $storeReview['user_id'],
+                    'user_id' => !in_array($storeReview['user_id'], $userIdData) ? 1 : $storeReview['user_id'],
                     'review' => arrayValueExists($storeReview, 'review') ? $storeReview['review'] : null,
                     'rating' => arrayValueExists($storeReview, 'rating') ? $storeReview['rating'] : 5,
                     'status' => arrayValueExists($storeReview, 'status') ? $storeReview['status'] : 'active',

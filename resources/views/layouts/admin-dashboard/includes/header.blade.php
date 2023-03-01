@@ -260,7 +260,7 @@
                         <a class="dropdown-toggle mr-n1">
                             <div class="user-toggle">
                                 <div class="user-avatar sm">
-                                    @if (Auth::user()->avatar == 'default.png')
+                                    @if (Auth::user()->avatar == 'default.png'  || !Storage::exists('public/users/images/avatar/' .  Auth::user()->avatar))
                                         <img src="{{ asset('admin-dashboard/images/avatar.png') }}" alt="store logo" class=""
                                             style="max-width:50px;max-height:50px" />
                                     @else

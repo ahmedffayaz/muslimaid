@@ -39,7 +39,6 @@
                             <div class="nk-block-head-content">
                                 <h4 class="title nk-block-title">Create Testimonial</h4>
                                 <div class="nk-block-des">
-                                    {{-- <p>You can make style out your....</p> --}}
                                 </div>
                             </div>
                         </div>
@@ -62,9 +61,8 @@
                                     <div class="row g-4">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">User <span class="text-danger">*</span></label>
+                                                <label class="form-label" for="user">User <span class="text-danger">*</span></label>
                                                         <select class=" select-user" id="user" name="user"  required>
-                                                            <option value="" disabled selected>Select user</option>
                                                             @foreach($users as $user)
                                                             <option value="{{$user->id}}">{{ $user->first_name }} {{ $user->last_name }}</option>
                                                             @endforeach
@@ -73,61 +71,61 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="form-group">
-                                            <label class="form-label" for="reviewer">User Name <span class="text-danger">*</span></label>
+                                            <label class="form-label" for="name">User Name <span class="text-danger">*</span></label>
                                             <div class="form-control-wrap">
-                                                <input id="user-name" type="text" class="form-control " name="name" placeholder="User Name" value="" required>
+                                                <input id="name" type="text" class="form-control"  name="name" placeholder="User Name" value="" required>
                                             </div>
                                         </div>
                                     </div>
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Title <span class="text-danger">*</span></label>
+                                                <label class="form-label" for="title">Title <span class="text-danger">*</span></label>
                                                 <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="" required>
+                                                    <input id="title" type="text" class="form-control " name="title" placeholder="Title" value="" required>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="reviewer">Company Name <span class="text-danger">*</span></label>
+                                                    <label class="form-label" for="company_name">Company Name <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input id="blog-title" type="text" class="form-control " name="company_name" placeholder="Company Name" value="" required>
+                                                        <input id="company_name" type="text" class="form-control " name="company_name" placeholder="Company Name" value="" required>
                                                     </div>
                                                 </div>
                                             </div>
 
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                            <label class="form-label" for="reviewer">Description <span class="text-danger">*</span></label>
-                                            <textarea  class="form-control " name="description" placeholder="Description" value="" required></textarea>
+                                            <label class="form-label" for="description">Description</label>
+                                            <textarea  class="description form-control " name="description" placeholder="Description" value=""></textarea>
                                         </div>
                                         </div>
                                         <hr>
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Job Position <span class="text-danger">*</span></label>
+                                                <label class="form-label" for="position">Job Position <span class="text-danger">*</span></label>
                                                 <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="position" placeholder="Job Position" value="" required>
+                                                    <input id="position" type="text" class="form-control" name="position" placeholder="Job Position" value="" required>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Order No <span class="text-danger">*</span></label>
+                                                <label class="form-label" for="order_no">Order No <span class="text-danger">*</span></label>
                                                 <div class="form-control-wrap">
-                                                    <input id="blog-title" type="number" class="form-control " name="order_no" placeholder="Order No" value="" required>
+                                                    <input id="order_no" type="number" class="form-control" name="order_no" placeholder="Order No" value="" required>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Status</label>
+                                                <label class="form-label" for="status">Status</label>
                                                 <div class="form-control-wrap ">
                                                     <div class="form-control-select">
-                                                        <select class="form-control" id="default-06" name="status" required>
+                                                        <select class="form-control" id="status" name="status" required>
                                                             <option value="active" selected>Active</option>
                                                             <option value="in-active">In-Active</option>
                                                         </select>
@@ -138,7 +136,7 @@
                                     <div class="col-lg-2">
                                         <div class="form-group">
                                             <div class=" logo">
-                                            <label class="form-label" for="reviewer">User Image <span class="text-danger">*</span></label>
+                                            <label class="form-label" for="user_image">User Image <span class="text-danger">*</span></label>
                                             <div class="btn-choose form-control">
                                                 Choose Image
                                                <input preview="#logo" type="file" name="user_image" class="hide_file form-control" onchange="readURL(this);" required>
@@ -212,5 +210,40 @@ $(document).ready(function () {
             reader.readAsDataURL(input.files[0]);
         }
         }
+</script>
+<script>
+    jQuery.validator.addMethod("regex", function(value, element) {
+        return this.optional(element) || /^[\w. ]+$/i.test(value);
+    }, "Letters, numbers, and underscores only please");
+
+    $('.form-validate').validate({
+        rules: {
+            title: {
+                required: true,
+                regex: true
+            },
+            user: {
+                required: true
+            },
+            name: {
+                required: true
+            },
+            title: {
+                required: true
+            },
+            company_name: {
+                required: true
+            },
+            position: {
+                required: true
+            },
+            order_no: {
+                required: true
+            }, 
+            user_image: {
+                required: true
+            }
+        }
+    });
 </script>
 @endpush

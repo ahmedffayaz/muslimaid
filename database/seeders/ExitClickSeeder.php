@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\ExitClick;
 use App\Models\Store;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -19,9 +20,10 @@ class ExitClickSeeder extends Seeder
     public function run()
     {
         Schema::disableForeignKeyConstraints();
-        DB::table('charities')->truncate();
+        DB::table('exit_clicks')->truncate();
         Schema::enableForeignKeyConstraints();
 
+        $userIdData = User::pluck('id')->toArray();
         $storeIdData = Store::pluck('id')->toArray();
         $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\exit_clicks.csv');
         $exitClicks = [];
@@ -37,10 +39,11 @@ class ExitClickSeeder extends Seeder
                 ) {
                     continue;
                 }
+
                 $exitClicks[] = [
                     'id' => $exitClick['id'],
                     'store_id' => $exitClick['store_id'],
-                    'user_id' => $exitClick['user_id'],
+                    'user_id' => !in_array($exitClick['user_id'], $userIdData) ? 1 : $exitClick['user_id'],
                     'network_id' => arrayValueExists($exitClick, 'network_id') ? $exitClick['network_id'] : null,
                     'conversion' => isset($exitClick['conversion']) && $exitClick['conversion'] == 'No' ? 0 : 1,
                     'current_cashback_percentage' => arrayValueExists($exitClick, 'commission_percentage') ? $exitClick['commission_percentage'] : null,

@@ -4,6 +4,7 @@ namespace App\Notifications;
 
 use App\Models\EmailTemplate;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -60,13 +61,14 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
             'email' => $notifiable->getEmailForPasswordReset(),
         ], false));
 
-        $button = '<a class="btn btn-primary" href="' . $url . '">Reset</a>';
+        $link = '<a class="btn btn-primary" href="' . $url . '">Reset password link</a>';
 
-        $filteredMessage  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}', '{{BUTTON}}'],
-                [SiteSetting()['website_title'], url('/'), $user['name'], $email, $user['subject'], $user['message'], $button],
+        $filteredMessage  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{SUBJECT}}', '{{MESSAGE}}', '{{LINK}}'],
+                [SiteSetting()['website_title'], url('/'), $user['name'], $email, $emailTemplate->subject, $user['message'], $link],
                 $emailTemplate->message);
 
-        return (new MailMessage)->view('emails.password_reset', ['email_message' => $filteredMessage]);
+        return (new MailMessage)->view('emails.password_reset', ['email_message' => $filteredMessage])
+            ->subject($emailTemplate->subject);
     }
 
     /**
