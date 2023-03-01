@@ -139,9 +139,7 @@ ul.email-social li a {padding:inherit}
                 <tbody>
                     <tr>
                         <td class="p-3 p-sm-5">
-                            <p><strong>Hello</strong>,</p>
-                            <p>You are receiving this email because we received a password reset request for your account.</p>
-                            <a class="btn btn-primary" href="{{$url}}">Reset</a>
+                            {!! $email_message !!}
                         </td>
                     </tr>
                 </tbody>
