@@ -650,8 +650,13 @@ class StoreController extends Controller
         }
     }
 
-    public function showStore()
+    public function showStore(Request $request)
     {
+        $store = Store::where('slug', $request->slug)->first();
+        if (!isset($store)) {
+            // handle scenario where store is not found
+            abort(404);
+        }
         return view('admin-dashboard.stores.show');
     }
 
