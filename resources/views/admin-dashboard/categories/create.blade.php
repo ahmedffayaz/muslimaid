@@ -16,11 +16,11 @@
         </div>
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="parent_id">Parent Category <span class="text-danger">*</span></label>
+                <label class="form-label" for="parent_id">Parent Category <span class="text-danger"></span></label>
                 <div class="form-control-wrap">
 
-                    <select class="form-select" data-search="on" id="parent_id" name="parent_id">
-                        <option value="">None</option>
+                    <select class="form-control" data-search="on" id="parent_id" name="parent_id">
+                        <option value selected>--Choose Category---</option>
                         @foreach ($categories as $parent)
                             <option value="{{ $parent->id }}" {{ $isEdit && $category->parent_id == $parent->id ? 'selected' : '' }} style="font-weight:bold">
                                 {{ $parent->name }}

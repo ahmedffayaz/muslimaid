@@ -273,16 +273,13 @@
                     _token: $("input[name=_token]").val()
                 },
                 success: function(data) {
-
                     modal.modal('show');
                     formPlaceholder.html(data);
-
                     $('.select-2').each(function() {
                         initializeSelect2($(this));
                     });
 
                     formPlaceholder.find(".promotion_end_date").datepicker();
-                    console.log(formPlaceholder.find(".promotion_end_date").datepicker());
                     formPlaceholder.find(".promotion_start_date").datepicker();
                     checkVoucherType();
                     attachFormValidator($(document).find('#create-edit-voucher-form'));

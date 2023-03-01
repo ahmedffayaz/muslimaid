@@ -61,24 +61,27 @@ class LoginController extends Controller
      */
     public function login(Request $request)
     {
-        
-        // Verify that user has registration with social media
+
         $emailCheck = User::where('email', $request->email)->first();
-    
-        if ($emailCheck->status != 1) {
-            return redirect()->back()->with(['error' => 'Your account is inactive']);
-        }
-        if (!is_null($emailCheck) && $emailCheck->provider != 'email') {
+
+
+        if (is_null($emailCheck)) {
+            return redirect()->back()->with(['error' => 'Email address not found']);
+        } else if ($emailCheck->provider != 'email') {
             Session::flash('social-login');
             return redirect()->route('login');
+        } else if ($emailCheck->status != 1) {
+            return redirect()->back()->with(['error' => 'Your account is inactive']);
         }
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
         // the login attempts for this application. We'll key this by the username and
         // the IP address of the client making these requests into this application.
-        if (method_exists($this, 'hasTooManyLoginAttempts') &&
-            $this->hasTooManyLoginAttempts($request)) {
+        if (
+            method_exists($this, 'hasTooManyLoginAttempts') &&
+            $this->hasTooManyLoginAttempts($request)
+        ) {
             $this->fireLockoutEvent($request);
 
             return $this->sendLockoutResponse($request);
@@ -115,13 +118,13 @@ class LoginController extends Controller
             'password' => 'required|string',
             'g-recaptcha-response' => 'required|captcha',
         ]);
-       
     }
-    protected function redirectTo(){
-       
-        if (Session::has('prvUrl')){
+    protected function redirectTo()
+    {
+
+        if (Session::has('prvUrl')) {
             return session('prvUrl');
-          }else{
+        } else {
             if (!Auth::user()->is_email_verified) {
                 auth()->logout();
                 Session::flash('email-not-verified');
