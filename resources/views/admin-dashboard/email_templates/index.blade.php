@@ -9,16 +9,13 @@
                         <div class="nk-block-head nk-block-head-lg wide-sm">
                             <div class="nk-block-head-content">
                                 <h3 class="nk-block-title fw-normal">Email Templates</h3>
-
                             </div>
                         </div><!-- .nk-block-head -->
-
                         @foreach ($templates as $template)
                             <div class="nk-block border-bottom">
                                 <h4 class="nk-block-title fw-normal mb-3">{{ $template->title }}</h4>
                                 <p class="lead">{{ $template->detail }}</p>
                                 <div class="card">
-
                                     <div class="card-inner">
                                         <div class="card-title-group">
                                             <div class="card-title">
@@ -29,7 +26,6 @@
                                                         class="icon ni ni-edit mr-1"></em> Edit</a>
                                             </div>
                                         </div>
-                                        {{-- <h4 class="title text-soft mb-4 overline-title"></h4> --}}
                                         <table class="email-wraper mt-4">
                                             <tr>
                                                 <td class="py-5">
@@ -82,10 +78,6 @@
                                                                                         src="{{ asset('admin-dashboard/images/socials/pinterest.png') }}" alt=""></a></li>
                                                                         @endisset
                                                                     </ul>
-                                                                    {{-- <p class="fs-12px pt-4">This email was sent to you as a
-                                                                        registered member of <a
-                                                                            href="{{ '/' }}">{{ SiteSetting()['website_title'] }}</a>.
-                                                                    </p> --}}
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -98,7 +90,6 @@
                             </div><!-- .nk-block -->
                             <hr class="border border-primary my-5 w-50">
                         @endforeach
-
                     </div><!-- .content-page -->
                 </div>
             </div>
@@ -110,16 +101,13 @@
             <div class="modal-content">
                 <div class="modal-header align-center">
                     <div class="nk-file-title">
-
                         <div class="nk-file-name">
                             <div class="nk-file-name-text"><span class="title">Edit Template</span></div>
-                            {{-- <div class="nk-file-name-sub">Project</div> --}}
                         </div>
                     </div>
                     <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
                 </div>
                 <div id="edit-template" class=" p-4">
-
                 </div>
             </div><!-- .modal-content -->
         </div><!-- .modla-dialog -->
@@ -207,10 +195,7 @@
                             NioApp.Toast(data['message'], data['status']);
                             location.reload(true);
 
-
-
                         })(NioApp, jQuery);
-
                     }
                 });
             });
