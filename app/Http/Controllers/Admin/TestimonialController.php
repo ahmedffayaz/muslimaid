@@ -115,8 +115,7 @@ class TestimonialController extends Controller
             'company_name.required' =>'The user company name field is required.',
             'order_no.required' =>'The order number field is required.',
             'order_no.integer' =>'The order number field must be integer.',
-            'meta_title.required' =>'The meta title field is required.',
-            'Position.required' =>'The user name field is required.',
+            'position.required' =>'The user name field is required.',
         ]);
 
         $imageName = $testimonial['image'];

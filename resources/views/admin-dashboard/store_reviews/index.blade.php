@@ -267,7 +267,7 @@
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
-                            NioApp.Toast('Review Updated Successfully.', 'success');
+                            NioApp.Toast(data.message, 'success');
 
                         })(NioApp, jQuery);
                         $('#table-data').load(window.location.href + ' #table-data')

@@ -421,7 +421,22 @@ class StoreController extends Controller
             }
 
             DB::commit();
-            return true;
+            if ($request->ajax()) {
+                return array(
+                    'message' => 'Cashback Updated Successfully.',
+                    'updated' => 'success'
+                );
+            }
+            flash()->success('Cashback updated successfully');
+            if (!$request->ajax()) {
+                flash()->success('Cashback updated successfully.');
+                return redirect()->back();
+            } else {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'Cashback updated successfully.'
+                ], JsonResponse::HTTP_OK);
+            }
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
             if (!$request->ajax()) {
@@ -470,7 +485,15 @@ class StoreController extends Controller
                 $cashback->update(['default' => '1']);
             }
             DB::commit();
-            return true;
+            if (!$request->ajax()) {
+                flash()->success('Cashback created successfully.');
+                return redirect()->back();
+            } else {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'Cashback created successfully.'
+                ], JsonResponse::HTTP_OK);
+            }
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
             if (!$request->ajax()) {
@@ -728,6 +751,12 @@ class StoreController extends Controller
                 flash()->success('store address added.');
                 return redirect()->back();
             }
+            else{
+                return array(
+                    'message' => 'Store Address added successfully.',
+                    'success' => true
+                );
+            }
         } catch (Exception $e) {
             DB::rollBack();
             if (!$request->ajax()) {
@@ -768,8 +797,13 @@ class StoreController extends Controller
             DB::commit();
 
             if (!$request->ajax()) {
-                flash()->success('Address updated successfully.');
+                flash()->success('Store  Address updated successfully.');
                 return redirect()->back();
+            }else{
+                return array(
+                    'message' => 'Store Address updated successfully.',
+                    'success' => true
+                );
             }
         } catch (Exception $e) {
             DB::rollBack();

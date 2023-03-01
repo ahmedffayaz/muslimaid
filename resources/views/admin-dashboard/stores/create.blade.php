@@ -32,17 +32,17 @@
                                         <div class="row g-4">
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="full-name-1">Store Name</label>
+                                                    <label class="form-label" for="store_name">Store Name <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="full-name-1" name="store_name" placeholder="Store name" required>
+                                                        <input type="text" class="form-control" id="store_name" name="store_name" placeholder="Store name" required>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="default-06">Network</label>
+                                                    <label class="form-label" for="network_id">Network <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
-                                                        <select class="form-select form-control" id="default-06" name="network_id" required>
+                                                        <select class="form-select form-control" id="network_id" name="network_id" required>
                                                             @foreach ($networks as $network)
                                                                 <option value="{{ $network->id }}">{{ $network->name }}</option>
                                                             @endforeach
@@ -52,15 +52,15 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="pay-amount-1">Store url</label>
+                                                    <label class="form-label" for="store_url">Store url <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="pay-amount-1" name="store_url" placeholder="Store url" required>
+                                                        <input type="text" class="form-control" id="store_url" name="store_url" placeholder="Store url" required>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="tracking_url">Tracking URL</label>
+                                                    <label class="form-label" for="tracking_url">Tracking URL <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
                                                         <input type="text" class="form-control" id="tracking_url" name="tracking_url" placeholder="https://example.com/item/abc-id-1345" required>
                                                     </div>

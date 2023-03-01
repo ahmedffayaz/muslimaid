@@ -159,7 +159,7 @@ class VouchersController extends Controller
                     'success' => true
                 );
             }
-            flash()->success('Voucher updated successfully');
+            flash()->success('Voucher updated successfully.');
             return redirect()->route('admin.vouchers.index');
         } catch (Exception $e) {
             $message = 'Something went wrong! Unable to update the voucher.';

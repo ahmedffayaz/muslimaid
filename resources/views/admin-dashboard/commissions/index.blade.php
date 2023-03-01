@@ -439,7 +439,7 @@
             }
 
             function validation() {
-                $('#form-validate').validate({
+                $('.forms-validate').validate({
                     errorClass: 'invalid-feedback d-block',
                     rules: {
                         exit_click_id: {

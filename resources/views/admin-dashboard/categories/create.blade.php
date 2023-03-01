@@ -73,7 +73,7 @@
         @endif
         <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label" for="logo_type">Logo Type <span class="text-danger">*</span></label>
+                <label class="form-label" for="logo_type">Logo Type </label>
                 <div class="form-control-wrap ">
                     <div class="form-control-select">
                         <select class="form-control" name="logo_type" id='logo_type' required>
@@ -117,7 +117,7 @@
         @endif
         <div class="col-lg-6 ">
             <div class="form-group">
-                <label class="form-label" for="banner_type">Banner Type <span class="text-danger">*</span></label>
+                <label class="form-label" for="banner_type">Banner Type </label>
                 <div class="form-control-wrap ">
                     <div class="form-control-select">
                         <select class="form-control" name="banner_type" id='banner_type' required>

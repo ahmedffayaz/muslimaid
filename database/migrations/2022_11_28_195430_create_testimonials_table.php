@@ -17,7 +17,7 @@ class CreateTestimonialsTable extends Migration
             $table->id();
             $table->string('title');
             $table->unsignedBigInteger('user_id');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->string('image');
             $table->string('name');
             $table->string('position');
