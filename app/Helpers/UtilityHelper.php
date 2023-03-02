@@ -662,3 +662,12 @@ function isWithdrawalAllowed()
 
     return auth()->user()->availableBalance() >= getMinimumCashoutAmount() && !in_array('pending', $cashoutStatuses) && !in_array('processing donation', $cashoutStatuses);
 }
+
+function getSiteLogo()
+{
+    if (isset(SiteSetting()['website_logo']) && SiteSetting()['website_logo'] != 'default.png') {
+        return asset('storage/dashboard/images/logo/'.SiteSetting()['website_logo']);
+    } else {
+        return asset('admin-dashboard/images/logo.png');
+    }
+}

@@ -240,15 +240,16 @@
                                                 <span class="nk-menu-text">Seo rules</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
+                                        <li>
+                                            <a href="{{ route('admin.api-docs') }}" target="_blank">
+                                                <span class="nk-menu-icon"><em class="icon ni ni-file-doc"></em></span>
+                                                <span class="nk-menu-text">API Docs</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        @if (Auth::user()->hasRole('admin'))
-                            <div class="dropdown">
-                                <a href="{{ url('docs') }}" class="dropbtn user-name"><em class="icon ni ni-file-doc"></em> API Docs</a>
-                            </div>
-                        @endif
                     </div><!-- .nk-header-news -->
                 @endif
             @endisset
@@ -278,7 +279,7 @@
                             <div class="dropdown-inner user-card-wrap bg-lighter d-none d-md-block">
                                 <div class="user-card">
                                     <div class="user-avatar">
-                                    @if (Auth::user()->avatar == 'default.png')
+                                    @if (Auth::user()->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' .  Auth::user()->avatar))
                                         <img src="{{ asset('admin-dashboard/images/avatar.png') }}"
                                          alt="store logo" class="" style="max-width:50px;max-height:50px"/>
                                     @else
