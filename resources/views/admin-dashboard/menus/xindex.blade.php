@@ -1,7 +1,6 @@
 @extends('layouts.admin-dashboard.app')
 @section('content')
-    <script src="{{ url('resources/js/new-sortable.js') }}">
-    </script>
+    <script src="{{ url('resources/js/new-sortable.js') }}"></script>
     <div class="container-fluid">
         <h2><span>Menus</span></h2>
         <div class="content info-box">
