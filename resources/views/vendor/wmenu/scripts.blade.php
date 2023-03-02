@@ -11,13 +11,13 @@
 		"menuFocus" : "%1$s. Element menu %2$d of %3$d.",
 		"subMenuFocus" : "%1$s. Menu of subelement %2$d of %3$s."
 	};
-	var arraydata = [];     
-	var addcustommenur= '{{ route("haddcustommenu") }}';
-	var updateitemr= '{{ route("hupdateitem")}}';
-	var generatemenucontrolr= '{{ route("hgeneratemenucontrol") }}';
-	var deleteitemmenur= '{{ route("hdeleteitemmenu") }}';
-	var deletemenugr= '{{ route("hdeletemenug") }}';
-	var createnewmenur= '{{ route("hcreatenewmenu") }}';
+	var arraydata = [];
+	var addcustommenur= '{{ route("admin.add.custom.menu") }}';
+	var updateitemr= '{{ route("admin.update.item")}}';
+	var generatemenucontrolr= '{{ route("admin.generate.menu.control") }}';
+	var deleteitemmenur= '{{ route("admin.delete.item.menu") }}';
+	var deletemenugr= '{{ route("admin.delete.menu") }}';
+	var createnewmenur= '{{ route("admin.create.new.menu") }}';
 	var csrftoken="{{ csrf_token() }}";
 	var menuwr = "{{ url()->current() }}";
 

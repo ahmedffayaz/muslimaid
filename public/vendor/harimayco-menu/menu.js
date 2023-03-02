@@ -115,7 +115,14 @@ function updateitem(id = 0) {
                 $('#spincustomu2').show();
             }
         },
-        success: function (response) { },
+        success: function (response) {
+            (function(NioApp, $){
+                'use strict';
+                toastr.clear();
+                NioApp.Toast(response.success, 'success');
+
+            })(NioApp, jQuery);
+        },
         complete: function () {
             if (id) {
                 $('#spincustomu2').hide();
@@ -140,7 +147,12 @@ function actualizarmenu() {
             $('#spincustomu2').show();
         },
         success: function (response) {
-            console.log('aqu llega');
+            (function(NioApp, $){
+                'use strict';
+                toastr.clear();
+                NioApp.Toast(response.success, 'success');
+
+            })(NioApp, jQuery);
         },
         complete: function () {
             $('#spincustomu2').hide();
@@ -157,7 +169,22 @@ function deleteitem(id) {
 
         url: deleteitemmenur,
         type: 'POST',
-        success: function (response) { }
+        success: function (response) {
+            (function(NioApp, $){
+                'use strict';
+                toastr.clear();
+                NioApp.Toast(response.success, 'success');
+
+            })(NioApp, jQuery);
+        },
+        error: function (error) {
+            (function(NioApp, $){
+                'use strict';
+                toastr.clear();
+                NioApp.Toast(error.responseJSON.error, 'error');
+
+            })(NioApp, jQuery);
+        }
     });
 }
 
@@ -241,6 +268,6 @@ function insertParam(key, value) {
     document.location.search = kvp.join('&');
 }
 
-wpNavMenu.registerChange = function () {
-    getmenus();
-};
+// wpNavMenu.registerChange = function () {
+//     getmenus();
+// };

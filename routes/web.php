@@ -178,12 +178,14 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::get('charity_type_delete/{id}', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeDestroy'])->name('charity_type_delete');
 
         // Menus
-        Route::get('manage-menus/{id?}', [App\Http\Controllers\Admin\MenuController::class, 'index']);
-        Route::post('create-menu', [App\Http\Controllers\Admin\MenuController::class, 'store']);
-        Route::get('add-categories-to-menu', [App\Http\Controllers\Admin\MenuController::class, 'addCatToMenu']);
-        Route::get('add-post-to-menu', [App\Http\Controllers\Admin\MenuController::class, 'addPostToMenu']);
-        Route::get('add-custom-link', [App\Http\Controllers\Admin\MenuController::class, 'addCustomLink']);
-        Route::get('update-menu', [App\Http\Controllers\Admin\MenuController::class, 'updateMenu']);
+        Route::group(['middleware' => config('menu.middleware')], function () {
+            Route::post('harimayco/add-custom-menu', [App\Http\Controllers\Admin\MenuController::class, 'addCustomMenu'])->name('add.custom.menu');
+            Route::post('harimayco/delete-item-menu', [App\Http\Controllers\Admin\MenuController::class, 'deleteItemMenu'])->name('delete.item.menu');
+            Route::post('harimayco/delete-menu', [App\Http\Controllers\Admin\MenuController::class, 'deleteMenu'])->name('delete.menu');
+            Route::post('harimayco/create-new-menu', [App\Http\Controllers\Admin\MenuController::class, 'createNewMenu'])->name('create.new.menu');
+            Route::post('harimayco/generate-menu-control', [App\Http\Controllers\Admin\MenuController::class, 'generateMenuControl'])->name('generate.menu.control');
+            Route::post('harimayco/update-item', [App\Http\Controllers\Admin\MenuController::class, 'updateItem'])->name('update.item');
+        });
 
         // Languages
         Route::post('languages/fetch', [App\Http\Controllers\Admin\LanguageController::class, 'fetch'])->name('languages.fetch');
@@ -220,7 +222,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::resource('email_templates', EmailTemplatesController::class)->only(['index', 'edit', 'update']);
 
         // Countries
-        Route::resource('countries', CountryController::class)->except(['show', 'destroy']);  
+        Route::resource('countries', CountryController::class)->except(['show', 'destroy']);
 
         Route::get('/api-docs', function() {
             return view('scribe.index');

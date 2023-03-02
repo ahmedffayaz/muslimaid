@@ -12,6 +12,7 @@
                                     </div>
                                 </div>
                             </div>
+                            @include('flash::message')
                             <div class="card">
                                 <div class="card-inner">
                                     <div class="card-head">
