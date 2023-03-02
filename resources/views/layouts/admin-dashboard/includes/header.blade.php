@@ -240,15 +240,16 @@
                                                 <span class="nk-menu-text">Seo rules</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
+                                        <li>
+                                            <a href="{{ route('admin.api-docs') }}" target="_blank">
+                                                <span class="nk-menu-icon"><em class="icon ni ni-file-doc"></em></span>
+                                                <span class="nk-menu-text">API Docs</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
                                     </ul>
                                 </div>
                             </div>
                         </div>
-                        @if (Auth::user()->hasRole('admin'))
-                            <div class="dropdown">
-                                <a href="{{ url('docs') }}" class="dropbtn user-name"><em class="icon ni ni-file-doc"></em> API Docs</a>
-                            </div>
-                        @endif
                     </div><!-- .nk-header-news -->
                 @endif
             @endisset

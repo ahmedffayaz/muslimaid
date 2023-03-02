@@ -3,19 +3,20 @@ window.abortControllers = {};
 function cacheAuthValue() {
     // Whenever the auth header is set for one endpoint, cache it for the others
     window.lastAuthValue = '';
-    let authInputs = document.querySelectorAll(`.auth-value`)
-    authInputs.forEach(el => {
-        el.addEventListener('input', (event) => {
-            window.lastAuthValue = event.target.value;
-            authInputs.forEach(otherInput => {
-                if (otherInput === el) return;
-                // Don't block the main thread
-                setTimeout(() => {
-                    otherInput.value = window.lastAuthValue;
-                }, 0);
+    document.querySelectorAll(`label[id^=auth-] > input`)
+        .forEach(el => {
+            el.addEventListener('change', (event) => {
+                window.lastAuthValue = event.target.value;
+                document.querySelectorAll(`label[id^=auth-] > input`)
+                    .forEach(otherInput => {
+                        if (otherInput === el) return;
+                        // Don't block the main thread
+                       setTimeout(() => {
+                           otherInput.value = window.lastAuthValue;
+                        }, 0);
+                    });
             });
         });
-    });
 }
 
 window.addEventListener('DOMContentLoaded', cacheAuthValue);
@@ -43,7 +44,7 @@ function tryItOut(endpointId) {
 
     // Show all input fields
     document.querySelectorAll(`input[data-endpoint=${endpointId}],label[data-endpoint=${endpointId}]`)
-        .forEach(el => el.style.display = 'block');
+        .forEach(el => el.hidden = false);
 
     if (document.querySelector(`#form-${endpointId}`).dataset.authed === "1") {
         const authElement = document.querySelector(`#auth-${endpointId}`);
@@ -67,7 +68,7 @@ function cancelTryOut(endpointId) {
     document.querySelector(`#btn-canceltryout-${endpointId}`).hidden = true;
     // Hide inputs
     document.querySelectorAll(`input[data-endpoint=${endpointId}],label[data-endpoint=${endpointId}]`)
-        .forEach(el => el.style.display = 'none');
+        .forEach(el => el.hidden = true);
     document.querySelectorAll(`#form-${endpointId} details`)
         .forEach(el => el.open = false);
     const authElement = document.querySelector(`#auth-${endpointId}`);
@@ -81,10 +82,10 @@ function cancelTryOut(endpointId) {
     document.querySelector('#example-responses-' + endpointId).hidden = false;
 }
 
-function makeAPICall(method, path, body = {}, query = {}, headers = {}, endpointId = null) {
+function makeAPICall(method, path, body, query, headers, endpointId) {
     console.log({endpointId, path, body, query, headers});
 
-    if (!(body instanceof FormData) && typeof body !== "string") {
+    if (!(body instanceof FormData)) {
         body = JSON.stringify(body)
     }
 
@@ -122,7 +123,7 @@ function makeAPICall(method, path, body = {}, query = {}, headers = {}, endpoint
         mode: 'cors',
         credentials: 'same-origin',
     })
-        .then(response => Promise.all([response.status, response.statusText, response.text(), response.headers]));
+        .then(response => Promise.all([response.status, response.text(), response.headers]));
 }
 
 function hideCodeSamples(endpointId) {
@@ -150,7 +151,7 @@ function handleResponse(endpointId, response, status, headers) {
 
     }
     responseContentEl.textContent = response === '' ? '<Empty response>' : response;
-    isJson && window.hljs.highlightElement(responseContentEl);
+    isJson && window.hljs.highlightBlock(responseContentEl);
     const statusEl = document.querySelector('#execution-response-status-' + endpointId);
     statusEl.textContent = ` (${status})`;
     document.querySelector('#execution-results-' + endpointId).hidden = false;
@@ -218,8 +219,8 @@ async function executeTryOut(endpointId, form) {
     const queryParameters = form.querySelectorAll('input[data-component=query]');
     queryParameters.forEach(el => {
         if (el.type !== 'radio' || (el.type === 'radio' && el.checked)) {
-            if (el.value === '') {
-                // Don't include empty values in the request
+            if (el.value === '' && el.required === false) {
+                // Don't include empty optional values in the request
                 return;
             }
 
@@ -231,9 +232,12 @@ async function executeTryOut(endpointId, form) {
     const urlParameters = form.querySelectorAll('input[data-component=url]');
     urlParameters.forEach(el => (path = path.replace(new RegExp(`\\{${el.name}\\??}`), el.value)));
 
-    const headers = Object.fromEntries(Array.from(form.querySelectorAll('input[data-component=header]'))
-        .map(el => [el.name, el.value]));
-
+    const headers = JSON.parse(form.dataset.headers);
+    // Check for auth param that might go in header
+    if (form.dataset.authed === "1") {
+        const authHeaderEl = form.querySelector('input[data-component=header]');
+        if (authHeaderEl) headers[authHeaderEl.name] = authHeaderEl.dataset.prefix + authHeaderEl.value;
+    }
     // When using FormData, the browser sets the correct content-type + boundary
     let method = form.dataset.method;
     if (body instanceof FormData) {
@@ -248,13 +252,13 @@ async function executeTryOut(endpointId, form) {
 
     let preflightPromise = Promise.resolve();
     if (window.useCsrf && window.csrfUrl) {
-        preflightPromise = makeAPICall('GET', window.csrfUrl).then(() => {
+        preflightPromise = makeAPICall('GET', window.csrfUrl, {}, {}, {}, null).then(() => {
             headers['X-XSRF-TOKEN'] = getCookie('XSRF-TOKEN');
         });
     }
 
     return preflightPromise.then(() => makeAPICall(method, path, body, query, headers, endpointId))
-        .then(([responseStatus, statusText, responseContent, responseHeaders]) => {
+        .then(([responseStatus, responseContent, responseHeaders]) => {
             handleResponse(endpointId, responseContent, responseStatus, responseHeaders)
         })
         .catch(err => {
