@@ -4,8 +4,8 @@
     <style>
         .btn-choose{
             padding:7px 10px;
-            background:#8ba7d7;
-            border:1px solid #854fff;
+            background-color: #854fff;
+            border-color: #854fff;
             position:relative;
             color:#fff;
             border-radius:8px;
@@ -63,8 +63,8 @@
                                     <div class="row g-4">
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">User  <span class="text-danger">*</span></label>
-                                                <select class=" select-user" id="user" name="user"  required>
+                                                <label class="form-label" for="user">User  <span class="text-danger">*</span></label>
+                                                <select class="select-user" id="user" name="user"  required>
                                                     @foreach($users as $user)
                                                     <option {{ $user->id == $testimonial->user_id ? 'selected' : '' }} value="{{$user->id}}">{{ $user->first_name }} {{ $user->last_name }}</option>
                                                     @endforeach
@@ -74,25 +74,25 @@
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">User Name <span class="text-danger">*</span></label>
+                                                <label class="form-label" for="name">User Name <span class="text-danger">*</span></label>
                                                 <div class="form-control-wrap">
-                                                    <input id="user-name" type="text" class="form-control " name="name" placeholder="User Name" value="{{ $testimonial->name }}" required>
+                                                    <input id="user-name" type="text" class="form-control" name="name" placeholder="User Name" value="{{ $testimonial->name }}" required>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Title <span class="text-danger">*</span></label>
+                                                <label class="form-label" for="title">Title <span class="text-danger">*</span></label>
                                                 <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="{{ $testimonial->title }}" required>
+                                                    <input id="title" type="text" class="form-control" name="title" placeholder="Title" value="{{ $testimonial->title }}" required>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Company Name <span class="text-danger">*</span></label>
+                                                <label class="form-label" for="company_name">Company Name <span class="text-danger">*</span></label>
                                                 <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="company_name" placeholder="Company Name" value="{{ $testimonial->company }}" required>
+                                                    <input id="company_name" type="text" class="form-control " name="company_name" placeholder="Company Name" value="{{ $testimonial->company }}" required>
                                                 </div>
                                             </div>
                                         </div>
@@ -100,34 +100,34 @@
 
                                         <div class="col-lg-12">
                                             <div class="form-group">
-                                            <label class="form-label" for="reviewer">Description <span class="text-danger">*</span></label>
-                                            <textarea  class="form-control " name="description" placeholder="Description" value="" required>{{ $testimonial->description }}</textarea>
+                                            <label class="form-label" for="description">Description </label>
+                                            <textarea  class="form-control description " name="description" placeholder="Description" value="">{{ $testimonial->description }}</textarea>
                                         </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Job Position <span class="text-danger">*</span></label>
+                                                <label class="form-label" for="position">Job Position <span class="text-danger">*</span></label>
                                                 <div class="form-control-wrap">
-                                                    <input id="blog-title" type="text" class="form-control " name="position" placeholder="Job Position" value="{{ $testimonial->position }}" required>
+                                                    <input id="position" type="text" class="form-control " name="position" placeholder="Job Position" value="{{ $testimonial->position }}" required>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Order No <span class="text-danger">*</span></label>
+                                                <label class="form-label" for="order_no">Order No <span class="text-danger">*</span></label>
                                                 <div class="form-control-wrap">
-                                                    <input id="blog-title" type="number" class="form-control " name="order_no" placeholder="Order No" value="{{ $testimonial->order_no }}" required>
+                                                    <input id="order_no" type="number" class="form-control " name="order_no" placeholder="Order No" value="{{ $testimonial->order_no }}" required>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
                                             <div class="form-group">
-                                                <label class="form-label" for="reviewer">Status <span class="text-danger">*</span></label>
+                                                <label class="form-label" for="status">Status <span class="text-danger">*</span></label>
                                                 <div class="form-control-wrap">
                                                         <div class="form-control-wrap ">
                                                             <div class="form-control-select">
-                                                                <select class="form-control" id="default-06" name="status" required>
+                                                                <select class="form-control" id="status" name="status" required>
                                                                     <option @if($testimonial->status == 'active') selected @endif value="active">Active</option>
                                                                     <option @if($testimonial->status == 'in-active') selected @endif value="in-active">In-Active</option>
 
@@ -138,6 +138,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-6">
+
                                             <div class="form-group">
                                                 <label class="form-label">User Image</label>
                                                 <div class="input-group">
@@ -209,5 +210,30 @@
         }
         }
 </script>
+<script>
+    jQuery.validator.addMethod("regex", function(value, element) {
+        return this.optional(element) || /^[\w. ]+$/i.test(value);
+    }, "Letters, numbers, and underscores only please");
 
+    $('.form-validate').validate({
+        rules: {
+            title: {
+                required: true,
+                regex: true
+            },
+            name: {
+                required: true
+            },
+            company_name: {
+                required: true
+            },
+            position: {
+                required: true
+            },
+            order_no: {
+                required: true
+            }, 
+        }
+    });
+</script>
 @endpush

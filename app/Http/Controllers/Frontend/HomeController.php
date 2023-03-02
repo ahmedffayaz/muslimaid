@@ -29,7 +29,7 @@ class HomeController extends Controller
     {
         if (empty($request->input('search'))) return null;
 
-        $stores = Store::where('name', 'like', '%' . $request->input('search') . '%')
+        $stores = Store::where('name', 'like', '%' . str_replace(' ', '%', $request->input('search')) . '%')
             ->orWhereHas('storeRuleData', function ($query) use ($request) {
                 $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $request->input('search') . '%');
             })->whereStatus('active')->limit(20)->get();

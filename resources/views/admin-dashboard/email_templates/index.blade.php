@@ -1,7 +1,6 @@
 @extends('layouts.admin-dashboard.app')
 
 @section('content')
-
     <div class="nk-content ">
         <div class="container-fluid">
             <div class="nk-content-inner">
@@ -10,29 +9,23 @@
                         <div class="nk-block-head nk-block-head-lg wide-sm">
                             <div class="nk-block-head-content">
                                 <h3 class="nk-block-title fw-normal">Email Templates</h3>
-
                             </div>
                         </div><!-- .nk-block-head -->
-
                         @foreach ($templates as $template)
-
                             <div class="nk-block border-bottom">
                                 <h4 class="nk-block-title fw-normal mb-3">{{ $template->title }}</h4>
                                 <p class="lead">{{ $template->detail }}</p>
                                 <div class="card">
-
-
                                     <div class="card-inner">
                                         <div class="card-title-group">
                                             <div class="card-title">
                                                 <h6 class="title">Subject: {{ $template->subject }}</h6>
                                             </div>
                                             <div class="card-tools">
-                                                <a href="{{ route('admin.email_templates.edit', $template) }}"
-                                                    class="template-edit btn btn-primary"><em class="icon ni ni-edit mr-1"></em> Edit</a>
+                                                <a href="{{ route('admin.email_templates.edit', $template) }}" class="template-edit btn btn-primary"><em
+                                                        class="icon ni ni-edit mr-1"></em> Edit</a>
                                             </div>
                                         </div>
-                                        {{-- <h4 class="title text-soft mb-4 overline-title"></h4> --}}
                                         <table class="email-wraper mt-4">
                                             <tr>
                                                 <td class="py-5">
@@ -40,9 +33,7 @@
                                                         <tbody>
                                                             <tr>
                                                                 <td class="text-center pb-4">
-                                                                    <a href="#"><img class="email-logo" src="@if (isset($settings['website_logo'])
-                                                                            && $settings['website_logo'] !='default.png'
-                                                                            ) {{ asset('storage/dashboard/images/logo/' . $settings['website_logo']) }}@else{{ asset('admin-dashboard/images/logo.png') }} @endif" alt="logo"></a>
+                                                                    <a href="#"><img class="email-logo" src="{{ getSiteLogo() }}" alt="logo"></a>
 
                                                                 </td>
                                                             </tr>
@@ -66,34 +57,25 @@
                                                                     <ul class="email-social">
                                                                         @isset(SiteSetting()['facebook'])
                                                                             <li><a href="{{ SiteSetting()['facebook'] }}"><img
-                                                                                        src="{{ asset('admin-dashboard/images/socials/facebook.png') }}"
-                                                                                        alt=""></a></li>
+                                                                                        src="{{ asset('admin-dashboard/images/socials/facebook.png') }}" alt=""></a></li>
                                                                         @endisset
                                                                         @isset(SiteSetting()['twitter'])
                                                                             <li><a href="{{ SiteSetting()['twitter'] }}"><img
-                                                                                        src="{{ asset('admin-dashboard/images/socials/twitter.png') }}"
-                                                                                        alt=""></a></li>
+                                                                                        src="{{ asset('admin-dashboard/images/socials/twitter.png') }}" alt=""></a></li>
                                                                         @endisset
                                                                         @isset(SiteSetting()['instagram'])
                                                                             <li><a href="{{ SiteSetting()['instagram'] }}"><img
-                                                                                        src="{{ asset('admin-dashboard/images/socials/instagram.png') }}"
-                                                                                        alt=""></a></li>
+                                                                                        src="{{ asset('admin-dashboard/images/socials/instagram.png') }}" alt=""></a></li>
                                                                         @endisset
                                                                         @isset(SiteSetting()['linkedin'])
                                                                             <li><a href="{{ SiteSetting()['linkedin'] }}"><img
-                                                                                        src="{{ asset('admin-dashboard/images/socials/linkedin.png') }}"
-                                                                                        alt=""></a></li>
+                                                                                        src="{{ asset('admin-dashboard/images/socials/linkedin.png') }}" alt=""></a></li>
                                                                         @endisset
                                                                         @isset(SiteSetting()['pinterest'])
                                                                             <li><a href="{{ SiteSetting()['pinterest'] }}"><img
-                                                                                        src="{{ asset('admin-dashboard/images/socials/pinterest.png') }}"
-                                                                                        alt=""></a></li>
+                                                                                        src="{{ asset('admin-dashboard/images/socials/pinterest.png') }}" alt=""></a></li>
                                                                         @endisset
                                                                     </ul>
-                                                                    {{-- <p class="fs-12px pt-4">This email was sent to you as a
-                                                                        registered member of <a
-                                                                            href="{{ '/' }}">{{ SiteSetting()['website_title'] }}</a>.
-                                                                    </p> --}}
                                                                 </td>
                                                             </tr>
                                                         </tbody>
@@ -106,8 +88,6 @@
                             </div><!-- .nk-block -->
                             <hr class="border border-primary my-5 w-50">
                         @endforeach
-
-
                     </div><!-- .content-page -->
                 </div>
             </div>
@@ -119,18 +99,13 @@
             <div class="modal-content">
                 <div class="modal-header align-center">
                     <div class="nk-file-title">
-
-
                         <div class="nk-file-name">
                             <div class="nk-file-name-text"><span class="title">Edit Template</span></div>
-                            {{-- <div class="nk-file-name-sub">Project</div> --}}
                         </div>
                     </div>
                     <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
                 </div>
                 <div id="edit-template" class=" p-4">
-
-
                 </div>
             </div><!-- .modal-content -->
         </div><!-- .modla-dialog -->
@@ -141,7 +116,7 @@
         ul.email-social li .icon {
             font-size: 20px;
         }
-    
+
         ul.email-social li a {
             padding: 7px
         }
@@ -168,11 +143,18 @@
                     success: function(data) {
                         $('#edit-template-modal').modal('show');
                         $('#edit-template').html(data);
+                        // alert('');
                         var rquill = new Quill('#teditor-container', {
                             modules: {
                                 toolbar: [
-                                    ['bold', 'italic'],
-                                    ['link', 'blockquote', 'code-block', 'image'],
+                                    ['bold', 'italic', {
+                                        'color': ['#854fff', 'black', '#8094ae', 'rgb(58, 170, 53)', 'green', 'white']
+                                    }, {
+                                        'background': ['#854fff', 'black', '#8094ae', 'rgb(58, 170, 53)', 'green', 'white']
+                                    }, {
+                                        align: ['', 'center', 'right', 'justify']
+                                    }, 'code'],
+                                    ['link', 'blockquote', 'code-block', 'image', 'code-block', 'direction'],
                                     [{
                                         list: 'ordered'
                                     }, {
@@ -211,14 +193,10 @@
                             NioApp.Toast(data['message'], data['status']);
                             location.reload(true);
 
-
-
                         })(NioApp, jQuery);
-
                     }
                 });
             });
         });
-
     </script>
 @endpush

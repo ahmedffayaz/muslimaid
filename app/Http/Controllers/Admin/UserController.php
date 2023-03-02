@@ -111,13 +111,15 @@ class UserController extends Controller
                 if (!$request->ajax()) {
                     flash()->error($validator->errors()->first());
                     return redirect()->back();
+                } else{
+                    return array(
+                        'message' => $validator->errors()->first(),
+                        'success' => false
+                    );
                 }
-
-                return array(
-                    'message' => $validator->errors()->first(),
-                    'success' => false
-                );
+             
             }
+           
 
             $avatarImage = $user->avatar;
             if ($request->hasFile('avatar')) {
@@ -138,15 +140,18 @@ class UserController extends Controller
 
             $user->syncRoles($request->input('roles'));
 
-            if (!$request->ajax()) {
+            if ($request->ajax()) {
+                return array(
+                    'message' => 'User updated successfully',
+                    'success' => true
+                );
+              
+            }else{
                 flash()->success('User updated successfully');
                 return redirect()->route('admin.users.index');
             }
 
-            return array(
-                'message' => $validator->errors()->first(),
-                'success' => true
-            );
+           
         } catch (Exception $e) {
             if (!$request->ajax()) throw new Exception($e->getMessage());
 

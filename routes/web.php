@@ -23,7 +23,8 @@ Route::get('/set-locale/{locale}', [App\Http\Controllers\Frontend\HomeController
 Auth::routes();
 
 Route::namespace('App\Http\Controllers\Website')->prefix('site')->name('site.')->group(function () {
-    Route::resource('/exit_click', ClickController::class)->only(['index', 'store']);
+    Route::resource('/exit_click', ClickController::class)->only(['store']);
+    Route::get('new-exit-click/{hash}/{url}', [App\Http\Controllers\Website\ClickController::class, 'getCashback'])->name('cashback');
 });
 
 // Admin routes
@@ -219,7 +220,11 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::resource('email_templates', EmailTemplatesController::class)->only(['index', 'edit', 'update']);
 
         // Countries
-        Route::resource('countries', CountryController::class)->except(['show', 'destroy']);
+        Route::resource('countries', CountryController::class)->except(['show', 'destroy']);  
+
+        Route::get('/api-docs', function() {
+            return view('scribe.index');
+        })->name('api-docs');
 
         Route::get('site/shutdown', function () {
             return Artisan::call('down');

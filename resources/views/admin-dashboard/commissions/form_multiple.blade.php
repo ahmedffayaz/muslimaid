@@ -15,7 +15,7 @@
                     </div>
                     <div class="col-lg-2">
                         <div class="form-group">
-                            <label class="form-label" for="exit_click_id">Exit Click aaa</label>
+                            <label class="form-label" for="exit_click_id">Exit Click</label>
                             <div class="form-control-wrap ">
                                 <input type="number" class="form-control" id="exit_click_id" min="0.0" value="{{ $row[0] }}" name="exit_click_id[]"
                                     placeholder="Exit Click ID" required>

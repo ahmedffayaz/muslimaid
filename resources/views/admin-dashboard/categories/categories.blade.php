@@ -117,7 +117,7 @@
                             <div class="card card-stretch">
                                 <div class="card-inner-group">
                                     <div class="card-inner">
-                                        <h5 class="title mb-3">All Categories</h5>
+                                        <h5 class="mb-3">All Categories</h5>
                                         <ul id="tree1">
                                             @foreach ($categories as $category)
                                                 <li class="border mt-2 pt-2 pb-1 px-2">

@@ -12,6 +12,15 @@
                                     </div>
                                 </div>
                             </div>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
                             <div class="card">
                                 <div class="card-inner">
                                     <div class="card-head">
@@ -198,6 +207,20 @@
                     lfm: LFMButton
                 }
             })
+        });
+    </script>
+    <script>
+        jQuery.validator.addMethod("regex", function(value, element) {
+            return this.optional(element) || /^[\w. ]+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
+
+        $('#form-validate').validate({
+            rules: {
+                title: {
+                    required: true,
+                    regex: true
+                }
+            }
         });
     </script>
 @endpush

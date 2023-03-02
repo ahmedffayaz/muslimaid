@@ -21,7 +21,7 @@
                                     <div class="card-head">
                                         <h5 class="card-title">User Info</h5>
                                     </div>
-                                    <form action="{{ route('admin.users.store') }}" enctype="multipart/form-data" class="gy-3 user-form is-alter" id="form-validate"
+                                    <form action="{{ route('admin.users.store') }}" enctype="multipart/form-data" class="gy-3 user-form is-alter" 
                                         method="POST">
                                         @csrf
                                         <div class="row g-4">
@@ -139,7 +139,7 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
-        $('#form-validate').validate({
+        $('.user-form').validate({
             errorClass: 'invalid-feedback d-block',
             rules: {
                 firstname: {
