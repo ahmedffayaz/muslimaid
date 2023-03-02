@@ -133,22 +133,20 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2">
+
+                                    <div class="col-lg-6">
+
                                         <div class="form-group">
-                                            <div class=" logo">
-                                            <label class="form-label" for="user_image">User Image <span class="text-danger">*</span></label>
-                                            <div class="btn-choose form-control">
-                                                Choose Image
-                                               <input preview="#logo" type="file" name="user_image" class="hide_file form-control" onchange="readURL(this);" required>
-                                              </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                    <div class="col-lg-3">
-                                        <div class="form-group">
-                                            <div class=" logo">
-                                              <img id="logo" src="" alt="store logo" class="d-none" style="max-width:80px;max-height:120px"/>
+                                            <label class="form-label">User Image</label>
+                                            <div class="input-group">
+                                                <span class="input-group-btn">
+                                                    <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white lfm">
+                                                        <i class="fa fa-picture-o"></i> Choose
+                                                    </a>
+                                                </span>
+                                                <input id="thumbnail" class="form-control" type="text" name="user_image">
                                             </div>
+                                            <div id="holder" style="margin-top:15px;max-height:100px;"></div>
                                         </div>
                                     </div>
                                         <div class="col-12">

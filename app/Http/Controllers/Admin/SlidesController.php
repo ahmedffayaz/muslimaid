@@ -35,8 +35,8 @@ class SlidesController extends Controller
             'name' => 'required|max:255',
             'store_id'=>'nullable',
             'link' =>'nullable|active_url',
-            'logo' => 'nullable|mimes:jpeg,jpg,png,gif|max:2048',
-            'banner' => 'required|mimes:jpeg,jpg,png,gif|max:2048'
+            'logo' => 'nullable',
+            'banner' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -59,17 +59,13 @@ class SlidesController extends Controller
         ]);
 
         if($request->has('logo')){
-            $imageName = Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo->extension();
-            $request->logo->storeAs('public/slider/slides/images',$imageName);
-
+            $imageName =parse_url($request->logo)['path'];
             $slide->logo = $imageName;
             $slide->update();
         }
 
         if($request->has('banner')){
-            $imageName = Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner->extension();
-            $request->banner->storeAs('public/slider/slides/images',$imageName);
-
+            $imageName =parse_url($request->banner)['path'];
             $slide->banner = $imageName;
             $slide->update();
         }
@@ -106,8 +102,8 @@ class SlidesController extends Controller
             'name' => 'required|max:255',
             'store_id'=>'nullable',
             'link' =>'nullable|active_url',
-            'logo' => 'nullable|mimes:jpeg,jpg,png,gif|max:2048',
-            'banner' => 'nullable|mimes:jpeg,jpg,png,gif|max:2048'
+            'logo' => 'nullable',
+            'banner' => 'nullable'
         ]);
 
         if ($validator->fails()) {
@@ -130,17 +126,13 @@ class SlidesController extends Controller
         ]);
 
         if($request->has('logo')){
-            $imageName = Str::slug($request->input('name')).'_logo_'.time().'.'.$request->logo->extension();
-            $request->logo->storeAs('public/slider/slides/images',$imageName);
-
+            $imageName =parse_url($request->logo_upload)['path'];
             $slide->logo = $imageName;
             $slide->update();
         }
 
         if($request->has('banner')){
-            $imageName = Str::slug($request->input('name')).'_banner_'.time().'.'.$request->banner->extension();
-            $request->banner->storeAs('public/slider/slides/images',$imageName);
-
+            $imageName =parse_url($request->banner_upload)['path'];
             $slide->banner = $imageName;
             $slide->update();
         }
