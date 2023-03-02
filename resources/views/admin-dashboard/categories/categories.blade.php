@@ -202,7 +202,11 @@
                         logoType()
                         bannerType()
                         store()
-                        validation()
+                        validation();
+                        $('.lfm').filemanager('image', {
+                            prefix: route_prefix
+                        });
+                            
                     }
                 });
             });
@@ -224,6 +228,9 @@
                         bannerType()
                         store()
                         validation()
+                        $('.lfm').filemanager('image', {
+                            prefix: route_prefix
+                        });
                     }
                 });
             });
@@ -350,7 +357,7 @@
                             $('#modal').modal('hide');
                             btn.removeAttr('disabled', 'disabled').button('refresh');
                             btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
-                            $('#tree1').load(location.href + ' #tree1');
+                            $('#tree1').load(location.href + ' #tree1');                   
                             (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();

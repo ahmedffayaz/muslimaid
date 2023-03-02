@@ -407,7 +407,7 @@ class StoreController extends Controller
             'network_id' => 'nullable|integer',
             'tracking_url' => 'nullable|url',
             'deeplink_url' => 'nullable|url',
-            'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
+             'cashback_icon' => 'nullable'
         ]);
 
         try {
@@ -415,7 +415,7 @@ class StoreController extends Controller
             $cashback->update($request->all());
 
             if ($request->hasFile('cashback_icon')) {
-                $cashbackIcon = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
+                $cashbackIcon = saveResizeImage(parse_url($request->cashback_icon)['path'], $this->iconPath, 200);
                 $cashback->image = $cashbackIcon;
                 $cashback->update();
             }
@@ -451,7 +451,7 @@ class StoreController extends Controller
             'type' => 'required',
             'sale_commission' => 'required|numeric|min:0',
             'deeplink_url' => 'nullable|url',
-            'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
+            'cashback_icon' => 'nullable'
         ]);
 
         try {
@@ -460,7 +460,7 @@ class StoreController extends Controller
             $cashback = StoreCashback::create($request->all());
 
             if ($request->hasFile('cashback_icon')) {
-                $cashbackIcon = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
+                $cashbackIcon = saveResizeImage(parse_url($request->cashback_icon)['path'], $this->iconPath, 200);
                 $cashback->image = $cashbackIcon;
                 $cashback->update();
             }

@@ -595,14 +595,14 @@
                             </div>
                         </div>
                         @if ($store->override_network)
-<div class="col-lg-12">
+                            <div class="col-lg-12">
                                 <div class="form-group">
                                     <label class="form-label" for="network_id">Network</label>
                                     <div class="form-control-wrap">
                                         <select class="form-control form-select select-2" id="network_id" name="network_id">
                                             @foreach ($networks as $network)
-<option value="{{ $network->id }}">{{ $network->name }}</option>
-@endforeach
+                                               <option value="{{ $network->id }}">{{ $network->name }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>
@@ -630,16 +630,19 @@
                                     </div>
                                 </div>
                             </div>
-@endif
-                        <div class="col-lg-12">
+                        @endif
+                        <div class="col-12">
                             <div class="form-group">
-                                <label class="form-label" for="cashback_icon">Icon Upload</label>
-                                <div class="form-control-wrap">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" name='cashback_icon' id="cashback_icon">
-                                        <label class="custom-file-label" for="cashback_icon">Choose file</label>
-                                    </div>
+                                <label class="form-label" for="image">Icon Upload</label>
+                                <div class="input-group">
+                                    <span class="input-group-btn">
+                                        <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white">
+                                            <i class="fa fa-picture-o"></i> Choose
+                                        </a>
+                                    </span>
+                                    <input id="thumbnail" class="form-control" type="text" name="image">
                                 </div>
+                                <div id="holder" style="margin-top:15px;max-height:100px;"></div>
                             </div>
                         </div>
                         <div class="col-lg-12">
@@ -1438,6 +1441,9 @@
                         $('#edit-cashback').html(data);
                         checkCashbackType();
                         calcCashback();
+                        $('#lfm').filemanager('image', {
+                            prefix: route_prefix
+                        });
                     }
                 });
             });
@@ -2060,4 +2066,5 @@
             }
         });
     </script>
+    
 @endpush

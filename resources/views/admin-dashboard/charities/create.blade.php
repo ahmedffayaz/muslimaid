@@ -78,7 +78,7 @@
                                                     <label class="form-label" for="logo_type">Logo <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
                                                         <div class="form-control-select">
-                                                            <select class="form-control" name="logo_type" id='logo_type' value="{{ old('logo_type') }}" required>
+                                                            <select class="form-control form-select" name="logo_type" id='logo_type' value="{{ old('logo_type') }}" required>
                                                                 <option value="upload">Upload</option>
                                                                 <option value="link">Link</option>
                                                             </select>
@@ -108,19 +108,15 @@
                                             <div class="col-lg-6 logo_upload">
                                                 <div class="form-group">
                                                     <label class="form-label" for="logo_upload">Logo Upload <span class="text-danger">*</span></label>
-                                                    <div class="form-control-wrap">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" name='logo_upload' id="logo_upload"
-                                                                value="{{ old('logo_upload') }}" required>
-                                                            @error('logo_upload')
-                                                                <span class="invalid-feedback d-block" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                            <label class="custom-file-label" for="logo_upload">Choose
-                                                                file</label>
-                                                        </div>
+                                                    <div class="input-group">
+                                                        <span class="input-group-btn">
+                                                            <a data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white lfm">
+                                                                <i class="fa fa-picture-o"></i> Choose
+                                                            </a>
+                                                        </span>
+                                                        <input id="thumbnail" class="form-control" type="text" name="logo_upload">
                                                     </div>
+                                                    <div id="holder" style="margin-top:15px;max-height:100px;"></div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 ">
@@ -128,7 +124,7 @@
                                                     <label class="form-label" for="banner_type">Banner <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
                                                         <div class="form-control-select">
-                                                            <select class="form-control" name="banner_type" id='banner_type' value="{{ old('banner_type') }}" required>
+                                                            <select class="form-control form-select" name="banner_type" id='banner_type' value="{{ old('banner_type') }}" required>
                                                                 <option value="upload">Upload</option>
                                                                 <option value="link">Link</option>
                                                             </select>
@@ -157,20 +153,16 @@
                                             </div>
                                             <div class="col-lg-6 banner_upload">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="banner_upload">Banner Upload <span class="text-danger">*</span></label>
-                                                    <div class="form-control-wrap">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload"
-                                                                value="{{ old('banner_upload') }}" required>
-                                                            <label class="custom-file-label" for="banner_upload">Choose
-                                                                file</label>
-                                                            @error('banner_upload')
-                                                                <span class="invalid-feedback d-block" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
+                                                    <label class="form-label">Banner Upload</label>
+                                                    <div class="input-group">
+                                                        <span class="input-group-btn">
+                                                            <a data-input="thumbnail2" data-preview="holder2" class="btn btn-primary text-white lfm">
+                                                                <i class="fa fa-picture-o"></i> Choose
+                                                            </a>
+                                                        </span>
+                                                        <input id="thumbnail2" class="form-control" type="text" name="banner_upload">
                                                     </div>
+                                                    <div id="holder2" style="margin-top:15px;max-height:100px;"></div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
@@ -329,4 +321,12 @@
             }
         });
     </script>
+    <script>
+        $(document).ready(function() {
+            $('.lfm').filemanager('image', {
+                prefix: route_prefix
+            });
+        });
+    </script>
+    
 @endpush

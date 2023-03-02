@@ -110,18 +110,16 @@
                                             <div class="col-lg-6 logo_upload">
                                                 <div class="form-group">
                                                     <label class="form-label" for="logo_upload">Logo Upload <span class="text-danger">*</span></label>
-                                                    <div class="form-control-wrap">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" name='logo_upload' id="logo_upload">
-                                                            <label class="custom-file-label" for="logo_upload">Choose
-                                                                file</label>
-                                                            @error('logo_upload')
-                                                                <span class="invalid-feedback d-block" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
+                                                    <div class="input-group">
+                                                        <span class="input-group-btn">
+                                                            <a data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white lfm">
+                                                                <i class="fa fa-picture-o"></i> Choose
+                                                            </a>
+                                                        </span>
+                                                        <input id="thumbnail" class="form-control" type="text" name="logo_upload">
                                                     </div>
+                                                    <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+                                               
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 ">
@@ -161,19 +159,15 @@
                                             <div class="col-lg-6 banner_upload">
                                                 <div class="form-group">
                                                     <label class="form-label" for="banner_upload">Banner Upload <span class="text-danger">*</span></label>
-                                                    <div class="form-control-wrap">
-                                                        <div class="custom-file">
-                                                            <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload">
-                                                            <label class="custom-file-label" for="banner_upload">Choose
-                                                                file</label>
-                                                            @error('banner_upload')
-                                                                <span class="invalid-feedback d-block" role="alert">
-                                                                    <strong>{{ $message }}</strong>
-                                                                </span>
-                                                            @enderror
-                                                        </div>
-
+                                                    <div class="input-group">
+                                                        <span class="input-group-btn">
+                                                            <a data-input="thumbnail2" data-preview="holder2" class="btn btn-primary text-white lfm">
+                                                                <i class="fa fa-picture-o"></i> Choose
+                                                            </a>
+                                                        </span>
+                                                        <input id="thumbnail2" class="form-control" type="text" name="banner_upload">
                                                     </div>
+                                                    <div id="holder2" style="margin-top:15px;max-height:100px;"></div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
@@ -328,6 +322,13 @@
                     url: true
                 },
             }
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('.lfm').filemanager('image', {
+                prefix: route_prefix
+            });
         });
     </script>
 @endpush

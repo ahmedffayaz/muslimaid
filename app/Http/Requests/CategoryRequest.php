@@ -27,10 +27,10 @@ class CategoryRequest extends FormRequest
             'name' => 'required',
             'parent_id' => 'exists:categories,id',
             'logo_type' => 'required',
-            'logo_upload' => 'nullable|mimes:jpeg,jpg,png,gif|max:1024',
+            'logo_upload' => 'nullable',
             'logo_link' => 'nullable|url',
             'banner_type' => 'required',
-            'banner_upload' => 'nullable|mimes:jpeg,jpg,png,gif|max:1024',
+            'banner_upload' => 'nullable',
             'banner_link' => 'nullable|url',
             'status' => 'required'
         ];
