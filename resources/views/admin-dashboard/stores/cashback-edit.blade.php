@@ -25,7 +25,7 @@
             </div>
         </div>
         @if ($cashback->store->override_network)
-            <div class="col-lg-12">
+            <div class="col-lg-12 network_url">
                 <div class="form-group">
                     <label class="form-label" for="network_id">Network</label>
                     <div class="form-control-wrap">
@@ -37,7 +37,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12">
+            <div class="col-lg-12 network_url">
                 <div class="form-group">
                     <label class="form-label" for="tracking_url">Tracking URL <span class="text-danger">*</span></label>
                     <div class="form-control-wrap">
@@ -48,7 +48,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-12">
+            <div class="col-lg-12 network_url">
                 <div class="form-group">
                     <label class="form-label" for="sale_commission">Deeplink URL</label>
                     <div class="form-control-wrap">

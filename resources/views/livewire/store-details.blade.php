@@ -1434,6 +1434,13 @@
                     success: function(data) {
                         $('#edit-cashback-modal').modal('show');
                         $('#edit-cashback').html(data);
+                        if ($('#store_override_network').is(":checked")) {
+                            $('.sote-override-network').hide();
+                            $('.network_url').css('cssText', 'display: block !important');
+                        } else {
+                            $('.network_url').css('cssText', 'display: none !important');
+                            $('.sote-override-network').show();
+                        }
                         checkCashbackType();
                         calcCashback();
                         NioApp.BS.tooltip('[data-toggle="tooltip"]');
@@ -2085,6 +2092,7 @@
             } else {
                 $('.sote-override-network').show();
             }
+            $("#store_form").submit();
         });
     </script>
 @endpush
