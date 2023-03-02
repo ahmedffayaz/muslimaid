@@ -116,7 +116,7 @@ function updateitem(id = 0) {
             }
         },
         success: function (response) {
-            (function(NioApp, $){
+            (function (NioApp, $) {
                 'use strict';
                 toastr.clear();
                 NioApp.Toast(response.success, 'success');
@@ -147,7 +147,7 @@ function actualizarmenu() {
             $('#spincustomu2').show();
         },
         success: function (response) {
-            (function(NioApp, $){
+            (function (NioApp, $) {
                 'use strict';
                 toastr.clear();
                 NioApp.Toast(response.success, 'success');
@@ -170,7 +170,7 @@ function deleteitem(id) {
         url: deleteitemmenur,
         type: 'POST',
         success: function (response) {
-            (function(NioApp, $){
+            (function (NioApp, $) {
                 'use strict';
                 toastr.clear();
                 NioApp.Toast(response.success, 'success');
@@ -178,7 +178,7 @@ function deleteitem(id) {
             })(NioApp, jQuery);
         },
         error: function (error) {
-            (function(NioApp, $){
+            (function (NioApp, $) {
                 'use strict';
                 toastr.clear();
                 NioApp.Toast(error.responseJSON.error, 'error');
