@@ -96,8 +96,6 @@ $currentUrl = url()->current();
 
                                                         @if (request()->has('action'))
                                                             <div class="publishing-action">
-                                                                <a onclick="createnewmenu()" name="save_menu" id="save_menu_header"
-                                                                    class="button button-primary menu-save">Create menu</a>
                                                             </div>
                                                         @elseif(request()->has('menu'))
                                                             <div class="publishing-action">
@@ -107,8 +105,6 @@ $currentUrl = url()->current();
                                                             </div>
                                                         @else
                                                             <div class="publishing-action">
-                                                                <a onclick="createnewmenu()" name="save_menu" id="save_menu_header"
-                                                                    class="button button-primary menu-save">Create menu</a>
                                                             </div>
                                                         @endif
                                                     </div>
