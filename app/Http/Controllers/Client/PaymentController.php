@@ -52,7 +52,6 @@ class PaymentController extends Controller
         if (array_key_exists('min_cashout_amount', SiteSetting()->toArray()))
             $min = SiteSetting()['min_cashout_amount'];
         else $min = 1;
-
         $user = Auth::user();
         $method = $user->paymentInfo()->where('payment_method', $request->payment_method)->first();
 
@@ -66,6 +65,17 @@ class PaymentController extends Controller
 
         if ($balance < $min) {
             flash()->error('You have insufficient balance for withdrawl.');
+            return redirect()->back();
+        }
+        $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
+        if ($previousCashouts > 0) {
+            $min = SiteSetting()['next_cashout_amount'];
+        } else {   
+            $min = SiteSetting()['min_cashout_amount'];
+        }
+        
+        if ($balance < $min) {
+            flash()->error("You need to have at least $min in your balance for withdrawal.");
             return redirect()->back();
         }
 

@@ -25,15 +25,18 @@
                 @foreach($coms as $com)
                 <div class="nk-tb-item">
                     <div class="nk-tb-col">
-                        @if ($com->store_id)
-                            <div class="icon-text"><a href="{{route('admin.stores.show_store')}}?slug={{$com->store->slug}}">
-                                <span class="tb-lead"> <em class="text-primary icon ni ni-cart-fill mr-2"></em>{{$com->store->name}}</span></a>
-                            </div>
-                        @else
-                            <div class="icon-text">
-                                <span class="tb-lead"> <em class="text-primary icon ni ni-coin-alt mr-2"></em>{{ ucfirst(str_replace('_', ' ', $com->type)) }}</span>
-                            </div>
-                         @endif 
+                        @if(isset($com->store))
+                            @if ($com->store_id)
+                                <div class="icon-text"><a href="{{route('admin.stores.show_store')}}?slug={{$com->store->slug}}">
+                                    <span class="tb-lead"> <em class="text-primary icon ni ni-cart-fill mr-2"></em>{{$com->store->name}}</span></a>
+                                </div>
+                            @else
+                                <div class="icon-text">
+                                    <span class="tb-lead"> <em class="text-primary icon ni ni-coin-alt mr-2"></em>{{ ucfirst(str_replace('_', ' ', $com->type)) }}</span>
+                                </div>
+                        
+                            @endif 
+                        @endif 
                     </div>
                     <div class="nk-tb-col">
                         <span class="tb-sub"><span>{{$com->user->first_name ?? ''}} {{$com->user->last_name ?? ''}}</span></span>
