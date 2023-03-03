@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Page;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
 
 class PagesController extends Controller
@@ -41,8 +42,8 @@ class PagesController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|regex:/^[\w. ]+$/',
-           
-        ],$messages = [
+
+        ], $messages = [
             'title.required' => 'The Title field is required.',
         ]);
         $page = new Page;
@@ -57,8 +58,16 @@ class PagesController extends Controller
         $page->meta_keyword = $request->meta_keyword;
         $page->default = 0;
         $page->save();
-        flash()->success('New Page created successfully');
-        return redirect()->route('admin.pages.index');
+
+        if (!$request->ajax()) {
+            flash()->success('New Page created successfully');
+            return redirect()->route('admin.pages.index');
+        } else {
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Page created successfully'
+            ], JsonResponse::HTTP_OK);
+        }
     }
 
     /**
@@ -92,8 +101,16 @@ class PagesController extends Controller
         $page->meta_description = $request->meta_description;
         $page->meta_keyword = $request->meta_keyword;
         $page->save();
-        flash()->success('Page updated');
-        return redirect()->route('admin.pages.index');
+
+        if (!$request->ajax()) {
+            flash()->success('Page updated');
+            return redirect()->route('admin.pages.index');
+        } else {
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Page updated'
+            ], JsonResponse::HTTP_OK);
+        }
     }
 
     /**

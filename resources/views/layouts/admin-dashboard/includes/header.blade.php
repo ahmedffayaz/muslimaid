@@ -59,6 +59,12 @@
                                                 </a>
                                             </li><!-- .nk-menu-item -->
                                         @endcan
+                                        <li class="">
+                                            <a href="/admin/charities" class="">
+                                                <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
+                                                <span class="nk-menu-text">Charities</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
                                     </ul>
                                 </div>
                             </div>
@@ -189,12 +195,6 @@
                                             <a href="/admin/menu" class="">
                                                 <span class="nk-menu-icon"><em class="icon ni ni-menu"></em></span>
                                                 <span class="nk-menu-text">Menu</span>
-                                            </a>
-                                        </li><!-- .nk-menu-item -->
-                                        <li class="">
-                                            <a href="/admin/charities" class="">
-                                                <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
-                                                <span class="nk-menu-text">Charities</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
                                     </ul>

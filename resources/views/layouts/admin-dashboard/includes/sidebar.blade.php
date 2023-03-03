@@ -78,6 +78,12 @@ d-xl-none
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan
+                            <li class="nk-menu-item">
+                                <a href="{{ route('admin.charities.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
+                                    <span class="nk-menu-text">Charities</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
                     @endcanany
@@ -212,12 +218,6 @@ d-xl-none
                                 <a href="/admin/menu" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-menu"></em></span>
                                     <span class="nk-menu-text">Menu</span>
-                                </a>
-                            </li><!-- .nk-menu-item -->
-                            <li class="nk-menu-item">
-                                <a href="{{ route('admin.charities.index') }}" class="nk-menu-link">
-                                    <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
-                                    <span class="nk-menu-text">Charities</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
                         </ul><!-- .nk-menu-sub -->
