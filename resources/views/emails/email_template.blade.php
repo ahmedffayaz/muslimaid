@@ -389,6 +389,14 @@
                                         <li><a href="{{ SiteSetting()['pinterest'] }}"><img src="{{ asset('admin-dashboard/images/socials/pinterest.png') }}" alt=""></a>
                                         </li>
                                     @endisset
+                                    @isset(SiteSetting()['youtube'])
+                                        <li><a href="{{ SiteSetting()['youtube'] }}"><img
+                                                src="{{ asset('admin-dashboard/images/socials/youtube.png') }}" alt=""></a></li>
+                                    @endisset
+                                    @isset(SiteSetting()['tiktok'])
+                                        <li><a href="{{ SiteSetting()['tiktok'] }}"><img
+                                                src="{{ asset('admin-dashboard/images/socials/tiktok.jpg') }}" alt=""></a></li>
+                                    @endisset
                                 </ul>
                             </td>
                         </tr>

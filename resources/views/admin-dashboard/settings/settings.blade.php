@@ -605,6 +605,36 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="row g-3 align-center">
+                                                        <div class="col-lg-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Youtube</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <div class="form-group">
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="youtube" value="{{ $settings['youtube'] ?? '' }}"
+                                                                        placeholder="Youtube Link">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row g-3 align-center">
+                                                        <div class="col-lg-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">Tiktok</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <div class="form-group">
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="tiktok" value="{{ $settings['tiktok'] ?? '' }}"
+                                                                        placeholder="Tiktok Link">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
                                                     <div class="nk-block-head mt-5">
                                                         <h5 class="title">Facebook Login <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
@@ -853,7 +883,7 @@
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
                                                                     <input type="number" class="form-control" min="0.0" step="0.1" id="min_cashout_amount" name="min_cashout_amount"
-                                                                        value="{{ $settings['min_cashout_amount'] ?? '' }}" placeholder="Min Cashout Amount">
+                                                                        value="{{ $settings['min_cashout_amount'] ?? '' }}" placeholder="First Cashout Amount">
                                                                 </div>
                                                             </div>
                                                         </div>
