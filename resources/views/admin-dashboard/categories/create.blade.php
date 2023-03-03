@@ -20,7 +20,7 @@
                 <div class="form-control-wrap">
 
                     <select class="form-control" data-search="on" id="parent_id" name="parent_id">
-                        <option value selected>--Choose Category---</option>
+                        <option value="0" selected>--Choose Category---</option>
                         @foreach ($categories as $parent)
                             <option value="{{ $parent->id }}" {{ $isEdit && $category->parent_id == $parent->id ? 'selected' : '' }} style="font-weight:bold">
                                 {{ $parent->name }}
