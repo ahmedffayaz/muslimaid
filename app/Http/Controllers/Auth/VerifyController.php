@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Models\UserVerify;
+use Throwable;
 use App\Traits\UserBonus;
-use Illuminate\Support\Str;
-use DB;
+use App\Models\UserVerify;
+use App\Traits\WelcomeEmail;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class VerifyController extends Controller
 {
-    use UserBonus;
+    use UserBonus, WelcomeEmail;
 
     public function __construct()
     {
@@ -19,31 +20,46 @@ class VerifyController extends Controller
 
     public function verifyAccount($token)
     {
-        $verifyUser = UserVerify::where('token', $token)->first();
+        try {
+            DB::beginTransaction();
+            $verifyUser = UserVerify::where('token', $token)->first();
 
-        if (!is_null($verifyUser)) {
-            $user = $verifyUser->user;
+            if (!is_null($verifyUser)) {
+                $user = $verifyUser->user;
 
-            if (!$user->is_email_verified) {
-                $verifyUser->user->is_email_verified = 1;
-                $verifyUser->user->save();
+                if (!$user->is_email_verified) {
+                    $verifyUser->user->is_email_verified = 1;
+                    $verifyUser->user->save();
 
-                $bonusStatus = 3;
+                    $bonusStatus = 3;
 
-                $this->welcomBonus($user, $bonusStatus);
+                    $this->welcomBonus($user, $bonusStatus);
 
-                if (!empty($verifyUser->user->referred_by)) {
-                    $this->referralBonus($verifyUser->user->referred_by, $bonusStatus);
+                    // Send welcome email to user
+                    $data['name'] = $verifyUser->user->first_name;
+                    $data['email'] = $verifyUser->user->email;
+                    $merge_subject = ['subject' => null, 'message' => null];
+                    $data = array_merge($data, $merge_subject);
+                    $this->welcomeEmail($data);
+
+                    if (!empty($verifyUser->user->referred_by)) {
+                        $this->referralBonus($verifyUser->user->referred_by, $bonusStatus);
+                    }
+
+                    session()->flash('success', 'Your e-mail is verified. You can now login.');
+                } else {
+                    session()->flash('success', 'Your e-mail is already verified. You can now login.');
                 }
-
-                session()->flash('success', 'Your e-mail is verified. You can now login.');
             } else {
-                session()->flash('success', 'Your e-mail is already verified. You can now login.');
+                session()->flash('error', 'Sorry your email cannot be identified.');
             }
-        } else {
-            session()->flash('error', 'Sorry your email cannot be identified.');
-        }
 
-        return redirect()->route('login');
+            DB::commit();
+
+            return redirect()->route('login');
+        } catch (Throwable $th) {
+            DB::rollBack();
+            session()->flash('error', 'something went wrong, try again.');
+        }
     }
 }
