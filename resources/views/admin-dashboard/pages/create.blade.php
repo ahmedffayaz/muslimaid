@@ -25,7 +25,7 @@
                                 <div class="card-inner">
                                     <div class="card-head">
                                     </div>
-                                    <form action="{{ route('admin.pages.store') }}" class="pages-form" id="form-validate" method="POST">
+                                    <form action="{{ route('admin.pages.store') }}" class="form-validate pages-form" method="POST">
                                         @csrf
                                         <div class="row g-4">
                                             <div class="col-lg-6">
@@ -96,9 +96,7 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="form-group">
-
                                                         <button class="btn btn-primary" type="submit">Save</button>
-
                                                     </div>
                                                 </div>
                                             </div>
@@ -115,36 +113,6 @@
     </div>
 @endsection
 @push('scripts')
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
-    <script>
-        var quill = new Quill('#editor-container', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic'],
-                    ['link', 'blockquote', 'code-block', 'image'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }]
-                ]
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow'
-        });
-
-        var form = document.querySelector('form');
-        $(".pages-form").submit(function(e) {
-
-            // Populate hidden form on submit
-            var desc = document.querySelector('input[name=intro]');
-            desc.value = quill.root.innerHTML;
-
-
-        });
-    </script>
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             Laraberg.init('content', {
@@ -154,9 +122,6 @@
             })
         })
     </script>
-
-
-
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
     <style>
@@ -210,11 +175,51 @@
         });
     </script>
     <script>
+        $(".pages-form").submit(function(e) {
+            e.preventDefault();
+            var _token = $("input[name=_token]").val();
+            var form_action = $(this).attr('action');
+            var formdata = new FormData(this);
+            // Populate hidden form on submit
+            $.ajax({
+                url: form_action,
+                method: "POST",
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function(data) {
+                    (function(NioApp, $) {
+                        'use strict';
+                        toastr.clear();
+                        NioApp.Toast(data.message, 'success');
+                    })(NioApp, jQuery);
+                    $('.pages-form')[0].reset();
+                },
+                error: function(error) {
+                    if (error.responseJSON.error) {
+                        (function(NioApp, $) {
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(error.responseJSON.error, 'error');
+                        })(NioApp, jQuery);
+                    } else {
+                        (function(NioApp, $) {
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                        })(NioApp, jQuery);
+                    }
+                }
+            });
+
+
+        });
+
         jQuery.validator.addMethod("regex", function(value, element) {
             return this.optional(element) || /^[\w. ]+$/i.test(value);
         }, "Letters, numbers, and underscores only please");
 
-        $('#form-validate').validate({
+        $('.form-validate').validate({
             rules: {
                 title: {
                     required: true,
