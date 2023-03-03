@@ -49,10 +49,17 @@ class PaymentController extends Controller
 
     public function cashout(Request $request)
     {
-        if (array_key_exists('min_cashout_amount', SiteSetting()->toArray()))
-            $min = SiteSetting()['min_cashout_amount'];
-        else $min = 1;
         $user = Auth::user();
+        $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
+        if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0) {
+            $min = SiteSetting()['min_cashout_amount'];
+        } else if (isset(SiteSetting()['next_cashout_amount']) && $previousCashouts > 0) {
+            $min = SiteSetting()['next_cashout_amount'];
+        } else if($previousCashouts == 0) {
+            $min = 1;
+        }else{
+            $min = 2;  
+        }
         $method = $user->paymentInfo()->where('payment_method', $request->payment_method)->first();
 
         if (!$method && $request->payment_method != 'charity') {
@@ -64,21 +71,9 @@ class PaymentController extends Controller
         $cashbacks = $user->balance;
 
         if ($balance < $min) {
-            flash()->error('You have insufficient balance for withdrawl.');
+            flash()->error("You have insufficient balance for withdrawl. You need to have at least $min in your balance for withdrawal.");
             return redirect()->back();
         }
-        $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
-        if ($previousCashouts > 0) {
-            $min = SiteSetting()['next_cashout_amount'];
-        } else {   
-            $min = SiteSetting()['min_cashout_amount'];
-        }
-        
-        if ($balance < $min) {
-            flash()->error("You need to have at least $min in your balance for withdrawal.");
-            return redirect()->back();
-        }
-
         $cashout = Cashout::create([
             'user_id' => $user->id,
             'amount' => $balance,
@@ -134,17 +129,24 @@ class PaymentController extends Controller
 
     public function CharityCashout(Request $request, Cashout $cashout)
     {
-        if (array_key_exists('min_cashout_amount', SiteSetting()->toArray()))
-            $min = SiteSetting()['min_cashout_amount'];
-        else $min = 1;
-
         $user = Auth::user();
+        $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
+        if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0) {
+            $min = SiteSetting()['min_cashout_amount'];
+        } else if (isset(SiteSetting()['next_cashout_amount']) && $previousCashouts > 0) {
+            $min = SiteSetting()['next_cashout_amount'];
+        } else if($previousCashouts == 0) {
+            $min = 1;
+        }else{
+            $min = 2;  
+        }
+
         $cashout_status = $user->cashouts()->where('status', '=', 'pending')->first();
         $balance_old = $user->availableBalance();
         $balance = ($balance_old - $request->amount);
 
         if ($balance_old < $min) {
-            flash()->error('You have insufficient balance for withdrawl.');
+            flash()->error("You have insufficient balance for withdrawl. You need to have at least $min in your balance for withdrawal.");
             return redirect()->back();
         }
 

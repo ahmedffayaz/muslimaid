@@ -65,7 +65,7 @@ class CashoutController extends Controller
                 $cashback->update(['status'=>7]);
             }
         }
-        flash()->success('cashout updated');
+        flash()->success('Cashout Updated Successfully.');
         return redirect()->back();
     }
 }
