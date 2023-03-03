@@ -95,13 +95,6 @@ class RegisterController extends Controller
 
         $this->welcomBonus($user, $bonusStatus);
 
-        // Send welcome email to user
-        $data['name'] = $data['firstname'];
-        unset($data['firstname']);
-        $merge_subject = ['subject' => null, 'message' => null];
-        $data = array_merge($data, $merge_subject);
-        $this->welcomeEmail($data);
-
         //send email to user to verify email address
         dispatch(new \App\Jobs\SendEmailJob($user));
 
