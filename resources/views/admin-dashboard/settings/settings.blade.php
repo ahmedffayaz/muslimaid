@@ -857,6 +857,21 @@
                                                                 </div>
                                                             </div>
                                                         </div>
+                                                    </div>
+                                                    <div class="row g-3 align-center">
+                                                        <div class="col-lg-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label" for="next_cashout_amount">Next Cashout Amount</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <div class="form-group">
+                                                                <div class="form-control-wrap">
+                                                                    <input type="number" class="form-control" min="0.0" step="0.1" id="next_cashout_amount" name="next_cashout_amount"
+                                                                        value="{{ $settings['next_cashout_amount'] ?? '' }}" placeholder="Next Cashout Amount">
+                                                                </div>
+                                                            </div>
+                                                        </div>
 
                                                     </div>
                                                     <div class="row g-3 align-center">
@@ -1038,6 +1053,9 @@
                     minValue: 0 
                 },
                 min_cashout_amount: {
+                    minValue: 0 
+                },
+                next_cashout_amount: {
                     minValue: 0 
                 }
             }

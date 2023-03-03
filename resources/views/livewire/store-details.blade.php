@@ -104,6 +104,16 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="col-lg-12">
+                                                        <div class="card">
+                                                            <input name="terms_conditions" type="hidden">
+                                                            <label class="form-label" for="terms_conditions">Terms & Conditions</label>
+                                                            <!-- Create the editor container -->
+                                                            <div id="teditor-container">
+                                                                {!! $store->terms_conditions !!}
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="col-lg-6">
                                                         <div class="preview-block">
                                                             <span class="preview-title form-label">Override Network <em class="icon ni ni-question" data-toggle="tooltip"
@@ -1094,7 +1104,22 @@
             placeholder: 'Compose an epic...',
             theme: 'snow'
         });
-
+            // Quill Editor
+            var quill = new Quill('#teditor-container', {
+                modules: {
+                    toolbar: [
+                        ['bold', 'italic'],
+                        ['link', 'blockquote', 'code-block', 'image'],
+                        [{
+                            list: 'ordered'
+                        }, {
+                            list: 'bullet'
+                        }]
+                    ]
+                },
+            placeholder: 'Compose an epic...',
+            theme: 'snow'
+        });
         $("#store_form").submit(function(e) {
             // Populate hidden form on submit
             var desc = document.querySelector('input[name=description]');
@@ -1773,6 +1798,12 @@
         $(document).ready(function() {
             $(document).on('submit', '#store_form', function(event) {
                 event.preventDefault();
+                var editor = document.querySelector('#editor-container');
+                var desc = document.querySelector('input[name=description]');
+                desc.value = editor.children[0].innerHTML;
+                var editor = document.querySelector('#teditor-container');
+                var desc = document.querySelector('input[name=terms_conditions]');
+                desc.value = editor.children[0].innerHTML;
                 $.ajax({
                     type: 'PUT',
                     url: $(this).attr('action'),
@@ -1813,6 +1844,12 @@
                 },
                 store_url: {
                     url: true
+                },
+                description: {
+                    maxlength: 255,
+                }, 
+                terms_conditions: {
+                    maxlength: 255
                 }
             }
         });

@@ -55,10 +55,8 @@ class HomeController extends Controller
                 $period = 1;
             }
         }
-
         if ($period == 1) {
             $timePeriod = Carbon::now()->subDay()->toDateTimeString();
-
             Cookie::queue(Cookie::make('period', 1, 120));
         } elseif ($period == 7) {
             $timePeriod = Carbon::now()->subDays(7)->toDateTimeString();

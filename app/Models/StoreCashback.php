@@ -40,9 +40,14 @@ class StoreCashback extends Model
         return $this->belongsTo(Network::class);
     }
 
+    public function currencyData()
+    {
+        return $this->hasOne(Currency::class, 'id', 'currency');
+    }
+
     public function getCashback()
     {
-        $currency = ($this->type == 'fixed') ? $this->currency : '';
+        $currency = ($this->type == 'fixed' && isset($this->currencyData)) ? $this->currencyData->symbol : '';
         $percentageSymbol = ($this->type == 'percentage') ? '%' : '';
 
         if ($this->store->custom_cashback_percentage) {

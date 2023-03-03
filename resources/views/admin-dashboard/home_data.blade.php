@@ -290,7 +290,9 @@
                             </div>
                             <div class="user-info">
                                 <span class="lead-text">{{$com->user->first_name}} {{$com->user->last_name}}</span>
-                                <span class="sub-text">{{$com->store->name}} <span class="badge badge-dim badge-pill badge-outline-primary ml-1">{{$com->store->network->name}}</span></span>
+                                @if(isset($com->store))
+                                  <span class="sub-text">{{$com->store->name}} <span class="badge badge-dim badge-pill badge-outline-primary ml-1">{{$com->store->network->name}}</span></span>
+                               @endif
                             </div>
                             <div class="user-action nk-top-products">
                                 <div class="total">
