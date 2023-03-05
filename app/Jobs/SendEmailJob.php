@@ -8,7 +8,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use App\Mail\emailTemp; 
+use App\Mail\emailTemp;
 use App\Models\UserVerify;
 use App\Models\EmailTemplate;
 use Illuminate\Support\Str;
@@ -40,7 +40,7 @@ class SendEmailJob implements ShouldQueue
         $token = Str::random(64);
 
         UserVerify::create([
-            'user_id' => $user->id, 
+            'user_id' => $user->id,
             'token' => $token
             ]);
         $email = new emailTemp();
@@ -54,7 +54,7 @@ class SendEmailJob implements ShouldQueue
             'email_message'=>$filtered_message,
             'subject'=>$verification_email_temp->subject
         );
-        Mail::send('emails.email_template', $data, function ($message) use ($data) {
+        Mail::send('frontend.emails.email_template', $data, function ($message) use ($data) {
             $message->to($data['email'])
                 ->subject($data['subject']);
         });
