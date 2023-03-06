@@ -40,7 +40,7 @@
                                         <div class="col-lg-12">
                                             <div class="form-group">
                                                 <label class="form-label" for="reviewer">Meta Description</label>
-                                                <textarea  class="form-control " name="meta_description" placeholder="Meta Description" value="{{ $blog->meta_description }}" ></textarea>
+                                                <textarea  class="form-control " name="meta_description" placeholder="Meta Description" value="" > {{ $blog->meta_description }}</textarea>
                                             </div>
                                         </div>
                                         <div class="col-lg-12">

@@ -87,6 +87,9 @@ class StoreController extends Controller
 
         try {
             DB::beginTransaction();
+            $slug = Str::slug($request->input('store_name'));
+            $lastId = Store::orderBy('id', 'desc')->pluck('id')->first();
+            $storeSlug = Store::where('slug', $slug)->first();
             $store = Store::create([
                 'name' => $request->input('store_name'),
                 'network_id' => $request->input('network_id'),
@@ -96,7 +99,7 @@ class StoreController extends Controller
                 'description' => $request->input('description'),
                 'status' => 'active',
                 'override_cashback' => 1,
-                'slug' => Str::slug($request->input('store_name')),
+                'slug' =>   isset($storeSlug) ? $slug . ($lastId + 1) : $slug,
                 'is_api' => 'no',
             ]);
             DB::commit();
@@ -164,6 +167,9 @@ class StoreController extends Controller
 
         try {
             DB::beginTransaction();
+            $slug = Str::slug($request->input('store_name'));
+            $lastId = Store::orderBy('id', 'desc')->pluck('id')->first();
+            $storeSlug = Store::where('slug', $slug)->first();
             $store->update([
                 'name' => $request->input('store_name'),
                 'override_network' => $request->has('store_override_network') ? 1 : 0,
@@ -176,7 +182,7 @@ class StoreController extends Controller
                 'terms_conditions' => $request->input('terms_conditions'),
                 'custom_cashback_percentage' => $request->input('custom_cashback_percentage'),
                 'status' => $request->input('status'),
-                'slug' => Str::slug($request->input('store_name')),
+                'slug' => isset($storeSlug) ? $slug . ($lastId + 1) : $slug,
                 'override_categories' => $request->has('override_categories') ? 1 : 0,
                 'override_cashback' => $request->has('override_cashback') ? 1 : 0,
                 'feature_homepage' => 0,
@@ -410,7 +416,7 @@ class StoreController extends Controller
             'network_id' => 'nullable|integer',
             'tracking_url' => 'nullable|url',
             'deeplink_url' => 'nullable|url',
-             'cashback_icon' => 'nullable'
+            'cashback_icon' => 'nullable'
         ]);
 
         try {
@@ -758,8 +764,7 @@ class StoreController extends Controller
             if (!$request->ajax()) {
                 flash()->success('store address added.');
                 return redirect()->back();
-            }
-            else{
+            } else {
                 return array(
                     'message' => 'Store Address added successfully.',
                     'success' => true
@@ -807,7 +812,7 @@ class StoreController extends Controller
             if (!$request->ajax()) {
                 flash()->success('Store  Address updated successfully.');
                 return redirect()->back();
-            }else{
+            } else {
                 return array(
                     'message' => 'Store Address updated successfully.',
                     'success' => true
