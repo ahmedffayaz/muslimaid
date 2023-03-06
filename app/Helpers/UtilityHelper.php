@@ -8,6 +8,7 @@ use App\Models\Cashout;
 use App\Models\SeoRule;
 use App\Models\Category;
 use App\Models\Currency;
+use App\Models\Page;
 use App\Models\UserVerify;
 use App\Models\SiteSetting;
 use App\Models\StoreReview;
@@ -20,6 +21,22 @@ use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
 
+function getPageTemplates($slug)
+{
+    $page = Page::where('slug', $slug)->first();
+    return $page;
+}
+
+function separatePageKeywords($content)
+{
+    $content_keyword = explode('{{', $content);
+    $keyword_array = array();
+    foreach ($content_keyword as $keyword) {
+        $keyword = str_replace("}}", "_KEYWORD}}", $keyword);
+        $keyword_array =  array_merge($keyword_array, explode('}}', $keyword));
+    }
+    return $keyword_array;
+}
 /**
  * get User Full name
  *
@@ -666,7 +683,7 @@ function isWithdrawalAllowed()
 function getSiteLogo()
 {
     if (isset(SiteSetting()['website_logo']) && SiteSetting()['website_logo'] != 'default.png') {
-        return asset('storage/dashboard/images/logo/'.SiteSetting()['website_logo']);
+        return asset('storage/dashboard/images/logo/' . SiteSetting()['website_logo']);
     } else {
         return asset('admin-dashboard/images/logo.png');
     }
