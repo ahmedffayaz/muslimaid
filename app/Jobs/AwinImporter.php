@@ -218,7 +218,6 @@ class AwinImporter implements ShouldQueue
                     'store_id' => $dbStores[$dbStoreKey]['id'],
                     'user_id' => 1,
                     'network_click_ref' => $transaction['clickRefs']['clickRef'],
-                    'status' => 'pending',
                     'exit_url' => '#',
                     'current_cashback_percentage' => $this->siteSettings['cashback_percentage'],
                 ]);

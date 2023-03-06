@@ -12,7 +12,7 @@
         <div class="nk-tb-col text-center"><span class="sub-text">Store</span></div>
         <div class="nk-tb-col text-right"><span class="sub-text">Exit Url</span></div>
         <div class="nk-tb-col  text-right"><span class="sub-text">Time</span></div>
-        <div class="nk-tb-col  text-right"><span class="sub-text">Status</span></div>
+        <div class="nk-tb-col  text-right"><span class="sub-text">Conversion</span></div>
     </div><!-- .nk-tb-item -->
     @foreach ($clicks as $click)
         <div class="nk-tb-item">
@@ -56,6 +56,7 @@
 
             <div class="nk-tb-col text-center">
                 <span class="tb-status badge badge-primary"><b>{{$click->network->name}}</b></span>
+                @endif
             </div>
             <div class="nk-tb-col text-center">
                 <span><b>{{ $click->store->id }} - {{ $click->store->name ?? '' }}</b></span>
