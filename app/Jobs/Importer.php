@@ -511,7 +511,6 @@ class Importer implements ShouldQueue
                         $new_click = ExitClick::create([
                             'store_id' => $store->id,
                             'user_id' => 1,
-                            'status' => 'pending',
                             'exit_url' => '#',
                             'current_cashback_percentage' => $cashback_percent_setting
                         ]);

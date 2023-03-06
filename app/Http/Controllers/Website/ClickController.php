@@ -76,7 +76,6 @@ class ClickController extends Controller
                 'store_id' => $storeId,
                 'user_id' => auth()->user()->id ?? 1,
                 'network_id' => $networkId,
-                'status' => 'pending',
                 'exit_url' => '#',
                 'current_cashback_percentage' => $cashbackPercent
             ]);
