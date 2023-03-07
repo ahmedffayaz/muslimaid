@@ -91,6 +91,7 @@ Route::namespace('App\Http\Controllers\Admin')
 
         // Categories
         Route::get('categories/export', [App\Http\Controllers\Admin\CategoryController::class, 'exportCsv'])->name('categories.export');
+        Route::get('categories/sorting', [App\Http\Controllers\Admin\CategoryController::class, 'sortCategory'])->name('categories.sort');
         Route::get('categories/picks/{category}', [App\Http\Controllers\Admin\CategoryController::class, 'picks'])->name('categories.picks');
         Route::post('categories/fetch', [App\Http\Controllers\Admin\CategoryController::class, 'fetch'])->name('categories.fetch');
         Route::post('categories/search_categories',  [App\Http\Controllers\Admin\CategoryController::class, 'searcCategories'])->name('categories.search_categories');

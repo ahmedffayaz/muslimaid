@@ -80,14 +80,14 @@ class DashboardController extends Controller
     public function cashback()
     {
         $user = Auth::user();
-        $cashbacks = UserCashback::where('user_id', $user->id)->latest()->get();
+        $cashbacks = UserCashback::where('user_id', $user->id)->latest()->paginate(20);
         return view('frontend.client-dashboard.cashback', compact('user', 'cashbacks'));
     }
 
     public function clicks()
     {
         $user = Auth::user();
-        $clicks = ExitClick::where('user_id', $user->id)->whereHas('store')->latest()->get();
+        $clicks = ExitClick::where('user_id', $user->id)->whereHas('store')->latest()->paginate(20);
         return view('frontend.client-dashboard.clicks', compact('user', 'clicks'));
     }
 

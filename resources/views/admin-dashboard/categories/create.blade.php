@@ -19,7 +19,7 @@
                 <label class="form-label" for="parent_id">Parent Category <span class="text-danger"></span></label>
                 <div class="form-control-wrap">
 
-                    <select class="form-control" data-search="on" id="parent_id" name="parent_id">
+                    <select class="form-control get_parent" data-search="on" id="parent_id" name="parent_id">
                         <option value="0" selected>--Choose Category---</option>
                         @foreach ($categories as $parent)
                             <option value="{{ $parent->id }}" {{ $isEdit && $category->parent_id == $parent->id ? 'selected' : '' }} style="font-weight:bold">
@@ -133,14 +133,16 @@
                 <div id="holder" style="margin-top:15px;max-height:100px;"></div>
             </div>
         </div>
-        <div class="col-lg-6">
-            <div class="form-group">
-                <label class="form-label" for="full-name-1">Sort</label>
-                <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="full-name-1" name="sort" value="{{ $isEdit ? $category->sort : '' }}">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label class="form-label" for="sort">Sort <em
+                        class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
+                        title="Smallest number appear first."></em></label>
+                    <div class="form-control-wrap">
+                        <input type="number" class="form-control" id="sort" step="1" min="0.0" name="sort" value="{{ $isEdit ? $category->sort : $sort }}">
+                    </div>
                 </div>
             </div>
-        </div>
         <div class="col-lg-6">
             <div class="form-group">
                 <label class="form-label" for="default-06">Status <span class="text-danger">*</span></label>

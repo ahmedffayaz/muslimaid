@@ -98,7 +98,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="logo_link">Logo Link <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="logo_link" name="logo_link" value={{ $charity->logo_link }} required>
+                                                        <input type="link" class="form-control" id="logo_link" name="logo_link" value={{ $charity->logo_link }} required>
                                                         @error('logo_link')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -146,7 +146,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="banner_link">Banner Link <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="banner_link" name="banner_link" value="{{ $charity->banner_link }}"
+                                                        <input type="link" class="form-control" id="banner_link" name="banner_link" value="{{ $charity->banner_link }}"
                                                             required>
                                                         @error('banner_link')
                                                             <span class="invalid-feedback d-block" role="alert">

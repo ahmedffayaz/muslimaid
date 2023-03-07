@@ -29,7 +29,7 @@ class CategoryController extends Controller
     public function index()
     {
         $route = 'index';
-        $categories = Category::where('parent_id', '=', 0)->orderBy('name', 'ASC')->get();
+        $categories = Category::where('parent_id', 0)->with(['childs'])->orderBy('sort', 'asc')->get();
         $allCategories = Category::latest()->get();
         return view('admin-dashboard.categories.categories', compact('categories', 'allCategories', 'route'));
     }
@@ -41,8 +41,14 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $categories = Category::where('parent_id', 0)->orderBy('name', 'ASC')->get();
-        return view('admin-dashboard.categories.create', compact('categories'));
+        $categories =  Category::latest()->where('parent_id', 0)->get();
+        $sort = Category::where('parent_id', 0)->orderBy('sort', 'desc')->pluck('sort')->first();
+        if (!isset($sort)) {
+            $sort = 1;
+        } else {
+            $sort += 1;
+        }
+        return view('admin-dashboard.categories.create', compact('categories', 'sort'));
     }
 
     /**
@@ -53,6 +59,7 @@ class CategoryController extends Controller
      */
     public function store(CategoryRequest $request)
     {
+
         try {
             DB::beginTransaction();
 
@@ -132,10 +139,13 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         $categories = Category::latest()->where('parent_id', 0)->get();
-        $stores = Store::latest()->get();
-        $blog = Blog::latest()->get();
-
-        return view('admin-dashboard.categories.create', compact('category', 'categories', 'stores', 'blog'))->render();
+        $sort = Category::orderBy('id', 'desc')->pluck('sort')->first();
+        if (!isset($sort)) {
+            $sort = 1;
+        } else {
+            $sort += 1;
+        }
+        return view('admin-dashboard.categories.create', compact('category', 'categories'))->render();
     }
 
     /**
@@ -309,5 +319,26 @@ class CategoryController extends Controller
         $categories = Category::latest()->where('parent_id', 0)->get();
         $stores = Store::latest()->get();
         return view('admin-dashboard.categories.picks-form', compact('category', 'categories', 'stores'))->render();
+    }
+    public function sortCategory(Request $request)
+    {
+
+        if ($request->category_id) {
+            $sort = Category::where('parent_id', $request->category_id)->orderBy('sort', 'desc')->pluck('sort')->first();
+            if (!isset($sort)) {
+                $sort = 1;
+            } else {
+                $sort += 1;
+            }
+            return $sort;
+        } else {
+            $sort = Category::latest()->where('parent_id', 0)->orderBy('sort', 'desc')->pluck('sort')->first();
+            if (!isset($sort)) {
+                $sort = 1;
+            } else {
+                $sort += 1;
+            }
+            return $sort;
+        }
     }
 }

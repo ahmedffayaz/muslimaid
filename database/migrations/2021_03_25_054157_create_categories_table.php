@@ -19,7 +19,7 @@ class CreateCategoriesTable extends Migration
             $table->string('name');
             $table->longText('slug');
             $table->longText('description')->nullable();
-            $table->string('sort')->nullable();
+            $table->string('sort')->default(0);
             $table->string('logo_type')->nullable();
             $table->string('logo_upload')->nullable();
             $table->string('logo_link')->nullable();
