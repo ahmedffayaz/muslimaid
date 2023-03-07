@@ -2,17 +2,16 @@
 
 namespace App\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use App\Mail\emailTemp;
 use App\Models\UserVerify;
-use App\Models\EmailTemplate;
 use Illuminate\Support\Str;
+use App\Models\EmailTemplate;
+use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
 
 class SendEmailJob implements ShouldQueue
 {
@@ -47,8 +46,7 @@ class SendEmailJob implements ShouldQueue
 
        $appUrl = env('APP_URL');
         $link = $appUrl.'/account/verify/'.$token;
-        $button = '<a href="'.$link.'" target="_blank"><input type="button" class="btn btn-success" value="Verify"></a>';
-        $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{BUTTON}}'],[SiteSetting()['website_title'], url('/'), $button],$verification_email_temp->message );
+        $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{LINK}}'],[SiteSetting()['website_title'], url('/'), $link],$verification_email_temp->message );
         $data = array(
             'email'=> $user->email,
             'email_message'=>$filtered_message,
