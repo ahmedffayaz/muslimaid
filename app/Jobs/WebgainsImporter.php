@@ -342,7 +342,6 @@ class WebgainsImporter implements ShouldQueue
                             'store_id' => $store->id,
                             'user_id' => 1,
                             'network_click_ref' => $cashback->clickRef,
-                            'status' => 'pending',
                             'exit_url' => '#',
                             'current_cashback_percentage' => $cashback_percent_setting
                         ]);

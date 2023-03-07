@@ -45,7 +45,6 @@ class ExitClickSeeder extends Seeder
                     'store_id' => $exitClick['store_id'],
                     'user_id' => !in_array($exitClick['user_id'], $userIdData) ? 1 : $exitClick['user_id'],
                     'network_id' => arrayValueExists($exitClick, 'network_id') ? $exitClick['network_id'] : null,
-                    'conversion' => isset($exitClick['conversion']) && $exitClick['conversion'] == 'No' ? 0 : 1,
                     'current_cashback_percentage' => arrayValueExists($exitClick, 'commission_percentage') ? $exitClick['commission_percentage'] : null,
                     'created_at' =>  arrayValueExists($exitClick, 'created_at') ? dbDate($exitClick['created_at']) : $now,
                     'updated_at' =>  arrayValueExists($exitClick, 'updated_at') ? dbDate($exitClick['updated_at']) : $now,

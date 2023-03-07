@@ -35,7 +35,6 @@ class ClicksSeeder extends Seeder
                 'store_id' => $faker->numberBetween(1, $storesCount),
                 'user_id' => $faker->numberBetween(1, $usersCount),
                 'network_id' => $faker->numberBetween(1, $networkCount),
-                'status' => 'pending',
                 'exit_url' => '#',
                 'created_at' => $now,
                 'updated_at' => $now,
