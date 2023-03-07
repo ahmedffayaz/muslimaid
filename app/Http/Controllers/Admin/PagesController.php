@@ -55,7 +55,7 @@ class PagesController extends Controller
             $pageSlug = Page::where('slug', $slug)->first();
             $page = new Page;
             $page->title = $request->title;
-            $page->slug = isset($pageSlug) ? $slug . ($lastId + 1) : $slug;
+            $page->slug = isset($pageSlug) ? $slug . '-' . ($lastId + 1) : $slug;
             $page->excerpt = $request->excerpt;
             $page->lb_content = $request->content;
             $page->status = $request->status;
