@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Throwable;
 use App\Models\Page;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 
 class PagesController extends Controller
 {
@@ -40,33 +42,48 @@ class PagesController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'title' => 'required|regex:/^[\w. ]+$/',
-
-        ], $messages = [
+        $request->validate([
+            'title' => 'required'
+        ], [
             'title.required' => 'The Title field is required.',
         ]);
-        $page = new Page;
-        $page->title = $request->title;
-        $page->slug = Str::slug($request->title);
-        $page->excerpt = $request->excerpt;
-        $page->lb_content = $request->content;
-        $page->status = $request->status;
-        $page->banner_image = parse_url($request->filepath)['path'];
-        $page->description = $request->short_description;
-        $page->meta_description = $request->meta_description;
-        $page->meta_keyword = $request->meta_keyword;
-        $page->default = 0;
-        $page->save();
 
-        if (!$request->ajax()) {
-            flash()->success('New Page created successfully');
-            return redirect()->route('admin.pages.index');
-        } else {
+        try {
+            DB::beginTransaction();
+            $page = new Page;
+            $page->title = $request->title;
+            $page->slug = Str::slug($request->title);
+            $page->excerpt = $request->excerpt;
+            $page->lb_content = $request->content;
+            $page->status = $request->status;
+            $page->banner_image = parse_url($request->filepath)['path'];
+            $page->description = $request->short_description;
+            $page->meta_description = $request->meta_description;
+            $page->meta_keyword = $request->meta_keyword;
+            $page->default = 0;
+            $page->save();
+            DB::commit();
+
+            if (!$request->ajax()) {
+                flash()->success('New Page created successfully');
+                return redirect()->route('admin.pages.edit', $page->id);
+            } else {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'Page created successfully',
+                    'url' => route('admin.pages.edit', $page->id)
+                ], JsonResponse::HTTP_OK);
+            }
+        } catch (Throwable $th) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Something went wrong, try again.');
+                return redirect()->back();
+            }
             return response()->json([
-                'status' => JsonResponse::HTTP_OK,
-                'message' => 'Page created successfully'
-            ], JsonResponse::HTTP_OK);
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Something went wrong, try again.'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -90,26 +107,46 @@ class PagesController extends Controller
      */
     public function update(Request $request, Page $page)
     {
-        $page->title = $request->title;
-        $page->excerpt = $request->excerpt;
-        $page->lb_content = $request->content;
-        $page->status = $request->status;
-        if (isset($request->filepath)) {
-            $page->banner_image = parse_url($request->filepath)['path'];
-        }
-        $page->description = $request->short_description;
-        $page->meta_description = $request->meta_description;
-        $page->meta_keyword = $request->meta_keyword;
-        $page->save();
+        $request->validate([
+            'title' => 'required'
+        ], [
+            'title.required' => 'The Title field is required.',
+        ]);
 
-        if (!$request->ajax()) {
-            flash()->success('Page updated');
-            return redirect()->route('admin.pages.index');
-        } else {
+        try {
+            DB::beginTransaction();
+            $page->title = $request->title;
+            $page->excerpt = $request->excerpt;
+            $page->lb_content = $request->content;
+            $page->status = $request->status;
+            if (isset($request->filepath)) {
+                $page->banner_image = parse_url($request->filepath)['path'];
+            }
+            $page->description = $request->short_description;
+            $page->meta_description = $request->meta_description;
+            $page->meta_keyword = $request->meta_keyword;
+            $page->save();
+
+            DB::commit();
+            if (!$request->ajax()) {
+                flash()->success('Page updated');
+                return redirect()->route('admin.pages.index');
+            } else {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'Page updated'
+                ], JsonResponse::HTTP_OK);
+            }
+        } catch (Throwable $th) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Something went wrong, try again.');
+                return redirect()->back();
+            }
             return response()->json([
-                'status' => JsonResponse::HTTP_OK,
-                'message' => 'Page updated'
-            ], JsonResponse::HTTP_OK);
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Something went wrong, try again.'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
