@@ -129,8 +129,8 @@ class EmailTemplatesSeeder extends Seeder
                     'detail' => 'Sent to referred user',
                     'key'    => 'referral_link',
                     'subject' => 'Referral link',
-                    'message' => "<p>Hello,</p><p>Join me at Cashback where you can earn money when you shop online.</p><p>Click my referral link below to sign up so you can browse, shop and earn while supporting Black-owned businesses with Cashback!</p>{{BUTTON}}<p>Regards</p><p>{{SITE_TITLE}} Team</p>",
-                    'keywords' => '{{SITE_TITLE}}, {{SITE_URL}}, {{REFERRAL_LINK}} , {{BUTTON}}'
+                    'message' => "<p>Hello,</p><p>Join me at Cashback where you can earn money when you shop online.</p><p>Click my referral link below to sign up so you can browse, shop and earn while supporting Black-owned businesses with Cashback!</p><a href='{{LINK}}' target='_blank'><input type='button' class='btn btn-success' value='Register'></a><p>Regards</p><p>{{SITE_TITLE}} Team</p>",
+                    'keywords' => '{{SITE_TITLE}}, {{SITE_URL}}, {{REFERRAL_LINK}} , {{LINK}}'
 
                 ),
                 array(
