@@ -56,7 +56,7 @@ class UserSeeder extends Seeder
                 'address' =>  isset($row['address']) ? $row['address'] : null,
                 'phone' =>  isset($row['phone']) ? $row['phone'] : null,
                 'avatar' => arrayValueExists($row, 'avatar') ? $row['avatar'] :  'default.png',
-                'status' => arrayValueExists($row, 'status') ? $row['status'] :  1,
+                'status' => arrayValueExists($row, 'status') ? $row['status'] :  'active',
                 'referred_by' => isset($row['referred_by']) ? $row['referred_by'] : null,
                 'referred_at' => isset($row['referred_at']) ? $row['referred_at'] : null,
                 'remember_token' => isset($row['remember_token']) ? $row['remember_token'] : null,
