@@ -65,29 +65,25 @@
         <div class="col-lg-6 logo_upload">
             <div class="form-group">
                 <label class="form-label">Logo</label>
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <a  data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white lfm">
-                            <i class="fa fa-picture-o"></i> Choose
-                        </a>
-                    </span>
-                    <input id="thumbnail" class="form-control" type="text" name="logo">
+                <label class="form-label" for="logo">Logo</label>
+                <div class="form-control-wrap">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name='logo' id="logo">
+                        <label class="custom-file-label" for="logo">Choose file</label>
+                    </div>
                 </div>
-                <div id="holder" style="margin-top:15px;max-height:100px;"></div>
             </div>
         </div>
         <div class="col-lg-6 banner_upload">
             <div class="form-group">
                 <label class="form-label">Banner</label>
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <a  data-input="thumbnail2" data-preview="holder2" class="btn btn-primary text-white lfm">
-                            <i class="fa fa-picture-o"></i> Choose
-                        </a>
-                    </span>
-                    <input id="thumbnail2" class="form-control" type="text" name="banner">
+                <label class="form-label" for="banner">Banner <span class="text-danger">*</span></label>
+                <div class="form-control-wrap">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="banner" id="banner">
+                        <label class="custom-file-label" for="banner">Choose file</label>
+                    </div>
                 </div>
-                <div id="holder2" style="margin-top:15px;max-height:100px;"></div>
             </div>
         </div>
         <div class="col-12">

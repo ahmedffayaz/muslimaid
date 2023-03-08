@@ -61,7 +61,17 @@
                 <div id="editor-container">{!! $isEdit ? $category->description : '' !!}</div>
             </div>
         </div>
-        <div class="col-lg-6">
+        @if ($isEdit)
+            <div class="col-lg-12 ">
+                <label class="form-label">Logo/Icon</label><br>
+                @if ($category->logo_type == 'upload')
+                    <img src="{{ asset($category->logo_upload) }}" style="max-height: 60px;max-width:60px" alt="">
+                @elseif($category->logo_type == 'link')
+                    <img src="{{ $category->logo_link }}" style="max-height: 60px;max-width:60px" alt="">
+                @endif
+            </div>
+        @endif
+         <div class="col-lg-6">
             <div class="form-group">
                 <label class="form-label" for="logo_type">Logo Type </label>
                 <div class="form-control-wrap ">
@@ -86,18 +96,25 @@
         </div>
         <div class="col-lg-6 logo_upload">
             <div class="form-group">
-                <label class="form-label" for="logo_upload">Logo Upload</label>
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <a data-input="thumbnail2" data-preview="holder2" class="btn btn-primary text-white lfm">
-                            <i class="fa fa-picture-o"></i> Choose
-                        </a>
-                    </span>
-                    <input id="thumbnail2" class="form-control" type="text" name="logo_upload">
+                <label class="form-label" for="logo_upload">Logo Upload </label>
+                <div class="form-control-wrap">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name='logo_upload' id="logo_upload">
+                        <label class="custom-file-label" for="logo_upload">Choose file</label>
+                    </div>
                 </div>
-                <div id="holder2" style="margin-top:15px;max-height:100px;"></div>
             </div>
         </div>
+        @if ($isEdit)
+            <div class="col-lg-12">
+                <label class="form-label">Banner</label><br>
+                @if ($category->banner_type == 'upload')
+                    <img src="{{ asset($category->banner_upload) }}" style="max-height: 150px" alt="">
+                @elseif($category->banner_type == 'link')
+                    <img src="{{ $category->banner_link }}" style="max-height: 150px" alt="">
+                @endif
+            </div>
+        @endif
         <div class="col-lg-6 ">
             <div class="form-group">
                 <label class="form-label" for="banner_type">Banner Type </label>
@@ -122,15 +139,12 @@
         <div class="col-lg-6 banner_upload">
             <div class="form-group">
                 <label class="form-label" for="banner_upload">Banner Upload</label>
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <a  data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white lfm">
-                            <i class="fa fa-picture-o"></i> Choose
-                        </a>
-                    </span>
-                    <input id="thumbnail" class="form-control" type="text" name="banner_upload">
+                <div class="form-control-wrap">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload">
+                        <label class="custom-file-label" for="banner_upload">Choose file</label>
+                    </div>
                 </div>
-                <div id="holder" style="margin-top:15px;max-height:100px;"></div>
             </div>
         </div>
         <div class="col-lg-6">

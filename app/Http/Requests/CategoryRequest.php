@@ -26,12 +26,12 @@ class CategoryRequest extends FormRequest
         return [
             'name' => 'required',
             'logo_type' => 'required',
-            'logo_upload' => 'nullable',
+            'logo_upload' => 'nullable|image:jpeg,png,jpg,gif',
             'logo_link' => 'nullable|url',
             'banner_type' => 'required',
-            'banner_upload' => 'nullable',
+            'banner_upload' => 'nullable|image:jpeg,png,jpg,gif',
             'banner_link' => 'nullable|url',
-            'status' => 'required'
+            'status' => 'required',
         ];
     }
 

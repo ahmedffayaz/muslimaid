@@ -1,33 +1,4 @@
 @extends('layouts.admin-dashboard.app')
-
-@push('styles')
-    <style>
-        .btn-choose{
-            padding:7px 10px;
-            background-color: #854fff;
-            border-color: #854fff;
-            position:relative;
-            color:#fff;
-            border-radius:8px;
-            text-align:center;
-            float:left;
-            cursor:pointer
-        }
-        .hide_file {
-            position: absolute;
-            z-index: 1000;
-            opacity: 0;
-            cursor: pointer;
-            right: 0;
-            top: 0;
-            height: 100%;
-            font-size: 24px;
-            width: 100%;
-
-        }
-    </style>
-@endpush
-
 @section('content')
 <div class="nk-content ">
     <div class="container-fluid">
@@ -135,27 +106,30 @@
                                     </div>
 
                                     <div class="col-lg-6">
-
                                         <div class="form-group">
-                                            <label class="form-label">User Image</label>
-                                            <div class="input-group">
-                                                <span class="input-group-btn">
-                                                    <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white lfm">
-                                                        <i class="fa fa-picture-o"></i> Choose
-                                                    </a>
-                                                </span>
-                                                <input id="thumbnail" class="form-control" type="text" name="user_image">
+                                          <label class="form-label" for="user_image">User Image</label>
+                                          <div class="form-control-wrap">
+                                            <div class="custom-file">
+                                              <input type="file" class="custom-file-input" name="user_image" id="user_image" onchange="readURL(this);">
+                                              <label class="custom-file-label" for="user_image">Choose file</label>
                                             </div>
-                                            <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+                                          </div>
                                         </div>
-                                    </div>
+                                        <div class="col-lg-3"> 
+                                            <div class="form-group">
+                                              <div class="preview-wrapper">
+                                                <img id="logo-preview" src="" alt="store logo" class="d-none" style="max-width:80px;max-height:120px"/>
+                                              </div>
+                                            </div>
+                                          </div>
+                                      </div>
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <button onclock="remobe_bug()" class="btn btn-primary add-blog" type="submit">Save</button>
 
                                             </div>
                                         </div>
-                                    </div>
+
                                 </form>
                             </div>
                         </div>
@@ -170,9 +144,9 @@
 @push('scripts')
 <script>
 
-$(document).ready(function () {
-        $('.select-user').select2();
-    });
+    $(document).ready(function () {
+            $('.select-user').select2();
+        });
 
 
        $(document).ready(function(){
@@ -191,23 +165,6 @@ $(document).ready(function () {
         });
     });
 
-
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                var preview = $(input).attr('preview');
-                $('#logo').removeClass('d-none');
-                //$('#logo-input').addClass('d-none');
-
-                $(preview)
-                    .attr('src', e.target.result)
-                    .css('max-width',80).css('max-height',120);
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-        }
 </script>
 <script>
     jQuery.validator.addMethod("regex", function(value, element) {

@@ -112,3 +112,18 @@ lfm('lfm2', 'file', {
     };
 
   
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+          reader.onload = function (e) {
+            var preview = $('#logo-preview');
+            preview.removeClass('d-none');
+      
+            preview.attr('src', e.target.result)
+                   .css('max-width', 80)
+                   .css('max-height', 120);
+          };
+      
+          reader.readAsDataURL(input.files[0]);
+        }
+      }

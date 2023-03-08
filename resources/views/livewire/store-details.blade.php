@@ -635,24 +635,28 @@
                                         <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
                                             title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">{{ $store->network->deeplink_identifier }}</span>
                                         <input type="text" class="form-control" id="deeplink_url"
-                                            value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}" name="deeplink_url" placeholder="https://example.com/item/abc-id-1345"
-                                            style="position: relative; left:30px; width: 95%">
+                                            value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}" name="deeplink_url"
+                                            placeholder="https://example.com/item/abc-id-1345" style="position: relative; left:30px; width: 95%">
                                     </div>
                                 </div>
                             </div>
                         @endif
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label class="form-label" for="image">Icon Upload</label>
-                                <div class="input-group">
-                                    <span class="input-group-btn">
-                                        <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white">
-                                            <i class="fa fa-picture-o"></i> Choose
-                                        </a>
-                                    </span>
-                                    <input id="thumbnail" class="form-control" type="text" name="image">
+                                <label class="form-label" for="cashback_icon">Icon Upload</label>
+                                <div class="form-control-wrap">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="cashback_icon" id="cashback_icon" onchange="readURL(this);">
+                                        <label class="custom-file-label" for="cashback_icon">Choose file</label>
+                                    </div>
                                 </div>
-                                <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <div class="preview-wrapper">
+                                        <img id="logo-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-lg-12">
@@ -1107,19 +1111,19 @@
             placeholder: 'Compose an epic...',
             theme: 'snow'
         });
-            // Quill Editor
-            var quill = new Quill('#teditor-container', {
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic'],
-                        ['link', 'blockquote', 'code-block', 'image'],
-                        [{
-                            list: 'ordered'
-                        }, {
-                            list: 'bullet'
-                        }]
-                    ]
-                },
+        // Quill Editor
+        var quill = new Quill('#teditor-container', {
+            modules: {
+                toolbar: [
+                    ['bold', 'italic'],
+                    ['link', 'blockquote', 'code-block', 'image'],
+                    [{
+                        list: 'ordered'
+                    }, {
+                        list: 'bullet'
+                    }]
+                ]
+            },
             placeholder: 'Compose an epic...',
             theme: 'snow'
         });
@@ -1162,7 +1166,7 @@
                             initializeSelect2($(this));
                         });
                         $('#voucher').find(".promotion_end_date").datepicker();
-                        console.log(  $('#voucher').find(".promotion_end_date").datepicker());
+                        console.log($('#voucher').find(".promotion_end_date").datepicker());
                         $('#voucher').find(".promotion_start_date").datepicker();
                         checkVoucherType();
                         attachFormValidator($(document).find('#model_edit'));
@@ -1471,9 +1475,6 @@
                         }
                         checkCashbackType();
                         calcCashback();
-                        $('#lfm').filemanager('image', {
-                            prefix: route_prefix
-                        });
                         NioApp.BS.tooltip('[data-toggle="tooltip"]');
 
                     }
@@ -1861,7 +1862,7 @@
                 },
                 description: {
                     maxlength: 255,
-                }, 
+                },
                 terms_conditions: {
                     maxlength: 255
                 }
@@ -2139,5 +2140,4 @@
             $("#store_form").submit();
         });
     </script>
-    
 @endpush

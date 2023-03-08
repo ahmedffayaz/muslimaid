@@ -43,7 +43,7 @@ class TestimonialController extends Controller
 
         $validated = $request->validate([
             'title' => 'required|regex:/^[\w. ]+$/',
-            'user_image' => 'required',
+            'user_image' => 'required|file|mimes:jpg,png|max:' . 1 * 1024, // 1024 KB = 1 MB',
             'name' =>'required',
             'company_name'=>'required',
             'order_no'=>'required|integer',
@@ -58,13 +58,17 @@ class TestimonialController extends Controller
             'meta_title.required' =>'The meta title field is required.',
             'Position.required' =>'The user name field is required.',
         ]);
+        if($request->has('user_image')){
 
+            $imageName = 'testimonial'.time().'.'.$request->user_image->extension();
+            $request->user_image->storeAs('public/users/images/avatar',$imageName);
+        }
 
             $testimonial = new Testimonial;
             $testimonial->user_id = $request->user;
             $testimonial->title = $request->title;
             $testimonial->description = $request->description;
-            $testimonial->image = parse_url($request->user_image)['path'];
+            $testimonial->image = $imageName;
             $testimonial->name = $request->name;
             $testimonial->position = $request->position;
             $testimonial->company = $request->company_name;
@@ -111,10 +115,15 @@ class TestimonialController extends Controller
             'order_no.integer' =>'The order number field must be integer.',
             'position.required' =>'The user name field is required.',
         ]);
+        $imageName = $testimonial['image'];
+        if($request->has('user_image')){
 
+            $imageName = 'testimonial'.time().'.'.$request->user_image->extension();
+            $request->user_image->storeAs('public/users/images/avatar',$imageName);
+        }
         $testimonial->title = $request->title;
         $testimonial->description = $request->description;
-        $testimonial->image = parse_url($request->user_image)['path'];
+        $testimonial->image = $imageName;
         $testimonial->name = $request->name;
         $testimonial->position = $request->position;
         $testimonial->company = $request->company_name;

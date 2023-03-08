@@ -40,7 +40,7 @@
                                         @if ($slide->banner == 'default1.png' || $slide->banner == 'default2.png' || $slide->banner == 'default3.png')
                                             <img src="{{ asset('frontend/images/slides/' . $slide->banner) }}" class="card-img-top" alt="" style="height:200px">
                                         @else
-                                            <img src="{{$slide->banner }}" class="card-img-top" alt="" style="height:200px">
+                                            <img src="{{ asset('storage/slider/slides/images/' . $slide->banner) }}" class="card-img-top" alt="" style="height:200px">
                                         @endif
                                         <div class="card-inner">
                                             <div class="project">
@@ -49,10 +49,10 @@
                                                         <div class="project-info">
                                                             <h6 class=" mb-2">{{ $slide->name }}</h6>
                                                             @if ($slide->logo == 'default1.png' || $slide->logo == 'default2.png' || $slide->logo == 'default3.png')
-                                                                <img src="{{ asset('frontend/images/slides/' . $slide->logo) }}" class="float-right" alt=""
+                                                                <img src="{{ asset('frontend/images/slides/logo/' . $slide->logo) }}" class="float-right" alt=""
                                                                     style="max-height: 50px">
                                                             @else
-                                                                <img src="{{ $slide->logo }}" class="float-right" alt=""
+                                                                <img src="{{ asset('storage/slider/slides/images/' . $slide->logo) }}" class="float-right" alt=""
                                                                     style="max-height: 50px">
                                                             @endif
                                                         </div>
@@ -134,10 +134,6 @@
                         linkType();
                         storeType();
                         formValidation();
-                        $('.lfm').filemanager('image', {
-                            prefix: route_prefix
-                        });
-                        
                     }
                 });
             });
@@ -162,9 +158,6 @@
                         linkType();
                         storeType();
                         formValidation();
-                        $('.lfm').filemanager('image', {
-                            prefix: route_prefix
-                        });
                     }
                 });
             });
@@ -213,7 +206,7 @@
                     $('#slider_type').val();
                     $('.store').show();
                     $('.sliderlink').hide();
-                     $('#store_id').attr('required', 'required');
+                    $('#store_id').attr('required', 'required');
                 }
             });
         }
