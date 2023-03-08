@@ -64,7 +64,13 @@
             </div>
 
             <div class="nk-tb-col tb-col-lg text-center">
-                {!! $user->status ? '<span class="tb-status badge badge-success">active</span>' : '<span class="tb-status badge badge-danger">in-active</span>' !!}
+                @if ($user->status == 'pending')
+                    <span class="tb-status badge badge-warning">Pending</span>
+                @elseif ($user->status == 'active')
+                    <span class="tb-status badge badge-success">Active</span>
+                @elseif ($user->status == 'in_active')
+                    <span class="tb-status badge badge-danger">In-active</span>
+                @endif
             </div>
             <div class="nk-tb-col nk-tb-col-tools">
                 <ul class="nk-tb-actions gx-1">

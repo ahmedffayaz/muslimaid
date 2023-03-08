@@ -147,8 +147,9 @@
                                                             <div class="form-control-wrap ">
                                                                 <div class="form-control-select">
                                                                     <select class="form-control" id="status" name="status" required>
-                                                                        <option @if ($user->status) selected @endif value="1">Active</option>
-                                                                        <option @if (!$user->status) selected @endif value="0">In-active</option>
+                                                                        <option @if ($user->status == 'pending') selected @endif value="pending">Pending</option>
+                                                                        <option @if ($user->status == 'active') selected @endif value="active">Active</option>
+                                                                        <option @if ($user->status == 'in_active') selected @endif value="in_active">In-active</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -479,6 +480,7 @@
                             toastr.clear();
                             NioApp.Toast(data.message, 'error');
                         })(NioApp, jQuery);
+                        submitBtn.removeAttr('disabled').find('.spinner-border').remove();
                     }
                 },
                 error: function(data) {

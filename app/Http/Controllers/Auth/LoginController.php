@@ -67,12 +67,17 @@ class LoginController extends Controller
 
         if (is_null($emailCheck)) {
             return redirect()->back()->with(['error' => 'Email address not found']);
-        } else if ($emailCheck->provider != 'email') {
+        }
+
+        if ($emailCheck->provider != 'email') {
             Session::flash('social-login');
             return redirect()->route('login');
-        } else if ($emailCheck->status != 1) {
+        }
+
+        if ($emailCheck->status == 'in_active') {
             return redirect()->back()->with(['error' => 'Your account is inactive']);
         }
+
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle

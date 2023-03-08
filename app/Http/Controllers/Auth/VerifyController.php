@@ -29,6 +29,7 @@ class VerifyController extends Controller
 
                 if (!$user->is_email_verified) {
                     $verifyUser->user->is_email_verified = 1;
+                    $verifyUser->user->status = 'active';
                     $verifyUser->user->save();
 
                     $bonusStatus = 3;

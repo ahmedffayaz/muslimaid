@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
                 'first_name' => $row['first_name'],
                 'last_name' => $row['last_name'],
                 'email' => $row['email'],
-                'email_verified_at' => isset($row['email_verified_at']) && $row['email_verified_at'] == 'Yes' ? $row['updated_at'] : null,
+                'email_verified_at' => isset($row['email_verified_at']) && $row['email_verified_at'] == 'Yes' ? $now : null,
                 'password' => $password,
                 'registration_type' => 'sign up',
                 'date_of_birth' => arrayValueExists($row, 'date_of_birth') ? date("Y-m-d", strtotime($row['date_of_birth'])):  null,
