@@ -44,7 +44,6 @@
                                                             <select class="form-control form-select" name="status" required>
                                                                 <option selected value="1">Active</option>
                                                                 <option value="0">In-active</option>
-
                                                             </select>
                                                         </div>
                                                     </div>
@@ -54,7 +53,6 @@
                                                 <fieldset class="uk-fieldset">
                                                     <div class="laraberg-sidebar">
                                                         <textarea name="excerpt" placeholder="Excerpt"></textarea>
-
                                                     </div>
                                                     <div class="uk-margin">
                                                         <textarea name="content" id="content" hidden></textarea>
@@ -105,7 +103,6 @@
                                 </div>
                             </div>
                         </div><!-- .nk-block -->
-
                     </div><!-- .components-preview -->
                 </div>
             </div>
@@ -147,7 +144,6 @@
                     contents: '<i class="note-icon-picture"></i> ',
                     tooltip: 'Insert image with filemanager',
                     click: function() {
-
                         lfm({
                             type: 'image',
                             prefix: '/filemanager'
@@ -156,7 +152,6 @@
                                 context.invoke('insertImage', lfmItem.url);
                             });
                         });
-
                     }
                 });
                 return button.render();
@@ -175,56 +170,45 @@
         });
     </script>
     <script>
-        $(".pages-form").submit(function(e) {
-            e.preventDefault();
-            var _token = $("input[name=_token]").val();
-            var form_action = $(this).attr('action');
-            var formdata = new FormData(this);
-            // Populate hidden form on submit
-            $.ajax({
-                url: form_action,
-                method: "POST",
-                data: formdata,
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    (function(NioApp, $) {
-                        'use strict';
-                        toastr.clear();
-                        NioApp.Toast(data.message, 'success');
-                    })(NioApp, jQuery);
-                    $('.pages-form')[0].reset();
-                },
-                error: function(error) {
-                    if (error.responseJSON.error) {
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(error.responseJSON.error, 'error');
-                        })(NioApp, jQuery);
-                    } else {
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
-                        })(NioApp, jQuery);
-                    }
-                }
-            });
-
-
-        });
-
-        jQuery.validator.addMethod("regex", function(value, element) {
-            return this.optional(element) || /^[\w. ]+$/i.test(value);
-        }, "Letters, numbers, and underscores only please");
-
         $('.form-validate').validate({
             rules: {
                 title: {
-                    required: true,
-                    regex: true
+                    required: true
                 }
+            },
+            submitHandler: function(form) {
+                if ($(form).valid()) {
+                    var _token = $("input[name=_token]").val();
+                    var form_action = $(this).attr('action');
+                    var formdata = new FormData(this);
+                    // Populate hidden form on submit
+                    $.ajax({
+                        url: form_action,
+                        method: "POST",
+                        data: formdata,
+                        processData: false,
+                        contentType: false,
+                        success: function(data) {
+                            window.location.href = data.url;
+                        },
+                        error: function(error) {
+                            if (error.responseJSON.error) {
+                                (function(NioApp, $) {
+                                    'use strict';
+                                    toastr.clear();
+                                    NioApp.Toast(error.responseJSON.error, 'error');
+                                })(NioApp, jQuery);
+                            } else {
+                                (function(NioApp, $) {
+                                    'use strict';
+                                    toastr.clear();
+                                    NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                                })(NioApp, jQuery);
+                            }
+                        }
+                    });
+                }
+                return false;
             }
         });
     </script>
