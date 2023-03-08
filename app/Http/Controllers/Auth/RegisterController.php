@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Auth;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Traits\UserBonus;
+use App\Jobs\SendEmailJob;
+use App\Traits\WelcomeEmail;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use App\Traits\WelcomeEmail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Session;
@@ -85,7 +86,7 @@ class RegisterController extends Controller
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
             'registration_type' => 'sign up',
-            'referred_by' => empty($data['referral_code']) ? '' : base64_decode($data['referral_code']),
+            'referred_by' => empty($data['referral_code']) ? '' : decrypt($data['referral_code']),
             'referred_at' => empty($data['referral_code']) ? '' : $today,
         ]);
 
@@ -96,7 +97,7 @@ class RegisterController extends Controller
         $this->welcomBonus($user, $bonusStatus);
 
         //send email to user to verify email address
-        dispatch(new \App\Jobs\SendEmailJob($user));
+        dispatch(new SendEmailJob($user));
 
         return redirect()->route('login');
     }
