@@ -42,7 +42,7 @@ class CategorySeeder extends Seeder
                 'name' => $category['name'],
                 'slug' =>  $slug,
                 'description' => arrayValueExists($category, 'description') ? $category['description'] : null,
-                'sort' => arrayValueExists($category, 'sort') ? $category['sort'] : null,
+                'sort' => arrayValueExists($category, 'sort') ? $category['sort'] : 0,
                 'logo_type' => arrayValueExists($category, 'logo_type') ? $category['logo_type'] : null,
                 'logo_upload' => arrayValueExists($category, 'logo_upload') ? $category['logo_upload'] : null,
                 'logo_link' => arrayValueExists($category, 'logo_link') ? $category['logo_link'] : null,
