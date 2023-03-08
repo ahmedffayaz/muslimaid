@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use Throwable;
 use App\Models\Charity;
-use Illuminate\Support\Facades\File;
 use App\Models\CharityType;
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
 class CharityController extends Controller
@@ -80,45 +81,52 @@ class CharityController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-        $charity = Charity::create([
-            'title' => $request->input('title'),
-            'charity_types_id' => $request->input('charity_types_id'),
-            'description' => $request->input('description'),
-            'logo_type' => $request->input('logo_type'),
-            'logo_link' => $request->input('logo_link'),
-            'banner_type' => $request->input('banner_type'),
-            'logo_link' => $request->input('logo_link'),
-            'country' => $request->input('country'),
-            'status' => $request->input('status'),
-        ]);
-        if ($request->input('logo_type') == 'upload') {
-            if ($request->has('logo_upload')) {
-                $imageName = parse_url($request->logo_upload)['path'];
-                if (File::exists(public_path('storage/charities/images' . $imageName))) {
-                    File::delete(public_path('storage/charities/images' . $imageName));
+        try {
+            DB::beginTransaction();
+            $charity = Charity::create([
+                'title' => $request->input('title'),
+                'charity_types_id' => $request->input('charity_types_id'),
+                'description' => $request->input('description'),
+                'logo_type' => $request->input('logo_type'),
+                'logo_link' => $request->input('logo_link'),
+                'banner_type' => $request->input('banner_type'),
+                'logo_link' => $request->input('logo_link'),
+                'country' => $request->input('country'),
+                'status' => $request->input('status'),
+            ]);
+            if ($request->input('logo_type') == 'upload') {
+                if ($request->has('logo_upload')) {
+                    $imageName = parse_url($request->logo_upload)['path'];
+                    if (File::exists(public_path('storage/charities/images' . $imageName))) {
+                        File::delete(public_path('storage/charities/images' . $imageName));
+                    }
+
+                    $charity->logo_upload = $imageName;
+                    $charity->update();
+                } else {
+                    $charity->logo_upload = 'category_default_logo.png';
+                    $charity->update();
                 }
-
-                $charity->logo_upload = $imageName;
-                $charity->update();
-            } else {
-                $charity->logo_upload = 'category_default_logo.png';
-                $charity->update();
             }
-        }
 
-        if ($request->input('banner_type') == 'upload') {
-            if ($request->has('banner_upload')) {
-                $imageName = parse_url($request->banner_upload)['path'];
-                $charity->banner_upload = $imageName;
-                $charity->update();
-            } else {
-                $charity->banner_upload = 'category_default_banner.png';
-                $charity->update();
+            if ($request->input('banner_type') == 'upload') {
+                if ($request->has('banner_upload')) {
+                    $imageName = parse_url($request->banner_upload)['path'];
+                    $charity->banner_upload = $imageName;
+                    $charity->update();
+                } else {
+                    $charity->banner_upload = 'category_default_banner.png';
+                    $charity->update();
+                }
             }
+            DB::commit();
+            flash()->success('New Charity added');
+            return redirect()->back();
+        } catch (Throwable $th) {
+            DB::rollBack();
+            flash()->error('Something went wrong, try again');
+            return redirect()->back();
         }
-
-        flash()->success('New Charity added');
-        return redirect()->back();
     }
 
     //  charity index function
@@ -131,22 +139,30 @@ class CharityController extends Controller
     //  charity store function
     public function charityTypeStore(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
             'title' => 'required',
             'status' => 'required',
-        ], $messages = [
+        ], [
             'title.required' => 'The Title field is required.',
             'status.required' => 'The Status is required.',
         ]);
-        if (!$request->ajax()) {
-            $charity = new CharityType();
-            $charity->create([
-                'title' =>  $request->title,
-                'status' => $request->status,
-            ]);
+        try {
+            DB::beginTransaction();
+            if (!$request->ajax()) {
+                $charity = new CharityType();
+                $charity->create([
+                    'title' =>  $request->title,
+                    'status' => $request->status,
+                ]);
+            }
+            DB::commit();
+            flash()->success('New Charity Type added');
+            return redirect()->back();
+        } catch (Throwable $th) {
+            DB::rollBack();
+            flash()->error('Something went wrong, try again');
+            return redirect()->back();
         }
-        flash()->success('New Charity Type added');
-        return redirect()->back();
     }
 
     //  charity edit function
@@ -158,21 +174,36 @@ class CharityController extends Controller
 
     public function charityTypeUpdate($id, Request $request)
     {
-        CharityType::where('id', $id)->update([
-            'title' => $request->input('title'),
-            'status' => $request->input('status'),
-        ]);
-        flash()->success('Charities Types updated');
-
-        return redirect()->route('admin.charities.charity_type_view');
+        try {
+            DB::beginTransaction();
+            CharityType::where('id', $id)->update([
+                'title' => $request->input('title'),
+                'status' => $request->input('status'),
+            ]);
+            DB::commit();
+            flash()->success('Charities Types updated');
+            return redirect()->route('admin.charities.charity_type_view');
+        } catch (Throwable $th) {
+            DB::rollBack();
+            flash()->error('Something went wrong');
+            return redirect()->back();
+        }
     }
 
     //  charity destroy function
     public function charityTypeDestroy($id)
     {
-        CharityType::where('id', $id)->delete();
-        flash()->success('Charity Type deleted');
-        return redirect()->back();
+        try {
+            DB::beginTransaction();
+            CharityType::where('id', $id)->delete();
+            DB::commit();
+            flash()->success('Charity Type deleted');
+            return redirect()->back();
+        } catch (Throwable $th) {
+            DB::rollBack();
+            flash()->error('Something went wrong, try again');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -211,37 +242,45 @@ class CharityController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-        $charity->update([
-            'title' => $request->input('title'),
-            'country' => $request->input('country'),
-            'charity_types_id' => $request->input('charity_types_id'),
-            'logo_type' => $request->input('logo_type'),
-            'logo_link' => $request->input('logo_link'),
-            'banner_type' => $request->input('banner_type'),
-            'banner_link' => $request->input('banner_link'),
-            'description' => $request->input('description'),
-            'status' => $request->input('status'),
-        ]);
-        if ($request->input('logo_type') == 'upload') {
-            if ($request->has('logo_upload')) {
-                $imageName = parse_url($request->logo_upload)['path'];
-                $charity->logo_upload = $imageName;
-                $charity->update();
+        try {
+            DB::beginTransaction();
+            $charity->update([
+                'title' => $request->input('title'),
+                'country' => $request->input('country'),
+                'charity_types_id' => $request->input('charity_types_id'),
+                'logo_type' => $request->input('logo_type'),
+                'logo_link' => $request->input('logo_link'),
+                'banner_type' => $request->input('banner_type'),
+                'banner_link' => $request->input('banner_link'),
+                'description' => $request->input('description'),
+                'status' => $request->input('status'),
+            ]);
+            if ($request->input('logo_type') == 'upload') {
+                if ($request->has('logo_upload')) {
+                    $imageName = parse_url($request->logo_upload)['path'];
+                    $charity->logo_upload = $imageName;
+                    $charity->update();
+                }
             }
-        }
-        if ($request->input('banner_type') == 'upload') {
-            if ($request->has('banner_upload')) {
-                $imageName = parse_url($request->banner_upload)['path'];
-                $charity->banner_upload = $imageName;
-                $charity->update();
+            if ($request->input('banner_type') == 'upload') {
+                if ($request->has('banner_upload')) {
+                    $imageName = parse_url($request->banner_upload)['path'];
+                    $charity->banner_upload = $imageName;
+                    $charity->update();
+                }
             }
-        }
+            DB::commit();
 
-        if (!$request->ajax()) {
-            flash()->success('Charities updated');
-            return redirect()->route('admin.charities.index');
-        } else {
-            return 1;
+            if (!$request->ajax()) {
+                flash()->success('Charities updated');
+                return redirect()->route('admin.charities.index');
+            } else {
+                return 1;
+            }
+        } catch (Throwable $th) {
+            DB::rollBack();
+            flash()->error('Something went wrong, try again');
+            return redirect()->back();
         }
     }
 
@@ -253,8 +292,16 @@ class CharityController extends Controller
      */
     public function destroy(Charity $Charity)
     {
-        $Charity->delete();
-        flash()->success('Charity deleted');
-        return redirect()->route('admin.charities.index');
+        try {
+            DB::beginTransaction();
+            $Charity->delete();
+            DB::commit();
+            flash()->success('Charity deleted');
+            return redirect()->route('admin.charities.index');
+        } catch (Throwable $th) {
+            DB::rollBack();
+            flash()->error('Something went wrong, try again');
+            return redirect()->back();
+        }
     }
 }
