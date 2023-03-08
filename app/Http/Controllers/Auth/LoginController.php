@@ -66,7 +66,7 @@ class LoginController extends Controller
 
 
         if (is_null($emailCheck)) {
-            return redirect()->back()->with(['error' => 'Email address not found']);
+            return redirect()->back()->with(['message' => 'Email address not found']);
         }
 
         if ($emailCheck->provider != 'email') {
@@ -75,7 +75,7 @@ class LoginController extends Controller
         }
 
         if ($emailCheck->status == 'in_active') {
-            return redirect()->back()->with(['error' => 'Your account is inactive']);
+            return redirect()->back()->with(['message' => 'Your account is inactive']);
         }
 
         $this->validateLogin($request);

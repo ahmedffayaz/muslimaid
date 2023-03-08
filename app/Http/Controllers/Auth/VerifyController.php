@@ -52,7 +52,7 @@ class VerifyController extends Controller
                     session()->flash('success', 'Your e-mail is already verified. You can now login.');
                 }
             } else {
-                session()->flash('error', 'Sorry your email cannot be identified.');
+                session()->flash('message', 'Sorry your email cannot be identified.');
             }
 
             DB::commit();
@@ -60,7 +60,7 @@ class VerifyController extends Controller
             return redirect()->route('login');
         } catch (Throwable $th) {
             DB::rollBack();
-            session()->flash('error', 'something went wrong, try again.');
+            session()->flash('message', 'something went wrong, try again.');
         }
     }
 }
