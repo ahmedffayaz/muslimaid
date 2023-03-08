@@ -206,7 +206,7 @@
                         $('.lfm').filemanager('image', {
                             prefix: route_prefix
                         });
-                            
+
                     }
                 });
             });
@@ -357,7 +357,7 @@
                             $('#modal').modal('hide');
                             btn.removeAttr('disabled', 'disabled').button('refresh');
                             btn.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
-                            $('#tree1').load(location.href + ' #tree1');                   
+                            $('#tree1').load(location.href + ' #tree1');
                             (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
@@ -596,5 +596,26 @@
                 }
             });
         }
+        $(document).on('change', '.get_parent', function(event) {
+            id = $('.get_parent').val();
+            url = '{{ route('admin.categories.sort') }}';
+            $.ajax({
+                url: url,
+                type: 'get',
+                data: {
+                    '_token': "{{ csrf_token() }}",
+                    'category_id': id
+                },
+                success: function(data) {
+                    var sortValue = parseFloat(data);
+                    if (!isNaN(sortValue)) {
+                        $('#sort').val(sortValue);
+                    }
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        });
     </script>
 @endpush

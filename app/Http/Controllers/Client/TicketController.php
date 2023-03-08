@@ -22,7 +22,8 @@ class TicketController extends Controller
      */
     public function index()
     {
-        return view('frontend.client-dashboard.tickets.index');
+        $tickets = Ticket::paginate(20); 
+        return view('frontend.client-dashboard.tickets.index', compact('tickets'));
     }
 
     /**
