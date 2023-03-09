@@ -33,7 +33,6 @@ function separatePageKeywords($content)
     $keyword_array = array();
     foreach ($content_keyword as $keyword) {
         $keyword = str_replace("}}", "_KEYWORD}}", $keyword);
-        $keyword = str_replace("<div class='gutenberg__content wp-embed-responsive'>", "", $keyword);
         $keyword_array =  array_merge($keyword_array, explode('}}', $keyword));
     }
     return $keyword_array;
