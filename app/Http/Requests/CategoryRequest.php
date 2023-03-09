@@ -32,6 +32,7 @@ class CategoryRequest extends FormRequest
             'banner_upload' => 'nullable|image:jpeg,png,jpg,gif',
             'banner_link' => 'nullable|url',
             'status' => 'required',
+            'sort' => 'required|integer'
         ];
     }
 
@@ -48,6 +49,8 @@ class CategoryRequest extends FormRequest
             'logo_upload.max' => 'Logo max size should be 1MB',
             'banner_upload.max' => 'Banner max size should be 1MB',
             'status' => 'Status field is required',
+            'sort' => 'Sort field is required',
+            'sort.integer'=> 'Sort field is must be integer',
         ];
     }
 }

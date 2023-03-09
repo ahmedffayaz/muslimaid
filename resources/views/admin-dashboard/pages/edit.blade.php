@@ -131,53 +131,49 @@
     </style>
 
     <script>
-        jQuery.validator.addMethod("regex", function(value, element) {
-            return this.optional(element) || /^[\w. ]+$/i.test(value);
-        }, "Letters, numbers, and underscores only please");
-
-        $(".pages-form").submit(function(e) {
-            e.preventDefault();
-            var _token = $("input[name=_token]").val();
-            var form_action = $(this).attr('action');
-            var formdata = new FormData(this);
-            // Populate hidden form on submit
-            $.ajax({
-                url: form_action,
-                method: "POST",
-                data: formdata,
-                processData: false,
-                contentType: false,
-                success: function(data) {
-                    (function(NioApp, $) {
-                        'use strict';
-                        toastr.clear();
-                        NioApp.Toast(data.message, 'success');
-                    })(NioApp, jQuery);
-                },
-                error: function(error) {
-                    if (error.responseJSON.error) {
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(error.responseJSON.error, 'error');
-                        })(NioApp, jQuery);
-                    } else {
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
-                        })(NioApp, jQuery);
-                    }
-                }
-            });
-        });
-
         $('.form-validate').validate({
             rules: {
                 title: {
-                    required: true,
-                    regex: true
+                    required: true
                 }
+            },
+            submitHandler: function(form) {
+                if ($(form).valid()) {
+                    var _token = $("input[name=_token]").val();
+                    var form_action = $(this).attr('action');
+                    var formdata = new FormData(this);
+                    // Populate hidden form on submit
+                    $.ajax({
+                        url: form_action,
+                        method: "POST",
+                        data: formdata,
+                        processData: false,
+                        contentType: false,
+                        success: function(data) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(data.message, 'success');
+                            })(NioApp, jQuery);
+                        },
+                        error: function(error) {
+                            if (error.responseJSON.error) {
+                                (function(NioApp, $) {
+                                    'use strict';
+                                    toastr.clear();
+                                    NioApp.Toast(error.responseJSON.error, 'error');
+                                })(NioApp, jQuery);
+                            } else {
+                                (function(NioApp, $) {
+                                    'use strict';
+                                    toastr.clear();
+                                    NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                                })(NioApp, jQuery);
+                            }
+                        }
+                    });
+                }
+                return false;
             }
         });
     </script>

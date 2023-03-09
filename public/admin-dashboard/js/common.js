@@ -44,37 +44,37 @@ $('#lfm').filemanager('image', {
 var lfm = function (id, type, options) {
     let button = document.getElementById(id);
     if (button) {
-    button.addEventListener('click', function () {
-        var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
-        var target_input = document.getElementById(button.getAttribute('data-input'));
-        var target_preview = document.getElementById(button.getAttribute('data-preview'));
+        button.addEventListener('click', function () {
+            var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
+            var target_input = document.getElementById(button.getAttribute('data-input'));
+            var target_preview = document.getElementById(button.getAttribute('data-preview'));
 
-        window.open(route_prefix + '?type=' + options.type || 'file', 'FileManager', 'width=900,height=600');
-        window.SetUrl = function (items) {
-            var file_path = items.map(function (item) {
-                return item.url;
-            }).join(',');
+            window.open(route_prefix + '?type=' + options.type || 'file', 'FileManager', 'width=900,height=600');
+            window.SetUrl = function (items) {
+                var file_path = items.map(function (item) {
+                    return item.url;
+                }).join(',');
 
-            // set the value of the desired input to image url
-            target_input.value = file_path;
-            target_input.dispatchEvent(new Event('change'));
+                // set the value of the desired input to image url
+                target_input.value = file_path;
+                target_input.dispatchEvent(new Event('change'));
 
-            // clear previous preview
-            target_preview.innerHtml = '';
+                // clear previous preview
+                target_preview.innerHtml = '';
 
-            // set or change the preview image src
-            items.forEach(function (item) {
-                let img = document.createElement('img')
-                img.setAttribute('style', 'height: 5rem')
-                img.setAttribute('src', item.thumb_url)
-                target_preview.appendChild(img);
-            });
+                // set or change the preview image src
+                items.forEach(function (item) {
+                    let img = document.createElement('img')
+                    img.setAttribute('style', 'height: 5rem')
+                    img.setAttribute('src', item.thumb_url)
+                    target_preview.appendChild(img);
+                });
 
-            // trigger change event
-            target_preview.dispatchEvent(new Event('change'));
-        };
-    });
-  }
+                // trigger change event
+                target_preview.dispatchEvent(new Event('change'));
+            };
+        });
+    }
 };
 
 lfm('lfm2', 'file', {
@@ -82,48 +82,70 @@ lfm('lfm2', 'file', {
 });
 
 
-    // Define function to open filemanager window
-    var lfm = function (options, cb) {
-        var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
-        window.open(route_prefix + '?type=' + options.type || 'file', 'FileManager', 'width=900,height=600');
-        window.SetUrl = cb;
-    };
+// Define function to open filemanager window
+var lfm = function (options, cb) {
+    var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
+    window.open(route_prefix + '?type=' + options.type || 'file', 'FileManager', 'width=900,height=600');
+    window.SetUrl = cb;
+};
 
-    // Define LFM summernote button
-    var LFMButton = function (context) {
-        var ui = $.summernote.ui;
-        var button = ui.button({
-            contents: '<i class="note-icon-picture"></i> ',
-            tooltip: 'Insert image with filemanager',
-            click: function () {
+// Define LFM summernote button
+var LFMButton = function (context) {
+    var ui = $.summernote.ui;
+    var button = ui.button({
+        contents: '<i class="note-icon-picture"></i> ',
+        tooltip: 'Insert image with filemanager',
+        click: function () {
 
-                lfm({
-                    type: 'image',
-                    prefix: '/filemanager'
-                }, function (lfmItems, path) {
-                    lfmItems.forEach(function (lfmItem) {
-                        context.invoke('insertImage', lfmItem.url);
-                    });
+            lfm({
+                type: 'image',
+                prefix: '/filemanager'
+            }, function (lfmItems, path) {
+                lfmItems.forEach(function (lfmItem) {
+                    context.invoke('insertImage', lfmItem.url);
                 });
+            });
 
-            }
-        });
-        return button.render();
-    };
+        }
+    });
+    return button.render();
+};
 
-  
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-          var reader = new FileReader();
-          reader.onload = function (e) {
+
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
             var preview = $('#logo-preview');
             preview.removeClass('d-none');
-      
+
             preview.attr('src', e.target.result)
-                   .css('max-width', 80)
-                   .css('max-height', 120);
-          };
-      
-          reader.readAsDataURL(input.files[0]);
+                .css('max-width', 80)
+                .css('max-height', 120);
+        };
+
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+function readLinkURL(input) {
+    if (input.value) {
+        if (input.id === "logo_link") {
+            $('#logo_link-preview').attr('src', input.value).removeClass('d-none');
+        } else if (input.id === "banner_link") {
+            $('#banner_link-preview').attr('src', input.value).removeClass('d-none');
         }
-      }
+    }
+}
+function readBannerURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            if (input.id === "logo_upload") {
+                $('#logo-preview').attr('src', e.target.result).removeClass('d-none');
+            } else if (input.id === "banner_upload") {
+                $('#banner-preview').attr('src', e.target.result).removeClass('d-none');
+            }
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}

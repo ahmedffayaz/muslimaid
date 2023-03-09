@@ -469,6 +469,15 @@ class StoreController extends Controller
         }
     }
 
+    public function cashbackForm(Request $request)
+    {
+        $storeId = decrypt($request->input('storeId'));
+        $store = Store::findOrFail($storeId);
+        $networks = Network::all();
+        $currencies = Currency::all();
+        return view('admin-dashboard.stores.cashback-edit', compact('store', 'currencies', 'networks'))->render();
+    }
+
     public function createCashback(Request $request)
     {
         $request->validate([

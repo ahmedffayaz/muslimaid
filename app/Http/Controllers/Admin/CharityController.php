@@ -69,14 +69,14 @@ class CharityController extends Controller
             'title' => 'required|max:255',
             'charity_types_id' => 'required',
             'country' => 'required',
-            'logo_type' => 'required|max:255',
+            'logo_type' => 'required',
             'banner_type' => 'required',
             'logo_upload' =>  $request->input('logo_type') === 'upload' ? 'required|image:jpeg,png,jpg,gif' : '',
             'banner_upload' =>  $request->input('banner_type') === 'upload' ? 'required|image:jpeg,png,jpg,gif' : '',
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('admin.charities.create')
+            return redirect()->back()
                 ->withErrors($validator)
                 ->withInput();
         }
@@ -119,7 +119,7 @@ class CharityController extends Controller
         }
 
         flash()->success('New Charity added');
-        return redirect()->route('admin.charities.index');
+        return redirect()->back();
     }
 
     //  charity index function
@@ -201,7 +201,7 @@ class CharityController extends Controller
             'title' => 'required|max:255',
             'charity_types_id' => 'required',
             'country' => 'required',
-            'logo_type' => 'required|max:255',
+            'logo_type' => 'required',
             'banner_type' => 'required',
             'logo_upload' =>  'nullable|image:jpeg,png,jpg,gif',
             'banner_upload' =>  'nullable|image:jpeg,png,jpg,gif'

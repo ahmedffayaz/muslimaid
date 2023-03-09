@@ -62,26 +62,46 @@
 
             </div>
         </div>
-        <div class="col-lg-6 logo_upload">
+        <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label">Logo</label>
-                <label class="form-label" for="logo">Logo</label>
+                <label class="form-label" for="logo">Logo <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" name='logo' id="logo">
+                        <input type="file" class="custom-file-input" name="logo" id="logo" onchange="sliderReadURL(this);">
                         <label class="custom-file-label" for="logo">Choose file</label>
                     </div>
                 </div>
             </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <div class="preview-wrapper">
+                        @if ($isEdit && $slide->logo)
+                            <img id="logo-preview" src="{{ asset('storage/slider/slides/images/' . $slide->logo) }}" style="max-height: 60px; max-width: 60px;" alt="">
+                        @else
+                            <img id="logo-preview" src="" alt="logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
+                        @endif
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-lg-6 banner_upload">
+        <div class="col-lg-6">
             <div class="form-group">
-                <label class="form-label">Banner</label>
                 <label class="form-label" for="banner">Banner <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" name="banner" id="banner">
+                        <input type="file" class="custom-file-input" name="banner" id="banner" onchange="sliderReadURL(this);">
                         <label class="custom-file-label" for="banner">Choose file</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="form-group">
+                    <div class="preview-wrapper">
+                        @if ($isEdit && $slide->banner)
+                            <img id="banner-preview" src="{{ asset('storage/slider/slides/images/' . $slide->banner)  }}" style="max-height: 60px; max-width: 60px;" alt="">
+                        @else
+                            <img id="banner-preview" src="" alt="logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
+                        @endif
                     </div>
                 </div>
             </div>

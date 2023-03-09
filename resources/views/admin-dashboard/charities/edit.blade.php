@@ -98,12 +98,25 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="logo_link">Logo Link <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="logo_link" name="logo_link" value={{ $charity->logo_link }} required>
+                                                        <input type="link" class="form-control" id="logo_link" name="logo_link" value="{{ $charity->logo_link }}" required onchange="readLinkURL(this);" >
                                                         @error('logo_link')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
                                                             </span>
                                                         @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 ">
+                                                    <div class="form-group">
+                                                     
+                                                        <div class="preview-wrapper">
+                                                            @if($charity->logo_link )
+                                                            <img id="logo_link-preview" src="{{ asset($charity->logo_link) }}" alt="store logo" style="max-height: 60px; max-width: 60px;" />   
+                                                            @else
+                                                            <img id="logo_link-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" /> 
+                                                            @endif
+                                                        </div>
+                                                       
                                                     </div>
                                                 </div>
                                             </div>
@@ -113,7 +126,7 @@
                                                     <div class="form-control-wrap">
                                                         <div class="custom-file">
                                                             <input type="file" class="custom-file-input" name="logo_upload" id="logo_upload" value="{{ old('logo_upload') }}"
-                                                                onchange="charityReadURL(this);" required>
+                                                                onchange="readBannerURL(this);" required>
                                                             <label class="custom-file-label" for="logo_upload">Choose file</label>
                                                             @error('logo_upload')
                                                                 <span class="invalid-feedback d-block" role="alert">
@@ -161,13 +174,25 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="banner_link">Banner Link <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="banner_link" name="banner_link" value="{{ $charity->banner_link }}"
-                                                            required>
+                                                        <input type="link" class="form-control" id="banner_link" name="banner_link" value="{{ $charity->banner_link }}"
+                                                            required onchange="readLinkURL(this);">
                                                         @error('banner_link')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
                                                             </span>
                                                         @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 ">
+                                                    <div class="form-group">
+                                                        <div class="preview-wrapper">
+                                                            @if($charity->banner_link )
+                                                                <img id="banner_link-preview" src="{{ asset($charity->banner_link) }}" alt="logo" style="max-height: 60px; max-width: 60px;" />   
+                                                            @else
+                                                                <img id="banner_link-preview" src="" alt="logo" class="d-none" style="max-height: 60px; max-width: 60px;" /> 
+                                                            @endif
+                                                        </div>
+                                                       
                                                     </div>
                                                 </div>
                                             </div>
@@ -177,7 +202,7 @@
                                                     <div class="form-control-wrap">
                                                         <div class="custom-file">
                                                             <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload"
-                                                                value="{{ old('banner_upload') }}" onchange="charityReadURL(this);" required>
+                                                                value="{{ old('banner_upload') }}" onchange="readBannerURL(this);" required>
                                                             <label class="custom-file-label" for="banner_upload">Choose file</label>
                                                             @error('banner_upload')
                                                                 <span class="invalid-feedback d-block" role="alert">
@@ -354,20 +379,5 @@
                 },
             }
         });
-    </script>
-    <script>
-        function charityReadURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-                reader.onload = function(e) {
-                    if (input.id === "logo_upload") {
-                        $('#logo-preview').attr('src', e.target.result).removeClass('d-none');
-                    } else if (input.id === "banner_upload") {
-                        $('#banner-preview').attr('src', e.target.result).removeClass('d-none');
-                    }
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
     </script>
 @endpush

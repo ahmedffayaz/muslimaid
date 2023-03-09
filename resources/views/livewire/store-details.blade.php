@@ -550,13 +550,13 @@
 <!-- .modal -->
 
 <!-- @@ Edit Cashback Modal @e -->
-<div class="modal fade" tabindex="-1" role="dialog" id="edit-cashback-modal">
+<div class="modal fade cashback-modal" tabindex="-1" role="dialog" id="edit-cashback-modal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content">
             <div class="modal-header align-center">
                 <div class="nk-file-title">
                     <div class="nk-file-name">
-                        <div class="nk-file-name-text"><span class="title">Edit Cashback</span></div>
+                        <div class="nk-file-name-text"><span class="title"></span></div>
                     </div>
                 </div>
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
@@ -1370,7 +1370,6 @@
             });
         }
 
-
         // Update store address
         $(document).ready(function() {
             $(document).on('submit', '.address_form', function(event) {
@@ -1464,7 +1463,7 @@
                         _token: _token
                     },
                     success: function(data) {
-                        $('#edit-cashback-modal').modal('show');
+                        $('.cashback-modal').modal('show');
                         $('#edit-cashback').html(data);
                         if ($('#store_override_network').is(":checked")) {
                             $('.sote-override-network').hide();
@@ -1496,7 +1495,7 @@
                     processData: false,
                     contentType: false,
                     success: function(data) {
-                        $('#edit-cashback-modal').modal('hide');
+                        $('.cashback-modal').modal('hide');
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
@@ -1523,40 +1522,29 @@
                 });
             });
         });
-        // Add Cashback
-        $(document).ready(function() {
-            $(document).on('submit', '.cashback_form_add', function(event) {
+
+        // Add Cashback Form
+        $(document).ready(function () {
+            $(document).on('click', '.add-cashbacks', function (event) {
                 event.preventDefault();
+                let storeId = "{{ encrypt($store->id) }}";
                 $.ajax({
-                    url: $(this).attr('action'),
-                    type: "POST",
-                    data: new FormData($(this)[0]),
-                    processData: false,
-                    contentType: false,
-                    success: function(data) {
-                        $('#cashback-modal').modal('hide');
-                        $('.cashback_form_add').trigger('reset');
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(data.message, 'success');
-                        })(NioApp, jQuery);
-                        fetchCashbacks();
-                    },
-                    error: function(error) {
-                        if (error.responseJSON.error) {
-                            (function(NioApp, $) {
-                                'use strict';
-                                toastr.clear();
-                                NioApp.Toast(error.responseJSON.error, 'error');
-                            })(NioApp, jQuery);
+                    url: "{{ route('admin.stores.cashbacks.create') }}",
+                    type: "GET",
+                    data: { storeId: storeId },
+                    success: function (data) {
+                        $('.cashback-modal').modal('show');
+                        $('#edit-cashback').html(data);
+                        if ($('#store_override_network').is(":checked")) {
+                            $('.sote-override-network').hide();
+                            $('.network_url').css('cssText', 'display: block !important');
                         } else {
-                            (function(NioApp, $) {
-                                'use strict';
-                                toastr.clear();
-                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
-                            })(NioApp, jQuery);
+                            $('.network_url').css('cssText', 'display: none !important');
+                            $('.sote-override-network').show();
                         }
+                        checkCashbackType();
+                        calcCashback();
+                        NioApp.BS.tooltip('[data-toggle="tooltip"]');
                     }
                 });
             });
@@ -2140,4 +2128,5 @@
             $("#store_form").submit();
         });
     </script>
+    
 @endpush

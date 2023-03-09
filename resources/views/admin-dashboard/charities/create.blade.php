@@ -95,13 +95,20 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="logo_link">Logo Link <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" id="logo_link" class="form-control" id="logo_link" name="logo_link" value="{{ old('logo_link') }}"
-                                                            required>
+                                                        <input type="link" id="logo_link" class="form-control" id="logo_link" name="logo_link" value="{{ old('logo_link') }}"
+                                                            required onchange="readLinkURL(this);" >
                                                         @error('logo_link')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
                                                             </span>
                                                         @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 ">
+                                                    <div class="form-group">
+                                                        <div class="preview-wrapper">
+                                                            <img id="logo_link-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />   
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -111,7 +118,7 @@
                                                     <div class="form-control-wrap">
                                                         <div class="custom-file">
                                                             <input type="file" class="custom-file-input" name="logo_upload" id="logo_upload"
-                                                                value="{{ old('logo_upload') }}" onchange="charityReadURL(this);" required>
+                                                                value="{{ old('logo_upload') }}" onchange="readBannerURL(this);" required>
                                                             <label class="custom-file-label" for="logo_upload">Choose file</label>
                                                             @error('logo_upload')
                                                                 <span class="invalid-feedback d-block" role="alert">
@@ -152,13 +159,20 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="banner_link">Banner Link <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="banner_link" name="banner_link" value="{{ old('banner_link') }}"
-                                                            required>
+                                                        <input type="link" class="form-control" id="banner_link" name="banner_link" value="{{ old('banner_link') }}" 
+                                                            required onchange="readLinkURL(this);" >
                                                         @error('banner_link')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
                                                             </span>
                                                         @enderror
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 ">
+                                                    <div class="form-group">
+                                                        <div class="preview-wrapper">
+                                                            <img id="banner_link-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />   
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -181,7 +195,7 @@
                                                 <div class="col-lg-3">
                                                     <div class="form-group">
                                                         <div class="preview-wrapper">
-                                                            <img id="banner-preview" src="" alt="store logo" class="d-none "
+                                                            <img id="banner-preview" src="" alt="store logo" class="d-none"
                                                                 style="max-width:80px;max-height:120px" />
                                                         </div>
                                                     </div>

@@ -59,6 +59,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::get('stores/cashbacks/{cashback}/edit', [App\Http\Controllers\Admin\StoreController::class, 'editCashback'])->name('stores.cashbacks.edit');
         Route::post('stores/categories/update', [App\Http\Controllers\Admin\StoreController::class, 'updateCategories'])->name('stores.categories.update');
         Route::put('stores/cashbacks/{cashback}/update', [App\Http\Controllers\Admin\StoreController::class, 'updateCashback'])->name('stores.cashbacks.update');
+        Route::get('stores/cashbacks/add', [App\Http\Controllers\Admin\StoreController::class, 'cashbackForm'])->name('stores.cashbacks.create');
         Route::post('stores/cashbacks/save', [App\Http\Controllers\Admin\StoreController::class, 'createCashback'])->name('stores.cashbacks.store');
         Route::post('stores/images/upload/{store}', [App\Http\Controllers\Admin\StoreController::class, 'uploadImage'])->name('stores.images.upload');
         Route::get('stores/images/delete/{storeimage}', [App\Http\Controllers\Admin\StoreController::class, 'deleteImage'])->name('stores.images.delete');
@@ -91,6 +92,7 @@ Route::namespace('App\Http\Controllers\Admin')
 
         // Categories
         Route::get('categories/export', [App\Http\Controllers\Admin\CategoryController::class, 'exportCsv'])->name('categories.export');
+        Route::get('categories/sorting', [App\Http\Controllers\Admin\CategoryController::class, 'sortCategory'])->name('categories.sort');
         Route::get('categories/picks/{category}', [App\Http\Controllers\Admin\CategoryController::class, 'picks'])->name('categories.picks');
         Route::post('categories/fetch', [App\Http\Controllers\Admin\CategoryController::class, 'fetch'])->name('categories.fetch');
         Route::post('categories/search_categories',  [App\Http\Controllers\Admin\CategoryController::class, 'searcCategories'])->name('categories.search_categories');

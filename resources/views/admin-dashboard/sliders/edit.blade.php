@@ -261,4 +261,19 @@
             });
         }
     </script>
+    <script>
+         function sliderReadURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    if (input.id === "logo") {
+                        $('#logo-preview').attr('src', e.target.result).removeClass('d-none');
+                    } else if (input.id === "banner") {
+                        $('#banner-preview').attr('src', e.target.result).removeClass('d-none');
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
 @endpush
