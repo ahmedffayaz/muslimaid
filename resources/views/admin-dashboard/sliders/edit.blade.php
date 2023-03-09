@@ -40,7 +40,7 @@
                                         @if ($slide->banner == 'default1.png' || $slide->banner == 'default2.png' || $slide->banner == 'default3.png')
                                             <img src="{{ asset('frontend/images/slides/' . $slide->banner) }}" class="card-img-top" alt="" style="height:200px">
                                         @else
-                                            <img src="{{ asset('storage/slider/slides/images/' . $slide->banner) }}" class="card-img-top" alt="" style="height:200px">
+                                            <img src="{{ asset($slide->banner) }}" class="card-img-top" alt="" style="height:200px">
                                         @endif
                                         <div class="card-inner">
                                             <div class="project">
@@ -52,7 +52,7 @@
                                                                 <img src="{{ asset('frontend/images/slides/logo/' . $slide->logo) }}" class="float-right" alt=""
                                                                     style="max-height: 50px">
                                                             @else
-                                                                <img src="{{ asset('storage/slider/slides/images/' . $slide->logo) }}" class="float-right" alt=""
+                                                                <img src="{{ asset($slide->logo) }}" class="float-right" alt=""
                                                                     style="max-height: 50px">
                                                             @endif
                                                         </div>

@@ -101,7 +101,7 @@
                 <label class="form-label" for="logo_upload">Icon Upload</label>
                 <div class="form-control-wrap">
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" name="logo_upload" id="logo_upload" onchange="readBannerURL(this);">
+                        <input type="file" class="custom-file-input" name="logo_upload" id="logo_upload" value="{{$isEdit ? $category->logo_upload : ''   }}"onchange="readBannerURL(this);">
                         <label class="custom-file-label" for="logo_upload">Choose file</label>
                     </div>
                 </div>
@@ -155,7 +155,7 @@
                     <label class="form-label" for="banner_upload">Banner Upload</label>
                     <div class="form-control-wrap">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload" onchange="readBannerURL(this);" required>
+                            <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload" value="{{$isEdit ? $category->banner_upload : '' }}"onchange="readBannerURL(this);">
                             <label class="custom-file-label" for="banner_upload">Choose file</label>
                         </div>
                     </div>

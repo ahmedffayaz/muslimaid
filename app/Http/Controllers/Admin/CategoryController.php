@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
@@ -193,6 +194,9 @@ class CategoryController extends Controller
             }
             if ($request->input('logo_type') == 'upload') {
                 if ($request->has('logo_upload')) {
+                    if (File::exists(public_path($category->logo_upload))) {
+                        File::delete(public_path( $category->logo_upload));
+                    }
                     $imageName = Str::slug($request->input('name')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
                     $request->logo_upload->storeAs('public/categories/images', $imageName);
                     $category->logo_upload = $this->imagePath . $imageName;
@@ -201,6 +205,9 @@ class CategoryController extends Controller
             }
             if ($request->input('banner_type') == 'upload') {
                 if ($request->has('banner_upload')) {
+                    if (File::exists(public_path($category->banner_upload))) {
+                        File::delete(public_path( $category->banner_upload));
+                    }
                     $imageName = Str::slug($request->input('name')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
                     $request->banner_upload->storeAs('public/categories/images', $imageName);
                     $category->banner_upload = $this->imagePath . $imageName;

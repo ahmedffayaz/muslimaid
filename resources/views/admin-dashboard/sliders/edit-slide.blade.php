@@ -76,7 +76,7 @@
                 <div class="form-group">
                     <div class="preview-wrapper">
                         @if ($isEdit && $slide->logo)
-                            <img id="logo-preview" src="{{ asset('storage/slider/slides/images/' . $slide->logo) }}" style="max-height: 60px; max-width: 60px;" alt="">
+                            <img id="logo-preview" src="{{ asset($slide->logo) }}" style="max-height: 60px; max-width: 60px;" alt="">
                         @else
                             <img id="logo-preview" src="" alt="logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
                         @endif
@@ -98,7 +98,7 @@
                 <div class="form-group">
                     <div class="preview-wrapper">
                         @if ($isEdit && $slide->banner)
-                            <img id="banner-preview" src="{{ asset('storage/slider/slides/images/' . $slide->banner)  }}" style="max-height: 60px; max-width: 60px;" alt="">
+                            <img id="banner-preview" src="{{ asset($slide->banner) }}" style="max-height: 60px; max-width: 60px;" alt="">
                         @else
                             <img id="banner-preview" src="" alt="logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
                         @endif

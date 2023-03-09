@@ -126,7 +126,7 @@
                                                     <div class="form-control-wrap">
                                                         <div class="custom-file">
                                                             <input type="file" class="custom-file-input" name="logo_upload" id="logo_upload" value="{{ old('logo_upload') }}"
-                                                                onchange="readBannerURL(this);" required>
+                                                                onchange="readBannerURL(this);" >
                                                             <label class="custom-file-label" for="logo_upload">Choose file</label>
                                                             @error('logo_upload')
                                                                 <span class="invalid-feedback d-block" role="alert">
@@ -140,7 +140,7 @@
                                                     <div class="form-group">
                                                         <div class="preview-wrapper">
                                                             @if ($charity->logo_upload)
-                                                                <img id="logo-preview"src="{{ asset('storage/charities/images/' . $charity->logo_upload) }}"
+                                                                <img id="logo-preview"src="{{ asset($charity->logo_upload) }}"
                                                                     style="max-height: 60px; max-width: 60px;" alt="">
                                                             @else
                                                                 <img id="logo-preview" src="" alt="store logo" class="d-none"
@@ -202,7 +202,7 @@
                                                     <div class="form-control-wrap">
                                                         <div class="custom-file">
                                                             <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload"
-                                                                value="{{ old('banner_upload') }}" onchange="readBannerURL(this);" required>
+                                                                value="{{ $charity->logo_upload }}" onchange="readBannerURL(this);" >
                                                             <label class="custom-file-label" for="banner_upload">Choose file</label>
                                                             @error('banner_upload')
                                                                 <span class="invalid-feedback d-block" role="alert">
@@ -216,7 +216,7 @@
                                                     <div class="form-group">
                                                         <div class="preview-wrapper">
                                                             @if ($charity->banner_upload)
-                                                                <img id="banner-preview"src="{{ asset('storage/charities/images/' . $charity->banner_upload) }}"
+                                                                <img id="banner-preview"src="{{ asset($charity->banner_upload) }}"
                                                                     style="max-height: 60px; max-width: 60px;" alt="">
                                                             @else
                                                                 <img id="banner-preview" src="" alt="logo" class="d-none"
