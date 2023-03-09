@@ -569,6 +569,116 @@
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
 
+<!-- @@ Add Cashback Modal @e -->
+<div class="modal fade" tabindex="-1" role="dialog" id="cashback-modal">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content">
+            <div class="modal-header align-center">
+                <div class="nk-file-title">
+                    <div class="nk-file-name">
+                        <div class="nk-file-name-text"><span class="title">Add Cashback</span></div>
+                    </div>
+                </div>
+                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
+            </div>
+            <div id="cashback" class=" p-4">
+                <form action="{{ route('admin.stores.cashbacks.store') }}" class="gy-3 form-validate is-alter cashback_form_add" method="POST">
+                    @csrf
+                    <input type="hidden" name="store_id" value="{{ $store->id }}">
+                    <div class="row g-4">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="type">Type <span class="text-danger">*</span></label>
+                                <div class="form-control-wrap ">
+                                    <select class="form-control form-select select-2" id="type" name="type" required>
+                                        <option value="percentage">Percentage</option>
+                                        <option value="fixed">Fixed</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="form-label" for="sale_commission">Commission <span class="text-danger">*</span></label>
+                                <div class="form-control-wrap">
+                                    <input type="number" class="form-control" min="0" step="0.01" id="sale_commission" value="" name="sale_commission"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                        @if ($store->override_network)
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="network_id">Network</label>
+                                    <div class="form-control-wrap">
+                                        <select class="form-control form-select select-2" id="network_id" name="network_id">
+                                            @foreach ($networks as $network)
+                                                <option value="{{ $network->id }}">{{ $network->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="tracking_url">Tracking URL</label>
+                                    <div class="form-control-wrap">
+                                        <input type="text" class="form-control" id="tracking_url" name="tracking_url"
+                                            placeholder="https://example.com/item/abc-id-1345" required style="width: 83%">
+                                        <span style="position: absolute; right:0; top:5px; width:17%" data-toggle="tooltip" data-placement="left"
+                                            title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">{{ $store->network->click_ref }}XXX</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label class="form-label" for="sale_commission">Deeplink URL</label>
+                                    <div class="form-control-wrap">
+                                        <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
+                                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">{{ $store->network->deeplink_identifier }}</span>
+                                        <input type="text" class="form-control" id="deeplink_url"
+                                            value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}" name="deeplink_url"
+                                            placeholder="https://example.com/item/abc-id-1345" style="position: relative; left:30px; width: 95%">
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <label class="form-label" for="cashback_icon">Icon Upload</label>
+                                <div class="form-control-wrap">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" name="cashback_icon" id="cashback_icon" onchange="readURL(this);">
+                                        <label class="custom-file-label" for="cashback_icon">Choose file</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3">
+                                <div class="form-group">
+                                    <div class="preview-wrapper">
+                                        <img id="logo-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="card">
+                                <label class="form-label" for="phone-no-1">Detail</label>
+                                <textarea name="detail" class="form-control "></textarea>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div><!-- .modal-content -->
+    </div><!-- .modla-dialog -->
+</div><!-- .modal -->
+
 <!-- @@ Review Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="review-modal">
     <div class="modal-dialog modal-md" role="document">
@@ -1003,19 +1113,19 @@
             placeholder: 'Compose an epic...',
             theme: 'snow'
         });
-            // Quill Editor
-            var quill = new Quill('#teditor-container', {
-                modules: {
-                    toolbar: [
-                        ['bold', 'italic'],
-                        ['link', 'blockquote', 'code-block', 'image'],
-                        [{
-                            list: 'ordered'
-                        }, {
-                            list: 'bullet'
-                        }]
-                    ]
-                },
+        // Quill Editor
+        var quill = new Quill('#teditor-container', {
+            modules: {
+                toolbar: [
+                    ['bold', 'italic'],
+                    ['link', 'blockquote', 'code-block', 'image'],
+                    [{
+                        list: 'ordered'
+                    }, {
+                        list: 'bullet'
+                    }]
+                ]
+            },
             placeholder: 'Compose an epic...',
             theme: 'snow'
         });
@@ -1058,7 +1168,7 @@
                             initializeSelect2($(this));
                         });
                         $('#voucher').find(".promotion_end_date").datepicker();
-                        console.log(  $('#voucher').find(".promotion_end_date").datepicker());
+                        console.log($('#voucher').find(".promotion_end_date").datepicker());
                         $('#voucher').find(".promotion_start_date").datepicker();
                         checkVoucherType();
                         attachFormValidator($(document).find('#model_edit'));
@@ -1366,9 +1476,6 @@
                         }
                         checkCashbackType();
                         calcCashback();
-                        $('#lfm').filemanager('image', {
-                            prefix: route_prefix
-                        });
                         NioApp.BS.tooltip('[data-toggle="tooltip"]');
 
                     }
@@ -1439,9 +1546,6 @@
                         }
                         checkCashbackType();
                         calcCashback();
-                        $('#lfm').filemanager('image', {
-                            prefix: route_prefix
-                        });
                         NioApp.BS.tooltip('[data-toggle="tooltip"]');
                     }
                 });
@@ -2026,5 +2130,5 @@
             $("#store_form").submit();
         });
     </script>
-
+    
 @endpush

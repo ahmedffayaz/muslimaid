@@ -61,7 +61,8 @@
                 <div id="editor-container">{!! $isEdit ? $category->description : '' !!}</div>
             </div>
         </div>
-        <div class="col-lg-6">
+        
+         <div class="col-lg-6">
             <div class="form-group">
                 <label class="form-label" for="logo_type">Logo Type </label>
                 <div class="form-control-wrap ">
@@ -80,23 +81,42 @@
             <div class="form-group">
                 <label class="form-label" for="logo_link">Logo Link </label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="logo_link" name="logo_link" value="{{ $isEdit ? $category->logo_link : '' }}" required>
+                    <input type="text" class="form-control" id="logo_link" name="logo_link" value="{{ $isEdit ? $category->logo_link : '' }}" required  onchange="readLinkURL(this);" >
+                </div>
+            </div>
+            <div class="col-lg-3 ">
+                <div class="form-group">
+                    <div class="preview-wrapper">
+                        @if ($isEdit && $category->logo_link)
+                            <img  id="logo_link-preview" src="{{ asset($category->logo_link) }}" style="max-height: 60px;max-width:60px" alt="">
+                        @else
+                            <img id="logo_link-preview" src="" alt="logo" class="d-none" style="max-height: 60px; max-width: 60px;" />  
+                        @endif
+                    </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-6 logo_upload">
             <div class="form-group">
-                <label class="form-label" for="logo_upload">Logo Upload</label>
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <a data-input="thumbnail2" data-preview="holder2" class="btn btn-primary text-white lfm">
-                            <i class="fa fa-picture-o"></i> Choose
-                        </a>
-                    </span>
-                    <input id="thumbnail2" class="form-control" type="text" name="logo_upload">
+                <label class="form-label" for="logo_upload">Icon Upload</label>
+                <div class="form-control-wrap">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="logo_upload" id="logo_upload" value="{{$isEdit ? $category->logo_upload : ''   }}"onchange="readBannerURL(this);">
+                        <label class="custom-file-label" for="logo_upload">Choose file</label>
+                    </div>
                 </div>
-                <div id="holder2" style="margin-top:15px;max-height:100px;"></div>
             </div>
+            <div class="col-lg-3 ">
+                <div class="form-group">
+                    <div class="preview-wrapper">
+                         @if ($isEdit && $category->logo_upload)
+                                <img  id="logo-preview" src="{{ asset($category->logo_upload) }}" style="max-height: 60px;max-width:60px" alt="">
+                            @else
+                                <img id="logo-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />  
+                            @endif
+                        </div>
+                    </div>
+                </div>
         </div>
         <div class="col-lg-6 ">
             <div class="form-group">
@@ -115,24 +135,43 @@
             <div class="form-group">
                 <label class="form-label" for="banner_link">Banner Link</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="banner_link" name="banner_link" value="{{ $isEdit ? $category->banner_link : '' }}" required>
+                    <input type="text" class="form-control" id="banner_link" name="banner_link" value="{{ $isEdit ? $category->banner_link : '' }}" required onchange="readLinkURL(this);">  
+                </div>
+            </div>
+            <div class="col-lg-3 ">
+                <div class="form-group">
+                    <div class="preview-wrapper">
+                        @if( $isEdit && $category->banner_link)
+                            <img id="banner_link-preview" src="{{ asset($category->logo_link) }}" style="max-height: 60px;max-width:60px" alt="">
+                        @else
+                            <img id="banner_link-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />  
+                        @endif  
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 banner_upload">
-            <div class="form-group">
-                <label class="form-label" for="banner_upload">Banner Upload</label>
-                <div class="input-group">
-                    <span class="input-group-btn">
-                        <a  data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white lfm">
-                            <i class="fa fa-picture-o"></i> Choose
-                        </a>
-                    </span>
-                    <input id="thumbnail" class="form-control" type="text" name="banner_upload">
+           <div class="col-lg-6 banner_upload">
+                <div class="form-group">
+                    <label class="form-label" for="banner_upload">Banner Upload</label>
+                    <div class="form-control-wrap">
+                        <div class="custom-file">
+                            <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload" value="{{$isEdit ? $category->banner_upload : '' }}"onchange="readBannerURL(this);">
+                            <label class="custom-file-label" for="banner_upload">Choose file</label>
+                        </div>
+                    </div>
                 </div>
-                <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+                <div class="col-lg-3 ">
+                    <div class="form-group">
+                        <div class="preview-wrapper">
+                            @if ($isEdit && $category->banner_upload)
+                                <img id="banner-preview" src="{{ asset($category->banner_upload) }}" style="max-height: 60px;max-width:60px" alt="">
+                            @else
+                                <img id="banner-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />  
+                            @endif
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
             <div class="col-lg-6">
                 <div class="form-group">
                     <label class="form-label" for="sort">Sort <em

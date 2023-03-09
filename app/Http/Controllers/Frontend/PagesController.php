@@ -31,7 +31,7 @@ class PagesController extends Controller
         }
 
         if ($slug == 'donate-to-charity') {
-            $charities = Charity::whereStatus(1)->orderBy('id', 'DESC')->paginate(2);
+            $charities = Charity::whereStatus(1)->orderBy('id', 'DESC')->paginate(12);
             return view('frontend.pages.donate-to-charity', compact('page', 'charities'));
         }
         if ($slug == 'offers') {

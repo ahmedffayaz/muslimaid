@@ -10,7 +10,7 @@
                         <div class="nk-block-head-content">
                             <h3 class="nk-block-title page-title">Charity Types</h3>
                             <div class="nk-block-des text-soft">
-                                <p>You have total {{count($CharityType)}} Charity Types.</p>
+                                <p>You have total {{count($charityType)}} Charity Types.</p>
                             </div>
                         </div><!-- .nk-block-head-content -->
 
@@ -24,7 +24,7 @@
                         <div class="card-inner-group">
 
                             <div class="card-inner px-0">
-                                @if (count($CharityType))
+                                @if (count($charityType))
                                 <div class="nk-tb-list nk-tb-ulist" id="table-data">
 
                                     <div class="nk-tb-item nk-tb-head">
@@ -36,7 +36,7 @@
                                         </div>
                                     </div><!-- .nk-tb-item -->
 
-                                    @foreach ($CharityType as $charity)
+                                    @foreach ($charityType as $charity)
                                         <div class="nk-tb-item">
                                             <div class="nk-tb-col">
                                                 <div class="tb-lead"><span><a class="edit-charity"
@@ -114,7 +114,7 @@
                 </div>
                 <div class="nk-block-between-md g-3 card-inner">
                     <div class="pagination g">
-                        {!! $CharityType->links()!!}
+                        {!! $charityType->links()!!}
                     </div>
                 </div><!-- .nk-block-between -->
             </div>
