@@ -102,6 +102,11 @@ class StoreController extends Controller
                 'slug' =>   isset($storeSlug) ? $slug . ($lastId + 1) : $slug,
                 'is_api' => 'no',
             ]);
+            if(($lastId + 1) !=  $store->id){
+                $store->update([
+                    'slug' =>   isset($storeSlug) ? $slug . $store->id : $slug,
+                ]);
+            }
             DB::commit();
 
             flash()->success('New store added');
@@ -169,7 +174,7 @@ class StoreController extends Controller
             DB::beginTransaction();
             $slug = Str::slug($request->input('store_name'));
             $lastId = Store::orderBy('id', 'desc')->pluck('id')->first();
-            $storeSlug = Store::where('slug', $slug)->first();
+            $storeSlug = Store::where('slug', $slug)->where('id', '!=' , $store->id)->first();
             $store->update([
                 'name' => $request->input('store_name'),
                 'override_network' => $request->has('store_override_network') ? 1 : 0,
@@ -182,7 +187,7 @@ class StoreController extends Controller
                 'terms_conditions' => $request->input('terms_conditions'),
                 'custom_cashback_percentage' => $request->input('custom_cashback_percentage'),
                 'status' => $request->input('status'),
-                'slug' => isset($storeSlug) ? $slug . ($lastId + 1) : $slug,
+                'slug' => isset($storeSlug) ? $slug . $store->id : $slug,
                 'override_categories' => $request->has('override_categories') ? 1 : 0,
                 'override_cashback' => $request->has('override_cashback') ? 1 : 0,
                 'feature_homepage' => 0,
