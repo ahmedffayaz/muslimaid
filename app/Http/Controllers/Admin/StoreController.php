@@ -24,10 +24,12 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class StoreController extends Controller
 {
     private $iconPath = 'stores/cashbacks/';
+     public $imagePath = 'storage/stores/images/';
     public function __construct()
     {
         $this->middleware('permission:view stores', ['only' => ['index']]);
@@ -300,7 +302,7 @@ class StoreController extends Controller
                 $img_exist->update([
 
                     'title' => $request->title,
-                    'image' => $imageName,
+                    'image' => $this->imagePath . $imageName,
                     'is_uploaded' => 1,
                     'is_fake' => 0,
 
@@ -317,7 +319,7 @@ class StoreController extends Controller
             $logo = StoreImage::create([
                 'store_id' => $store->id,
                 'title' => $request->title,
-                'image' => $imageName,
+                'image' => $this->imagePath . $imageName,
                 'image_type' => 'store_logo',
                 'is_uploaded' => 1,
 
