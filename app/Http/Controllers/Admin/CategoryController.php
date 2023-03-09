@@ -139,7 +139,7 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         $categories = Category::latest()->where('parent_id', 0)->get();
-        $sort = Category::orderBy('id', 'desc')->pluck('sort')->first();
+        $sort = Category::where('parent_id', 0)->orderBy('sort', 'desc')->pluck('sort')->first();
         if (!isset($sort)) {
             $sort = 1;
         } else {
