@@ -147,9 +147,9 @@
                                                             <div class="form-control-wrap ">
                                                                 <div class="form-control-select">
                                                                     <select class="form-control" id="status" name="status" required>
-                                                                        <option @if ($user->status == 'pending') selected @endif value="pending">Pending</option>
-                                                                        <option @if ($user->status == 'active') selected @endif value="active">Active</option>
-                                                                        <option @if ($user->status == 'in_active') selected @endif value="in_active">In-active</option>
+                                                                        <option {{ $user->status == 'pending' ? 'selected' : '' }} value="pending">Pending</option>
+                                                                        <option {{ $user->status == 'active' ? 'selected' : '' }} value="active">Active</option>
+                                                                        <option {{ $user->status == 'in_active' ? 'selected' : '' }} value="in_active">In-active</option>
                                                                     </select>
                                                                 </div>
                                                             </div>

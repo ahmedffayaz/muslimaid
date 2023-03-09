@@ -369,11 +369,14 @@ function getRecaptchaSecretKey()
     return $key;
 }
 
-function currency()
+function currency($balance = null)
 {
     $settings = SiteSetting();
     $currency = Currency::where('id', $settings['currency'])->pluck('symbol')->first();
-    return $currency;
+    if ($balance != null)
+        return $currency . number_format((float) $balance->sum('amount'), 2, '.', '');
+    else
+        return $currency;
 }
 
 function sidebarCategories()
@@ -687,4 +690,15 @@ function getSiteLogo()
     } else {
         return asset('admin-dashboard/images/logo.png');
     }
+}
+
+function getRandomColorClass()
+{
+    $color = rand(1, 5);
+    if ($color == 1) return 'bg-info';
+    if ($color == 2) return 'bg-primary';
+    if ($color == 3) return 'bg-danger';
+    if ($color == 4) return 'bg-success';
+    if ($color == 5) return 'bg-warning';
+    return null;
 }

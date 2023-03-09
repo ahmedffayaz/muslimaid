@@ -20,22 +20,7 @@
             <div class="nk-tb-col" style="width: 30%">
                 <a href="{{ route('admin.users.show_user') }}?user_id={{ $user->id }}">
                     <div class="user-card">
-                        <div class="user-avatar
-                            <?php
-                            $color = rand(1, 5);
-                            if ($color == 1) {
-                                echo 'bg-info';
-                            } elseif ($color == 2) {
-                                echo 'bg-primary';
-                            } elseif ($color == 3) {
-                                echo 'bg-danger';
-                            } elseif ($color == 4) {
-                                echo 'bg-success';
-                            } elseif ($color == 5) {
-                                echo 'bg-warning';
-                            } else {
-                            }
-                            ?>">
+                        <div class="user-avatar {{ getRandomColorClass() }}">
                             <span>
                                 @if ($user->first_name == 'unnamed' || $user->last_name == 'unnamed')
                                     NA @else{{ $user->first_name[0] }}{{ $user->last_name[0] }}
@@ -53,7 +38,7 @@
                 </a>
             </div>
             <div class="nk-tb-col tb-col-lg">
-                <span class="tb-amount"><span class="currency">{{ currency() }}</span>{{ number_format((float) $user->balance->sum('amount'), 2, '.', '') }}</span>
+                <span class="tb-amount">{{ currency($user->balance) }}</span>
             </div>
             <div class="nk-tb-col tb-col-lg">
                 <span>{{ $user->registration_type }}</span>
