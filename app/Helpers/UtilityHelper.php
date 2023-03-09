@@ -372,7 +372,10 @@ function getRecaptchaSecretKey()
 function currency($number, $withSymbol = true)
 {
     $settings = SiteSetting();
-    $currencySymbol = Currency::where('id', $settings['currency'])->pluck('symbol')->first();
+    $currencySymbol = '$';
+    if (isset($settings['currency'])) {
+        $currencySymbol = getCurrencySymbol();
+    }
 	$number = number_format((float)$number, 2, '.', '');
 	return $withSymbol ? $currencySymbol . $number : $number;
 }
@@ -699,4 +702,25 @@ function getRandomColorClass()
     if ($color == 4) return 'bg-success';
     if ($color == 5) return 'bg-warning';
     return null;
+}
+
+function currencyOrPercentage($number, $type = 'fixed', $symbol = null)
+{
+    if ($type == 'fixed') {
+        return !empty($symbol) ? $symbol . currency($number, false) : currency($number);
+    } else {
+        return currency($number, false) . '%';
+    }
+}
+
+function getCurrencySymbol($symbol = null)
+{
+    $settings = SiteSetting();
+    $currencySymbol = '$'; // Set a default value
+
+    if (isset($settings['currency'])) {
+        $currencySymbol = !empty($symbol) ? $symbol : Currency::where('id', $settings['currency'])->pluck('symbol')->first();
+    }
+
+    return $currencySymbol;
 }

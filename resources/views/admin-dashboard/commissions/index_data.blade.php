@@ -9,8 +9,8 @@
         <div class="nk-tb-col " style="width: 25%"><span class="sub-text">User</span></div>
         <div class="nk-tb-col" style="width: 20%"><span class="sub-text">Store</span></div>
         <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Network Commission
-                ({{ currency(0) }})</span></div>
-        <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Cashback ({{ currency(0) }})</span></div>
+                ({{ getCurrencySymbol() }})</span></div>
+        <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Cashback ({{ getCurrencySymbol() }})</span></div>
         <div class="nk-tb-col  text-center"><span class="sub-text">Exit Click Id</span></div>
         <div class="nk-tb-col  text-center"><span class="sub-text">Event Time</span></div>
         <div class="nk-tb-col  text-right"><span class="sub-text">Status</span></div>

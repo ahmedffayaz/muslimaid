@@ -58,9 +58,13 @@ class StoreCashback extends Model
         $percentageSymbol = ($this->type == 'percentage') ? '%' : '';
 
         if ($this->store->custom_cashback_percentage) {
-            return $currency . ($this->store->custom_cashback_percentage / 100) * $this->sale_commission . $percentageSymbol . ' Cashback';
+            return $this->type == 'fixed'
+                    ? currencyOrPercentage(($this->store->custom_cashback_percentage / 100) * $this->cashback->sale_commission, 'fixed', $currency) . ' Cashback'
+                    : currencyOrPercentage(($this->store->custom_cashback_percentage / 100) * $this->cashback->sale_commission, 'percentage') . ' Cashback';
         } else {
-            return $currency . (SiteSetting()['cashback_percentage'] / 100) * $this->sale_commission . $percentageSymbol . ' Cashback';
+            return $this->type == 'fixed'
+                    ? currencyOrPercentage((SiteSetting()['cashback_percentage'] / 100) * $this->sale_commission, 'fixed', $currency) . ' Cashback'
+                    : currencyOrPercentage((SiteSetting()['cashback_percentage'] / 100) * $this->sale_commission, 'percentage') . ' Cashback';
         }
     }
 
