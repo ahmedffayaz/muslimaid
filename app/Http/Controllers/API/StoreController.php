@@ -119,7 +119,10 @@ class StoreController extends Controller
         //
     }
     public function featuredCashback(){
-        return StoreResource::collection(Store::where('feature_homepage',1)->latest()->get());
+        $stores = Store::whereHas('tags', function ($query) {
+            $query->where('title', 'feature_homepage');
+        })->latest()->get();
+        return StoreResource::collection($stores);
 
     }
     public function slider(){

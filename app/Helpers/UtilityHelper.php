@@ -33,6 +33,7 @@ function separatePageKeywords($content)
     $keyword_array = array();
     foreach ($content_keyword as $keyword) {
         $keyword = str_replace("}}", "_KEYWORD}}", $keyword);
+        $keyword = str_replace("<div class='gutenberg__content wp-embed-responsive'>", "", $keyword);
         $keyword_array =  array_merge($keyword_array, explode('}}', $keyword));
     }
     return $keyword_array;
@@ -384,7 +385,9 @@ function sidebarCategories()
 
 function sidebarStores()
 {
-    $stores = Store::where('feature_sidebar', 1)->latest()->get();
+    $stores = Store::whereHas('tags', function ($query) {
+        $query->where('title', 'feature_sidebar');
+    })->latest()->get();
     return $stores;
 }
 

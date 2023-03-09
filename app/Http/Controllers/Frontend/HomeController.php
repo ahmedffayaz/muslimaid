@@ -16,7 +16,9 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $stores = Store::where('feature_homepage', 1)->latest()->get();
+        $stores = Store::whereHas('tags', function ($query) {
+            $query->where('title', 'feature_homepage');
+        })->latest()->get();
         $languages = Language::orderBy('id', 'desc')->get();
         $featured_categories = Category::where('feature_homepage', 1)->orderBy('name', 'ASC')->latest()->get();
         $slider = Slider::where('name', 'Home')->first();

@@ -19,6 +19,7 @@ use App\Models\StoreCashback;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
@@ -185,16 +186,13 @@ class StoreController extends Controller
                 'slug' => isset($storeSlug) ? $slug . ($lastId + 1) : $slug,
                 'override_categories' => $request->has('override_categories') ? 1 : 0,
                 'override_cashback' => $request->has('override_cashback') ? 1 : 0,
-                'feature_homepage' => 0,
-                'feature_sidebar' => 0,
                 'editor_pick' => 0,
             ]);
 
             if ($request->has('tags')) {
-                foreach ($request->input('tags') as $tag) {
-                    $store->update([
-                        $tag => 1,
-                    ]);
+                foreach ($request->input('tags') as $tag_id) {
+                    $tag = Tag::find($tag_id);
+                    $store->tags()->attach($tag);
                 }
             }
             DB::commit();

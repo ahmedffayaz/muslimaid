@@ -190,11 +190,13 @@
                                                         <label class="form-label" for="default-06">Tags</label>
                                                         <div class="form-control-wrap ">
                                                             <div class="">
+                                                                @php 
+                                                                    $storeTagsIds = $store->tags()->pluck('tag_id')->toArray();
+                                                                @endphp
                                                                 <select class="form-control form-select select-2" name="tags[]" multiple>
-                                                                    <option @if ($store->feature_homepage) selected @endif value="feature_homepage">Homepage featured
-                                                                    </option>
-                                                                    <option @if ($store->feature_sidebar) selected @endif value="feature_sidebar">Sidebar featured
-                                                                    </option>
+                                                                    @foreach($tags as $tag)
+                                                                        <option @if (in_array($tag->id, $storeTagsIds)) selected @endif value="{{$tag->id}}">{{ $tag->title }}</option>
+                                                                    @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
