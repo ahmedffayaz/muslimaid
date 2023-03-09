@@ -369,14 +369,12 @@ function getRecaptchaSecretKey()
     return $key;
 }
 
-function currency($balance = null)
+function currency($number, $withSymbol = true)
 {
     $settings = SiteSetting();
-    $currency = Currency::where('id', $settings['currency'])->pluck('symbol')->first();
-    if ($balance != null)
-        return $currency . number_format((float) $balance->sum('amount'), 2, '.', '');
-    else
-        return $currency;
+    $currencySymbol = Currency::where('id', $settings['currency'])->pluck('symbol')->first();
+	$number = number_format((float)$number, 2, '.', '');
+	return $withSymbol ? $currencySymbol . $number : $number;
 }
 
 function sidebarCategories()

@@ -4,8 +4,8 @@
         <div class="nk-tb-item nk-tb-head">
 
             <div class="nk-tb-col pl-0"><span class="sub-text">Store</span></div>
-            <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Network Commission ({{ currency() }})</span></div>
-            <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Cashback ({{ currency() }})</span></div>
+            <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Network Commission ({{ currency(0) }})</span></div>
+            <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Cashback ({{ currency(0) }})</span></div>
             <div class="nk-tb-col  text-center"><span class="sub-text">Exit Click Id</span></div>
             <div class="nk-tb-col  text-center"><span class="sub-text">Event Time</span></div>
             <div class="nk-tb-col  text-right"><span class="sub-text">Status</span></div>
@@ -27,13 +27,13 @@
 
                 <div class="nk-tb-col  text-center">
                     @if ($commission->network_commission)
-                        <span><span class="currency">{{ currency() }} </span>{{ $commission->network_commission }}</span>
+                        <span><span class="currency">{{ currency($commission->network_commission) }} </span></span>
                     @else
                         <span>-</span>
                     @endif
                 </div>
                 <div class="nk-tb-col  text-center">
-                    <span><span class="currency">{{ currency() }} </span>{{ $commission->amount }}</span>
+                    <span><span class="currency">{{ currency($commission->amount) }} </span></span>
                 </div>
                 <div class="nk-tb-col  text-center">
                     @if ($commission->exit_click_id)
@@ -151,7 +151,7 @@
 </script>
 <script>
     $(document).ready(function() {
-       
+
         $(document).on('submit', '#update_cashback_form', function(e) {
             e.preventDefault();
             var form_action = $(this).attr('action');
