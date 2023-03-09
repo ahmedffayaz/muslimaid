@@ -39,7 +39,6 @@ class PagesSeeder extends Seeder
                 'banner_image' => empty($page['banner_image']) ? null : $page['banner_image'],
                 'description' => empty($page['description']) ? null : $page['description'],
                 'default' => $page['default'],
-                'used_keywords' => isset($page['used_keywords']) ? $page['used_keywords'] : null,
                 'created_at' => $now,
                 'updated_at' =>  $now,
             ];

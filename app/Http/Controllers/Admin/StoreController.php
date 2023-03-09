@@ -195,11 +195,10 @@ class StoreController extends Controller
             ]);
 
             if ($request->has('tags')) {
-                foreach ($request->input('tags') as $tag_id) {
-                    $tag = Tag::find($tag_id);
-                    $store->tags()->attach($tag);
-                }
+                $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
+                if ($tags->count() > 0) $store->tags()->sync($tags);
             }
+
             DB::commit();
 
             if (!$request->ajax()) {

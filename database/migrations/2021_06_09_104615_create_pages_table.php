@@ -24,7 +24,6 @@ class CreatePagesTable extends Migration
             $table->text('banner_image')->nullable();
             $table->longText('description')->nullable();
             $table->string('default')->default(1);
-            $table->string('used_keywords')->nullable();
             $table->timestamps();
         });
     }

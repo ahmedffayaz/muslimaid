@@ -52,12 +52,6 @@
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
-                                                @if (isset($page->used_keywords))
-                                                    <div class="form-group mb-0">
-                                                        <label class="form-label" for="default-06">Keywords: </label>
-                                                        <label>{{ $page->used_keywords }}</label>
-                                                    </div>
-                                                @endif
                                                 <fieldset class="uk-fieldset">
                                                     <div class="uk-margin">
                                                         <textarea name="content" id="content" hidden>{{ $page->lb_raw_content }}</textarea>
