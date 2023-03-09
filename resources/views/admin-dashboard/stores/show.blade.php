@@ -36,28 +36,8 @@ ul.categories li {
     -o-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
 }
-
-/* 
-
-@media (max-width: 350px){
-    #tracking_url{
-        width: 75%
-    }
-}
-
-@media (min-width:350px) and (max-width: 767px){
-    #tracking_url{
-        width: 90%
-    }
-}
-@media (min-width: 992px){
-    #tracking_url{
-        width: 85%
-    }
-} */
 </style>
 
 @section('content')
-@livewire('store-details')
-
+    @livewire('store-details')
 @endsection

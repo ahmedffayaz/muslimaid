@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Network;
 use App\Models\Category;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Store extends Model
@@ -28,8 +29,6 @@ class Store extends Model
         'override_cashback',
         'override_categories',
         'override_network',
-        'feature_sidebar',
-        'feature_homepage',
         'editor_pick',
         'custom_cashback_percentage',
         'status',
@@ -91,7 +90,12 @@ class Store extends Model
     {
         return $this->hasMany(UserCashback::class);
     }
-
+    
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
+    
     public function editorPicks()
     {
         return $this->hasMany(EditorPick::class);
@@ -128,4 +132,5 @@ class Store extends Model
         }
         return null;
     }
+
 }

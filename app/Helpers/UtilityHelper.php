@@ -388,7 +388,9 @@ function sidebarCategories()
 
 function sidebarStores()
 {
-    $stores = Store::where('feature_sidebar', 1)->latest()->get();
+    $stores = Store::whereHas('tags', function ($query) {
+        $query->where('title', 'feature_sidebar');
+    })->latest()->get();
     return $stores;
 }
 

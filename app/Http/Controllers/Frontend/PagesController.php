@@ -55,7 +55,7 @@ class PagesController extends Controller
             return view("frontend.pages.{$slug}", compact('page'));
         }
 
-        return view('frontend.pages.single-page', compact('page'));
+        return view('frontend.pages.single-page', compact('page', 'slug'));
     }
 
     public function blog()
