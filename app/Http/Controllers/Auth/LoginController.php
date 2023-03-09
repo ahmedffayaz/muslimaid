@@ -130,9 +130,9 @@ class LoginController extends Controller
         if (Session::has('prvUrl')) {
             return session('prvUrl');
         } else {
-            if (!Auth::user()->is_email_verified) {
+            if (!Auth::user()->is_email_verified || Auth::user()->status == 'pending') {
                 auth()->logout();
-                Session::flash('email-not-verified');
+                Session::flash('message', 'You need to confirm your account. Please check your email.');
                 return route('login');
             }
             Session::flash('login-welcome');
