@@ -56,7 +56,6 @@
 
             <div class="nk-tb-col text-center">
                 <span class="tb-status badge badge-primary"><b>{{$click->network->name}}</b></span>
-                @endif
             </div>
             <div class="nk-tb-col text-center">
                 <span><b>{{ $click->store->id }} - {{ $click->store->name ?? '' }}</b></span>
