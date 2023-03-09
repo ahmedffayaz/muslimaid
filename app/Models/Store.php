@@ -90,12 +90,12 @@ class Store extends Model
     {
         return $this->hasMany(UserCashback::class);
     }
-    
+
     public function tags(): MorphToMany
     {
         return $this->morphToMany(Tag::class, 'taggable');
     }
-    
+
     public function editorPicks()
     {
         return $this->hasMany(EditorPick::class);
@@ -132,5 +132,4 @@ class Store extends Model
         }
         return null;
     }
-
 }
