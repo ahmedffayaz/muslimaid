@@ -16,11 +16,11 @@ class UserCashbackResource extends JsonResource
     {
         return [
             'Store'=>$this->store->name,
-            'Order Amount'=> currency().number_format((float)$this->order_value, 2, '.', ''),
-            'Cashback'=> currency().number_format((float)$this->amount, 2, '.', ''),
+            'Order Amount'=> currency($this->order_value),
+            'Cashback'=> currency($this->order_value),
             'Date'=>\Carbon\Carbon::parse($this->event_date)->isoFormat('Do MMMM YYYY'),
             'Status'=>$this->statusMap->status
         ];
-       
+
     }
 }

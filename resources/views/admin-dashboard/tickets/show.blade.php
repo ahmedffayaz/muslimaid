@@ -111,7 +111,7 @@
                                                         href="{{ route('admin.stores.show_store') }}?slug={{ $ticket->store->slug }}">{{
                                                         $ticket->store->id }}
                                                         - {{ $ticket->store->name }}</a><br>
-                                                    Purchase Amount: {{ currency() }}{{ $ticket->claim_amount }}<br>
+                                                    Purchase Amount: {{ currency($ticket->claim_amount) }}<br>
                                                     Claim date:
                                                     {{ Carbon\Carbon::parse($ticket->created_at)->isoFormat('Do MMMM
                                                     YYYY') }}<br>
@@ -121,7 +121,7 @@
                                                     MMMM YYYY') }}<br>
                                                     Description:  {{ $ticket->message }}
                                                     @endif
-                                                  
+
 
                                                 </div>
 

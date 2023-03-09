@@ -15,84 +15,12 @@
                         </div><!-- .nk-block-head-content -->
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
-                {{-- <div class="row mb-4">
-                    <div class="col-md-6 col-xl-3">
-                        <div class="card">
-                            <div class="card-body p-0">
-                                <div class="media p-3">
-                                    <div class="media-body">
-                                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Total
-                                            Revenue</span>
-                                        <h3 class="mb-0 mt-2">{{ currency() }} {{$total_revenue}}</h3>
-                                       
-                                    </div>
-                                    <div class="align-self-center text-center analytics-icon" style="    display: contents;">
-                                        <em class="icon ni ni-coins text-info"></em>
-                                    </div>
-                                    
-                                   
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 col-xl-3">
-                        <div class="card">
-                            <div class="card-body p-0">
-                                <div class="media p-3">
-                                    <div class="media-body">
-                                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pending Revenue</span>
-                                        <h3 class="mb-0 mt-2">{{ currency() }} {{$pending_total_revenue}}</h3>
-                                    </div>
-                                    <div class="align-self-center text-center analytics-icon" style="    display: contents;">
-                                        <em class="icon ni ni-coins text-info"></em>
-                                    </div>
-                                   
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 col-xl-3">
-                        <div class="card">
-                            <div class="card-body p-0">
-                                <div class="media p-3">
-                                    <div class="media-body">
-                                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Cashbacks</span>
-                                        <h3 class="mb-0 mt-2">{{count($coms)}}</h3>
-                                    </div>
-                                    <div class="align-self-center text-center analytics-icon" style="    display: contents;">
-                                        <em class="icon ni ni-growth-fill text-info"></em>
-                                    </div>
-                                    
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-md-6 col-xl-3">
-                        <div class="card">
-                            <div class="card-body p-0">
-                                <div class="media p-3">
-                                    <div class="media-body">
-                                        <span class="text-muted text-uppercase font-size-12 font-weight-bold">Conversion Rate</span>
-                                        <h3 class="mb-0 mt-2">@if($total_clicks){{round((count($coms)*100)/$total_clicks,0)}}% @else 0% @endif</h3>
-                                    </div>
-                                    <div class="align-self-center text-center analytics-icon" style="    display: contents;">
-                                        <em class="icon ni ni-reload text-info"></em>
-                                    </div>
-                                   
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> --}}
                 <div class="card card-preview mb-4">
                     <div class="card-inner">
                         <form action="{{route('admin.reports.search_performance')}}" class="form-validate is-alter performance_search_form" method="POST">
                             @csrf
                             <div class="row g-4">
-                            
+
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-label" for="default-06">Store</label>
@@ -102,7 +30,7 @@
                                                 @foreach ($stores as $store)
                                                 <option value="{{$store->id}}">{{$store->id}} - {{$store->name}}</option>
                                                 @endforeach
-                                            </select> 
+                                            </select>
                                         </div>
                                     </div>
                                 </div>
@@ -122,8 +50,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                
-                                                    
+
+
                                 <div class="col-3 align-self-end">
                                     <div class="form-group">
                                         <button type="submit" class="btn btn-success btn-block">Search</button>
@@ -146,14 +74,14 @@
 @push('scripts')
 <script>
     $(document).ready(function(){
-    
+
      $(document).on('submit', '.performance_search_form', function(event){
-        event.preventDefault(); 
+        event.preventDefault();
             $('#report_data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
-            
-          
+
+
         var _token = $("input[name=_token]").val();
         var store_id = $("select[name=store_id]").val();
         var start_date = $("input[name=start_date]").val();
@@ -168,14 +96,14 @@
            $('html, body').animate({ scrollTop: 0 }, 'slow');
           }
         });
-        
+
      });
-    
+
     });
 
     $('.date-picker').on('click', function(e) {
    e.preventDefault();
-   $(this).attr("autocomplete", "off");  
+   $(this).attr("autocomplete", "off");
 });
-    </script>    
+    </script>
 @endpush

@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use Illuminate\Support\Facades\Response;
+use Exception;
+use Throwable;
 use App\Models\User;
 use App\Models\ExitClick;
 use App\Models\PaymentInfo;
@@ -11,8 +12,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
-use Exception;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
@@ -61,27 +62,35 @@ class UserController extends Controller
             );
         }
 
-        $avatarImage = "default.png";
-        if ($request->hasFile('avatar')) {
-            $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
+        try {
+            DB::beginTransaction();
+            $avatarImage = "default.png";
+            if ($request->hasFile('avatar')) {
+                $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
+            }
+
+            $user =  User::create([
+                'first_name' => $request->firstname,
+                'last_name' => $request->lastname,
+                'email' => $request->email,
+                'password' => Hash::make('123456789'),
+                'registration_type' => 'sign up',
+                'phone' => $request->phone,
+                'address' => $request->address,
+                'intro' => $request->intro,
+                'avatar' => $avatarImage,
+                'status' => 'active'
+            ]);
+
+            $user->assignRole('user');
+            DB::commit();
+            flash()->success('New user added successfully');
+            return redirect()->route('admin.users.index');
+        } catch (Throwable $th) {
+            DB::rollBack();
+            flash()->error('Something went wrong, try again');
+            return redirect()->back();
         }
-
-        $user =  User::create([
-            'first_name' => $request->firstname,
-            'last_name' => $request->lastname,
-            'email' => $request->email,
-            'password' => Hash::make('123456789'),
-            'registration_type' => 'sign up',
-            'phone' => $request->phone,
-            'address' => $request->address,
-            'intro' => $request->intro,
-            'avatar' => $avatarImage
-        ]);
-
-        $user->assignRole('user');
-
-        flash()->success('New user added successfully');
-        return redirect()->route('admin.users.index');
     }
 
     public function show(User $user)
@@ -117,10 +126,9 @@ class UserController extends Controller
                         'success' => false
                     );
                 }
-             
             }
-           
 
+            DB::beginTransaction();
             $avatarImage = $user->avatar;
             if ($request->hasFile('avatar')) {
 
@@ -139,20 +147,19 @@ class UserController extends Controller
             ]);
 
             $user->syncRoles($request->input('roles'));
+            DB::commit();
 
             if ($request->ajax()) {
                 return array(
                     'message' => 'User updated successfully',
                     'success' => true
                 );
-              
             }else{
                 flash()->success('User updated successfully');
                 return redirect()->route('admin.users.index');
             }
-
-           
         } catch (Exception $e) {
+            DB::rollBack();
             if (!$request->ajax()) throw new Exception($e->getMessage());
 
             return array(

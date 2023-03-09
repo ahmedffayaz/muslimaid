@@ -12,8 +12,8 @@
                             <h3 class="nk-block-title page-title">Earnings</h3>
                         </div><!-- .nk-block-head-content -->
                         <div class="nk-block-head-content">
-                            
-                            
+
+
                         </div><!-- .nk-block-head-content -->
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
@@ -24,14 +24,14 @@
                                 <div class="media p-3">
                                     <div class="media-body">
                                         <span class="text-muted text-uppercase font-size-12 font-weight-bold">Earning</span>
-                                        <h3 class="mb-0 mt-2">{{ currency() }}{{number_format((float)$total_revenue, 2, '.', '')}}</h3>
-                                       
+                                        <h3 class="mb-0 mt-2">{{ currency($total_revenue) }}</h3>
+
                                     </div>
                                     <div class="align-self-center text-center analytics-icon" style="    display: contents;">
                                         <em class="icon ni ni-coins text-info"></em>
                                     </div>
-                                    
-                                   
+
+
                                 </div>
                             </div>
                         </div>
@@ -43,12 +43,12 @@
                                 <div class="media p-3">
                                     <div class="media-body">
                                         <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pending Revenue</span>
-                                        <h3 class="mb-0 mt-2">{{ currency() }}{{number_format((float)$pending_total_revenue, 2, '.', '')}}</h3>
+                                        <h3 class="mb-0 mt-2">{{ currency($pending_total_revenue) }}</h3>
                                     </div>
                                     <div class="align-self-center text-center analytics-icon" style="    display: contents;">
                                         <em class="icon ni ni-coins text-info"></em>
                                     </div>
-                                   
+
                                 </div>
                             </div>
                         </div>
@@ -65,7 +65,7 @@
                                     <div class="align-self-center text-center analytics-icon" style="    display: contents;">
                                         <em class="icon ni ni-growth-fill text-info"></em>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -82,7 +82,7 @@
                                     <div class="align-self-center text-center analytics-icon" style="    display: contents;">
                                         <em class="icon ni ni-reload text-info"></em>
                                     </div>
-                                   
+
                                 </div>
                             </div>
                         </div>
@@ -93,7 +93,7 @@
                         <form action="{{route('admin.reports.search_earnings')}}" class="form-validate is-alter earnings_form" method="POST">
                             @csrf
                             <div class="row g-4 justify-content-md-center">
-                            
+
                                 <div class="col-lg-3">
                                     <div class="form-group">
                                         <label class="form-label" for="store_id">Store</label>
@@ -113,7 +113,7 @@
                                         <div class="form-control-wrap ">
                                             <select class="form-select form-control" data-search="on" id="status" name="status_id">
                                                 <option value="0">Any</option>
-                                                
+
                                                 @foreach ($statuses as $status)
                                                 <option value="{{$status->id}}">{{$status->status}}</option>
                                                 @endforeach
@@ -159,13 +159,13 @@
 @push('scripts')
 <script>
     $(document).ready(function(){
-    
+
      $(document).on('submit', '.earnings_form', function(event){
-        event.preventDefault(); 
+        event.preventDefault();
             $('#report_data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
-          
+
         var _token = $("input[name=_token]").val();
         var store_id = $("select[name=store_id]").val();
         var status_id = $("select[name=status_id").val();
@@ -181,11 +181,11 @@
            $('html, body').animate({ scrollTop: 0 }, 'slow');
           }
         });
-        
+
      });
-    
+
     });
-    
-    </script>  
-      
+
+    </script>
+
 @endpush
