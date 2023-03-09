@@ -30,8 +30,6 @@ class CreateStoresTable extends Migration
             $table->string('override_cashback')->default(0);
             $table->string('override_categories')->default(0);
             $table->boolean('override_network')->default(0);
-            $table->string('feature_homepage')->default(0);
-            $table->string('feature_sidebar')->default(0);
             $table->string('editor_pick')->default(0);
             $table->string('custom_cashback_percentage')->nullable();
             $table->string('status')->default(1);

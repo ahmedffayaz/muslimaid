@@ -56,8 +56,6 @@ class StoreSeeder extends Seeder
                     'override_cashback' => 1,
                     'override_network' => 1,
                     'override_categories' => 1,
-                    'feature_homepage' => 0,
-                    'feature_sidebar' => 0,
                     'editor_pick' => 0,
                     'status' => ($store['status'] == 1) ? 'active': 'inactive',
                     'is_fake' =>  0,
@@ -95,8 +93,6 @@ class StoreSeeder extends Seeder
                     'status' => 'active',
                     'is_fake' => 1,
                     'description' => $faker->text(500),
-                    'feature_homepage' => $faker->randomElement([1, 0]),
-                    'feature_sidebar' => $faker->randomElement([1, 0]),
                 ];
 
                 $storesImages[] = [

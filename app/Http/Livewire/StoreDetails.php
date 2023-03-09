@@ -6,7 +6,7 @@ use Livewire\Component;
 use App\Models\Store;
 use App\Models\Network;
 use App\Models\Category;
-
+use App\Models\Tag;
 
 class StoreDetails extends Component
 {
@@ -14,6 +14,7 @@ class StoreDetails extends Component
     public $stores;
     public $networks;
     public $categories;
+    public $tags;
     public $slug;
 
     protected $queryString = ['slug'];
@@ -29,6 +30,7 @@ class StoreDetails extends Component
         $this->stores = Store::latest()->get();
         $this->networks = Network::all();
         $this->categories = Category::where('parent_id',0)->get();
+        $this->tags = Tag::all(); 
 
 
     }
