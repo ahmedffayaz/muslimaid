@@ -199,6 +199,8 @@ class StoreController extends Controller
             if ($request->has('tags')) {
                 $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
                 if ($tags->count() > 0) $store->tags()->sync($tags);
+            }else{
+                $store->tags()->detach();
             }
 
             DB::commit();
