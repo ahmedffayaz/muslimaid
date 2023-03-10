@@ -38,7 +38,7 @@ class NewsletterController extends Controller
                 [
                     'email' => $email,
                     'first_name' => isset($name_arr[0]) ? $name_arr[0] : '',
-                    'last_name' => isset($name_arr[0]) ? $name_arr[0] : '',
+                    'last_name' => isset($name_arr[1]) ? $name_arr[1] : '',
                 ]
             ]
         ];
