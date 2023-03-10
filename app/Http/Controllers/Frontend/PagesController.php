@@ -31,7 +31,7 @@ class PagesController extends Controller
         }
 
         if ($slug == 'donate-to-charity') {
-            $charities = Charity::whereStatus(1)->orderBy('id', 'DESC')->paginate(2);
+            $charities = Charity::whereStatus(1)->orderBy('id', 'DESC')->paginate(12);
             return view('frontend.pages.donate-to-charity', compact('page', 'charities'));
         }
         if ($slug == 'offers') {
@@ -55,7 +55,7 @@ class PagesController extends Controller
             return view("frontend.pages.{$slug}", compact('page'));
         }
 
-        return view('frontend.pages.single-page', compact('page'));
+        return view('frontend.pages.single-page', compact('page', 'slug'));
     }
 
     public function blog()

@@ -9,8 +9,8 @@
         <div class="nk-tb-col " style="width: 25%"><span class="sub-text">User</span></div>
         <div class="nk-tb-col" style="width: 20%"><span class="sub-text">Store</span></div>
         <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Network Commission
-                ({{ currency() }})</span></div>
-        <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Cashback ({{ currency() }})</span></div>
+                ({{ getCurrencySymbol() }})</span></div>
+        <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Cashback ({{ getCurrencySymbol() }})</span></div>
         <div class="nk-tb-col  text-center"><span class="sub-text">Exit Click Id</span></div>
         <div class="nk-tb-col  text-center"><span class="sub-text">Event Time</span></div>
         <div class="nk-tb-col  text-right"><span class="sub-text">Status</span></div>
@@ -22,23 +22,7 @@
         <div class="nk-tb-item">
             <div class="nk-tb-col "style="width: 25%">
                 <div class="user-card">
-                    <div class="user-avatar
-                        <?php
-                        $color = rand(1, 5);
-                        if ($color == 1) {
-                            echo 'bg-info';
-                        } elseif ($color == 2) {
-                            echo 'bg-primary';
-                        } elseif ($color == 3) {
-                            echo 'bg-danger';
-                        } elseif ($color == 4) {
-                            echo 'bg-success';
-                        } elseif ($color == 5) {
-                            echo 'bg-warning';
-                        } else {
-                        }
-                        ?>
-                    ">
+                    <div class="user-avatar {{ getRandomColorClass() }}">
                         <span>{{ $commission->exitClick->user->first_name[0] ?? 'N' }}{{ $commission->exitClick->user->last_name[0] ?? 'A' }}</span>
                     </div>
                     <div class="user-info">
@@ -69,11 +53,11 @@
 
             <div class="nk-tb-col  text-center">
                 <span>
-                    <span class="currency">{{ currency() }}</span>{{ number_format((float) $commission->network_commission, 2, '.', '') }}</span>
+                    <span class="currency">{{ currency($commission->network_commission) }}</span></span>
             </div>
             <div class="nk-tb-col  text-center">
                 <span>
-                    <span class="currency">{{ currency() }}</span>{{ number_format((float) $commission->amount, 2, '.', '') }}</span>
+                    <span class="currency">{{ currency($commission->amount) }}</span></span>
             </div>
             <div class="nk-tb-col  text-center">
                 @if ($commission->store_id)

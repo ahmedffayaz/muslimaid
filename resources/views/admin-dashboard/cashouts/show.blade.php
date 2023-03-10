@@ -34,7 +34,7 @@
                         <div class="nk-block-head-content">
                             <h3 class="nk-block-title fw-normal"></h3>
                             <div class="nk-block-des">
-                              
+
                             </div>
                         </div>
                         <div class="nk-block-head-content">
@@ -50,17 +50,17 @@
                         </div><!-- .nk-block-head-content -->
                     </div>
                     </div>
-                   
+
                 @include('flash::message')
-                    
-                    
+
+
                     <div class="nk-block nk-block-lg">
                         <div class="card card-preview">
                             <div class="card-inner">
                                 <div class="nk-block">
                                     <div class="nk-block-head">
                                         <h5 class="title">Cashout Information</h5>
-                                    
+
                                     </div><!-- .nk-block-head -->
                                     <div class="profile-ud-list">
                                         <div class="profile-ud-item">
@@ -72,7 +72,7 @@
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">Withdraw Amount</span>
-                                                <span class="profile-ud-value">{{ currency() }} {{$cashout->amount}}</span>
+                                                <span class="profile-ud-value">{{ currency($cashout->amount) }}</span>
                                             </div>
                                         </div>
                                         <div class="profile-ud-item">
@@ -87,7 +87,7 @@
                                                 <span class="profile-ud-value">{{$cashout->status}}</span>
                                             </div>
                                         </div>
-                                        
+
                                     </div><!-- .profile-ud-list -->
                                 </div><!-- .nk-block -->
                                 <div class="nk-block">
@@ -151,7 +151,7 @@
                                         <h6 class="title overline-title text-base">Cashback</h6>
                                     </div><!-- .nk-block-head -->
                                     <div class="profile-ud-list">
-                                        
+
                                         @foreach ($cashout->cashbacks as $cashback)
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
@@ -160,22 +160,22 @@
                                                         <span class="profile-ud-value"><a href="{{route('admin.stores.show_store')}}?slug={{$cashback->store->slug}}">
                                                             {{ $cashback->store->name }}</a></span>
                                                    @else
-                                                        <span class="profile-ud-value"> {{ ucfirst(str_replace('_', ' ', $cashback->type)) }}</span> 
+                                                        <span class="profile-ud-value"> {{ ucfirst(str_replace('_', ' ', $cashback->type)) }}</span>
                                                    @endif
                                             </div>
                                         </div>
-                                       
+
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">Cashback Amount</span>
-                                                <span class="profile-ud-value">{{ currency() }} {{$cashback->amount}}</span>
+                                                <span class="profile-ud-value">{{ currency($cashback->amount) }}</span>
                                             </div>
                                         </div>
-                                        
+
 
                                         @endforeach
-                                      
-                                        
+
+
                                     </div><!-- .profile-ud-list -->
                                 </div><!-- .nk-block -->
                                 @endif
@@ -186,43 +186,43 @@
                                         <h6 class="title overline-title text-base">Bonus</h6>
                                     </div><!-- .nk-block-head -->
                                     <div class="profile-ud-list">
-                                        
-                                       
-                                            
-                                       
+
+
+
+
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">Bonus</span>
                                                 <span class="profile-ud-value">Sign up bonus</span>
                                             </div>
                                         </div>
-                                       
+
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">Amount</span>
-                                                <span class="profile-ud-value">{{ currency() }} {{$cashout->bonus->amount}}</span>
+                                                <span class="profile-ud-value">{{ currency($cashout->bonus->amount) }}</span>
                                             </div>
                                         </div>
-                                        
 
-                                       
-                                      
-                                        
+
+
+
+
                                     </div><!-- .profile-ud-list -->
                                 </div><!-- .nk-block -->
                                 @endif
-                               
+
                             </div><!-- .card-inner -->
                             <div class="card-inner">
-                               
+
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="tabItem5">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
-                                               
+
                                                 {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
-                                           
+
                                             <form action="{{route('admin.cashouts.update',$cashout)}}" class="gy-3 form-validate is-alter"  id="form_withdraw" method="POST">
                                                 @csrf
                                                 @method('PUT')
@@ -249,14 +249,14 @@
                                                 </div>
                                             </form>
                                         </div>
-                                      
+
                                     </div>
                                 </div>
                             </div>
                         </div><!-- .card-preview -->
-                      
+
                     </div>
-                  
+
                 </div>
             </div>
         </div>
@@ -280,9 +280,9 @@
             showCancelButton: true,
             confirmButtonText: 'Yes, submit it!'
         }).then(function (result) {
-            if (result.value) { 
+            if (result.value) {
                 $("#"+form_id).submit();
-            } 
+            }
             else{
                 window.toast({
                 type: 'error',

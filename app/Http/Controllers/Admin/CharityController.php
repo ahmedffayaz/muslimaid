@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Throwable;
 use App\Models\Charity;
 use App\Models\CharityType;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 
 class CharityController extends Controller
 {
+    public $imagePath = 'storage/charities/images/';
     /**
      * Display a listing of the resource.
      *
@@ -72,8 +74,8 @@ class CharityController extends Controller
             'country' => 'required',
             'logo_type' => 'required',
             'banner_type' => 'required',
-            'logo_upload' =>  $request->input('logo_type') === 'upload' ? 'required' : '',
-            'banner_upload' =>  $request->input('banner_type') === 'upload' ? 'required' : '',
+            'logo_upload' =>  $request->input('logo_type') === 'upload' ? 'required|image:jpeg,png,jpg,gif' : '',
+            'banner_upload' =>  $request->input('banner_type') === 'upload' ? 'required|image:jpeg,png,jpg,gif' : '',
         ]);
 
         if ($validator->fails()) {
@@ -90,18 +92,15 @@ class CharityController extends Controller
                 'logo_type' => $request->input('logo_type'),
                 'logo_link' => $request->input('logo_link'),
                 'banner_type' => $request->input('banner_type'),
-                'logo_link' => $request->input('logo_link'),
+                'banner_link' => $request->input('banner_link'),
                 'country' => $request->input('country'),
                 'status' => $request->input('status'),
             ]);
             if ($request->input('logo_type') == 'upload') {
                 if ($request->has('logo_upload')) {
-                    $imageName = parse_url($request->logo_upload)['path'];
-                    if (File::exists(public_path('storage/charities/images' . $imageName))) {
-                        File::delete(public_path('storage/charities/images' . $imageName));
-                    }
-
-                    $charity->logo_upload = $imageName;
+                    $imageName = Str::slug($request->input('logo_type')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
+                    $request->logo_upload->storeAs('public/charities/images', $imageName);
+                    $charity->logo_upload =$this->imagePath . $imageName;
                     $charity->update();
                 } else {
                     $charity->logo_upload = 'category_default_logo.png';
@@ -111,17 +110,19 @@ class CharityController extends Controller
 
             if ($request->input('banner_type') == 'upload') {
                 if ($request->has('banner_upload')) {
-                    $imageName = parse_url($request->banner_upload)['path'];
-                    $charity->banner_upload = $imageName;
+                    $imageName = Str::slug($request->input('logo_type')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
+                    $request->banner_upload->storeAs('public/charities/images', $imageName);
+                    $charity->banner_upload =$this->imagePath . $imageName;
                     $charity->update();
                 } else {
                     $charity->banner_upload = 'category_default_banner.png';
                     $charity->update();
                 }
+              
             }
             DB::commit();
             flash()->success('New Charity added');
-            return redirect()->back();
+            return redirect()->route('admin.charities.index');
         } catch (Throwable $th) {
             DB::rollBack();
             flash()->error('Something went wrong, try again');
@@ -132,8 +133,8 @@ class CharityController extends Controller
     //  charity index function
     public function charityTypeView()
     {
-        $CharityType = CharityType::latest()->paginate(15);
-        return view('admin-dashboard.charities.charity_type_view', compact('CharityType'));
+        $charityType = CharityType::latest()->paginate(20);
+        return view('admin-dashboard.charities.charity_type_view', compact('charityType'));
     }
 
     //  charity store function
@@ -233,8 +234,8 @@ class CharityController extends Controller
             'country' => 'required',
             'logo_type' => 'required',
             'banner_type' => 'required',
-            'logo_upload' =>  'nullable',
-            'banner_upload' =>  'nullable'
+            'logo_upload' =>  'nullable|image:jpeg,png,jpg,gif',
+            'banner_upload' =>  'nullable|image:jpeg,png,jpg,gif'
         ]);
 
         if ($validator->fails()) {
@@ -257,15 +258,23 @@ class CharityController extends Controller
             ]);
             if ($request->input('logo_type') == 'upload') {
                 if ($request->has('logo_upload')) {
-                    $imageName = parse_url($request->logo_upload)['path'];
-                    $charity->logo_upload = $imageName;
+                    if (File::exists(public_path($charity->logo_upload))) {
+                        File::delete(public_path($charity->logo_upload));
+                    }
+                    $imageName = Str::slug($request->input('name')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
+                    $request->logo_upload->storeAs('public/charities/images', $imageName);
+                    $charity->logo_upload = $this->imagePath .$imageName;
                     $charity->update();
                 }
             }
             if ($request->input('banner_type') == 'upload') {
                 if ($request->has('banner_upload')) {
-                    $imageName = parse_url($request->banner_upload)['path'];
-                    $charity->banner_upload = $imageName;
+                    if (File::exists(public_path($charity->banner_upload))) {
+                        File::delete(public_path($charity->banner_upload));
+                    }
+                    $imageName = Str::slug($request->input('name')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
+                    $request->banner_upload->storeAs('public/charities/images', $imageName);
+                    $charity->banner_upload = $this->imagePath .$imageName;
                     $charity->update();
                 }
             }

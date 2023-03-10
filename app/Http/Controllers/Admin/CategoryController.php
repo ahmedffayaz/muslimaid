@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryRequest;
@@ -80,19 +81,24 @@ class CategoryController extends Controller
                 'slug' => Str::slug($request->name),
             ]);
 
-            if ($request->has('logo_upload')) {
-                $imageName = parse_url($request->logo_upload)['path'];
-                $category->logo_upload =  $imageName;
-                $category->update();
-            } else {
-                $category->logo_upload = 'category_default_logo.png';
-                $category->update();
-            }
+            if ($request->input('logo_type') == 'upload') {
+                if ($request->has('logo_upload')) {
+                    $imageName = Str::slug($request->input('name')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
+                    $request->logo_upload->storeAs('public/categories/images', $imageName);
 
+                    $category->logo_upload = $this->imagePath . $imageName;
+                    $category->update();
+                } else {
+                    $category->logo_upload = 'category_default_logo.png';
+                    $category->update();
+                }
+            }
             if ($request->input('banner_type') == 'upload') {
                 if ($request->has('banner_upload')) {
-                    $imageName = parse_url($request->banner_upload)['path'];
-                    $category->banner_upload =  $imageName;
+                    $imageName = Str::slug($request->input('name')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
+                    $request->banner_upload->storeAs('public/categories/images', $imageName);
+
+                    $category->banner_upload = $this->imagePath . $imageName;
                     $category->update();
                 } else {
                     $category->banner_upload = 'category_default_banner.png';
@@ -139,7 +145,7 @@ class CategoryController extends Controller
     public function edit(Category $category)
     {
         $categories = Category::latest()->where('parent_id', 0)->get();
-        $sort = Category::orderBy('id', 'desc')->pluck('sort')->first();
+        $sort = Category::where('parent_id', 0)->orderBy('sort', 'desc')->pluck('sort')->first();
         if (!isset($sort)) {
             $sort = 1;
         } else {
@@ -188,15 +194,23 @@ class CategoryController extends Controller
             }
             if ($request->input('logo_type') == 'upload') {
                 if ($request->has('logo_upload')) {
-                    $imageName = parse_url($request->logo_upload)['path'];
-                    $category->logo_upload =  $imageName;
+                    if (File::exists(public_path($category->logo_upload))) {
+                        File::delete(public_path( $category->logo_upload));
+                    }
+                    $imageName = Str::slug($request->input('name')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
+                    $request->logo_upload->storeAs('public/categories/images', $imageName);
+                    $category->logo_upload = $this->imagePath . $imageName;
                     $category->update();
                 }
             }
             if ($request->input('banner_type') == 'upload') {
                 if ($request->has('banner_upload')) {
-                    $imageName = parse_url($request->banner_upload)['path'];
-                    $category->banner_upload =  $imageName;
+                    if (File::exists(public_path($category->banner_upload))) {
+                        File::delete(public_path( $category->banner_upload));
+                    }
+                    $imageName = Str::slug($request->input('name')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
+                    $request->banner_upload->storeAs('public/categories/images', $imageName);
+                    $category->banner_upload = $this->imagePath . $imageName;
                     $category->update();
                 }
             }

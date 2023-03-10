@@ -369,11 +369,15 @@ function getRecaptchaSecretKey()
     return $key;
 }
 
-function currency()
+function currency($number, $withSymbol = true)
 {
     $settings = SiteSetting();
-    $currency = Currency::where('id', $settings['currency'])->pluck('symbol')->first();
-    return $currency;
+    $currencySymbol = '$';
+    if (isset($settings['currency'])) {
+        $currencySymbol = getCurrencySymbol();
+    }
+	$number = number_format((float)$number, 2, '.', '');
+	return $withSymbol ? $currencySymbol . $number : $number;
 }
 
 function sidebarCategories()
@@ -384,7 +388,9 @@ function sidebarCategories()
 
 function sidebarStores()
 {
-    $stores = Store::where('feature_sidebar', 1)->latest()->get();
+    $stores = Store::whereHas('tags', function ($query) {
+        $query->where('title', 'feature_sidebar');
+    })->latest()->get();
     return $stores;
 }
 
@@ -687,4 +693,36 @@ function getSiteLogo()
     } else {
         return asset('admin-dashboard/images/logo.png');
     }
+}
+
+function getRandomColorClass()
+{
+    $color = rand(1, 5);
+    if ($color == 1) return 'bg-info';
+    if ($color == 2) return 'bg-primary';
+    if ($color == 3) return 'bg-danger';
+    if ($color == 4) return 'bg-success';
+    if ($color == 5) return 'bg-warning';
+    return null;
+}
+
+function currencyOrPercentage($number, $type = 'fixed', $symbol = null)
+{
+    if ($type == 'fixed') {
+        return !empty($symbol) ? $symbol . currency($number, false) : currency($number);
+    } else {
+        return currency($number, false) . '%';
+    }
+}
+
+function getCurrencySymbol($symbol = null)
+{
+    $settings = SiteSetting();
+    $currencySymbol = '$'; // Set a default value
+
+    if (isset($settings['currency'])) {
+        $currencySymbol = !empty($symbol) ? $symbol : Currency::where('id', $settings['currency'])->pluck('symbol')->first();
+    }
+
+    return $currencySymbol;
 }

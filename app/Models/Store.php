@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Network;
 use App\Models\Category;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Store extends Model
@@ -28,8 +29,6 @@ class Store extends Model
         'override_cashback',
         'override_categories',
         'override_network',
-        'feature_sidebar',
-        'feature_homepage',
         'editor_pick',
         'custom_cashback_percentage',
         'status',
@@ -92,6 +91,11 @@ class Store extends Model
         return $this->hasMany(UserCashback::class);
     }
 
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
+
     public function editorPicks()
     {
         return $this->hasMany(EditorPick::class);
@@ -114,15 +118,16 @@ class Store extends Model
 
     public function getCashback()
     {
-        $currency = null;
-        $percentage = null;
         if ($this->cashback) {
-            $this->cashback->type == 'fixed' ? ($this->cashback->currency ? $currency = $this->cashback->currency : $currency = currency()) : '';
-            $this->cashback->type == 'percentage' ? $percentage = '%' : '';
+            $currency = ($this->type == 'fixed' && isset($this->cashback->currencyData)) ? $this->cashback->currencyData->symbol : '';
             if ($this->custom_cashback_percentage) {
-                return $currency . ($this->custom_cashback_percentage / 100) * $this->cashback->sale_commission . $percentage . ' Cashback';
+                return $this->cashback->type == 'fixed'
+                    ? currencyOrPercentage(($this->custom_cashback_percentage / 100) * $this->cashback->sale_commission, 'fixed', $currency) . ' Cashback'
+                    : currencyOrPercentage(($this->custom_cashback_percentage / 100) * $this->cashback->sale_commission, 'percentage') . ' Cashback';
             } else {
-                return $currency . (SiteSetting()['cashback_percentage'] / 100) * $this->cashback->sale_commission . $percentage . ' Cashback';
+                return $this->cashback->type == 'fixed'
+                    ? currencyOrPercentage((SiteSetting()['cashback_percentage'] / 100) * $this->cashback->sale_commission, 'fixed', $currency) . ' Cashback'
+                    : currencyOrPercentage((SiteSetting()['cashback_percentage'] / 100) * $this->cashback->sale_commission, 'percentage') . ' Cashback';
             }
         }
         return null;

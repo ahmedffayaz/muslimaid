@@ -26,7 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
             $table->string('avatar')->nullable();
-            $table->boolean('status')->default(1);
+            $table->enum('status', ['pending', 'active', 'in_active'])->default('pending');
             $table->string('referred_by')->nullable();
             $table->string('referred_at')->nullable();
             $table->rememberToken();

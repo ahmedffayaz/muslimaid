@@ -78,7 +78,7 @@
                                                     <div class="col-lg-12 text-center">
                                                         <label class="form-label" for="pay-amount-1">Avatar</label>
                                                         <div class="profile-card__avatar text-center">
-                                                            @if ($user->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . $user->avatar) )
+                                                            @if ($user->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . $user->avatar))
                                                                 <img src="{{ asset('admin-dashboard/images/avatar.png') }}" id="image_avatar" width="100">
                                                             @else
                                                                 <img src="{{ asset('storage/users/images/avatar/' . $user->avatar) }}" id="image_avatar" width="100"
@@ -147,8 +147,9 @@
                                                             <div class="form-control-wrap ">
                                                                 <div class="form-control-select">
                                                                     <select class="form-control" id="status" name="status" required>
-                                                                        <option @if ($user->status) selected @endif value="1">Active</option>
-                                                                        <option @if (!$user->status) selected @endif value="0">In-active</option>
+                                                                        <option {{ $user->status == 'pending' ? 'selected' : '' }} value="pending">Pending</option>
+                                                                        <option {{ $user->status == 'active' ? 'selected' : '' }} value="active">Active</option>
+                                                                        <option {{ $user->status == 'in_active' ? 'selected' : '' }} value="in_active">In-active</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -280,7 +281,6 @@
                                             </div>
                                         </form>
                                     </div>
-
                                     <div class="tab-pane" id="tabItem9">
                                         <h5 class="title mb-4">Change Password</h5>
                                         <form action="{{ route('admin.users.save_password', $user) }}" class="gy-3 form-validate is-alter" id='password_form'
@@ -298,7 +298,8 @@
                                                 </div>
                                                 <div class="col-lg-6">
                                                     <div class="form-group">
-                                                        <label class="form-label" for="password_confirmation">Confirm New Password <span class="text-danger">*</span></label>
+                                                        <label class="form-label" for="password_confirmation">Confirm New Password <span
+                                                                class="text-danger">*</span></label>
                                                         <div class="form-control-wrap">
                                                             <input type="password" class="form-control" id="password_confirmation" value=""
                                                                 name="password_confirmation" required>
@@ -314,7 +315,6 @@
                                         </form>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -379,12 +379,6 @@
             theme: 'snow'
         });
 
-//   var form = document.querySelector('form');
-// $(".user-form").submit(function(e) {
-//             // Populate hidden form on submit
-//             var desc = document.querySelector('input[name=intro]');
-//             desc.value = quill.root.innerHTML;
-//         });
         function fetchCashbacks(page) {
             pageurl = "{{ route('admin.users.cashbacks') }}?page=" + page
 
@@ -486,6 +480,7 @@
                             toastr.clear();
                             NioApp.Toast(data.message, 'error');
                         })(NioApp, jQuery);
+                        submitBtn.removeAttr('disabled').find('.spinner-border').remove();
                     }
                 },
                 error: function(data) {
@@ -631,8 +626,7 @@
             },
             submitHandler: function(form) {
                 if ($(form).valid())
-                   
-                return false;
+                    return false;
             }
         });
     </script>

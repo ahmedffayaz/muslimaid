@@ -40,7 +40,7 @@
                                         @if ($slide->banner == 'default1.png' || $slide->banner == 'default2.png' || $slide->banner == 'default3.png')
                                             <img src="{{ asset('frontend/images/slides/' . $slide->banner) }}" class="card-img-top" alt="" style="height:200px">
                                         @else
-                                            <img src="{{$slide->banner }}" class="card-img-top" alt="" style="height:200px">
+                                            <img src="{{ asset($slide->banner) }}" class="card-img-top" alt="" style="height:200px">
                                         @endif
                                         <div class="card-inner">
                                             <div class="project">
@@ -49,10 +49,10 @@
                                                         <div class="project-info">
                                                             <h6 class=" mb-2">{{ $slide->name }}</h6>
                                                             @if ($slide->logo == 'default1.png' || $slide->logo == 'default2.png' || $slide->logo == 'default3.png')
-                                                                <img src="{{ asset('frontend/images/slides/' . $slide->logo) }}" class="float-right" alt=""
+                                                                <img src="{{ asset('frontend/images/slides/logo/' . $slide->logo) }}" class="float-right" alt=""
                                                                     style="max-height: 50px">
                                                             @else
-                                                                <img src="{{ $slide->logo }}" class="float-right" alt=""
+                                                                <img src="{{ asset($slide->logo) }}" class="float-right" alt=""
                                                                     style="max-height: 50px">
                                                             @endif
                                                         </div>
@@ -134,10 +134,6 @@
                         linkType();
                         storeType();
                         formValidation();
-                        $('.lfm').filemanager('image', {
-                            prefix: route_prefix
-                        });
-                        
                     }
                 });
             });
@@ -162,9 +158,6 @@
                         linkType();
                         storeType();
                         formValidation();
-                        $('.lfm').filemanager('image', {
-                            prefix: route_prefix
-                        });
                     }
                 });
             });
@@ -213,7 +206,7 @@
                     $('#slider_type').val();
                     $('.store').show();
                     $('.sliderlink').hide();
-                     $('#store_id').attr('required', 'required');
+                    $('#store_id').attr('required', 'required');
                 }
             });
         }
@@ -266,6 +259,21 @@
                     return false;
                 }
             });
+        }
+    </script>
+    <script>
+         function sliderReadURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    if (input.id === "logo") {
+                        $('#logo-preview').attr('src', e.target.result).removeClass('d-none');
+                    } else if (input.id === "banner") {
+                        $('#banner-preview').attr('src', e.target.result).removeClass('d-none');
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
         }
     </script>
 @endpush

@@ -203,10 +203,7 @@
                         bannerType()
                         store()
                         validation();
-                        $('.lfm').filemanager('image', {
-                            prefix: route_prefix
-                        });
-
+                            
                     }
                 });
             });
@@ -228,9 +225,6 @@
                         bannerType()
                         store()
                         validation()
-                        $('.lfm').filemanager('image', {
-                            prefix: route_prefix
-                        });
                     }
                 });
             });

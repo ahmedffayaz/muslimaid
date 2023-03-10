@@ -19,15 +19,18 @@ use App\Models\StoreCashback;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Tag;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\File;
 
 class StoreController extends Controller
 {
     private $iconPath = 'stores/cashbacks/';
+     public $imagePath = 'storage/stores/images/';
     public function __construct()
     {
         $this->middleware('permission:view stores', ['only' => ['index']]);
@@ -190,18 +193,14 @@ class StoreController extends Controller
                 'slug' => isset($storeSlug) ? $slug . $store->id : $slug,
                 'override_categories' => $request->has('override_categories') ? 1 : 0,
                 'override_cashback' => $request->has('override_cashback') ? 1 : 0,
-                'feature_homepage' => 0,
-                'feature_sidebar' => 0,
                 'editor_pick' => 0,
             ]);
 
             if ($request->has('tags')) {
-                foreach ($request->input('tags') as $tag) {
-                    $store->update([
-                        $tag => 1,
-                    ]);
-                }
+                $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
+                if ($tags->count() > 0) $store->tags()->sync($tags);
             }
+
             DB::commit();
 
             if (!$request->ajax()) {
@@ -300,7 +299,7 @@ class StoreController extends Controller
                 $img_exist->update([
 
                     'title' => $request->title,
-                    'image' => $imageName,
+                    'image' => $this->imagePath . $imageName,
                     'is_uploaded' => 1,
                     'is_fake' => 0,
 
@@ -317,7 +316,7 @@ class StoreController extends Controller
             $logo = StoreImage::create([
                 'store_id' => $store->id,
                 'title' => $request->title,
-                'image' => $imageName,
+                'image' => $this->imagePath . $imageName,
                 'image_type' => 'store_logo',
                 'is_uploaded' => 1,
 
@@ -421,7 +420,7 @@ class StoreController extends Controller
             'network_id' => 'nullable|integer',
             'tracking_url' => 'nullable|url',
             'deeplink_url' => 'nullable|url',
-            'cashback_icon' => 'nullable'
+            'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
         ]);
 
         try {
@@ -429,7 +428,7 @@ class StoreController extends Controller
             $cashback->update($request->all());
 
             if ($request->hasFile('cashback_icon')) {
-                $cashbackIcon = saveResizeImage(parse_url($request->cashback_icon)['path'], $this->iconPath, 200);
+                $cashbackIcon = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
                 $cashback->image = $cashbackIcon;
                 $cashback->update();
             }
@@ -489,7 +488,7 @@ class StoreController extends Controller
             'type' => 'required',
             'sale_commission' => 'required|numeric|min:0',
             'deeplink_url' => 'nullable|url',
-            'cashback_icon' => 'nullable'
+            'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
         ]);
 
         try {
@@ -498,7 +497,7 @@ class StoreController extends Controller
             $cashback = StoreCashback::create($request->all());
 
             if ($request->hasFile('cashback_icon')) {
-                $cashbackIcon = saveResizeImage(parse_url($request->cashback_icon)['path'], $this->iconPath, 200);
+                $cashbackIcon = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
                 $cashback->image = $cashbackIcon;
                 $cashback->update();
             }
