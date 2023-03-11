@@ -80,10 +80,10 @@
                                             <label class="form-label" for="country">All Country</label>
                                             <div class="form-control-wrap ">
                                                 <select class="form-select form-control" data-search="on" id="country" name="country">
-                                                    {{-- <option value="0">Any</option>
-                                                @foreach ($charities as $category)
-                                                <option value="{{$category->id}}">{{$category->name}}</option>
-                                                @endforeach --}}
+                                                    <option value="0">Any</option>
+                                                    @foreach ($countries as $country)
+                                                        <option value="{{ $country->id }}">{{ $country->name }}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -159,7 +159,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <button type="submit" class="btn-lg btn-primary" id="save-btn">Save</button>
@@ -197,7 +197,7 @@
                     $('#add-charity-modal').modal('hide');
                     btn.removeAttr('disabled', 'disabled').button('refresh');
                     form.trigger('reset');
-                   
+
                 },
                 error: function(error) {
 

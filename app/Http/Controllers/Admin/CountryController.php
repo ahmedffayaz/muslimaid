@@ -34,9 +34,6 @@ class CountryController extends Controller
      */
     public function create()
     {
-        $regions = Region::all();
-        $currencies = Currency::all();
-        return view('admin-dashboard.countries.form', compact('regions', 'currencies'));
     }
 
     /**
@@ -121,33 +118,10 @@ class CountryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'title' => 'required',
-            'iso_code' => 'required',
-            'region_id' => 'required|integer',
-            'currency_id' => 'required|integer',
-            'status' => 'required|integer',
-        ], [
-            'title.required' => 'Country name is required.',
-            'iso_code.required' => 'ISO Code is required.',
-            'region_id.required' => 'Region is required.',
-            'region_id.integer' => 'Region value must be integer.',
-            'currency_id.required' => 'Currency is required.',
-            'currency_id.integer' => 'Currency value must be integer.',
-            'status.required' => 'Status is required.',
-            'status.integer' => 'Status value must be integer.',
-        ]);
-
         try {
             DB::beginTransaction();
 
             Country::find($id)->update([
-                'name' => $request->title,
-                'iso_code' => $request->iso_code,
-                'region_id' => $request->region_id,
-                'currency_id' => $request->currency_id,
-                'upload_type' => $request->upload_type,
-                'type_value' => $request->type_value,
                 'status' => $request->status
             ]);
 

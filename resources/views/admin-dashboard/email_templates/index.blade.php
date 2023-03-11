@@ -143,7 +143,6 @@
                     success: function(data) {
                         $('#edit-template-modal').modal('show');
                         $('#edit-template').html(data);
-                        // alert('');
                         var rquill = new Quill('#teditor-container', {
                             modules: {
                                 toolbar: [

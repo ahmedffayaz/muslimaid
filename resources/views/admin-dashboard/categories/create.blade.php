@@ -114,9 +114,9 @@
                             @else
                                 <img id="logo-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />  
                             @endif
-                        </div>
                     </div>
                 </div>
+            </div>
         </div>
         <div class="col-lg-6 ">
             <div class="form-group">

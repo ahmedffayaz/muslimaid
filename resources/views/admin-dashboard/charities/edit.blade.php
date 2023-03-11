@@ -230,13 +230,20 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="country">Country <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="country" name="country" value="{{ $charity->country }}">
-                                                        @error('country')
-                                                            <span class="invalid-feedback d-block" role="alert">
-                                                                <strong>{{ $message }}</strong>
-                                                            </span>
-                                                        @enderror
+                                                        <div class="input-group">
+                                                            <select class="form-control form-select" name="country">
+                                                                <option value="0">Country</option>
+                                                                @foreach ($countries as $country)
+                                                                    <option value="{{ $country->id }}" {{ $charity->country == $country->id ? 'selected' :'' }}>{{ $country->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                     </div>
+                                                    @error('country')
+                                                    <span class="invalid-feedback d-block" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">

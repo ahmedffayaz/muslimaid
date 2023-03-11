@@ -224,7 +224,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::resource('email_templates', EmailTemplatesController::class)->only(['index', 'edit', 'update']);
 
         // Countries
-        Route::resource('countries', CountryController::class)->except(['show', 'destroy']);
+        Route::resource('countries', CountryController::class)->except(['show','create','destroy']);
 
         Route::get('/api-docs', function() {
             return view('scribe.index');
