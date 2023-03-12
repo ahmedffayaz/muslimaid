@@ -408,7 +408,7 @@ class StoreController extends Controller
     public function editCashback(Request $request, StoreCashback $cashback)
     {
         $networks = Network::all();
-        $currencies = Currency::all();
+        $currencies = Currency::latest()->get();
         return view('admin-dashboard.stores.cashback-edit', compact('cashback', 'currencies', 'networks'))->render();
     }
 
