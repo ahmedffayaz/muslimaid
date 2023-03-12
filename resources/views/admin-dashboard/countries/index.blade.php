@@ -28,9 +28,9 @@
                                 <div class="row g-4 justify-content-md-center">
                                     <div class="col-lg-3 col-md-6">
                                         <div class="form-group">
-                                            <label class="form-label" for="country">Country</label>
+                                            <label class="form-label" for="name">Country</label>
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control" id="country" value="" name="country">
+                                                <input type="text" class="form-control" id="name" value="" name="name">
                                             </div>
                                         </div>
                                     </div>
@@ -210,6 +210,41 @@
             }
 
             $('#type').html(html);
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+
+            $(document).on('submit', '.search_form', function(event) {
+                event.preventDefault();
+                $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+        </div></div>`);
+
+                var _token = $("input[name=_token]").val();
+                var name = $("input[name=name").val();
+                var region_id = $("select[name=region_id]").val();
+                var currency_id = $("select[name=currency_id").val();
+                var status = $("select[name=status").val();
+                $.ajax({
+                    url: '{{ route('admin.countries.search') }}',
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                        name: name,
+                        region_id: region_id,
+                        currency_id: currency_id,
+                        status: status
+                    },
+                    success: function(data) {
+                        $('#table-data').html(data);
+                        $('html, body').animate({
+                            scrollTop: 0
+                        }, 'slow');
+                    }
+                });
+
+            });
         });
     </script>
 @endpush

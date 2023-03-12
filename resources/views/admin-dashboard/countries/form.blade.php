@@ -6,10 +6,10 @@
         <div class="row g-4">
             <div class="col-lg-6">
                 <div class="form-group">
-                    <label class="form-label" for="title">Title</label>
+                    <label class="form-label" for="name">Title</label>
                     <div class="form-control-wrap">
                         <div class="input-group">
-                            <input type="text" class="form-control" id="title" name="title" placeholder="Title" value="{{ $country->name  }}" disabled>
+                            <input type="text" class="form-control" id="name" name="name" placeholder="Title" value="{{ $country->name  }}" disabled>
                         </div>
                     </div>
                 </div>
