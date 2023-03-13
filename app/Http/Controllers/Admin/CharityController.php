@@ -245,7 +245,7 @@ class CharityController extends Controller
         }
         try {
             DB::beginTransaction();
-            $charity->update([
+            $inputData = [
                 'title' => $request->input('title'),
                 'country' => $request->input('country'),
                 'charity_types_id' => $request->input('charity_types_id'),
@@ -255,29 +255,39 @@ class CharityController extends Controller
                 'banner_link' => $request->input('banner_link'),
                 'description' => $request->input('description'),
                 'status' => $request->input('status'),
-            ]);
-            if ($request->input('logo_type') == 'upload') {
-                if ($request->has('logo_upload')) {
-                    if (File::exists(public_path($charity->logo_upload))) {
-                        File::delete(public_path($charity->logo_upload));
-                    }
-                    $imageName = Str::slug($request->input('name')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
-                    $request->logo_upload->storeAs('public/charities/images', $imageName);
-                    $charity->logo_upload = $this->imagePath .$imageName;
-                    $charity->update();
+            ];
+            
+            if ($request->input('logo_type') == 'upload' && $request->has('logo_upload')) {
+                $imageName = Str::slug($request->input('name')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
+                $request->logo_upload->storeAs('public/charities/images', $imageName);
+                $inputData['logo_upload'] = $this->imagePath . $imageName;
+                $inputData['logo_link'] = null;
+                if (File::exists(public_path($charity->logo_upload))) {
+                    File::delete(public_path($charity->logo_upload));
+                }
+            } else if ($request->input('logo_type') == 'link') {
+                $inputData['logo_upload'] = null;
+                if (File::exists(public_path($charity->logo_upload))) {
+                    File::delete(public_path($charity->logo_upload));
                 }
             }
-            if ($request->input('banner_type') == 'upload') {
-                if ($request->has('banner_upload')) {
-                    if (File::exists(public_path($charity->banner_upload))) {
-                        File::delete(public_path($charity->banner_upload));
-                    }
-                    $imageName = Str::slug($request->input('name')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
-                    $request->banner_upload->storeAs('public/charities/images', $imageName);
-                    $charity->banner_upload = $this->imagePath .$imageName;
-                    $charity->update();
+            
+            if ($request->input('banner_type') == 'upload' && $request->has('banner_upload')) {
+                $imageName = Str::slug($request->input('name')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
+                $request->banner_upload->storeAs('public/charities/images', $imageName);
+                $inputData['banner_upload'] = $this->imagePath . $imageName;
+                $inputData['banner_link'] = null;
+                if (File::exists(public_path($charity->banner_upload))) {
+                    File::delete(public_path($charity->banner_upload));
+                }
+            } else if ($request->input('banner_type') == 'link') {
+                $inputData['banner_upload'] = null;
+                if (File::exists(public_path($charity->banner_upload))) {
+                    File::delete(public_path($charity->banner_upload));
                 }
             }
+            
+            $charity->update($inputData);
             DB::commit();
 
             if (!$request->ajax()) {
