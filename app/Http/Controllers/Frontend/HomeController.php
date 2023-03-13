@@ -22,7 +22,7 @@ class HomeController extends Controller
         $languages = Language::orderBy('id', 'desc')->get();
         $featured_categories = Category::where('feature_homepage', 1)->orderBy('name', 'ASC')->latest()->get();
         $slider = Slider::where('name', 'Home')->first();
-        $testimonials = Testimonial::where('status', 'active')->orderByDesc('id')->take(5)->get();
+        $testimonials = Testimonial::where('status', 'active')->orderBy('order_no')->take(5)->get();
 
         return view('frontend.pages.home', compact('stores', 'languages', 'featured_categories', 'slider', 'testimonials'));
     }

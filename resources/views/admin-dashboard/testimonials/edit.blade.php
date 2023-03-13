@@ -75,8 +75,8 @@
 
                                             <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="description">Description </label>
-                                                    <textarea class="form-control description " name="description" placeholder="Description" value="">{{ $testimonial->description }}</textarea>
+                                                    <label class="form-label" for="description">Description <span class="text-danger">*</span></label>
+                                                    <textarea class="form-control description " name="description" placeholder="Description" value="" required>{{ $testimonial->description }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">
@@ -93,7 +93,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="order_no">Order No <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input id="order_no" type="number" class="form-control " name="order_no" placeholder="Order No"
+                                                        <input id="order_no" type="number" class="form-control " name="order_no" min="1" placeholder="Order No"
                                                             value="{{ $testimonial->order_no }}" required>
                                                     </div>
                                                 </div>

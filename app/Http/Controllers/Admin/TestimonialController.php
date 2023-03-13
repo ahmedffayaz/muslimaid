@@ -48,6 +48,7 @@ class TestimonialController extends Controller
             'image' => 'required|file|mimes:jpg,png|max:' . 1 * 1024, // 1024 KB = 1 MB',
             'name' => 'required',
             'company_name' => 'required',
+            'description' => 'required',
             'order_no' => 'required|integer',
             'position' => 'required'
         ], $messages = [
@@ -58,7 +59,8 @@ class TestimonialController extends Controller
             'order_no.required' => 'The order number field is required.',
             'order_no.integer' => 'The order number field must be integer.',
             'meta_title.required' => 'The meta title field is required.',
-            'Position.required' => 'The user name field is required.',
+            'position.required' => 'The user name field is required.',
+            'description.required' => 'The description field is required.',
         ]);
        
 
@@ -109,6 +111,7 @@ class TestimonialController extends Controller
             'title' => 'required|regex:/^[\w. ]+$/',
             'name' => 'required',
             'company_name' => 'required',
+            'description' => 'required',
             'order_no' => 'required|integer',
             'position' => 'required'
         ], $messages = [
@@ -118,6 +121,7 @@ class TestimonialController extends Controller
             'order_no.required' => 'The order number field is required.',
             'order_no.integer' => 'The order number field must be integer.',
             'position.required' => 'The user name field is required.',
+            'description.required' => 'The description field is required.',
         ]);
 
         if ($request->has('image')) {
