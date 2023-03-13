@@ -29,7 +29,7 @@ class SettingSeeder extends Seeder
             $settings[] = [
                 'title' => $setting['title'],
                 'type' => $setting['type'],
-                'value' => $setting['value'],
+                'value' => ($setting['type'] == "facebook_url" || $setting['type'] == "google_url") ?  (url('/') .  $setting['value']) : $setting['value'],
                 'default' => isset($setting['default']) && !empty($setting['default']) ? $setting['default'] : 1,
                 'created_at' => $now,
                 'updated_at' => $now,
