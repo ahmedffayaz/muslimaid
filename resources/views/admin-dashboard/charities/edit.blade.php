@@ -241,6 +241,11 @@
                                                             </span>
                                                         @enderror
                                                     </div>
+                                                    @error('country')
+                                                    <span class="invalid-feedback d-block" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">

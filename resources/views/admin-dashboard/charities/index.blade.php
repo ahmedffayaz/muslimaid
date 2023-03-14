@@ -23,13 +23,8 @@
                                                         class="icon ni ni-plus"></em><span>Create Charity Type</span></a>
                                             </li>
                                             <li class="nk-block-tools-opt"><a href="{{ route('admin.charities.charity_type_view') }}" class="btn btn-primary btn-sm"><em
-                                                        class="icon ni ni-plus"></em><span>View Charity Type</span></a></li>
-
-                                            {{-- <li><a href="{{route('admin.stores.export')}}" id="export"
-                                                class="btn btn-success btn-sm"
-                                                class="btn btn-white btn-outline-light"><em
-                                                    class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
-                                        --}}
+                                                        class="icon ni ni-plus"></em><span>View Charity Type</span></a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div><!-- .toggle-wrap -->
@@ -82,7 +77,7 @@
                                                 <select class="form-select form-control" data-search="on" id="country" name="country">
                                                     <option value="0">Any</option>
                                                     @foreach ($countries as $country)
-                                                        <option value="{{$country->id}}">{{$country->name}}</option>
+                                                        <option value="{{ $country->id }}">{{ $country->name }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -159,7 +154,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <button type="submit" class="btn-lg btn-primary" id="save-btn">Save</button>
@@ -197,7 +192,7 @@
                     $('#add-charity-modal').modal('hide');
                     btn.removeAttr('disabled', 'disabled').button('refresh');
                     form.trigger('reset');
-                   
+
                 },
                 error: function(error) {
 

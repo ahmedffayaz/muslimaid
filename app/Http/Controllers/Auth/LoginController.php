@@ -121,7 +121,7 @@ class LoginController extends Controller
         $request->validate([
             $this->username() => 'required|string',
             'password' => 'required|string',
-             'g-recaptcha-response' => 'required|captcha', 
+            'g-recaptcha-response' => 'required|captcha', 
         ]);
     }
     protected function redirectTo()

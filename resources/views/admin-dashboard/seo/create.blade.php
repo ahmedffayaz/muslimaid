@@ -106,7 +106,6 @@
         var counter = 0;
         $(document).on('click', '#append_fields', function() {
             let counter = $('.seo-fields').attr('data-count');
-           // alert(counter);
 
             html = `<div>
             <div class="form-group">
