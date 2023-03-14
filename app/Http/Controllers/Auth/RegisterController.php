@@ -95,11 +95,32 @@ class RegisterController extends Controller
         $bonusStatus = 1;
 
         $this->welcomBonus($user, $bonusStatus);
-
         //send email to user to verify email address
         dispatch(new SendEmailJob($user));
 
-        return redirect()->route('login');
+        $settings = SiteSetting();
+        $requestBody = [
+            'list_ids'=> [
+                isset($settings['sendgrid_registered_list_id']) ? $settings['sendgrid_registered_list_id'] : "",
+            ],
+            'contacts' => [
+                [
+                    'email' => $data['email'],
+                ]
+            ]
+        ];
+        $apiKey = isset($settings['sendgrid_api_key']) ? $settings['sendgrid_api_key'] : "";
+        $sg = new \SendGrid($apiKey);
+        try {
+            $response = $sg->client->marketing()->contacts()->put($requestBody);
+            if($response->statusCode() == 201 || $response->statusCode() == 202){
+                return redirect()->route('login')->with(['success' => 'User Successfully registered, verify your account'], );
+            }else{
+                return redirect()->route('login')->with(['error' => 'Something went wrong!']);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('login')->with(['error' => 'Something went wrong!']);
+        }
     }
 
     /**
