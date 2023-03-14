@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Country;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,7 +25,8 @@ class CharityController extends Controller
     {
         $charities = Charity::latest()->paginate(30);
         $charitiestypes = CharityType::where('status', '1')->get();
-        return view('admin-dashboard.charities.index', compact('charities', 'charitiestypes'));
+        $countries = Country::where('status', '1')->get();
+        return view('admin-dashboard.charities.index', compact('charities', 'charitiestypes', 'countries'));
     }
 
     public function searchCharities(Request $request)
@@ -57,7 +59,8 @@ class CharityController extends Controller
     public function create()
     {
         $charitiestypes = CharityType::where('status', '1')->get();
-        return view('admin-dashboard.charities.create', compact('charitiestypes'));
+        $countries = Country::where('status', '1')->get();
+        return view('admin-dashboard.charities.create', compact('charitiestypes', 'countries'));
     }
 
     /**
@@ -216,7 +219,8 @@ class CharityController extends Controller
     public function edit(Charity $charity)
     {
         $CharityType = CharityType::latest()->get();
-        return view('admin-dashboard.charities.edit', compact('charity', 'CharityType'));
+        $countries = Country::where('status', '1')->get();
+        return view('admin-dashboard.charities.edit', compact('charity', 'CharityType', 'countries'));
     }
 
     /**
