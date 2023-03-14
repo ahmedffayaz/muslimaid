@@ -80,10 +80,10 @@
                                             <label class="form-label" for="country">All Country</label>
                                             <div class="form-control-wrap ">
                                                 <select class="form-select form-control" data-search="on" id="country" name="country">
-                                                    {{-- <option value="0">Any</option>
-                                                @foreach ($charities as $category)
-                                                <option value="{{$category->id}}">{{$category->name}}</option>
-                                                @endforeach --}}
+                                                    <option value="0">Any</option>
+                                                    @foreach ($countries as $country)
+                                                        <option value="{{$country->id}}">{{$country->name}}</option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
