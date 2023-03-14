@@ -76,6 +76,51 @@ class StoreController extends Controller
         return view('frontend.stores.location', compact('locations', 'categories', 'location_array', 'mainCategory'));
     }
 
+    function sortByDistance(Request $request, $slug) {
+        $latitudeFrom = $request->latitude;
+        $longitudeFrom = $request->longitude;
+
+        $category = Category::whereSlug($slug)->first();
+        $stores = Store::when(optional($category)->id, function ($query) use ($category) {
+            $query->whereHas('categories', function ($query) use ($category) {
+                $query->where('category_id', $category->id);
+            });
+        })->where('status', 'active')->with('logo', 'storeAddress')->paginate(25);
+
+        // Loop through each store and calculate the distance
+        foreach ($stores as $store) {
+            $store->storeAddress = $store->storeAddress->first();
+            if ($store->storeAddress && isset($latitudeFrom) && isset($longitudeFrom)) {
+                $latitudeTo = $store->storeAddress->latitude;
+                $longitudeTo = $store->storeAddress->longitude;
+                $earthRadius = 6371; // Earth's radius in kilometers
+
+                // Convert coordinates to radians
+                $latFrom = deg2rad($latitudeFrom);
+                $lonFrom = deg2rad($longitudeFrom);
+                $latTo = deg2rad($latitudeTo);
+                $lonTo = deg2rad($longitudeTo);
+
+                // Calculate the differences
+                $latDelta = $latTo - $latFrom;
+                $lonDelta = $lonTo - $lonFrom;
+
+                // Calculate the distance using the Haversine formula
+                $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+                    cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+                $distance = $angle * $earthRadius;
+
+                // Add the distance to the store object
+                $store->distance = number_format((float)$distance, 2, '.', '');
+            } else {$store->distance = '1.4';}
+        }
+
+        // Sort the stores by distance in ascending order
+        $stores = $stores->sortBy('distance');
+
+        return view('frontend.stores.sorted_stores', compact('stores'));
+    }
+
     public function showReviews(Request $request, $id)
     {
         $limit = 5;
