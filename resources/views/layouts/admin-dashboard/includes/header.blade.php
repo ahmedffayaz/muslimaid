@@ -59,12 +59,22 @@
                                                 </a>
                                             </li><!-- .nk-menu-item -->
                                         @endcan
+                                        @can('view charities')
                                         <li class="">
                                             <a href="/admin/charities" class="">
                                                 <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
                                                 <span class="nk-menu-text">Charities</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
+                                        @endcan
+                                        @can('view countries')
+                                        <li class="">
+                                            <a href="/admin/countries" class="">
+                                                <span class="nk-menu-icon"><em class="icon ni ni-flag"></em></span>
+                                                <span class="nk-menu-text">Countries</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
+                                        @endcan
                                     </ul>
                                 </div>
                             </div>

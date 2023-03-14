@@ -34,9 +34,6 @@ class CountryController extends Controller
      */
     public function create()
     {
-        $regions = Region::all();
-        $currencies = Currency::all();
-        return view('admin-dashboard.countries.form', compact('regions', 'currencies'));
     }
 
     /**
@@ -48,13 +45,13 @@ class CountryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
+            'name' => 'required',
             'iso_code' => 'required',
             'region_id' => 'required|integer',
             'currency_id' => 'required|integer',
             'status' => 'required|integer',
         ], [
-            'title.required' => 'Country name is required.',
+            'name.required' => 'Country name is required.',
             'iso_code.required' => 'ISO Code is required.',
             'region_id.required' => 'Region is required.',
             'region_id.integer' => 'Region value must be integer.',
@@ -68,7 +65,7 @@ class CountryController extends Controller
             DB::beginTransaction();
 
             Country::create([
-                'name' => $request->title,
+                'name' => $request->name,
                 'iso_code' => $request->iso_code,
                 'region_id' => $request->region_id,
                 'currency_id' => $request->currency_id,
@@ -121,33 +118,10 @@ class CountryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->validate([
-            'title' => 'required',
-            'iso_code' => 'required',
-            'region_id' => 'required|integer',
-            'currency_id' => 'required|integer',
-            'status' => 'required|integer',
-        ], [
-            'title.required' => 'Country name is required.',
-            'iso_code.required' => 'ISO Code is required.',
-            'region_id.required' => 'Region is required.',
-            'region_id.integer' => 'Region value must be integer.',
-            'currency_id.required' => 'Currency is required.',
-            'currency_id.integer' => 'Currency value must be integer.',
-            'status.required' => 'Status is required.',
-            'status.integer' => 'Status value must be integer.',
-        ]);
-
         try {
             DB::beginTransaction();
 
             Country::find($id)->update([
-                'name' => $request->title,
-                'iso_code' => $request->iso_code,
-                'region_id' => $request->region_id,
-                'currency_id' => $request->currency_id,
-                'upload_type' => $request->upload_type,
-                'type_value' => $request->type_value,
                 'status' => $request->status
             ]);
 
@@ -170,5 +144,25 @@ class CountryController extends Controller
                 'error' => $exception->getMessage()
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+    public function searchCountries(Request $request)
+    {
+        $countries = (new Country())->newQuery();
+        if ($request->input('name')) {
+            $countries->where('name', $request->input('name'));
+        }
+        if ($request->input('region_id')) {
+            $countries->where('region_id', $request->input('region_id'));
+        }
+        if ($request->input('currency_id')) {
+            $countries->where('currency_id', $request->input('currency_id'));
+        }
+        if ($request->input('status') != -1) {
+            $status = $request->input('status') == 'active' ? true : false;
+            $countries->where('status', $status);
+        }
+        $countries = $countries->orderBy('name', 'DESC')->get();
+        $route = 'search';
+        return view('admin-dashboard.countries.index_data', compact('countries', 'route'))->render();
     }
 }

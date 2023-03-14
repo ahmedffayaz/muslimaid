@@ -295,7 +295,7 @@ class CharityController extends Controller
             DB::commit();
 
             if (!$request->ajax()) {
-                flash()->success('Charities updated');
+                flash()->success('Charity updated');
                 return redirect()->route('admin.charities.index');
             } else {
                 return 1;

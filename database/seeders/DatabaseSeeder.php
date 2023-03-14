@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             RegionSeeder::class,
             CharitySeeder::class,
             CharityTypeSeeder::class,
+            CountrySeeder::class,
         ]);
     }
 }

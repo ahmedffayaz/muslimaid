@@ -79,7 +79,7 @@ class StoreController extends Controller
             'tracking_url' => 'required|url',
             'deeplink_url' => 'nullable|url',
             'store_url' => 'required|url',
-            'description' => 'nullable|max:255'
+            'description' => 'nullable'
         ]);
 
         if ($validator->fails()) {
@@ -169,8 +169,8 @@ class StoreController extends Controller
             'tracking_url' => 'required|url',
             'deeplink_url' => 'nullable|url',
             'store_url' => 'required|url',
-            'description' => 'nullable|max:255',
-            'terms_conditions' => 'nullable|max:255'
+            'description' => 'nullable',
+            'terms_conditions' => 'nullable'
         ]);
 
         try {

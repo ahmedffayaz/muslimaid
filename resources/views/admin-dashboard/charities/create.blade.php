@@ -96,7 +96,7 @@
                                                     <label class="form-label" for="logo_link">Logo Link <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
                                                         <input type="link" id="logo_link" class="form-control" id="logo_link" name="logo_link" value="{{ old('logo_link') }}"
-                                                            required onchange="readLinkURL(this);" >
+                                                            required onchange="readLinkURL(this);">
                                                         @error('logo_link')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -107,7 +107,8 @@
                                                 <div class="col-lg-3 ">
                                                     <div class="form-group">
                                                         <div class="preview-wrapper">
-                                                            <img id="logo_link-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />   
+                                                            <img id="logo_link-preview" src="" alt="store logo" class="d-none"
+                                                                style="max-height: 60px; max-width: 60px;" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -159,8 +160,8 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="banner_link">Banner Link <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="link" class="form-control" id="banner_link" name="banner_link" value="{{ old('banner_link') }}" 
-                                                            required onchange="readLinkURL(this);" >
+                                                        <input type="link" class="form-control" id="banner_link" name="banner_link" value="{{ old('banner_link') }}"
+                                                            required onchange="readLinkURL(this);">
                                                         @error('banner_link')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
@@ -171,7 +172,8 @@
                                                 <div class="col-lg-3 ">
                                                     <div class="form-group">
                                                         <div class="preview-wrapper">
-                                                            <img id="banner_link-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />   
+                                                            <img id="banner_link-preview" src="" alt="store logo" class="d-none"
+                                                                style="max-height: 60px; max-width: 60px;" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -195,8 +197,7 @@
                                                 <div class="col-lg-3">
                                                     <div class="form-group">
                                                         <div class="preview-wrapper">
-                                                            <img id="banner-preview" src="" alt="store logo" class="d-none"
-                                                                style="max-width:80px;max-height:120px" />
+                                                            <img id="banner-preview" src="" alt="store logo" class="d-none" style="max-width:80px;max-height:120px" />
                                                         </div>
                                                     </div>
                                                 </div>
@@ -205,7 +206,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="country">Country <span class="text-danger">*</span></label>
                                                     <div class="form-control-select">
-                                                        <select class="form-control form-select" id="country" name="country" value="{{ old('country') }}" required>
+                                                        <select class="form-control form-select" id="country" data-search="on" name="country" value="{{ old('country') }}" required>
                                                             @foreach($countries as $country)
                                                                 <option value="{{ $country->id }}">{{ $country->name }}</option>
                                                             @endforeach
