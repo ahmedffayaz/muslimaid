@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Website;
+namespace App\Http\Controllers\Frontend;
 
 use Exception;
 use Throwable;
@@ -16,12 +16,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ClickController extends Controller
 {
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -96,10 +90,10 @@ class ClickController extends Controller
             if ($request->ajax()) {
                 return array(
                     'status' => JsonResponse::HTTP_OK,
-                    'url' => route('site.cashback', [$hashStoreId, $url])
+                    'url' => route('click.redirect', [$hashStoreId, $url])
                 );
             }
-            return redirect()->route('site.cashback', $hashStoreId, $url);
+            return redirect()->route('click.redirect', $hashStoreId, $url);
         } catch (ModelNotFoundException $e) {
             DB::rollBack();
             if ($request->ajax()) {
@@ -121,14 +115,14 @@ class ClickController extends Controller
         }
     }
 
-    public function getCashback($hash, $url)
+    public function redirect($hash, $url)
     {
         try {
             $storeId = decrypt($hash);
             $store = Store::find($storeId);
             $url = decrypt($url);
 
-            return view('frontend.pages.exit', compact('store', 'url'));
+            return view('frontend.stores.exit-click', compact('store', 'url'));
         } catch (Throwable $th) {
             if (request()->ajax()) {
                 return response()->json([

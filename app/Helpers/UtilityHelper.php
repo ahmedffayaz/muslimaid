@@ -457,11 +457,11 @@ function checkStaticpageRule($url)
             'post' => '\App\Models\Blog',
             'page' => '\App\Models\Page',
             'store.location'  => '\App\Models\Category',
-            'store.show' => '\App\Models\Store'
+            'stores.show' => '\App\Models\Store'
         ];
 
         foreach ($route_names as $route_name => $model) {
-            if ($current_route_name == 'store.show') {
+            if ($current_route_name == 'stores.show') {
                 $meta_description = [];
                 $meta_keyword = [];
                 $store = Store::where('slug', $slug)->select('id', 'name')->with('storeRuleData')->first();

@@ -112,40 +112,44 @@ class PagesController extends Controller
     {
         $request->validate([
             'title' => 'required'
-        ], [
-            'title.required' => 'The Title field is required.',
         ]);
 
         try {
             DB::beginTransaction();
-            $page->title = $request->title;
-            $page->excerpt = $request->excerpt;
-            $page->lb_content = $request->content;
-            $page->status = $request->status;
+
+            $page->update([
+                'title' => $request->input('title'),
+                'excerpt' => $request->input('excerpt'),
+                'lb_content' => $request->input('content'),
+                'status' => $request->input('status') == 'inactive' && $page->type == 'general' ? 'inactive' : 'active',
+                'description' => $request->input('short_description'),
+                'meta_description' => $request->input('meta_description'),
+                'meta_keyword' => $request->input('meta_keyword'),
+            ]);
+
             if (isset($request->filepath)) {
                 $page->banner_image = parse_url($request->filepath)['path'];
+                $page->save();
             }
-            $page->description = $request->short_description;
-            $page->meta_description = $request->meta_description;
-            $page->meta_keyword = $request->meta_keyword;
-            $page->save();
 
             DB::commit();
+
             if (!$request->ajax()) {
                 flash()->success('Page updated');
                 return redirect()->route('admin.pages.index');
-            } else {
-                return response()->json([
-                    'status' => JsonResponse::HTTP_OK,
-                    'message' => 'Page updated'
-                ], JsonResponse::HTTP_OK);
             }
+
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Page updated'
+            ], JsonResponse::HTTP_OK);
         } catch (Throwable $th) {
             DB::rollBack();
             if (!$request->ajax()) {
                 flash()->error('Something went wrong, try again.');
                 return redirect()->back();
             }
+
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
                 'error' => 'Something went wrong, try again.'
@@ -161,7 +165,15 @@ class PagesController extends Controller
      */
     public function destroy(Page $page)
     {
+        if ($page->type == 'system') {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'System pages cannot be deleted.'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
         $page->delete();
+
         flash()->success('Page deleted');
         return redirect()->route('admin.pages.index');
     }

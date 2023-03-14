@@ -28,17 +28,20 @@ class PagesSeeder extends Seeder
         $now = Carbon::now();
 
         foreach ($csvToArray as $page) {
+            if (!arrayValueExists($page, 'type')) $page['type'] = 'general';
+            if (!in_array($page['type'], ['system', 'special', 'general'])) continue;
+
             $pages[] = [
                 'id' => $page['id'],
                 'title' => $page['title'],
                 'slug' => $page['slug'],
                 'excerpt' => empty($page['excerpt']) ? null : $page['excerpt'],
-                'status' => $page['status'],
+                'status' => arrayValueExists($page, 'status') && $page['status'] == 'inactive' && $page['type'] == 'general' ? 'inactive' : 'active',
                 'meta_description' => empty($page['meta_description']) ? null : $page['meta_description'],
                 'meta_keyword' => empty($page['meta_keyword']) ? null : $page['meta_keyword'],
                 'banner_image' => empty($page['banner_image']) ? null : $page['banner_image'],
                 'description' => empty($page['description']) ? null : $page['description'],
-                'default' => $page['default'],
+                'type' => $page['type'],
                 'created_at' => $now,
                 'updated_at' =>  $now,
             ];

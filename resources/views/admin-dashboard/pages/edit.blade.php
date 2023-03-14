@@ -36,15 +36,14 @@
                                                     <label class="form-label" for="default-06">Status</label>
                                                     <div class="form-control-wrap ">
                                                         <div class="">
-                                                            @if ($page->default)
+                                                            @if ($page->type == 'system')
                                                                 <select class="form-control form-select disabled " name="status" required>
-                                                                    <option @if ($page->status == 1) selected @endif value="1">Active</option>
+                                                                    <option @if ($page->status == 'active') selected @endif value="active">Active</option>
                                                                 </select>
                                                             @else
                                                                 <select class="form-control form-select" name="status" required>
-                                                                    <option @if ($page->status == 1) selected @endif value="1">Active</option>
-                                                                    <option @if ($page->status == 0) selected @endif value="0">In-active</option>
-
+                                                                    <option @if ($page->status == 'active') selected @endif value="active">Active</option>
+                                                                    <option @if ($page->status == 'inactive') selected @endif value="inactive">In-active</option>
                                                                 </select>
                                                             @endif
                                                         </div>
