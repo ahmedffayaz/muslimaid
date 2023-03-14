@@ -24,6 +24,7 @@
         "laravel/ui": "^3.2",
         "laraveldaily/laravel-charts": "^0.1.25",
         "livewire/livewire": "^2.5",
+        "sendgrid/sendgrid": "^8.0",
         "spatie/laravel-newsletter": "^4.10",
         "spatie/laravel-permission": "^4.0",
         "spatie/laravel-translation-loader": "^2.7",

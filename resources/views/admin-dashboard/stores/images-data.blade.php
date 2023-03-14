@@ -42,7 +42,7 @@
                             <li><a @if($item->is_fake)
                                    href="{{asset('frontend/images/logos/'.$item->image)}}"
                                @else
-                                   href="{{asset('storage/stores/images/'.$item->image)}}"
+                                   href="{{asset($item->image)}}"
                                @endif target="_blank">
                                <em class="icon ni ni-eye"></em><span>View</span></a></li>
                             <li><a href="" image-id={{$item->id}} class="delete-img"><em class="icon ni ni-trash"></em><span>Delete</span></a></li>

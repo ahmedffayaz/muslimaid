@@ -11,9 +11,9 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $categories = Category::with('childs')->where('parent_id','0')->get();
-        $subCategories = Category::with('stores')->where('parent_id','0')->get();
-        return view ('frontend.categories.index',compact('categories'));
+        $categories = Category::with('childs')->where('parent_id', '0')->get();
+        $subCategories = Category::with('stores')->where('parent_id', '0')->get();
+        return view('frontend.categories.index', compact('categories'));
     }
 
     public function show(Request $request, $slug)
@@ -42,11 +42,14 @@ class CategoryController extends Controller
                 $query->where('category_id', $mainCategory->id);
             });
         })->where('status', 'active')->with('logo', 'storeAddress')->paginate(25);
+
         if (!isset($mainCategory) || is_null($mainCategory)) {
             return abort(404);
         }
+
         $categories = Category::with(['stores.storeAddress'])->whereParentId($mainCategory['id'])->orderBy('name', 'ASC')->get();
         $location_array = array();
+
         foreach ($categories as $category) {
             foreach ($category->stores as $store) {
                 $location_array['des'][] = $store->description;
@@ -56,6 +59,7 @@ class CategoryController extends Controller
                 }
             }
         }
+        
         return view('frontend.categories.show', compact('locations', 'categories', 'location_array', 'mainCategory'));
     }
 }

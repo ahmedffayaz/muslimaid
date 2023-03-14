@@ -2021,10 +2021,16 @@
                 $('.currency-div').hide();
                 $('#currency').removeAttr('required').val('');
             }
+                $('#currency option:first-child').prop('selected', true);
         }
 
         $(document.body).on("change", "#type", function() {
             checkCashbackType();
+        });
+
+        // Select first option by default
+        $(document).ready(function() {
+            $('#currency option:first-child').prop('selected', true);
         });
 
         // Override Categories

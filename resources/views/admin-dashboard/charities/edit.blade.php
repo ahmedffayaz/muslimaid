@@ -229,8 +229,12 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-label" for="country">Country <span class="text-danger">*</span></label>
-                                                    <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="country" name="country" value="{{ $charity->country }}">
+                                                    <div class="form-control-select">
+                                                        <select class="form-control form-select" id="country" name="country" value="{{ old('country') }}" required>
+                                                            @foreach($countries as $country)
+                                                                <option value="{{ $country->id }}" {{ $charity->country == $country->id ? 'slected' : '' }}>{{ $country->name }}</option>
+                                                            @endforeach
+                                                        </select>
                                                         @error('country')
                                                             <span class="invalid-feedback d-block" role="alert">
                                                                 <strong>{{ $message }}</strong>
