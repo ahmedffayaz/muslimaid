@@ -546,7 +546,7 @@ function getImageUrl($url)
     if (empty($url) || (isset($url->image) && empty($url->image))) return null;
 
     if (isset($url->image)) {
-        $baseDir = $url->is_fake ? 'frontend/images/logos/' : 'storage/stores/images/';
+        $baseDir = $url->is_fake ? 'frontend/images/logos/' : '';
 
         return strpos($url->image, 'http') !== false
             ? $url->image
@@ -555,7 +555,7 @@ function getImageUrl($url)
 
     return strpos($url, 'http') !== false
         ? $url
-        : asset('storage/stores/images/' . ltrim($url, '/'));
+        : asset($url);
 }
 
 /**
