@@ -23,13 +23,8 @@
                                                         class="icon ni ni-plus"></em><span>Create Charity Type</span></a>
                                             </li>
                                             <li class="nk-block-tools-opt"><a href="{{ route('admin.charities.charity_type_view') }}" class="btn btn-primary btn-sm"><em
-                                                        class="icon ni ni-plus"></em><span>View Charity Type</span></a></li>
-
-                                            {{-- <li><a href="{{route('admin.stores.export')}}" id="export"
-                                                class="btn btn-success btn-sm"
-                                                class="btn btn-white btn-outline-light"><em
-                                                    class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
-                                        --}}
+                                                        class="icon ni ni-plus"></em><span>View Charity Type</span></a>
+                                            </li>
                                         </ul>
                                     </div>
                                 </div><!-- .toggle-wrap -->
