@@ -27,6 +27,14 @@ function getPageTemplates($slug)
     return $page;
 }
 
+//feature store for cashblack
+function getFeaturesStores($feature_tag){
+    $stores = Store::whereHas('tags', function ($query) use ($feature_tag) {
+        $query->where('title', $feature_tag);
+    })->latest()->get();
+    return $stores;
+}
+
 function separatePageKeywords($content)
 {
     $content_keyword = explode('{{', $content);
