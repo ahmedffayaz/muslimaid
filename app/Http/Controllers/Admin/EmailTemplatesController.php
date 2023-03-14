@@ -16,7 +16,7 @@ class EmailTemplatesController extends Controller
     public function index()
     {
         $templates = EmailTemplate::all();
-        return view('admin-dashboard.email_templates.index',compact('templates'));
+        return view('frontend.emails.admin.index',compact('templates'));
     }
 
     /**
@@ -28,7 +28,7 @@ class EmailTemplatesController extends Controller
     public function edit($id)
     {
         $template = EmailTemplate::find($id);
-        return view('admin-dashboard.email_templates.edit',compact('template'))->render();
+        return view('frontend.emails.admin.edit',compact('template'))->render();
 
     }
 

@@ -43,22 +43,36 @@ class StoreController extends Controller
                     $query->whereHas('categories', function ($query) use ($request) {
                         $query->whereIn('category_id', $request->id);
                     });
-                })->with('logo', 'storeAddress')->paginate(25);
+                })->with('logo', 'storeAddress','slug');
             } else {
                 $locations = Store::when(optional($mainCategory)->id, function ($query) use ($mainCategory) {
                     $query->whereHas('categories', function ($query) use ($mainCategory) {
                         $query->where('category_id', $mainCategory->id);
                     });
-                })->where('status', 'active')->with('logo', 'storeAddress')->paginate(25);
+                })->where('status', 'active')->with('logo', 'storeAddress');
             }
-            return view('frontend.stores.stores', compact('locations'));
+          
+            if(isset($request->orderBy)){
+                $orderByArr = explode("-",$request->orderBy);
+                $locations->orderBy($orderByArr[0], $orderByArr[1]);
+            } 
+            $locations = $locations->paginate(25);
+            $locations->appends(['orderBy' => $request->orderBy]);
+            return view('frontend.stores.stores', compact('locations', 'slug'));
         }
 
         $locations = Store::when(optional($mainCategory)->id, function ($query) use ($mainCategory) {
             $query->whereHas('categories', function ($query) use ($mainCategory) {
                 $query->where('category_id', $mainCategory->id);
             });
-        })->where('status', 'active')->with('logo', 'storeAddress')->paginate(25);
+        })->where('status', 'active')->with('logo', 'storeAddress');
+        if(isset($request->orderBy)){
+            $orderByArr = explode("-",$request->orderBy);
+            $locations->orderBy($orderByArr[0], $orderByArr[1]);
+        }
+        
+        $locations = $locations->paginate(25);
+        $locations->appends(['orderBy' => $request->orderBy]);
         if (!isset($mainCategory) || is_null($mainCategory)) {
             return abort(404);
         }
@@ -73,7 +87,7 @@ class StoreController extends Controller
                 }
             }
         }
-        return view('frontend.stores.location', compact('locations', 'categories', 'location_array', 'mainCategory'));
+        return view('frontend.stores.location', compact('locations', 'categories', 'location_array', 'mainCategory', 'slug'));
     }
 
     public function showReviews(Request $request, $id)

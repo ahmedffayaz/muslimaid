@@ -69,8 +69,8 @@
 
                                             <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="description">Description</label>
-                                                    <textarea class="description form-control " name="description" placeholder="Description" value=""></textarea>
+                                                    <label class="form-label" for="description">Description <span class="text-danger">*</span></label>
+                                                    <textarea class="description form-control " name="description" placeholder="Description" value="" required></textarea>
                                                 </div>
                                             </div>
                                             <hr>
@@ -89,7 +89,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="order_no">Order No <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input id="order_no" type="number" class="form-control" name="order_no" placeholder="Order No" value="" required>
+                                                        <input id="order_no" type="number" class="form-control" name="order_no" min="1" placeholder="Order No" value="" required>
                                                     </div>
                                                 </div>
                                             </div>

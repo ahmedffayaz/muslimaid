@@ -229,15 +229,17 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-label" for="country">Country <span class="text-danger">*</span></label>
-                                                    <div class="form-control-wrap">
-                                                        <div class="input-group">
-                                                            <select class="form-control form-select" name="country">
-                                                                <option value="0">Country</option>
-                                                                @foreach ($countries as $country)
-                                                                    <option value="{{ $country->id }}" {{ $charity->country == $country->id ? 'selected' :'' }}>{{ $country->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
+                                                    <div class="form-control-select">
+                                                        <select class="form-control form-select" id="country" name="country" value="{{ old('country') }}" required>
+                                                            @foreach($countries as $country)
+                                                                <option value="{{ $country->id }}" {{ $charity->country == $country->id ? 'slected' : '' }}>{{ $country->name }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('country')
+                                                            <span class="invalid-feedback d-block" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
                                                     </div>
                                                     @error('country')
                                                     <span class="invalid-feedback d-block" role="alert">

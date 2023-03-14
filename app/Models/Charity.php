@@ -28,4 +28,8 @@ class Charity extends Model
     {
         return $this->hasOne(CharityType::class, 'id', 'charity_types_id');
     }
+    public function Country()
+    {
+        return $this->hasOne(Country::class, 'id', 'country');
+    }
 }

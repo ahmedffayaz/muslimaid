@@ -205,10 +205,9 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-label" for="country">Country <span class="text-danger">*</span></label>
-                                                    <div class="form-control-wrap">
-                                                        <select class="form-select form-control" data-search="on" id="country" name="country">
-                                                            <option value="0">Any</option>
-                                                            @foreach ($countries as $country)
+                                                    <div class="form-control-select">
+                                                        <select class="form-control form-select" id="country" data-search="on" name="country" value="{{ old('country') }}" required>
+                                                            @foreach($countries as $country)
                                                                 <option value="{{ $country->id }}">{{ $country->name }}</option>
                                                             @endforeach
                                                         </select>

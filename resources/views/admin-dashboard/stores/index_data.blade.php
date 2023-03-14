@@ -62,7 +62,7 @@
                             @if (strpos($store->logo->first()->image, 'http') !== false)
                                 src="{{$store->logo->first()->image}}"
                             @else
-                                src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                                src="{{asset($store->logo->first()->image)}}"
                             @endif
                         @endif
                     @else
