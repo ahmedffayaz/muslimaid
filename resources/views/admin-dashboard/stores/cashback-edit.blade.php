@@ -96,7 +96,7 @@
                 <label class="form-label" for="currency">Currency</label>
                 <div class="form-control-wrap ">
                     <div class="form-control-select">
-                        <select class="form-control" id="currency" name="currency" required>
+                        <select class="form-control form-select select-2" id="currency" name="currency" required>
                             @foreach ($currencies as $currency)
                                 <option @if ($isEdit && $cashback->currency == $currency->id) selected @endif value="{{ $currency->id }}">{{ $currency->short_name }}</option>
                             @endforeach

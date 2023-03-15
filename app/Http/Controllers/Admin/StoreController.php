@@ -79,7 +79,7 @@ class StoreController extends Controller
             'tracking_url' => 'required|url',
             'deeplink_url' => 'nullable|url',
             'store_url' => 'required|url',
-            'description' => 'nullable|max:255'
+            'description' => 'nullable'
         ]);
 
         if ($validator->fails()) {
@@ -169,8 +169,8 @@ class StoreController extends Controller
             'tracking_url' => 'required|url',
             'deeplink_url' => 'nullable|url',
             'store_url' => 'required|url',
-            'description' => 'nullable|max:255',
-            'terms_conditions' => 'nullable|max:255'
+            'description' => 'nullable',
+            'terms_conditions' => 'nullable'
         ]);
 
         try {
@@ -199,6 +199,8 @@ class StoreController extends Controller
             if ($request->has('tags')) {
                 $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
                 if ($tags->count() > 0) $store->tags()->sync($tags);
+            }else{
+                $store->tags()->detach();
             }
 
             DB::commit();
@@ -408,7 +410,7 @@ class StoreController extends Controller
     public function editCashback(Request $request, StoreCashback $cashback)
     {
         $networks = Network::all();
-        $currencies = Currency::all();
+        $currencies = Currency::latest()->get();
         return view('admin-dashboard.stores.cashback-edit', compact('cashback', 'currencies', 'networks'))->render();
     }
 
@@ -420,6 +422,7 @@ class StoreController extends Controller
             'network_id' => 'nullable|integer',
             'tracking_url' => 'nullable|url',
             'deeplink_url' => 'nullable|url',
+            'currency' => $request->input('type') === 'fixed' ? 'required' : '',            
             'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
         ]);
 
@@ -488,6 +491,7 @@ class StoreController extends Controller
             'type' => 'required',
             'sale_commission' => 'required|numeric|min:0',
             'deeplink_url' => 'nullable|url',
+            'currency' => $request->input('type') === 'fixed' ? 'required' : '',
             'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
         ]);
 

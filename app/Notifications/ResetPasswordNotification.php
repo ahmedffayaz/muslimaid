@@ -66,7 +66,7 @@ class ResetPasswordNotification extends Notification implements ShouldQueue
                 [SiteSetting()['website_title'], url('/'), $user['name'], $email, $emailTemplate->subject, $user['message'], $url],
                 $emailTemplate->message);
 
-        return (new MailMessage)->view('frontend.emails.password_reset', ['email_message' => $filteredMessage])
+        return (new MailMessage)->view('frontend.emails.frontend.password_reset', ['email_message' => $filteredMessage])
             ->subject($emailTemplate->subject);
     }
 

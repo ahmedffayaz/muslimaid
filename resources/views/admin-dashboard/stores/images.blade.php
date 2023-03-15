@@ -59,7 +59,7 @@
                                         <a href="" class="dropdown-toggle btn btn-sm btn-icon btn-trigger" data-toggle="dropdown" aria-expanded="false"><em class="icon ni ni-more-h"></em></a>
                                         <div class="dropdown-menu dropdown-menu-right" style="">
                                             <ul class="link-list-plain no-bdr">
-                                                <li><a href="{{asset('storage/stores/images/'.$item->image)}}" target="_blank"><em class="icon ni ni-eye"></em><span>View</span></a></li>
+                                                <li><a href="{{asset($item->image)}}" target="_blank"><em class="icon ni ni-eye"></em><span>View</span></a></li>
                                                 <li><a href="{{route('admin.stores.images.delete',$item)}}"><em class="icon ni ni-trash"></em><span>Delete</span></a></li>
                                             </ul>
                                         </div>
