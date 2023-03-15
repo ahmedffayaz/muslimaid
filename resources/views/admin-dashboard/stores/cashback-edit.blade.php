@@ -27,7 +27,7 @@
             <div class="form-group">
                 <label class="form-label" for="sale_commission">Network Commission <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
-                    <input type="number" class="form-control" min="0" step="0.01" id="sale_commission" value="{{ $isEdit ? $cashback->sale_commission : '' }}"
+                    <input type="number" class="form-control" min="0.1" step="0.1" id="sale_commission" value="{{ $isEdit ? $cashback->sale_commission : '' }}"
                         name="sale_commission" required oninput="calcPercentage()">
                 </div>
             </div>

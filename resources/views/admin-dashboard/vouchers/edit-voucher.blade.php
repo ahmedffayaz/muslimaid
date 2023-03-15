@@ -42,7 +42,7 @@
             <div class="form-group">
                 <label class="form-label" for="click_url">Click url <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="click_url" value="{{ $isEdit ? $voucher->click_url : '' }}" name="click_url" required>
+                    <input type="url" class="form-control" id="click_url" value="{{ $isEdit ? $voucher->click_url : '' }}" name="click_url" required>
                 </div>
             </div>
         </div>
@@ -51,7 +51,7 @@
             <div class="form-group">
                 <label class="form-label" for="destination">Destination url <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="destination" value="{{ $isEdit ? $voucher->destination : '' }}" name="destination" required>
+                    <input type="url" class="form-control" id="destination" value="{{ $isEdit ? $voucher->destination : '' }}" name="destination" required>
                 </div>
             </div>
         </div>
@@ -90,7 +90,7 @@
             <div class="form-group">
                 <label class="form-label" for="sale_commission">Sale commission <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
-                    <input type="number" min="0.0" step="1" class="form-control" id="sale_commission" value="{{ $isEdit ? $voucher->sale_commission : '' }}"
+                    <input type="number" min="0.1" step="0.1" class="form-control" id="sale_commission" value="{{ $isEdit ? $voucher->sale_commission : '' }}"
                         name="sale_commission" required>
                 </div>
             </div>

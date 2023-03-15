@@ -417,7 +417,7 @@
                     },
                     sale_commission: {
                         required: true,
-                        minValue: 1,
+                        minValue: 0.1,
                     }
                 },
                 messages: {

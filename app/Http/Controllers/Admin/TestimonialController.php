@@ -49,7 +49,7 @@ class TestimonialController extends Controller
             'name' => 'required',
             'company_name' => 'required',
             'description' => 'required',
-            'order_no' => 'required|integer',
+            'order_no' => 'required|numeric|min:0.1',
             'position' => 'required'
         ], $messages = [
             'title.required' => 'The Title field is required.',
@@ -112,7 +112,7 @@ class TestimonialController extends Controller
             'name' => 'required',
             'company_name' => 'required',
             'description' => 'required',
-            'order_no' => 'required|integer',
+            'order_no' => 'required|numeric|min:0.1',
             'position' => 'required'
         ], $messages = [
             'title.required' => 'The Title field is required.',

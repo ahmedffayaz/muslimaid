@@ -150,16 +150,16 @@ class SettingsController extends Controller
             $request->offsetUnset('_method');
             $request->offsetUnset('_token');
            $request->validate([
-                'referral_bonus' => 'nullable|min:0|numeric',
-                'welcome_bonus' => 'nullable|min:0|numeric',
-                'min_cashout_amount'=> 'nullable|min:0|numeric',
-                'next_cashout_amount'=> 'nullable|min:0|numeric',
+                'referral_bonus' => 'nullable|min:0.1|numeric',
+                'welcome_bonus' => 'nullable|min:0.1|numeric',
+                'min_cashout_amount'=> 'nullable|min:0.1|numeric',
+                'next_cashout_amount'=> 'nullable|min:0.1|numeric',
             ]
             , $messages = [
-                'referral_bonus' => 'Value must be equal to or greater than 0.',
-                'welcome_bonus' => 'Value must be equal to or greater than 0.',
-                'min_cashout_amount' => 'Value must be equal to or greater than 0.',
-                'next_cashout_amount' => 'Value must be equal to or greater than 0.',
+                'referral_bonus' => 'Value must be equal to or greater than 0.1.',
+                'welcome_bonus' => 'Value must be equal to or greater than 0.1.',
+                'min_cashout_amount' => 'Value must be equal to or greater than 0.1',
+                'next_cashout_amount' => 'Value must be equal to or greater than 0.1',
             ]);
           
             foreach ($request->input() as $key => $value) {
