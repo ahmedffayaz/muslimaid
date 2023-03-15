@@ -146,8 +146,14 @@
                                                                 <div class=" logo">
                                                                     <label for="website-logo-input">
                                                                         <img id="website-logo"
-                                                                            src="@if (isset($settings['website_logo']) && $settings['website_logo'] != 'default.png') {{ asset('storage/dashboard/images/logo/' . $settings['website_logo']) }}@else{{ asset('admin-dashboard/images/logo.png') }} @endif"
-                                                                            alt="store logo" class="" style="max-width:100px;max-height:120px" />
+                                                                            src="{{ !isset($settings['website_logo'])
+                                                                            ? asset('admin-dashboard/images/logo.png')
+                                                                            : ($settings['website_logo'] == 'default.png'
+                                                                                ? asset('admin-dashboard/images/logo.png')
+                                                                                : ($settings['website_logo'] == 'cashblack-default.png'
+                                                                                    ? asset('cashblack/img/logo.png')
+                                                                                    : asset('storage/dashboard/images/logo/' . $settings['website_logo']))) }}"
+                                                                            alt="store logo" class="" style="max-width:220px;max-height:120px" />
                                                                         <input id="website-logo-input" preview="#website-logo" name="website_logo" class="d-none"
                                                                             type='file' onchange="readURL(this);" />
                                                                     </label>
@@ -188,7 +194,13 @@
                                                                 <div class=" logo">
                                                                     <label for="favicon-input">
                                                                         <img id="favicon"
-                                                                            src="@if (isset($settings['favicon']) && $settings['favicon'] != 'default.png') {{ asset('storage/dashboard/images/logo/' . $settings['favicon']) }}@else{{ asset('admin-dashboard/images/favicon.png') }} @endif"
+                                                                            src="{{ !isset($settings['favicon'])
+                                                                                ? asset('admin-dashboard/images/favicon.png')
+                                                                                : ($settings['favicon'] == 'default.png'
+                                                                                    ? asset('admin-dashboard/images/favicon.png')
+                                                                                    : ($settings['favicon'] == 'cashblack-default.png'
+                                                                                        ? asset('cashblack/img/favicon.png')
+                                                                                        : asset('storage/dashboard/images/logo/' . $settings['favicon']))) }}"
                                                                             alt="store logo" class="" style="max-width:100px;max-height:120px" />
                                                                         <input id="favicon-input" preview="#favicon" name="favicon" class="d-none" type='file'
                                                                             onchange="readURL(this);" />
