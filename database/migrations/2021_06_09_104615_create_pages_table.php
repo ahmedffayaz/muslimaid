@@ -18,12 +18,12 @@ class CreatePagesTable extends Migration
             $table->string('title');
             $table->text('slug');
             $table->text('excerpt')->nullable();
-            $table->string('status')->default(1);
+            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->longText('meta_description')->nullable();
             $table->string('meta_keyword')->nullable();
             $table->text('banner_image')->nullable();
             $table->longText('description')->nullable();
-            $table->string('default')->default(1);
+            $table->enum('type', ['system', 'special', 'general'])->default('general');
             $table->timestamps();
         });
     }

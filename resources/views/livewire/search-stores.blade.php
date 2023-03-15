@@ -1,5 +1,5 @@
 <div>
-    <form class="search__form" action="{{ route('search') }}">
+    <form class="search__form" action="{{ route('search.index') }}">
         <input wire:model="search" type="text" class="search__input" name="search" placeholder="Search stores..."
             value="" aria-label="Store search" type="text" autocomplete="off" />
         <button class="search__button search__button--type--submit" type="submit">
@@ -26,7 +26,7 @@
                                 </div>
                             </div>
                             <div class="suggestions__item-info">
-                                <a href="{{ route('store.show', $store->slug) }}"
+                                <a href="{{ route('stores.show', $store->slug) }}"
                                     class="suggestions__item-name">{!! $store->name !!}</a>
                             </div>
                             <div class="suggestions__item-price">

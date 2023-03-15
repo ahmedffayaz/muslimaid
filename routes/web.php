@@ -16,17 +16,6 @@ use Illuminate\Support\Facades\Redirect;
 |
 */
 
-Route::get('/', [App\Http\Controllers\Frontend\HomeController::class, 'index']);
-Route::post('/quick-search', [App\Http\Controllers\Frontend\HomeController::class, 'quickSearch'])->name('quick-search');
-Route::get('/set-locale/{locale}', [App\Http\Controllers\Frontend\HomeController::class, 'setLocale']);
-
-Auth::routes();
-
-Route::namespace('App\Http\Controllers\Website')->prefix('site')->name('site.')->group(function () {
-    Route::resource('/exit_click', ClickController::class)->only(['store']);
-    Route::get('new-exit-click/{hash}/{url}', [App\Http\Controllers\Website\ClickController::class, 'getCashback'])->name('cashback');
-});
-
 // Admin routes
 Route::namespace('App\Http\Controllers\Admin')
     ->middleware(['auth', 'role:admin|data|finance'])
@@ -226,7 +215,6 @@ Route::namespace('App\Http\Controllers\Admin')
         // Countries
         Route::resource('countries', CountryController::class)->except(['show','create','destroy']);
         Route::post('countries/search',  [App\Http\Controllers\Admin\CountryController::class, 'searchCountries'])->name('countries.search');
-       
 
         Route::get('/api-docs', function() {
             return view('scribe.index');
@@ -242,22 +230,51 @@ Route::namespace('App\Http\Controllers\Admin')
     });
 
 // Front Website Routes
-Route::get('blog', [App\Http\Controllers\Frontend\PagesController::class, 'blog'])->name('blog');
-Route::get('search', [App\Http\Controllers\Frontend\PagesController::class, 'search'])->name('search');
-Route::get('cashback/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
-Route::get('categories/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
-Route::get('stores/reviews/{id}', [App\Http\Controllers\Frontend\StoreController::class, 'showReviews'])->name('store.reviews.show');
-Route::post('stores/reviews/submit', [App\Http\Controllers\Frontend\StoreController::class, 'storeReviews'])->name('store.reviews.submit');
-Route::get('search_suggestions', [App\Http\Controllers\Frontend\PagesController::class, 'searchSuggestions'])->name('search_suggestions');
-Route::get('pages/{slug}', [App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('page');
-Route::get('post/{slug}', [App\Http\Controllers\Frontend\PagesController::class, 'blogPost'])->name('post');
-Route::post('contact_form', [App\Http\Controllers\Frontend\PagesController::class, 'contactForm'])->name('contactForm');
-Route::get('all_stores/{letter}', [App\Http\Controllers\Frontend\PagesController::class, 'allStoresLetter'])->name('all_stores_of_letter');
-Route::get('all_stores', [App\Http\Controllers\Frontend\PagesController::class, 'allStores'])->name('all_stores');
-Route::post('showCharity', [App\Http\Controllers\Frontend\PagesController::class, 'showCharity'])->name('showCharity');
 
-Route::resource('newsletter', App\Http\Controllers\Frontend\NewsletterController::class)->only(['index', 'store']);
-Route::resource('categories', App\Http\Controllers\Frontend\CategoryController::class)->only(['index', 'show']);
+Auth::routes();
+
+Route::get('login/{provider}', [App\Http\Controllers\SocialController::class, 'redirect']);
+Route::get('login/{provider}/callback', [App\Http\Controllers\SocialController::class, 'Callback']);
+Route::get('register-form', [App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register-form');
+Route::get('account/verify/{token}', [App\Http\Controllers\Auth\VerifyController::class, 'verifyAccount'])->name('user.verify');
+
+Route::get('/', [App\Http\Controllers\Frontend\HomeController::class, 'index']);
+Route::get('set-locale/{locale}', [App\Http\Controllers\Frontend\HomeController::class, 'setLocale']);
+
+Route::get('search', [App\Http\Controllers\Frontend\SearchController::class, 'index'])->name('search.index');
+Route::post('search', [App\Http\Controllers\Frontend\SearchController::class, 'suggestions'])->name('search.suggestions');
+
+Route::get('stores/{letter?}', [App\Http\Controllers\Frontend\StoreController::class, 'index'])->name('stores.index');
+Route::get('cashback/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('stores.show');
+
+Route::post('exit-click', [App\Http\Controllers\Frontend\ClickController::class, 'store'])->name('click.store');
+Route::get('exit-click/{hash}/{url}', [App\Http\Controllers\Frontend\ClickController::class, 'redirect'])->name('click.redirect');
+
+Route::post('stores-reviews', [App\Http\Controllers\Frontend\StoreReviewController::class, 'store'])->name('stores-reviews.store');
+Route::get('stores-reviews/{id}', [App\Http\Controllers\Frontend\StoreReviewController::class, 'show'])->name('stores-reviews.show');
+
+Route::get('categories', [App\Http\Controllers\Frontend\CategoryController::class, 'index'])->name('categories.index');
+Route::get('categories/{slug}', [App\Http\Controllers\Frontend\CategoryController::class, 'show'])->name('categories.show');
+
+Route::get('blogs', [App\Http\Controllers\Frontend\BlogController::class, 'index'])->name('blogs.index');
+Route::get('blogs/{slug}', [App\Http\Controllers\Frontend\BlogController::class, 'show'])->name('blogs.show');
+
+Route::get('charities', [App\Http\Controllers\Frontend\CharityController::class, 'index'])->name('charities.index');
+Route::post('charities/{id}', [App\Http\Controllers\Frontend\CharityController::class, 'show'])->name('charities.show');
+
+Route::get('newsletter', [App\Http\Controllers\Frontend\NewsletterController::class, 'index'])->name('newsletter.index');
+Route::post('newsletter', [App\Http\Controllers\Frontend\NewsletterController::class, 'store'])->name('newsletter.store');
+
+Route::get('contact', [App\Http\Controllers\Frontend\ContactController::class, 'index'])->name('contact.index');
+Route::post('contact', [App\Http\Controllers\Frontend\ContactController::class, 'store'])->name('contact.store');
+
+Route::get('vouchers', [App\Http\Controllers\Frontend\VoucherController::class, 'index'])->name('vouchers.index');
+
+Route::get('offers', [App\Http\Controllers\Frontend\OfferController::class, 'index'])->name('offers.index');
+
+Route::get('trending', [App\Http\Controllers\Frontend\TrendingController::class, 'index'])->name('trending.index');
+
+Route::get('pages/{slug}', [App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('pages.show');
 
 // CLient Dashboard routes
 Route::namespace('App\Http\Controllers\Client')
@@ -291,9 +308,3 @@ Route::namespace('App\Http\Controllers\Client')
 Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
-
-Route::get('login/{provider}', [App\Http\Controllers\SocialController::class, 'redirect']);
-Route::get('login/{provider}/callback', [App\Http\Controllers\SocialController::class, 'Callback']);
-Route::get('register-form', [App\Http\Controllers\Auth\RegisterController::class, 'showRegistrationForm'])->name('register-form');
-
-Route::get('account/verify/{token}', [App\Http\Controllers\Auth\VerifyController::class, 'verifyAccount'])->name('user.verify');

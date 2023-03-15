@@ -17,20 +17,20 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $feature_tag = Tag::where('title', 'feature1_homepage')->pluck('id')->first(); 
+        $feature_tag = Tag::where('title', 'feature1_homepage')->pluck('id')->first();
+
         $stores = Store::whereHas('tags', function ($query) use ($feature_tag) {
-            if(isset($feature_tag)){
-                $query->where('title', 'feature1_homepage');
-            }else{
-                $query->where('title', 'feature_homepage');
-            }
+            isset($feature_tag)
+                ? $query->where('title', 'feature1_homepage')
+                : $query->where('title', 'feature_homepage');
         })->latest()->get();
+
         $languages = Language::orderBy('id', 'desc')->get();
         $featured_categories = Category::where('feature_homepage', 1)->orderBy('name', 'ASC')->latest()->get();
         $slider = Slider::where('name', 'Home')->first();
         $testimonials = Testimonial::where('status', 'active')->orderBy('order_no')->take(5)->get();
 
-        return view('frontend.pages.home', compact('stores', 'languages', 'featured_categories', 'slider', 'testimonials', 'feature_tag'));
+        return view('frontend.home', compact('stores', 'languages', 'featured_categories', 'slider', 'testimonials', 'feature_tag'));
     }
 
     public function quickSearch(Request $request)
