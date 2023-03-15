@@ -15,6 +15,13 @@ use Illuminate\Validation\ValidationException;
 
 class StoreController extends Controller
 {
+    public function index($slug)
+    {
+        $category = Category::whereSlug($slug)->with('childs')->first();
+        if (empty($category)) abort(404);
+        $stores = $category->stores()->where('status', 'active')->with('logo', 'storeAddress')->get();
+        return view('frontend.stores.all_stores', compact('category'));
+    }
 
     /**
      * Display the specified resource.
@@ -51,11 +58,11 @@ class StoreController extends Controller
                     });
                 })->where('status', 'active')->with('logo', 'storeAddress');
             }
-          
+
             if(isset($request->orderBy)){
                 $orderByArr = explode("-",$request->orderBy);
                 $locations->orderBy($orderByArr[0], $orderByArr[1]);
-            } 
+            }
             $locations = $locations->paginate(25);
             $locations->appends(['orderBy' => $request->orderBy]);
             return view('frontend.stores.stores', compact('locations', 'slug'));
@@ -70,7 +77,7 @@ class StoreController extends Controller
             $orderByArr = explode("-",$request->orderBy);
             $locations->orderBy($orderByArr[0], $orderByArr[1]);
         }
-        
+
         $locations = $locations->paginate(25);
         $locations->appends(['orderBy' => $request->orderBy]);
         if (!isset($mainCategory) || is_null($mainCategory)) {
@@ -95,44 +102,47 @@ class StoreController extends Controller
         $longitudeFrom = $request->longitude;
 
         $category = Category::whereSlug($slug)->first();
-        $stores = Store::when(optional($category)->id, function ($query) use ($category) {
-            $query->whereHas('categories', function ($query) use ($category) {
-                $query->where('category_id', $category->id);
-            });
-        })->where('status', 'active')->with('logo', 'storeAddress')->paginate(25);
+        $stores = $category->stores()->where('status', 'active')->with('logo', 'storeAddress')->paginate(2);
 
-        // Loop through each store and calculate the distance
+        // Calculate distance between user and each store
         foreach ($stores as $store) {
             $store->storeAddress = $store->storeAddress->first();
             if ($store->storeAddress && isset($latitudeFrom) && isset($longitudeFrom)) {
                 $latitudeTo = $store->storeAddress->latitude;
                 $longitudeTo = $store->storeAddress->longitude;
-                $earthRadius = 6371; // Earth's radius in kilometers
 
-                // Convert coordinates to radians
-                $latFrom = deg2rad($latitudeFrom);
-                $lonFrom = deg2rad($longitudeFrom);
-                $latTo = deg2rad($latitudeTo);
-                $lonTo = deg2rad($longitudeTo);
+                $distance = $this->calculateDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo);
 
-                // Calculate the differences
-                $latDelta = $latTo - $latFrom;
-                $lonDelta = $lonTo - $lonFrom;
-
-                // Calculate the distance using the Haversine formula
-                $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
-                    cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
-                $distance = $angle * $earthRadius;
-
-                // Add the distance to the store object
                 $store->distance = number_format((float)$distance, 2, '.', '');
             } else {$store->distance = '1.4';}
         }
 
-        // Sort the stores by distance in ascending order
+        // Sort stores by distance
         $stores = $stores->sortBy('distance');
 
         return view('frontend.stores.sorted_stores', compact('stores'));
+    }
+
+    private function calculateDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo)
+    {
+        $earthRadius = 6371; // km
+
+        // Convert coordinates to radians
+        $latFrom = deg2rad($latitudeFrom);
+        $lonFrom = deg2rad($longitudeFrom);
+        $latTo = deg2rad($latitudeTo);
+        $lonTo = deg2rad($longitudeTo);
+
+        // Calculate the differences
+        $latDelta = $latTo - $latFrom;
+        $lonDelta = $lonTo - $lonFrom;
+
+        // Calculate the distance using the Haversine formula
+        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) +
+            cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+        $distance = $angle * $earthRadius;
+
+        return $distance;
     }
 
     public function showReviews(Request $request, $id)

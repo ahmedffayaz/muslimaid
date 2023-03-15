@@ -36,7 +36,7 @@ class Category extends Model
 
     public function stores()
     {
-        return $this->belongsToMany(Store::class);
+        return $this->belongsToMany(Store::class, 'category_store');
     }
 
     public function mappedTo()
