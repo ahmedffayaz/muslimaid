@@ -215,7 +215,6 @@ Route::namespace('App\Http\Controllers\Admin')
         // Countries
         Route::resource('countries', CountryController::class)->except(['show','create','destroy']);
         Route::post('countries/search',  [App\Http\Controllers\Admin\CountryController::class, 'searchCountries'])->name('countries.search');
-       
 
         Route::get('/api-docs', function() {
             return view('scribe.index');

@@ -28,7 +28,9 @@ class StoreReviewController extends Controller
         $stars = '';
 
         foreach ($reviews as $review) {
-            $avatar = $review->user->avatar != null && $review->user->avatar != '' ? asset('frontend/images/avatars/' . $review->user->avatar) : asset('admin-dashboard/images/avatar.png');
+            $avatar = $review->user->avatar != null && $review->user->avatar != ''
+                ? asset('frontend/images/avatars/' . $review->user->avatar)
+                : asset('admin-dashboard/images/avatar.png');
 
             foreach (range(1, 5) as $index) {
                 $activeStars = $index <= $review->rating ? 'rating__star--active' : '';
@@ -79,17 +81,17 @@ class StoreReviewController extends Controller
             'rating' => 'required|integer',
             'review' => 'nullable|max:256'
         ]);
-        try {
 
+        try {
             DB::beginTransaction();
 
-            $reviews = new StoreReview;
-            $reviews->store_id = $request->store_id;
-            $reviews->user_id = auth()->user()->id;
-            $reviews->review = htmlentities($request->review);
-            $reviews->rating = $request->rating;
-            $reviews->status = 'pending';
-            $reviews->save();
+            StoreReview::create([
+                'store_id' => $request->store_id,
+                'user_id' => auth()->user()->id,
+                'review' => htmlentities($request->review),
+                'rating' => $request->rating,
+                'status' => 'pending',
+            ]);
 
             DB::commit();
 

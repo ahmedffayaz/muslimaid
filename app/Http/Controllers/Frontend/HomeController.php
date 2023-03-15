@@ -17,14 +17,12 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $feature_tag = Tag::where('title', 'feature1_homepage')->pluck('id')->first(); 
-        
+        $feature_tag = Tag::where('title', 'feature1_homepage')->pluck('id')->first();
+
         $stores = Store::whereHas('tags', function ($query) use ($feature_tag) {
-            if(isset($feature_tag)){
-                $query->where('title', 'feature1_homepage');
-            }else{
-                $query->where('title', 'feature_homepage');
-            }
+            isset($feature_tag)
+                ? $query->where('title', 'feature1_homepage')
+                : $query->where('title', 'feature_homepage');
         })->latest()->get();
 
         $languages = Language::orderBy('id', 'desc')->get();
