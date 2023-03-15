@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -8,10 +9,10 @@
                         <div class="nk-block nk-block-lg">
                             <div class="nk-block-head">
                                 <div class="nk-block-head-content">
-                                    <div class="nk-block-des">
-                                    </div>
+                                    <div class="nk-block-des"></div>
                                 </div>
                             </div>
+
                             @if ($errors->any())
                                 <div class="alert alert-danger">
                                     <ul>
@@ -21,6 +22,7 @@
                                     </ul>
                                 </div>
                             @endif
+
                             <div class="card">
                                 <div class="card-inner">
                                     <div class="card-head">
@@ -42,8 +44,8 @@
                                                     <div class="form-control-wrap ">
                                                         <div class="">
                                                             <select class="form-control form-select" name="status" required>
-                                                                <option selected value="1">Active</option>
-                                                                <option value="0">In-active</option>
+                                                                <option selected value="active">Active</option>
+                                                                <option value="inactive">In-active</option>
                                                             </select>
                                                         </div>
                                                     </div>
