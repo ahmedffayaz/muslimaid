@@ -40,9 +40,9 @@
                                 <div class="nk-file-info">
                                     <div class="nk-file-title">
                                         <div class="nk-file-icon">
-                                            <a class="nk-file-icon-link" href="{{asset('storage/stores/images/'.$item->image)}}" target="_blank">
+                                            <a class="nk-file-icon-link" href="{{asset($item->image)}}" target="_blank">
                                                 <span class="nk-file-icon-type">
-                                                   <img src="{{asset('storage/stores/images/'.$item->image)}}" alt="">
+                                                   <img alt="{{ $item->name }}" src="{{ $item->logo->first() && !$item->logo->first()->is_fake ? asset($item->logo->first()->image) : asset('frontend/images/' . ($item->logo->first() ? 'logos/'.$item->logo->first()->image : 'products/product-16.jpg')) }}">
                                                 </span>
                                             </a>
                                         </div>

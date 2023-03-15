@@ -147,7 +147,7 @@ class StoreController extends Controller
         if (!$logo) {
             $logoUrl = asset('admin-dashboard/images/avatar/default-logo.png');
         } else {
-            $logoUrl = asset('storage/stores/images/' . $logo->image);
+            $logoUrl = asset($logo->image);
         }
         $networks = Network::all();
         $categories = Category::all();
