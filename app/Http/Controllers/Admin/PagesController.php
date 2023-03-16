@@ -9,6 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Config;
 
 class PagesController extends Controller
 {
@@ -184,5 +186,21 @@ class PagesController extends Controller
             'title' => 'required|max:255',
             'content' => 'required'
         ]);
+    }
+
+    public function getAvailableShortCodes()
+    {
+        $templates = File::allFiles(resource_path(convertPathForOS('views/frontend/templates')));
+
+        $shortCodes = [];
+
+        foreach ($templates as $template) {
+            array_push(
+                $shortCodes, 
+                '[' . str_replace('.blade.php', '', $template->getFilename()) . ']'
+            );
+        }
+
+        return view('admin-dashboard.pages.short-codes-modal', compact('shortCodes'));
     }
 }

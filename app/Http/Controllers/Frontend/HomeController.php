@@ -2,35 +2,39 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
+use App\Models\Tag;
+use App\Models\Page;
+use App\Models\Store;
+use App\Models\Slider;
+use App\Models\Category;
+use App\Models\Language;
+use App\Models\Testimonial;
 use Illuminate\Http\Request;
 use App\Models\StoreCashback;
-use App\Models\Language;
-use App\Models\Category;
-use App\Models\Store;
 use Illuminate\Support\Facades\App;
-use App\Models\Slider;
-use App\Models\Testimonial;
-use App\Models\Tag;
+use App\Http\Controllers\Controller;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        $feature_tag = Tag::where('title', 'feature1_homepage')->pluck('id')->first();
+        $page = Page::whereSlug('/')->whereType('system')->first();
+        if (empty($page)) abort(404);
 
-        $stores = Store::whereHas('tags', function ($query) use ($feature_tag) {
-            isset($feature_tag)
+        $featureTag = Tag::where('title', 'feature1_homepage')->pluck('id')->first();
+
+        $stores = Store::whereHas('tags', function ($query) use ($featureTag) {
+            isset($featureTag)
                 ? $query->where('title', 'feature1_homepage')
                 : $query->where('title', 'feature_homepage');
         })->latest()->get();
 
         $languages = Language::orderBy('id', 'desc')->get();
-        $featured_categories = Category::where('feature_homepage', 1)->orderBy('name', 'ASC')->latest()->get();
+        $featuredCategories = Category::where('feature_homepage', 1)->orderBy('name', 'ASC')->latest()->get();
         $slider = Slider::where('name', 'Home')->first();
         $testimonials = Testimonial::where('status', 'active')->orderBy('order_no')->take(5)->get();
 
-        return view('frontend.home', compact('stores', 'languages', 'featured_categories', 'slider', 'testimonials', 'feature_tag'));
+        return view('frontend.home', compact('page', 'stores', 'languages', 'featuredCategories', 'slider', 'testimonials'));
     }
 
     public function quickSearch(Request $request)

@@ -31,7 +31,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
+                                            <div class="col-lg-3">
                                                 <div class="form-group">
                                                     <label class="form-label" for="default-06">Status</label>
                                                     <div class="form-control-wrap ">
@@ -48,6 +48,15 @@
                                                             @endif
                                                         </div>
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3">
+                                                <div class="form-group">
+                                                    <label class="form-label">&nbsp;</label>
+                                                    <button type="button" class="btn btn-primary form-control" id="view-shortcodes-btn">
+                                                        <em class="icon ni ni-eye"></em>
+                                                        <span>View Available Short Codes</span>
+                                                    </button>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
@@ -108,6 +117,12 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="view-shortcodes-modal" tabindex="-1" role="dialog" aria-labelledby="view-shortcodes-modal-title" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content"></div>
+        </div>
+    </div>
 @endsection
 @push('scripts')
     <script>
@@ -117,7 +132,34 @@
                 laravelFilemanager: true,
                 sidebar: true
             })
-        })
+        });
+
+        let viewShortcodesModal = $('#view-shortcodes-modal');
+
+        $(document).on('click', '#view-shortcodes-btn', function(e) {
+            e.preventDefault();
+
+            let _self = $(this);
+            let btnHtml = _self.html();
+            
+            _self
+                .attr('disabled', 'disabled')
+                .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
+
+            $.ajax({
+                url: `{{ route('admin.pages.view-short-codes') }}`,
+                method: 'post',
+                data: {
+                    _token: $('input[name=_token]').val(),
+                },
+                success: function(data) {
+                    viewShortcodesModal.find('.modal-content').html(data);
+                    viewShortcodesModal.modal('show');
+            
+                    _self.removeAttr('disabled').html(btnHtml);
+                }
+            });
+        });
     </script>
 
     <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">

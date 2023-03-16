@@ -31,12 +31,14 @@ class PagesSeeder extends Seeder
             if (!arrayValueExists($page, 'type')) $page['type'] = 'general';
             if (!in_array($page['type'], ['system', 'special', 'general'])) continue;
 
-            $pages[] = [
+            // Need to create the page one by one because `laraberg` does not support mass-assignment
+            Page::create([
                 'id' => $page['id'],
                 'title' => $page['title'],
                 'slug' => $page['slug'],
                 'excerpt' => empty($page['excerpt']) ? null : $page['excerpt'],
                 'status' => arrayValueExists($page, 'status') && $page['status'] == 'inactive' && $page['type'] == 'general' ? 'inactive' : 'active',
+                'lb_content' => arrayValueExists($page, 'content') ? $page['content'] : null,
                 'meta_description' => empty($page['meta_description']) ? null : $page['meta_description'],
                 'meta_keyword' => empty($page['meta_keyword']) ? null : $page['meta_keyword'],
                 'banner_image' => empty($page['banner_image']) ? null : $page['banner_image'],
@@ -44,9 +46,7 @@ class PagesSeeder extends Seeder
                 'type' => $page['type'],
                 'created_at' => $now,
                 'updated_at' =>  $now,
-            ];
+            ]);
         }
-
-        Page::insert($pages);
     }
 }

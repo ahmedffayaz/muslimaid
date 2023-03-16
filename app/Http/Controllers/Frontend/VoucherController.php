@@ -11,11 +11,11 @@ class VoucherController extends Controller
 {
     public function index()
     {
-        $page = Page::where('slug', 'vouchers')->first();
+        $page = Page::where('slug', 'vouchers')->whereType('system')->first();
         if (empty($page)) abort(404);
 
         $stores = Store::has('vouchers')->latest()->paginate(10);
         
-        return view('frontend.vouchers.index', compact('stores', 'page'));
+        return view('frontend.pages.single-page', compact('stores', 'page'));
     }
 }

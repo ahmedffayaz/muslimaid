@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Models\Page;
 use App\Models\Store;
 use App\Models\Category;
 use Illuminate\Http\Request;
@@ -11,9 +12,13 @@ class CategoryController extends Controller
 {
     public function index()
     {
+        $page = Page::where('slug', 'categories')->whereType('system')->first();
+        if (empty($page)) abort(404);
+        
         $categories = Category::with('childs')->where('parent_id', '0')->get();
         $subCategories = Category::with('stores')->where('parent_id', '0')->get();
-        return view('frontend.categories.index', compact('categories'));
+
+        return view('frontend.pages.single-page', compact('page', 'categories'));
     }
 
     public function show(Request $request, $slug)

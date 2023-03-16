@@ -734,3 +734,20 @@ function getCurrencySymbol($symbol = null)
 
     return $currencySymbol;
 }
+
+function resolvePageShortCodes($content, $data = [])
+{
+    preg_match_all('/\[\S[a-zA-Z0-9-]*\]/', $content, $shortCodes);
+
+    if (empty($shortCodes) || empty($shortCodes[0])) return $content;
+
+    foreach ($shortCodes[0] as $shortCode) {
+        $viewName = 'frontend.templates.' . preg_replace('/[\[\]]/', '', $shortCode);
+
+        if (view()->exists($viewName)) {
+            $content = str_replace($shortCode, view($viewName, $data)->render(), $content);
+        }
+    }
+
+    return $content;
+}

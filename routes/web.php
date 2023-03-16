@@ -206,7 +206,10 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('sliders/sort_slides', [App\Http\Controllers\Admin\SliderController::class, 'sortSlides'])->name('sort_slides');
         Route::resource('sliders', SliderController::class)->only(['index', 'store', 'edit']);
         Route::resource('slides', SlidesController::class)->except(['index', 'show']);
+
         Route::resource('pages', PagesController::class)->except(['show']);
+        Route::post('pages/view-short-codes', [App\Http\Controllers\Admin\PagesController::class, 'getAvailableShortCodes'])->name('pages.view-short-codes');
+
         Route::resource('blogs', BlogController::class)->except(['show']);
         Route::resource('testimonials', TestimonialController::class)->except('show');
         Route::resource('seo', SeoController::class)->except('show');
