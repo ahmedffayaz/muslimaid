@@ -88,11 +88,18 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Bonus::class);
     }
 
-    public function availableBalance()
+    public function availableBalance($status)
     {
-        $cashback = $this->cashbacks()->where('status', '=', '3')->sum('amount');
-        $bonus = $this->bonus()->where('status', 'unpaid')->first() ? $this->bonus()->where('status', 'unpaid')->first()->amount : 0;
-        return $cashback + $bonus;
+        $total_cashback = 0;
+        $cashback = $this->cashbacks();
+        if($status != null){
+            if($status == 5){
+                $total_cashback = $cashback->get()->where('status', 6)->sum('amount');
+            }
+            $cashback->where('status', $status);
+        }
+        $total_cashback += $cashback->sum('amount');
+        return $total_cashback; 
     }
 
     public function clicks()
