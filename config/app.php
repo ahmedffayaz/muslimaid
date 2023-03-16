@@ -171,6 +171,7 @@ return [
         /*
          * Package Service Providers...
          */
+        Stevebauman\Location\LocationServiceProvider::class,
 
         /*
          * Application Service Providers...
@@ -243,7 +244,7 @@ return [
         'Menu' => Harimayco\Menu\Facades\Menu::class,
         'Socialite' => Laravel\Socialite\Facades\Socialite::class,
         'NoCaptcha' => Anhskohbo\NoCaptcha\Facades\NoCaptcha::class,
-
+        'Location' => 'Stevebauman\Location\Facades\Location',
     ],
 
 ];

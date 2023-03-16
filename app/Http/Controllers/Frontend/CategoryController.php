@@ -6,6 +6,7 @@ use App\Models\Store;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Stevebauman\Location\Facades\Location;
 
 class CategoryController extends Controller
 {
@@ -18,65 +19,90 @@ class CategoryController extends Controller
 
     public function show(Request $request, $slug)
     {
-        $mainCategory = Category::whereSlug($slug)->first();
+        $ip = request()->ip(); //Dynamic IP address get
+        $data = Location::get($ip);
+
+        $category = Category::whereSlug($slug)->with('childs')->first();
+
+        if (empty($category)) abort(404);
 
         if ($request->ajax()) {
             if ($request->has('id')) {
-                $locations = Store::when($request->has('id'), function ($query) use ($request) {
+                $stores = Store::when($request->has('id'), function ($query) use ($request) {
                     $query->whereHas('categories', function ($query) use ($request) {
                         $query->whereIn('category_id', $request->id);
                     });
-                })->with('logo', 'storeAddress', 'slug');
+                })->with('logo', 'storeAddress')->where('status', 'active')->get();
             } else {
-                $locations = Store::when(optional($mainCategory)->id, function ($query) use ($mainCategory) {
-                    $query->whereHas('categories', function ($query) use ($mainCategory) {
-                        $query->where('category_id', $mainCategory->id);
+                $stores = Store::when(optional($category)->id, function ($query) use ($category) {
+                    $query->whereHas('categories', function ($query) use ($category) {
+                        $query->where('category_id', $category->id);
                     });
-                })->where('status', 'active')->with('logo', 'storeAddress');
+                })->where('status', 'active')->with('logo', 'storeAddress')->get();
             }
 
-            if (isset($request->orderBy)) {
-                $orderByArr = explode("-", $request->orderBy);
-                $locations->orderBy($orderByArr[0], $orderByArr[1]);
-            }
-
-            $locations = $locations->paginate(25);
-            $locations->appends(['orderBy' => $request->orderBy]);
-
-            return view('frontend.stores.stores', compact('locations'));
+            $stores = $this->sortByDistance($data, $stores);
+            $stores = $stores->sortBy('distance')->values()->paginate(25);
+            return view('frontend.stores.stores', compact('stores'));
         }
 
-        $locations = Store::when(optional($mainCategory)->id, function ($query) use ($mainCategory) {
-            $query->whereHas('categories', function ($query) use ($mainCategory) {
-                $query->where('category_id', $mainCategory->id);
-            });
-        })->where('status', 'active')->with('logo', 'storeAddress');
+        $stores = $category->stores()->where('status', 'active')->with('logo', 'storeAddress');
 
         if (isset($request->orderBy)) {
             $orderByArr = explode("-", $request->orderBy);
-            $locations->orderBy($orderByArr[0], $orderByArr[1]);
+            $stores = $stores->orderBy($orderByArr[0], $orderByArr[1])->get();
+            $stores = $this->sortByDistance($data, $stores);
+            $stores = $stores->paginate(25);
+            $stores->appends(['orderBy' => $request->orderBy]);
+            return view('frontend.categories.show', compact('category', 'stores', 'slug'));
         }
 
-        $locations = $locations->paginate(25);
-        $locations->appends(['orderBy' => $request->orderBy]);
+        $stores = $stores->get();
+        $stores = $this->sortByDistance($data, $stores);
+        $stores = $stores->sortBy('distance')->values()->paginate(25);
+        
+        return view('frontend.categories.show', compact('category', 'stores', 'slug'));
+    }
 
-        if (!isset($mainCategory) || is_null($mainCategory)) {
-            return abort(404);
-        }
+    private function sortByDistance($data, $stores)
+    {
+        // Calculate distance between user and each store
+        foreach ($stores as $store) {
+            $store->storeAddress = $store->storeAddress->first();
 
-        $categories = Category::with(['stores.storeAddress'])->whereParentId($mainCategory['id'])->orderBy('name', 'ASC')->get();
-        $location_array = array();
+            if ($store->storeAddress) {
+                $latitudeTo = $store->storeAddress->latitude;
+                $longitudeTo = $store->storeAddress->longitude;
 
-        foreach ($categories as $category) {
-            foreach ($category->stores as $store) {
-                $location_array['des'][] = $store->description;
-                foreach ($store->storeAddress as $address) {
-                    $location_array['lat'][] = $address->latitude;
-                    $location_array['long'][] = $address->longitude;
-                }
+                $distance = $this->calculateDistance($data->latitude, $data->longitude, $latitudeTo, $longitudeTo);
+
+                $store->distance = number_format((float)$distance, 2, '.', '');
+            } else {
+                $store->distance = 'Unknown';
             }
         }
 
-        return view('frontend.categories.show', compact('locations', 'categories', 'location_array', 'mainCategory', 'slug'));
+        return $stores;
+    }
+
+    private function calculateDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo)
+    {
+        $earthRadius = 6371; // km
+
+        // Convert coordinates to radians
+        $latFrom = deg2rad($latitudeFrom);
+        $lonFrom = deg2rad($longitudeFrom);
+        $latTo = deg2rad($latitudeTo);
+        $lonTo = deg2rad($longitudeTo);
+
+        // Calculate the differences
+        $latDelta = $latTo - $latFrom;
+        $lonDelta = $lonTo - $lonFrom;
+
+        // Calculate the distance using the Haversine formula
+        $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) + cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+        $distance = $angle * $earthRadius;
+
+        return $distance;
     }
 }
