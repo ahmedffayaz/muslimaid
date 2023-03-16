@@ -148,7 +148,7 @@ class DashboardController extends Controller
 
     public function userBalance(){
         $user = Auth::user();
-        $balance = number_format((float)Auth::user()->availableBalance(), 2, '.', '');
+        $balance = number_format((float)Auth::user()->availableBalance(3), 2, '.', '');
         $arr = array("status" => 200, "message" =>"User Balance", "data" => ['available_balance' => $balance]);
         return Response::json($arr);
     }

@@ -93,7 +93,7 @@ class PaymentController extends Controller
             $arr = array("status" => 400, "message" => "Payment method not found, please add your payment method information", "data" => array());
             return \Response::json($arr);
         }
-        $balance = $user->availableBalance();
+        $balance = $user->availableBalance(3);
         $cashbacks = $user->balance;
         if($balance < $min){
             $arr = array("status" => 400, "message" => "You have insufficient balance for withdrawl.", "data" => array());

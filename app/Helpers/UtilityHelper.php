@@ -691,7 +691,7 @@ function isWithdrawalAllowed()
 {
     $cashoutStatuses = auth()->user()->cashouts()->pluck('status')->all();
 
-    return auth()->user()->availableBalance() >= getMinimumCashoutAmount() && !in_array('pending', $cashoutStatuses) && !in_array('processing donation', $cashoutStatuses);
+    return auth()->user()->availableBalance(3) >= getMinimumCashoutAmount() && !in_array('pending', $cashoutStatuses) && !in_array('processing donation', $cashoutStatuses);
 }
 
 function getSiteLogo()

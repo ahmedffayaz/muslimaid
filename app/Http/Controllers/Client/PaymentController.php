@@ -67,7 +67,7 @@ class PaymentController extends Controller
             return redirect()->back();
         }
 
-        $balance = $user->availableBalance();
+        $balance = $user->availableBalance(3);
         $cashbacks = $user->balance;
 
         if ($balance < $min) {
@@ -142,7 +142,7 @@ class PaymentController extends Controller
         }
 
         $cashout_status = $user->cashouts()->where('status', '=', 'pending')->first();
-        $balance_old = $user->availableBalance();
+        $balance_old = $user->availableBalance(3);
         $balance = ($balance_old - $request->amount);
 
         if ($balance_old < $min) {
