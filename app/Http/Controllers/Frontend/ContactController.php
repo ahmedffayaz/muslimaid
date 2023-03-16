@@ -14,10 +14,10 @@ class ContactController extends Controller
 {
     public function index()
     {
-        $page = Page::where('slug', 'contact')->first();
+        $page = Page::where('slug', 'contact')->whereType('system')->first();
         if (empty($page)) abort(404);
 
-        return view('frontend.contact.index', compact('page'));
+        return view('frontend.pages.single-page', compact('page'));
     }
 
     public function store(Request $request)

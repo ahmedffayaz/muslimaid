@@ -11,12 +11,12 @@ class CharityController extends Controller
 {
     public function index()
     {
-        $page = Page::where('slug', 'charities')->first();
+        $page = Page::where('slug', 'charities')->whereType('system')->first();
         if (empty($page)) abort(404);
 
         $charities = Charity::whereStatus(1)->orderBy('id', 'DESC')->paginate(12);
 
-        return view('frontend.charities.index', compact('page', 'charities'));
+        return view('frontend.pages.single-page', compact('page', 'charities'));
     }
 
     public function show($id)

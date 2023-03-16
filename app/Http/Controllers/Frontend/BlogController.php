@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Frontend;
 
 use App\Models\Blog;
+use App\Models\Page;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -10,10 +11,13 @@ class BlogController extends Controller
 {
     public function index()
     {
+        $page = Page::whereSlug('blogs')->whereType('system')->first();
+        if (empty($page)) abort(404);
+        
         $blogs = Blog::latest()->get();
         $latestBlogs = Blog::latest()->limit(5)->get();
 
-        return view('frontend.blogs.index', compact('blogs', 'latestBlogs'));
+        return view('frontend.pages.single-page', compact('page', 'blogs', 'latestBlogs'));
     }
 
     public function show($slug)

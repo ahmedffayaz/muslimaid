@@ -11,7 +11,7 @@ class OfferController extends Controller
 {
     public function index()
     {
-        $page = Page::where('slug', 'offers')->first();
+        $page = Page::where('slug', 'offers')->whereType('system')->first();
         if (empty($page)) abort(404);
 
         $categories = Category::where('parent_id', 0)->with(['stores' => function ($query) {
@@ -20,6 +20,6 @@ class OfferController extends Controller
             }])->having('categories_count', 0);
         }])->get();
 
-        return view('frontend.offers.index', compact('page', 'categories'));
+        return view('frontend.pages.single-page', compact('page', 'categories'));
     }
 }
