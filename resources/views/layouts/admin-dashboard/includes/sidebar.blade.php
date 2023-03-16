@@ -7,21 +7,23 @@ d-xl-none
         <div class="nk-sidebar-brand">
             <a href="{{ route('admin.home.index') }}" class="logo-link nk-sidebar-logo">
                 <img class="logo-light logo-img"
-                    src="@if (isset($settings['website_logo']) && $settings['website_logo'] != 'default.png') {{ asset('storage/dashboard/images/logo/' . $settings['website_logo']) }}@else{{ asset('admin-dashboard/images/logo.png') }} @endif"
+                    src="{{ !isset($settings['website_logo'])
+                        ? asset('admin-dashboard/images/logo.png')
+                        : ($settings['website_logo'] == 'default.png'
+                            ? asset('admin-dashboard/images/logo.png')
+                            : ($settings['website_logo'] == 'cashblack-default.png'
+                                ? asset('cashblack/img/logo.png')
+                                : asset('storage/dashboard/images/logo/' . $settings['website_logo']))) }}"
                     alt="logo">
                 <img class="logo-dark logo-img"
-                    src="@if (isset($settings['website_logo']) && $settings['website_logo'] != 'default.png') {{ asset('storage/dashboard/images/logo/' . $settings['website_logo']) }}@else{{ asset('admin-dashboard/images/logo-dark.png') }} @endif"
+                    src="{{ !isset($settings['website_logo'])
+                        ? asset('admin-dashboard/images/logo.png')
+                        : ($settings['website_logo'] == 'default.png'
+                            ? asset('admin-dashboard/images/logo-dark.png')
+                            : ($settings['website_logo'] == 'cashblack-default.png'
+                                ? asset('cashblack/img/logo.png')
+                                : asset('storage/dashboard/images/logo/' . $settings['website_logo']))) }}"
                     alt="logo-dark">
-                <img class="logo-small logo-img logo-img-small"
-                    @isset($settings['favicon'])
-                    @if ($settings['favicon'] == 'default.png')
-                    src="{{ asset('admin-dashboard/images/favicon.png') }}"
-                    @else
-                    src="{{ asset('storage/dashboard/images/logo/' . $settings['favicon']) }}"
-                @endif
-                @else
-                src="{{ asset('admin-dashboard/images/favicon.png') }}"
-                @endif alt="logo-small">
             </a>
         </div>
         <div class="nk-menu-trigger mr-n2">

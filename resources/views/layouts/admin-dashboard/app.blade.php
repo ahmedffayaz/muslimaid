@@ -11,15 +11,13 @@
     <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
     <!-- Fav Icon  -->
     <link rel="shortcut icon"
-        @isset($settings['favicon'])
-            @if ($settings['favicon'] == 'default.png')
-                href="{{ asset('admin-dashboard/images/favicon.png') }}"
-            @else
-                href="{{ asset('storage/dashboard/images/logo/' . $settings['favicon']) }}"
-            @endif
-        @else
-            href="{{ asset('admin-dashboard/images/favicon.png') }}"
-        @endisset>
+        href="{{ !isset($settings['favicon'])
+            ? asset('admin-dashboard/images/favicon.png')
+            : ($settings['favicon'] == 'default.png'
+                ? asset('admin-dashboard/images/favicon.png')
+                : ($settings['favicon'] == 'cashblack-default.png'
+                    ? asset('cashblack/img/favicon.png')
+                    : asset('storage/dashboard/images/logo/' . $settings['favicon']))) }}">
 
     <!-- Page Title  -->
     <title>{{ $settings['website_title'] }} | Admin Panel</title>
@@ -165,7 +163,8 @@
         overflow-y: auto;
     }
 
-    .nk-header-search .nk-menu-icon, .nk-header-search .nk-menu-text {
+    .nk-header-search .nk-menu-icon,
+    .nk-header-search .nk-menu-text {
         line-height: 1rem !important;
     }
 
