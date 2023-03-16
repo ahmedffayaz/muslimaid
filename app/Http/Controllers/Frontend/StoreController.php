@@ -32,22 +32,34 @@ class StoreController extends Controller
                         $query->whereIn('category_id', $request->id);
                     });
                 })->with('logo', 'storeAddress')->where('status', 'active')->get();
-
-                $stores = $this->sortByDistance($data, $stores);
-                return view('frontend.stores.stores', compact('stores'));
+            } else {
+                $stores = Store::when(optional($category)->id, function ($query) use ($category) {
+                    $query->whereHas('categories', function ($query) use ($category) {
+                        $query->where('category_id', $category->id);
+                    });
+                })->where('status', 'active')->with('logo', 'storeAddress')->get();
             }
 
-            $stores = Store::when(optional($category)->id, function ($query) use ($category) {
-                $query->whereHas('categories', function ($query) use ($category) {
-                    $query->where('category_id', $category->id);
-                });
-            })->where('status', 'active')->with('logo', 'storeAddress')->get();
             $stores = $this->sortByDistance($data, $stores);
+            $stores = $stores->sortBy('distance')->values()->paginate(25);
             return view('frontend.stores.stores', compact('stores'));
         }
-        $stores = $category->stores()->where('status', 'active')->with('logo', 'storeAddress')->get();
+
+        $stores = $category->stores()->where('status', 'active')->with('logo', 'storeAddress');
+
+        if (isset($request->orderBy)) {
+            $orderByArr = explode("-", $request->orderBy);
+            $stores = $stores->orderBy($orderByArr[0], $orderByArr[1])->get();
+            $stores = $this->sortByDistance($data, $stores);
+            $stores = $stores->paginate(25);
+            $stores->appends(['orderBy' => $request->orderBy]);
+            return view('frontend.stores.location', compact('category', 'stores', 'slug'));
+        }
+
+        $stores = $stores->get();
         $stores = $this->sortByDistance($data, $stores);
-        return view('frontend.stores.location', compact('category', 'stores'));
+        $stores = $stores->sortBy('distance')->values()->paginate(25);
+        return view('frontend.stores.location', compact('category', 'stores', 'slug'));
     }
 
     /**
@@ -83,10 +95,7 @@ class StoreController extends Controller
                 $store->distance = 'Unknown';
             }
         }
-
-        // Sort stores by distance
-        $stores = $stores->sortBy('distance');
-        return $stores->values()->paginate(25);
+        return $stores;
     }
 
     private function calculateDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo)
