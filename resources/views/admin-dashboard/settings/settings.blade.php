@@ -897,7 +897,7 @@
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="number" class="form-control" min="0.0" step="0.1" id="min_cashout_amount" name="min_cashout_amount"
+                                                                    <input type="number" class="form-control" min="0.1" step="0.1" id="min_cashout_amount" name="min_cashout_amount"
                                                                         value="{{ $settings['min_cashout_amount'] ?? '' }}" placeholder="First Cashout Amount">
                                                                 </div>
                                                             </div>
@@ -912,7 +912,7 @@
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="number" class="form-control" min="0.0" step="0.1" id="next_cashout_amount" name="next_cashout_amount"
+                                                                    <input type="number" class="form-control" min="0.1" step="0.1" id="next_cashout_amount" name="next_cashout_amount"
                                                                         value="{{ $settings['next_cashout_amount'] ?? '' }}" placeholder="Next Cashout Amount">
                                                                 </div>
                                                             </div>
@@ -928,7 +928,7 @@
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="number" class="form-control" id="welcome_bonus"  min= "0.0" step="0.1"  name="welcome_bonus"
+                                                                    <input type="number" class="form-control" id="welcome_bonus"  min= "0.1" step="0.1"  name="welcome_bonus"
                                                                         value="{{ $settings['welcome_bonus'] ?? '' }}" placeholder="Welcome Bonus">
                                                                 </div>
                                                             </div>
@@ -945,7 +945,7 @@
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="number" class="form-control" id="referral_bonus" min= "0.0" step="0.1"  name="referral_bonus"
+                                                                    <input type="number" class="form-control" id="referral_bonus" min="0.1" step="0.1"  name="referral_bonus"
                                                                         value="{{ $settings['referral_bonus'] ?? '' }}" placeholder="Referral Bonus">
                                                                 </div>
                                                             </div>
@@ -1164,16 +1164,16 @@
         $('#form-validate').validate({
             rules: {
                 referral_bonus: {
-                    minValue: 0
+                    minValue: 0.1
                 },
                 welcome_bonus: {
-                    minValue: 0 
+                    minValue: 0.1
                 },
                 min_cashout_amount: {
-                    minValue: 0 
+                    minValue: 0.1 
                 },
                 next_cashout_amount: {
-                    minValue: 0 
+                    minValue: 0.1 
                 }
             }
         });

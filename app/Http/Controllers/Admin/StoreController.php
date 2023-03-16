@@ -418,7 +418,7 @@ class StoreController extends Controller
     {
         $request->validate([
             'type' => 'required',
-            'sale_commission' => 'required|numeric|min:0',
+            'sale_commission' => 'required|numeric|min:0.1',
             'network_id' => 'nullable|integer',
             'tracking_url' => 'nullable|url',
             'deeplink_url' => 'nullable|url',
@@ -489,7 +489,7 @@ class StoreController extends Controller
     {
         $request->validate([
             'type' => 'required',
-            'sale_commission' => 'required|numeric|min:0',
+            'sale_commission' => 'required|numeric|min:0.1',
             'deeplink_url' => 'nullable|url',
             'currency' => $request->input('type') === 'fixed' ? 'required' : '',
             'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'

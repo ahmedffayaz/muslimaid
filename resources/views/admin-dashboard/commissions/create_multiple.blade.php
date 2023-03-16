@@ -60,7 +60,7 @@
                         <div class="form-group">
                             <label class="form-label" for="exit_click_id">Exit Click <span class="text-danger">*</span></label>
                             <div class="form-control-wrap ">
-                                <input type="number" class="form-control" min="0.0" step="1" id="exit_click_id" name="exit_click_id[]" placeholder="Exit Click ID" required>
+                                <input type="number" class="form-control" min="0.1" step="0.1" id="exit_click_id" name="exit_click_id[]" placeholder="Exit Click ID" required>
                             </div>
                         </div>
                     </div>
@@ -69,7 +69,7 @@
                         <div class="form-group">
                             <label class="form-label" for="phone-no-1">Order Value <span class="text-danger">*</span></label>
                             <div class="form-control-wrap">
-                                <input type="number" class="form-control" min="0.0" step="1" id="phone-no-1" placeholder="Order Value" name="order_value[]">
+                                <input type="number" class="form-control" min="0.1" step="0.1" id="phone-no-1" placeholder="Order Value" name="order_value[]">
                             </div>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                         <div class="form-group">
                             <label class="form-label" for="phone-no-1">Network Commission <span class="text-danger">*</span></label>
                             <div class="form-control-wrap">
-                                <input type="number" class="form-control" step="1"  min="0.0" id="phone-no-1"  placeholder="Network Commission" name="network_commission[]" >
+                                <input type="number" class="form-control" step="0.1"  min="0.1" id="phone-no-1"  placeholder="Network Commission" name="network_commission[]" >
                             </div>
                         </div>
                     </div>

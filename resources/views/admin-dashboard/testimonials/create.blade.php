@@ -89,7 +89,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="order_no">Order No <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input id="order_no" type="number" class="form-control" name="order_no" min="1" placeholder="Order No" value="" required>
+                                                        <input id="order_no" type="number" class="form-control" name="order_no" min="0.1"  step="0.1" placeholder="Order No" value="" required>
                                                     </div>
                                                 </div>
                                             </div>

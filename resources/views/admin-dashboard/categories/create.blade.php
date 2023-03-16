@@ -178,7 +178,7 @@
                         class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
                         title="Smallest number appear first."></em></label>
                     <div class="form-control-wrap">
-                        <input type="number" class="form-control" id="sort" step="1" min="0.0" name="sort" value="{{ $isEdit ? $category->sort : $sort }}">
+                        <input type="number" class="form-control" id="sort" step="0.1" min="0.1" name="sort" value="{{ $isEdit ? $category->sort : $sort }}">
                     </div>
                 </div>
             </div>

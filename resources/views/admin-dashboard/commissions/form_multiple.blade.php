@@ -17,7 +17,7 @@
                         <div class="form-group">
                             <label class="form-label" for="exit_click_id">Exit Click</label>
                             <div class="form-control-wrap ">
-                                <input type="number" class="form-control" id="exit_click_id" min="0.0" value="{{ $row[0] }}" name="exit_click_id[]"
+                                <input type="number" class="form-control" id="exit_click_id" min="0.1" value="{{ $row[0] }}" name="exit_click_id[]"
                                     placeholder="Exit Click ID" required>
                             </div>
                         </div>
@@ -26,7 +26,7 @@
                         <div class="form-group">
                             <label class="form-label" for="order_value">Order Value</label>
                             <div class="form-control-wrap">
-                                <input type="number" class="form-control" min="0" id="order_value" value="{{ $row[1] }}" name="order_value[]" step="0.01"
+                                <input type="number" class="form-control" min="0" id="order_value" value="{{ $row[1] }}" name="order_value[]" step="0.1"
                                     placeholder="Order Value">
                             </div>
                         </div>
@@ -36,7 +36,7 @@
                             <label class="form-label" for="network_commission">Network Commission</label>
                             <div class="form-control-wrap">
                                 <input type="number" class="form-control" min="0" id="network_commission" value="{{ $row[2] }}" name="network_commission[]"
-                                    step="0.01" placeholder="Network Commission" required>
+                                    step="0.1" placeholder="Network Commission" required>
                             </div>
                         </div>
                     </div>

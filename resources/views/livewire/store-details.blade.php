@@ -440,7 +440,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="vsale_commission">Sale commission <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
-                                    <input type="number" min="1" step="1" class="form-control" id="vsale_commission" name="sale_commission"
+                                    <input type="number" min="0.1" step="0.1" class="form-control" id="vsale_commission" name="sale_commission"
                                         value="{{ old('sale_commission') }}" required>
                                     @error('vsale_commission')
                                         <span class="invalid-feedback d-block" role="alert">
@@ -601,7 +601,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="sale_commission">Commission <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
-                                    <input type="number" class="form-control" min="0" step="0.01" id="sale_commission" value="" name="sale_commission"
+                                    <input type="number" class="form-control" min="0" step="0.1" id="sale_commission" value="" name="sale_commission"
                                         required>
                                 </div>
                             </div>
@@ -1199,7 +1199,7 @@
                     },
                     sale_commission: {
                         required: true,
-                        minValue: 1,
+                        minValue: 0.1,
                     }
                 },
             });
@@ -1466,6 +1466,7 @@
                     },
                     success: function(data) {
                         $('.cashback-modal').modal('show');
+                        $('.title').text('Edit Cashback');
                         $('#edit-cashback').html(data);
                         if ($('#store_override_network').is(":checked")) {
                             $('.sote-override-network').hide();
@@ -1536,6 +1537,7 @@
                     data: { storeId: storeId },
                     success: function (data) {
                         $('.cashback-modal').modal('show');
+                        $('.title').text('Add Cashback');
                         $('#edit-cashback').html(data);
                         if ($('#store_override_network').is(":checked")) {
                             $('.sote-override-network').hide();

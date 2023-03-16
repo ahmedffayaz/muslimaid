@@ -452,9 +452,15 @@
                             required: true
                         },
 
+                    },
+                    submitHandler: function(form) {
+                        if ($(form).valid())
+                            form.submit();
+                        return false;
                     }
                 });
             }
+
         });
     </script>
 @endpush

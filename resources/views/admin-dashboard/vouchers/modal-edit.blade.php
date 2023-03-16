@@ -15,7 +15,7 @@
             <div class="form-group">
                 <label class="form-label" for="sale_commission">Sale commission <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
-                    <input type="number" class="form-control" id="sale_commission" min="1" step="1" value="{{ $voucher->sale_commission }}"
+                    <input type="number" class="form-control" id="sale_commission" min="0.1" step="0.1" value="{{ $voucher->sale_commission }}"
                         name="sale_commission" required>
                 </div>
             </div>
