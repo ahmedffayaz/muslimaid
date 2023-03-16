@@ -28,7 +28,8 @@ function getPageTemplates($slug)
 }
 
 //feature store for cashblack
-function getFeaturesStores($feature_tag){
+function getFeaturesStores($feature_tag)
+{
     $stores = Store::whereHas('tags', function ($query) use ($feature_tag) {
         $query->where('title', $feature_tag);
     })->latest()->get();
@@ -384,8 +385,8 @@ function currency($number, $withSymbol = true)
     if (isset($settings['currency'])) {
         $currencySymbol = getCurrencySymbol();
     }
-	$number = number_format((float)$number, 2, '.', '');
-	return $withSymbol ? $currencySymbol . $number : $number;
+    $number = number_format((float)$number, 2, '.', '');
+    return $withSymbol ? $currencySymbol . $number : $number;
 }
 
 function sidebarCategories()
@@ -733,4 +734,13 @@ function getCurrencySymbol($symbol = null)
     }
 
     return $currencySymbol;
+}
+
+function getSiteFavicon()
+{
+    if (isset(SiteSetting()['favicon']) && SiteSetting()['favicon'] != 'default.png') {
+        return asset('storage/dashboard/images/logo/' . SiteSetting()['favicon']);
+    } else {
+        return asset('admin-dashboard/images/favicon.png');
+    }
 }

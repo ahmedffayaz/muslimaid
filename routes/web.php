@@ -245,9 +245,7 @@ Route::namespace('App\Http\Controllers\Admin')
 Route::get('blog', [App\Http\Controllers\Frontend\PagesController::class, 'blog'])->name('blog');
 Route::get('search', [App\Http\Controllers\Frontend\PagesController::class, 'search'])->name('search');
 Route::get('cashback/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('store.show');
-Route::get('categories/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'storeLocation'])->name('store.location');
-Route::get('new-categories/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'index'])->name('store.index');
-Route::post('categories/location/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'sortByDistance'])->name('store.distance');
+Route::get('categories/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'index'])->name('store.index');
 Route::get('stores/reviews/{id}', [App\Http\Controllers\Frontend\StoreController::class, 'showReviews'])->name('store.reviews.show');
 Route::post('stores/reviews/submit', [App\Http\Controllers\Frontend\StoreController::class, 'storeReviews'])->name('store.reviews.submit');
 Route::get('search_suggestions', [App\Http\Controllers\Frontend\PagesController::class, 'searchSuggestions'])->name('search_suggestions');
