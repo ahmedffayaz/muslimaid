@@ -88,7 +88,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Bonus::class);
     }
 
-    public function availableBalance($status)
+    public function availableBalance($status = null)
     {
         $total_cashback = 0;
         $cashback = $this->cashbacks();
