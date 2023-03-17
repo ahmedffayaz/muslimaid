@@ -16,19 +16,21 @@ class CreateStoreCashbacksTable extends Migration
         Schema::create('store_cashbacks', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('store_id');
+            $table->unsignedBigInteger('network_id')->default(0);
             $table->string('type')->nullable();
-            $table->string('cashback_name')->nullable();
+            $table->text('cashback_name')->nullable();
             $table->string('image')->nullable();
             $table->text('click_url')->nullable();
+            $table->longText('tracking_url')->nullable();
+            $table->longText('deeplink_url')->nullable();
             $table->text('sale_commission')->nullable();
             $table->text('currency')->nullable();
             $table->longText('detail')->nullable();
             $table->longText('network_detail')->nullable();
-            $table->float('value')->nullable();
             $table->string('default')->default(0)->nullable();
+            $table->enum('is_api', ['yes', 'no'])->default('yes');
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

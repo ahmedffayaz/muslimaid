@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
-use App\Models\UserCashback;
 use App\Models\ExitClick;
-use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
-use Illuminate\Support\Facades\Validator;
+use App\Models\UserCashback;
 use App\Traits\ApiResponser;
-use App\Http\Resources\UserCashbackResource;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\ClickResource;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\UserCashbackResource;
 
 
 class DashboardController extends Controller
@@ -109,7 +112,7 @@ class DashboardController extends Controller
         $cashbacks = UserCashback::select('*'); 
         if(request()->get('status')){
            
-            $status = \DB::table('cashback_statuses')->where('status',request()->get('status'))->first();
+            $status = DB::table('cashback_statuses')->where('status',request()->get('status'))->first();
             $cashbacks = $cashbacks->where('status',$status->id);
         } 
         
@@ -117,7 +120,7 @@ class DashboardController extends Controller
     }
     public function clicks(){
 
-        $user = \Auth::user();
+        $user = Auth::user();
         return ClickResource::collection($clicks = ExitClick::where('user_id',$user->id)->latest()->get());
     }
     public function changePassword(){
@@ -125,7 +128,7 @@ class DashboardController extends Controller
     }
     public function savePassword(Request $request)
     {
-        $user = \Auth::user();
+        $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -144,9 +147,9 @@ class DashboardController extends Controller
     }
 
     public function userBalance(){
-        $user = \Auth::user();
-        $balance = number_format((float)\Auth::user()->availableBalance(), 2, '.', '');
+        $user = Auth::user();
+        $balance = number_format((float)Auth::user()->availableBalance(3), 2, '.', '');
         $arr = array("status" => 200, "message" =>"User Balance", "data" => ['available_balance' => $balance]);
-        return \Response::json($arr);
+        return Response::json($arr);
     }
 }

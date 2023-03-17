@@ -21,16 +21,19 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('registration_type');
+            $table->date('date_of_birth')->nullable();
             $table->longText('intro')->nullable();
             $table->string('address')->nullable();
             $table->string('phone')->nullable();
-            $table->boolean('status')->default(1);
+            $table->string('avatar')->nullable();
+            $table->enum('status', ['pending', 'active', 'in_active'])->default('pending');
+            $table->string('referred_by')->nullable();
+            $table->string('referred_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();
-            
-            
-
+            $table->enum('provider', ['email', 'google', 'facebook']);
+            $table->string('provider_id')->nullable();
         });
     }
 

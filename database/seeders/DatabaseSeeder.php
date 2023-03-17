@@ -13,25 +13,30 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-
         $this->call([
+            TagSeeder::class,
+            EmailTemplatesSeeder::class,
             RolesPermissionsSeeder::class,
             UserSeeder::class,
-            NetworkSeeder::class,
-            // StoreSeeder::class,
             CategorySeeder::class,
+            BlogSeeder::class,
+            StoreSeeder::class,
+            StoreAddressSeeder::class,
+            StoreDataSeeder::class,
+            ExitClickSeeder::class,
+            UserCashbackSeeder::class,
+            NetworkSeeder::class,
             CashbackStatusSeeder::class,
-            ClicksSeeder::class,
             SettingSeeder::class,
-            CashbackSeeder::class,
-            // ReviewSeeder::class,
-            CashoutSeeder::class,
             PagesSeeder::class,
             MenuSeeder::class,
             SliderSeeder::class,
-            EmailTemplatesSeeder::class
-           
+            TestimonialSeeder::class,
+            TicketCategorySeeder::class,
+            RegionSeeder::class,
+            CharitySeeder::class,
+            CharityTypeSeeder::class,
+            CountrySeeder::class,
         ]);
-        // \App\Models\User::factory(10)->create();
     }
 }

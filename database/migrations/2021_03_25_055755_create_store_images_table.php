@@ -17,7 +17,7 @@ class CreateStoreImagesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('store_id');
             $table->string('title');
-            $table->string('image');
+            $table->longText('image');
             $table->string('image_type');
             $table->string('is_uploaded')->default(1);
             $table->string('is_fake')->default(0);

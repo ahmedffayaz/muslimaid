@@ -4,11 +4,16 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\ExitClick;
-use Illuminate\Support\Facades\DB;
+use App\Models\Network;
+use App\Models\Store;
+use App\Models\User;
+use Carbon\Carbon;
 use Faker\Factory as Faker;
 
 class ClicksSeeder extends Seeder
 {
+    private $count = 1000;
+
     /**
      * Run the database seeds.
      *
@@ -17,17 +22,27 @@ class ClicksSeeder extends Seeder
     public function run()
     {
         $faker = Faker::create();
+        $storesCount = Store::count();
+        $usersCount = User::count();
+        $networkCount = Network::count();
 
-        foreach (range(1,5000) as $index) {
+        $now = Carbon::now();
 
-            $click = ExitClick::create([
-                'store_id'=>$faker->numberBetween(1,40),
-                'user_id'=>$faker->numberBetween(1,1000),
-                'status'=>'pending',
-                'exit_url'=>'#',
-    
-            ]);
-           
-	}
+        $clicks = [];
+
+        for ($i = 0; $i < $this->count; $i++) {
+            $clicks[] = [
+                'store_id' => $faker->numberBetween(1, $storesCount),
+                'user_id' => $faker->numberBetween(1, $usersCount),
+                'network_id' => $faker->numberBetween(1, $networkCount),
+                'exit_url' => '#',
+                'created_at' => $now,
+                'updated_at' => $now,
+            ];
+        }
+
+        foreach (array_chunk($clicks, 500) as $clickChunk) {
+            ExitClick::insert($clickChunk);
+        }
     }
 }

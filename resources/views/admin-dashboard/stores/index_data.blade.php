@@ -55,10 +55,15 @@
                             </ul>
                         </div>
                     </div><a href="{{route('admin.stores.show_store')}}?slug={{$store->slug}}"><img  @if($store->logo->first())
+                        onerror="{{asset('frontend/images/logos/'.mt_rand(1, 20).'.png')}}"
                         @if($store->logo->first()->is_fake)
                             src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
                         @else
-                            src="{{asset('storage/stores/images/'.$store->logo->first()->image)}}"
+                            @if (strpos($store->logo->first()->image, 'http') !== false)
+                                src="{{$store->logo->first()->image}}"
+                            @else
+                                src="{{asset($store->logo->first()->image)}}"
+                            @endif
                         @endif
                     @else
                         src="{{asset('frontend/images/products/product-16.jpg')}}" 
@@ -106,7 +111,7 @@
                                 <div class="override mt-2">
                                     @if($store->override_cashback)
                                     <span class="badge badge-dim badge-pill badge-primary text-capitalize">
-                                        <em class="icon ni ni-done"></em> Cashabck Overridden
+                                        <em class="icon ni ni-done"></em> Cashback Overridden
                                     </span>
                                     @endif
                                     @if($store->override_categories)

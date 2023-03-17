@@ -18,7 +18,7 @@
     </div>
 </div><!-- .nk-tb-item -->
 @foreach ($tickets as $ticket)
-<div class="nk-tb-item">
+<div class="nk-tb-item" id="reload">
     
     
    

@@ -34,7 +34,7 @@
                         <div class="nk-block-head-content">
                             <h3 class="nk-block-title fw-normal"></h3>
                             <div class="nk-block-des">
-                              
+
                             </div>
                         </div>
                         <div class="nk-block-head-content">
@@ -50,17 +50,17 @@
                         </div><!-- .nk-block-head-content -->
                     </div>
                     </div>
-                   
+
                 @include('flash::message')
-                    
-                    
+
+
                     <div class="nk-block nk-block-lg">
                         <div class="card card-preview">
                             <div class="card-inner">
                                 <div class="nk-block">
                                     <div class="nk-block-head">
                                         <h5 class="title">Cashout Information</h5>
-                                    
+
                                     </div><!-- .nk-block-head -->
                                     <div class="profile-ud-list">
                                         <div class="profile-ud-item">
@@ -72,7 +72,7 @@
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">Withdraw Amount</span>
-                                                <span class="profile-ud-value">{{ currency() }} {{$cashout->amount}}</span>
+                                                <span class="profile-ud-value">{{ currency($cashout->amount) }}</span>
                                             </div>
                                         </div>
                                         <div class="profile-ud-item">
@@ -87,7 +87,7 @@
                                                 <span class="profile-ud-value">{{$cashout->status}}</span>
                                             </div>
                                         </div>
-                                        
+
                                     </div><!-- .profile-ud-list -->
                                 </div><!-- .nk-block -->
                                 <div class="nk-block">
@@ -151,28 +151,31 @@
                                         <h6 class="title overline-title text-base">Cashback</h6>
                                     </div><!-- .nk-block-head -->
                                     <div class="profile-ud-list">
-                                        
+
                                         @foreach ($cashout->cashbacks as $cashback)
-                                            
-                                       
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">Store</span>
-                                                <span class="profile-ud-value"><a href="{{route('admin.stores.show_store')}}?slug={{$cashback->store->slug}}">{{$cashback->store->name}}</a></span>
+                                                    @if ($cashback->store_id)
+                                                        <span class="profile-ud-value"><a href="{{route('admin.stores.show_store')}}?slug={{$cashback->store->slug}}">
+                                                            {{ $cashback->store->name }}</a></span>
+                                                   @else
+                                                        <span class="profile-ud-value"> {{ ucfirst(str_replace('_', ' ', $cashback->type)) }}</span>
+                                                   @endif
                                             </div>
                                         </div>
-                                       
+
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">Cashback Amount</span>
-                                                <span class="profile-ud-value">{{ currency() }} {{$cashback->amount}}</span>
+                                                <span class="profile-ud-value">{{ currency($cashback->amount) }}</span>
                                             </div>
                                         </div>
-                                        
+
 
                                         @endforeach
-                                      
-                                        
+
+
                                     </div><!-- .profile-ud-list -->
                                 </div><!-- .nk-block -->
                                 @endif
@@ -183,43 +186,44 @@
                                         <h6 class="title overline-title text-base">Bonus</h6>
                                     </div><!-- .nk-block-head -->
                                     <div class="profile-ud-list">
-                                        
-                                       
-                                            
-                                       
+
+
+
+
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">Bonus</span>
                                                 <span class="profile-ud-value">Sign up bonus</span>
                                             </div>
                                         </div>
-                                       
+
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">Amount</span>
-                                                <span class="profile-ud-value">{{ currency() }} {{$cashout->bonus->amount}}</span>
+                                                <span class="profile-ud-value">{{ currency($cashout->bonus->amount) }}</span>
                                             </div>
                                         </div>
-                                        
 
-                                       
-                                      
-                                        
+
+
+
+
                                     </div><!-- .profile-ud-list -->
                                 </div><!-- .nk-block -->
                                 @endif
-                               
+
                             </div><!-- .card-inner -->
                             <div class="card-inner">
-                               
+
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="tabItem5">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
-                                               
+
                                                 {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
-                                            <form action="{{route('admin.cashouts.update',$cashout)}}" class="gy-3 form-validate is-alter" method="POST">
+
+                                            <form action="{{route('admin.cashouts.update',$cashout)}}" class="gy-3 form-validate is-alter"  id="form_withdraw" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="row g-4">
@@ -229,8 +233,9 @@
                                                             <div class="form-control-wrap ">
                                                                 <div class="form-control-select">
                                                                     <select class="form-control" id="default-06" name="status" required>
-                                                                        <option @if($cashout->status == 'pending') selected @endif value="pending">Pending</option>
-                                                                        <option @if($cashout->status == 'paid') selected @endif value="paid">Paid</option>
+                                                                            <option @if($cashout->status == 'pending') selected @endif value="pending">Pending</option>
+                                                                            <option @if($cashout->status == 'paid') selected @endif value="paid">Paid</option>
+                                                                            <option @if($cashout->status == 'donated') selected @endif value="donated">Donated</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -238,20 +243,20 @@
                                                     </div>
                                                    <div class="col-12">
                                                         <div class="form-group">
-                                                            <button type="submit" class="btn btn-lg btn-primary">Save</button>
+                                                            <button type="button" class="btn btn-lg btn-primary withdraw_submit">Save</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </form>
                                         </div>
-                                      
+
                                     </div>
                                 </div>
                             </div>
                         </div><!-- .card-preview -->
-                      
+
                     </div>
-                  
+
                 </div>
             </div>
         </div>
@@ -263,5 +268,28 @@
 
 @endsection
 @push('scripts')
- 
+<script>
+    $(document).on('click', '.withdraw_submit', function (e) {
+        var form_id = "form_withdraw";
+        var action = $(this).attr("action");
+        var method = $(this).attr("method");
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, submit it!'
+        }).then(function (result) {
+            if (result.value) {
+                $("#"+form_id).submit();
+            }
+            else{
+                window.toast({
+                type: 'error',
+                title: error.response.data.message
+            });
+            }
+       });
+    });
+</script>
 @endpush

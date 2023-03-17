@@ -17,9 +17,25 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li class="nk-block-tools-opt"><a href="{{route('admin.stores.create')}}" class="btn btn-primary btn-sm"><em class="icon ni ni-plus"></em><span>Add Store</span></a></li>
-                                        <li><a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
-                                      
+                                        <li class="nk-block-tools-opt">
+                                            <button class="btn btn-warning btn-sm" id="fake-data-importer-btn">
+                                                <em class="icon ni ni-upload-cloud"></em>
+                                                <span>Import Fake Stores</span>
+                                            </button>
+                                            <form action="{{ route('admin.stores.import-fake-data') }}" id="fake-data-importer-form" method="post">@csrf</form>
+                                        </li>
+                                        <li class="nk-block-tools-opt">
+                                            <a href="{{route('admin.stores.create')}}" class="btn btn-primary btn-sm">
+                                                <em class="icon ni ni-plus"></em>
+                                                <span>Add Store</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light">
+                                                <em class="icon ni ni-download-cloud"></em>
+                                                <span>Export</span>
+                                            </a>
+                                        </li>
                                     </ul>
                                 </div>
                             </div><!-- .toggle-wrap -->
@@ -71,10 +87,10 @@
                                     <div class="form-group">
                                         <label class="form-label" for="status">Cashback/Categories Override</label>
                                         <div class="form-control-wrap ">
-                                    <div class="custom-control custom-checkbox">
-                                        <input type="checkbox" class="custom-control-input" id="customCheck1" name="overridden">
-                                        <label class="custom-control-label" for="customCheck1">Overridden</label>
-                                    </div>
+                                            <div class="custom-control custom-checkbox">
+                                                <input type="checkbox" class="custom-control-input" id="customCheck1" name="overridden">
+                                                <label class="custom-control-label" for="customCheck1">Overridden</label>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -85,14 +101,14 @@
                                 </div>
                             </div>
                         </form>
-                        
+
                     </div>
-               
+
                 </div>
                 @include('flash::message')
                 <div class="nk-block" id="table-data">
                     @include('admin-dashboard.stores.index_data')
-                    
+
                 </div><!-- .nk-block -->
                 {{-- <div class="nk-block">
                     <div class="card card-stretch">
@@ -115,110 +131,148 @@
 </div>
 @endsection
 @push('scripts')
-    <script>
-    $(document).ready(function(){
-     $(document).on('click', '.pagination a', function(event){
-        event.preventDefault(); 
-        var route = $('.pagination').attr('route');
-        var page = $(this).attr('href').split('page=')[1];
-        
-         if(route=='index'){
-            $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+<script>
+    $(document).ready(function() {
+        $(document).on('click', '.pagination a', function(event) {
+            event.preventDefault();
+            var route = $('.pagination').attr('route');
+            var page = $(this).attr('href').split('page=')[1];
+
+            if (route == 'index') {
+                $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
-            
-             pageurl = "{{route('admin.stores.fetch')}}?page="
-             var _token = $("input[name=_token]").val();
-            $.ajax({
 
-                url:pageurl+page,
-                method:"POST",
-                data:{_token:_token, page:page},
-                success:function(data)
-                {
-                    $('#table-data').html(data);
-                    $('html, body').animate({ scrollTop: 0 }, 'slow');
-                }
+                pageurl = "{{route('admin.stores.fetch')}}?page="
+                var _token = $("input[name=_token]").val();
+
+                $.ajax({
+
+                    url: pageurl + page,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                        page: page
+                    },
+                    success: function(data) {
+                        $('#table-data').html(data);
+                        $('html, body').animate({
+                            scrollTop: 0
+                        }, 'slow');
+                    }
                 });
-         } 
+            }
 
-         if(route=='search'){
-            $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
-            </div></div>`);
-            
-            var _token = $("input[name=_token]").val();
-            var network_id = $("select[name=network_id]").val();
-            var store_id = $("input[name=store_id]").val();
-            var status = $("select[name=status").val();
-            var store_name = $("input[name=store_name]").val();
-            $.ajax({
-              url:'{{route("admin.stores.search_stores")}}?page='+page,
-              method:"POST",
-              data:{_token:_token,network_id:network_id,store_id:store_id,store_name:store_name,status:status,page:page},
-              success:function(data)
-              {
-               $('#table-data').html(data);
-               $('html, body').animate({ scrollTop: 0 }, 'slow');
-              }
-            });
-         }       
-     });
+            if (route == 'search') {
+                $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status"><span class="sr-only">Loading...</span></div></div>`);
+
+                var _token = $("input[name=_token]").val();
+                var network_id = $("select[name=network_id]").val();
+                var store_id = $("input[name=store_id]").val();
+                var status = $("select[name=status").val();
+                var store_name = $("input[name=store_name]").val();
+                $.ajax({
+                    url: '{{route("admin.stores.search_stores")}}?page=' + page,
+                    method: "POST",
+                    data: {
+                        _token: _token,
+                        network_id: network_id,
+                        store_id: store_id,
+                        store_name: store_name,
+                        status: status,
+                        page: page
+                    },
+                    success: function(data) {
+                        $('#table-data').html(data);
+                        $('html, body').animate({
+                            scrollTop: 0
+                        }, 'slow');
+                    }
+                });
+            }
+        });
     });
-    </script> 
-    <script>
-        $(document).ready(function(){
-        
-         $(document).on('submit', '.search_form', function(event){
+</script>
+<script>
+    $(document).ready(function() {
+
+        $(document).on('submit', '.search_form', function(event) {
             $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
-            event.preventDefault(); 
-            
+            event.preventDefault();
+
             var _token = $("input[name=_token]").val();
             var store = $("input[name=store]").val();
             var network_id = $("select[name=network_id]").val();
             var status = $("select[name=status").val();
             var store_name = $("input[name=store_name]").val();
             var overridden = 0;
-            if($("input[name=overridden]").prop("checked")){
+            if ($("input[name=overridden]").prop("checked")) {
                 var overridden = 1;
             }
-            
+
             $.ajax({
-              url:'{{route("admin.stores.search_stores")}}',
-              method:"POST",
-              data:{_token:_token,network_id:network_id,store:store,store_name:store_name,status:status,overridden:overridden},
-              success:function(data)
-              {
-               $('#table-data').html(data);
-               $('html, body').animate({ scrollTop: 0 }, 'slow');
-              }
+                url: '{{route("admin.stores.search_stores")}}',
+                method: "POST",
+                data: {
+                    _token: _token,
+                    network_id: network_id,
+                    store: store,
+                    store_name: store_name,
+                    status: status,
+                    overridden: overridden
+                },
+                success: function(data) {
+                    $('#table-data').html(data);
+                    $('html, body').animate({
+                        scrollTop: 0
+                    }, 'slow');
+                }
             });
-            
-         });
-        
+
         });
-        
-        </script>  
-        <script>
-            $(document).ready(function(){
-               
-               $(document).on('click', '.delete-store', function(event){
-                    var form_id = $(this).attr('form_id');
-                    Swal.fire({
-                        title: 'Are you sure?',
-                        text: "You won't be able to revert this!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, delete it!'
-                    }).then(function (result) {
-                        if (result.value) {
-                        $('#'+form_id).submit();
-                        }
-                   });
-                   event.preventDefault(); 
-                });
-           });
-        </script>
+
+    });
+</script>
+<script>
+    $(document).ready(function() {
+
+        $(document).on('click', '.delete-store', function(event) {
+            var form_id = $(this).attr('form_id');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function(result) {
+                if (result.value) {
+                    $('#' + form_id).submit();
+                }
+            });
+            event.preventDefault();
+        });
+
+        $('#fake-data-importer-btn').on('click', function(e) {
+            let _self = $(this);
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ok!'
+            }).then(function(result) {
+                if (result.value) {
+                    _self
+                        .attr('disabled', 'disabled')
+                        .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
+
+                    $('#fake-data-importer-form').submit();
+                }
+            });
+        });
+    });
+</script>
 @endpush

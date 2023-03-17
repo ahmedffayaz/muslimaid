@@ -8,7 +8,6 @@ use App\Models\Cashout;
 use App\Models\User;
 use App\Models\CashbackStatus;
 
-
 class CashoutController extends Controller
 {
     /**
@@ -19,28 +18,8 @@ class CashoutController extends Controller
     public function index()
     {
         $cashouts = Cashout::latest()->paginate(10);
+
         return view('admin-dashboard.cashouts.index', compact('cashouts'));
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -55,17 +34,6 @@ class CashoutController extends Controller
         $users  = User::latest()->get();
         $statuses = CashbackStatus::all();
         return view('admin-dashboard.cashouts.show',compact('cashout','users','statuses'));
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -91,20 +59,13 @@ class CashoutController extends Controller
             }
 
         }
-
-        flash()->success('cashout updated');
+        elseif($request->input('status') == 'donated'){
+            $cashout->update(['status'=>'donated']);
+            foreach($cashout->cashbacks as $cashback){
+                $cashback->update(['status'=>7]);
+            }
+        }
+        flash()->success('Cashout Updated Successfully.');
         return redirect()->back();
-        
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

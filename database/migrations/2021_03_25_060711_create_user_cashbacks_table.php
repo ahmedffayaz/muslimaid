@@ -15,8 +15,9 @@ class CreateUserCashbacksTable extends Migration
     {
         Schema::create('user_cashbacks', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('store_id');
+            $table->unsignedBigInteger('store_id')->nullable();
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('cashout_id')->nullable();
             $table->unsignedBigInteger('exit_click_id')->nullable();
             $table->unsignedBigInteger('network_order_id')->nullable();
             $table->unsignedBigInteger('network_commission_id')->nullable();
@@ -27,9 +28,10 @@ class CreateUserCashbacksTable extends Migration
             $table->float('order_value')->nullable();
             $table->string('amount');
             $table->string('status');
+            $table->enum('type', ['cashback', 'welcome_bonus', 'referral_bonus'])->default('cashback');
+            $table->enum('is_api', ['yes', 'no'])->default('yes');
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

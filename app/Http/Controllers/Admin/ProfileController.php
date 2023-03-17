@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 
 class ProfileController extends Controller
@@ -18,52 +18,8 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $profile = \Auth::user();
-        return view('admin-dashboard.profile.edit',compact('profile'));
-        
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-       
+        $profile = Auth::user();
+        return view('admin-dashboard.profile.edit', compact('profile'));
     }
 
     /**
@@ -75,41 +31,28 @@ class ProfileController extends Controller
      */
     public function update(Request $request, User $profile)
     {
-        $validated = $request->validate([
+        $request->validate([
             'first_name' => 'required|regex:/^[A-Za-z ]+$/',
             'last_name' => 'required|regex:/^[A-Za-z ]+$/',
-            // 'phone' => 'min:10|numeric|max:15',
-            // 'address' => 'min:10'
-        ],$messages = [
+        ], [
             'first_name.required' => 'First name is required.',
             'last_name.required' => 'Last name is required.'
         ]);
+
         $profile->update($request->input());
 
-        if($request->has('avatar')){
-
-            $imageName = 'admin_avatar_'.time().'.'.$request->avatar->extension();          
-            $request->avatar->storeAs('public/users/images/avatar',$imageName);
-
-           $profile->update([
-               'avatar'=>$imageName
-           ]);
-
+        $avatarImage = $profile->avatar;
+        if ($request->hasFile('avatar')) {
+            $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
+            $profile->update([
+                'avatar' => $avatarImage
+            ]);
         }
-        flash()->success('Profle Updated');
+
+        flash()->success('Profile Updated');
         return redirect()->back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
     public function savePassword(Request $request, User $user)
     {
         $validator = Validator::make($request->all(), [
@@ -117,30 +60,29 @@ class ProfileController extends Controller
         ]);
 
         if ($validator->fails()) {
-           
-
-            if(!$request->ajax())
-            {
+            if (!$request->ajax()) {
                 flash()->error($validator->errors()->first());
                 return redirect()->back();
-            }else{
-                return array('message' => $validator->errors()->first(),
-                                'updated'=>'error');
+            } else {
+                return array(
+                    'message' => $validator->errors()->first(),
+                    'updated' => 'error'
+                );
             }
-
         }
+
         $user->update([
             'password' => Hash::make($request->password),
-
         ]);
-        if(!$request->ajax())
-        {
-        flash()->success('Password changed successfully');
-        return redirect()->route('admin.profile.index');
-        }else{
-            return array('message' => 'Password updated successfully',
-                                'updated'=>'success');
-        }
 
+        if (!$request->ajax()) {
+            flash()->success('Password changed successfully');
+            return redirect()->route('admin.profile.index');
+        } else {
+            return array(
+                'message' => 'Password updated successfully',
+                'updated' => 'success'
+            );
+        }
     }
 }

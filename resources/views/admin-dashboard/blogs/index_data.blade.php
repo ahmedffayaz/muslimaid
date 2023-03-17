@@ -27,7 +27,7 @@
         <span>{{$blog->slug}}</span>
     </div>
     <div class="nk-tb-col">
-        <span><a href="{{route('post',$blog->slug)}}" target="_blank" class="a_link"><em class="icon ni ni-link-alt"></em></a></span>
+        <span><a href="{{route('blogs.show',$blog->slug)}}" target="_blank" class="a_link"><em class="icon ni ni-link-alt"></em></a></span>
     </div>
  
     

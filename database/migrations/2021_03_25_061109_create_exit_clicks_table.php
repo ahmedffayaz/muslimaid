@@ -17,11 +17,12 @@ class CreateExitClicksTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('user_id');
-            $table->string('status');
+            $table->unsignedBigInteger('network_id')->nullable();
+            $table->string('network_click_ref')->nullable();
             $table->longText('exit_url')->nullable();
+            $table->double('current_cashback_percentage')->nullable();
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

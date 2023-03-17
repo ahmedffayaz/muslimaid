@@ -9,13 +9,13 @@
                                 <a href="{{route('admin.reports.earnings')}}" class="media-body" style="display: contents;">
                                 <div class="media-body">
                                     <h6 class="title">Revenue</h6>
-                                    <h3 class="mb-0 mt-2"> {{ currency() }}{{number_format((float)$total_revenue, 2, '.', '')}}</h3>
-                                    
+                                    <h3 class="mb-0 mt-2"> {{ currency($total_revenue) }}</h3>
+
                                 </div>
                                 <div class="align-self-center text-center analytics-icon" >
                                     <em class="icon ni ni-coins text-info"></em>
                                 </div>
-                                
+
                                 </a>
                             </div>
                         </div>
@@ -29,18 +29,18 @@
                                 <a href="{{route('admin.reports.earnings')}}" class="media-body" style="display: contents;">
                                 <div class="media-body">
                                     <h6 class="title">Pending Revenue</h6>
-                                    <h3 class="mb-0 mt-2">{{ currency() }}{{number_format((float)$pending_total_revenue, 2, '.', '')}}</h3>
+                                    <h3 class="mb-0 mt-2">{{ currency($pending_total_revenue) }}</h3>
                                 </div>
                                 <div class="align-self-center text-center analytics-icon">
                                     <em class="icon ni ni-coins text-info"></em>
                                 </div>
                                 </a>
-                                
+
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
 
                 <div class="col-lg-3 mb-3">
                     <div class="card">
@@ -56,7 +56,7 @@
                                     <em class="icon ni ni-growth-fill text-info"></em>
                                 </div>
                                 </a>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -80,8 +80,8 @@
                 </div>
             </div>
         </div>
-        
-        
+
+
     </div>
     <div class="row g-gs">
         @if(count($tickets))
@@ -98,11 +98,11 @@
                     </div>
                 </div>
                 @php
-                $new_tickets = \App\Models\Ticket::where('new_ticket',1)->get();    
+                $new_tickets = \App\Models\Ticket::where('new_ticket',1)->get();
                 @endphp
                 <ul class="nk-support">
                 @if(count($tickets))
-                
+
                     @foreach ($tickets->take(5) as $ticket)
                     <li class="nk-support-item">
                         <a href="{{route('admin.tickets.show', $ticket)}}" class=" @if(count($new_tickets)) icon-status icon-status-info @endif">
@@ -129,7 +129,7 @@
                             @elseif($ticket->status=='pending')
                                 @if($ticket->lastReply->reply_by =='admin')
                                 <span class="badge badge-dot badge-dot-xs badge-info ml-1">Replied</span>
-                                
+
                                 @endif
                                 @if($ticket->lastReply->reply_by =='client')
                                 <span class="badge badge-dot badge-dot-xs badge-warning ml-1">Awaiting your reply </span>
@@ -137,10 +137,10 @@
 
                             @elseif($ticket->status=='closed')
                             <span class="badge badge-dot badge-dot-xs badge-success ml-1">Closed </span>
-                                
+
 
                             @endif
-                                
+
                             </div>
                         </a>
                             <p>{{$ticket->title}}</p>
@@ -148,14 +148,14 @@
                         </div>
                     </li>
                     @endforeach
-                    
-                
+
+
                 @else
                 <li class="nk-support-item">No New/Pending Tickets</li>
                 @endif
             </ul>
             </div>
-            
+
         </div>
         @endif
 
@@ -174,7 +174,7 @@
                                 <div class="title">Total Stores</div>
                                 <div class="count">{{count($stores)}}</div>
                             </div>
-                            
+
                         </a><a href="{{route('admin.stores.index')}}">
                         <em class="icon bg-primary-dim ni ni-bag"></em></a>
                         </li>
@@ -205,7 +205,7 @@
                         </a><a href="{{route('admin.clicks.index')}}">
                             <em class="icon bg-success-dim ni ni-arrow-up-right"></em></a>
                         </li>
-                        
+
                     </ul>
                 </div><!-- .card-inner -->
             </div><!-- .card -->
@@ -219,7 +219,7 @@
                                 <h6 class="title">Clicks Conversion rate @if(count($clicks)){{round((count($coms)*100)/count($clicks),0)}}% @else 0% @endif</h6>
                             </div>
                             <div class="card-tools">
-                                
+
                             </div>
                         </div>
                         <div class="data-group">
@@ -241,7 +241,7 @@
                                     </div>
                                     <div class="amount amount-xs">{{$notconverted}}</div>
                                 </li>
-                                
+
                             </ul>
                         </div>
                     </div><!-- .card-inner -->
@@ -254,10 +254,10 @@
                 </div>
             </div><!-- .card -->
         </div><!-- .col -->
-        
-        
-        
-        
+
+
+
+
         @if(count($coms))
         <div class="col-lg-6">
             <div class="card card-full">
@@ -275,7 +275,7 @@
                     @foreach ($coms->take(10) as $com)
                     <div class="card-inner card-inner-md">
                         <div class="user-card">
-                            <div class="user-avatar 
+                            <div class="user-avatar
                                 <?php
 
                                     $color = rand(1,5);
@@ -290,17 +290,19 @@
                             </div>
                             <div class="user-info">
                                 <span class="lead-text">{{$com->user->first_name}} {{$com->user->last_name}}</span>
-                                <span class="sub-text">{{$com->store->name}} <span class="badge badge-dim badge-pill badge-outline-primary ml-1">{{$com->store->network->name}}</span></span>
+                                @if(isset($com->store))
+                                  <span class="sub-text">{{$com->store->name}} <span class="badge badge-dim badge-pill badge-outline-primary ml-1">{{$com->store->network->name}}</span></span>
+                               @endif
                             </div>
                             <div class="user-action nk-top-products">
                                 <div class="total">
-                                    <div class="amount"> {{ currency() }}{{$com->amount}}</div>
+                                    <div class="amount"> {{ currency($com->amount) }}</div>
                                     <div class="count">
                                         @php echo \Carbon\Carbon::createFromTimeStamp(strtotime($com->event_date))->diffForHumans() @endphp
                                         </div>
-                                    
+
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -309,15 +311,15 @@
                     @if($coms->count() > 10)
                     <span class="p-3 text-center d-block">
                         +{{$coms->count()-10}} More  <a href="{{route('admin.commissions.index')}}" class="link ml-1 a_link">View All</a>
-                    
+
                     </span>
                    @endif
-                    
+
                 </div>
             </div>
-            
+
         </div><!-- .col -->
-        
+
         @endif
         @if(count($users))
         <div class="col-lg-6">
@@ -336,7 +338,7 @@
                     @foreach ($users->take(10) as $user)
                     <div class="card-inner card-inner-md">
                         <div class="user-card">
-                            <div class="user-avatar 
+                            <div class="user-avatar
                                 <?php
 
                                     $color = rand(1,5);
@@ -370,13 +372,13 @@
                     @if($users->count() > 10)
                     <span class="p-3 text-center d-block">
                         +{{$users->count()-10}} More  <a href="{{route('admin.commissions.index')}}" class="link ml-1 a_link">View All</a>
-                    
+
                     </span>
                    @endif
-                    
+
                 </div>
             </div>
-            
+
         </div><!-- .col -->
         @endif
         @if(count($reviews))
@@ -389,7 +391,7 @@
                         </div>
                         <div class="card-tools">
                             <a  href="{{route('admin.reviews.index')}}" class="a_link">View All</a>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -405,21 +407,21 @@
                         {{-- <div class="nk-tb-col "><span class="sub-text">Status</span></div> --}}
                         <div class="nk-tb-col nk-tb-col-tools text-right">
                             <span class="sub-text">Action</span>
-                            
+
                         </div>
                     </div><!-- .nk-tb-item -->
                     @foreach ($reviews->take(10) as $review)
                     <div class="nk-tb-item">
-                        
+
                         <div class="nk-tb-col">
                             <span>{{$review->reviewer}}</span>
                         </div>
                         <div class="nk-tb-col">
                             <span>{{ substr(strip_tags($review->review),0,50) }}..</span>
                         </div>
-                        
-                        
-                      
+
+
+
                         <div class="nk-tb-col">
                             <a href="{{route('admin.stores.show_store')}}?slug={{$review->store->slug}}">
                             <span><b>{{$review->store->name ?? ''}}</b></span><br>
@@ -431,7 +433,7 @@
                         </div>
                         <div class="nk-tb-col nk-tb-col-tools">
                             <ul class="nk-tb-actions gx-1">
-                                
+
                                 <li>
                                     <div class="drodown">
                                         <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
@@ -439,11 +441,11 @@
                                             <ul class="link-list-opt no-bdr">
                                                 <li><a href="{{route('admin.reviews.edit', $review)}}"><em class="icon ni ni-edit"></em><span>Edit Review</span></a></li>
                                                 <li><a  onclick="$('#delete-review-{{$review->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Review</span></a>
-                                                                        
+
                                                     <form action="{{ route('admin.reviews.destroy', $review) }}" id="delete-review-{{$review->id}}" method="POST" class="m-0">
                                                         @method('DELETE')
                                                         @csrf
-                                                        
+
                                                     </form>
                                                 </li>
                                             </ul>
@@ -453,17 +455,17 @@
                             </ul>
                         </div>
                     </div><!-- .nk-tb-item -->
-                    
-                    @endforeach   
+
+                    @endforeach
                 </div>
             </div><!-- .card -->
         </div>
         @endif
-        
-        
+
+
     </div><!-- .row -->
 
-           
+
 
 
 @push('scripts')
@@ -484,18 +486,18 @@
           data: [converted, notconverted]
         }]
       };
-     
-    
+
+
       function ecommerceDoughnutS1(selector, set_data) {
         var $selector = selector ? $(selector) : $('.ecommerce-doughnut-s1');
         $selector.each(function () {
           var $self = $(this),
               _self_id = $self.attr('id'),
               _get_data = typeof set_data === 'undefined' ? eval(_self_id) : set_data;
-    
+
           var selectCanvas = document.getElementById(_self_id).getContext("2d");
           var chart_data = [];
-    
+
           for (var i = 0; i < _get_data.datasets.length; i++) {
             chart_data.push({
               backgroundColor: _get_data.datasets[i].background,
@@ -505,7 +507,7 @@
               data: _get_data.datasets[i].data
             });
           }
-    
+
           var chart = new Chart(selectCanvas, {
             type: 'doughnut',
             data: {
@@ -552,15 +554,15 @@
           });
         });
       } // init chart
-    
-    
+
+
       NioApp.coms.docReady.push(function () {
         ecommerceDoughnutS1();
       });
     }(NioApp, jQuery);
-    
-    </script> 
-    
+
+    </script>
+
     {{-- {!! $chart1->renderChartJsLibrary() !!}
     {!! $chart1->renderJs() !!}   --}}
 

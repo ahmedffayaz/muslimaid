@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
+use Carbon\Carbon;
 use App\Models\User;
-use Illuminate\Foundation\Auth\RegistersUsers;
+use App\Traits\UserBonus;
+use App\Jobs\SendEmailJob;
+use App\Traits\WelcomeEmail;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-use Illuminate\Support\Facades\Mail;
-use App\Models\EmailTemplate;
-use App\Models\Bonus;
-use Session;
+use Illuminate\Foundation\Auth\RegistersUsers;
 
 class RegisterController extends Controller
 {
@@ -28,7 +29,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers;
+    use RegistersUsers, UserBonus, WelcomeEmail;
 
     /**
      * Where to redirect users after registration.
@@ -60,9 +61,16 @@ class RegisterController extends Controller
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'g-recaptcha-response' => ['required','captcha'],
         ]);
     }
 
+    public function showRegistrationForm(Request $request)
+    {
+        $refCode = $request->referby;
+        Session::put('refCode', $refCode);
+        return view('frontend.auth.register', compact('refCode'));
+    }
     /**
      * Create a new user instance after a valid registration.
      *
@@ -71,53 +79,79 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        $today = Carbon::today()->toDateString();
         $user =  User::create([
             'first_name' => $data['firstname'],
             'last_name' => $data['lastname'],
             'email' => $data['email'],
             'password' => Hash::make($data['password']),
-            'registration_type'=>'sign up'
+            'registration_type' => 'sign up',
+            'referred_by' => empty($data['referral_code']) ? '' : decrypt($data['referral_code']),
+            'referred_at' => empty($data['referral_code']) ? '' : $today,
         ]);
-        // $role = Role::create(['name' => 'user']);
 
         $user->assignRole('user');
 
-        $email_template = EmailTemplate::where('key','user_welcome')->first(); 
+        $bonusStatus = 1;
 
-        $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}'],[SiteSetting()['website_title'], url('/') ,$user->first_name,$user->email],$email_template->message );
-        
-        $email_data = array(
-            'name' =>  $data['firstname'],
-            'email' => $data['email'],
-            'email_message'=>$filtered_message,
-            'subject'=>$email_template->subject
-        );
+        $this->welcomBonus($user, $bonusStatus);
+        //send email to user to verify email address
+        dispatch(new SendEmailJob($user));
 
-        $bonus = array_key_exists('welcome_bonus',SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
-
-        $user_bonus = Bonus::create([
-            'user_id'=>$user->id,
-            'amount'=>$bonus,
-        ]);
-        
-        
-        Mail::send('emails.email_template', $email_data, function ($message) use ($email_data) {
-            $message->to($email_data['email'], $email_data['name'])
-                ->subject($email_data['subject']);
-        });
-
-        return $user;
-    }
-
-    protected function redirectTo()
-    {
-        Session::flash('welcome','welcome message'); 
-        if (Session::has('prvUrl')){
-            return session('prvUrl');
-        }else{
-            return '/';
+        $settings = SiteSetting();
+        $requestBody = [
+            'list_ids'=> [
+                isset($settings['sendgrid_registered_list_id']) ? $settings['sendgrid_registered_list_id'] : "",
+            ],
+            'contacts' => [
+                [
+                    'email' => $data['email'],
+                ]
+            ]
+        ];
+        $apiKey = isset($settings['sendgrid_api_key']) ? $settings['sendgrid_api_key'] : "";
+        $sg = new \SendGrid($apiKey);
+        try {
+            $response = $sg->client->marketing()->contacts()->put($requestBody);
+            if($response->statusCode() == 201 || $response->statusCode() == 202){
+                return redirect()->route('login')->with(['success' => 'User Successfully registered, verify your account'], );
+            }else{
+                return redirect()->route('login')->with(['error' => 'Something went wrong!']);
+            }
+        } catch (Exception $ex) {
+            return redirect()->route('login')->with(['error' => 'Something went wrong!']);
         }
     }
 
-    
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+        if ($response = $this->registered($request, $user)) {
+            return $response;
+        }
+
+        return $request->wantsJson()
+            ? new JsonResponse([], 201)
+            : redirect($this->redirectPath());
+    }
+
+
+    protected function redirectTo()
+    {
+        Session::flash('welcome', 'welcome message');
+        if (Session::has('prvUrl')) {
+            return session('prvUrl');
+        } else {
+            return '/';
+        }
+    }
 }

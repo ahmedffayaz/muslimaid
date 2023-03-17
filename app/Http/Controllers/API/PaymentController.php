@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\APi;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use App\Models\Store;
-use App\Models\PaymentInfo;
 use App\Models\Cashout;
+use App\Models\PaymentInfo;
 use App\Traits\ApiResponser;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,7 +25,7 @@ class PaymentController extends Controller
         $validator = Validator::make($input, $rules);
         if ($validator->fails()) {
             $arr = array("status" => 429, "message" => $validator->errors()->first(), "data" => array());
-            return \Response::json($arr);
+            return Response::json($arr);
         }
         $user =\Auth::user();
 
@@ -92,7 +93,7 @@ class PaymentController extends Controller
             $arr = array("status" => 400, "message" => "Payment method not found, please add your payment method information", "data" => array());
             return \Response::json($arr);
         }
-        $balance = $user->availableBalance();
+        $balance = $user->availableBalance(3);
         $cashbacks = $user->balance;
         if($balance < $min){
             $arr = array("status" => 400, "message" => "You have insufficient balance for withdrawl.", "data" => array());

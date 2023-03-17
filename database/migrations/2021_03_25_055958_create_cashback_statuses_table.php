@@ -16,6 +16,7 @@ class CreateCashbackStatusesTable extends Migration
         Schema::create('cashback_statuses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('status');
+            $table->string('details')->nullable();
             $table->timestamps();
         });
     }

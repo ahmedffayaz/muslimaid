@@ -2,8 +2,11 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 use App\Models\Page;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class PagesSeeder extends Seeder
 {
@@ -14,31 +17,36 @@ class PagesSeeder extends Seeder
      */
     public function run()
     {
-        $pages = array(
-            array('id' => '1','title' => 'About','slug' => 'about','excerpt' => NULL,'default' => '1','status' => '1','created_at' => '2021-06-09 12:30:34','updated_at' => '2021-06-09 12:30:34'),
-            array('id' => '3','title' => 'Privacy Policy','slug' => 'privacy-policy','excerpt' => NULL,'default' => '1','status' => '1','created_at' => '2021-06-10 08:25:01','updated_at' => '2021-06-10 08:25:01'),
-            array('id' => '4','title' => 'Terms and Conditions','slug' => 'terms-and-conditions','excerpt' => NULL,'default' => '1','status' => '1','created_at' => '2021-06-10 08:32:37','updated_at' => '2021-06-10 08:32:37'),
-            array('id' => '5','title' => 'Cookie Policy','slug' => 'cookie-policy','excerpt' => NULL,'default' => '1','status' => '1','created_at' => '2021-06-10 08:34:45','updated_at' => '2021-06-10 08:34:45'),
-            array('id' => '6','title' => 'Advertising & Partnerships','slug' => 'advertising-partnerships','excerpt' => NULL,'default' => '1','status' => '1','created_at' => '2021-06-10 10:02:03','updated_at' => '2021-06-10 10:02:03'),
-            array('id' => '7','title' => 'Careers','slug' => 'careers','excerpt' => NULL,'default' => '1','status' => '1','created_at' => '2021-06-10 10:19:43','updated_at' => '2021-06-10 10:19:43'),
-            array('id' => '8','title' => 'Getting Started','slug' => 'getting-started','excerpt' => NULL,'default' => '1','status' => '1','created_at' => '2021-06-10 10:20:01','updated_at' => '2021-06-10 10:20:01'),
-            array('id' => '9','title' => 'Customer Service','slug' => 'customer-service','excerpt' => NULL,'default' => '1','status' => '1','created_at' => '2021-06-10 10:20:13','updated_at' => '2021-06-10 10:20:13'),
-            array('id' => '10','title' => 'Donate to Charity','slug' => 'donate-to-charity','excerpt' => NULL,'default' => '1','status' => '1','created_at' => '2021-06-10 10:20:22','updated_at' => '2021-06-10 10:20:22'),
-            array('id' => '11','title' => 'FAQs','slug' => 'faqs','excerpt' => NULL,'default' => '1','status' => '1','created_at' => '2021-06-10 10:20:32','updated_at' => '2021-06-10 10:45:11'),
-            array('id' => '12','title' => 'Contact','slug' => 'contact','excerpt' => NULL,'default' => '1','status' => '1','created_at' => '2021-06-10 10:20:32','updated_at' => '2021-06-10 10:45:11'),
-            array('id' => '14','title' => 'Offers','slug' => 'offers','excerpt' => NULL,'default' => '0','status' => '1','created_at' => '2021-06-15 12:58:53','updated_at' => '2021-06-15 12:58:53'),
-            array('id' => '15','title' => 'Vouchers','slug' => 'vouchers','excerpt' => NULL,'default' => '0','status' => '1','created_at' => '2021-06-15 13:06:36','updated_at' => '2021-06-15 13:06:36')
-          );
+        Schema::disableForeignKeyConstraints();
+        DB::table('pages')->truncate();
+        Schema::enableForeignKeyConstraints();
 
-          foreach ($pages as $page) {
-            $p = new Page;
-            $p->title = $page['title'];
-            $p->slug = $page['slug'];
-            $p->excerpt = $page['excerpt'];
-            $p->status = $page['status'];
-            $p->default = $page['default'];
-            $p->save();
-          }
-          
+        $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\pages.csv');
+
+        $pages = [];
+
+        $now = Carbon::now();
+
+        foreach ($csvToArray as $page) {
+            if (!arrayValueExists($page, 'type')) $page['type'] = 'general';
+            if (!in_array($page['type'], ['system', 'special', 'general'])) continue;
+
+            // Need to create the page one by one because `laraberg` does not support mass-assignment
+            Page::create([
+                'id' => $page['id'],
+                'title' => $page['title'],
+                'slug' => $page['slug'],
+                'excerpt' => empty($page['excerpt']) ? null : $page['excerpt'],
+                'status' => arrayValueExists($page, 'status') && $page['status'] == 'inactive' && $page['type'] == 'general' ? 'inactive' : 'active',
+                'lb_content' => arrayValueExists($page, 'content') ? $page['content'] : null,
+                'meta_description' => empty($page['meta_description']) ? null : $page['meta_description'],
+                'meta_keyword' => empty($page['meta_keyword']) ? null : $page['meta_keyword'],
+                'banner_image' => empty($page['banner_image']) ? null : $page['banner_image'],
+                'description' => empty($page['description']) ? null : $page['description'],
+                'type' => $page['type'],
+                'created_at' => $now,
+                'updated_at' =>  $now,
+            ]);
+        }
     }
 }

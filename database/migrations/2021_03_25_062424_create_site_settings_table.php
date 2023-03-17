@@ -18,10 +18,10 @@ class CreateSiteSettingsTable extends Migration
             $table->string('title');
             $table->string('type');
             $table->text('value')->nullable();
+            $table->string('category')->default('general');
             $table->string('default')->default(0);
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

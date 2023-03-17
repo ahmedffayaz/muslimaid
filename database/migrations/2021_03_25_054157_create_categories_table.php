@@ -15,21 +15,26 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->unsignedBigInteger('parent_id')->default(0);
             $table->string('name');
             $table->longText('slug');
             $table->longText('description')->nullable();
-            $table->string('sort')->nullable();
+            $table->integer('sort')->default(0);
             $table->string('logo_type')->nullable();
             $table->string('logo_upload')->nullable();
             $table->string('logo_link')->nullable();
             $table->string('banner_type')->nullable();
             $table->string('banner_upload')->nullable();
             $table->string('banner_link')->nullable();
-            $table->unsignedBigInteger('parent_id')->default(0);
+            $table->string('feature_homepage')->default(0);
+            $table->string('feature_sidebar')->default(0);
             $table->boolean('status')->default(1);
+            $table->boolean('is_map_enable')->default(0);
+            $table->string('url')->nullable();
+            $table->string('meta_keyword')->nullable();
+            $table->longText('meta_description')->nullable();
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

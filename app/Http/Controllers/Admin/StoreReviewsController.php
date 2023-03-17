@@ -2,19 +2,22 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\StoreReview;
+use App\Models\User;
 use App\Models\Store;
+use App\Models\StoreReview;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Validator;
+
 
 class StoreReviewsController extends Controller
 {
     function __construct()
     {
-         $this->middleware('permission:view reviews', ['only' => ['index']]);
-         $this->middleware('permission:edit reviews', ['only' => ['edit','show','update']]);
-         $this->middleware('permission:add reviews', ['only' => ['create','Store']]);
-         $this->middleware('permission:delete reviews', ['only' => ['destroy']]);
+        $this->middleware('permission:view reviews', ['only' => ['index']]);
+        $this->middleware('permission:edit reviews', ['only' => ['edit', 'show', 'update']]);
+        $this->middleware('permission:add reviews', ['only' => ['create', 'Store']]);
+        $this->middleware('permission:delete reviews', ['only' => ['destroy']]);
     }
     /**
      * Display a listing of the resource.
@@ -23,10 +26,11 @@ class StoreReviewsController extends Controller
      */
     public function index()
     {
-        $route='index';
+        $route = 'index';
         $stores = Store::latest()->get();
-        $reviews = StoreReview::latest()->paginate(30);
-        return view('admin-dashboard.store_reviews.index',compact('reviews','stores','route'));
+        $users = User::get();
+        $reviews = StoreReview::orderBy('status', 'desc')->latest()->paginate(30);
+        return view('admin-dashboard.store_reviews.index', compact('reviews', 'stores', 'users', 'route'));
     }
 
     /**
@@ -36,8 +40,9 @@ class StoreReviewsController extends Controller
      */
     public function create()
     {
+        $users = User::where('status', 1)->get();
         $stores = Store::latest()->get();
-        return view('admin-dashboard.store_reviews.create', compact('stores'));
+        return view('admin-dashboard.store_reviews.create', compact('stores', 'users'));
     }
 
     /**
@@ -48,26 +53,47 @@ class StoreReviewsController extends Controller
      */
     public function store(Request $request)
     {
-        try{
-            $review = StoreReview::create($request->all());
-            flash()->success('Review added successfully');
+        $validator = Validator::make($request->all(), [
+            'user_id' => 'required',
+            'store_id' => 'required',
+            'review' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            if ($request->ajax()) {
+                return array(
+                    'message' => $validator->errors()->first(),
+                    'success' => false
+                );
+            }
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        try {
+            $review = StoreReview::create([
+                'user_id' => $request->input('user_id'),
+                'store_id' => $request->input('store_id'),
+                'review' => $request->input('review'),
+            ]);
+
+            // Get average rating against active reviews
+            $averageRating = $review->where('store_id', $review->store_id)->where('status', 'active')->avg('rating');
+
+            // Update store rating
+            $review->store()->update([
+                'rating' => $averageRating
+            ]);
+            if ($request->ajax()) {
+                return array(
+                    'message' => 'Review added successfully.',
+                    'success' => true
+                );
+            }
+            flash()->success('Review added successfully.');
             return redirect()->route('admin.reviews.index');
-            
-        }catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             flash()->error('something went wrong! unable to add the Review');
             return redirect()->route('admin.reviews.index');
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -78,10 +104,10 @@ class StoreReviewsController extends Controller
      */
 
     public function edit(StoreReview $review)
-    {  
-
+    {
+        $users = User::get();
         $stores = Store::latest()->get();
-        return view('admin-dashboard.store_reviews.edit', compact('stores','review'))->render();
+        return view('admin-dashboard.store_reviews.edit', compact('stores', 'review', 'users'))->render();
     }
 
     /**
@@ -93,22 +119,37 @@ class StoreReviewsController extends Controller
      */
     public function update(Request $request, StoreReview $review)
     {
-        // dd($request->all());
-        try{
+
+        try {
             $review->update($request->all());
-            if(!$request->ajax())
-            {
-                flash()->success('Review updated successfully');
-                return redirect()->back(); }
-            else{
-                return true;
-                }
-    
-            
-            // return redirect()->route('admin.reviews.index');
-        
+
+            // Get average rating against active reviews
+            $averageRating = StoreReview::where('store_id', $review->store_id)->where('status', 'active')->avg('rating');
+
+            // Update store rating
+            if ($request->status == 'active') {
+                $store = $review->store()->update([
+                    'rating' => $averageRating
+                ]);
+            }
+
+            if (!$request->ajax()) {
+                flash()->success('Review updated successfully.');
+                return redirect()->back();
+            } else {
+                return array(
+                    'message' => 'Review updated successfully.',
+                    'success' => true
+                );
+            }
         } catch (\Throwable $th) {
-            flash()->error('something went wrong! unable to update the review');
+            if ($request->ajax()) {
+                return array(
+                    'message' => 'Something went wrong! unable to update the review',
+                    'success' => false,
+                );
+            }
+            flash()->error('Something went wrong! unable to update the review');
             return redirect()->route('admin.reviews.index');
         }
     }
@@ -127,45 +168,16 @@ class StoreReviewsController extends Controller
     }
     function fetch(Request $request)
     {
-     if($request->ajax())
-     {
-        $route = 'index';
-        $reviews = StoreReview::latest()->paginate(30);
+        if ($request->ajax()) {
+            $route = 'index';
+            $reviews = StoreReview::latest()->paginate(30);
 
-         return view('admin-dashboard.store_reviews.index_data', compact('reviews','route'))->render();
-     }
-    }
-    public function exportCsv(Request $request)
-    {
-        try {
-
-            $table = Category::latest()->get();
-            $filename = "categories.csv";
-            $handle = fopen($filename, 'w+');
-            fputcsv($handle, array('Name', 'Parent Category','No of Stores', 'Status'));
-
-            foreach($table as $row) {
-                fputcsv($handle, array($row->name, $row->parent->name ?? '', count($row->stores), $row->status ? 'active' : 'in-active'));
-            }
-
-            fclose($handle);
-
-            $headers = array(
-                'Content-Type' => 'text/csv',
-            );
-
-            return \Response::download($filename, 'categories.csv', $headers);
-        } catch (\Throwable $th) {
-            
-            flash()->error('Error while exporting categories');
-            return redirect()->route('admin.categories.index');
-
+            return view('admin-dashboard.store_reviews.index_data', compact('reviews', 'route'))->render();
         }
-
     }
+
     public function searchReviews(Request $request, StoreReview $reviews)
     {
-        // dd($request->all());
         $reviews = $reviews->newQuery();
 
         // Search by store.
@@ -173,21 +185,18 @@ class StoreReviewsController extends Controller
             $reviews->where('store_id', $request->input('store_id'));
         }
 
-        // Search by name.
-        if ($request->input('reviewer')) {
-            $reviews->where('reviewer','like', '%'.$request->input('reviewer').'%');
-           
+        // Search by reviewer.
+        if ($request->input('reviewer_id')) {
+            $reviews->where('user_id', $request->input('reviewer_id'));
         }
 
         // Search by store.
-        if ($request->input('status')!=-1) {
+        if ($request->input('status') != -1) {
             $reviews->where('status', $request->input('status'));
         }
-        
-        $reviews = $reviews->latest()->paginate(30);
-        $route='search';
-        return view('admin-dashboard.store_reviews.index_data', compact('reviews','route'))->render();
-        
 
+        $reviews = $reviews->latest()->paginate(30);
+        $route = 'search';
+        return view('admin-dashboard.store_reviews.index_data', compact('reviews', 'route'))->render();
     }
 }

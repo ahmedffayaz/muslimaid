@@ -2,26 +2,28 @@
 
 namespace App\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Http\Request;
+use Exception;
 use App\Models\Store;
-use App\Models\ImportedCategory;
-use App\Models\StoreCashback;
-use App\Models\StoreImage;
-use App\Models\UserCashback;
+use App\Models\Network;
 use App\Models\Voucher;
 use App\Models\ExitClick;
-use App\Models\ImporterSetting;
+use App\Models\StoreImage;
 use App\Models\SiteSetting;
-use App\Models\CashbackStatusChange;
-use App\Models\Network;
-use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use Illuminate\Support\Str;
+use App\Models\UserCashback;
+use Illuminate\Http\Request;
+use App\Models\StoreCashback;
+use Illuminate\Bus\Queueable;
+use App\Models\ImporterSetting;
+use App\Models\ImportedCategory;
+use Illuminate\Support\Facades\DB;
+use App\Models\CashbackStatusChange;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class WebgainsImporter implements ShouldQueue
 {
@@ -45,26 +47,26 @@ class WebgainsImporter implements ShouldQueue
     public function handle()
     {
         //fetching importer settings
-        $network = Network::where('id',2)->first();
-        $setting = ImporterSetting::where('network_id',2)->first();
-        $settings = SiteSetting::latest()->get()->pluck('value','type');
+        $network = Network::where('id', 2)->first();
+        $setting = ImporterSetting::where('network_id', 2)->first();
+        $settings = SiteSetting::latest()->get()->pluck('value', 'type');
 
-        if($setting->import_stores == 1){
+        if ($setting->import_stores == 1) {
 
             $cu = curl_init();
 
             curl_setopt_array($cu, array(
-                CURLOPT_URL => 'https://api.webgains.com/2.0/programs?key='.$settings['webgains_api_key'].'&programsjoined=1&campaignId='.$settings['webgains_campaignid'],
+                CURLOPT_URL => 'https://api.webgains.com/2.0/programs?key=' . $settings['webgains_api_key'] . '&programsjoined=1&campaignId=' . $settings['webgains_campaignid'],
                 CURLOPT_RETURNTRANSFER => 1,
             ));
-
+            curl_setopt($cu, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($cu, CURLOPT_SSL_VERIFYPEER, 0);
             $result = curl_exec($cu);
             if (curl_errno($cu)) {
                 echo 'Error:' . curl_error($cu);
             }
             curl_close($cu);
             $result_array = json_decode($result, TRUE);
-
             foreach ($result_array as $results) {
                 try {
 
@@ -78,7 +80,7 @@ class WebgainsImporter implements ShouldQueue
                         }
                         $store = Store::create([
                             'name'         => $results['name'],
-                            'slug'         => \Str::slug($results['name']),
+                            'slug'         => Str::slug($results['name']),
                             'advertiser_id' => $results['id'],
                             'network_id'   => 2,
                             'tracking_url' => $store_link,
@@ -97,7 +99,7 @@ class WebgainsImporter implements ShouldQueue
                                             if ($index == '1') {
                                                 break;
                                             }
-                                            $c_type = \Str::contains($tier['commission'], '%') ? 'percentage' : 'fixed';
+                                            $c_type = Str::contains($tier['commission'], '%') ? 'percentage' : 'fixed';
                                             if ($c_type == 'percentage') {
                                                 $sale_commission =  str_replace('%', '', $tier['commission']);
                                                 $currency = null;
@@ -134,7 +136,7 @@ class WebgainsImporter implements ShouldQueue
                         }
 
                         if (!empty($results['categories'])) {
-                            foreach($results['categories'] as $category){
+                            foreach ($results['categories'] as $category) {
                                 $category_parent = ImportedCategory::where('name', $category['name'])->first();
                                 if (!$category_parent) {
                                     $category_parent = new ImportedCategory();
@@ -158,8 +160,8 @@ class WebgainsImporter implements ShouldQueue
                             'is_uploaded' => 1,
                             'is_fake' => 1
                         ]);
-                    }else if($results['status'] == 'live' && $results['membershipStatus'] == '10') {
-                        if (!$store->override_cashback){
+                    } else if ($results['status'] == 'live' && $results['membershipStatus'] == '10') {
+                        if (!$store->override_cashback) {
                             $https_link = substr($results['textLink'], 0, 4);
                             if ($https_link == "http") {
                                 $store_link = str_replace("mycampaignid", $settings['webgains_campaignid'], $results['textLink']);
@@ -180,7 +182,7 @@ class WebgainsImporter implements ShouldQueue
                                                 if ($index == '1') {
                                                     break;
                                                 }
-                                                $c_type = \Str::contains($tier['commission'], '%') ? 'percentage' : 'fixed';
+                                                $c_type = Str::contains($tier['commission'], '%') ? 'percentage' : 'fixed';
                                                 if ($c_type == 'percentage') {
                                                     $sale_commission =  str_replace('%', '', $tier['commission']);
                                                     $currency = null;
@@ -220,7 +222,7 @@ class WebgainsImporter implements ShouldQueue
                                 DB::table('category_store')->where('store_id', $store->id)->delete();
 
                                 if (!empty($results['categories'])) {
-                                    foreach($results['categories'] as $category){
+                                    foreach ($results['categories'] as $category) {
                                         $category_parent = ImportedCategory::where('name', $category['name'])->first();
                                         if (!$category_parent) {
                                             $category_parent = new ImportedCategory();
@@ -258,19 +260,20 @@ class WebgainsImporter implements ShouldQueue
                             $store->update();
                         }
                     }
-                } catch (\Execption $e) {
+                } catch (Exception $e) {
                     flash()->error('Error while running importer');
                     return redirect()->route('admin.stores.index');
                 }
             }
         }
 
-        if($setting->import_vouchers == 1){
-            
-            $curl = curl_init();
+        if ($setting->import_vouchers == 1) {
 
+            $curl = curl_init();
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
             curl_setopt_array($curl, array(
-                CURLOPT_URL => 'https://api.webgains.com/2.0/vouchers?key='.$settings['webgains_api_key'].'&campaignId='.$settings['webgains_campaignid'].'&networks=UK&joined=1',
+                CURLOPT_URL => 'https://api.webgains.com/2.0/vouchers?key=' . $settings['webgains_api_key'] . '&campaignId=' . $settings['webgains_campaignid'] . '&networks=UK&joined=1',
                 CURLOPT_RETURNTRANSFER => 1,
             ));
 
@@ -284,8 +287,8 @@ class WebgainsImporter implements ShouldQueue
             foreach ($result_array1 as $result) {
                 $store = Store::where('advertiser_id', $result['programId'])->first();
                 $voucher_exist = Voucher::where('link_id', $result['id'])->first();
-                if (!$voucher_exist){
-                    $voucher = Voucher::create([    
+                if (!$voucher_exist) {
+                    $voucher = Voucher::create([
                         'click_url'       => empty($result['trackingUrl']) ? '#' : $result['trackingUrl'],
                         'sale_commission' => empty($result['discount']) ? NULL : $result['discount'],
                         'store_id' => $store->id ?? 0,
@@ -303,16 +306,16 @@ class WebgainsImporter implements ShouldQueue
             }
         }
 
-        if($setting->import_cashbacks == 1){
-
+        if ($setting->import_cashbacks == 1) {
             $cashback_percent_setting = SiteSetting::where('type', 'cashback_percentage')->first()->value;
             $startdate = date('Y-m-d\TH:i:s', strtotime(' -31 days'));
             $enddate = date('Y-m-d\TH:i:s');
             $campaignid = $settings['webgains_campaignid'];
             $username = $settings['webgains_user_name'];
             $password = $settings['webgains_password'];
-            $soap = new \SoapClient (NULL, 
-                array ( 
+            $soap = new \SoapClient(
+                NULL,
+                array(
                     "location"   => "http://ws.webgains.com/aws.php",
                     "uri"        => "urn:http://ws.webgains.com/aws.php",
                     "style"      => SOAP_RPC,
@@ -320,13 +323,15 @@ class WebgainsImporter implements ShouldQueue
                     'exceptions' => 0
                 )
             );
+
             $results = $soap->getFullEarnings($startdate, $enddate, $campaignid, $username, $password);
-            if($results){
+
+            if ($results) {
                 $cashback_percent = 0;
-                foreach($results as $cashback){
+                foreach ($results as $cashback) {
                     $store = Store::where('advertiser_id', $cashback->programID)->first();
                     $click = ExitClick::where('id', $cashback->clickRef)->first();
-                    if(!$click){
+                    if (!$click) {
                         $click = ExitClick::where('network_click_ref', $cashback->clickRef)->first();
                     }
                     if ($click) {
@@ -337,24 +342,23 @@ class WebgainsImporter implements ShouldQueue
                             'store_id' => $store->id,
                             'user_id' => 1,
                             'network_click_ref' => $cashback->clickRef,
-                            'status' => 'pending',
                             'exit_url' => '#',
                             'current_cashback_percentage' => $cashback_percent_setting
                         ]);
                         $click_id = $new_click->id;
                         $cashback_percent = $cashback_percent_setting;
                     }
-                    $cashback_amount_for_user = ( $cashback->commission / 100) * $cashback_percent;
+                    $cashback_amount_for_user = ($cashback->commission / 100) * $cashback_percent;
                     $commission_exist = UserCashback::where(['exit_click_id' =>  $click_id, 'network_commission_id' =>  $cashback->transactionID])->first();
                     $status = '';
-                    if ( $cashback->status == 'delayed') {
+                    if ($cashback->status == 'delayed') {
                         $status = 1;
-                    } else if ( $cashback->status == 'cancelled') {
+                    } else if ($cashback->status == 'cancelled') {
                         $status = 2;
-                    } else if ( $cashback->status == 'confirmed') {
+                    } else if ($cashback->status == 'confirmed') {
                         $status = 3;
-                    } 
-                    if ( $cashback->status == 'confirmed' &&  $cashback->paymentStatus != 'paid') {
+                    }
+                    if ($cashback->status == 'confirmed' &&  $cashback->paymentStatus != 'paid') {
                         $status = 1;
                     }
                     if (!$commission_exist) {
@@ -399,5 +403,4 @@ class WebgainsImporter implements ShouldQueue
             }
         }
     }
-
 }

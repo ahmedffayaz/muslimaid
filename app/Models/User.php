@@ -11,10 +11,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Notifications\ResetPasswordNotification;
 use Laravel\Sanctum\HasApiTokens;
 
-
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasFactory, Notifiable, HasRoles , SoftDeletes, HasApiTokens;
+    use HasFactory, Notifiable, HasRoles, SoftDeletes, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -26,6 +25,7 @@ class User extends Authenticatable
         'last_name',
         'email',
         'password',
+        'email_verified_at',
         'registration_type',
         'phone',
         'address',
@@ -34,6 +34,9 @@ class User extends Authenticatable
         'status',
         'provider',
         'provider_id',
+        'referred_by',
+        'referred_at',
+        'is_email_verified',
     ];
 
     /**
@@ -55,47 +58,67 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-
-    public function paymentInfo(){
+    public function paymentInfo()
+    {
         return $this->hasOne(PaymentInfo::class);
     }
-    public function paypalInfo(){
-        return $this->paymentInfo()->where('payment_method','paypal');
-    }
-    public function bankInfo(){
-        return $this->paymentInfo()->where('payment_method','bank');
+
+    public function paypalInfo()
+    {
+        return $this->paymentInfo()->where('payment_method', 'paypal');
     }
 
+    public function bankInfo()
+    {
+        return $this->paymentInfo()->where('payment_method', 'bank');
+    }
 
-    public function cashbacks(){
+    public function cashbacks()
+    {
         return $this->hasMany(UserCashback::class);
     }
-    public function balance(){
-        return $this->cashbacks()->where('status','=','3');
-    }  
-    public function bonus(){
-        return $this->hasOne(Bonus::class);
-    }  
-    public function availableBalance(){
-        $cashback = $this->cashbacks()->where('status','=','3')->sum('amount');
 
-        $bonus = $this->bonus()->where('status','unpaid')->first() ?$this->bonus()->where('status','unpaid')->first()->amount :0;
-
-        return $cashback+$bonus;
+    public function balance()
+    {
+        return $this->cashbacks()->where('status', '=', '3');
     }
-    public function clicks(){
+
+    public function bonus()
+    {
+        return $this->hasOne(Bonus::class);
+    }
+
+    public function availableBalance($status)
+    {
+        $total_cashback = 0;
+        $cashback = $this->cashbacks();
+        if($status != null){
+            if($status == 5){
+                $total_cashback = $cashback->get()->where('status', 6)->sum('amount');
+            }
+            $cashback->where('status', $status);
+        }
+        $total_cashback += $cashback->sum('amount');
+        return $total_cashback; 
+    }
+
+    public function clicks()
+    {
         return $this->hasMany(ExitClick::class)->orderByDesc('created_at');
-    } 
-    public function cashouts(){
+    }
+
+    public function cashouts()
+    {
         return $this->hasMany(Cashout::class);
     }
-    public function claims(){
-        return $this->hasMany(Ticket::class)->where('ticket_type','claim')->orderByDesc('created_at');
+
+    public function claims()
+    {
+        return $this->hasMany(Ticket::class)->where('ticket_type', 'claim')->orderByDesc('created_at');
     }
+
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotification($token));
     }
-
-    
 }

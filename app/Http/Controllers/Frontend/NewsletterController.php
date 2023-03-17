@@ -2,92 +2,52 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Exception;
 use Newsletter;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+
 
 class NewsletterController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-      $sub = Newsletter::subscribe('rincewind@discworld.com');
-      dd($sub);
+        Newsletter::subscribe('rincewind@discworld.com');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        if(Newsletter::subscribe($request->input('email'))){
-            return $message = 'Thank you for subscribing to out newsletter';
-        }else{
-            return $message = 'Something went wrong!';
-
-        }
+        $settings = SiteSetting();
+        $email = $request->input('email');
+        $nameArray = explode(' ', $request->input('name'));
         
-    }
+        $requestBody = [
+            'list_ids' => [
+                isset($settings['sendgrid_newsletter_list_id']) ? $settings['sendgrid_newsletter_list_id'] : "",
+            ],
+            'contacts' => [
+                [
+                    'email' => $email,
+                    'first_name' => isset($nameArray[0]) ? $nameArray[0] : '',
+                    'last_name' => isset($nameArray[1]) ? $nameArray[1] : '',
+                ]
+            ]
+        ];
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
+        $apiKey = isset($settings['sendgrid_api_key']) ? $settings['sendgrid_api_key'] : "";
+        $sg = new \SendGrid($apiKey);
+        
+        try {
+            $response = $sg->client->marketing()->contacts()->put($requestBody);
+            Newsletter::subscribe($request->input('email'));
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
+            if ($response->statusCode() == 201 || $response->statusCode() == 202) {
+                return redirect()->back()->with(['success' => 'Thank you for subscribing to out newsletter']);
+            }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
+            return redirect()->back()->with(['error' => 'Something went wrong!']);
+        } catch (Exception $ex) {
+            return redirect()->back()->with(['error' => $ex->getMessage()]);
+        }
     }
 }

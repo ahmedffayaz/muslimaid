@@ -1,12 +1,13 @@
 <?php
 
 namespace Database\Seeders;
-use Spatie\Permission\Models\Role;
 
 use App\Models\User;
+use Illuminate\Support\Carbon;
 use Illuminate\Database\Seeder;
-
-use Faker\Factory as Faker;
+use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\Schema;
 
 class UserSeeder extends Seeder
 {
@@ -17,51 +18,63 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $admin = new User();
-		$admin->first_name = 'Super';
-		$admin->last_name = 'Admin';
-		$admin->email = 'admin@trs.com';
-		$admin->password = bcrypt('123@#$xyz990');
-		$admin->registration_type = 'sign up';
-        $admin->avatar = 'default.png';
-		$admin->save();
-        $admin->assignRole('admin');
-        $admin->assignRole('user');
+        Schema::disableForeignKeyConstraints();
+        DB::table('users')->truncate();
+        Schema::enableForeignKeyConstraints();
 
-        $data = new User();
-		$data->first_name = 'Data';
-		$data->last_name = 'Operator';
-		$data->email = 'data@trs.com';
-		$data->password = bcrypt('123@#$xyz990');
-		$data->registration_type = 'sign up';
-        $data->avatar = 'default.png';
-		$data->save();
-        $data->assignRole('data');
+        $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\users.csv');
+        $users = [];
+        $roles = [];
+        $password = bcrypt('123@#$xyz990'); // important optimization
+        $now = Carbon::parse(now())->format('Y-m-d H:i:s');
 
-        $finance = new User();
-		$finance->first_name = 'Finance';
-		$finance->last_name = 'Manager';
-		$finance->email = 'finance@trs.com';
-		$finance->password = bcrypt('123@#$xyz990');
-		$finance->registration_type = 'sign up';
-        $finance->avatar = 'default.png';
-		$finance->save();
-        $finance->assignRole('finance');
+        foreach ($csvToArray as $row) {
+            if (
+                !arrayValueExists($row, 'id')
+                || !arrayValueExists($row, 'first_name')
+                || !arrayValueExists($row, 'last_name')
+                || !arrayValueExists($row, 'email')
+                || !arrayValueExists($row, 'roles')
+            ) {
+                continue;
+            }
 
-        $faker = Faker::create();
+            foreach (explode(',', $row['roles']) as $role) {
+                $roles[trim($role)][] = $row['id'];
+            }
 
-    	foreach (range(1,1000) as $index) {
+            $users[] = [
+                'id' => $row['id'],
+                'first_name' => $row['first_name'],
+                'last_name' => $row['last_name'],
+                'email' => $row['email'],
+                'email_verified_at' => isset($row['email_verified_at']) && $row['email_verified_at'] == 'Yes' ? $now : null,
+                'password' => $password,
+                'registration_type' => 'sign up',
+                'date_of_birth' => arrayValueExists($row, 'date_of_birth') ? date("Y-m-d", strtotime($row['date_of_birth'])):  null,
+                'intro' => isset($row['intro']) ? $row['intro'] : null,
+                'address' =>  isset($row['address']) ? $row['address'] : null,
+                'phone' =>  isset($row['phone']) ? $row['phone'] : null,
+                'avatar' => arrayValueExists($row, 'avatar') ? $row['avatar'] :  'default.png',
+                'status' => arrayValueExists($row, 'status') ? $row['status'] :  'active',
+                'referred_by' => isset($row['referred_by']) ? $row['referred_by'] : null,
+                'referred_at' => isset($row['referred_at']) ? $row['referred_at'] : null,
+                'remember_token' => isset($row['remember_token']) ? $row['remember_token'] : null,
+                'created_at' => arrayValueExists($row, 'created_at') ? dbDate($row['created_at']) : $now,
+                'updated_at' => arrayValueExists($row, 'updated_at') ? dbDate($row['updated_at']) : $now,
+                'deleted_at' => null,
+                'provider' => isset($row['provider']) ? $row['provider'] : 'email',
+                'provider_id' => isset($row['provider_id']) ? $row['provider_id'] : null,
+                'is_email_verified' => arrayValueExists($row, 'is_email_verified') ? $row['is_email_verified'] :  1,
+            ];
+        }
 
-            $user = new User();
-            $user->first_name = $faker->firstName;
-            $user->last_name = $faker->lastName;
-            $user->email = $faker->unique()->email;
-            $user->password = bcrypt('123@#$xyz990');
-            $user->registration_type = 'sign up';
-            $user->avatar = 'default.png';
-            $user->save();	     
-            $user->assignRole('user');
-	}
+        foreach (array_chunk($users, 500) as $usersChunk) {
+            User::insert($usersChunk);
+        }
 
+        foreach ($roles as $roleName => $roleIds) {
+            Role::findByName($roleName)->users()->sync($roleIds);
+        }
     }
 }

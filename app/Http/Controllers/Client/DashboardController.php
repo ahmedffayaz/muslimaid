@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers\Client;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-use App\Models\UserCashback;
 use App\Models\ExitClick;
+use App\Models\UserCashback;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
-use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
@@ -20,40 +20,12 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        $user = \Auth::user();
-        return view('client-dashboard.dashboard',compact('user'));
-    }
+        $user = Auth::user();
+        $items = $user->cashbacks()->where(function($q) {
+            $q->where('store_id', '<>', null)->whereHas('store');
+        })->orWhere('store_id', null)->latest()->limit(5)->get();
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        return view('frontend.client-dashboard.dashboard', compact('user', 'items'));
     }
 
     /**
@@ -64,8 +36,8 @@ class DashboardController extends Controller
      */
     public function edit()
     {
-        $user = \Auth::user();
-        return view('client-dashboard.edit-profile',compact('user'));
+        $user = Auth::user();
+        return view('frontend.client-dashboard.edit-profile', compact('user'));
     }
 
     /**
@@ -75,59 +47,58 @@ class DashboardController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
-        // dd($request->all());
-        
-        $validated = $request->validate([
+        $request->validate([
             'firstname' => 'required|regex:/^[A-Za-z ]+$/',
             'lastname' => 'required|regex:/^[A-Za-z ]+$/',
-            // 'phone' => 'min:10|numeric|max:15',
-            // 'address' => 'min:10'
-        ],$messages = [
+        ], [
             'firstname.required' => 'First name is required.',
             'lastname.required' => 'Last name is required.'
         ]);
-        
+
+        $user = auth()->user();
+
+        $avatarImage = $user->avatar;
+        if ($request->hasFile('avatar')) {
+            $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
+        }
+
         $user->update([
             'first_name' => $request->firstname,
             'last_name' => $request->lastname,
             'phone' => $request->phone,
             'address' => $request->address,
             'intro' => $request->intro,
+            'avatar' => $avatarImage
         ]);
+
         flash()->success('User updated successfully');
-        return redirect()->back();   
+        return redirect()->back();
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
+    public function cashback()
     {
-        //
+        $user = Auth::user();
+        $cashbacks = UserCashback::where('user_id', $user->id)->latest()->paginate(20);
+        return view('frontend.client-dashboard.cashback', compact('user', 'cashbacks'));
     }
-    public function cashback(){
 
-        $user = \Auth::user();
-        $cashbacks = UserCashback::where('user_id',$user->id)->latest()->get();
-        return view('client-dashboard.cashback',compact('user','cashbacks'));
+    public function clicks()
+    {
+        $user = Auth::user();
+        $clicks = ExitClick::where('user_id', $user->id)->whereHas('store')->latest()->paginate(20);
+        return view('frontend.client-dashboard.clicks', compact('user', 'clicks'));
     }
-    public function clicks(){
 
-        $user = \Auth::user();
-        $clicks = ExitClick::where('user_id',$user->id)->latest()->get();
-        return view('client-dashboard.clicks',compact('user','clicks'));
+    public function changePassword()
+    {
+        return view('frontend.client-dashboard.change-password');
     }
-    public function changePassword(){
-        return view('client-dashboard.change-password');
-    }
+
     public function savePassword(Request $request)
     {
-        $user = \Auth::user();
+        $user = Auth::user();
         $validator = Validator::make($request->all(), [
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
@@ -135,13 +106,20 @@ class DashboardController extends Controller
         if ($validator->fails()) {
             flash()->error($validator->errors()->first());
             return redirect()->back();
-
         }
-        $user->update([
-            'password' => Hash::make($request->password),
-        ]);
+        if (!Hash::check($request->old_password, $user->password)) {
+            flash()->error('Old password does not match with our records');
+            return redirect()->back();
+        } else if ($request->password != $request->password_confirmation) {
+            flash()->error('Password confirmation do not match');
+            return redirect()->back();
+        } else {
+            $user->update([
+                'password' => Hash::make($request->password),
+            ]);
 
-        flash()->success('Password changed successfully');
-        return redirect()->back();
+            flash()->success('Password changed successfully');
+            return redirect()->back();
+        }
     }
 }

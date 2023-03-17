@@ -2,9 +2,15 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use Throwable;
 use App\Models\Page;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Config;
 
 class PagesController extends Controller
 {
@@ -15,9 +21,9 @@ class PagesController extends Controller
      */
     public function index()
     {
-        $route='index';
+        $route = 'index';
         $pages = Page::latest()->paginate(20);
-        return view('admin-dashboard.pages.index',compact('pages','route'));
+        return view('admin-dashboard.pages.index', compact('pages', 'route'));
     }
 
     /**
@@ -38,27 +44,52 @@ class PagesController extends Controller
      */
     public function store(Request $request)
     {
-        $page = new Page;
-        $page->title = $request->title;
-        $page->slug = \Str::slug($request->title);
-        $page->excerpt = $request->excerpt;
-        $page->lb_content = $request->content;
-        $page->status = $request->status;
-        $page->default = 0;
-        $page->save();
-        flash()->success('New Page created successfully');
-        return redirect()->route('admin.pages.index');
-    }
+        $request->validate([
+            'title' => 'required'
+        ], [
+            'title.required' => 'The Title field is required.',
+        ]);
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
+        try {
+            DB::beginTransaction();
+            $slug = Str::slug($request->input('title'));
+            $lastId = Page::orderBy('id', 'desc')->pluck('id')->first();
+            $pageSlug = Page::where('slug', $slug)->first();
+            $page = new Page;
+            $page->title = $request->title;
+            $page->slug = isset($pageSlug) ? $slug . '-' . ($lastId + 1) : $slug;
+            $page->excerpt = $request->excerpt;
+            $page->lb_content = $request->content;
+            $page->status = $request->status;
+            $page->banner_image = parse_url($request->filepath)['path'];
+            $page->description = $request->short_description;
+            $page->meta_description = $request->meta_description;
+            $page->meta_keyword = $request->meta_keyword;
+            $page->default = 0;
+            $page->save();
+            DB::commit();
+
+            if (!$request->ajax()) {
+                flash()->success('New Page created successfully');
+                return redirect()->route('admin.pages.edit', $page->id);
+            } else {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'Page created successfully',
+                    'url' => route('admin.pages.edit', $page->id)
+                ], JsonResponse::HTTP_OK);
+            }
+        } catch (Throwable $th) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Something went wrong, try again.');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Something went wrong, try again.'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -69,7 +100,7 @@ class PagesController extends Controller
      */
     public function edit(Page $page)
     {
-        return view('admin-dashboard.pages.edit',compact('page'));
+        return view('admin-dashboard.pages.edit', compact('page'));
     }
 
     /**
@@ -81,13 +112,51 @@ class PagesController extends Controller
      */
     public function update(Request $request, Page $page)
     {
-        $page->title = $request->title;
-        $page->excerpt = $request->excerpt;
-        $page->lb_content = $request->content;
-        $page->status = $request->status;
-        $page->save();
-        flash()->success('Page updated');
-        return redirect()->route('admin.pages.index');
+        $request->validate([
+            'title' => 'required'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $page->update([
+                'title' => $request->input('title'),
+                'excerpt' => $request->input('excerpt'),
+                'lb_content' => $request->input('content'),
+                'status' => $request->input('status') == 'inactive' && $page->type == 'general' ? 'inactive' : 'active',
+                'description' => $request->input('short_description'),
+                'meta_description' => $request->input('meta_description'),
+                'meta_keyword' => $request->input('meta_keyword'),
+            ]);
+
+            if (isset($request->filepath)) {
+                $page->banner_image = parse_url($request->filepath)['path'];
+                $page->save();
+            }
+
+            DB::commit();
+
+            if (!$request->ajax()) {
+                flash()->success('Page updated');
+                return redirect()->route('admin.pages.index');
+            }
+
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Page updated'
+            ], JsonResponse::HTTP_OK);
+        } catch (Throwable $th) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Something went wrong, try again.');
+                return redirect()->back();
+            }
+
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Something went wrong, try again.'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     /**
@@ -98,16 +167,40 @@ class PagesController extends Controller
      */
     public function destroy(Page $page)
     {
+        if ($page->type == 'system') {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'System pages cannot be deleted.'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
         $page->delete();
+
         flash()->success('Page deleted');
         return redirect()->route('admin.pages.index');
-
     }
+
     public function runValidation($request)
     {
         return $request->validate([
             'title' => 'required|max:255',
             'content' => 'required'
         ]);
+    }
+
+    public function getAvailableShortCodes()
+    {
+        $templates = File::allFiles(resource_path(convertPathForOS('views/frontend/templates')));
+
+        $shortCodes = [];
+
+        foreach ($templates as $template) {
+            array_push(
+                $shortCodes, 
+                '[' . str_replace('.blade.php', '', $template->getFilename()) . ']'
+            );
+        }
+
+        return view('admin-dashboard.pages.short-codes-modal', compact('shortCodes'));
     }
 }
