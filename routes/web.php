@@ -242,6 +242,7 @@ Route::get('register-form', [App\Http\Controllers\Auth\RegisterController::class
 Route::get('account/verify/{token}', [App\Http\Controllers\Auth\VerifyController::class, 'verifyAccount'])->name('user.verify');
 
 Route::get('/', [App\Http\Controllers\Frontend\HomeController::class, 'index']);
+Route::post('/quick-search', [App\Http\Controllers\Frontend\HomeController::class, 'quickSearch'])->name('quick-search');
 Route::get('set-locale/{locale}', [App\Http\Controllers\Frontend\HomeController::class, 'setLocale']);
 
 Route::get('search', [App\Http\Controllers\Frontend\SearchController::class, 'index'])->name('search.index');
