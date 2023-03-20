@@ -450,7 +450,11 @@ function isGoogleEnabled()
 function checkStaticpageRule($url)
 {
     $slug = request()->route('slug');
-    $current_route_name = Request::route()->getName();
+    if(!isset($slug)){
+        $path = parse_url($url, PHP_URL_PATH);
+        preg_match('/[^\/]+$/', $path, $matches);
+        $slug = isset($matches[0]) ? $matches[0] : '/';
+    }
     $seo_rules = SeoRule::where('is_enabled', 1)->with('ruleData')->where('url', $url)->first();
     if ($seo_rules != null) {
         $meta_description = [];
@@ -463,34 +467,20 @@ function checkStaticpageRule($url)
         return  ['title' => $title, 'meta_description' => implode(',', $meta_description), 'meta_keyword' => implode(',', $meta_keyword)];
     } elseif ($slug) {
         $route_names = [
-            'post' => '\App\Models\Blog',
             'page' => '\App\Models\Page',
+            'post' => '\App\Models\Blog',
             'store.location'  => '\App\Models\Category',
             'stores.show' => '\App\Models\Store'
         ];
 
-        foreach ($route_names as $route_name => $model) {
-            if ($current_route_name == 'stores.show') {
-                $meta_description = [];
-                $meta_keyword = [];
-                $store = Store::where('slug', $slug)->select('id', 'name')->with('storeRuleData')->first();
-                $title = $store->name;
-                foreach ($store->storeRuleData as $meta_data) {
-                    $meta_data['key'] == 'meta:description' ? $meta_description[] = $meta_data['value'] : '';
-                    $meta_data['key'] == 'meta:keywords' ? $meta_keyword[] = $meta_data['value'] : '';
-                }
-                return ['title' => $title, 'meta_description' => implode(',', $meta_description), 'meta_keyword' => implode(',', $meta_keyword)];
-            } elseif ($route_name == $current_route_name) {
-                $record = $model::where('slug', $slug)->first();
-                if (($record->title ? $record->title : $record->name) || $record->meta_description && $record->meta_keyword) {
-                    return $record;
-                }
-                return null;
+        foreach ($route_names as $model) {
+            $record = $model::where('slug', $slug)->first();
+            if(isset($record) && (($record->title ? $record->title : $record->name) || $record->meta_description && $record->meta_keyword)) {
+                return $record;
             }
         }
-    } else {
-        return null;
-    }
+    } 
+    return null;
 }
 
 function sendVerificationEmail($user)
