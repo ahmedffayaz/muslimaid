@@ -15,7 +15,7 @@ class CategoryController extends Controller
     {
         $page = Page::where('slug', 'categories')->whereType('system')->first();
         if (empty($page)) abort(404);
-        
+
         $categories = Category::with('childs')->where('parent_id', '0')->get();
         $subCategories = Category::with('stores')->where('parent_id', '0')->get();
 
@@ -52,10 +52,43 @@ class CategoryController extends Controller
         }
 
         $stores = $category->stores()->where('status', 'active')->with('logo', 'storeAddress');
-
         if (isset($request->orderBy)) {
-            $orderByArr = explode("-", $request->orderBy);
-            $stores = $stores->orderBy($orderByArr[0], $orderByArr[1])->get();
+            if ($request->orderBy == 'popularity') {
+
+                $stores =   $stores->with('clicks')->get()->sortByDesc(function ($store) {
+
+                    return $store->clicks->count();
+                });
+            } else if ($request->orderBy == 'cashback-amount') {
+                $stores = $stores->whereHas('cashbacks', function ($query) {
+                    $query->where('type', 'fixed')
+                        ->whereHas('currencyData', function ($query) {
+                            $query->where('symbol', '£');
+                        });
+                })
+                    ->get()
+                    ->filter(function ($store) {
+                        $cashback = $store->getCashback();
+                        return (strpos($cashback, '£') !== false);
+                    })
+                    ->sortByDesc(function ($store) {
+                        return $store->getCashback();
+                    });
+            } else if ($request->orderBy == 'cashback-percentage') {
+
+                $stores = $stores->whereHas('cashbacks', function ($query) {
+                    $query->where('type', 'percentage');
+                })->get()->filter(function ($store) {
+                    $cashback = $store->getCashback();
+                    return (strpos($cashback, '%') !== false);
+                })->sortByDesc(function ($store) {
+                    return $store->getCashback();
+                });
+            } else {
+                $orderByArr = explode("-", $request->orderBy);
+                $stores = $stores->orderBy($orderByArr[0], $orderByArr[1])->get();
+            }
+
             $stores = $this->sortByDistance($data, $stores);
             $stores = $stores->paginate(25);
             $stores->appends(['orderBy' => $request->orderBy]);
@@ -65,7 +98,7 @@ class CategoryController extends Controller
         $stores = $stores->get();
         $stores = $this->sortByDistance($data, $stores);
         $stores = $stores->sortBy('distance')->values()->paginate(25);
-        
+
         return view('frontend.categories.show', compact('category', 'stores', 'slug'));
     }
 
