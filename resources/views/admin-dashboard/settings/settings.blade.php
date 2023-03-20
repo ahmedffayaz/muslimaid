@@ -40,9 +40,6 @@
                                         <li class="nav-item">
                                             <a class="nav-link" data-toggle="tab" href="#tabItem10"><em class="icon ni ni-shield-check"></em><span>Recaptcha</span></a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabItem11"><em class="icon ni ni-mail"></em><span>SendGrid</span></a>
-                                        </li>
                                         {{-- <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-code"></em><span>APIs Integration</span></a>
                                     </li> --}}
@@ -517,6 +514,65 @@
                                                                 <div class="form-control-wrap">
                                                                     <input type="text" class="form-control" secret="mailchimp_list_id" name="mailchimp_list_id"
                                                                         value="{{ $settings['mailchimp_list_id'] ?? '' }}" placeholder="Mailchimp List ID">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="nk-block-head mt-5">
+                                                        <h5 class="title">SendGrid <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
+                                                            title=" SendGrid is used for newsletters and registered users listing leave blank if you want to disable Newsletter."></em></h5>
+                                                    </div>
+
+                                                    <div class="row g-3 align-center">
+                                                        <div class="col-lg-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">
+                                                                    API Key
+                                                                    <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
+                                                                        title="Enter Send Grid API key."></em>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <div class="form-group">
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="sendgrid_api_key"
+                                                                        value="{{ $settings['sendgrid_api_key'] ?? '' }}" placeholder="API key">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">
+                                                                    Newsletter List id
+                                                                    <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
+                                                                        title="Enter Newsletter List id."></em>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <div class="form-group">
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="sendgrid_newsletter_list_id"
+                                                                        value="{{ $settings['sendgrid_newsletter_list_id'] ?? '' }}" placeholder=" Newsletter List id">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-3">
+                                                            <div class="form-group">
+                                                                <label class="form-label">
+                                                                    Registered List id
+                                                                    <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
+                                                                        title="Enter Registered List id."></em>
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-9">
+                                                            <div class="form-group">
+                                                                <div class="form-control-wrap">
+                                                                    <input type="text" class="form-control" name="sendgrid_registered_list_id"
+                                                                        value="{{ $settings['sendgrid_registered_list_id'] ?? '' }}" placeholder="Registered List id">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1004,78 +1060,6 @@
                                                                 <div class="form-control-wrap">
                                                                     <input type="text" class="form-control" name="google_recaptcha_secret_key"
                                                                         value="{{ $settings['google_recaptcha_secret_key'] ?? '' }}" placeholder="Recaptcha Secret Key">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row g-3">
-                                                        <div class="col-lg-9 offset-lg-3">
-                                                            <div class="form-group mt-2">
-                                                                <button type="submit" class="btn btn-lg btn-primary">Update</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane" id="tabItem11">
-                                            <div class="nk-block">
-                                                <div class="nk-block-head">
-                                                    <h5 class="title">SendGrid Settings</h5>
-                                                </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
-                                                    @csrf
-                                                    @method('POST')
-                                                    <div class="row g-3 align-center">
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label">
-                                                                    API Key
-                                                                    <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
-                                                                        title="Enter Send Grid API key."></em>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-9">
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="sendgrid_api_key"
-                                                                        value="{{ $settings['sendgrid_api_key'] ?? '' }}" placeholder="API key">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label">
-                                                                    Newsletter List id
-                                                                    <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
-                                                                        title="Enter Newsletter List id."></em>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-9">
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="sendgrid_newsletter_list_id"
-                                                                        value="{{ $settings['sendgrid_newsletter_list_id'] ?? '' }}" placeholder=" Newsletter List id">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label">
-                                                                    Registered List id
-                                                                    <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
-                                                                        title="Enter Registered List id."></em>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-9">
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="sendgrid_registered_list_id"
-                                                                        value="{{ $settings['sendgrid_registered_list_id'] ?? '' }}" placeholder="Registered List id">
                                                                 </div>
                                                             </div>
                                                         </div>

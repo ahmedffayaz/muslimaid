@@ -270,7 +270,7 @@ d-xl-none
                             <li class="nk-menu-item ">
                                 <a href="{{ route('admin.seo.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon "><em class="icon ni ni-menu"></em></span>
-                                    <span class="nk-menu-text">Seo rules</span>
+                                    <span class="nk-menu-text">Seo Rules</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
                         </ul>
