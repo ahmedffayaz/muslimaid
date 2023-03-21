@@ -30,7 +30,7 @@ class CategoryController extends Controller
     public function index()
     {
         $route = 'index';
-        $categories = Category::where('parent_id', 0)->with(['childs'])->orderBy('sort', 'asc')->get();
+        $categories = Category::where('parent_id', 0)->with(['childs'])->orderBy('sort', 'desc')->get();
         $allCategories = Category::latest()->get();
         return view('admin-dashboard.categories.categories', compact('categories', 'allCategories', 'route'));
     }

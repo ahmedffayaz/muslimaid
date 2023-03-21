@@ -1,6 +1,6 @@
 
 <ul>
-    @foreach ($childs->sortBy('sort')->values() as $child)
+    @foreach ($childs->sortBy(['sort', 'name']) as $child)
         <li class="border-top   py-1">
             <span class="float-right">
                 <div class="actions">

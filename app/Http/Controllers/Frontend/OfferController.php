@@ -14,7 +14,7 @@ class OfferController extends Controller
         $page = Page::where('slug', 'offers')->whereType('system')->first();
         if (empty($page)) abort(404);
 
-        $categories = Category::where('parent_id', 0)->with(['stores' => function ($query) {
+        $categories = Category::where('parent_id', 0)->orderBy('sort', 'desc')->orderBy('name', 'asc')->with(['stores' => function ($query) {
             $query->withCount(['categories' => function ($query) {
                 $query->whereStatus(0);
             }])->having('categories_count', 0);
