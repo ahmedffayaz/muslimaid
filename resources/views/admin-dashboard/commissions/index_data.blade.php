@@ -23,17 +23,18 @@
             <div class="nk-tb-col "style="width: 25%">
                 <div class="user-card">
                     <div class="user-avatar {{ getRandomColorClass() }}">
-                        <span>{{ $commission->exitClick->user->first_name[0] ?? 'N' }}{{ $commission->exitClick->user->last_name[0] ?? 'A' }}</span>
+                        <span>
+                            {{ isset($commission->exitClick) && isset($commission->exitClick->user) ? ($commission->exitClick->user->first_name[0] ?? 'N') . ($commission->exitClick->user->last_name[0] ?? 'A') : 'NA' }}</span>
                     </div>
                     <div class="user-info">
 
-                        @if ($commission->store_id)
+                        @if ($commission->store_id && isset($commission->exitClick->user) && isset($commission->user))
                             <span class="tb-lead">{{ $commission->exitClick->user->id ?? '' }} @if ($commission->user->first_name != 'unnamed' || $commission->user->last_name != 'unnamed')
                                     - {{ $commission->user->first_name }} {{ $commission->user->last_name }}
                                 @endif
                             </span>
                             <span>{{ $commission->exitClick->user->email ?? '' }}</span>
-                        @else
+                        @elseif(isset($commission->user))
                             <span class="tb-lead">{{ $commission->user->id }} @if ($commission->user->first_name != 'unnamed' || $commission->user->last_name != 'unnamed')
                                     - {{ $commission->user->first_name }} {{ $commission->user->last_name }}
                                 @endif
