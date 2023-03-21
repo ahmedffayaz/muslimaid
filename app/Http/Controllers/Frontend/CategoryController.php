@@ -16,8 +16,8 @@ class CategoryController extends Controller
         $page = Page::where('slug', 'categories')->whereType('system')->first();
         if (empty($page)) abort(404);
 
-        $categories = Category::with('childs')->where('parent_id', '0')->get();
-        $subCategories = Category::with('stores')->where('parent_id', '0')->get();
+        $categories = Category::with('childs')->where('parent_id', '0')->orderBy('sort','desc')->orderBy('name','asc')->get();
+        $subCategories = Category::with('stores')->where('parent_id', '0') ->orderBy('sort','desc')->orderBy('name','asc')->get();
 
         return view('frontend.pages.single-page', compact('page', 'categories'));
     }
