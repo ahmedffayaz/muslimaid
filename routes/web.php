@@ -159,6 +159,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('settings/fetch', [App\Http\Controllers\Admin\SettingsController::class, 'fetch'])->name('settings.fetch');
         Route::post('settings/search_settings',  [App\Http\Controllers\Admin\SettingsController::class, 'searchSettings'])->name('settings.search_settings');
         Route::post('maintenance', [App\Http\Controllers\Admin\SettingsController::class, 'maintenance'])->name('settings.maintenance');
+        Route::post('networks/settings', [App\Http\Controllers\Admin\SettingsController::class, 'viewSetting'])->name('networks.settings');
         Route::resource('settings', SettingsController::class)->except(['show']);
         Route::resource('charities', CharityController::class)->except(['show']);
         Route::get('charity-type-view', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeView'])->name('charities.charity_type_view');

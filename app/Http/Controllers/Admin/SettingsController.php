@@ -338,4 +338,12 @@ class SettingsController extends Controller
             );
         }
     }
+
+    public function viewSetting(Request $request)
+    {
+        $networkFullName = $request->networkName;
+        $networkName = str_replace(' ', '_', strtolower($request->networkName));
+        $settings = SiteSetting::latest()->get()->pluck('value', 'type');
+		return view('admin-dashboard.networks.modal', compact('settings', 'networkName', 'networkFullName'))->render();
+    } 
 }
