@@ -217,10 +217,10 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::resource('email_templates', EmailTemplatesController::class)->only(['index', 'edit', 'update']);
 
         // Countries
-        Route::resource('countries', CountryController::class)->except(['show','create','destroy']);
+        Route::resource('countries', CountryController::class)->except(['show', 'create', 'destroy']);
         Route::post('countries/search',  [App\Http\Controllers\Admin\CountryController::class, 'searchCountries'])->name('countries.search');
 
-        Route::get('/api-docs', function() {
+        Route::get('/api-docs', function () {
             return view('scribe.index');
         })->name('api-docs');
 
@@ -301,13 +301,13 @@ Route::namespace('App\Http\Controllers\Client')
         Route::get('payment-methods', [App\Http\Controllers\Client\PaymentController::class, 'paymentDetails'])->name('payment_details');
         Route::post('payment-save', [App\Http\Controllers\Client\PaymentController::class, 'paymentSave'])->name('payment_save');
         Route::post('cashout', [App\Http\Controllers\Client\PaymentController::class, 'cashout'])->name('cashout');
-        Route::post('CharityCashout', [App\Http\Controllers\Client\PaymentController::class,'CharityCashout'])->name('CharityCashout');
+        Route::post('CharityCashout', [App\Http\Controllers\Client\PaymentController::class, 'CharityCashout'])->name('CharityCashout');
         Route::post('ticket/step2', [App\Http\Controllers\Client\TicketController::class, 'step2'])->name('tickets.step2');
         Route::post('ticket/step3', [App\Http\Controllers\Client\TicketController::class, 'step3'])->name('tickets.step3');
         Route::resource('tickets', TicketController::class)->only(['index', 'create', 'show', 'update']);
         Route::resource('referral', ReferController::class)->only('index');
         Route::post('send-referral-link', [App\Http\Controllers\Client\ReferController::class, 'sendReferralLink'])->name('send-referral-link');
-        Route::get('CharityWithdraw',[App\Http\Controllers\Client\PaymentController::class,'CharityWithdraw'])->name('CharityWithdraw');
+        Route::get('CharityWithdraw', [App\Http\Controllers\Client\PaymentController::class, 'CharityWithdraw'])->name('CharityWithdraw');
     });
 
 Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], function () {

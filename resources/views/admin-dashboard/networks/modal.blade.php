@@ -6,7 +6,7 @@
             <label class="form-label" for="{{ $networkName }}_website_id">Website ID</label>
             <div class="form-control-wrap">
                 <input type="text" class="form-control" name="{{ $networkName }}_website_id" id="{{ $networkName }}_website_id"
-                value="{{ isset($settings[$networkName . '_website_id']) ? $settings[$networkName . '_website_id'] : '' }}" required>
+                    value="{{ isset($settings[$networkName . '_website_id']) ? $settings[$networkName . '_website_id'] : '' }}" required>
             </div>
         </div>
         @if (isset($settings[$networkName . '_requestor_id']))
