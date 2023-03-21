@@ -450,7 +450,7 @@ function isGoogleEnabled()
 function checkStaticpageRule($url)
 {
     $slug = request()->route('slug');
-    if(!isset($slug)){
+    if (!isset($slug)) {
         $path = parse_url($url, PHP_URL_PATH);
         preg_match('/[^\/]+$/', $path, $matches);
         $slug = isset($matches[0]) ? $matches[0] : '/';
@@ -475,11 +475,11 @@ function checkStaticpageRule($url)
 
         foreach ($route_names as $model) {
             $record = $model::where('slug', $slug)->first();
-            if(isset($record) && (($record->title ? $record->title : $record->name) || $record->meta_description && $record->meta_keyword)) {
+            if (isset($record) && (($record->title ? $record->title : $record->name) || $record->meta_description && $record->meta_keyword)) {
                 return $record;
             }
         }
-    } 
+    }
     return null;
 }
 
