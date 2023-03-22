@@ -59,7 +59,7 @@ class PagesController extends Controller
             $page->title = $request->title;
             $page->slug = isset($pageSlug) ? $slug . '-' . ($lastId + 1) : $slug;
             $page->excerpt = $request->excerpt;
-            $page->lb_content = $request->content;
+            $page->lb_content = $this->addContainerToParagraphs($request->content);
             $page->status = $request->status;
             $page->banner_image = parse_url($request->filepath)['path'];
             $page->description = $request->short_description;
@@ -118,11 +118,11 @@ class PagesController extends Controller
 
         try {
             DB::beginTransaction();
-
+            
             $page->update([
                 'title' => $request->input('title'),
                 'excerpt' => $request->input('excerpt'),
-                'lb_content' => $request->input('content'),
+                'lb_content' => $this->addContainerToParagraphs($request->content),
                 'status' => $request->input('status') == 'inactive' && $page->type == 'general' ? 'inactive' : 'active',
                 'description' => $request->input('short_description'),
                 'meta_description' => $request->input('meta_description'),
@@ -157,6 +157,12 @@ class PagesController extends Controller
                 'error' => 'Something went wrong, try again.'
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    function addContainerToParagraphs($description){
+        $updatedDescription = preg_replace('/(<!-- wp:paragraph -->\s*<p>\[.*?\]<\/p>\s*<!-- \/wp:paragraph -->)|(<p>[^<]*<\/p>)/', '$1<div class="container">\2</div>', $description);
+        $updatedDescription = preg_replace('/(<p>(?:(?!class="container").)*?\[.*?\].*?<\/p>)/', '<div class="container">$1</div>', $updatedDescription);
+        return $updatedDescription;
     }
 
     /**
