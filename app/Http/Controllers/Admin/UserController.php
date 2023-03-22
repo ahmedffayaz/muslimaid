@@ -47,7 +47,6 @@ class UserController extends Controller
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'phone' => ['required', 'string', 'max:255'],
         ]);
 
         if ($validator->fails()) {
@@ -113,14 +112,13 @@ class UserController extends Controller
                 'firstname' => ['required', 'string', 'max:255'],
                 'lastname' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-                'phone' => ['required', 'string', 'max:255'],
             ]);
 
             if ($validator->fails()) {
                 if (!$request->ajax()) {
                     flash()->error($validator->errors()->first());
                     return redirect()->back();
-                } else{
+                } else {
                     return array(
                         'message' => $validator->errors()->first(),
                         'success' => false
@@ -154,7 +152,7 @@ class UserController extends Controller
                     'message' => 'User updated successfully',
                     'success' => true
                 );
-            }else{
+            } else {
                 flash()->success('User updated successfully');
                 return redirect()->route('admin.users.index');
             }

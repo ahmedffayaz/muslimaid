@@ -90,7 +90,7 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="firstname">First Name</label>
+                                                            <label class="form-label" for="firstname">First Name <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="firstname" value="{{ $user->first_name }}" name="firstname"
                                                                     required>
@@ -99,7 +99,7 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="lastname">Last Name</label>
+                                                            <label class="form-label" for="lastname">Last Name <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="lastname" value="{{ $user->last_name }}" name="lastname"
                                                                     required>
@@ -108,7 +108,7 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="email">Email</label>
+                                                            <label class="form-label" for="email">Email <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="email" class="form-control" id="email" value="{{ $user->email }}" name="email"
                                                                     required>
@@ -119,8 +119,7 @@
                                                         <div class="form-group">
                                                             <label class="form-label" for="phone-no-1">Phone</label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="phone-no-1" value="{{ $user->phone }}" name="phone"
-                                                                    required>
+                                                                <input type="text" class="form-control" id="phone-no-1" value="{{ $user->phone }}" name="phone">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -619,9 +618,6 @@
                 },
                 email: {
                     required: true
-                },
-                phone: {
-                    required: true,
                 },
             },
             submitHandler: function(form) {

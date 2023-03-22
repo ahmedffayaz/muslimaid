@@ -60,17 +60,17 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="phone-no-1">Phone <span class="text-danger">*</span></label>
+                                                    <label class="form-label" for="phone-no-1">Phone </label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="phone-no-1" name="phone" value="{{ old('phone') ?? null }}" required>
+                                                        <input type="text" class="form-control" id="phone-no-1" name="phone" value="{{ old('phone') ?? null }}">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="pay-amount-1">Address <span class="text-danger">*</span></label>
+                                                    <label class="form-label" for="pay-amount-1">Address </label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="pay-amount-1" name="address" value="{{ old('address') ?? null }}" required>
+                                                        <input type="text" class="form-control" id="pay-amount-1" name="address" value="{{ old('address') ?? null }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -149,12 +149,6 @@
                     required: true
                 },
                 email: {
-                    required: true
-                },
-                phone: {
-                    required: true
-                },
-                address: {
                     required: true
                 },
             }

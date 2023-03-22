@@ -26,13 +26,14 @@ class CategoryRequest extends FormRequest
         return [
             'name' => 'required',
             'logo_type' => 'required',
-            'logo_upload' => 'nullable|image:jpeg,png,jpg,gif',
-            'logo_link' => 'nullable|url',
+            'logo_upload' => 'required_if:logo_type,==,upload|image:jpeg,png,jpg,gif',
+            'logo_link' => 'required_if:logo_type,==,link|nullable|url',
             'banner_type' => 'required',
-            'banner_upload' => 'nullable|image:jpeg,png,jpg,gif',
-            'banner_link' => 'nullable|url',
+            'banner_upload' => 'required_if:banner_type,==,upload|image:jpeg,png,jpg,gif',
+            'banner_link' => 'required_if:banner_type,==,link|nullable|url',
             'status' => 'required',
-            'sort' => 'required|integer'
+            'sort' => 'required|integer|min:1'
+            
         ];
     }
 
@@ -49,8 +50,12 @@ class CategoryRequest extends FormRequest
             'logo_upload.max' => 'Logo max size should be 1MB',
             'banner_upload.max' => 'Banner max size should be 1MB',
             'status' => 'Status field is required',
-            'sort' => 'Sort field is required',
-            'sort.integer'=> 'Sort field is must be integer',
+            'sort' => 'The sort field is required',
+            'sort.integer' => 'Sort field is must be integer',
+            'banner_upload.required_if' => ' The banner upload field is required',
+            'logo_upload.required_if' => ' The logo upload field is required',
+            'banner_link.required_if' => ' The banner link field is required',
+            'logo_link.required_if' => ' The logo link field is required',
         ];
     }
 }
