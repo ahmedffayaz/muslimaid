@@ -687,11 +687,10 @@ function isWithdrawalAllowed()
 
 function getSiteLogo()
 {
-    if (isset(SiteSetting()['website_logo']) && SiteSetting()['website_logo'] != 'default.png') {
-        return asset('storage/dashboard/images/logo/' . SiteSetting()['website_logo']);
-    } else {
-        return asset('admin-dashboard/images/logo.png');
-    }
+    $settings = SiteSetting();
+    $siteLogo = (empty($settings['website_logo']) ? asset('admin-dashboard/images/logo.png') : ($settings['website_logo'] == 'default.png' ? asset('admin-dashboard/images/logo.png') : ($settings['website_logo'] == 'cashblack-default.png'
+        ? asset('cashblack/img/logo.png') : asset('storage/dashboard/images/logo/' . $settings['website_logo']))));
+    return $siteLogo;
 }
 
 function getRandomColorClass()
