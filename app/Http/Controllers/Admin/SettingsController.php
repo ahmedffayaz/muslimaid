@@ -145,23 +145,25 @@ class SettingsController extends Controller
 
     public function saveSettings(Request $request)
     {
-      
+
         try {
             $request->offsetUnset('_method');
             $request->offsetUnset('_token');
-           $request->validate([
-                'referral_bonus' => 'nullable|min:0.1|numeric',
-                'welcome_bonus' => 'nullable|min:0.1|numeric',
-                'min_cashout_amount'=> 'nullable|min:0.1|numeric',
-                'next_cashout_amount'=> 'nullable|min:0.1|numeric',
-            ]
-            , $messages = [
-                'referral_bonus' => 'Value must be equal to or greater than 0.1.',
-                'welcome_bonus' => 'Value must be equal to or greater than 0.1.',
-                'min_cashout_amount' => 'Value must be equal to or greater than 0.1',
-                'next_cashout_amount' => 'Value must be equal to or greater than 0.1',
-            ]);
-          
+            $request->validate(
+                [
+                    'referral_bonus' => 'nullable|min:0.1|numeric',
+                    'welcome_bonus' => 'nullable|min:0.1|numeric',
+                    'min_cashout_amount' => 'nullable|min:0.1|numeric',
+                    'next_cashout_amount' => 'nullable|min:0.1|numeric',
+                ],
+                $messages = [
+                    'referral_bonus' => 'Value must be equal to or greater than 0.1.',
+                    'welcome_bonus' => 'Value must be equal to or greater than 0.1.',
+                    'min_cashout_amount' => 'Value must be equal to or greater than 0.1',
+                    'next_cashout_amount' => 'Value must be equal to or greater than 0.1',
+                ]
+            );
+
             foreach ($request->input() as $key => $value) {
                 SiteSetting::updateOrCreate([
                     'type'   => $key,
@@ -337,5 +339,13 @@ class SettingsController extends Controller
                 'response' => 'error'
             );
         }
+    }
+
+    public function viewSetting(Request $request)
+    {
+        $networkFullName = $request->networkName;
+        $networkName = str_replace(' ', '_', strtolower($request->networkName));
+        $settings = SiteSetting::latest()->get()->pluck('value', 'type');
+        return view('admin-dashboard.networks.modal', compact('settings', 'networkName', 'networkFullName'))->render();
     }
 }
