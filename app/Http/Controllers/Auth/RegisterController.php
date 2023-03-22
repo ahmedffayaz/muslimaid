@@ -61,7 +61,7 @@ class RegisterController extends Controller
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'g-recaptcha-response' => ['required','captcha'],
+            'g-recaptcha-response' => ['required', 'captcha'],
         ]);
     }
 
@@ -80,48 +80,46 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         try {
-        $today = Carbon::today()->toDateString();
-        $user =  User::create([
-            'first_name' => $data['firstname'],
-            'last_name' => $data['lastname'],
-            'email' => $data['email'],
-            'password' => Hash::make($data['password']),
-            'registration_type' => 'sign up',
-            'referred_by' => empty($data['referral_code']) ? '' : decrypt($data['referral_code']),
-            'referred_at' => empty($data['referral_code']) ? '' : $today,
-        ]);
+            $today = Carbon::today()->toDateString();
+            $user =  User::create([
+                'first_name' => $data['firstname'],
+                'last_name' => $data['lastname'],
+                'email' => $data['email'],
+                'password' => Hash::make($data['password']),
+                'registration_type' => 'sign up',
+                'referred_by' => empty($data['referral_code']) ? '' : decrypt($data['referral_code']),
+                'referred_at' => empty($data['referral_code']) ? '' : $today,
+            ]);
 
-        $user->assignRole('user');
+            $user->assignRole('user');
 
-        $bonusStatus = 1;
+            $bonusStatus = 1;
 
-        $this->welcomBonus($user, $bonusStatus);
-        //send email to user to verify email address
-        dispatch(new SendEmailJob($user));
+            $this->welcomBonus($user, $bonusStatus);
+            //send email to user to verify email address
+            dispatch(new SendEmailJob($user));
 
-        if (!empty($settings['sendgrid_registered_list_id']) && !empty($settings['sendgrid_api_key'])) {
-     
+            if (!empty($settings['sendgrid_registered_list_id']) && !empty($settings['sendgrid_api_key'])) {
+                $settings = SiteSetting();
+                $requestBody = [
+                    'list_ids' => [
+                        isset($settings['sendgrid_registered_list_id']) ? $settings['sendgrid_registered_list_id'] : "",
+                    ],
+                    'contacts' => [
+                        [
+                            'email' => $data['email'],
+                        ]
+                    ]
+                ];
+                $apiKey = isset($settings['sendgrid_api_key']) ? $settings['sendgrid_api_key'] : "";
+                $sg = new \SendGrid($apiKey);
 
-        $settings = SiteSetting();
-        $requestBody = [
-            'list_ids'=> [
-                isset($settings['sendgrid_registered_list_id']) ? $settings['sendgrid_registered_list_id'] : "",
-            ],
-            'contacts' => [
-                [
-                    'email' => $data['email'],
-                ]
-            ]
-        ];
-        $apiKey = isset($settings['sendgrid_api_key']) ? $settings['sendgrid_api_key'] : "";
-        $sg = new \SendGrid($apiKey);
-       
-            $response = $sg->client->marketing()->contacts()->put($requestBody);
-            if($response->statusCode() != 201 && $response->statusCode() != 202){
-                return redirect()->route('login')->with(['error' => 'Something went wrong!']);
+                $response = $sg->client->marketing()->contacts()->put($requestBody);
+                if ($response->statusCode() != 201 && $response->statusCode() != 202) {
+                    return redirect()->route('login')->with(['error' => 'Something went wrong!']);
+                }
             }
-        }
-            return redirect()->route('login')->with(['success' => 'User Successfully registered, verify your account'], );
+            return redirect()->route('login')->with(['success' => 'User Successfully registered, verify your account'],);
         } catch (Exception $ex) {
             return redirect()->route('login')->with(['error' => 'Something went wrong!']);
         }
