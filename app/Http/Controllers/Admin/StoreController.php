@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\File;
 
 class StoreController extends Controller
 {
-    private $iconPath = 'stores/cashbacks/';
+    private $iconPath = 'stores/cashbacks';
      public $imagePath = 'storage/stores/images/';
     public function __construct()
     {
@@ -431,6 +431,9 @@ class StoreController extends Controller
             $cashback->update($request->all());
 
             if ($request->hasFile('cashback_icon')) {
+                if (!empty($cashback->image) && Storage::exists('public/'.$cashback->image)) {
+                    File::delete(public_path('storage/'.$cashback->image));
+                }
                 $cashbackIcon = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
                 $cashback->image = $cashbackIcon;
                 $cashback->update();
@@ -451,6 +454,60 @@ class StoreController extends Controller
                 return response()->json([
                     'status' => JsonResponse::HTTP_OK,
                     'message' => 'Cashback updated successfully.'
+                ], JsonResponse::HTTP_OK);
+            }
+        } catch (ModelNotFoundException $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while updating cashback.');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'error' => 'Error while updating cashback.'
+            ], JsonResponse::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while updating cashback.');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Error while updating cashback.'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function deleteCashback(Request $request, StoreCashback $cashback)
+    {
+        $request->validate([
+            'storeCashbackId' => 'required'
+        ]);
+
+        try {
+            DB::beginTransaction();
+            $storeCashback = $cashback->where('id', $request->storeCashbackId)->first();
+            if (!empty($storeCashback->image) && Storage::exists('public/'.$storeCashback->image)) {
+                File::delete(public_path('storage/'.$storeCashback->image));
+            }
+            $storeCashback->delete();
+
+            DB::commit();
+            if ($request->ajax()) {
+                return array(
+                    'message' => 'Cashback Deleted Successfully.',
+                    'deleted' => 'success'
+                );
+            }
+            flash()->success('Cashback Deleted successfully');
+            if (!$request->ajax()) {
+                flash()->success('Cashback Deleted successfully.');
+                return redirect()->back();
+            } else {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'Cashback Deleted successfully.'
                 ], JsonResponse::HTTP_OK);
             }
         } catch (ModelNotFoundException $e) {

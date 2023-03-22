@@ -1484,7 +1484,45 @@
             });
         });
 
+        // Delete Cashback Popup
+        $(document).ready(function() {
+            $(document).on('click', '.cashback-delete', function(event) {
+                event.preventDefault();
 
+                var form = $(this).closest('form');
+                var url = form.attr('action');
+                var data = form.serialize();
+
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: data,
+                    success: function(data) {
+                        (function(NioApp, $) {
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(data.message, 'success');
+                        })(NioApp, jQuery);
+                        fetchCashbacks();
+                    },
+                    error: function(error) {
+                        if (error.responseJSON.error) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        } else {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                            })(NioApp, jQuery);
+                        }
+                    }
+                });
+            });
+        });
 
         // Cashback Update
         $(document).ready(function() {
