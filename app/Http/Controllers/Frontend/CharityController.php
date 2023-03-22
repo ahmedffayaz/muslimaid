@@ -15,27 +15,10 @@ class CharityController extends Controller
     {
         $page = Page::where('slug', 'charities')->whereType('system')->first();
         if (empty($page)) abort(404);
-        $charities = Charity::whereStatus(1)->orderBy('id', 'DESC');
-        $countryId = null;
-        $charity = null;
-        if (isset($request->country)) {
-            $countryId = $request->country;
-            $charities->where('country', $request->country);
-        }
-
-        if (isset($request->charity_types_id)) {
-            $charity = $request->charity_types_id;
-            $charities->where('charity_types_id', $request->charity_types_id);
-        }
-
-        $charities = $charities->paginate(12);
-        $charities->appends([
-            'country' => $countryId,
-            'charity_types_id' => $charity,
-        ]);
+        $charities = Charity::whereStatus(1)->orderBy('id', 'DESC')->paginate(12);
         $countries = Country::where('status', '1')->latest()->get();
         $charityTypes = CharityType::where('status', '1')->latest()->get();
-        return view('frontend.pages.single-page', compact('page', 'charities', 'countries', 'charityTypes', 'countryId', 'charity'));
+        return view('frontend.pages.single-page', compact('page', 'charities', 'countries', 'charityTypes'));
     }
 
     public function show($id)
@@ -44,5 +27,18 @@ class CharityController extends Controller
         if (empty($charity)) return null;
 
         return view('frontend.charities.show', compact('charity'));
+    }
+
+
+    public function search(Request $request)
+    {
+        $countryId = $request->query('country');
+        $charityTypeId = $request->query('charity_types_id');
+        $charities = Charity::when(request('country'), function ($query, $countryId) {
+            $query->where('country', $countryId);
+        })->when(request('charity_types_id'), function ($query, $charityTypeId) {
+            $query->where('charity_types_id', $charityTypeId);
+        })->paginate(12);
+        return view('frontend.templates.charity-index', compact('charities'))->render();
     }
 }

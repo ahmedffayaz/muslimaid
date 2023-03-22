@@ -266,6 +266,8 @@ Route::get('blogs/{slug}', [App\Http\Controllers\Frontend\BlogController::class,
 
 Route::get('charities', [App\Http\Controllers\Frontend\CharityController::class, 'index'])->name('charities.index');
 Route::post('charities/{id}', [App\Http\Controllers\Frontend\CharityController::class, 'show'])->name('charities.show');
+Route::get('charities/search', [App\Http\Controllers\Frontend\CharityController::class, 'search'])->name('charities.search');
+
 
 Route::get('newsletter', [App\Http\Controllers\Frontend\NewsletterController::class, 'index'])->name('newsletter.index');
 Route::post('newsletter', [App\Http\Controllers\Frontend\NewsletterController::class, 'store'])->name('newsletter.store');
