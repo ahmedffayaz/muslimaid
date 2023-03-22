@@ -455,7 +455,7 @@
                     },
                     submitHandler: function(form) {
                         if ($(form).valid())
-                            form.submit();
+                            // form.submit();
                         return false;
                     }
                 });

@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="nk-tb-col text-center">
-                <span class="tb-status badge badge-primary"><b>{{$click->network->name}}</b></span>
+                <span class="tb-status badge badge-primary"><b>{{ isset($click->network) ? $click->network->name : '' }}</b></span>
             </div>
             <div class="nk-tb-col text-center">
                 <span><b>{{ $click->store->id }} - {{ $click->store->name ?? '' }}</b></span>

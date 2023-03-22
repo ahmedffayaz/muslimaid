@@ -8,7 +8,7 @@
             <div class="nk-tb-col tb-col-mb pl-0"><span class="sub-text">Cashback</span></div>
             <div class="nk-tb-col tb-col-mb"><span class="sub-text">Type</span></div>
             <div class="nk-tb-col tb-col-mb"><span class="sub-text">Detail</span></div>
-            <div class="nk-tb-col nk-tb-col-tools text-right pr-0">
+            <div class="nk-tb-col nk-tb-col-tools pr-0">
                 <span class="sub-text">Edit</span>
             </div>
         </div><!-- .nk-tb-item -->
@@ -33,9 +33,14 @@
                     <span>{{ $cashback->detail }}</span>
                 </div>
 
-                <div class="nk-tb-col nk-tb-col-tools pr-2 text-right">
+                <div class="nk-tb-col nk-tb-col-tools pr-2 text-right d-flex">
                     @if ($store->override_cashback)
                         <a href="" cashback-id='{{ $cashback->id }}' class='cashback-edit a_link'><em class="icon ni ni-edit"></em></a>
+                        <form action="{{ route('admin.stores.cashbacks.delete', $store) }}" id="store-cashback-form-id" method="POST">
+                            @csrf
+                            <input type="hidden" name="storeCashbackId" value="{{ $cashback->id }}">
+                            <a href="javascript:void(0);" class='cashback-delete a_link'><em class="icon ni ni-trash-fill"></em></a>
+                        </form>
                     @endif
                 </div>
             </div><!-- .nk-tb-item -->

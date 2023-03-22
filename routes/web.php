@@ -48,6 +48,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::get('stores/cashbacks/{cashback}/edit', [App\Http\Controllers\Admin\StoreController::class, 'editCashback'])->name('stores.cashbacks.edit');
         Route::post('stores/categories/update', [App\Http\Controllers\Admin\StoreController::class, 'updateCategories'])->name('stores.categories.update');
         Route::put('stores/cashbacks/{cashback}/update', [App\Http\Controllers\Admin\StoreController::class, 'updateCashback'])->name('stores.cashbacks.update');
+        Route::post('stores/cashbacks/{cashback}/delete', [App\Http\Controllers\Admin\StoreController::class, 'deleteCashback'])->name('stores.cashbacks.delete');
         Route::get('stores/cashbacks/add', [App\Http\Controllers\Admin\StoreController::class, 'cashbackForm'])->name('stores.cashbacks.create');
         Route::post('stores/cashbacks/save', [App\Http\Controllers\Admin\StoreController::class, 'createCashback'])->name('stores.cashbacks.store');
         Route::post('stores/images/upload/{store}', [App\Http\Controllers\Admin\StoreController::class, 'uploadImage'])->name('stores.images.upload');
