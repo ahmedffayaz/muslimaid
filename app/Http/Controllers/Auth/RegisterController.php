@@ -79,6 +79,7 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
+        try {
         $today = Carbon::today()->toDateString();
         $user =  User::create([
             'first_name' => $data['firstname'],
@@ -98,6 +99,9 @@ class RegisterController extends Controller
         //send email to user to verify email address
         dispatch(new SendEmailJob($user));
 
+        if (!empty($settings['sendgrid_registered_list_id']) && !empty($settings['sendgrid_api_key'])) {
+     
+
         $settings = SiteSetting();
         $requestBody = [
             'list_ids'=> [
@@ -111,13 +115,13 @@ class RegisterController extends Controller
         ];
         $apiKey = isset($settings['sendgrid_api_key']) ? $settings['sendgrid_api_key'] : "";
         $sg = new \SendGrid($apiKey);
-        try {
+       
             $response = $sg->client->marketing()->contacts()->put($requestBody);
-            if($response->statusCode() == 201 || $response->statusCode() == 202){
-                return redirect()->route('login')->with(['success' => 'User Successfully registered, verify your account'], );
-            }else{
+            if($response->statusCode() != 201 && $response->statusCode() != 202){
                 return redirect()->route('login')->with(['error' => 'Something went wrong!']);
             }
+        }
+            return redirect()->route('login')->with(['success' => 'User Successfully registered, verify your account'], );
         } catch (Exception $ex) {
             return redirect()->route('login')->with(['error' => 'Something went wrong!']);
         }

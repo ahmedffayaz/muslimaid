@@ -17,6 +17,11 @@ class NewsletterController extends Controller
 
     public function store(Request $request)
     {
+        try {
+        if (empty($settings['sendgrid_newsletter_list_id']) || empty($settings['sendgrid_api_key'])) {
+            return redirect()->back()->with(['error' => 'Default list settings are not added!']);
+        }
+
         $settings = SiteSetting();
         $email = $request->input('email');
         $nameArray = explode(' ', $request->input('name'));
@@ -37,7 +42,7 @@ class NewsletterController extends Controller
         $apiKey = isset($settings['sendgrid_api_key']) ? $settings['sendgrid_api_key'] : "";
         $sg = new \SendGrid($apiKey);
         
-        try {
+        
             $response = $sg->client->marketing()->contacts()->put($requestBody);
             Newsletter::subscribe($request->input('email'));
 
