@@ -231,8 +231,9 @@
                                                     <label class="form-label" for="country">Country <span class="text-danger">*</span></label>
                                                     <div class="form-control-select">
                                                         <select class="form-control form-select" id="country" name="country" value="{{ old('country') }}" required>
+                                                          
                                                             @foreach($countries as $country)
-                                                                <option value="{{ $country->id }}" {{ $charity->country == $country->id ? 'slected' : '' }}>{{ $country->name }}</option>
+                                                                <option value="{{ $country->id }}" {{ $charity->country == $country->id ? 'selected' : '' }}>{{ $country->name }}</option>
                                                             @endforeach
                                                         </select>
                                                         @error('country')

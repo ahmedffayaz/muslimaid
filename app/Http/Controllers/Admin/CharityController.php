@@ -23,7 +23,7 @@ class CharityController extends Controller
      */
     public function index()
     {
-        $charities = Charity::latest()->paginate(30);
+        $charities = Charity::with('Country')->latest()->paginate(30);
         $charitiestypes = CharityType::where('status', '1')->get();
         $countries = Country::where('status', '1')->get();
         return view('admin-dashboard.charities.index', compact('charities', 'charitiestypes', 'countries'));
@@ -219,7 +219,7 @@ class CharityController extends Controller
     public function edit(Charity $charity)
     {
         $CharityType = CharityType::latest()->get();
-        $countries = Country::where('status', '1')->get();
+        $countries = Country::all();
         return view('admin-dashboard.charities.edit', compact('charity', 'CharityType', 'countries'));
     }
 

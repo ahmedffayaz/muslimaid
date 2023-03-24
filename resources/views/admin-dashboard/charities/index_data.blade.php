@@ -9,6 +9,7 @@
     
     <div class="nk-tb-col "><span class="sub-text">Title</span></div>
     <div class="nk-tb-col "><span class="sub-text">Description</span></div>
+    <div class="nk-tb-col "><span class="sub-text">Country</span></div>
     <div class="nk-tb-col text-center"><span class="sub-text">Status</span></div>
     <div class="nk-tb-col nk-tb-col-tools text-right">
         <span class="sub-text">Action</span>
@@ -22,6 +23,9 @@
     </div>
     <div class="nk-tb-col">
         <span>{{ substr(strip_tags($charity->description),0,50) }}..</span>
+    </div>
+    <div class="nk-tb-col">
+        <span>{{ $charity->Country->name }}</span>
     </div>
     <div class="nk-tb-col text-center">
         {!!$charity->status ==1  ? '<span class="tb-status badge badge-success">Active</span>' : '<span class="tb-status badge badge-warning">In-active</span>'!!}
