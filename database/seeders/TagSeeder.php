@@ -22,6 +22,7 @@ class TagSeeder extends Seeder
         foreach ($csvToArray as $tag) {
             $tags[] = [
                 'title' => $tag['title'],
+                'type' => $tag['type'],
                 'created_at' => $now,
                 'updated_at' => $now,
             ];

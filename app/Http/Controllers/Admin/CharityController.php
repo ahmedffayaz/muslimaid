@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\Country;
+use App\Models\Tag;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 
@@ -60,7 +61,8 @@ class CharityController extends Controller
     {
         $charitiestypes = CharityType::where('status', '1')->get();
         $countries = Country::where('status', '1')->get();
-        return view('admin-dashboard.charities.create', compact('charitiestypes', 'countries'));
+        $tags = Tag::where('type', 'charities')->get(); 
+        return view('admin-dashboard.charities.create', compact('charitiestypes', 'countries', 'tags'));
     }
 
     /**
@@ -123,6 +125,14 @@ class CharityController extends Controller
                 }
               
             }
+
+            if ($request->has('tags')) {
+                $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
+                if ($tags->count() > 0) $charity->tags()->sync($tags);
+            }else{
+                $charity->tags()->detach();
+            }
+
             DB::commit();
             flash()->success('New Charity added');
             return redirect()->route('admin.charities.index');
@@ -220,7 +230,8 @@ class CharityController extends Controller
     {
         $CharityType = CharityType::latest()->get();
         $countries = Country::all();
-        return view('admin-dashboard.charities.edit', compact('charity', 'CharityType', 'countries'));
+        $tags = Tag::where('type', 'charities')->get(); 
+        return view('admin-dashboard.charities.edit', compact('charity', 'CharityType', 'countries', 'tags'));
     }
 
     /**
@@ -292,6 +303,15 @@ class CharityController extends Controller
             }
             
             $charity->update($inputData);
+
+            
+            if ($request->has('tags')) {
+                $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
+                if ($tags->count() > 0) $charity->tags()->sync($tags);
+            }else{
+                $charity->tags()->detach();
+            }
+
             DB::commit();
 
             if (!$request->ajax()) {

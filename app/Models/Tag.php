@@ -13,4 +13,8 @@ class Tag extends Model
     {
         return $this->morphedByMany(Store::class, 'taggable');
     }
+    public function charities(): MorphToMany
+    {
+        return $this->morphedByMany(Charity::class, 'taggable');
+    }
 }
