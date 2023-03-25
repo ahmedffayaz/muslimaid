@@ -118,7 +118,7 @@ class PagesController extends Controller
 
         try {
             DB::beginTransaction();
-            
+
             $page->update([
                 'title' => $request->input('title'),
                 'excerpt' => $request->input('excerpt'),
@@ -160,8 +160,13 @@ class PagesController extends Controller
     }
 
     function addContainerToParagraphs($description){
-        $updatedDescription = preg_replace('/(<!-- wp:paragraph -->\s*<p>\[.*?\]<\/p>\s*<!-- \/wp:paragraph -->)|(<p>[^<]*<\/p>)/', '$1<div class="container">\2</div>', $description);
-        $updatedDescription = preg_replace('/(<p>(?:(?!class="container").)*?\[.*?\].*?<\/p>)/', '<div class="container">$1</div>', $updatedDescription);
+        // replace matching <p> tag with wrapped <div> tag
+        $updatedDescription = preg_replace('/<p>(?!\[.*?\])(.*?)<\/p>/', '<div class="container"><p>$1</p></div>', $description);
+        $updatedDescription = preg_replace('/<div class="container">(.*?)<div class="container">(.*?)<\/div>(.*?)<\/div>/', '<div class="container">$1$2$3</div>', $updatedDescription);
+        $updatedDescription = str_replace('<div class="container"><p></p></div>', '', $updatedDescription);
+        $updatedDescription = str_replace('<div class="container"><p><p>', '<div class="container"><p>', $updatedDescription);
+        $updatedDescription = str_replace('</p></div></p>', '</p></div>', $updatedDescription);
+        // dd($updatedDescription);
         return $updatedDescription;
     }
 
