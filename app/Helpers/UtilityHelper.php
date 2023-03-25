@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Models\Cashout;
 use App\Models\SeoRule;
 use App\Models\Category;
+use App\Models\Charity;
 use App\Models\Currency;
 use App\Models\Page;
 use App\Models\UserVerify;
@@ -34,6 +35,14 @@ function getFeaturesStores($feature_tag)
         $query->where('title', $feature_tag);
     })->latest()->get();
     return $stores;
+}
+
+function getFeaturesCharities($feature_tag)
+{
+    $charities = Charity::whereHas('tags', function ($query) use ($feature_tag) {
+        $query->where('title', $feature_tag);
+    })->latest()->get();
+    return $charities;
 }
 
 function separatePageKeywords($content)
