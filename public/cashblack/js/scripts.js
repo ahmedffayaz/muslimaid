@@ -6,7 +6,7 @@ $(document).ready(function() {
     })
 
     $(window).scroll(function() {
-        if($(window).scrollTop() == 0) {
+        if (Math.round(window.scrollY + window.innerHeight) === document.documentElement.scrollHeight) {
             $('.section').addClass('static-sections');
             $('.container').addClass('static-sections');
         }
