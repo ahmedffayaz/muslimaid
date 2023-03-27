@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Store;
 use App\Models\SiteCategory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Category extends Model
 {
@@ -28,8 +29,6 @@ class Category extends Model
         'parent_id',
         'mapped_to',
         'network_id',
-        'feature_homepage',
-        'feature_sidebar',
         'meta_description',
         'meta_keyword',
     ];
@@ -57,6 +56,11 @@ class Category extends Model
     public function picks()
     {
         return $this->hasMany(EditorPick::class);
+    }
+
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 
     public function enableGoogleMap()
