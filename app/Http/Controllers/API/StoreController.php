@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Traits\ApiResponser;
+use Exception;
 use App\Models\Store;
 use App\Models\Slider;
+use App\Traits\ApiResponser;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
 use App\Http\Resources\SliderResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
@@ -20,7 +21,7 @@ class StoreController extends Controller
      */
     public function index(Request $request)
     {
-        $stores = Store::select('stores.*');
+        $stores = Store::select('stores.*')->whereStatus('active');
         if($request->get('search')){
             $stores = $stores->where('name','like','%'.$request->get('search').'%');
         }
@@ -39,27 +40,6 @@ class StoreController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  int  $id
@@ -69,55 +49,16 @@ class StoreController extends Controller
     {
         try{
             $store = Store::where('slug',$slug)->firstOrFail();
-            
-            
+            return new StoreResource($store);
         } catch (ModelNotFoundException $ex) { // Store not found
-
             $arr = array("status" => 404, "message" => 'Store not found', "data" => array());
-
-            return \Response::json($arr);
+            return response()->json($arr);
         } catch (Exception $ex) { // Anything that went wrong
             $arr = array("status" => 500, "message" => 'Something went wrong!', "data" => array());
-
-            return \Response::json($arr);
+            return response()->json($arr);
         }
-        return new StoreResource($store);
-
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
     public function featuredCashback(){
         $stores = Store::whereHas('tags', function ($query) {
             $query->where('title', 'feature_homepage');
@@ -125,6 +66,7 @@ class StoreController extends Controller
         return StoreResource::collection($stores);
 
     }
+
     public function slider(){
         return SliderResource::collection(Slider::where('name','Home')->first()->slides);
     }
@@ -144,8 +86,8 @@ class StoreController extends Controller
         $limit = $request->has('per_page') ? $request->get('per_page') : 10;
         $stores = $stores->paginate($limit);
         $stores->appends(
-                        ['search'   => $request->get('search'), 
-                        'per_page'  => $limit, 
+                        ['search'   => $request->get('search'),
+                        'per_page'  => $limit,
                         'name_sort' => $request->get('name_sort')
                         ]);
         return StoreResource::collection($stores);

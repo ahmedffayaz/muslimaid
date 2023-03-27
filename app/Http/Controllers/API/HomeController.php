@@ -28,9 +28,13 @@ class HomeController extends Controller
                 isset($featureTag) ? $query->where('title', 'app_featured1_homepage') : $query->where('title', 'app_featured_homepage');
             })->with('cashbacks')->latest()->limit(10)->get();
 
-            $featuredCategories = Category::whereHas('tags', function ($query) use ($featureTag) {
+            $featuredCategories = Category::with(['stores' => function ($query) use ($featureTag) {
+                $query->whereHas('categories.tags', function ($query) use ($featureTag) {
+                    isset($featureTag) ? $query->where('title', 'app_featured1_homepage') : $query->where('title', 'app_featured_homepage');
+                })->latest()->limit(10);
+            }])->whereHas('tags', function ($query) use ($featureTag) {
                 isset($featureTag) ? $query->where('title', 'app_featured1_homepage') : $query->where('title', 'app_featured_homepage');
-            })->with('stores')->latest()->limit(10)->get();
+            })->latest()->limit(10)->get();
 
             $data = [
                 'status' => JsonResponse::HTTP_OK,
