@@ -49,8 +49,6 @@ class CategorySeeder extends Seeder
                 'banner_type' => arrayValueExists($category, 'banner_type') ? $category['banner_type'] : null,
                 'banner_upload' => arrayValueExists($category, 'banner_upload') ? $category['banner_upload'] : null,
                 'banner_link' => arrayValueExists($category, 'banner_link') ? $category['banner_link'] : null,
-                'feature_homepage' => isset($category['feature_homepage']) && $category['feature_homepage'] == '1' ? 1 : 0,
-                'feature_sidebar' => isset($category['feature_sidebar']) && $category['feature_sidebar'] == '1' ? 1 : 0,
                 'status' => isset($category['status']) && $category['status'] == '1' ? 1 : 0,
                 'is_map_enable' => isset($category['is_map_enable']) && $category['is_map_enable'] == '1' ? 1 : 0,
                 'url' => arrayValueExists($category, 'url') ? $category['url'] : null,
