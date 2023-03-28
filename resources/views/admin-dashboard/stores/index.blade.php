@@ -18,10 +18,12 @@
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
                                         <li class="nk-block-tools-opt">
+                                            @if(app()->environment('local'))
                                             <button class="btn btn-warning btn-sm" id="fake-data-importer-btn">
                                                 <em class="icon ni ni-upload-cloud"></em>
                                                 <span>Import Fake Stores</span>
                                             </button>
+                                            @endif
                                             <form action="{{ route('admin.stores.import-fake-data') }}" id="fake-data-importer-form" method="post">@csrf</form>
                                         </li>
                                         <li class="nk-block-tools-opt">
