@@ -252,6 +252,7 @@ Route::post('search', [App\Http\Controllers\Frontend\SearchController::class, 's
 
 Route::get('stores/{letter?}', [App\Http\Controllers\Frontend\StoreController::class, 'index'])->name('stores.index');
 Route::get('cashback/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('stores.show');
+Route::post('stores', [App\Http\Controllers\Frontend\StoreController::class, 'storesView'])->name('stores.view');
 
 Route::post('exit-click', [App\Http\Controllers\Frontend\ClickController::class, 'store'])->name('click.store');
 Route::get('exit-click/{hash}/{url}', [App\Http\Controllers\Frontend\ClickController::class, 'redirect'])->name('click.redirect');
@@ -261,6 +262,7 @@ Route::get('stores-reviews/{id}', [App\Http\Controllers\Frontend\StoreReviewCont
 
 Route::get('categories', [App\Http\Controllers\Frontend\CategoryController::class, 'index'])->name('categories.index');
 Route::get('categories/{slug}', [App\Http\Controllers\Frontend\CategoryController::class, 'show'])->name('categories.show');
+Route::get('categories/{slug}/search', [App\Http\Controllers\Frontend\CategoryController::class, 'categoriesView'])->name('categories.view');
 
 Route::get('blogs', [App\Http\Controllers\Frontend\BlogController::class, 'index'])->name('blogs.index');
 Route::get('blogs/{slug}', [App\Http\Controllers\Frontend\BlogController::class, 'show'])->name('blogs.show');
