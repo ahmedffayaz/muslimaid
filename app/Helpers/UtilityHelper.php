@@ -344,7 +344,9 @@ function getCategories($limit = null, $offset = 0)
         ->when(!empty($offset), function ($q) use ($offset) {
             $q->offset($offset);
         })
-        ->get();
+        ->get()->sortBy(function ($category) {
+            return $category->slug === "cashblack-to-your-door" ? 1 : 0;
+        });
 
     return $categories;
 }
