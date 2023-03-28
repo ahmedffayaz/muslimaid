@@ -1,3 +1,7 @@
+.static-sections {
+  animation: none !important;
+}
+
 * {
   margin: 0;
   padding: 0;
