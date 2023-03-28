@@ -738,11 +738,10 @@ function getCurrencySymbol($symbol = null)
 
 function getSiteFavicon()
 {
-    if (isset(SiteSetting()['favicon']) && SiteSetting()['favicon'] != 'default.png') {
-        return asset('storage/dashboard/images/logo/' . SiteSetting()['favicon']);
-    } else {
-        return asset('admin-dashboard/images/favicon.png');
-    }
+    $settings = SiteSetting();
+    $siteLogo = (empty($settings['favicon']) ? asset('admin-dashboard/images/favicon.png') : ($settings['favicon'] == 'default.png' ? asset('admin-dashboard/images/favicon.png') : ($settings['favicon'] == 'cashblack-default.png'
+        ? asset('cashblack/img/favicon.png') : asset('storage/dashboard/images/logo/' . $settings['favicon']))));
+    return $siteLogo;
 }
 
 function resolvePageShortCodes($content, $data = [])
