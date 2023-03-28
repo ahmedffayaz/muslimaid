@@ -1,3 +1,7 @@
+.static-sections {
+  animation: none !important;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -327,7 +331,7 @@ textarea {
   top: 15%;
   right: 13.2%;
   max-width: 375px;
-  background-color: rgba(255, 255, 255, 0.3);
+  background-color: rgba(255, 255, 255, 0.9);
   border-radius: 5px;
   background-color: rgba(255, 255, 255, 0.9);
   padding: 20px 15px;
@@ -689,9 +693,11 @@ textarea {
 
 .introbtn {
   border-color: #3baa34;
-  padding: 10px 30px;
+
+  padding: 15px 90px;
   font-size: 24px !important;
-  font-weight: 600;
+  font-weight: 1000;
+
 }
 @media (max-width: 580px) {
   .introbtn {
@@ -702,7 +708,7 @@ textarea {
   }
 }
 .introbtn i.fa {
-  font-size: 24px;
+  font-size: 50px;
   display: inline-block;
   vertical-align: middle;
   color: #3baa34;
@@ -716,6 +722,9 @@ textarea {
 }
 .introbtn:focus {
   box-shadow: none;
+}
+.app-font-size{
+  font-size: 1.1rem !important;
 }
 
 .app-img-wrap {

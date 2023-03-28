@@ -2,9 +2,15 @@ $(document).ready(function() {
     $('#request-cashout').appendTo("body");
     $('.image_modal').appendTo("body");
     $(".btn-navbar-close").click(function() {
-        console.log("test");
         $(".navbar-collapse").removeClass("show");
     })
+
+    $(window).scroll(function() {
+        if (Math.round(window.scrollY + window.innerHeight) === document.documentElement.scrollHeight) {
+            $('.section').addClass('static-sections');
+            $('.container').addClass('static-sections');
+        }
+    });
 
     $(".acc-after-login").on("click", function(e) {
         console.log("first click");

@@ -10,7 +10,6 @@ use App\Models\Category;
 use App\Models\Language;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
-use App\Models\StoreCashback;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
 
@@ -21,16 +20,20 @@ class HomeController extends Controller
         $page = Page::whereSlug('/')->whereType('system')->first();
         if (empty($page)) abort(404);
 
-        $featureTag = Tag::where('title', 'feature1_homepage')->pluck('id')->first();
+        $featureTag = Tag::where('title', 'featured1_homepage')->pluck('id')->first();
 
         $stores = Store::whereHas('tags', function ($query) use ($featureTag) {
             isset($featureTag)
-                ? $query->where('title', 'feature1_homepage')
-                : $query->where('title', 'feature_homepage');
+                ? $query->where('title', 'featured1_homepage')
+                : $query->where('title', 'featured_homepage');
         })->latest()->get();
 
         $languages = Language::orderBy('id', 'desc')->get();
-        $featuredCategories = Category::where('feature_homepage', 1)->orderBy('name', 'ASC')->latest()->get();
+        $featuredCategories = Category::whereHas('tags', function ($query) use ($featureTag) {
+            isset($featureTag)
+                ? $query->where('title', 'featured1_homepage')
+                : $query->where('title', 'featured_homepage');
+        })->orderBy('name', 'ASC')->latest()->get();
         $slider = Slider::where('name', 'Home')->first();
         $testimonials = Testimonial::where('status', 'active')->orderBy('order_no')->take(5)->get();
 

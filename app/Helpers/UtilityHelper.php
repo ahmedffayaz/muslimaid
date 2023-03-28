@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Models\Cashout;
 use App\Models\SeoRule;
 use App\Models\Category;
+use App\Models\Charity;
 use App\Models\Currency;
 use App\Models\Page;
 use App\Models\UserVerify;
@@ -34,6 +35,14 @@ function getFeaturesStores($feature_tag)
         $query->where('title', $feature_tag);
     })->latest()->get();
     return $stores;
+}
+
+function getFeaturesCharities($feature_tag)
+{
+    $charities = Charity::whereHas('tags', function ($query) use ($feature_tag) {
+        $query->where('title', $feature_tag);
+    })->latest()->get();
+    return $charities;
 }
 
 function separatePageKeywords($content)
@@ -540,7 +549,7 @@ function getImageUrl($url)
         $baseDir = $url->is_fake ? 'frontend/images/logos/' : '';
 
         return strpos($url->image, 'http') !== false
-            ? $url->image
+            ? ((!@getimagesize($url->image)) ? asset('cashblack/img/no-logo.png') : $url->image)
             : asset($baseDir . ltrim($url->image, '/'));
     }
 
@@ -725,11 +734,12 @@ function getCurrencySymbol($symbol = null)
     return $currencySymbol;
 }
 
-function getSiteFavicon()
+function getSiteFavicon($cashblack = false)
 {
-    if (isset(SiteSetting()['favicon']) && SiteSetting()['favicon'] != 'default.png') {
+    if ((isset(SiteSetting()['favicon']) && SiteSetting()['favicon'] != 'default.png') && (isset(SiteSetting()['favicon']) && SiteSetting()['favicon'] != 'cashblack-default.png')) {
         return asset('storage/dashboard/images/logo/' . SiteSetting()['favicon']);
     } else {
+        if ($cashblack) return asset('cashblack/img/favicon.png');
         return asset('admin-dashboard/images/favicon.png');
     }
 }
