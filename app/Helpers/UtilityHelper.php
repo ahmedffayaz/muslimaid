@@ -734,11 +734,12 @@ function getCurrencySymbol($symbol = null)
     return $currencySymbol;
 }
 
-function getSiteFavicon()
+function getSiteFavicon($cashblack = false)
 {
-    if (isset(SiteSetting()['favicon']) && SiteSetting()['favicon'] != 'default.png') {
+    if ((isset(SiteSetting()['favicon']) && SiteSetting()['favicon'] != 'default.png') && (isset(SiteSetting()['favicon']) && SiteSetting()['favicon'] != 'cashblack-default.png')) {
         return asset('storage/dashboard/images/logo/' . SiteSetting()['favicon']);
     } else {
+        if ($cashblack) return asset('cashblack/img/favicon.png');
         return asset('admin-dashboard/images/favicon.png');
     }
 }
