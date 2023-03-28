@@ -42,7 +42,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/user/claim-step-3',[API\ClaimController::class, 'step3']);
     Route::get('/user/user-balance',[API\DashboardController::class, 'userBalance']);
 
-        
+
     Route::post('/change_password', [API\AuthController::class, 'changePassword']);
 
     Route::post('/auth/logout', [API\AuthController::class, 'logout']);
@@ -50,9 +50,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::apiResource('categories', API\CategoryController::class);
 Route::get('child_categories/{slug}', [API\CategoryController::class,'childCategories']);
-Route::apiResource('stores', API\StoreController::class);
+Route::apiResource('stores', API\StoreController::class)->only(['index', 'show']);
 Route::get('featured_cashback',[API\StoreController::class,'featuredCashback']);
 Route::get('slider',[API\StoreController::class,'slider']);
 Route::get('vouchers',[API\StoreController::class,'vouchers']);
 Route::post('click/track', [API\ClickController::class, 'track']);
-
+Route::get('home', [API\HomeController::class, 'index']);
