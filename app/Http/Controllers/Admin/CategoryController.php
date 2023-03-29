@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\CategoryRequest;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
@@ -178,10 +179,10 @@ class CategoryController extends Controller
                 flash()->error($validator->errors()->first());
                 return redirect()->back();
             } else {
-                return array(
+                return response()->json([
                     'status' => JsonResponse::HTTP_FORBIDDEN,
                     'error' => 'Something went wrong'
-                );
+                ]);
             }
         }
         try {
