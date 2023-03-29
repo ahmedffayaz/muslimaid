@@ -736,19 +736,10 @@ function getCurrencySymbol($symbol = null)
 
 function getSiteFavicon()
 {
-<<<<<<< HEAD
     $settings = SiteSetting();
     $siteLogo = (empty($settings['favicon']) ? asset('admin-dashboard/images/favicon.png') : ($settings['favicon'] == 'default.png' ? asset('admin-dashboard/images/favicon.png') : ($settings['favicon'] == 'cashblack-default.png'
         ? asset('cashblack/img/favicon.png') : asset('storage/dashboard/images/logo/' . $settings['favicon']))));
     return $siteLogo;
-=======
-    if ((isset(SiteSetting()['favicon']) && SiteSetting()['favicon'] != 'default.png') && (isset(SiteSetting()['favicon']) && SiteSetting()['favicon'] != 'cashblack-default.png')) {
-        return asset('storage/dashboard/images/logo/' . SiteSetting()['favicon']);
-    } else {
-        if ($cashblack) return asset('cashblack/img/favicon.png');
-        return asset('admin-dashboard/images/favicon.png');
-    }
->>>>>>> develop
 }
 
 function resolvePageShortCodes($content, $data = [])
