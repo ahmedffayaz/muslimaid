@@ -5,6 +5,14 @@ $(document).ready(function() {
         $(".navbar-collapse").removeClass("show");
     })
 
+    let toast = $('.toast').toast();
+    toast.show();
+    setTimeout(function() { $(".toast").hide(); }, 5000);
+
+    $(".toast-close").on("click", function(e) {
+        $(".toast").hide();
+    })
+    
     $(window).scroll(function() {
         if (Math.round(window.scrollY + window.innerHeight) === document.documentElement.scrollHeight) {
             $('.section').addClass('static-sections');
