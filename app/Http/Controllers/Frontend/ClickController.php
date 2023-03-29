@@ -115,15 +115,14 @@ class ClickController extends Controller
         }
     }
 
-    public function redirect($hash, $url, Request $request)
+    public function redirect($hash, $url)
     {
         try {
             $storeId = decrypt($hash);
             $store = Store::find($storeId);
             $url = decrypt($url);
-            $cashbackId = isset($request->cashbackId) ? decrypt($request->cashbackId) : '';
 
-            return view('frontend.stores.exit-click', compact('store', 'url', 'cashbackId'));
+            return view('frontend.stores.exit-click', compact('store', 'url'));
         } catch (Throwable $th) {
             if (request()->ajax()) {
                 return response()->json([
