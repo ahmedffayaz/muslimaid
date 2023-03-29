@@ -27,7 +27,7 @@ class SlideResource extends JsonResource
         ];
 
         if ($this->slider_type == 'store') {
-            $data['url_key'] = $this->store->slug;
+            $data['url_key'] = optional($this->store)->slug;
         }
 
         return $data;
