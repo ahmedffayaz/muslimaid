@@ -81,7 +81,7 @@
             <div class="form-group">
                 <label class="form-label" for="logo_link">Logo Link </label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="logo_link" name="logo_link" value="{{ $isEdit ? $category->logo_link : '' }}"  onchange="readLinkURL(this);" >
+                    <input type="text" class="form-control" id="logo_link" name="logo_link" value="{{ $isEdit ? $category->logo_link : '' }}" required onchange="readLinkURL(this);" >
                 </div>
             </div>
             <div class="col-lg-3 ">
@@ -135,7 +135,8 @@
             <div class="form-group">
                 <label class="form-label" for="banner_link">Banner Link</label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="banner_link" name="banner_link" value="{{ $isEdit ? $category->banner_link : '' }}" onchange="readLinkURL(this);">
+                    <input type="text" class="form-control" id="banner_link" name="banner_link" value="{{ $isEdit ? $category->banner_link : '' }}" required onchange="readLinkURL(this);">  
+
                 </div>
             </div>
             <div class="col-lg-3 ">

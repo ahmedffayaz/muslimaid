@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use App\Http\Requests\CategoryRequest;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 
@@ -61,7 +62,6 @@ class CategoryController extends Controller
 
         try {
             DB::beginTransaction();
-
             $category = Category::create([
                 'name' => $request->input('name'),
                 'parent_id' => !empty($request->input('parent_id')) ? $request->input('parent_id') : 0,
@@ -160,8 +160,31 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, Category $category)
+    public function update(Request $request, Category $category)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'logo_type' => 'required',
+            'logo_upload' => 'nullable|image:jpeg,png,jpg,gif',
+            'logo_link' => 'required_if:logo_type,==,link|required|url',
+            'banner_type' => 'required',
+            'banner_upload' => 'nullable|image:jpeg,png,jpg,gif',
+            'banner_link' => 'required_if:banner_type,==,link|required|url',
+            'status' => 'required',
+            'sort' => 'required|integer|min:1'
+        ]);
+
+        if ($validator->fails()) {
+            if (!$request->ajax()) {
+                flash()->error($validator->errors()->first());
+                return redirect()->back();
+            } else {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_FORBIDDEN,
+                    'error' => 'Something went wrong'
+                ]);
+            }
+        }
         try {
             DB::beginTransaction();
             $category->update([
@@ -210,9 +233,7 @@ class CategoryController extends Controller
                     $category->update();
                 }
             }
-
             DB::commit();
-
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,
                 'success' => 'Category updated'
