@@ -549,7 +549,7 @@ function getImageUrl($url)
         $baseDir = $url->is_fake ? 'frontend/images/logos/' : '';
 
         return strpos($url->image, 'http') !== false
-            ? ((!($url->image)) ? asset('cashblack/img/no-logo.png') : $url->image)
+            ? (!($url->image) ? asset('cashblack/img/no-logo.png') : $url->image)
             : asset($baseDir . ltrim($url->image, '/'));
     }
 
