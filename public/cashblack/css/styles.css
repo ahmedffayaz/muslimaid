@@ -2315,7 +2315,7 @@ button.hamburger:not(.collapsed):before {
     }
 }
 .sort-option .sort-btn {
-    width: 138px;
+    width: 150px;
     height: 34px;
     border: 1px solid #000;
     background-color: transparent;

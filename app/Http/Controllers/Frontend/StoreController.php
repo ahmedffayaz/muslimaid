@@ -16,16 +16,14 @@ class StoreController extends Controller
 
         if (!empty($letter)) {
             $stores = Store::where('name', 'like', $letter . '%')->get();
-            $allStores = Store::whereStatus('active')->latest()->paginate(12);
-            // return view('frontend.stores.show-by-letter', compact('stores', 'letter','allStores'));
-            return view('frontend.pages.single-page', compact('page', 'stores', 'letter', 'allStores'));
+            return view('frontend.pages.single-page', compact('page', 'stores', 'letter'));
         }
 
         $groups = Store::latest()->get()->sortBy('name')->groupBy(function ($store) {
             return strtoupper(substr($store->name, 0, 1));
         });
 
-        return view('frontend.pages.single-page', compact('page', 'groups'));
+        return view('frontend.pages.single-page', compact('page'));
     }
 
     public function show($slug)
@@ -38,43 +36,37 @@ class StoreController extends Controller
     }
     public function storesView(Request $request)
     {
-        $perPage = $request->input('perPage');
+       $allStores = Store::where('status', 'active');
         if (isset($request->orderBy)) {
             if ($request->orderBy == 'popularity') {
-                $allStores = Store::whereStatus('active')->with('clicks')->paginate($perPage);
+                $allStores = $allStores->withCount('clicks')->orderByDesc('clicks_count')->paginate($request->input('perPage'));
             } else if ($request->orderBy == 'cashback-amount') {
-                $allStores = Store::whereStatus('active')->whereHas('cashbacks', function ($query) {
-                    $query->where('type', 'fixed')
-                        ->whereHas('currencyData', function ($query) {
-                            $query->where('symbol', '£');
-                        });
+                $allStores = $allStores->whereHas('cashbacks', function ($query) {
+                    $query->where('type', 'fixed')->whereHas('currencyData', function ($query) {
+                        $query->where('symbol', '£');
+                    });
                 })->get()->filter(function ($store) {
                     $cashback = $store->getCashback();
                     return (strpos($cashback, '£') !== false);
                 })->sortByDesc(function ($store) {
-                    $cashback = $store->getCashback();
-                    return (float) substr($cashback, 1);
-                })->paginate($perPage);
+                    return $store->getCashback();
+                })->paginate($request->input('perPage'));
             } else if ($request->orderBy == 'cashback-percentage') {
-                $allStores = Store::whereStatus('active')->whereHas('cashbacks', function ($query) {
+                $allStores =$allStores->whereHas('cashbacks', function ($query) {
                     $query->where('type', 'percentage');
                 })->get()->filter(function ($store) {
                     $cashback = $store->getCashback();
                     return (strpos($cashback, '%') !== false);
                 })->sortByDesc(function ($store) {
                     return $store->getCashback();
-                })->paginate($perPage);
+                })->paginate($request->input('perPage'));
             } else {
-                $orderByArr = explode("-", $request->orderBy);
-                $allStores = Store::whereStatus('active')->orderBy($orderByArr[0], $orderByArr[1])->paginate($perPage);
-                $allStores->appends(['orderBy' => $request->orderBy]);
+                $orderByArr = explode('-', $request->orderBy);
+                $allStores = $allStores->orderBy($orderByArr[0], $orderByArr[1])->paginate($request->input('perPage'));
             }
         } else {
-
-            $allStores = Store::whereStatus('active')->latest()->paginate($perPage);
-            $allStores->appends(['orderBy' => $request->orderBy]);
+            $allStores = $allStores->latest()->paginate($request->input('perPage'));
         }
-
-        return view('frontend.stores.stores-view', compact('allStores', 'perPage'))->render();
+        return view('frontend.stores.stores-view', compact('allStores'))->render();
     }
 }
