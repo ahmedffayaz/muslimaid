@@ -672,7 +672,14 @@ class StoreController extends Controller
     public function createEditorPick(Request $request)
     {
         try {
+            
+            $existingPicks = EditorPick::where('category_id', $request->input('category_id'))->get();
             DB::beginTransaction();
+            foreach ($existingPicks as $existingPick) {
+                if (!in_array($existingPick->store_id, $request->input('picks'))) {
+                    $existingPick->delete();
+                }
+            }
             foreach ($request->input('picks') as $pick) {
                 EditorPick::firstOrCreate(
                     [

@@ -160,31 +160,8 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Category $category)
+    public function update(CategoryRequest $request, Category $category)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'logo_type' => 'required',
-            'logo_upload' => 'nullable|image:jpeg,png,jpg,gif',
-            'logo_link' => 'required_if:logo_type,==,link|required|url',
-            'banner_type' => 'required',
-            'banner_upload' => 'nullable|image:jpeg,png,jpg,gif',
-            'banner_link' => 'required_if:banner_type,==,link|required|url',
-            'status' => 'required',
-            'sort' => 'required|integer|min:1'
-        ]);
-
-        if ($validator->fails()) {
-            if (!$request->ajax()) {
-                flash()->error($validator->errors()->first());
-                return redirect()->back();
-            } else {
-                return response()->json([
-                    'status' => JsonResponse::HTTP_FORBIDDEN,
-                    'error' => 'Something went wrong'
-                ]);
-            }
-        }
         try {
             DB::beginTransaction();
             $category->update([
@@ -207,7 +184,7 @@ class CategoryController extends Controller
                 if ($request->has('tags')) {
                     $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
                     if ($tags->count() > 0) $category->tags()->sync($tags);
-                }else{
+                } else {
                     $category->tags()->detach();
                 }
             }
