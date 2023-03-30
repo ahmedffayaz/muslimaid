@@ -5,14 +5,6 @@ $(document).ready(function() {
         $(".navbar-collapse").removeClass("show");
     })
 
-    let toast = $('.toast').toast();
-    toast.show();
-    setTimeout(function() { $(".toast").hide(); }, 5000);
-
-    $(".toast-close").on("click", function(e) {
-        $(".toast").hide();
-    })
-    
     $(window).scroll(function() {
         if (Math.round(window.scrollY + window.innerHeight) === document.documentElement.scrollHeight) {
             $('.section').addClass('static-sections');
@@ -927,30 +919,6 @@ $(document).on("click", "#local-leads", function() {
     } else {
         $(".login-form-modal").magnificPopup("open");
     }
-})
-
-$(document).on("click", "#subscribeNewsletter", function(e) {
-    var firstname = $("#s_firstname").val();
-    var email = $("#s_email").val();
-    var user_id = $("#s_user_id").val();
-    if($(this).prop("checked") == true){
-        var checked = true;
-    } else {
-        var checked = false;
-    }
-    var url = base_url + "client/ajax_subcribe_action";
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: {'first_name':firstname,'email':email,'user_id':user_id,'checked':checked},
-        success: function(data) {
-            var data = JSON.parse(data);
-            var alertMessage = getAlertMessages(data);
-            $(".messageBox").html(alertMessage);
-
-            window.location.reload();
-        }
-    });
 })
 
 function arrangeMeeting(form) {
