@@ -164,7 +164,7 @@
                                                                 <div class=" logo">
                                                                     <label for="logo-input">
                                                                         <img id="logo"
-                                                                            src="@if (isset($settings['dashboard_logo']) && $settings['dashboard_logo'] != 'default.png') {{ asset('storage/dashboard/images/logo/' . $settings['dashboard_logo']) }}@else{{ asset('admin-dashboard/images/logo-dark.png') }} @endif"
+                                                                            src="{{ getDashboardLogo() }}"
                                                                             alt="store logo" class="" style="max-width:100px;max-height:120px" />
                                                                         <input id="logo-input" preview="#logo" name="dashboard_logo" class="d-none" type='file'
                                                                             onchange="readURL(this);" />

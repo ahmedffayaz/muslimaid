@@ -702,6 +702,14 @@ function getSiteLogo()
     return $siteLogo;
 }
 
+function getDashboardLogo()
+{
+    $settings = SiteSetting();
+    $siteLogo = (empty($settings['dashboard_logo']) ? asset('admin-dashboard/images/logo-dark.png') : ($settings['dashboard_logo'] == 'default.png' ? asset('admin-dashboard/images/logo-dark.png') : ($settings['dashboard_logo'] == 'cashblack-default.png'
+        ? asset('cashblack/img/logo.png') : asset('storage/dashboard/images/logo/' . $settings['dashboard_logo']))));
+    return $siteLogo;
+}
+
 function getRandomColorClass()
 {
     $color = rand(1, 5);
