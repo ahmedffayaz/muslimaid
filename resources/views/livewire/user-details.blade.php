@@ -123,21 +123,37 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-12">
+                                                    <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="address">Address</label>
+                                                            <label class="form-label" for="sort_code">Sort Code</label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="address" value="{{ $user->address ?? '' }}"
-                                                                    name="address">
+                                                                <input type="number" class="form-control" id="sort_code" value="{{ $user->sort_code }}" name="sort_code">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="bank_acc_no">Bank Account Number</label>
+                                                            <div class="form-control-wrap">
+                                                                <input type="number" class="form-control" id="bank_acc_no" value="{{ $user->bank_acc_no }}" name="bank_acc_no">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="paypal_email">Paypal Email </label>
+                                                            <div class="form-control-wrap">
+                                                                <input type="email" class="form-control" id="paypal_email" value="{{ $user->paypal_email }}" name="paypal_email">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-12">
-                                                        <div class="card">
-                                                            <input name="intro" type="hidden">
-                                                            <label class="form-label" for="phone-no-1">Introduction</label>
-                                                            <!-- Create the editor container -->
-                                                            <div id="editor-container">{!! $user->intro ?? '' !!}</div>
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="address">Address</label>
+                                                            <div class="form-control-wrap">
+                                                                <textarea type="text" class="form-control" id="address" value="{{ $user->address ?? '' }}"
+                                                                    name="address"></textarea>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
@@ -607,17 +623,32 @@
                 }
             });
         }
+
+        jQuery.validator.addMethod("regex", function(value, element) {
+            return this.optional(element) || /^[A-Za-z ]+$/i.test(value);
+        }, "Only alphabetic name is allow");
+
+        jQuery.validator.addMethod("validPhone", function(value, element) {
+            var regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+            return regex.test(value);
+        }, "Enter a valid phone number");
+
         $('.user-form').validate({
             errorClass: 'invalid-feedback d-block',
             rules: {
                 firstname: {
-                    required: true
+                    required: true,
+                    regex: true
                 },
                 lastname: {
-                    required: true
+                    required: true,
+                    regex: true
                 },
                 email: {
                     required: true
+                },
+                phone: {
+                    validPhone: true
                 },
             },
             submitHandler: function(form) {

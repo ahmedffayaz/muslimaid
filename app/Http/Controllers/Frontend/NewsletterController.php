@@ -6,7 +6,7 @@ use Exception;
 use Newsletter;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-
+use App\Models\User;
 
 class NewsletterController extends Controller
 {
@@ -18,11 +18,18 @@ class NewsletterController extends Controller
     public function store(Request $request)
     {
         try {
+            $settings = SiteSetting();
+
             if (empty($settings['sendgrid_newsletter_list_id']) || empty($settings['sendgrid_api_key'])) {
-                return redirect()->back()->with(['error' => 'Default list settings are not added!']);
+                if ($request->ajax()) {
+                    return response()->json([
+                        'message' => 'Default list settings are not added! Try again after adding keys',
+                        'color' => 'red',
+                    ]);
+                }
+                return redirect()->back()->with(['color' => 'Default list settings are not added!']);
             }
 
-            $settings = SiteSetting();
             $email = $request->input('email');
             $nameArray = explode(' ', $request->input('name'));
 
@@ -47,12 +54,37 @@ class NewsletterController extends Controller
             Newsletter::subscribe($request->input('email'));
 
             if ($response->statusCode() == 201 || $response->statusCode() == 202) {
+                if ($request->ajax()) {
+                    if(isset($request->userId)){
+                        $user = User::where('id', $request->userId)->first();
+                        if(isset($user)){
+                            $user->email_preference = 1;
+                            $user->save();
+                        }
+                    }
+                    return response()->json([
+                        'message' => 'You are subscribed successfully',
+                        'color' => 'green',
+                    ]);
+                }
                 return redirect()->back()->with(['success' => 'Thank you for subscribing to out newsletter']);
             }
 
-            return redirect()->back()->with(['error' => 'Something went wrong!']);
+            if ($request->ajax()) {
+                return response()->json([
+                    'message' => 'Something went wrong!',
+                    'color' => 'red',
+                ]);
+            }
+            return redirect()->back()->with(['color' => 'Something went wrong!']);
         } catch (Exception $ex) {
-            return redirect()->back()->with(['error' => $ex->getMessage()]);
+            if ($request->ajax()) {
+                return response()->json([
+                    'message' => 'Something went wrong!',
+                    'color' => 'red',
+                ]);
+            }
+            return redirect()->back()->with(['color' => $ex->getMessage()]);
         }
     }
 }

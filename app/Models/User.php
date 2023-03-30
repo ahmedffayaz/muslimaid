@@ -37,6 +37,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'referred_by',
         'referred_at',
         'is_email_verified',
+        'email_preference',
+        'sort_code',
+        'bank_acc_no',
+        'paypal_email'
     ];
 
     /**
