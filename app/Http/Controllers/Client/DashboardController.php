@@ -21,7 +21,7 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $items = $user->cashbacks()->where(function($q) {
+        $items = $user->cashbacks()->where(function ($q) {
             $q->where('store_id', '<>', null)->whereHas('store');
         })->orWhere('store_id', null)->latest()->limit(5)->get();
 
@@ -67,9 +67,11 @@ class DashboardController extends Controller
         $user->update([
             'first_name' => $request->firstname,
             'last_name' => $request->lastname,
+            'sort_code' => isset($request->sort_code) ? $request->sort_code : $user->sort_code,
+            'bank_acc_no' => isset($request->bank_acc_no) ? $request->bank_acc_no : $user->bank_acc_no,
+            'paypal_email' => isset($request->paypal_email) ? $request->paypal_email : $user->paypal_email,
             'phone' => $request->phone,
             'address' => $request->address,
-            'intro' => $request->intro,
             'avatar' => $avatarImage
         ]);
 
