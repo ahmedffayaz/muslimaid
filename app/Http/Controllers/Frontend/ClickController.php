@@ -121,8 +121,9 @@ class ClickController extends Controller
             $storeId = decrypt($hash);
             $store = Store::find($storeId);
             $url = decrypt($url);
+            $cashbackId = isset($request->cashbackId) ? decrypt($request->cashbackId) : '';
 
-            return view('frontend.stores.exit-click', compact('store', 'url'));
+            return view('frontend.stores.exit-click', compact('store', 'url', 'cashbackId'));
         } catch (Throwable $th) {
             if (request()->ajax()) {
                 return response()->json([
