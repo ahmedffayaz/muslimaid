@@ -26,6 +26,8 @@ class CategorySeeder extends Seeder
         $categories = [];
         $now = Carbon::now();
         $slugArray = array();
+        $parentCounter = 0;
+        $categoryIdArray = array();
         foreach ($csvToArray as $category) {
             $category['id'] = !isset($category['id']) ? reset($category) : $category['id'];
 
@@ -35,12 +37,16 @@ class CategorySeeder extends Seeder
                 $slug = $slug . $category['id'];
             }
             array_push($slugArray, $slug);
-
+            $sort = 0;
+            if (!arrayValueExists($category, 'parent_id') || $category['parent_id'] === 0) {
+                $parentCounter++;
+                $sort = $parentCounter;
+            }
             $categories[] = [
                 'id' => $category['id'],
                 'parent_id' => arrayValueExists($category, 'parent_id') ? $category['parent_id'] : 0,
                 'name' => $category['name'],
-                'slug' =>  $slug,
+                'sort' => $sort,
                 'description' => arrayValueExists($category, 'description') ? $category['description'] : null,
                 'sort' => arrayValueExists($category, 'sort') ? $category['sort'] : 0,
                 'logo_type' => arrayValueExists($category, 'logo_type') ? $category['logo_type'] : null,
@@ -57,10 +63,21 @@ class CategorySeeder extends Seeder
                 'created_at' => isset($category['created_at']) ? dbDate($category['created_at']) : $now,
                 'updated_at' => isset($category['updated_at']) ? dbDate($category['updated_at']) : $now,
             ];
+            array_push($categoryIdArray, $category['id']);
         }
 
         foreach (array_chunk($categories, 500) as $categoriesChunk) {
             Category::insert($categoriesChunk);
+        }
+        $categories = Category::where('parent_id', '!=', 0)->get();
+        foreach ($categories as $category) {
+            $sortValue = 1;
+            $sort = Category::where('parent_id', $category->parent_id)->orderBy('sort', 'desc')->pluck('sort')->first();
+            if (isset($sort)) {
+                $sortValue = $sort + 1;
+            }
+            $category->sort = $sortValue;
+            $category->update();
         }
     }
 }
