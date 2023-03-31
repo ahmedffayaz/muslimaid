@@ -101,10 +101,13 @@ class CategoryController extends Controller
     }
     public function categoriesView(Request $request, $slug)
     {
+        $ip =  request()->ip(); //Dynamic IP address get
+        $data = Location::get($ip);
         $category = Category::whereSlug($slug)->with('stores')->first();
         if (isset($request->orderBy)) {
             if ($request->orderBy == 'popularity') {
                 $allStores = $category->stores()->with('clicks')->paginate($request->input('perPage'));
+                $allStores = $this->sortByDistance($data, $allStores);
             } else if ($request->orderBy == 'cashback-amount') {
                 $allStores = $category->stores()->whereHas('cashbacks', function ($query) {
                     $query->where('type', 'fixed')->whereHas('currencyData', function ($query) {
@@ -116,6 +119,7 @@ class CategoryController extends Controller
                 })->sortByDesc(function ($store) {
                     return $store->getCashback();
                 })->paginate($request->input('perPage'));
+                $allStores = $this->sortByDistance($data, $allStores);
             } else if ($request->orderBy == 'cashback-percentage') {
                 $allStores = $category->stores()->whereHas('cashbacks', function ($query) {
                     $query->where('type', 'percentage');
@@ -125,13 +129,19 @@ class CategoryController extends Controller
                 })->sortByDesc(function ($store) {
                     return $store->getCashback();
                 })->paginate($request->input('perPage'));
+                $allStores = $this->sortByDistance($data, $allStores);
             } else {
                 $orderByArr = explode("-", $request->orderBy);
                 $allStores = $category->stores()->orderBy($orderByArr[0], $orderByArr[1])->paginate($request->input('perPage'));
+                $allStores = $this->sortByDistance($data, $allStores);
             }
         } else {
             $allStores = $category->stores()->latest()->paginate($request->input('perPage'));
+            $allStores = $this->sortByDistance($data, $allStores);
         }
-        return view('frontend.categories.view', compact('allStores', 'slug'))->render();
+        return [
+            'view' => view('frontend.categories.view', compact('allStores', 'slug'))->render(),
+            'stores' => $allStores
+        ];
     }
 }

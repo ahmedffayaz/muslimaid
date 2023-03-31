@@ -363,12 +363,6 @@ function getStores($limit = null, $offset = 0)
     return $categories;
 }
 
-function getPaginatedStores($perPage = 12, $letter = null)
-{
-    return Store::when(!empty($letter), function ($q) use ($letter) {
-        $q->where('name', 'like', $letter . '%');
-    })->orderBy('name', 'asc')->paginate($perPage);
-}
 
 function SiteSetting()
 {
@@ -549,7 +543,7 @@ function getImageUrl($url)
         $baseDir = $url->is_fake ? 'frontend/images/logos/' : '';
 
         return strpos($url->image, 'http') !== false
-            ? (!($url->image) ? asset('cashblack/img/no-logo.png') : $url->image)
+            ? (!$url->image ? asset('cashblack/img/no-logo.png') : $url->image)
             : asset($baseDir . ltrim($url->image, '/'));
     }
 
