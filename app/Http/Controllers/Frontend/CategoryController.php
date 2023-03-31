@@ -24,9 +24,8 @@ class CategoryController extends Controller
 
     public function show(Request $request, $slug)
     {
-        $ip = request()->ip(); //Dynamic IP address get
+        $ip =  request()->ip(); //Dynamic IP address get
         $data = Location::get($ip);
-
         $category = Category::whereSlug($slug)->with('childs')->first();
 
         if (empty($category)) abort(404);
@@ -52,10 +51,8 @@ class CategoryController extends Controller
         }
 
         $stores = $category->stores()->where('status', 'active')->with('logo', 'storeAddress');
-
-
-        $stores = $this->sortByDistance($data, $stores);
         $stores = $stores->paginate(25);
+        $stores = $this->sortByDistance($data, $stores);
         $stores = $stores->sortBy('distance')->values()->paginate(25);
         $stores->appends(['orderBy' => $request->orderBy]);
         return view('frontend.categories.show', compact('category', 'stores', 'slug'));
@@ -104,11 +101,10 @@ class CategoryController extends Controller
     }
     public function categoriesView(Request $request, $slug)
     {
-        $category = Category::whereSlug($slug)->with('childs')->first();
-        $perPage = $request->input('perPage');
+        $category = Category::whereSlug($slug)->with('stores')->first();
         if (isset($request->orderBy)) {
             if ($request->orderBy == 'popularity') {
-                $allStores = $category->stores()->with('clicks')->paginate($perPage);
+                $allStores = $category->stores()->with('clicks')->paginate($request->input('perPage'));
             } else if ($request->orderBy == 'cashback-amount') {
                 $allStores = $category->stores()->whereHas('cashbacks', function ($query) {
                     $query->where('type', 'fixed')->whereHas('currencyData', function ($query) {
@@ -119,7 +115,7 @@ class CategoryController extends Controller
                     return (strpos($cashback, '£') !== false);
                 })->sortByDesc(function ($store) {
                     return $store->getCashback();
-                })->paginate($perPage);
+                })->paginate($request->input('perPage'));
             } else if ($request->orderBy == 'cashback-percentage') {
                 $allStores = $category->stores()->whereHas('cashbacks', function ($query) {
                     $query->where('type', 'percentage');
@@ -128,15 +124,14 @@ class CategoryController extends Controller
                     return (strpos($cashback, '%') !== false);
                 })->sortByDesc(function ($store) {
                     return $store->getCashback();
-                })->paginate($perPage);
+                })->paginate($request->input('perPage'));
             } else {
                 $orderByArr = explode("-", $request->orderBy);
-                $allStores = $category->stores()->orderBy($orderByArr[0], $orderByArr[1])->paginate($perPage);
+                $allStores = $category->stores()->orderBy($orderByArr[0], $orderByArr[1])->paginate($request->input('perPage'));
             }
         } else {
-            $allStores = $category->stores()->latest()->paginate($perPage);
-            $allStores->appends(['orderBy' => $request->orderBy]);
+            $allStores = $category->stores()->latest()->paginate($request->input('perPage'));
         }
-        return view('frontend.categories.view', compact('allStores', 'category'))->render();
+        return view('frontend.categories.view', compact('allStores', 'slug'))->render();
     }
 }

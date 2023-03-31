@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\URL;
 
 class LoginController extends Controller
 {
@@ -39,6 +40,19 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+
+    //redirect
+    protected function authenticated(Request $request, $user)
+    {
+        $previousUrl = URL::previous();
+        // Check if the previous URL is the login URL, and if so, redirect to the home page
+        if ($previousUrl == route('login')) {
+            return redirect('/');
+        }
+
+        return redirect()->intended($request->prvUrl);
     }
 
     /**
