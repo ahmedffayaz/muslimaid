@@ -13,18 +13,9 @@ class StoreController extends Controller
     {
         $page = Page::where('slug', 'stores')->whereType('system')->first();
         if (empty($page)) abort(404);
-
-        if (!empty($letter)) {
-            $stores = Store::where('name', 'like', $letter . '%')->get();
-            return view('frontend.pages.single-page', compact('page', 'stores', 'letter'));
-        }
-
-        $groups = Store::latest()->get()->sortBy('name')->groupBy(function ($store) {
-            return strtoupper(substr($store->name, 0, 1));
-        });
-
-        return view('frontend.pages.single-page', compact('page'));
+        return view('frontend.pages.single-page', compact('page', 'letter'));
     }
+
 
     public function show($slug)
     {
@@ -37,7 +28,8 @@ class StoreController extends Controller
     public function storesView(Request $request)
     {
        $allStores = Store::where('status', 'active');
-        if (isset($request->orderBy)) {
+       $letter = $request->input('letter');
+        if (isset($request->orderBy)&& !isset($letter)) {
             if ($request->orderBy == 'popularity') {
                 $allStores = $allStores->withCount('clicks')->orderByDesc('clicks_count')->paginate($request->input('perPage'));
             } else if ($request->orderBy == 'cashback-amount') {
@@ -64,9 +56,11 @@ class StoreController extends Controller
                 $orderByArr = explode('-', $request->orderBy);
                 $allStores = $allStores->orderBy($orderByArr[0], $orderByArr[1])->paginate($request->input('perPage'));
             }
-        } else {
+        }elseif(isset($letter)){
+            $allStores = $allStores->where('name', 'like', $letter . '%')->paginate($request->input('perPage'));
+         } else {
             $allStores = $allStores->latest()->paginate($request->input('perPage'));
         }
-        return view('frontend.stores.stores-view', compact('allStores'))->render();
+        return view('frontend.stores.stores-view', compact('allStores','letter'))->render();
     }
 }

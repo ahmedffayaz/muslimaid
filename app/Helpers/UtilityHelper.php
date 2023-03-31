@@ -363,12 +363,6 @@ function getStores($limit = null, $offset = 0)
     return $categories;
 }
 
-function getPaginatedStores($perPage = 12, $letter = null)
-{
-    return Store::when(!empty($letter), function ($q) use ($letter) {
-        $q->where('name', 'like', $letter . '%');
-    })->orderBy('name', 'asc')->paginate($perPage);
-}
 
 function SiteSetting()
 {
