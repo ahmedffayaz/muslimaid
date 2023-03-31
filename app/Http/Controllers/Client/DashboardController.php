@@ -8,6 +8,7 @@ use App\Models\ExitClick;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Store;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -82,8 +83,30 @@ class DashboardController extends Controller
     public function cashback()
     {
         $user = Auth::user();
-        $cashbacks = UserCashback::where('user_id', $user->id)->latest()->paginate(20);
-        return view('frontend.client-dashboard.cashback', compact('user', 'cashbacks'));
+        $stores = Store::where('status', 'active')->orderBy('name', 'asc')
+            ->has('commissions')->whereHas('commissions', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })->get();
+        return view('frontend.client-dashboard.cashback', compact('user',  'stores'));
+    }
+
+    public function searchCashback(Request $request)
+    {
+        $user = Auth::user();
+        $cashbacks = UserCashback::where('user_id', $user->id);
+        if (isset($request->status)) {
+            $cashbacks->where('status', $request->status);
+        }
+        if (isset($request->store_id)) {
+            $cashbacks->whereHas('store', function ($query) use ($request) {
+                $query->where('id', $request->store_id);
+            });
+        }
+        if (isset($request->date_from) && isset($request->date_to)) {
+            $cashbacks->whereBetween('event_date', [$request->date_from, $request->date_to]);
+        }
+        $cashbacks = $cashbacks->latest()->paginate(20);
+        return view('frontend.client-dashboard.cashback-table', compact('cashbacks'));
     }
 
     public function clicks()
