@@ -10,6 +10,7 @@ use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StoreResource;
 use App\Http\Resources\Category\CategoryResource;
 
 class CategoryController extends Controller
@@ -17,74 +18,94 @@ class CategoryController extends Controller
     use ApiResponser;
 
 
-    public function index()
+    public function index($letter = null)
     {
         try {
-            $page = Page::where('slug', 'categories')->whereType('system')->pluck('banner_image')->first();
+            $page = Page::where('slug', 'categories')->whereType('system')->pluck('banner_image')->firstOrFail();
 
             if (!empty($letter)) {
                 $categories = Category::where('name', 'like', $letter . '%')->with(['childs' => function ($query) {
                     $query->withCount('stores');
-                }])->withCount('stores')->where('parent_id', 0)->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();
+                }])->withCount('stores')->where('parent_id', 0)->orderBy('sort', 'desc')->orderBy('name', 'asc')->paginate(12);
             } else {
                 $categories = Category::with(['childs' => function ($query) {
                     $query->withCount('stores');
-                }])->withCount('stores')->where('parent_id', 0)->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();
+                }])->withCount('stores')->where('parent_id', 0)->orderBy('sort', 'desc')->orderBy('name', 'asc')->paginate(12);
             }
 
-            return response()->json([
+            if ($categories->count() == 0) {
+                $data = [
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'No store found'
+                ];
+                return response()->json($data, JsonResponse::HTTP_OK);
+            }
+
+            $data = [
                 'status' => JsonResponse::HTTP_OK,
+                'message' => 'Success',
                 'data' => [
                     'main_banner' => getBannerImageUrl($page),
                     'categories' => CategoryResource::collection($categories)
                 ]
-            ]);
+            ];
+
+            return response()->json($data, JsonResponse::HTTP_OK);
+        } catch (Exception $e) {
+            $data = [
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => 'Something went wrong, try again'
+            ];
+            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function show($slug, $letter = null)
+    {
+        try {
+            if (!empty($letter)) {
+                $stores = Store::where('name', 'like', $letter . '%')
+                    ->whereHas('categories', function ($query) use ($slug) {
+                        $query->whereSlug($slug)->where('parent_id', '!=', 0)->whereStatus(1);
+                    })->with(['categories' => function ($query) use ($slug) {
+                        $query->whereSlug($slug)->whereStatus(1);
+                    }])->whereStatus('active')->paginate(12);
+            } else {
+                $stores = Store::whereHas('categories', function ($query) use ($slug) {
+                    $query->whereSlug($slug)->where('parent_id', '!=', 0)->whereStatus(1);
+                })->with(['categories' => function ($query) use ($slug) {
+                    $query->whereSlug($slug)->where('parent_id', '!=', 0)->whereStatus(1);
+                }])->whereStatus('active')->paginate(12);
+            }
+
+            if ($stores->count() == 0) {
+                $data = [
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'No store found'
+                ];
+                return response()->json($data, JsonResponse::HTTP_OK);
+            }
+
+            $data = [
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'success',
+                'data' => [
+                    'categories' => [
+                        [
+                            'main_banner' => getBannerImageUrl($stores[0]->categories->first()->banner_upload),
+                            'title' => $stores[0]->categories->first()->name,
+                            'stores' => StoreResource::collection($stores)
+                        ]
+                    ],
+                ]
+            ];
+
+            return response()->json($data, JsonResponse::HTTP_OK);
         } catch (Exception $e) {
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => 'Something went wrong, try again'
-            ]);
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-    public function show($slug)
-    {
-        try {
-
-            $stores = Store::whereHas('categories', function ($query) use ($slug) {
-                $query->whereSlug($slug)->whereStatus(1);
-            })->with(['categories' => function ($query) use ($slug) {
-                $query->whereSlug($slug)->whereStatus(1);
-            }])->whereStatus('active')->paginate(2);
-
-            return response()->json([
-                'status' => JsonResponse::HTTP_OK,
-                'data' => [
-                    'main_banner' => getBannerImageUrl($stores[0]->categories->first()->banner_upload),
-                    'categories' => CategoryResource::collection($stores)
-                ]
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage().'Something went wrong, try again'
-            ]);
-        }
-    }
-    public function childCategories($slug)
-    {
-
-        $parent_category = Category::with('stores')->where('slug', $slug)->first();
-        $categories = Category::select('*')->where('parent_id', $parent_category->id);
-        if (request()->get('search')) {
-            $categories = $categories->where('name', 'like', '%' . request()->get('search') . '%');
-        }
-        if (request()->get('name_sort')) {
-            $order = request()->get('name_sort') == 'descending' ? 'desc' : 'asc';
-            $categories = $categories->orderBy('name', $order);
-        } else {
-            $categories = $categories->orderBy('id', 'DESC');
-        }
-        $categories = $categories->latest()->get();
-        return CategoryResource::collection($categories);
     }
 }

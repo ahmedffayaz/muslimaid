@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
 use App\Http\Resources\Home\SlideResource;
+use App\Http\Resources\StoreDetailResource;
 use App\Http\Resources\Home\FeaturedCategoryResource;
 
 class HomeController extends Controller
@@ -57,16 +58,17 @@ class HomeController extends Controller
                 'data' => [
                     'base_url' => url('/'),
                     'main_banner_images' => SlideResource::collection($slides),
-                    'featured_stores' => StoreResource::collection($featuredStores),
+                    'featured_stores' => StoreDetailResource::collection($featuredStores),
                     'featured_categories' => FeaturedCategoryResource::collection($featuredCategories)
                 ]
             ];
             return response()->json($data, JsonResponse::HTTP_OK);
         } catch (Exception $e) {
-            return response()->json([
+            $data = [
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage() . 'Something went wrong, try again'
-            ]);
+                'message' => 'Something went wrong, try again'
+            ];
+            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

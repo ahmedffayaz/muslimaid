@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Exception;
+use App\Models\Page;
 use App\Models\Store;
 use App\Models\Slider;
 use App\Traits\ApiResponser;
@@ -23,26 +24,39 @@ class StoreController extends Controller
     public function index(Request $request)
     {
         try {
-            $stores = Store::select('stores.*')->whereStatus('active');
-            if($request->get('search')){
-                $stores = $stores->where('name','like','%'.$request->get('search').'%');
-            }
-            if($request->get('name_sort')){
-                $order = $request->get('name_sort') == 'descending' ? 'desc' :'asc';
-                $stores = $stores->orderBy('name',$order);
-            }else{
-                $stores = $stores->orderBy('id','DESC');
-            }
-            $limit = $request->has('per_page') ? $request->get('per_page') : 10;
-            $stores = $stores->paginate($limit);
-            $stores->appends(['search' => $request->get('search'), 'per_page'=>$limit,'name_sort' => $request->get('name_sort')]);
+            $page = Page::whereSlug('stores')->whereType('system')->whereStatus('active')->pluck('banner_image')->firstOrFail();
 
-            return StoreResource::collection($stores);
+            $stores = Store::whereStatus('active')->paginate(12);
+
+            if ($stores->count() == 0) {
+                $data = [
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'No store found'
+                ];
+                return response()->json($data, JsonResponse::HTTP_OK);
+            }
+
+            $data = [
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Success',
+                'data' => [
+                    'main_banner_image' => getBannerImageUrl($page),
+                    'stores' => StoreResource::collection($stores)
+                ]
+            ];
+            return response()->json($data, JsonResponse::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
+            $data = [
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'message' => 'Something went wrong, try again.'
+            ];
+            return response()->json($data, JsonResponse::HTTP_NOT_FOUND);
         } catch (Exception $e) {
-            return response()->json([
+            $data = [
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => 'Something went wrong, try again.'
-            ]);
+            ];
+            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -55,22 +69,25 @@ class StoreController extends Controller
     public function show($slug)
     {
         try{
-            $store = Store::where('slug',$slug)->firstOrFail();
-            return response()->json([
+            $store = Store::where('slug',$slug)->whereStatus('active')->firstOrFail();
+            $data = [
                 'status' => JsonResponse::HTTP_OK,
                 'message' => 'Success',
-                'data' => ['stores' => new StoreResource($store)]
-            ]);
+                'data' => ['fav_stores' => new StoreResource($store)]
+            ];
+            return response()->json($data, JsonResponse::HTTP_OK);
         } catch (ModelNotFoundException $ex) { // Store not found
-            return response()->json([
+            $data = [
                 'status' => JsonResponse::HTTP_NOT_FOUND,
                 'message' => 'Store not found'
-            ]);
+            ];
+            return response()->json($data, JsonResponse::HTTP_NOT_FOUND);
         } catch (Exception $ex) { // Anything that went wrong
-            return response()->json([
+            $data = [
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => 'Something went wrong, try again.'
-            ]);
+            ];
+            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
