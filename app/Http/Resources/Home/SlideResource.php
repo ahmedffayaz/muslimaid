@@ -17,19 +17,15 @@ class SlideResource extends JsonResource
         $bannerLogo = ($this->logo == 'default1.png' || $this->logo == 'default2.png' || $this->logo == 'default3.png') ? asset('frontend/images/slides/logo/' . $this->logo) : asset($this->logo);
         $bannerImage = ($this->banner == 'default1.png' || $this->banner == 'default2.png' || $this->banner == 'default3.png') ? asset('frontend/images/slides/' . $this->banner) : asset($this->banner);
 
-        $data = [
+        return [
             'order' => $this->order,
             'banner_type' => $this->slider_type,
             'banner_logo' => $bannerLogo,
             'banner_image' => $bannerImage,
             'description' => $this->description,
-            'link' => $this->link
+            'link' => $this->link,
+            'urk_key' => $this->when($this->slider_type == 'store', optional($this->store)->slug),
+            'title' => $this->when($this->slider_type == 'store', optional($this->store)->name)
         ];
-
-        if ($this->slider_type == 'store') {
-            $data['url_key'] = optional($this->store)->slug;
-        }
-
-        return $data;
     }
 }

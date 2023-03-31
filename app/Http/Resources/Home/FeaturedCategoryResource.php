@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Home;
 
+use App\Http\Resources\StoreResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class FeaturedCategoryResource extends JsonResource
@@ -24,7 +25,7 @@ class FeaturedCategoryResource extends JsonResource
             'title' => $this->name,
             'url_key' => $this->slug,
             'main_banner' => $banner,
-            'stores' => FeaturedCategoryStoreResource::collection($this->stores)
+            'stores' => StoreResource::collection($this->stores)
         ];
     }
 }

@@ -17,18 +17,11 @@ class StoreResource extends JsonResource
      */
     public function toArray($request)
     {
-        if($this->cashback){
-            return [
-                'title' => $this->name,
-                'url_key' => $this->slug,
-                'banner_image' => getImageUrl($this->images()->where('title', 'cover')->first()),
-                'big_icon' => getImageUrl($this->logo->first()),
-                'description' => $this->description,
-                'terms_conditions' => $this->terms_conditions,
-                'cashback' => $this->getCashback(),
-                'cashbacks' => CashbackResource::collection($this->cashbacks)
-            ];
-        }
-
+        return [
+            'title' => $this->name,
+            'url_key' => $this->slug,
+            'big_icon' => getImageUrl($this->logo->first()),
+            'cashback' => $this->getCashback()
+        ];
     }
 }
