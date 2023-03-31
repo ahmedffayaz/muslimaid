@@ -9,8 +9,8 @@ use App\Models\Store;
 use App\Models\Category;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StoreResource;
 use App\Http\Resources\Home\SlideResource;
-use App\Http\Resources\Home\FeaturedStoreResource;
 use App\Http\Resources\Home\FeaturedCategoryResource;
 
 class HomeController extends Controller
@@ -20,34 +20,53 @@ class HomeController extends Controller
         try {
             $slides = Slide::whereHas('slider', function ($query) {
                 $query->whereName('Mobile Home');
-            })->with('store')->orderBy('order', 'ASC')->limit(10)->get();
+            })->with(['store' => function ($query) {
+                $query->select('id', 'name', 'slug');
+            }])->orderBy('order', 'ASC')->limit(10)->get();
 
-            $featureTag = Tag::where('title', 'app_featured1_homepage')->pluck('id')->first();
+            $featuredTag = Tag::where('title', 'app_featured1_homepage')->pluck('id')->first();
 
-            $featuredStores = Store::whereHas('tags', function ($query) use ($featureTag) {
-                isset($featureTag) ? $query->where('title', 'app_featured1_homepage') : $query->where('title', 'app_featured_homepage');
-            })->with('cashbacks')->latest()->limit(10)->get();
+            $featuredStores = Store::select('id', 'name', 'slug', 'status')
+                ->whereHas('tags', function ($query) use ($featuredTag) {
+                    $query->when(isset($featuredTag), function ($query) {
+                        $query->where('title', 'app_featured1_homepage');
+                    }, function ($query) {
+                        $query->where('title', 'app_featured_homepage');
+                    });
+                })->latest()->take(10)->whereStatus('active')->get();
 
-            $featuredCategories = Category::with(['stores' => function ($query) use ($featureTag) {
-                $query->whereHas('categories.tags', function ($query) use ($featureTag) {
-                    isset($featureTag) ? $query->where('title', 'app_featured1_homepage') : $query->where('title', 'app_featured_homepage');
-                })->latest()->limit(10);
-            }])->whereHas('tags', function ($query) use ($featureTag) {
-                isset($featureTag) ? $query->where('title', 'app_featured1_homepage') : $query->where('title', 'app_featured_homepage');
-            })->latest()->limit(10)->get();
+            $featuredCategories = Category::whereHas('tags', function ($query) use ($featuredTag) {
+                $query->when(isset($featuredTag), function ($query) {
+                    $query->where('title', 'app_featured1_homepage');
+                }, function ($query) {
+                    $query->where('title', 'app_featured_homepage');
+                });
+            })->with(['stores' => function ($query) use ($featuredTag) {
+                $query->whereHas('categories.tags', function ($query) use ($featuredTag) {
+                    $query->when(isset($featuredTag), function ($query) {
+                        $query->where('title', 'app_featured1_homepage');
+                    }, function ($query) {
+                        $query->where('title', 'app_featured_homepage');
+                    });
+                })->whereStatus('active')->limit(10);
+            }])->whereStatus(1)->limit(10)->get();
 
             $data = [
                 'status' => JsonResponse::HTTP_OK,
+                'message' => 'Success',
                 'data' => [
                     'base_url' => url('/'),
                     'main_banner_images' => SlideResource::collection($slides),
-                    'featured_stores' => FeaturedStoreResource::collection($featuredStores),
+                    'featured_stores' => StoreResource::collection($featuredStores),
                     'featured_categories' => FeaturedCategoryResource::collection($featuredCategories)
                 ]
             ];
             return response()->json($data, JsonResponse::HTTP_OK);
         } catch (Exception $e) {
-            return response()->json('Something went wrong, try again');
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage() . 'Something went wrong, try again'
+            ]);
         }
     }
 }

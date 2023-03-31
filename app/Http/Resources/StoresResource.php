@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Resources\Home;
+namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FeaturedStoreResource extends JsonResource
+class StoresResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -17,7 +17,6 @@ class FeaturedStoreResource extends JsonResource
         return [
             'title' => $this->name,
             'url_key' => $this->slug,
-            'banner_image' => getImageUrl($this->images()->where('title', 'cover')->first()),
             'big_icon' => getImageUrl($this->logo->first()),
             'cashback' => $this->getCashback()
         ];

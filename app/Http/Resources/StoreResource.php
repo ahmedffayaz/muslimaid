@@ -23,12 +23,11 @@ class StoreResource extends JsonResource
                 'url_key' => $this->slug,
                 'banner_image' => getImageUrl($this->images()->where('title', 'cover')->first()),
                 'big_icon' => getImageUrl($this->logo->first()),
-                'description' => $this->description,
-                'terms_conditions' => $this->terms_conditions,
+                'description' => $this->when($this->description, $this->description),
+                'terms_conditions' => $this->when($this->terms_conditions, $this->terms_conditions),
                 'cashback' => $this->getCashback(),
-                'cashbacks' => CashbackResource::collection($this->cashbacks)
+                'cashbacks' => $this->when($this->cashbacks, CashbackResource::collection($this->cashbacks))
             ];
         }
-
     }
 }
