@@ -54,19 +54,19 @@ class CategoryRequest extends FormRequest
         $validator->after(function ($validator) {
             $category = $this->route('category');
             if ($category) {
-                if ($this->logo_type == 'upload' && empty($category->logo_upload)) {
+                if ($this->logo_type == 'upload' && empty($this->logo_upload) && empty($category->logo_upload)) {
                     $validator->errors()->add('logo_upload', 'The logo upload field is required when logo type is upload.');
                 }
 
-                if ($this->banner_type == 'upload' && empty($category->banner_upload)) {
+                if ($this->banner_type == 'upload' && empty($this->banner_upload) && empty($category->banner_upload)) {
                     $validator->errors()->add('banner_upload', 'The banner upload field is required when banner type is upload.');
                 }
 
-                if ($this->logo_type == 'link' && empty($category->logo_link)) {
+                if ($this->logo_type == 'link' && empty($this->logo_link) && empty($category->logo_link)) {
                     $validator->errors()->add('logo_link', 'The logo link field is required when logo type is link.');
                 }
 
-                if ($this->banner_type == 'link' && empty($category->banner_link)) {
+                if ($this->banner_type == 'link' && empty($this->banner_link) && empty($category->banner_link)) {
                     $validator->errors()->add('banner_link', 'The banner link field is required when banner type is link.');
                 }
             } else {

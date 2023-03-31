@@ -65,7 +65,6 @@ class PagesController extends Controller
             $page->description = $request->short_description;
             $page->meta_description = $request->meta_description;
             $page->meta_keyword = $request->meta_keyword;
-            $page->default = 0;
             $page->save();
             DB::commit();
 

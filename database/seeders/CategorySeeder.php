@@ -44,6 +44,7 @@ class CategorySeeder extends Seeder
             }
             $categories[] = [
                 'id' => $category['id'],
+                'slug' => $slug,
                 'parent_id' => arrayValueExists($category, 'parent_id') ? $category['parent_id'] : 0,
                 'name' => $category['name'],
                 'sort' => $sort,
@@ -56,7 +57,7 @@ class CategorySeeder extends Seeder
                 'banner_upload' => arrayValueExists($category, 'banner_upload') ? $category['banner_upload'] : null,
                 'banner_link' => arrayValueExists($category, 'banner_link') ? $category['banner_link'] : null,
                 'status' => isset($category['status']) && $category['status'] == '1' ? 1 : 0,
-                'is_map_enable' => isset($category['is_map_enable']) && $category['is_map_enable'] == '1' ? 1 : 0,
+                'is_map_enable' => ((isset($category['is_map_enable']) && $category['is_map_enable']) || $slug == 'cashback-to-your-door') == '1' ? 1 : 0,
                 'url' => arrayValueExists($category, 'url') ? $category['url'] : null,
                 'meta_keyword' => arrayValueExists($category, 'meta_keyword') ? $category['meta_keyword'] : null,
                 'meta_description' => arrayValueExists($category, 'meta_description') ? $category['meta_description'] : null,

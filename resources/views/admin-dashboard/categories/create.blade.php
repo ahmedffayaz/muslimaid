@@ -98,7 +98,7 @@
         </div>
         <div class="col-lg-6 logo_upload">
             <div class="form-group">
-                <label class="form-label" for="logo_upload">Icon Upload</label>
+                <label class="form-label" for="logo_upload">Logo Upload</label>
                 <div class="form-control-wrap">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" name="logo_upload" id="logo_upload" value="{{$isEdit ? $category->logo_upload : ''   }}"onchange="readBannerURL(this);">
