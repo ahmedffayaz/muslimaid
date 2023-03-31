@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailJob;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -85,6 +86,9 @@ class UserController extends Controller
 
             $user->assignRole('user');
             DB::commit();
+            //send email to user to verify email address
+            dispatch(new SendEmailJob($user));
+            
             flash()->success('New user added successfully');
             return redirect()->route('admin.users.index');
         } catch (Throwable $th) {
