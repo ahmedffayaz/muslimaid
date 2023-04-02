@@ -58,7 +58,7 @@ class CategoryController extends Controller
         return view('frontend.categories.show', compact('category', 'stores', 'slug'));
     }
 
-    private function sortByDistance($data, $stores)
+    private function sortByDistance($data, $stores, $isSortBy = false)
     {
         // Calculate distance between user and each store
         foreach ($stores as $store) {
@@ -76,7 +76,7 @@ class CategoryController extends Controller
             }
         }
 
-        return $stores;
+        return $isSortBy ? $stores->sortBy('distance') : $stores;
     }
 
     private function calculateDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo)
@@ -136,8 +136,9 @@ class CategoryController extends Controller
                 $allStores = $this->sortByDistance($data, $allStores);
             }
         } else {
-            $allStores = $category->stores()->latest()->paginate($request->input('perPage'));
-            $allStores = $this->sortByDistance($data, $allStores);
+            $allStores = $category->stores()->latest()->get();
+            $allStores = $this->sortByDistance($data, $allStores, true);
+            $allStores = $allStores->paginate($request->input('perPage'));
         }
         return [
             'view' => view('frontend.categories.view', compact('allStores', 'slug'))->render(),
