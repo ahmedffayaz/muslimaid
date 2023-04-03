@@ -15,6 +15,7 @@ use App\Models\SiteSetting;
 use App\Models\StoreReview;
 use Illuminate\Support\Str;
 use App\Models\EmailTemplate;
+use App\Models\Slider;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
@@ -27,6 +28,16 @@ function getPageTemplates($slug)
     $page = Page::where('slug', $slug)->first();
     return $page;
 }
+
+function getHomeSliders()
+{
+    $name = "Before Login Home";
+    if (auth()->user()){
+        $name = "After Login Home";
+    }
+    $slider = Slider::where('name', $name)->first();
+    return $slider;
+} 
 
 //feature store for cashblack
 function getFeaturesStores($feature_tag)
