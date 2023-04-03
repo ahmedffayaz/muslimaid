@@ -12,6 +12,7 @@ use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
 use App\Http\Resources\SliderResource;
+use App\Http\Resources\StoreDetailResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
 
 class StoreController extends Controller
@@ -73,7 +74,7 @@ class StoreController extends Controller
             $data = [
                 'status' => JsonResponse::HTTP_OK,
                 'message' => 'Success',
-                'data' => ['fav_stores' => new StoreResource($store)]
+                'data' => ['fav_stores' => new StoreDetailResource($store)]
             ];
             return response()->json($data, JsonResponse::HTTP_OK);
         } catch (ModelNotFoundException $ex) { // Store not found
