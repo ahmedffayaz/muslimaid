@@ -79,9 +79,7 @@ class UserController extends Controller
                 'address' => $request->address,
                 'avatar' => $avatarImage,
                 'status' => 'active',
-                'sort_code' => isset($request->sort_code) ? $request->sort_code : null,
-                'bank_acc_no' => isset($request->bank_acc_no) ? $request->bank_acc_no : null,
-                'paypal_email' => isset($request->paypal_email) ? $request->paypal_email : null,
+                'date_of_birth' => $request->date_of_birth,
             ]);
 
             $user->assignRole('user');
@@ -147,9 +145,7 @@ class UserController extends Controller
                 'address' => $request->input('address'),
                 'status' => $request->input('status'),
                 'avatar' => $avatarImage,
-                'sort_code' => isset($request->sort_code) ? $request->sort_code : $user->sort_code,
-                'bank_acc_no' => isset($request->bank_acc_no) ? $request->bank_acc_no : $user->bank_acc_no,
-                'paypal_email' => isset($request->paypal_email) ? $request->paypal_email : $user->paypal_email,
+                'date_of_birth' => $request->date_of_birth,
             ]);
 
             $user->syncRoles($request->input('roles'));

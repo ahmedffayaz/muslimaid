@@ -21,8 +21,7 @@
                                     <div class="card-head">
                                         <h5 class="card-title">User Info</h5>
                                     </div>
-                                    <form action="{{ route('admin.users.store') }}" enctype="multipart/form-data" class="gy-3 user-form is-alter" 
-                                        method="POST">
+                                    <form action="{{ route('admin.users.store') }}" enctype="multipart/form-data" class="gy-3 user-form is-alter" method="POST">
                                         @csrf
                                         <div class="row g-4">
                                             <div class="col-lg-12 text-center">
@@ -68,28 +67,14 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label">Sort Code </label>
+                                                    <label class="form-label" for="date_of_birth">Date of Birth </label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" name="sort_code" value="{{ old('sort_code') ?? null }}">
+                                                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
+                                                            value="{{ old('date_of_birth') ?? null }}">
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label class="form-label">Bank Account Number </label>
-                                                    <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" name="bank_acc_no" value="{{ old('bank_acc_no') ?? null }}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group">
-                                                    <label class="form-label">Paypal Email </label>
-                                                    <div class="form-control-wrap">
-                                                        <input type="email" class="form-control" name="paypal_email" value="{{ old('paypal_email') ?? null }}">
-                                                    </div>
-                                                </div>
-                                            </div>
+
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label class="form-label" for="pay-amount-1">Address </label>
@@ -156,7 +141,7 @@
             }
         }
 
-        
+
         jQuery.validator.addMethod("regex", function(value, element) {
             return this.optional(element) || /^[A-Za-z ]+$/i.test(value);
         }, "Only alphabetic name is allow");

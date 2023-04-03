@@ -26,6 +26,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'password',
         'email_verified_at',
+        'date_of_birth',
         'registration_type',
         'phone',
         'address',
@@ -38,9 +39,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'referred_at',
         'is_email_verified',
         'email_preference',
-        'sort_code',
-        'bank_acc_no',
-        'paypal_email'
     ];
 
     /**
@@ -96,14 +94,14 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $total_cashback = 0;
         $cashback = $this->cashbacks();
-        if($status != null){
-            if($status == 5){
+        if ($status != null) {
+            if ($status == 5) {
                 $total_cashback = $cashback->get()->where('status', 6)->sum('amount');
             }
             $cashback->where('status', $status);
         }
         $total_cashback += $cashback->sum('amount');
-        return $total_cashback; 
+        return $total_cashback;
     }
 
     public function clicks()

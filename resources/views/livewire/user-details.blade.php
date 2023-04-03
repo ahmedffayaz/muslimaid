@@ -123,27 +123,13 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="sort_code">Sort Code</label>
+                                                            <label class="form-label" for="date_of_birth">Date of Birth </label>
                                                             <div class="form-control-wrap">
-                                                                <input type="number" class="form-control" id="sort_code" value="{{ $user->sort_code }}" name="sort_code">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="bank_acc_no">Bank Account Number</label>
-                                                            <div class="form-control-wrap">
-                                                                <input type="number" class="form-control" id="bank_acc_no" value="{{ $user->bank_acc_no }}" name="bank_acc_no">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="paypal_email">Paypal Email </label>
-                                                            <div class="form-control-wrap">
-                                                                <input type="email" class="form-control" id="paypal_email" value="{{ $user->paypal_email }}" name="paypal_email">
+                                                                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
+                                                                    value="{{ $user->date_of_birth ?? '' }}">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -151,8 +137,7 @@
                                                         <div class="form-group">
                                                             <label class="form-label" for="address">Address</label>
                                                             <div class="form-control-wrap">
-                                                                <textarea type="text" class="form-control" id="address" value="{{ $user->address ?? '' }}"
-                                                                    name="address"></textarea>
+                                                                <textarea type="text" class="form-control" id="address" value="{{ $user->address ?? '' }}" name="address">{{ $user->address }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>

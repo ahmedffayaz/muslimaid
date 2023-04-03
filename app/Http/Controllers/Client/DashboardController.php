@@ -68,9 +68,7 @@ class DashboardController extends Controller
         $user->update([
             'first_name' => $request->firstname,
             'last_name' => $request->lastname,
-            'sort_code' => isset($request->sort_code) ? $request->sort_code : $user->sort_code,
-            'bank_acc_no' => isset($request->bank_acc_no) ? $request->bank_acc_no : $user->bank_acc_no,
-            'paypal_email' => isset($request->paypal_email) ? $request->paypal_email : $user->paypal_email,
+            'date_of_birth' => $request->date_of_birth,
             'phone' => $request->phone,
             'address' => $request->address,
             'avatar' => $avatarImage
