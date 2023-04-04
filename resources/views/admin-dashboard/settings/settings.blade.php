@@ -1170,14 +1170,12 @@
                     contentType: false,
                     processData: false,
                     success: function(data) {
-
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
                             NioApp.Toast(data.message, data.response);
                         })(NioApp, jQuery);
-                        location.reload(true);
-
+                        // location.reload(true);
                     },
                     error: function(data) {
 

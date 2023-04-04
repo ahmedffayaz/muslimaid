@@ -56,13 +56,19 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        return Validator::make($data, [
+        $rules = [
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
-            'g-recaptcha-response' => ['required', 'captcha'],
-        ]);
+        ];
+        // Check if reCAPTCHA key is set
+        if (!empty(getSpecificSetting('google_recaptcha_site_key')) && !empty(getSpecificSetting('google_recaptcha_secret_key'))) {
+            $rules['g-recaptcha-response'] = 'required|captcha';
+        }
+
+        return Validator::make($data, $rules);
+
     }
 
     public function showRegistrationForm(Request $request)

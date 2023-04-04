@@ -21,6 +21,7 @@ trait UserBonus
             $userCashback = UserCashback::updateOrCreate([
                 'user_id' => $user->id,
             ], [
+                'user_id' => $user->id,
                 'amount' => $welcomeBonus,
                 'status' => $status,
                 'type' => 'welcome_bonus'

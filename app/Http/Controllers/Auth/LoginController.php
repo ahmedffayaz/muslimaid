@@ -92,6 +92,10 @@ class LoginController extends Controller
             return redirect()->back()->with(['message' => 'Your account is inactive']);
         }
 
+        if ($emailCheck->status == 'pending') {
+            return redirect()->back()->with(['message' => 'First verify your account for login']);
+        }
+
         $this->validateLogin($request);
 
         // If the class is using the ThrottlesLogins trait, we can automatically throttle
@@ -132,11 +136,16 @@ class LoginController extends Controller
      */
     protected function validateLogin(Request $request)
     {
-        $request->validate([
+        $rules = [
             $this->username() => 'required|string',
             'password' => 'required|string',
-            'g-recaptcha-response' => 'required|captcha', 
-        ]);
+        ];
+        // Check if reCAPTCHA key is set
+        if (!empty(getSpecificSetting('google_recaptcha_site_key')) && !empty(getSpecificSetting('google_recaptcha_secret_key'))) {
+            $rules['g-recaptcha-response'] = 'required|captcha';
+        }
+
+        $request->validate($rules);
     }
     protected function redirectTo()
     {
