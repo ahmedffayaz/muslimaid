@@ -76,8 +76,8 @@ class StoreController extends Controller
         $validator = Validator::make($request->all(), [
             'store_name' => 'required|max:255',
             'network_id' => 'required',
-            'tracking_url' => 'required|url',
-            'deeplink_url' => 'nullable|url',
+            'tracking_url' => ['required', 'regex:/^https?:\/\/[a-z0-9-\.]+\.[a-z]{2,}(?:\/[^?"\'\s]*\?.*)?$/i'],
+            'deeplink_url' => ['nullable', 'regex:/^https?:\/\/[a-z0-9-\.]+\.[a-z]{2,}(?:\/[^?"\'\s]*\?.*)?$/i'],
             'store_url' => 'required|url',
             'description' => 'nullable'
         ]);
@@ -166,8 +166,8 @@ class StoreController extends Controller
         $request->validate([
             'store_name' => 'required|max:255',
             'network_id' => 'required',
-            'tracking_url' => 'required|url',
-            'deeplink_url' => 'nullable|url',
+            'tracking_url' => ['required', 'regex:/^https?:\/\/[a-z0-9-\.]+\.[a-z]{2,}(?:\/[^?"\'\s]*\?.*)?$/i'],
+            'deeplink_url' => ['nullable', 'regex:/^https?:\/\/[a-z0-9-\.]+\.[a-z]{2,}(?:\/[^?"\'\s]*\?.*)?$/i'],
             'store_url' => 'required|url',
             'description' => 'nullable',
             'terms_conditions' => 'nullable'

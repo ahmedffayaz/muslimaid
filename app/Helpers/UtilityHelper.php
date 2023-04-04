@@ -337,7 +337,7 @@ function getEventsForMenu()
 
 function getCategories($limit = null, $offset = 0)
 {
-    $categories = Category::where('parent_id', 0)->orderBy('sort', 'desc')->orderBy('name', 'asc')
+    $categories = Category::where('parent_id', 0)->whereStatus('1')->orderBy('sort', 'desc')->orderBy('name', 'asc')
         ->when(!empty($limit), function ($q) use ($limit) {
             $q->limit($limit);
         })

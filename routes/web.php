@@ -295,8 +295,10 @@ Route::namespace('App\Http\Controllers\Client')
         Route::get('dashboard', [App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
         Route::get('profile', [App\Http\Controllers\Client\DashboardController::class, 'edit'])->name('profile');
         Route::put('profile/update/{user}', [App\Http\Controllers\Client\DashboardController::class, 'update'])->name('profile.update');
-        Route::get('cashback', [App\Http\Controllers\Client\DashboardController::class, 'cashback'])->name('cashback'); 
+        Route::get('cashback', [App\Http\Controllers\Client\DashboardController::class, 'cashback'])->name('cashback');
+        Route::get('cashouts', [App\Http\Controllers\Client\DashboardController::class, 'cashouts'])->name('cashouts'); 
         Route::post('searchCashback', [App\Http\Controllers\Client\DashboardController::class, 'searchCashback'])->name('search_cashback');
+        Route::post('searchCashouts', [App\Http\Controllers\Client\DashboardController::class, 'searchCashouts'])->name('search_cashout');
         Route::get('clicks', [App\Http\Controllers\Client\DashboardController::class, 'clicks'])->name('clicks');
         Route::get('change_password', [App\Http\Controllers\Client\DashboardController::class, 'changePassword'])->name('change_password');
         Route::post('users/passwordsave/', [App\Http\Controllers\Client\DashboardController::class, 'savePassword'])->name('save_password');
