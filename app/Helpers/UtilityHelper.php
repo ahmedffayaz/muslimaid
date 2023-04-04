@@ -29,9 +29,9 @@ function getPageTemplates($slug)
     return $page;
 }
 
-function getSpecificSetting($title)
+function getSpecificSetting($type)
 {
-    $setting = SiteSetting::where('title', $title)->pluck('value')->first();
+    $setting = SiteSetting::where('type', $type)->pluck('value')->first();
     return $setting;
 }
 
