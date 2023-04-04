@@ -59,13 +59,12 @@ class PagesController extends Controller
             $page->title = $request->title;
             $page->slug = isset($pageSlug) ? $slug . '-' . ($lastId + 1) : $slug;
             $page->excerpt = $request->excerpt;
-            $page->lb_content = $request->content;
+            $page->lb_content = $this->addContainerToParagraphs($request->content);
             $page->status = $request->status;
             $page->banner_image = parse_url($request->filepath)['path'];
             $page->description = $request->short_description;
             $page->meta_description = $request->meta_description;
             $page->meta_keyword = $request->meta_keyword;
-            $page->default = 0;
             $page->save();
             DB::commit();
 
@@ -122,7 +121,7 @@ class PagesController extends Controller
             $page->update([
                 'title' => $request->input('title'),
                 'excerpt' => $request->input('excerpt'),
-                'lb_content' => $request->input('content'),
+                'lb_content' => $this->addContainerToParagraphs($request->content),
                 'status' => $request->input('status') == 'inactive' && $page->type == 'general' ? 'inactive' : 'active',
                 'description' => $request->input('short_description'),
                 'meta_description' => $request->input('meta_description'),
@@ -157,6 +156,17 @@ class PagesController extends Controller
                 'error' => 'Something went wrong, try again.'
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    function addContainerToParagraphs($description){
+        // replace matching <p> tag with wrapped <div> tag
+        $updatedDescription = preg_replace('/<p>(?!\[.*?\])(.*?)<\/p>/', '<div class="container"><p>$1</p></div>', $description);
+        $updatedDescription = preg_replace('/<div class="container">(.*?)<div class="container">(.*?)<\/div>(.*?)<\/div>/', '<div class="container">$1$2$3</div>', $updatedDescription);
+        $updatedDescription = str_replace('<div class="container"><p></p></div>', '', $updatedDescription);
+        $updatedDescription = str_replace('<div class="container"><p><p>', '<div class="container"><p>', $updatedDescription);
+        $updatedDescription = str_replace('</p></div></p>', '</p></div>', $updatedDescription);
+        // dd($updatedDescription);
+        return $updatedDescription;
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\CharityType;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Charity extends Model
 {
@@ -31,5 +32,9 @@ class Charity extends Model
     public function Country()
     {
         return $this->hasOne(Country::class, 'id', 'country');
+    }
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
     }
 }

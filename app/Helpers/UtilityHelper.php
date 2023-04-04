@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Models\Cashout;
 use App\Models\SeoRule;
 use App\Models\Category;
+use App\Models\Charity;
 use App\Models\Currency;
 use App\Models\Page;
 use App\Models\UserVerify;
@@ -14,6 +15,7 @@ use App\Models\SiteSetting;
 use App\Models\StoreReview;
 use Illuminate\Support\Str;
 use App\Models\EmailTemplate;
+use App\Models\Slider;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
@@ -27,6 +29,16 @@ function getPageTemplates($slug)
     return $page;
 }
 
+function getHomeSliders()
+{
+    $name = "Before Login Home";
+    if (auth()->user()){
+        $name = "After Login Home";
+    }
+    $slider = Slider::where('name', $name)->first();
+    return $slider;
+} 
+
 //feature store for cashblack
 function getFeaturesStores($feature_tag)
 {
@@ -34,6 +46,14 @@ function getFeaturesStores($feature_tag)
         $query->where('title', $feature_tag);
     })->latest()->get();
     return $stores;
+}
+
+function getFeaturesCharities($feature_tag)
+{
+    $charities = Charity::whereHas('tags', function ($query) use ($feature_tag) {
+        $query->where('title', $feature_tag);
+    })->latest()->get();
+    return $charities;
 }
 
 function separatePageKeywords($content)
@@ -335,7 +355,9 @@ function getCategories($limit = null, $offset = 0)
         ->when(!empty($offset), function ($q) use ($offset) {
             $q->offset($offset);
         })
-        ->get();
+        ->get()->sortBy(function ($category) {
+            return $category->slug === "cashblack-to-your-door" ? 1 : 0;
+        });
 
     return $categories;
 }
@@ -354,12 +376,6 @@ function getStores($limit = null, $offset = 0)
     return $categories;
 }
 
-function getPaginatedStores($perPage = 12, $letter = null)
-{
-    return Store::when(!empty($letter), function ($q) use ($letter) {
-        $q->where('name', 'like', $letter . '%');
-    })->orderBy('name', 'asc')->paginate($perPage);
-}
 
 function SiteSetting()
 {
@@ -540,7 +556,7 @@ function getImageUrl($url)
         $baseDir = $url->is_fake ? 'frontend/images/logos/' : '';
 
         return strpos($url->image, 'http') !== false
-            ? $url->image
+            ? (!$url->image ? asset('cashblack/img/no-logo.png') : $url->image)
             : asset($baseDir . ltrim($url->image, '/'));
     }
 
@@ -687,11 +703,18 @@ function isWithdrawalAllowed()
 
 function getSiteLogo()
 {
-    if (isset(SiteSetting()['website_logo']) && SiteSetting()['website_logo'] != 'default.png') {
-        return asset('storage/dashboard/images/logo/' . SiteSetting()['website_logo']);
-    } else {
-        return asset('admin-dashboard/images/logo.png');
-    }
+    $settings = SiteSetting();
+    $siteLogo = (empty($settings['website_logo']) ? asset('admin-dashboard/images/logo.png') : ($settings['website_logo'] == 'default.png' ? asset('admin-dashboard/images/logo.png') : ($settings['website_logo'] == 'cashblack-default.png'
+        ? asset('cashblack/img/logo.png') : asset('storage/dashboard/images/logo/' . $settings['website_logo']))));
+    return $siteLogo;
+}
+
+function getDashboardLogo()
+{
+    $settings = SiteSetting();
+    $siteLogo = (empty($settings['dashboard_logo']) ? asset('admin-dashboard/images/logo-dark.png') : ($settings['dashboard_logo'] == 'default.png' ? asset('admin-dashboard/images/logo-dark.png') : ($settings['dashboard_logo'] == 'cashblack-default.png'
+        ? asset('cashblack/img/logo.png') : asset('storage/dashboard/images/logo/' . $settings['dashboard_logo']))));
+    return $siteLogo;
 }
 
 function getRandomColorClass()
@@ -728,11 +751,10 @@ function getCurrencySymbol($symbol = null)
 
 function getSiteFavicon()
 {
-    if (isset(SiteSetting()['favicon']) && SiteSetting()['favicon'] != 'default.png') {
-        return asset('storage/dashboard/images/logo/' . SiteSetting()['favicon']);
-    } else {
-        return asset('admin-dashboard/images/favicon.png');
-    }
+    $settings = SiteSetting();
+    $siteLogo = (empty($settings['favicon']) ? asset('admin-dashboard/images/favicon.png') : ($settings['favicon'] == 'default.png' ? asset('admin-dashboard/images/favicon.png') : ($settings['favicon'] == 'cashblack-default.png'
+        ? asset('cashblack/img/favicon.png') : asset('storage/dashboard/images/logo/' . $settings['favicon']))));
+    return $siteLogo;
 }
 
 function resolvePageShortCodes($content, $data = [])

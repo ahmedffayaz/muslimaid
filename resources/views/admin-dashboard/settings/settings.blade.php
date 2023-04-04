@@ -143,13 +143,7 @@
                                                                 <div class=" logo">
                                                                     <label for="website-logo-input">
                                                                         <img id="website-logo"
-                                                                            src="{{ !isset($settings['website_logo'])
-                                                                            ? asset('admin-dashboard/images/logo.png')
-                                                                            : ($settings['website_logo'] == 'default.png'
-                                                                                ? asset('admin-dashboard/images/logo.png')
-                                                                                : ($settings['website_logo'] == 'cashblack-default.png'
-                                                                                    ? asset('cashblack/img/logo.png')
-                                                                                    : asset('storage/dashboard/images/logo/' . $settings['website_logo']))) }}"
+                                                                            src="{{ getSiteLogo() }}"
                                                                             alt="store logo" class="" style="max-width:220px;max-height:120px" />
                                                                         <input id="website-logo-input" preview="#website-logo" name="website_logo" class="d-none"
                                                                             type='file' onchange="readURL(this);" />
@@ -170,7 +164,7 @@
                                                                 <div class=" logo">
                                                                     <label for="logo-input">
                                                                         <img id="logo"
-                                                                            src="@if (isset($settings['dashboard_logo']) && $settings['dashboard_logo'] != 'default.png') {{ asset('storage/dashboard/images/logo/' . $settings['dashboard_logo']) }}@else{{ asset('admin-dashboard/images/logo-dark.png') }} @endif"
+                                                                            src="{{ getDashboardLogo() }}"
                                                                             alt="store logo" class="" style="max-width:100px;max-height:120px" />
                                                                         <input id="logo-input" preview="#logo" name="dashboard_logo" class="d-none" type='file'
                                                                             onchange="readURL(this);" />

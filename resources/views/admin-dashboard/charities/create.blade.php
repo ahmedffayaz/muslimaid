@@ -219,6 +219,24 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="tag">Tag </label>
+                                                    <div class="form-control-select">
+                                                        <select class="form-control form-select" id="tags" data-search="on" name="tags[]" value="{{ old('tag') }}"  multiple>
+                                                            @foreach($tags as $tag)
+                                                                <option value="{{ $tag->id }}">{{ $tag->title }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('tags')
+                                                            <span class="invalid-feedback d-block" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-label" for="status">Status <span class="text-danger">*</span></label>

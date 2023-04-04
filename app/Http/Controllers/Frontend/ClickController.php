@@ -74,7 +74,7 @@ class ClickController extends Controller
                 'current_cashback_percentage' => $cashbackPercent
             ]);
 
-            $click->exit_url = $trackingUrl . $clickIdentifier . $click->id . $deeplinkIdentifier. $deeplinkUrl;
+            $click->exit_url = $trackingUrl . $clickIdentifier . $click->id . $deeplinkIdentifier . $deeplinkUrl;
             $click->update();
 
             $url = encrypt($click->exit_url);
@@ -115,14 +115,15 @@ class ClickController extends Controller
         }
     }
 
-    public function redirect($hash, $url)
+    public function redirect(Request $request, $hash, $url)
     {
         try {
             $storeId = decrypt($hash);
             $store = Store::find($storeId);
             $url = decrypt($url);
+            $cashbackId = isset($request->cashbackId) ? decrypt($request->cashbackId) : '';
 
-            return view('frontend.stores.exit-click', compact('store', 'url'));
+            return view('frontend.stores.exit-click', compact('store', 'url', 'cashbackId'));
         } catch (Throwable $th) {
             if (request()->ajax()) {
                 return response()->json([

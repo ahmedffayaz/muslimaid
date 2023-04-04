@@ -3,18 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
-use App\Models\Blog;
+use App\Models\Tag;
 use App\Models\Store;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\File;
 use App\Http\Requests\CategoryRequest;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -63,7 +62,6 @@ class CategoryController extends Controller
 
         try {
             DB::beginTransaction();
-
             $category = Category::create([
                 'name' => $request->input('name'),
                 'parent_id' => !empty($request->input('parent_id')) ? $request->input('parent_id') : 0,
@@ -151,7 +149,8 @@ class CategoryController extends Controller
         } else {
             $sort += 1;
         }
-        return view('admin-dashboard.categories.create', compact('category', 'categories'))->render();
+        $tags = Tag::where('type', 'categories')->get();
+        return view('admin-dashboard.categories.create', compact('category', 'categories', 'tags'))->render();
     }
 
     /**
@@ -176,8 +175,6 @@ class CategoryController extends Controller
                 'banner_link' => $request->input('banner_link'),
                 'sort' => $request->input('sort'),
                 'status' => $request->input('status'),
-                'feature_homepage' => 0,
-                'feature_sidebar' => 0,
                 'title' => $request->input('title'),
                 'meta_keyword' => $request->input('meta_keyword'),
                 'meta_description' => $request->input('meta_description')
@@ -185,17 +182,16 @@ class CategoryController extends Controller
             ]);
             if ($category->parent_id == 0) {
                 if ($request->has('tags')) {
-                    foreach ($request->input('tags') as $tag) {
-                        $category->update([
-                            $tag => 1
-                        ]);
-                    }
+                    $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
+                    if ($tags->count() > 0) $category->tags()->sync($tags);
+                } else {
+                    $category->tags()->detach();
                 }
             }
             if ($request->input('logo_type') == 'upload') {
                 if ($request->has('logo_upload')) {
                     if (File::exists(public_path($category->logo_upload))) {
-                        File::delete(public_path( $category->logo_upload));
+                        File::delete(public_path($category->logo_upload));
                     }
                     $imageName = Str::slug($request->input('name')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
                     $request->logo_upload->storeAs('public/categories/images', $imageName);
@@ -206,7 +202,7 @@ class CategoryController extends Controller
             if ($request->input('banner_type') == 'upload') {
                 if ($request->has('banner_upload')) {
                     if (File::exists(public_path($category->banner_upload))) {
-                        File::delete(public_path( $category->banner_upload));
+                        File::delete(public_path($category->banner_upload));
                     }
                     $imageName = Str::slug($request->input('name')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
                     $request->banner_upload->storeAs('public/categories/images', $imageName);
@@ -214,9 +210,7 @@ class CategoryController extends Controller
                     $category->update();
                 }
             }
-
             DB::commit();
-
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,
                 'success' => 'Category updated'

@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailJob;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -47,7 +48,6 @@ class UserController extends Controller
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'phone' => ['required', 'string', 'max:255'],
         ]);
 
         if ($validator->fails()) {
@@ -77,13 +77,18 @@ class UserController extends Controller
                 'registration_type' => 'sign up',
                 'phone' => $request->phone,
                 'address' => $request->address,
-                'intro' => $request->intro,
                 'avatar' => $avatarImage,
-                'status' => 'active'
+                'status' => 'active',
+                'sort_code' => isset($request->sort_code) ? $request->sort_code : null,
+                'bank_acc_no' => isset($request->bank_acc_no) ? $request->bank_acc_no : null,
+                'paypal_email' => isset($request->paypal_email) ? $request->paypal_email : null,
             ]);
 
             $user->assignRole('user');
             DB::commit();
+            //send email to user to verify email address
+            dispatch(new SendEmailJob($user));
+            
             flash()->success('New user added successfully');
             return redirect()->route('admin.users.index');
         } catch (Throwable $th) {
@@ -113,14 +118,13 @@ class UserController extends Controller
                 'firstname' => ['required', 'string', 'max:255'],
                 'lastname' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-                'phone' => ['required', 'string', 'max:255'],
             ]);
 
             if ($validator->fails()) {
                 if (!$request->ajax()) {
                     flash()->error($validator->errors()->first());
                     return redirect()->back();
-                } else{
+                } else {
                     return array(
                         'message' => $validator->errors()->first(),
                         'success' => false
@@ -141,9 +145,11 @@ class UserController extends Controller
                 'email' => $request->input('email'),
                 'phone' => $request->input('phone'),
                 'address' => $request->input('address'),
-                'intro' => $request->input('intro'),
                 'status' => $request->input('status'),
-                'avatar' => $avatarImage
+                'avatar' => $avatarImage,
+                'sort_code' => isset($request->sort_code) ? $request->sort_code : $user->sort_code,
+                'bank_acc_no' => isset($request->bank_acc_no) ? $request->bank_acc_no : $user->bank_acc_no,
+                'paypal_email' => isset($request->paypal_email) ? $request->paypal_email : $user->paypal_email,
             ]);
 
             $user->syncRoles($request->input('roles'));
@@ -154,7 +160,7 @@ class UserController extends Controller
                     'message' => 'User updated successfully',
                     'success' => true
                 );
-            }else{
+            } else {
                 flash()->success('User updated successfully');
                 return redirect()->route('admin.users.index');
             }

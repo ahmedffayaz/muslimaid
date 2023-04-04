@@ -576,13 +576,15 @@
                         required: true
                     },
                     logo_link: {
-                        url: true
+                        url: true,
+                        required:true
                     },
                     banner_type: {
                         required: true
                     },
                     banner_link: {
-                        url: true
+                        url: true,
+                        required:true
                     },
                     status: {
                         required: true

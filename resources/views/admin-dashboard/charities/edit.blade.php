@@ -231,8 +231,9 @@
                                                     <label class="form-label" for="country">Country <span class="text-danger">*</span></label>
                                                     <div class="form-control-select">
                                                         <select class="form-control form-select" id="country" name="country" value="{{ old('country') }}" required>
+                                                          
                                                             @foreach($countries as $country)
-                                                                <option value="{{ $country->id }}" {{ $charity->country == $country->id ? 'slected' : '' }}>{{ $country->name }}</option>
+                                                                <option value="{{ $country->id }}" {{ $charity->country == $country->id ? 'selected' : '' }}>{{ $country->name }}</option>
                                                             @endforeach
                                                         </select>
                                                         @error('country')
@@ -246,6 +247,26 @@
                                                         <strong>{{ $message }}</strong>
                                                     </span>
                                                 @enderror
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="tag">Tag </label>
+                                                    <div class="form-control-select">
+                                                        @php 
+                                                            $charityTagsIds = $charity->tags()->pluck('tag_id')->toArray();
+                                                        @endphp
+                                                        <select class="form-control form-select" id="tags" data-search="on" name="tags[]" value="{{ old('tag') }}"  multiple>
+                                                            @foreach($tags as $tag)
+                                                                <option @if (in_array($tag->id, $charityTagsIds)) selected @endif value="{{ $tag->id }}">{{ $tag->title }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('tags')
+                                                            <span class="invalid-feedback d-block" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6">

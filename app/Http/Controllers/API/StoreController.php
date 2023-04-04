@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Traits\ApiResponser;
+use Exception;
+use App\Models\Page;
 use App\Models\Store;
 use App\Models\Slider;
+use App\Traits\ApiResponser;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
 use App\Http\Resources\SliderResource;
+use App\Http\Resources\StoreDetailResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
 
 class StoreController extends Controller
@@ -20,43 +24,41 @@ class StoreController extends Controller
      */
     public function index(Request $request)
     {
-        $stores = Store::select('stores.*');
-        if($request->get('search')){
-            $stores = $stores->where('name','like','%'.$request->get('search').'%');
+        try {
+            $page = Page::whereSlug('stores')->whereType('system')->whereStatus('active')->pluck('banner_image')->firstOrFail();
+
+            $stores = Store::whereStatus('active')->paginate(12);
+
+            if ($stores->count() == 0) {
+                $data = [
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'No store found'
+                ];
+                return response()->json($data, JsonResponse::HTTP_OK);
+            }
+
+            $data = [
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Success',
+                'data' => [
+                    'main_banner_image' => getBannerImageUrl($page),
+                    'stores' => StoreResource::collection($stores)
+                ]
+            ];
+            return response()->json($data, JsonResponse::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
+            $data = [
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'message' => 'Something went wrong, try again.'
+            ];
+            return response()->json($data, JsonResponse::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            $data = [
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => 'Something went wrong, try again.'
+            ];
+            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-        if($request->get('name_sort')){
-            $order = $request->get('name_sort') == 'descending' ? 'desc' :'asc';
-            $stores = $stores->orderBy('name',$order);
-        }else{
-            $stores = $stores->orderBy('id','DESC');
-        }
-        $limit = $request->has('per_page') ? $request->get('per_page') : 10;
-        $stores = $stores->paginate($limit);
-        $stores->appends(['search' => $request->get('search'), 'per_page'=>$limit,'name_sort' => $request->get('name_sort')]);
-
-        return StoreResource::collection($stores);
-
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -68,56 +70,28 @@ class StoreController extends Controller
     public function show($slug)
     {
         try{
-            $store = Store::where('slug',$slug)->firstOrFail();
-            
-            
+            $store = Store::where('slug',$slug)->whereStatus('active')->firstOrFail();
+            $data = [
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Success',
+                'data' => ['fav_stores' => new StoreDetailResource($store)]
+            ];
+            return response()->json($data, JsonResponse::HTTP_OK);
         } catch (ModelNotFoundException $ex) { // Store not found
-
-            $arr = array("status" => 404, "message" => 'Store not found', "data" => array());
-
-            return \Response::json($arr);
+            $data = [
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'message' => 'Store not found'
+            ];
+            return response()->json($data, JsonResponse::HTTP_NOT_FOUND);
         } catch (Exception $ex) { // Anything that went wrong
-            $arr = array("status" => 500, "message" => 'Something went wrong!', "data" => array());
-
-            return \Response::json($arr);
+            $data = [
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => 'Something went wrong, try again.'
+            ];
+            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-        return new StoreResource($store);
-
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
     public function featuredCashback(){
         $stores = Store::whereHas('tags', function ($query) {
             $query->where('title', 'feature_homepage');
@@ -125,6 +99,7 @@ class StoreController extends Controller
         return StoreResource::collection($stores);
 
     }
+
     public function slider(){
         return SliderResource::collection(Slider::where('name','Home')->first()->slides);
     }
@@ -144,8 +119,8 @@ class StoreController extends Controller
         $limit = $request->has('per_page') ? $request->get('per_page') : 10;
         $stores = $stores->paginate($limit);
         $stores->appends(
-                        ['search'   => $request->get('search'), 
-                        'per_page'  => $limit, 
+                        ['search'   => $request->get('search'),
+                        'per_page'  => $limit,
                         'name_sort' => $request->get('name_sort')
                         ]);
         return StoreResource::collection($stores);
