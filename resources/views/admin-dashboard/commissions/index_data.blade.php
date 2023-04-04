@@ -39,6 +39,7 @@
                                     - {{ $commission->user->first_name }} {{ $commission->user->last_name }}
                                 @endif
                             </span>
+                            <span>{{ $commission->user->email ?? '' }}</span>
                         @endif
                     </div>
                 </div>
