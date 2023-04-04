@@ -30,7 +30,7 @@ class StoreDetails extends Component
         $this->stores = Store::latest()->get();
         $this->networks = Network::all();
         $this->categories = Category::where('parent_id',0)->get();
-        $this->tags = Tag::all(); 
+        $this->tags = Tag::where('type', 'stores')->get(); 
 
 
     }

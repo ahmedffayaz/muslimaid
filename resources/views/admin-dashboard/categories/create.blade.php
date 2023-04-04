@@ -61,7 +61,7 @@
                 <div id="editor-container">{!! $isEdit ? $category->description : '' !!}</div>
             </div>
         </div>
-        
+
          <div class="col-lg-6">
             <div class="form-group">
                 <label class="form-label" for="logo_type">Logo Type </label>
@@ -81,7 +81,7 @@
             <div class="form-group">
                 <label class="form-label" for="logo_link">Logo Link </label>
                 <div class="form-control-wrap">
-                    <input type="text" class="form-control" id="logo_link" name="logo_link" value="{{ $isEdit ? $category->logo_link : '' }}" required  onchange="readLinkURL(this);" >
+                    <input type="text" class="form-control" id="logo_link" name="logo_link" value="{{ $isEdit ? $category->logo_link : '' }}" required onchange="readLinkURL(this);" >
                 </div>
             </div>
             <div class="col-lg-3 ">
@@ -90,7 +90,7 @@
                         @if ($isEdit && $category->logo_link)
                             <img  id="logo_link-preview" src="{{ asset($category->logo_link) }}" style="max-height: 60px;max-width:60px" alt="">
                         @else
-                            <img id="logo_link-preview" src="" alt="logo" class="d-none" style="max-height: 60px; max-width: 60px;" />  
+                            <img id="logo_link-preview" src="" alt="logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
                         @endif
                     </div>
                 </div>
@@ -98,7 +98,7 @@
         </div>
         <div class="col-lg-6 logo_upload">
             <div class="form-group">
-                <label class="form-label" for="logo_upload">Icon Upload</label>
+                <label class="form-label" for="logo_upload">Logo Upload</label>
                 <div class="form-control-wrap">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" name="logo_upload" id="logo_upload" value="{{$isEdit ? $category->logo_upload : ''   }}"onchange="readBannerURL(this);">
@@ -112,7 +112,7 @@
                          @if ($isEdit && $category->logo_upload)
                                 <img  id="logo-preview" src="{{ asset($category->logo_upload) }}" style="max-height: 60px;max-width:60px" alt="">
                             @else
-                                <img id="logo-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />  
+                                <img id="logo-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
                             @endif
                     </div>
                 </div>
@@ -136,6 +136,7 @@
                 <label class="form-label" for="banner_link">Banner Link</label>
                 <div class="form-control-wrap">
                     <input type="text" class="form-control" id="banner_link" name="banner_link" value="{{ $isEdit ? $category->banner_link : '' }}" required onchange="readLinkURL(this);">  
+
                 </div>
             </div>
             <div class="col-lg-3 ">
@@ -144,8 +145,8 @@
                         @if( $isEdit && $category->banner_link)
                             <img id="banner_link-preview" src="{{ asset($category->logo_link) }}" style="max-height: 60px;max-width:60px" alt="">
                         @else
-                            <img id="banner_link-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />  
-                        @endif  
+                            <img id="banner_link-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
+                        @endif
                     </div>
                 </div>
             </div>
@@ -166,7 +167,7 @@
                             @if ($isEdit && $category->banner_upload)
                                 <img id="banner-preview" src="{{ asset($category->banner_upload) }}" style="max-height: 60px;max-width:60px" alt="">
                             @else
-                                <img id="banner-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />  
+                                <img id="banner-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
                             @endif
                         </div>
                     </div>
@@ -178,7 +179,7 @@
                         class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
                         title="Smallest number appear first."></em></label>
                     <div class="form-control-wrap">
-                        <input type="number" class="form-control" id="sort" step="0.1" min="0.1" name="sort" value="{{ $isEdit ? $category->sort : $sort }}">
+                        <input type="number" class="form-control" id="sort"  name="sort" value="{{ $isEdit ? $category->sort : $sort }}">
                     </div>
                 </div>
             </div>
@@ -203,11 +204,13 @@
                 <label class="form-label" for="default-06">Tags</label>
                 <div class="form-control-wrap ">
                     <div class="">
+                        @php
+                            $categoryTagsIds = $category->tags()->pluck('tag_id')->toArray();
+                        @endphp
                         <select class="form-control form-select select-2" name="tags[]" id="tags" multiple>
-                            <option @if ($category->feature_homepage) selected @endif value="feature_homepage">
-                                Homepage featured</option>
-                            <option @if ($category->feature_sidebar) selected @endif value="feature_sidebar">Sidebar
-                                featured</option>
+                                @foreach($tags as $tag)
+                                    <option @if (in_array($tag->id, $categoryTagsIds)) selected @endif value="{{$tag->id}}">{{ $tag->title }}</option>
+                                @endforeach
                         </select>
                     </div>
                 </div>

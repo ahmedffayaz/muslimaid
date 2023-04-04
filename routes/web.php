@@ -252,6 +252,7 @@ Route::post('search', [App\Http\Controllers\Frontend\SearchController::class, 's
 
 Route::get('stores/{letter?}', [App\Http\Controllers\Frontend\StoreController::class, 'index'])->name('stores.index');
 Route::get('cashback/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('stores.show');
+Route::post('stores', [App\Http\Controllers\Frontend\StoreController::class, 'storesView'])->name('stores.view');
 
 Route::post('exit-click', [App\Http\Controllers\Frontend\ClickController::class, 'store'])->name('click.store');
 Route::get('exit-click/{hash}/{url}', [App\Http\Controllers\Frontend\ClickController::class, 'redirect'])->name('click.redirect');
@@ -261,12 +262,15 @@ Route::get('stores-reviews/{id}', [App\Http\Controllers\Frontend\StoreReviewCont
 
 Route::get('categories', [App\Http\Controllers\Frontend\CategoryController::class, 'index'])->name('categories.index');
 Route::get('categories/{slug}', [App\Http\Controllers\Frontend\CategoryController::class, 'show'])->name('categories.show');
+Route::get('categories/{slug}/search', [App\Http\Controllers\Frontend\CategoryController::class, 'categoriesView'])->name('categories.view');
 
 Route::get('blogs', [App\Http\Controllers\Frontend\BlogController::class, 'index'])->name('blogs.index');
 Route::get('blogs/{slug}', [App\Http\Controllers\Frontend\BlogController::class, 'show'])->name('blogs.show');
 
 Route::get('charities', [App\Http\Controllers\Frontend\CharityController::class, 'index'])->name('charities.index');
 Route::post('charities/{id}', [App\Http\Controllers\Frontend\CharityController::class, 'show'])->name('charities.show');
+Route::any('charity/search', [App\Http\Controllers\Frontend\CharityController::class, 'search'])->name('charities.search');
+
 
 Route::get('newsletter', [App\Http\Controllers\Frontend\NewsletterController::class, 'index'])->name('newsletter.index');
 Route::post('newsletter', [App\Http\Controllers\Frontend\NewsletterController::class, 'store'])->name('newsletter.store');
@@ -291,7 +295,8 @@ Route::namespace('App\Http\Controllers\Client')
         Route::get('dashboard', [App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
         Route::get('profile', [App\Http\Controllers\Client\DashboardController::class, 'edit'])->name('profile');
         Route::put('profile/update/{user}', [App\Http\Controllers\Client\DashboardController::class, 'update'])->name('profile.update');
-        Route::get('cashback', [App\Http\Controllers\Client\DashboardController::class, 'cashback'])->name('cashback');
+        Route::get('cashback', [App\Http\Controllers\Client\DashboardController::class, 'cashback'])->name('cashback'); 
+        Route::post('searchCashback', [App\Http\Controllers\Client\DashboardController::class, 'searchCashback'])->name('search_cashback');
         Route::get('clicks', [App\Http\Controllers\Client\DashboardController::class, 'clicks'])->name('clicks');
         Route::get('change_password', [App\Http\Controllers\Client\DashboardController::class, 'changePassword'])->name('change_password');
         Route::post('users/passwordsave/', [App\Http\Controllers\Client\DashboardController::class, 'savePassword'])->name('save_password');

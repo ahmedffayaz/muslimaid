@@ -17,30 +17,11 @@ class StoreResource extends JsonResource
      */
     public function toArray($request)
     {
-
-        if($this->cashback){
-
-            $currency = ($this->cashback->type=='fixed') ? $this->cashback->currency :null;
-
-            $cashback_value = $this->custom_cashback_percentage ? ($this->custom_cashback_percentage/100)*$this->cashback->sale_commission :(SiteSetting()['cashback_percentage']/100)*$this->cashback->sale_commission;
-    
-            $cashback = $currency ? $currency.$cashback_value: $cashback_value.'%';
-            return [
-            
-                "network"=> $this->network->name,
-                "name" => $this->name,
-                "slug"=> $this->slug,
-                "description"=> strip_tags($this->description),
-                "default_cashback"=>$cashback,
-                "tracking_url"=> $this->tracking_url,
-                "store_url"=> $this->store_url,
-                "updated_at"=> \Carbon\Carbon::parse($this->updated_at)->isoFormat('DD-MM-YYYY'),
-                "logo"=> $this->logo->first() ? ($this->logo->first()->is_fake ? url('frontend/images/logos/'.$this->logo->first()->image) :url('storage/stores/images/'.$this->logo->first()->image)) :url('frontend/images/products/product-16.jpg'),
-                "cashbacks"=>CashbackResource::collection($this->cashbacks),
-                "vouchers"=>VoucherResource::collection($this->vouchers),
-            ];
-
-        }
-        
+        return [
+            'title' => $this->name,
+            'url_key' => $this->slug,
+            'big_icon' => getImageUrl($this->logo->first()),
+            'cashback' => $this->getCashback()
+        ];
     }
 }

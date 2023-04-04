@@ -39,7 +39,15 @@ class ProfileController extends Controller
             'last_name.required' => 'Last name is required.'
         ]);
 
-        $profile->update($request->input());
+        $profile->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'sort_code' => isset($request->sort_code) ? $request->sort_code : $profile->sort_code,
+            'bank_acc_no' => isset($request->bank_acc_no) ? $request->bank_acc_no : $profile->bank_acc_no,
+            'paypal_email' => isset($request->paypal_email) ? $request->paypal_email : $profile->paypal_email,
+            'phone' => $request->phone,
+            'address' => $request->address,
+        ]);
 
         $avatarImage = $profile->avatar;
         if ($request->hasFile('avatar')) {

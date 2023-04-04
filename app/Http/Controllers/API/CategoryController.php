@@ -2,56 +2,110 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Traits\ApiResponser;
-use App\Models\Category;
-use App\Http\Resources\CategoryResource;
+use Exception;
+use App\Models\Page;
 use App\Models\Store;
+use App\Models\Category;
+use App\Traits\ApiResponser;
+use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
+use App\Http\Resources\Category\CategoryResource;
 
 class CategoryController extends Controller
 {
     use ApiResponser;
 
 
-    public function index(){
-        return CategoryResource::collection(Category::where('parent_id',0)->latest()->get());
-    }
-    public function show($slug){
-        $category = Category::with('stores')->where('slug',$slug)->first();
-        $stores = $category->stores();
-        $limit = request()->has('per_page') ? request()->get('per_page') : 10;
-        
-        if(request()->get('search')){
-            $stores = $stores->where('name','like','%'.request()->get('search').'%');
-        }
-        if(request()->get('name_sort')){
-            $order = request()->get('name_sort') == 'descending' ? 'desc' :'asc';
-            $stores = $stores->orderBy('name',$order);
-        }else{
-            $stores = $stores->orderBy('id','DESC');
-        }
-        $stores = $stores->paginate($limit);
-        $stores->appends(['search' => request()->get('search'), 'per_page'=>$limit,'name_sort' => request()->get('name_sort')]);
-    
-        return StoreResource::collection($stores);
+    public function index($letter = null)
+    {
+        try {
+            $page = Page::where('slug', 'categories')->whereType('system')->pluck('banner_image')->firstOrFail();
 
-    }
-    public function childCategories($slug){
+            if (!empty($letter)) {
+                $categories = Category::where('name', 'like', $letter . '%')->with(['childs' => function ($query) {
+                    $query->withCount('stores');
+                }])->withCount('stores')->where('parent_id', 0)->orderBy('sort', 'desc')->orderBy('name', 'asc')->paginate(12);
+            } else {
+                $categories = Category::with(['childs' => function ($query) {
+                    $query->withCount('stores');
+                }])->withCount('stores')->where('parent_id', 0)->orderBy('sort', 'desc')->orderBy('name', 'asc')->paginate(12);
+            }
 
-        $parent_category = Category::with('stores')->where('slug',$slug)->first();
-        $categories = Category::select('*')->where('parent_id',$parent_category->id);
-        if(request()->get('search')){
-            $categories = $categories->where('name','like','%'.request()->get('search').'%');
+            if ($categories->count() == 0) {
+                $data = [
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'No store found'
+                ];
+                return response()->json($data, JsonResponse::HTTP_OK);
+            }
+
+            $data = [
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Success',
+                'data' => [
+                    'main_banner' => getBannerImageUrl($page),
+                    'categories' => CategoryResource::collection($categories)
+                ]
+            ];
+
+            return response()->json($data, JsonResponse::HTTP_OK);
+        } catch (Exception $e) {
+            $data = [
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => 'Something went wrong, try again'
+            ];
+            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-        if(request()->get('name_sort')){
-            $order = request()->get('name_sort') == 'descending' ? 'desc' :'asc';
-            $categories = $categories->orderBy('name',$order);
-        }else{
-            $categories = $categories->orderBy('id','DESC');
+    }
+
+    public function show($slug, $letter = null)
+    {
+        try {
+            if (!empty($letter)) {
+                $stores = Store::where('name', 'like', $letter . '%')
+                    ->whereHas('categories', function ($query) use ($slug) {
+                        $query->whereSlug($slug)->where('parent_id', '!=', 0)->whereStatus(1);
+                    })->with(['categories' => function ($query) use ($slug) {
+                        $query->whereSlug($slug)->whereStatus(1);
+                    }])->whereStatus('active')->paginate(12);
+            } else {
+                $stores = Store::whereHas('categories', function ($query) use ($slug) {
+                    $query->whereSlug($slug)->where('parent_id', '!=', 0)->whereStatus(1);
+                })->with(['categories' => function ($query) use ($slug) {
+                    $query->whereSlug($slug)->where('parent_id', '!=', 0)->whereStatus(1);
+                }])->whereStatus('active')->paginate(12);
+            }
+
+            if ($stores->count() == 0) {
+                $data = [
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'No store found'
+                ];
+                return response()->json($data, JsonResponse::HTTP_OK);
+            }
+
+            $data = [
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'success',
+                'data' => [
+                    'categories' => [
+                        [
+                            'main_banner' => getBannerImageUrl($stores[0]->categories->first()->banner_upload),
+                            'title' => $stores[0]->categories->first()->name,
+                            'stores' => StoreResource::collection($stores)
+                        ]
+                    ],
+                ]
+            ];
+
+            return response()->json($data, JsonResponse::HTTP_OK);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => 'Something went wrong, try again'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-        $categories = $categories->latest()->get();
-        return CategoryResource::collection($categories);
     }
 }

@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Http\Resources;
+
+use Illuminate\Http\Resources\Json\JsonResource;
+
+class StoreDetailResource extends JsonResource
+{
+    /**
+     * Transform the resource into an array.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     */
+    public function toArray($request)
+    {
+        if($this->cashback){
+            return [
+                'title' => $this->name,
+                'url_key' => $this->slug,
+                'banner_image' => getImageUrl($this->images()->where('title', 'cover')->first()),
+                'big_icon' => getImageUrl($this->logo->first()),
+                'description' => $this->when($this->description, $this->description),
+                'terms_conditions' => $this->when($this->terms_conditions, $this->terms_conditions),
+                'cashback' => $this->getCashback(),
+                'cashbacks' => $this->when($this->cashbacks, CashbackResource::collection($this->cashbacks))
+            ];
+        }
+    }
+}

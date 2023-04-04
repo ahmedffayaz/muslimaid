@@ -60,26 +60,42 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="phone-no-1">Phone <span class="text-danger">*</span></label>
+                                                    <label class="form-label" for="phone-no-1">Phone </label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="phone-no-1" name="phone" value="{{ old('phone') ?? null }}" required>
+                                                        <input type="text" class="form-control" id="phone-no-1" name="phone" value="{{ old('phone') ?? null }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Sort Code </label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" name="sort_code" value="{{ old('sort_code') ?? null }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Bank Account Number </label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" name="bank_acc_no" value="{{ old('bank_acc_no') ?? null }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="form-label">Paypal Email </label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="email" class="form-control" name="paypal_email" value="{{ old('paypal_email') ?? null }}">
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="pay-amount-1">Address <span class="text-danger">*</span></label>
+                                                    <label class="form-label" for="pay-amount-1">Address </label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="pay-amount-1" name="address" value="{{ old('address') ?? null }}" required>
+                                                        <textarea type="text" class="form-control" id="pay-amount-1" name="address">{{ old('address') ?? null }}</textarea>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="card">
-                                                    <input name="intro" type="hidden">
-                                                    <label class="form-label" for="phone-no-1">Introduction</label>
-                                                    <!-- Create the editor container -->
-                                                    <div id="editor-container">{!! old('intro') ?? null !!}</div>
                                                 </div>
                                             </div>
                                             <div class="col-12">
@@ -139,23 +155,33 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+        
+        jQuery.validator.addMethod("regex", function(value, element) {
+            return this.optional(element) || /^[A-Za-z ]+$/i.test(value);
+        }, "Only alphabetic name is allow");
+
+        jQuery.validator.addMethod("validPhone", function(value, element) {
+            var regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+            return regex.test(value);
+        }, "Enter a valid phone number");
+
         $('.user-form').validate({
             errorClass: 'invalid-feedback d-block',
             rules: {
                 firstname: {
-                    required: true
+                    required: true,
+                    regex: true
                 },
                 lastname: {
-                    required: true
+                    required: true,
+                    regex: true
                 },
                 email: {
                     required: true
                 },
                 phone: {
-                    required: true
-                },
-                address: {
-                    required: true
+                    validPhone: true
                 },
             }
         });
