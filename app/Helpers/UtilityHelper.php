@@ -680,7 +680,17 @@ function arrayValueExists($array, $key)
 
 function getMinimumCashoutAmount()
 {
-    return arrayValueExists(SiteSetting(), 'min_cashout_amount') ? SiteSetting()['min_cashout_amount'] : 1;
+    $previousCashouts = auth()->user()->cashouts()->where('status', 'paid')->count();
+    if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0) {
+        $min = SiteSetting()['min_cashout_amount'];
+    } else if (isset(SiteSetting()['next_cashout_amount']) && $previousCashouts > 0) {
+        $min = SiteSetting()['next_cashout_amount'];
+    } else if ($previousCashouts == 0) {
+        $min = 1;
+    } else {
+        $min = 2;
+    }
+    return $min;
 }
 
 function isWithdrawalAllowed()

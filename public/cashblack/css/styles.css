@@ -281,7 +281,7 @@ textarea {
 }
 
 .btn-primary {
-    background-color: #000;
+    background-color: #000 !important;
     border: 0;
 }
 .btn-primary:hover,
@@ -341,7 +341,47 @@ textarea {
     color: #fff;
     font-size: 18px;
 }
+.badge {
+    border-radius: 50px;
+    margin-top: 12px;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+}
 
+.badge-success {
+    color: #fff;
+    background-color: #28a745;
+}
+
+.badge-primary {
+    color: #fff;
+    background-color: #007bff;
+}
+
+.badge-danger {
+    color: #fff;
+    background-color: #dc3545;
+}
+
+.badge-info {
+    color: #fff;
+    background-color: #17a2b8;
+}
+
+.badge-secondary {
+    color: #fff;
+    background-color: #6c757d;
+}
+
+.badge-light {
+    color: #212529;
+    background-color: #f8f9fa;
+}
+
+.badge-warning {
+    color: #212529;
+    background-color: #ffc107;
+}
 .hero {
     position: relative;
 }
