@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Client;
 
-use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\Store;
+use App\Models\Cashout;
 use App\Models\ExitClick;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Store;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -152,5 +153,26 @@ class DashboardController extends Controller
             flash()->success('Password changed successfully');
             return redirect()->back();
         }
+    }
+    public function cashouts()
+    {
+        $user = Auth::user();
+        return view('frontend.client-dashboard.cashouts',compact('user'));
+    }
+    public function searchCashouts(Request $request)
+    {
+        $user = Auth::user();
+        $cashouts = Cashout::where('user_id', $user->id);
+        if (isset($request->status)) {
+            $cashouts->where('status', $request->status);
+        }
+        if (isset($request->payment_method)) {
+            $cashouts->where('payment_method', $request->payment_method);
+        }
+        if (isset($request->date_from) && isset($request->date_to)) {
+            $cashouts->whereBetween('created_at', [$request->date_from, $request->date_to]);
+        }
+        $cashouts =$cashouts->latest()->paginate(20);
+        return view('frontend.client-dashboard.cashout-table', compact('cashouts'));
     }
 }
