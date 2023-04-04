@@ -29,15 +29,21 @@ function getPageTemplates($slug)
     return $page;
 }
 
+function getSpecificSetting($title)
+{
+    $setting = SiteSetting::where('title', $title)->pluck('value')->first();
+    return $setting;
+}
+
 function getHomeSliders()
 {
     $name = "Before Login Home";
-    if (auth()->user()){
+    if (auth()->user()) {
         $name = "After Login Home";
     }
     $slider = Slider::where('name', $name)->first();
     return $slider;
-} 
+}
 
 //feature store for cashblack
 function getFeaturesStores($feature_tag)

@@ -27,7 +27,7 @@ class NewsletterController extends Controller
                         'color' => 'red',
                     ]);
                 }
-                return redirect()->back()->with(['color' => 'Default list settings are not added!']);
+                return redirect()->back()->with(['error' => 'Default list settings are not added!']);
             }
 
             $email = $request->input('email');
@@ -55,9 +55,9 @@ class NewsletterController extends Controller
 
             if ($response->statusCode() == 201 || $response->statusCode() == 202) {
                 if ($request->ajax()) {
-                    if(isset($request->userId)){
+                    if (isset($request->userId)) {
                         $user = User::where('id', $request->userId)->first();
-                        if(isset($user)){
+                        if (isset($user)) {
                             $user->email_preference = 1;
                             $user->save();
                         }
@@ -76,7 +76,7 @@ class NewsletterController extends Controller
                     'color' => 'red',
                 ]);
             }
-            return redirect()->back()->with(['color' => 'Something went wrong!']);
+            return redirect()->back()->with(['error' => 'Something went wrong!']);
         } catch (Exception $ex) {
             if ($request->ajax()) {
                 return response()->json([
@@ -84,7 +84,7 @@ class NewsletterController extends Controller
                     'color' => 'red',
                 ]);
             }
-            return redirect()->back()->with(['color' => $ex->getMessage()]);
+            return redirect()->back()->with(['error' => $ex->getMessage()]);
         }
     }
 }
