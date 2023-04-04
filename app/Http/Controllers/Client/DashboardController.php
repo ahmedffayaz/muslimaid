@@ -22,9 +22,15 @@ class DashboardController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $items = $user->cashbacks()->where(function ($q) {
-            $q->where('store_id', '<>', null)->whereHas('store');
-        })->orWhere('store_id', null)->latest()->limit(5)->get();
+        $items =  $user->cashbacks()
+            ->where(function ($query) {
+                $query->whereNotNull('store_id')
+                    ->whereHas('store')
+                    ->orWhereNull('store_id');
+            })
+            ->latest()
+            ->limit(5)
+            ->get();
 
         return view('frontend.client-dashboard.dashboard', compact('user', 'items'));
     }
