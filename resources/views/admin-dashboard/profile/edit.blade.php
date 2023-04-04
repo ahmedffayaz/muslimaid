@@ -130,6 +130,22 @@
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-4">
                                                             <div class="form-group">
+                                                                <label class="form-label" for="date_of_birth">Date of Birth</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-8">
+                                                            <div class="form-group">
+                                                                <div class="form-control-wrap">
+                                                                    <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
+                                                                        value="{{ $profile->date_of_birth }}" placeholder="Date of Birth" required>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="row g-3 align-center">
+                                                        <div class="col-lg-4">
+                                                            <div class="form-group">
                                                                 <label class="form-label" for="phone">Phone Number</label>
                                                                 {{-- <span class="form-note">Copyright information of your website.</span> --}}
                                                             </div>
@@ -148,61 +164,7 @@
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-4">
                                                             <div class="form-group">
-                                                                <label class="form-label" for="sort_code">Sort Code</label>
-                                                                {{-- <span class="form-note">Copyright information of your website.</span> --}}
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-8">
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input type="number" class="form-control" id="sort_code" name="sort_code"
-                                                                        value="{{ $profile->sort_code }}" placeholder="Sort Code">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="row g-3 align-center">
-                                                        <div class="col-lg-4">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="bank_acc_no">Bank Account Number</label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-8">
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input type="number" class="form-control" id="bank_acc_no" name="bank_acc_no"
-                                                                        value="{{ $profile->bank_acc_no }}" placeholder="Bank Account Number">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="row g-3 align-center">
-                                                        <div class="col-lg-4">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="paypal_email">Paypal Email</label>
-                                                                {{-- <span class="form-note">Copyright information of your website.</span> --}}
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-8">
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input type="email" class="form-control" id="paypal_email" name="paypal_email"
-                                                                        value="{{ $profile->paypal_email }}" placeholder="Paypal Email">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="row g-3 align-center">
-                                                        <div class="col-lg-4">
-                                                            <div class="form-group">
                                                                 <label class="form-label" for="address">Address</label>
-                                                                {{-- <span class="form-note">Copyright information of your website.</span> --}}
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-8">
@@ -357,7 +319,6 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
-
     </script>
 
     <script>
