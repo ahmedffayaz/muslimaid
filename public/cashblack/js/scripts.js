@@ -446,6 +446,7 @@ $("#listview").click(function() {
     if (!$(this).hasClass("active") ) {
         $(this).addClass("active");
         $("#gridview").removeClass("active");
+        $("#viewType").val('list-view');
     }
 
     if ($(".category-listing").hasClass("grid-view") ) {
@@ -459,6 +460,7 @@ $("#gridview").click(function() {
     if (!$(this).hasClass("active") ) {
         $(this).addClass("active");
         $("#listview").removeClass("active");
+        $("#viewType").val('grid-view');
     }
 
     if ($(".category-listing").hasClass("list-view") ) {
