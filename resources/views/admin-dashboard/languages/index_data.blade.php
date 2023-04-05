@@ -1,8 +1,3 @@
-<style>
-    .nk-tb-list{
-        table-layout: fixed;
-    }
-</style>
 @if(count($languages))
 <div class="nk-tb-item nk-tb-head">
     

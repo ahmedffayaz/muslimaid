@@ -81,7 +81,7 @@
                     <div class="card card-stretch">
                         <div class="card-inner-group">
                             
-                            <div class="card-inner px-0">
+                            <div class="card-inner px-0 table-responsive">
                                 <div class="nk-tb-list nk-tb-ulist" id="table-data">
                                     
                                     @include('admin-dashboard.translations.index_data')                                   

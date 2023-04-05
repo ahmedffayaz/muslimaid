@@ -1,8 +1,3 @@
-<style>
-    .nk-tb-list{
-        table-layout: fixed;
-    }
-</style>
 <div class="nk-tb-item nk-tb-head">
     
     <div class="nk-tb-col"><span class="sub-text">Category</span></div>

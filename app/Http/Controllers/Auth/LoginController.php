@@ -93,7 +93,7 @@ class LoginController extends Controller
         }
 
         if ($emailCheck->status == 'pending') {
-            return redirect()->back()->with(['message' => 'First verify your account for login']);
+            return redirect()->back()->with(['message' => 'Please verify your account for login']);
         }
 
         $this->validateLogin($request);
