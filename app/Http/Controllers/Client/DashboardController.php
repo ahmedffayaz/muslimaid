@@ -117,9 +117,37 @@ class DashboardController extends Controller
     public function clicks()
     {
         $user = Auth::user();
-        $clicks = ExitClick::where('user_id', $user->id)->whereHas('store')->latest()->paginate(20);
-        return view('frontend.client-dashboard.clicks', compact('user', 'clicks'));
+        $user = Auth::user();
+        $userId = $user->id;
+        $stores  = Store::whereHas('clicks', function ($query)  use ($userId) {
+            $query->where('user_id', $userId);
+        })->get();
+        return view('frontend.client-dashboard.clicks', compact('user', 'stores'));
     }
+    public function searchClick(Request $request)
+    {
+        $user = Auth::user();
+        $clicks = ExitClick::where('user_id', $user->id);
+
+        if (isset($request->store_id)) {
+            $clicks->whereHas('store', function ($query) use ($request) {
+                $query->where('id', $request->store_id);
+            });
+        }
+        if (isset($request->date_from) && isset($request->date_to)) {
+            $clicks->whereBetween('created_at', [$request->date_from, $request->date_to]);
+        }
+        if (isset($request->conversion) && $request->conversion != '0') {
+            if ($request->conversion == 'yes') {
+                $clicks->whereHas('cashback');
+            } else if ($request->conversion == 'no') {
+                $clicks->whereDoesntHave('cashback');
+            }
+        }
+        $clicks = $clicks->latest()->paginate(20);
+        return view('frontend.client-dashboard.click-table', compact('clicks'));
+    }
+
 
     public function changePassword()
     {
@@ -155,7 +183,7 @@ class DashboardController extends Controller
     public function cashouts()
     {
         $user = Auth::user();
-        return view('frontend.client-dashboard.cashouts',compact('user'));
+        return view('frontend.client-dashboard.cashouts', compact('user'));
     }
     public function searchCashouts(Request $request)
     {
@@ -170,7 +198,7 @@ class DashboardController extends Controller
         if (isset($request->date_from) && isset($request->date_to)) {
             $cashouts->whereBetween('created_at', [$request->date_from, $request->date_to]);
         }
-        $cashouts =$cashouts->latest()->paginate(20);
+        $cashouts = $cashouts->latest()->paginate(20);
         return view('frontend.client-dashboard.cashout-table', compact('cashouts'));
     }
 }
