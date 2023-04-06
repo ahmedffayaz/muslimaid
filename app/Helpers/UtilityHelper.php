@@ -35,7 +35,7 @@ function getSpecificSetting($type)
     return $setting;
 }
 
-function statusBatches($status)
+function statusBadges($status)
 {
     if ($status == 'confirmed'){
        return '<span class="badge badge-primary">'.$status.'</span>';
