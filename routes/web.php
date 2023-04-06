@@ -300,6 +300,7 @@ Route::namespace('App\Http\Controllers\Client')
         Route::post('searchCashback', [App\Http\Controllers\Client\DashboardController::class, 'searchCashback'])->name('search_cashback');
         Route::post('searchCashouts', [App\Http\Controllers\Client\DashboardController::class, 'searchCashouts'])->name('search_cashout');
         Route::get('clicks', [App\Http\Controllers\Client\DashboardController::class, 'clicks'])->name('clicks');
+        Route::post('searchClick', [App\Http\Controllers\Client\DashboardController::class, 'searchClick'])->name('search_click');
         Route::get('change_password', [App\Http\Controllers\Client\DashboardController::class, 'changePassword'])->name('change_password');
         Route::post('users/passwordsave/', [App\Http\Controllers\Client\DashboardController::class, 'savePassword'])->name('save_password');
         Route::resource('withdraw', PaymentController::class)->only(['index']);

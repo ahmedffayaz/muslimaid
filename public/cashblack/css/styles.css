@@ -591,6 +591,16 @@ textarea {
         height: 100%;
         margin-left: 0;
     }
+    
+    .header-right .acc-after-login{
+        display: none
+    }
+
+    
+    .header-right .after-login{
+        display: block !important;
+        margin-right: 12px;
+    }
 }
 .header__middle-area .header-search-col .header-search form {
     height: 100%;
@@ -669,8 +679,8 @@ textarea {
 @media (max-width: 579px) {
     .header__middle-area .header-search-col {
         height: 54px;
-        padding: 7px 15px;
-        top: 57px;
+        padding: 8px 16px;
+        top: 66px;
     }
 }
 @media (min-width: 768px) and (max-width: 991px) {
@@ -689,6 +699,33 @@ textarea {
     .header__middle-area.before-logged-in .header-search-col {
         background-color: #3baa34;
         width: 100%;
+    }
+    .header-search-login{
+        width: 90% !important;
+    }
+    .pagination{
+        overflow: scroll;
+    }
+    .newsletter-form{
+        display: grid !important;
+    }
+    .newsletter-form .input-fields{
+        margin-right: 0px!important;
+    }
+    
+    .acc-dropdown .acc-btn {
+        width: 95%!important;
+        color: #ffffff!important;
+        margin-top: 5px!important;
+        margin-right: 5px!important;
+        margin-left: 5px!important;
+    }
+    .form-container .social-login-buttons{
+        display: grid!important;
+        margin-top: 1.5rem!important;
+    }
+    .social-buttons {
+        margin-top: 0.5rem!important;
     }
 }
 
@@ -1885,6 +1922,8 @@ button.hamburger:not(.collapsed):before {
 }
 .newsletter-form .input-fields {
     border: 1px solid #dcdcdc;
+    margin-right: 10px;
+
 }
 @media (max-width: 580px) {
     .newsletter-form .input-fields {
@@ -4544,4 +4583,145 @@ input [type="number"] {
 .social_block a:hover {
     filter: invert(62%) sepia(8%) saturate(4162%) hue-rotate(69deg)
         brightness(85%) contrast(88%);
+}
+
+/* // media queries */
+
+@media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+    /* Styles for iPad in landscape orientation */
+    .hero .hero-form-container {
+        top: 3%;
+        max-width: 330px;
+        padding: 9px 15px;
+    }
+    .hero .hero-form-container h2 {
+        font-size: 1rem;
+        margin-bottom: 0.6rem;
+    }
+    .hero .hero-form-container .form-control {
+        padding: 0.3rem 1rem;
+    }
+    .header__middle-area .header-search-col {
+        left: 17rem;
+        top: 16px;
+        width: 56%;
+    }
+    .header__middle-area .header-search-login {
+        top: 79px !important;
+    }
+    .how-works__single-item {
+        display: grid;
+    }
+    .how-works__single-item .how-works__icon {
+        margin: 1rem 2rem;
+    }
+    .acc-dropdown .acc-btn {
+        width: 95%;
+        color: #ffffff;
+        margin-top: 5px;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+    .form-container .forgot-pass {
+        font-size: 0.775rem;
+    }
+    .form-container .form .cta {
+        margin-top: 1rem;
+    }
+    .form-container .social-login-buttons {
+        display: block;
+        margin-top: 0.3rem!important
+    }
+    .social-buttons{
+        margin-top: 1rem!important; 
+        margin-left: 0rem!important;
+    }
+    .form-container .form .row input.form-control{
+        padding: 1rem 1.15rem 1rem 3rem;
+    }
+    .form-container .form .row{
+        margin-top: 0.4rem !important;
+    }
+    .form-container .signin-option{
+        margin-top: 1rem !important;
+    }
+    form{
+        width: fit-content;
+    }
+    .header-right .acc-after-login{
+        display: none
+    }
+    
+    .pagination{
+        overflow: scroll;
+    }
+}
+@media only screen and (min-device-width: 768px) and (max-device-width: 768px) and (orientation: portrait) {
+    .hero .hero-form-container {
+        top: 3%;
+        max-width: 330px;
+        padding: 9px 15px;
+    }
+    .hero .hero-form-container h2 {
+        font-size: 1rem;
+        margin-bottom: 0.6rem;
+    }
+    .hero .hero-form-container .form-control {
+        padding: 0.3rem 1rem;
+    }
+    .header__middle-area .header-search-col {
+        left: 17rem;
+        top: 16px;
+        width: 56%;
+    }
+    
+    .header__middle-area .header-search-login {
+        top: 79px !important;
+    }
+    .how-works__single-item {
+        display: grid;
+    }
+    .how-works__single-item .how-works__icon {
+        margin: 1rem 2rem;
+    }
+    .acc-dropdown .acc-btn {
+        width: 95%;
+        color: #ffffff;
+        margin-top: 5px;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+    .form-container .forgot-pass {
+        font-size: 0.775rem;
+    }
+    .form-container .form .cta {
+        margin-top: 1rem;
+    }
+    .form-container .social-login-buttons {
+        display: block;
+        margin-top: 0.3rem!important
+    }
+    .social-buttons{
+        margin-top: 1rem!important; 
+        margin-left: 0rem!important;
+    }
+    .form-container .form .row input.form-control{
+        padding: 1rem 1.15rem 1rem 3rem;
+    }
+    .form-container .form .row{
+        margin-top: 0.4rem !important;
+    }
+    .form-container .signin-option{
+        margin-top: 1rem !important;
+    }
+    form{
+        width: fit-content;
+    }
+    .header-right .acc-after-login{
+        display: none
+    }
+    
+    .pagination{
+        overflow: scroll;
+    }
 }

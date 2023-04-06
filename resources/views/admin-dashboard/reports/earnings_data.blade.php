@@ -3,7 +3,7 @@
 <div class="row g-gs">
     <div class="col-xxl-12">
         <div class="card h-100">
-            <div class="card-inner mb-n2">
+            <div class="card-inner mb-n2 border-0">
                 <div class="card-title-group">
                     <div class="card-title card-title-sm">
                         <h6 class="title">Earning Report</h6>

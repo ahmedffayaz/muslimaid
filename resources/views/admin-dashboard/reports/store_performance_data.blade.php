@@ -2,7 +2,7 @@
 <div class="row g-gs">    
     <div class="col-xxl-6">
         <div class="card h-100">
-            <div class="card-inner mb-n2">
+            <div class="card-inner mb-n2 border-0">
                 <div class="card-title-group">
                     <div class="card-title card-title-sm">
                         <h6 class="title">Most visited stores</h6>
@@ -31,13 +31,13 @@
                         <span class="tb-sub tb-amount"><span>{{$click->store->network->name ?? ''}}</span></span>
                     </div>
                     
-                    <div class="nk-tb-col tb-col-sm ">
+                    <div class="nk-tb-col ">
                         <span class="tb-sub">{{$click->count}}</span>
                     </div>
-                    <div class="nk-tb-col tb-col-sm ">
+                    <div class="nk-tb-col ">
                         <span class="tb-sub">{{ $click->store ? count($click->store->commissions) : ''}}</span>
                     </div>
-                    <div class="nk-tb-col tb-col-sm ">
+                    <div class="nk-tb-col ">
                         <span class="tb-sub">{{ $click->store ? round(((count($click->store->commissions)*100)/$click->count),2) : '0'}}%</span>
                     </div>
                 </div><!-- .nk-tb-item -->

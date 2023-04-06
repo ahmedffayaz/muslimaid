@@ -29,10 +29,30 @@ function getPageTemplates($slug)
     return $page;
 }
 
-function getSpecificSetting($title)
+function getSpecificSetting($type)
 {
-    $setting = SiteSetting::where('title', $title)->pluck('value')->first();
+    $setting = SiteSetting::where('type', $type)->pluck('value')->first();
     return $setting;
+}
+
+function statusBadges($status)
+{
+    if ($status == 'confirmed'){
+       return '<span class="badge badge-primary">'.$status.'</span>';
+    }elseif($status == 'paid'){
+       return '<span class="badge badge-success">'.$status.'</span>';
+    }elseif($status == 'failed'){
+        return '<span class="badge badge-danger">'.$status.'</span>';
+    }elseif($status == 'pending'){
+        return '<span class="badge badge-info">'.$status.'</span>';
+    }elseif($status == 'donated'){
+        return '<span class="badge badge-secondary">'.$status.'</span>';
+    }elseif($status == 'processing donation'){
+        return '<span class="badge badge-light">'.$status.'</span>';
+    }elseif($status == 'processing'){
+        return '<span class="badge badge-warning">'.$status.'</span>';
+    }
+    return '<span class="badge badge-primary">'.$status.'</span>';
 }
 
 function getHomeSliders()

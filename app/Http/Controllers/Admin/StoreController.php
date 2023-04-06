@@ -76,8 +76,8 @@ class StoreController extends Controller
         $validator = Validator::make($request->all(), [
             'store_name' => 'required|max:255',
             'network_id' => 'required',
-            'tracking_url' => ['required', 'regex:/^https?:\/\/[a-z0-9-\.]+\.[a-z]{2,}(?:\/[^?"\'\s]*\?.*)?$/i'],
-            'deeplink_url' => ['nullable', 'regex:/^https?:\/\/[a-z0-9-\.]+\.[a-z]{2,}(?:\/[^?"\'\s]*\?.*)?$/i'],
+            'tracking_url' =>['required','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'deeplink_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'store_url' => 'required|url',
             'description' => 'nullable'
         ]);
@@ -166,8 +166,8 @@ class StoreController extends Controller
         $request->validate([
             'store_name' => 'required|max:255',
             'network_id' => 'required',
-            'tracking_url' => ['required', 'regex:/^https?:\/\/[a-z0-9-\.]+\.[a-z]{2,}(?:\/[^?"\'\s]*\?.*)?$/i'],
-            'deeplink_url' => ['nullable', 'regex:/^https?:\/\/[a-z0-9-\.]+\.[a-z]{2,}(?:\/[^?"\'\s]*\?.*)?$/i'],
+            'tracking_url' =>['required','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'deeplink_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'store_url' => 'required|url',
             'description' => 'nullable',
             'terms_conditions' => 'nullable'
@@ -420,8 +420,8 @@ class StoreController extends Controller
             'type' => 'required',
             'sale_commission' => 'required|numeric|min:0.1',
             'network_id' => 'nullable|integer',
-            'tracking_url' => 'nullable|url',
-            'deeplink_url' => 'nullable|url',
+            'tracking_url' =>['required','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'deeplink_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'currency' => $request->input('type') === 'fixed' ? 'required' : '',            
             'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
         ]);
@@ -547,7 +547,8 @@ class StoreController extends Controller
         $request->validate([
             'type' => 'required',
             'sale_commission' => 'required|numeric|min:0.1',
-            'deeplink_url' => 'nullable|url',
+            'tracking_url' =>['required','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'deeplink_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'currency' => $request->input('type') === 'fixed' ? 'required' : '',
             'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
         ]);

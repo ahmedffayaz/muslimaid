@@ -140,8 +140,9 @@ class CategoryController extends Controller
             $allStores = $this->sortByDistance($data, $allStores, true);
             $allStores = $allStores->paginate($request->input('perPage'));
         }
+        $viewType = isset($request->viewType) ? $request->viewType : 'grid-view';
         return [
-            'view' => view('frontend.categories.view', compact('allStores', 'slug'))->render(),
+            'view' => view('frontend.categories.view', compact('allStores', 'slug', 'viewType'))->render(),
             'stores' => $allStores
         ];
     }

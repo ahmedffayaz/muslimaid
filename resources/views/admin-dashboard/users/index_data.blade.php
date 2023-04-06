@@ -1,8 +1,3 @@
-<style>
-    .nk-tb-list {
-        table-layout: fixed;
-    }
-</style>
 @if (count($users))
     <div class="nk-tb-item nk-tb-head">
         <div class="nk-tb-col" style="width: 30%"><span class="sub-text">User</span></div>

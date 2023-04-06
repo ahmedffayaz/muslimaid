@@ -1,12 +1,4 @@
-<style>
-    .nk-tb-list{
-        table-layout: fixed;
-    }
-</style>
 <div class="nk-tb-item nk-tb-head">
-    
-    
-    
     <div class="nk-tb-col"><span class="sub-text">Title</span></div>
     <div class="nk-tb-col"><span class="sub-text">Slug</span></div>
     <div class="nk-tb-col"><span class="sub-text">View</span></div>
