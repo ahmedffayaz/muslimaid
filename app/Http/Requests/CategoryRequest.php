@@ -69,6 +69,8 @@ class CategoryRequest extends FormRequest
                 if ($this->banner_type == 'link' && empty($this->banner_link) && empty($category->banner_link)) {
                     $validator->errors()->add('banner_link', 'The banner link field is required when banner type is link.');
                 }
+            }elseif(isset($this->parent_id) && $this->parent_id == 158){
+
             } else {
                 $newValidator = Validator::make($this->all(), [
                     'logo_upload' => 'required_if:logo_type,==,upload|image:jpeg,png,jpg,gif',

@@ -16,6 +16,7 @@ class Category extends Model
     protected $fillable = [
         'name',
         'is_map_enable',
+        'visibility',
         'slug',
         'description',
         'sort',
