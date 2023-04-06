@@ -1,8 +1,3 @@
-<style>
-    .nk-tb-list {
-        table-layout: fixed;
-    }
-</style>
 @if (count($countries))
     <div class="nk-tb-item nk-tb-head">
 
@@ -31,7 +26,7 @@
             <div class="nk-tb-col  text-center">
                 <span>{{ $country->region->name }}</span>
             </div>
-            <div class="nk-tb-col tb-col-lg text-center">
+            <div class="nk-tb-col text-center">
                 @if ($country->status != 0)
                     <span class="tb-status badge badge-success">Active</span>
                 @else

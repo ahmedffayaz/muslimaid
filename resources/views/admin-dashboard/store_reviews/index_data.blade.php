@@ -1,8 +1,3 @@
-<style>
-    .nk-tb-list {
-        table-layout: fixed;
-    }
-</style>
 @if (count($reviews))
     <div class="nk-tb-item nk-tb-head">
 

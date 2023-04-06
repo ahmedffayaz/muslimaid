@@ -1,8 +1,3 @@
-<style>
-    .nk-tb-list {
-        table-layout: fixed;
-    }
-</style>
 @if (count($clicks))
     <div class="nk-tb-item nk-tb-head">
         <div class="nk-tb-col " style="width: 10%"><span class="sub-text">Click ID</span></div>

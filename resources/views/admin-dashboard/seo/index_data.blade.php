@@ -1,8 +1,3 @@
-<style>
-    .nk-tb-list{
-        table-layout: fixed;
-    }
-</style>
 @if(count($seo_rules))
 <div class="nk-tb-item nk-tb-head">
     <div class="nk-tb-col"><span class="sub-text">URL</span></div>
