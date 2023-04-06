@@ -34,7 +34,8 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="store_name">Store Name <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="store_name" name="store_name" placeholder="Store name" required>
+                                                        <input type="text" class="form-control" id="store_name" name="store_name" placeholder="Store name"
+                                                            value="{{ old('store_name') }}" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -44,7 +45,8 @@
                                                     <div class="form-control-wrap ">
                                                         <select class="form-select form-control" id="network_id" name="network_id" required>
                                                             @foreach ($networks as $network)
-                                                                <option value="{{ $network->id }}">{{ $network->name }}</option>
+                                                                <option value="{{ $network->id }}" {{ old('network_id') == $network->id ? 'selected' : '' }}>{{ $network->name }}
+                                                                </option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -54,7 +56,8 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="store_url">Store url <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="store_url" name="store_url" placeholder="Store url" required>
+                                                        <input type="text" class="form-control" id="store_url" value="{{ old('store_url') }}" name="store_url"
+                                                            placeholder="Store url" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -62,7 +65,8 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="tracking_url">Tracking URL <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="tracking_url" name="tracking_url" placeholder="https://example.com/item/abc-id-1345" required>
+                                                        <input type="text" class="form-control" id="tracking_url" value="{{ old('tracking_url') }}" name="tracking_url"
+                                                            placeholder="https://example.com/item/abc-id-1345" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -70,7 +74,8 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="deeplink_url">Deeplink URL</label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="deeplink_url" name="deeplink_url" placeholder="https://example.com/item/abc-id-1345">
+                                                        <input type="text" class="form-control" id="deeplink_url" value="{{ old('deeplink_url') }}" name="deeplink_url"
+                                                            placeholder="https://example.com/item/abc-id-1345">
                                                     </div>
                                                 </div>
                                             </div>
