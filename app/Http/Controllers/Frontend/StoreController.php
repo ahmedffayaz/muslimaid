@@ -61,6 +61,7 @@ class StoreController extends Controller
          } else {
             $allStores = $allStores->latest()->paginate($request->input('perPage'));
         }
-        return view('frontend.stores.stores-view', compact('allStores','letter'))->render();
+        $viewType = isset($request->viewType) ? $request->viewType : 'grid-view';
+        return view('frontend.stores.stores-view', compact('allStores','letter', 'viewType'))->render();
     }
 }
