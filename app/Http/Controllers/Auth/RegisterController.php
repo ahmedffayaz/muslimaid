@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Carbon\Carbon;
 use App\Models\User;
+use Exception;
 use App\Traits\UserBonus;
 use App\Jobs\SendEmailJob;
 use App\Traits\WelcomeEmail;
