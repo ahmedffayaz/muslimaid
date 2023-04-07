@@ -16,6 +16,7 @@ use App\Models\StoreReview;
 use Illuminate\Support\Str;
 use App\Models\EmailTemplate;
 use App\Models\Slider;
+use App\Models\StoreSeoData;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
@@ -592,6 +593,13 @@ function checkStaticpageRule($url)
 
         foreach ($route_names as $model) {
             $record = $model::where('slug', $slug)->first();
+            if ($model == '\App\Models\Store' && isset($record)) {
+                $seoRule = array();
+                $seoRule['name']  = $record->name;
+                $seoRule['meta_description'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:description')->pluck('value')->first();
+                $seoRule['meta_keyword'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:keywords')->pluck('value')->first();
+                return $seoRule;
+            }
             if (isset($record) && (($record->title ? $record->title : $record->name) || $record->meta_description && $record->meta_keyword)) {
                 return $record;
             }
