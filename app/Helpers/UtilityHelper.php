@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Blog;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Store;
@@ -46,6 +47,33 @@ function getSpecificSetting($type)
 {
     $setting = SiteSetting::where('type', $type)->pluck('value')->first();
     return $setting;
+}
+
+function removeAllTags($text, $limit)
+{
+    $cleanText = strip_tags($text, '<p>');
+    if ($limit != 0) {
+        $cleanText = substr($cleanText, 0, $limit);
+        $cleanText = str_replace('<p>', '<p class="excerpt">', $cleanText);
+        if(strlen($text) > $limit){
+            $cleanText .= '..';
+        }
+    }
+    return $cleanText;
+}
+
+function getRelatedBlogs($keywords, $id)
+{
+    $tags = explode(",", $keywords);
+    $blogs = [];
+    if (!empty($tags[0])) {
+        $blogs = Blog::where('id', '!=', $id)->where(function ($query) use ($tags) {
+            foreach ($tags as $tag) {
+                $query->orWhere('meta_keyword', 'like', '%' . $tag . '%');
+            }
+        })->get();
+    }
+    return $blogs;
 }
 
 function statusBadges($status)
