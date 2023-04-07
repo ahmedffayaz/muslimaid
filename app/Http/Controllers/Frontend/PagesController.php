@@ -16,7 +16,10 @@ class PagesController extends Controller
         if (view()->exists("frontend.pages.{$slug}")) {
             return view("frontend.pages.{$slug}", compact('page'));
         }
-
+        if($slug == 'blog'){
+            $blogs = Blog::latest()->paginate(20);
+            return view('frontend.pages.single-page', compact('page', 'slug', 'blogs'));
+        }
         return view('frontend.pages.single-page', compact('page', 'slug'));
     }
 
