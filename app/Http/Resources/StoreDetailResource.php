@@ -14,7 +14,7 @@ class StoreDetailResource extends JsonResource
      */
     public function toArray($request)
     {
-        if($this->cashback){
+        if ($this->cashback) {
             return [
                 'title' => $this->name,
                 'url_key' => $this->slug,
