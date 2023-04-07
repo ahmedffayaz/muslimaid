@@ -8,6 +8,8 @@ use App\Models\EmailTemplate;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendEmail;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
@@ -85,5 +87,20 @@ class ReferController extends Controller
             flash()->error('Some thing went wrong, try again');
             return redirect()->back();
         }
+    }
+    public function myReferrals()
+    {
+        return view('frontend.referral.my-referrals');
+    }
+    public function searchReferrals(Request $request)
+    {
+        $user = Auth::user();
+        $userId = $user->id;
+        $referrals = User::whereNotNull('referred_by')->where('referred_by',  $userId );
+        if (isset($request->date_from) && isset($request->date_to)) {
+            $referrals->whereBetween('referred_at', [$request->date_from, $request->date_to]);
+        }
+        $referrals = $referrals->latest()->paginate(20);
+        return view('frontend.referral.referrals-table', compact('referrals'));
     }
 }

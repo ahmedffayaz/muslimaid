@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Throwable;
 use App\Traits\UserBonus;
+use Carbon\Carbon;
 use App\Models\UserVerify;
 use App\Traits\WelcomeEmail;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +30,7 @@ class VerifyController extends Controller
 
                 if (!$user->is_email_verified) {
                     $verifyUser->user->is_email_verified = 1;
+                    $verifyUser->user->email_verified_at = Carbon::now();
                     $verifyUser->user->status = 'active';
                     $verifyUser->user->save();
 

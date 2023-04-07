@@ -169,6 +169,7 @@ class PaymentController extends Controller
         $cashout = Cashout::create([
             'user_id' => $user->id,
             'charity_types_id' => $request->charity_types_id,
+            'cashout_type' => $request->payment_method,
             'amount' => $request->amount,
             'new_cashout' => '1',
             'payment_method' => $request->payment_method,
@@ -203,7 +204,7 @@ class PaymentController extends Controller
         SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
         SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
 
-        flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $balance . " to reach your " . $request->payment_method . " account.");
+        flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $request->amount . " to reach your " . $request->payment_method . " account.");
         return redirect()->back();
     }
 }

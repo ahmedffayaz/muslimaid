@@ -28,10 +28,7 @@ class DashboardController extends Controller
                 $query->whereNotNull('store_id')
                     ->whereHas('store')
                     ->orWhereNull('store_id');
-            })
-            ->latest()
-            ->limit(5)
-            ->get();
+            })->latest()->limit(5)->get();
 
         return view('frontend.client-dashboard.dashboard', compact('user', 'items'));
     }
@@ -116,7 +113,6 @@ class DashboardController extends Controller
 
     public function clicks()
     {
-        $user = Auth::user();
         $user = Auth::user();
         $userId = $user->id;
         $stores  = Store::whereHas('clicks', function ($query)  use ($userId) {
