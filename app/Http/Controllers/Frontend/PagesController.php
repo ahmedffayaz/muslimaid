@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Models\Page;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Blog;
 
 class PagesController extends Controller
 {
@@ -16,7 +17,7 @@ class PagesController extends Controller
         if (view()->exists("frontend.pages.{$slug}")) {
             return view("frontend.pages.{$slug}", compact('page'));
         }
-        if($slug == 'blog'){
+        if ($slug == 'blog') {
             $blogs = Blog::latest()->paginate(20);
             return view('frontend.pages.single-page', compact('page', 'slug', 'blogs'));
         }
