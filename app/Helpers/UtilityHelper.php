@@ -519,11 +519,11 @@ function checkStaticpageRule($url)
         foreach ($route_names as $model) {
             $record = $model::where('slug', $slug)->first();
             if ($model == '\App\Models\Store' && isset($record)) {
-                $seo_record = array();
-                $seo_record['name']  = $record->name;
-                $seo_record['meta_description'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:description')->pluck('value')->first();
-                $seo_record['meta_keyword'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:keywords')->pluck('value')->first();
-                return $seo_record;
+                $seoRule = array();
+                $seoRule['name']  = $record->name;
+                $seoRule['meta_description'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:description')->pluck('value')->first();
+                $seoRule['meta_keyword'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:keywords')->pluck('value')->first();
+                return $seoRule;
             }
             if (isset($record) && (($record->title ? $record->title : $record->name) || $record->meta_description && $record->meta_keyword)) {
                 return $record;
