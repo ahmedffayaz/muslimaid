@@ -46,6 +46,22 @@
         </div>
         <div class="col-lg-6">
             <div class="form-group">
+                <label class="form-label" for="visibility">Visibility</label>
+                <div class="form-control-wrap ">
+                    <div class="form-control-select">
+                        <select class="form-control" name="visibility" id='visibility' >
+                            <option>Select Visibility</option>
+                            <option value="hidden" {{ $isEdit && $category->visibility == 'hidden' ? 'selected' : '' }}>
+                                Hidden</option>
+                            <option value="more" {{ $isEdit && $category->visibility == 'more' ? 'selected' : '' }}>
+                                More</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6" style="margin-top: 5%;">
+            <div class="form-group">
                 <div class="custom-control custom-control-sm custom-checkbox notext">
                     <input type="checkbox" class="custom-control-input" name="is_map_enable" value="{{ $isEdit ?? $category->is_map_enable }}" id="is_map_enable"
                         {{ $isEdit && $category->is_map_enable == 1 ? 'checked' : '' }}>

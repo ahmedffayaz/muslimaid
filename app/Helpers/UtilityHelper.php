@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Blog;
 use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Store;
@@ -16,17 +17,30 @@ use App\Models\StoreReview;
 use Illuminate\Support\Str;
 use App\Models\EmailTemplate;
 use App\Models\Slider;
+use App\Models\StoreSeoData;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
+use Stevebauman\Location\Facades\Location;
 
 function getPageTemplates($slug)
 {
     $page = Page::where('slug', $slug)->first();
     return $page;
+}
+
+function getmoreCategories(){
+    $categories = Category::where('visibility', 'more')->where('parent_id', 0)->whereStatus('1')->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();
+    return $categories;
+}
+
+function getCuisineTags($store)
+{
+    $tags = $store->categories->where('parent_id', 158)->pluck('name')->toArray();
+    return $tags;
 }
 
 function getSpecificSetting($type)
@@ -35,24 +49,51 @@ function getSpecificSetting($type)
     return $setting;
 }
 
+function removeAllTags($text, $limit)
+{
+    $cleanText = strip_tags($text, '<p>');
+    if ($limit != 0) {
+        $cleanText = substr($cleanText, 0, $limit);
+        $cleanText = str_replace('<p>', '<p class="excerpt">', $cleanText);
+        if(strlen($text) > $limit){
+            $cleanText .= '..';
+        }
+    }
+    return $cleanText;
+}
+
+function getRelatedBlogs($keywords, $id)
+{
+    $tags = explode(",", $keywords);
+    $blogs = [];
+    if (!empty($tags[0])) {
+        $blogs = Blog::where('id', '!=', $id)->where(function ($query) use ($tags) {
+            foreach ($tags as $tag) {
+                $query->orWhere('meta_keyword', 'like', '%' . $tag . '%');
+            }
+        })->get();
+    }
+    return $blogs;
+}
+
 function statusBadges($status)
 {
-    if ($status == 'confirmed'){
-       return '<span class="badge badge-primary">'.$status.'</span>';
-    }elseif($status == 'paid'){
-       return '<span class="badge badge-success">'.$status.'</span>';
-    }elseif($status == 'failed'){
-        return '<span class="badge badge-danger">'.$status.'</span>';
-    }elseif($status == 'pending'){
-        return '<span class="badge badge-info">'.$status.'</span>';
-    }elseif($status == 'donated'){
-        return '<span class="badge badge-secondary">'.$status.'</span>';
-    }elseif($status == 'processing donation'){
-        return '<span class="badge badge-light">'.$status.'</span>';
-    }elseif($status == 'processing'){
-        return '<span class="badge badge-warning">'.$status.'</span>';
+    if ($status == 'confirmed') {
+        return '<span class="badge badge-primary">' . $status . '</span>';
+    } elseif ($status == 'paid') {
+        return '<span class="badge badge-success">' . $status . '</span>';
+    } elseif ($status == 'failed') {
+        return '<span class="badge badge-danger">' . $status . '</span>';
+    } elseif ($status == 'pending') {
+        return '<span class="badge badge-info">' . $status . '</span>';
+    } elseif ($status == 'donated') {
+        return '<span class="badge badge-secondary">' . $status . '</span>';
+    } elseif ($status == 'processing donation') {
+        return '<span class="badge badge-light">' . $status . '</span>';
+    } elseif ($status == 'processing') {
+        return '<span class="badge badge-warning">' . $status . '</span>';
     }
-    return '<span class="badge badge-primary">'.$status.'</span>';
+    return '<span class="badge badge-primary">' . $status . '</span>';
 }
 
 function getHomeSliders()
@@ -374,7 +415,10 @@ function getEventsForMenu()
 
 function getCategories($limit = null, $offset = 0)
 {
-    $categories = Category::where('parent_id', 0)->whereStatus('1')->orderBy('sort', 'desc')->orderBy('name', 'asc')
+    $categories = Category::where(function ($query) {
+        $query->where('visibility', '!=', 'hidden')
+            ->orWhereNull('visibility');
+    })->where('parent_id', 0)->whereStatus('1')->orderBy('sort', 'desc')->orderBy('name', 'asc')
         ->when(!empty($limit), function ($q) use ($limit) {
             $q->limit($limit);
         })
@@ -390,7 +434,10 @@ function getCategories($limit = null, $offset = 0)
 
 function getStores($limit = null, $offset = 0)
 {
-    $categories = Category::where('parent_id', 0)
+    $categories = Category::where(function ($query) {
+        $query->where('visibility', '!=', 'hidden')
+            ->orWhereNull('visibility');
+    })->where('parent_id', 0)
         ->when(!empty($limit), function ($q) use ($limit) {
             $q->limit($limit);
         })
@@ -433,7 +480,10 @@ function currency($number, $withSymbol = true)
 
 function sidebarCategories()
 {
-    $sidebar_categories = Category::where('feature_sidebar', 1)->orderBy('name', 'ASC')->get();
+    $sidebar_categories = Category::where(function ($query) {
+        $query->where('visibility', '!=', 'hidden')
+            ->orWhereNull('visibility');
+    })->where('feature_sidebar', 1)->orderBy('name', 'ASC')->get();
     return $sidebar_categories;
 }
 
@@ -452,14 +502,68 @@ function textHighlight($text, $search, $highlightColor = '#3366cc', $casesensiti
 
 function similarStores($store)
 {
-    $categoryIds = $store->categories->pluck('id')->toArray();
+    $categorySlugs = $store->categories->pluck('slug')->toArray();
 
-    $similarStores = Store::whereHas('categories', function ($query) use ($categoryIds) {
-        return $query->whereIn('categories.id', $categoryIds);
-    })->where('id', '!=', $store->id)
-        ->limit(10)
-        ->get();
+    if (in_array('cashblack-to-your-door', $categorySlugs)) {
+        $ip = request()->ip();
+        $data = Location::get($ip);
+        $category = Category::where(function ($query) {
+            $query->where('visibility', '!=', 'hidden')
+                ->orWhereNull('visibility');
+        })->whereSlug('cashblack-to-your-door')->with('stores')->first();
+        $allStores = $category->stores()->whereNotIn('store_id', [$store->id])->latest()->get();
+        $allStores = sortByDistance($data, $allStores);
+        $similarStores = $allStores->sortBy('distance')->values()->take(10);
+    } else {
+        $similarStores = Store::whereHas('categories', function ($query) use ($categorySlugs) {
+            return $query->whereIn('categories.slug', $categorySlugs);
+        })->where('id', '!=', $store->id)
+            ->limit(10)
+            ->get();
+    }
     return $similarStores;
+}
+
+function sortByDistance($data, $stores, $isSortBy = false)
+{
+    // Calculate distance between user and each store
+    foreach ($stores as $store) {
+        $store->storeAddress = $store->storeAddress->first();
+
+        if (isset($store->storeAddress) && isset($data->longitude)) {
+            $latitudeTo = $store->storeAddress->latitude;
+            $longitudeTo = $store->storeAddress->longitude;
+
+            $distance = calculateDistance($data->latitude, $data->longitude, $latitudeTo, $longitudeTo);
+
+            $store->distance = number_format((float)$distance, 2, '.', '');
+        } else {
+            $store->distance = 'Unknown';
+        }
+    }
+
+    return $isSortBy ? $stores->sortBy('distance') : $stores;
+}
+
+function calculateDistance($latitudeFrom, $longitudeFrom, $latitudeTo, $longitudeTo)
+{
+    $earthRadius = 6371; // km
+
+    // Convert coordinates to radians
+    $latFrom = deg2rad($latitudeFrom);
+    $lonFrom = deg2rad($longitudeFrom);
+    $latTo = deg2rad($latitudeTo);
+    $lonTo = deg2rad($longitudeTo);
+
+    // Calculate the differences
+    $latDelta = $latTo - $latFrom;
+    $lonDelta = $lonTo - $lonFrom;
+
+    // Calculate the distance using the Haversine formula
+    $angle = 2 * asin(sqrt(pow(sin($latDelta / 2), 2) + cos($latFrom) * cos($latTo) * pow(sin($lonDelta / 2), 2)));
+    $distance = $angle * $earthRadius;
+
+    return $distance;
 }
 
 function maintenance()
@@ -517,6 +621,13 @@ function checkStaticpageRule($url)
 
         foreach ($route_names as $model) {
             $record = $model::where('slug', $slug)->first();
+            if ($model == '\App\Models\Store' && isset($record)) {
+                $seoRule = array();
+                $seoRule['name']  = $record->name;
+                $seoRule['meta_description'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:description')->pluck('value')->first();
+                $seoRule['meta_keyword'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:keywords')->pluck('value')->first();
+                return $seoRule;
+            }
             if (isset($record) && (($record->title ? $record->title : $record->name) || $record->meta_description && $record->meta_keyword)) {
                 return $record;
             }

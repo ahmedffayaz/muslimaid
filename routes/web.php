@@ -316,6 +316,8 @@ Route::namespace('App\Http\Controllers\Client')
         Route::resource('tickets', TicketController::class)->only(['index', 'create', 'show', 'update']);
         Route::resource('referral', ReferController::class)->only('index');
         Route::post('send-referral-link', [App\Http\Controllers\Client\ReferController::class, 'sendReferralLink'])->name('send-referral-link');
+        Route::get('my-referrals',[App\Http\Controllers\Client\ReferController::class, 'myReferrals'])->name('referral.my-referral');
+        Route::post('search-referrals', [App\Http\Controllers\Client\ReferController::class, 'searchReferrals'])->name('search_referrals');
         Route::get('CharityWithdraw', [App\Http\Controllers\Client\PaymentController::class, 'CharityWithdraw'])->name('CharityWithdraw');
     });
 

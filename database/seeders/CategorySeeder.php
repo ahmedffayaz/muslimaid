@@ -62,6 +62,7 @@ class CategorySeeder extends Seeder
                 'meta_description' => arrayValueExists($category, 'meta_description') ? $category['meta_description'] : null,
                 'created_at' => isset($category['created_at']) ? dbDate($category['created_at']) : $now,
                 'updated_at' => isset($category['updated_at']) ? dbDate($category['updated_at']) : $now,
+                'visibility' => $category['id'] == 158 || (arrayValueExists($category, 'parent_id') && $category['parent_id'] == 158) ? 'hidden' : null,
             ];
             array_push($categoryIdArray, $category['id']);
         }
