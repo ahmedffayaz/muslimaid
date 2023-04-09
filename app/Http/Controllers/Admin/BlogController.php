@@ -94,12 +94,22 @@ class BlogController extends Controller
      */
     public function update(Request $request, Blog $blog)
     {
+        $validated = $request->validate([
+            'title' => 'required|regex:/^[\w. ]+$/',
+        ],$messages = [
+            'title.required' => 'The Title field is required.',
+        ]);
         $blog->title = $request->title;
         $blog->excerpt = $request->excerpt;
         $blog->lb_content = $request->content;
         $blog->meta_keyword = $request->meta_keyword;
         $blog->meta_description = $request->meta_description;
-        $blog->save();
+        if ($request->has('filepath') && !empty($request->filepath)) {
+            $blog->featured_image = $request->filepath;
+        } else {
+            $blog->featured_image = $blog->featured_image; 
+        }
+        $blog->update();
         flash()->success('blog updated successfully');
         return redirect()->route('admin.blogs.index');
     }
