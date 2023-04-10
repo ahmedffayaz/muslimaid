@@ -64,7 +64,8 @@ class CategoryController extends Controller
         $stores = sortByDistance($data, $stores);
         $stores = $stores->sortBy('distance')->values()->paginate(25);
         $stores->appends(['orderBy' => $request->orderBy]);
-        return view('frontend.categories.show', compact('category', 'stores', 'slug'));
+        $cuisine = isset( $request->cuisine) ?  $request->cuisine : '';
+        return view('frontend.categories.show', compact('category', 'stores', 'slug','cuisine'));
     }
 
 
@@ -77,12 +78,19 @@ class CategoryController extends Controller
             $query->where('visibility', '!=', 'hidden')
                 ->orWhereNull('visibility');
         })->whereSlug($slug)->with('stores')->first();
+        $allStores = $category->stores();
+        $categoryCuisine = $request->cuisine;
+        if(isset($request->cuisine)){
+            $allStores->whereHas('categories', function ($query) use ($categoryCuisine){
+                $query->where('name', $categoryCuisine);
+            });
+        }
         if (isset($request->orderBy)) {
             if ($request->orderBy == 'popularity') {
-                $allStores = $category->stores()->with('clicks')->paginate($request->input('perPage'));
+                $allStores = $allStores->with('clicks')->paginate($request->input('perPage'));
                 $allStores = sortByDistance($data, $allStores);
             } else if ($request->orderBy == 'cashback-amount') {
-                $allStores = $category->stores()->whereHas('cashbacks', function ($query) {
+                $allStores = $allStores->whereHas('cashbacks', function ($query) {
                     $query->where('type', 'fixed')->whereHas('currencyData', function ($query) {
                         $query->where('symbol', '£');
                     });
@@ -94,7 +102,7 @@ class CategoryController extends Controller
                 })->paginate($request->input('perPage'));
                 $allStores = sortByDistance($data, $allStores);
             } else if ($request->orderBy == 'cashback-percentage') {
-                $allStores = $category->stores()->whereHas('cashbacks', function ($query) {
+                $allStores = $allStores->whereHas('cashbacks', function ($query) {
                     $query->where('type', 'percentage');
                 })->get()->filter(function ($store) {
                     $cashback = $store->getCashback();
@@ -105,11 +113,11 @@ class CategoryController extends Controller
                 $allStores = sortByDistance($data, $allStores);
             } else {
                 $orderByArr = explode("-", $request->orderBy);
-                $allStores = $category->stores()->orderBy($orderByArr[0], $orderByArr[1])->paginate($request->input('perPage'));
+                $allStores = $allStores->orderBy($orderByArr[0], $orderByArr[1])->paginate($request->input('perPage'));
                 $allStores = sortByDistance($data, $allStores);
             }
         } else {
-            $allStores = $category->stores()->latest()->get();
+            $allStores = $allStores->latest()->get();
             $allStores = sortByDistance($data, $allStores, true);
             $allStores = $allStores->paginate($request->input('perPage'));
         }

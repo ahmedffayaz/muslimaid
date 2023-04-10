@@ -48,7 +48,14 @@ function getSpecificSetting($type)
     $setting = SiteSetting::where('type', $type)->pluck('value')->first();
     return $setting;
 }
-
+function checkCashbackChildCategories($slug, $parentId)
+{
+    $category = Category::where('slug', $slug)->where('parent_id', $parentId)->first();
+    if (isset($category)) {
+        return 1;
+    } 
+    return 0;
+}
 function removeAllTags($text, $limit)
 {
     $cleanText = strip_tags($text, '<p>');
@@ -69,6 +76,7 @@ function getRelatedBlogs($keywords, $id)
     if (!empty($tags[0])) {
         $blogs = Blog::where('id', '!=', $id)->where(function ($query) use ($tags) {
             foreach ($tags as $tag) {
+                $tag = trim($tag);
                 $query->orWhere('meta_keyword', 'like', '%' . $tag . '%');
             }
         })->get();
