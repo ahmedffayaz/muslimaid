@@ -3,15 +3,16 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Auth\UserResource;
 use App\Models\Bonus;
-use App\Models\EmailTemplate;
 use App\Models\User;
 use App\Traits\ApiResponser;
 use App\Traits\WelcomeEmail;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -20,98 +21,254 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'firstname' => ['required', 'string', 'max:255'],
-            'lastname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-        if ($validator->fails()) {
-            return $this->error($validator->errors()->first(), 401);
+        try {
+            $validator = Validator::make($request->all(), [
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
+            ]);
+            if ($validator->fails()) {
+                $data = [
+                    'status' => 406,
+                    'message' => $validator->errors()->first(),
+                ];
+                return response()->json($data, 406);
+            }
+
+            $otp = strval(random_int(100000, 999999));
+            $user = User::create([
+                'first_name' => 'unnamed',
+                'last_name' => 'unnamed',
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
+                'opt_code' => $otp,
+                'status' => 'pending',
+                'registration_type' => 'sign up',
+            ]);
+
+            $user->assignRole('user');
+            $bonus = array_key_exists('welcome_bonus', SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
+            Bonus::create([
+                'user_id' => $user->id,
+                'amount' => $bonus,
+            ]);
+
+            // Send welcome email to user
+            $data = array(
+                'name' => $user->first_name,
+                'email' => $user->email
+            );
+            $merge_subject = ['subject' => null, 'message' => null];
+            $data = array_merge($data, $merge_subject);
+            $this->welcomeEmail($data);
+
+            $user = new UserResource($user);
+            $response = [
+                'status' => 200,
+                'message' => "Successful Registered.",
+                'data' => $user,
+            ];
+
+            return response($response, 200);
+        } catch (Exception $e) {
+            $data = [
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage() . 'Something went wrong, try again.'
+            ];
+            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        $user = User::create([
-            'first_name' => $request->input('firstname'),
-            'last_name' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-            'registration_type' => 'sign up',
-        ]);
-
-        $user->assignRole('user');
-
-        $bonus = array_key_exists('welcome_bonus', SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
-
-        $user_bonus = Bonus::create([
-            'user_id' => $user->id,
-            'amount' => $bonus,
-        ]);
-
-        // Send welcome email to user
-        $data = array(
-            'name' => $user->first_name,
-            'email' => $user->email
-        );
-        $merge_subject = ['subject' => null, 'message' => null];
-        $data = array_merge($data, $merge_subject);
-        $this->welcomeEmail($data);
-
-        return $this->success([
-            'token' => $user->createToken('API Token')->plainTextToken,
-            'id' => $user->id,
-            "first_name" => $user->first_name,
-            "last_name" => $user->last_name,
-            "email" => $user->email,
-            "registration_type" => $user->registration_type,
-            'phone' => $user->phone,
-            'intro' => $user->intro,
-            'profile_image' => $user->avatar ? url('storage/users/images/avatar/'.$user->avatar) : ''
-        ], 'User registered successfully');
     }
 
     public function login(Request $request)
     {
-        $attr = $request->validate([
-            'email' => 'required|string|email|',
-            'password' => 'required|string|min:6',
-        ]);
+        try {
+            $rules = [
+                'email' => 'required|string|email|',
+                'password' => 'required|string|min:6',
+            ];
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                $data = [
+                    'status' => 406,
+                    'message' => $validator->errors()->first(),
+                ];
+                return response()->json($data, 406);
+            }
 
-        if (!Auth::attempt($attr)) {
-            return $this->error('Credentials did not match', 401);
+            $userData = User::where('email', $request->email)->first();
+            if ($userData->status == 'in_active') {
+                $data = [
+                    'status' => 401,
+                    'message' => 'Your account is inactive'
+                ];
+                return response()->json($data, 401);
+            }
+
+            if ($userData->status == 'pending') {
+                $data = [
+                    'status' => 401,
+                    'message' => 'Please verify your account before login'
+                ];
+                return response()->json($data, 401);
+            }
+
+            if (!auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
+                $data = [
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'Email or password is incorrect.'
+                ];
+                return response()->json($data, JsonResponse::HTTP_OK);
+            }
+
+            $user = new UserResource(User::where('email', $request->email)->first());
+            $response = [
+                'status' => 200,
+                'message' => "Successful login.",
+                'data' => $user,
+            ];
+
+            return response($response, 200);
+        } catch (Exception $e) {
+            $data = [
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage() . 'Something went wrong, try again.'
+            ];
+            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return $this->success([
-            'token' => auth()->user()->createToken('API Token')->plainTextToken,
-            'id' => auth()->user()->id,
-            'first_name' => auth()->user()->first_name,
-            'last_name' => auth()->user()->last_name,
-            'email' => auth()->user()->email,
-            'phone' => auth()->user()->phone,
-            'intro' => auth()->user()->intro,
-            'profile_image' => auth()->user()->avatar ? url('storage/users/images/avatar/'.auth()->user()->avatar) : ''
-        ], 'User logged in successfully', 200);
     }
 
     public function logout()
     {
-        auth()->user()->tokens()->delete();
+        try {
+            auth()->user()->tokens()->delete();
+            $response = [
+                'status' => 200,
+                'message' => "User successfully logged out",
+            ];
 
-        return $this->success([
-            'message' => 'User logged out',
-        ]);
+            return response($response, 200);
+        } catch (Exception $e) {
+            $data = [
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage() . 'Something went wrong, try again.'
+            ];
+            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    public function userData(Request $request)
+    public function changePassword(Request $request)
+    {
+        $rules = array(
+            'old_password' => 'required',
+            'new_password' => 'required|min:8',
+            'confirm_password' => 'required|same:new_password',
+        );
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            $data = [
+                'status' => 406,
+                'message' => $validator->errors()->first()
+            ];
+            return response()->json($data, 406);
+        } else {
+            try {
+                if ((Hash::check(request('old_password'), Auth::user()->password)) == false) {
+                    $data = [
+                        'status' => 400,
+                        'message' => "Check your old password."
+                    ];
+                } else if ((Hash::check(request('new_password'), Auth::user()->password)) == true) {
+                    $data = [
+                        'status' => 400,
+                        'message' => "Please enter a password which is not similar then current password."
+                    ];
+                } else {
+                    User::where('id', Auth::user()->id)->update(['password' => Hash::make($request->new_password)]);
+                    $data = [
+                        'status' => 200,
+                        'message' => "Password updated successfully."
+                    ];
+                    return response()->json($data, 200);
+                }
+                return response()->json($data, 400);
+            } catch (\Exception $e) {
+                $data = [
+                    'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                    'message' => $e->getMessage() . 'Something went wrong, try again.'
+                ];
+                return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+    }
+
+    public function userData()
+    {
+        try {
+            $user = auth()->user();
+            $user = new UserResource($user);
+            $response = [
+                'status' => 200,
+                'data' => $user,
+            ];
+            return response($response, 200);
+        } catch (\Exception $e) {
+            $data = [
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage() . 'Something went wrong, try again.'
+            ];
+            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function updateProfile(Request $request)
     {
         $user = auth()->user();
-        return [
-            "first_name" => $user->first_name,
-            "last_name" => $user->last_name,
-            "email" => $user->email,
-            "registration_type" => $user->registration_type,
-        ];
+        $validator = Validator::make($request->all(), [
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
+        ]);
 
+        if ($validator->fails()) {
+            $data = [
+                'status' => 406,
+                'message' => $validator->errors()->first()
+            ];
+            return response()->json($data, 406);
+        } else {
+            try {
+                $avatarImage = $user->avatar;
+                // dd($request->hasFile('avatar'));
+                if ($request->hasFile('avatar')) {
+                    $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
+                }
+                $user->update([
+                    'first_name' => $request->firstname,
+                    'last_name' => $request->lastname,
+                    'email' => $request->input('email'),
+                    'phone' => $request->phone,
+                    'address' => $request->address,
+                    'date_of_birth' => $request->dob,
+                    'avatar' => $avatarImage,
+                ]);
+
+                $user = new UserResource($user);
+                $response = [
+                    'status' => 200,
+                    'message' => "Successful Updated.",
+                    'data' => $user,
+                ];
+                return response($response, 200);
+            } catch (\Exception $e) {
+                $data = [
+                    'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                    'message' => $e->getMessage() . 'Something went wrong, try again.'
+                ];
+                return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
     }
+
+
     public function forgotPassword(Request $request)
     {
 
@@ -135,46 +292,10 @@ class AuthController extends Controller
                 return $this->error($ex->getMessage(), 400);
             } catch (\Exception $ex) {
                 return $this->error($ex->getMessage(), 400);
-
             }
         }
     }
 
-    public function changePassword(Request $request)
-    {
-        $user = auth()->user();
-        $input = $request->all();
-        $userid = $user->id;
-        $rules = array(
-            'old_password' => 'required',
-            'new_password' => 'required|min:8',
-            'confirm_password' => 'required|same:new_password',
-        );
-        $validator = Validator::make($input, $rules);
-        if ($validator->fails()) {
-            $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
-        } else {
-            try {
-                if ((Hash::check(request('old_password'), Auth::user()->password)) == false) {
-                    $arr = array("status" => 400, "message" => "Check your old password.", "data" => array());
-                } else if ((Hash::check(request('new_password'), Auth::user()->password)) == true) {
-                    $arr = array("status" => 400, "message" => "Please enter a password which is not similar then current password.", "data" => array());
-                } else {
-                    User::where('id', $userid)->update(['password' => Hash::make($input['new_password'])]);
-                    $arr = array("status" => 200, "message" => "Password updated successfully.", "data" => array());
-                }
-            } catch (\Exception $ex) {
-                if (isset($ex->errorInfo[2])) {
-                    $msg = $ex->errorInfo[2];
-                } else {
-                    $msg = $ex->getMessage();
-                }
-                $arr = array("status" => 400, "message" => $msg, "data" => array());
-            }
-        }
-        return \Response::json($arr);
-
-    }
     public function socialLogin(Request $request)
     {
         $provider_id = $request->input('provider_id');
@@ -190,9 +311,8 @@ class AuthController extends Controller
                 'phone' => $userExists->phone,
                 'intro' => $userExists->intro,
                 "registration_type" => $userExists->registration_type,
-                'profile_image' => $userExists->avatar ? url('storage/users/images/avatar/'.$userExists->avatar) : ''
+                'profile_image' => $userExists->avatar ? url('storage/users/images/avatar/' . $userExists->avatar) : ''
             ], 'User Logged In Successfully');
-
         }
         $validator = Validator::make($request->all(), [
             'firstname' => ['required', 'string', 'max:255'],
@@ -218,7 +338,7 @@ class AuthController extends Controller
 
         $bonus = array_key_exists('welcome_bonus', SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
 
-        $user_bonus = Bonus::create([
+        $userBonus = Bonus::create([
             'user_id' => $user->id,
             'amount' => $bonus,
         ]);
@@ -240,57 +360,7 @@ class AuthController extends Controller
             "registration_type" => $user->registration_type,
             'phone' => $user->phone,
             'intro' => $user->intro,
-            'profile_image' => $user->avatar ? url('storage/users/images/avatar/'.$user->avatar) : ''
+            'profile_image' => $user->avatar ? url('storage/users/images/avatar/' . $user->avatar) : ''
         ], 'User Registered Successfully');
     }
-    public function updateProfile(Request $request)
-    {
-        $user = auth()->user();
-        $input = $request->all();
-        $userid = $user->id;
-        $rules = array(
-            'firstname' => 'required|regex:/^[A-Za-z ]+$/',
-            'lastname' => 'required|regex:/^[A-Za-z ]+$/',
-        );
-        $validator = Validator::make($input, $rules);
-        if ($validator->fails()) {
-            $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
-        } else {
-            try {
-                $user->update([
-                    'first_name' => $request->firstname,
-                    'last_name' => $request->lastname,
-                    'phone' => $request->phone,
-                    'address' => $request->address,
-                    'intro' => $request->intro,
-                ]);
-                if($request->has('profile_image')){
-
-                    $imageName = $request->firstname.'_user_avatar_'.time().'.png';
-                    $file = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',$request->input('profile_image')));
-                    \Storage::put('public/users/images/avatar/'.$imageName, $file);
-                    $user->update([
-                       'avatar'=>$imageName
-                   ]);
-
-                }
-                $data = [
-                    'id' => auth()->user()->id,
-                    'first_name' => auth()->user()->first_name,
-                    'last_name' => auth()->user()->last_name,
-                    'email' => auth()->user()->email,
-                    'phone' => auth()->user()->phone,
-                    'address' => auth()->user()->adress,
-                    'intro' => auth()->user()->intro,
-                    'profile_image' => auth()->user()->avatar ? url('storage/users/images/avatar/'.auth()->user()->avatar) : ''
-                ];
-                $arr = array("status" => 200, "message" => "Profile updated successfully.", "data" => $data);
-
-            } catch (\Exception $ex) {
-                $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => array());
-            }
-        }
-        return \Response::json($arr);
-    }
-
 }
