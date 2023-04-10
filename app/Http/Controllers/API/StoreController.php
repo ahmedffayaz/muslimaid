@@ -5,8 +5,6 @@ namespace App\Http\Controllers\API;
 use Exception;
 use App\Models\Page;
 use App\Models\Store;
-use App\Models\Slider;
-use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
@@ -27,7 +25,27 @@ class StoreController extends Controller
         try {
             $page = Page::whereSlug('stores')->whereType('system')->whereStatus('active')->pluck('banner_image')->firstOrFail();
 
-            $stores = Store::whereStatus('active')->paginate(12);
+            $stores = Store::when($request->has('letter'), function ($query) use ($request) {
+                $query->where('name', 'like', $request->input('letter') . '%');
+            })->when($request->orderBy == 'latest', function ($query) {
+                $query->latest();
+            })->when($request->orderBy == 'popularity', function ($query) {
+                $query->withCount('clicks')->orderByDesc('clicks_count');
+            })->when($request->orderBy == 'cashback-amount', function ($query) {
+                $query->whereHas('cashbacks', function ($query) {
+                    $query->whereType('fixed');
+                })->get()->filter(function ($query) {
+                    $cashback = $query->getCashback();
+                    return (strpos($cashback, '£') !== false);
+                });
+            })->when($request->orderBy == 'cashback-percentage', function ($query) {
+                $query->whereHas('cashbacks', function ($query) {
+                    $query->where('type', 'percentage');
+                })->get()->filter(function ($query) {
+                    $cashback = $query->getCashback();
+                    return (strpos($cashback, '%') !== false);
+                });
+            })->whereStatus('active')->paginate(12);
 
             if ($stores->count() == 0) {
                 $data = [
@@ -55,7 +73,7 @@ class StoreController extends Controller
         } catch (Exception $e) {
             $data = [
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => 'Something went wrong, try again.'
+                'message' => $e->getMessage() . 'Something went wrong, try again.'
             ];
             return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
@@ -69,8 +87,8 @@ class StoreController extends Controller
      */
     public function show($slug)
     {
-        try{
-            $store = Store::where('slug',$slug)->whereStatus('active')->firstOrFail();
+        try {
+            $store = Store::where('slug', $slug)->whereStatus('active')->firstOrFail();
             $data = [
                 'status' => JsonResponse::HTTP_OK,
                 'message' => 'Success',
@@ -92,38 +110,27 @@ class StoreController extends Controller
         }
     }
 
-    public function featuredCashback(){
-        $stores = Store::whereHas('tags', function ($query) {
-            $query->where('title', 'feature_homepage');
-        })->latest()->get();
-        return StoreResource::collection($stores);
-
-    }
-
-    public function slider(){
-        return SliderResource::collection(Slider::where('name','Home')->first()->slides);
-    }
-
     public function vouchers(Request $request)
     {
         $stores = Store::has('vouchers')->select('stores.*');
-        if($request->get('search')){
-            $stores = $stores->where('name','like','%'.$request->get('search').'%');
+        if ($request->get('search')) {
+            $stores = $stores->where('name', 'like', '%' . $request->get('search') . '%');
         }
-        if($request->get('name_sort')){
-            $order = $request->get('name_sort') == 'descending' ? 'desc' :'asc';
-            $stores = $stores->orderBy('name',$order);
-        }else{
-            $stores = $stores->orderBy('id','DESC');
+        if ($request->get('name_sort')) {
+            $order = $request->get('name_sort') == 'descending' ? 'desc' : 'asc';
+            $stores = $stores->orderBy('name', $order);
+        } else {
+            $stores = $stores->orderBy('id', 'DESC');
         }
         $limit = $request->has('per_page') ? $request->get('per_page') : 10;
         $stores = $stores->paginate($limit);
         $stores->appends(
-                        ['search'   => $request->get('search'),
-                        'per_page'  => $limit,
-                        'name_sort' => $request->get('name_sort')
-                        ]);
+            [
+                'search'   => $request->get('search'),
+                'per_page'  => $limit,
+                'name_sort' => $request->get('name_sort')
+            ]
+        );
         return StoreResource::collection($stores);
     }
-
 }
