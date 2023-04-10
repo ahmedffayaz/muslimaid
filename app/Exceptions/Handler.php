@@ -34,12 +34,19 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->renderable(function (\Exception $e) {
+        $this->renderable(function (\Exception $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'status' => 401, 
+                    'message' => 'Not authenticated User'
+                ], 401);
+            }
             if ($e->getPrevious() instanceof \Illuminate\Session\TokenMismatchException) {
                 Session::flash('message', 'Form has expired. Please try again.');
                 Session::flash('alert-class', 'alert-danger');
                 return redirect()->back();
             };
         });
+
     }
 }

@@ -15,21 +15,18 @@ use App\Http\Controllers\API as API;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
 Route::post('/auth/register', [API\AuthController::class, 'register']);
-Route::post('/auth/social', [API\AuthController::class, 'socialLogin']);
-
 Route::post('/auth/login', [API\AuthController::class, 'login']);
 
+Route::post('/auth/social', [API\AuthController::class, 'socialLogin']);
 Route::post('password/email', [API\AuthController::class, 'forgotPassword']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
-    Route::get('/me', [API\AuthController::class, 'userData']);
-    Route::get('/user/profile',[API\DashboardController::class, 'edit'])->name('profile');
-    Route::put('/user/profile/update',[API\AuthController::class, 'updateProfile'])->name('update_profile');
+    Route::get('/auth/logout', [API\AuthController::class, 'logout']);
+    Route::post('/change_password', [API\AuthController::class, 'changePassword']);
+    Route::post('/update_profile',[API\AuthController::class, 'updateProfile'])->name('update_profile');
+    Route::get('/user_data', [API\AuthController::class, 'userData'])->name('user_data');
+
     Route::get('/user/cashback',[API\DashboardController::class, 'cashback'])->name('cashback');
     Route::get('/user/clicks',[API\DashboardController::class, 'clicks'])->name('clicks');
     Route::get('/user/payment_methods',[API\PaymentController::class, 'paymentMethods']);
@@ -42,10 +39,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/user/claim-step-3',[API\ClaimController::class, 'step3']);
     Route::get('/user/user-balance',[API\DashboardController::class, 'userBalance']);
 
-
-    Route::post('/change_password', [API\AuthController::class, 'changePassword']);
-
-    Route::post('/auth/logout', [API\AuthController::class, 'logout']);
 });
 
 Route::apiResource('stores', API\StoreController::class)->only(['index', 'show']);
