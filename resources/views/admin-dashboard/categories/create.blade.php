@@ -50,7 +50,7 @@
                 <div class="form-control-wrap ">
                     <div class="form-control-select">
                         <select class="form-control" name="visibility" id="visibility">
-                            <option value="">Select Visibility</option>
+                            <option value="">Visible</option>
                             <option value="hidden" {{ $isEdit && $category->visibility == 'hidden' ? 'selected' : '' }}>
                                 Hidden</option>
                             <option value="more" {{ $isEdit && $category->visibility == 'more' ? 'selected' : '' }}>

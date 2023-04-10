@@ -588,7 +588,7 @@
                     },
                     banner_upload: {
                         required: true
-                    }
+                    },
                     banner_type: {
                         required: true
                     },

@@ -3333,7 +3333,7 @@ button.hamburger:not(.collapsed):before {
     font-size: 0.75rem;
 }
 .takeaway-listing .distance {
-    background: url(../img/icons/car-icon.png) left center no-repeat;
+    background: url("/frontend/images/car-icon.png") left center no-repeat;
     padding-left: 1.75rem;
 }
 .takeaway-listing.list-view .list-item {
