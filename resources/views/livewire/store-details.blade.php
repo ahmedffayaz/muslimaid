@@ -1889,12 +1889,6 @@
                 },
                 store_url: {
                     url: true
-                },
-                description: {
-                    maxlength: 255,
-                },
-                terms_conditions: {
-                    maxlength: 255
                 }
             }
         });

@@ -16,14 +16,20 @@ $(document).ready(function () {
     });
 
     $(window).scroll(function () {
-        if (
-            Math.round(window.scrollY + window.innerHeight) ===
-            document.documentElement.scrollHeight
-        ) {
-            $(".section").addClass("static-sections");
+        $("section").each(function () {
+            var sectionTop = $(this).offset().top;
+            var sectionHeight = $(this).outerHeight();
+            var windowHeight = $(window).height();
+            var windowBottom = $(window).scrollTop() + windowHeight;
+            if (windowBottom > sectionTop + sectionHeight) {
+                $(this).addClass("static-sections");
+            } 
+        });
+        if (Math.round($(window).scrollTop() + $(window).height()) === $(document).height()) {
             $(".container").addClass("static-sections");
-        }
+        } 
     });
+    
 
     $(".acc-after-login").on("click", function (e) {
         console.log("first click");

@@ -1558,7 +1558,7 @@ button.hamburger:not(.collapsed):before {
     background-repeat: no-repeat;
 }
 .form-container .form .row input.user-icon {
-    background-image: url(../img/icons/user.png);
+    background-image: url(../img/icons/account-icon.png);
 }
 .form-container .form .row input.password-icon {
     background-image: url(../img/icons/security.png);
