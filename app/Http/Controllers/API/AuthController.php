@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Auth\UserResource;
+use App\Http\Resources\Home\UserResource;
 use App\Models\Bonus;
 use App\Models\User;
 use App\Traits\ApiResponser;
@@ -34,13 +34,13 @@ class AuthController extends Controller
                 return response()->json($data, 406);
             }
 
-            $otp = strval(random_int(100000, 999999));
+            $Opt = strval(random_int(100000, 999999));
             $user = User::create([
                 'first_name' => 'unnamed',
                 'last_name' => 'unnamed',
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
-                'opt_code' => $otp,
+                'opt_code' => $Opt,
                 'status' => 'pending',
                 'registration_type' => 'sign up',
             ]);
@@ -95,20 +95,22 @@ class AuthController extends Controller
             }
 
             $userData = User::where('email', $request->email)->first();
-            if ($userData->status == 'in_active') {
-                $data = [
-                    'status' => 401,
-                    'message' => 'Your account is inactive'
-                ];
-                return response()->json($data, 401);
-            }
-
-            if ($userData->status == 'pending') {
-                $data = [
-                    'status' => 401,
-                    'message' => 'Please verify your account before login'
-                ];
-                return response()->json($data, 401);
+            if(isset($userData)){
+                if ($userData->status == 'in_active') {
+                    $data = [
+                        'status' => 401,
+                        'message' => 'Your account is inactive'
+                    ];
+                    return response()->json($data, 401);
+                }
+    
+                if ($userData->status == 'pending') {
+                    $data = [
+                        'status' => 401,
+                        'message' => 'Please verify your account before login'
+                    ];
+                    return response()->json($data, 401);
+                }
             }
 
             if (!auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
@@ -200,98 +202,144 @@ class AuthController extends Controller
         }
     }
 
-    public function userData()
+    public function resendOptCode(Request $request)
     {
-        try {
-            $user = auth()->user();
-            $user = new UserResource($user);
-            $response = [
-                'status' => 200,
-                'data' => $user,
-            ];
-            return response($response, 200);
-        } catch (\Exception $e) {
-            $data = [
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage() . 'Something went wrong, try again.'
-            ];
-            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    public function updateProfile(Request $request)
-    {
-        $user = auth()->user();
-        $validator = Validator::make($request->all(), [
-            'firstname' => ['required', 'string', 'max:255'],
-            'lastname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-        ]);
-
+        $rules = array(
+            'email' => 'required|email',
+        );
+        $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
             $data = [
                 'status' => 406,
                 'message' => $validator->errors()->first()
             ];
             return response()->json($data, 406);
-        } else {
+        }else{
             try {
-                $avatarImage = $user->avatar;
-                // dd($request->hasFile('avatar'));
-                if ($request->hasFile('avatar')) {
-                    $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
-                }
-                $user->update([
-                    'first_name' => $request->firstname,
-                    'last_name' => $request->lastname,
-                    'email' => $request->input('email'),
-                    'phone' => $request->phone,
-                    'address' => $request->address,
-                    'date_of_birth' => $request->dob,
-                    'avatar' => $avatarImage,
-                ]);
-
-                $user = new UserResource($user);
-                $response = [
-                    'status' => 200,
-                    'message' => "Successful Updated.",
-                    'data' => $user,
-                ];
-                return response($response, 200);
-            } catch (\Exception $e) {
+                
+            } catch (\Exception $ex) {
                 $data = [
-                    'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                    'message' => $e->getMessage() . 'Something went wrong, try again.'
+                    'status' => 400,
+                    'message' => $ex->getMessage()
                 ];
-                return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+                return response()->json($data, 400);
             }
         }
     }
 
+    public function verifyOptCode(Request $request)
+    {
+        $rules = array(
+            'email' => 'required|email',
+            'opt_code' => 'required|max:6',
+        );
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            $data = [
+                'status' => 406,
+                'message' => $validator->errors()->first()
+            ];
+            return response()->json($data, 406);
+        }else{
+            try {
+                $userOpt = User::where('email', $request->email)->pluck('opt_code')->first(); 
+                if((int)$userOpt === (int)$request->opt_code && !empty($userOpt)){
+                    $data = [
+                        'status' => 200,
+                        'message' => "Opt Code successfully verified"
+                    ];
+                    return response()->json($data, 200);
+                }else{
+                    $data = [
+                        'status' => 400,
+                        'message' => "Error! Entered Opt doesn't match"
+                    ];
+                    return response()->json($data, 400);
+                }
+            } catch (\Exception $ex) {
+                $data = [
+                    'status' => 400,
+                    'message' => $ex->getMessage()
+                ];
+                return response()->json($data, 400);
+            }
+        }
+    }
 
     public function forgotPassword(Request $request)
     {
-
-        $input = $request->all();
         $rules = array(
-            'email' => "required|email",
+            'email' => 'required|email',
         );
-        $validator = \Validator::make($input, $rules);
+        $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return $this->error($validator->errors()->first(), 401);
-        } else {
+            $data = [
+                'status' => 406,
+                'message' => $validator->errors()->first()
+            ];
+            return response()->json($data, 406);
+        }else{
             try {
+
                 $response = \Password::sendResetLink($request->only('email'));
                 switch ($response) {
-                    case \Password::RESET_LINK_SENT:
-                        return $this->success([], trans($response));
-                    case \Password::INVALID_USER:
-                        return $this->error(trans($response), 401);
+                    case \Password::RESET_LINK_SENT:{
+                       
+                        $user = User::where('email', $request->email)->first();
+                        $userData =  [
+                            'id' => $user->id,
+                            'name' => $user->first_name . ' ' . $user->last_name,
+                            'email' => $user->email,
+                        ];
+                        $passingData =  [
+                            'user' => $userData,
+                            'opt_code' => empty($user->opt_code) ? '' : $user->opt_code,
+                        ];
+                        $data = [
+                            'status' => 200,
+                            'message' => "If ". $request->email  ."is registered with Cashblack, password reset instructions will be sent to the address.",
+                            'data' => $passingData,
+                        ];
+                        return response()->json($data, 200);
+                    }
+                    case \Password::INVALID_USER:{
+                        $data = [
+                            'status' => 401,
+                            'message' => "Invalid Email"
+                        ];
+                        return response()->json($data, 401);
+                    }
+                    default: {
+                        $user = User::where('email', $request->email)->first();
+                        $userData =  [
+                            'id' => $user->id,
+                            'name' => $user->first_name . ' ' . $user->last_name,
+                            'email' => $user->email,
+                        ];
+                        $passingData =  [
+                            'user' => $userData,
+                            'opt_code' => empty($user->opt_code) ? '' : $user->opt_code,
+                        ];
+                        $data = [
+                            'status' => 200,
+                            'message' => "If ". $request->email  ."is registered with Cashblack, password reset instructions will be sent to the address.",
+                            'data' => $passingData,
+                        ];
+                        return response()->json($data, 200);
+                    }
                 }
             } catch (\Swift_TransportException $ex) {
-                return $this->error($ex->getMessage(), 400);
+                $data = [
+                    'status' => 400,
+                    'message' => $ex->getMessage()
+                ];
+                return response()->json($data, 400);
             } catch (\Exception $ex) {
-                return $this->error($ex->getMessage(), 400);
+                $data = [
+                    'status' => 400,
+                    'message' => $ex->getMessage()
+                ];
+                return response()->json($data, 400);
             }
         }
     }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Resources\Auth;
+namespace App\Http\Resources\Home;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
@@ -34,12 +34,12 @@ class UserResource extends JsonResource
             "status" => $this->status,
             "dob" => date('d-M-Y', strtotime($this->date_of_birth)),
             "address" => empty($this->address) ?'' : $this->address,
-            "user_image"=> $this->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . $this->avatar) ? 'admin-dashboard/images/avatar.png' : 'storage/users/images/avatar/' . $this->avatar,
+            "user_image"=> url('/') . '/' .  ($this->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . $this->avatar) ? 'admin-dashboard/images/avatar.png' : 'storage/users/images/avatar/' . $this->avatar),
             "user_image_type" => "upload",
             "is_verify"=> $this->is_email_verified ? 'Yes' : 'No',
             "date_updated"=> date('d-M-Y', strtotime($this->updated_at)),
             "date_created"=> date('d-M-Y', strtotime($this->created_at)),
-            "opt_code" => $this->opt_code,
+            "opt_code" => empty($this->opt_code) ? '': $this->opt_code,
             "first_name"=> empty($this->first_name) ? '' : $this->first_name,
             "last_name"=>  empty($this->last_name) ? '' : $this->last_name,
             "contact_number"=> $this->phone,

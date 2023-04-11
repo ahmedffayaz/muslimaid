@@ -13,6 +13,10 @@ use App\Http\Resources\StoreResource;
 use App\Http\Resources\Home\SlideResource;
 use App\Http\Resources\StoreDetailResource;
 use App\Http\Resources\Home\FeaturedCategoryResource;
+use App\Http\Resources\SearchResources;
+use App\Models\Page;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -67,6 +71,54 @@ class HomeController extends Controller
             $data = [
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
                 'message' => 'Something went wrong, try again'
+            ];
+            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function mainSearch(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'search_text' => ['required'],
+            ]);
+
+            if ($validator->fails()) {
+                $data = [
+                    'status' => 406,
+                    'message' => $validator->errors()->first()
+                ];
+                return response()->json($data, 406);
+            } else {
+                $search = $request->search_text;
+                $page = Page::whereSlug('stores')->whereType('system')->whereStatus('active')->pluck('banner_image')->firstOrFail();
+                $stores =  Store::where('name', 'like', '%' . $search . '%')
+                    ->orWhereHas('storeRuleData', function ($query) use ($search) {
+                        $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $search . '%');
+                    })->whereStatus('active')->get();
+
+                if ($stores->count() == 0) {
+                    $data = [
+                        'status' => JsonResponse::HTTP_OK,
+                        'message' => 'No store found'
+                    ];
+                    return response()->json($data, JsonResponse::HTTP_OK);
+                }
+
+                $data = [
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'Success',
+                    'data' => [
+                        'main_banner_image' => getBannerImageUrl($page),
+                        'stores' => SearchResources::collection($stores)
+                    ]
+                ];
+                return response()->json($data, JsonResponse::HTTP_OK);
+            }
+        } catch (Exception $e) {
+            $data = [
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage() . 'Something went wrong, try again.'
             ];
             return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
