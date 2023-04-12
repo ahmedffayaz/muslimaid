@@ -104,6 +104,25 @@ function statusBadges($status)
     return '<span class="badge badge-primary">' . $status . '</span>';
 }
 
+function cashbackStatus($status){
+    if ($status == 'Confirmed') {
+        return 3;
+    } elseif ($status == 'Paid') {
+        return 4;
+    } elseif ($status == 'Failed') {
+        return 2;
+    } elseif ($status == 'Pending') {
+        return 1;
+    } elseif ($status == 'Donated') {
+        return 7;
+    } elseif ($status == 'Processing Donation') {
+        return 6;
+    } elseif ($status == 'Processing') {
+        return 5;
+    }
+    return 1;
+}
+
 function getHomeSliders()
 {
     $name = "Before Login Home";
