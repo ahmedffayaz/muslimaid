@@ -7,7 +7,6 @@ use App\Models\Tag;
 use App\Models\Slide;
 use App\Models\Store;
 use App\Models\Category;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
 use App\Http\Resources\Home\SlideResource;
@@ -57,7 +56,7 @@ class HomeController extends Controller
             }])->whereStatus(1)->limit(10)->get();
 
             $data = [
-                'status' => JsonResponse::HTTP_OK,
+                'status' => 200,
                 'message' => 'Success',
                 'data' => [
                     'base_url' => url('/'),
@@ -66,13 +65,14 @@ class HomeController extends Controller
                     'featured_categories' => FeaturedCategoryResource::collection($featuredCategories)
                 ]
             ];
-            return response()->json($data, JsonResponse::HTTP_OK);
+            return response()->json($data, 200);
         } catch (Exception $e) {
             $data = [
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => 'Something went wrong, try again'
+                'status' => 500,
+                'message' => 'Something went wrong, try again',
+                'data' => []
             ];
-            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($data, 500);
         }
     }
 
@@ -86,7 +86,8 @@ class HomeController extends Controller
             if ($validator->fails()) {
                 $data = [
                     'status' => 406,
-                    'message' => $validator->errors()->first()
+                    'message' => $validator->errors()->first(),
+                    'data' => []
                 ];
                 return response()->json($data, 406);
             } else {
@@ -99,28 +100,30 @@ class HomeController extends Controller
 
                 if ($stores->count() == 0) {
                     $data = [
-                        'status' => JsonResponse::HTTP_OK,
-                        'message' => 'No store found'
+                        'status' => 200,
+                        'message' => 'No store found',
+                        'data' => []
                     ];
-                    return response()->json($data, JsonResponse::HTTP_OK);
+                    return response()->json($data, 200);
                 }
 
                 $data = [
-                    'status' => JsonResponse::HTTP_OK,
+                    'status' => 200,
                     'message' => 'Success',
                     'data' => [
                         'main_banner_image' => getBannerImageUrl($page),
                         'stores' => SearchResources::collection($stores)
                     ]
                 ];
-                return response()->json($data, JsonResponse::HTTP_OK);
+                return response()->json($data, 200);
             }
         } catch (Exception $e) {
             $data = [
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage() . 'Something went wrong, try again.'
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
             ];
-            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($data, 500);
         }
     }
 }

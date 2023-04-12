@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Home\UserResource;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -23,10 +22,11 @@ class UserController extends Controller
             return response($response, 200);
         } catch (\Exception $e) {
             $data = [
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage() . 'Something went wrong, try again.'
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
             ];
-            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($data, 500);
         }
     }
 
@@ -42,13 +42,13 @@ class UserController extends Controller
         if ($validator->fails()) {
             $data = [
                 'status' => 406,
-                'message' => $validator->errors()->first()
+                'message' => $validator->errors()->first(),
+                'data' => []
             ];
             return response()->json($data, 406);
         } else {
             try {
                 $avatarImage = $user->avatar;
-                // dd($request->hasFile('avatar'));
                 if ($request->hasFile('avatar')) {
                     $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
                 }
@@ -65,22 +65,23 @@ class UserController extends Controller
                 $user = new UserResource($user);
                 $response = [
                     'status' => 200,
-                    'message' => "Successful Updated.",
+                    'message' => "Successfully Updated.",
                     'data' => $user,
                 ];
                 return response($response, 200);
             } catch (\Exception $e) {
                 $data = [
-                    'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                    'message' => $e->getMessage() . 'Something went wrong, try again.'
+                    'status' => 500,
+                    'message' => 'Something went wrong, try again.',
+                    'data' => []
                 ];
-                return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+                return response()->json($data, 500);
             }
         }
     }
 
 
-    public function updatePic(Request $request)
+    public function updateAvatar(Request $request)
     {
         try {
             $user = auth()->user();
@@ -91,7 +92,8 @@ class UserController extends Controller
             if ($validator->fails()) {
                 $data = [
                     'status' => 406,
-                    'message' => $validator->errors()->first()
+                    'message' => $validator->errors()->first(),
+                    'data' => []
                 ];
                 return response()->json($data, 406);
             } else {
@@ -106,19 +108,20 @@ class UserController extends Controller
                 $user = new UserResource($user);
                 $response = [
                     'status' => 200,
-                    'message' => "Successful",
+                    'message' => "Successfully Updated.",
                     'data' => [
-                        'msg' => url('/') . '/' . ($user->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . $user->avatar) ? 'admin-dashboard/images/avatar.png' : 'storage/users/images/avatar/' . $user->avatar),
+                        'image_url' => url('/') . '/' . ($user->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . $user->avatar) ? 'admin-dashboard/images/avatar.png' : 'storage/users/images/avatar/' . $user->avatar),
                     ],
                 ];
                 return response($response, 200);
             }
         } catch (\Exception $e) {
             $data = [
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage() . 'Something went wrong, try again.'
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
             ];
-            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($data, 500);
         }
     }
 }

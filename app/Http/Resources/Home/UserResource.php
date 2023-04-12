@@ -18,11 +18,11 @@ class UserResource extends JsonResource
         $roles = $this->getRoleNames();
         $userRoles = $roles->implode(', ');
 
-        $permissions = $this->getAllPermissions()->pluck('name'); 
+        $permissions = $this->getAllPermissions()->pluck('name');
         $userPermissions = $permissions->implode(',');
 
         $token = $this->createToken('API Token')->plainTextToken;
-        
+
         $user = [
             "id" => $this->id,
             "name" => $this->first_name . ' ' . $this->last_name,
@@ -30,25 +30,25 @@ class UserResource extends JsonResource
             "permission" =>  ucwords($userPermissions),
             "email" => $this->email,
             "paypal_email" =>  empty($this->paypalInfo) ? '' : $this->paypalInfo->paypal_email,
-            "ref_id"=> empty($this->referred_by) ? '' : $this->referred_by,
+            "ref_id" => empty($this->referred_by) ? '' : $this->referred_by,
             "status" => $this->status,
             "dob" => date('d-M-Y', strtotime($this->date_of_birth)),
-            "address" => empty($this->address) ?'' : $this->address,
-            "user_image"=> url('/') . '/' .  ($this->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . $this->avatar) ? 'admin-dashboard/images/avatar.png' : 'storage/users/images/avatar/' . $this->avatar),
+            "address" => empty($this->address) ? '' : $this->address,
+            "user_image" => url('/') . '/' .  ($this->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . $this->avatar) ? 'admin-dashboard/images/avatar.png' : 'storage/users/images/avatar/' . $this->avatar),
             "user_image_type" => "upload",
-            "is_verify"=> $this->is_email_verified ? 'Yes' : 'No',
-            "date_updated"=> date('d-M-Y', strtotime($this->updated_at)),
-            "date_created"=> date('d-M-Y', strtotime($this->created_at)),
-            "opt_code" => empty($this->opt_code) ? '': $this->opt_code,
-            "first_name"=> empty($this->first_name) ? '' : $this->first_name,
-            "last_name"=>  empty($this->last_name) ? '' : $this->last_name,
-            "contact_number"=> $this->phone,
-            "sort_code"=> empty($this->bankInfo) ? '' : $this->bankInfo->bank_sort_code,
-            "bank_acc_no"=> empty($this->bankInfo) ? '' : $this->bankInfo->account_number,
-            "referral_code"=> empty($this->referred_by) ? '' : $this->referred_by,
-            "email_preference"=> $this->email_preference ? 'Yes' : 'No',
-            "token"=> $token,
-            "balance"=> currency($this->availableBalance(3))
+            "is_verify" => $this->is_email_verified ? 'Yes' : 'No',
+            "date_updated" => date('d-M-Y', strtotime($this->updated_at)),
+            "date_created" => date('d-M-Y', strtotime($this->created_at)),
+            "otp" => empty($this->otp) ? '' : $this->otp,
+            "first_name" => empty($this->first_name) ? '' : $this->first_name,
+            "last_name" =>  empty($this->last_name) ? '' : $this->last_name,
+            "contact_number" => $this->phone,
+            "sort_code" => empty($this->bankInfo) ? '' : $this->bankInfo->bank_sort_code,
+            "bank_acc_no" => empty($this->bankInfo) ? '' : $this->bankInfo->account_number,
+            "referral_code" => empty($this->referred_by) ? '' : $this->referred_by,
+            "email_preference" => $this->email_preference ? 'Yes' : 'No',
+            "token" => $token,
+            "balance" => currency($this->availableBalance(3))
         ];
 
         $data = [

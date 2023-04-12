@@ -17,8 +17,8 @@ use App\Http\Controllers\API as API;
 
 Route::post('/auth/register', [API\AuthController::class, 'register']);
 Route::post('/auth/login', [API\AuthController::class, 'login']);
-Route::post('/verify_opt', [API\AuthController::class, 'verifyOptCode']);
-Route::get('/resend_opt', [API\AuthController::class, 'resendOptCode']);
+Route::post('/verify_otp', [API\AuthController::class, 'verifyOtpCode']);
+Route::get('/resend_otp', [API\AuthController::class, 'resendOtpCode']);
 
 Route::post('/auth/social', [API\AuthController::class, 'socialLogin']);
 Route::post('password/email', [API\AuthController::class, 'forgotPassword']);
@@ -27,18 +27,18 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/auth/logout', [API\AuthController::class, 'logout']);
     Route::post('/change_password', [API\AuthController::class, 'changePassword']);
 
-    Route::post('/update_profile', [API\UserController::class, 'updateProfile'])->name('update_profile');
-    Route::post('/update_pic_action', [API\UserController::class, 'updatePic'])->name('update_pic_action');
-    Route::get('/user_data', [API\UserController::class, 'userData'])->name('user_data');
+    Route::post('/update_profile', [API\UserController::class, 'updateProfile']);
+    Route::post('/update_avatar', [API\UserController::class, 'updateAvatar']);
+    Route::get('/user_data', [API\UserController::class, 'userData']);
 
-    Route::post('search_ajax', [API\HomeController::class, 'mainSearch']);
+    Route::post('main_search', [API\HomeController::class, 'mainSearch']);
     Route::post('/dashboard_data', [API\DashboardController::class, 'index']);
 
 
-    Route::get('/user/cashback', [API\DashboardController::class, 'cashback'])->name('cashback');
-    Route::get('/user/clicks', [API\DashboardController::class, 'clicks'])->name('clicks');
+    Route::get('/user/cashback', [API\DashboardController::class, 'cashback']);
+    Route::get('/user/clicks', [API\DashboardController::class, 'clicks']);
     Route::get('/user/payment_methods', [API\PaymentController::class, 'paymentMethods']);
-    Route::post('/user/payment_methods_save', [API\PaymentController::class, 'paymentSave'])->name('payment_save');
+    Route::post('/user/payment_methods', [API\PaymentController::class, 'paymentSave']);
     Route::get('/user/cashouts', [API\PaymentController::class, 'cashouts']);
     Route::post('/user/withdraw', [API\PaymentController::class, 'withdraw']);
     Route::get('/user/claims', [API\ClaimController::class, 'claims']);

@@ -17,7 +17,6 @@ use App\Http\Resources\DashboardResources;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserCashbackResource;
-use Illuminate\Http\JsonResponse;
 
 class DashboardController extends Controller
 {
@@ -36,10 +35,11 @@ class DashboardController extends Controller
             return response($response, 200);
         } catch (\Exception $e) {
             $data = [
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage() . 'Something went wrong, try again.'
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
             ];
-            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($data, 500);
         }
     }
 
