@@ -15,10 +15,10 @@ class ClickResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'Store'=>$this->store->name,
-            'store_id'=>$this->store->id,
-            'Date'=>\Carbon\Carbon::parse($this->created_at)->isoFormat('Do MMMM YYYY'),
-            
+            'Store' => $this->store->name,
+            'store_id' => $this->store->id,
+            'Date' => \Carbon\Carbon::parse($this->created_at)->isoFormat('Do MMMM YYYY'),
+
         ];
     }
 }

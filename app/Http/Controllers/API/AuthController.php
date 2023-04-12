@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Auth\UserResource;
+use App\Http\Resources\Home\UserResource;
 use App\Models\Bonus;
 use App\Models\User;
 use App\Traits\ApiResponser;
 use App\Traits\WelcomeEmail;
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -27,11 +26,12 @@ class AuthController extends Controller
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
             ]);
             if ($validator->fails()) {
-                $data = [
+                $response = [
                     'status' => 406,
                     'message' => $validator->errors()->first(),
+                    'data' => []
                 ];
-                return response()->json($data, 406);
+                return response()->json($response, 406);
             }
 
             $otp = strval(random_int(100000, 999999));
@@ -40,7 +40,7 @@ class AuthController extends Controller
                 'last_name' => 'unnamed',
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
-                'opt_code' => $otp,
+                'otp' => $otp,
                 'status' => 'pending',
                 'registration_type' => 'sign up',
             ]);
@@ -70,11 +70,12 @@ class AuthController extends Controller
 
             return response($response, 200);
         } catch (Exception $e) {
-            $data = [
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage() . 'Something went wrong, try again.'
+            $response = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
             ];
-            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($response, 500);
         }
     }
 
@@ -87,36 +88,42 @@ class AuthController extends Controller
             ];
             $validator = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
-                $data = [
+                $response = [
                     'status' => 406,
                     'message' => $validator->errors()->first(),
+                    'data' => []
                 ];
-                return response()->json($data, 406);
+                return response()->json($response, 406);
             }
 
             $userData = User::where('email', $request->email)->first();
-            if ($userData->status == 'in_active') {
-                $data = [
-                    'status' => 401,
-                    'message' => 'Your account is inactive'
-                ];
-                return response()->json($data, 401);
-            }
+            if (isset($userData)) {
+                if ($userData->status == 'in_active') {
+                    $response = [
+                        'status' => 401,
+                        'message' => 'Your account is inactive',
+                        'data' => []
+                    ];
+                    return response()->json($response, 401);
+                }
 
-            if ($userData->status == 'pending') {
-                $data = [
-                    'status' => 401,
-                    'message' => 'Please verify your account before login'
-                ];
-                return response()->json($data, 401);
+                if ($userData->status == 'pending') {
+                    $response = [
+                        'status' => 401,
+                        'message' => 'Please verify your account before login',
+                        'data' => []
+                    ];
+                    return response()->json($response, 401);
+                }
             }
 
             if (!auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
-                $data = [
-                    'status' => JsonResponse::HTTP_OK,
-                    'message' => 'Email or password is incorrect.'
+                $response = [
+                    'status' => 200,
+                    'message' => 'Email or password is incorrect.',
+                    'data' => []
                 ];
-                return response()->json($data, JsonResponse::HTTP_OK);
+                return response()->json($response, 200);
             }
 
             $user = new UserResource(User::where('email', $request->email)->first());
@@ -128,11 +135,12 @@ class AuthController extends Controller
 
             return response($response, 200);
         } catch (Exception $e) {
-            $data = [
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage() . 'Something went wrong, try again.'
+            $response = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
             ];
-            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($response, 500);
         }
     }
 
@@ -143,15 +151,17 @@ class AuthController extends Controller
             $response = [
                 'status' => 200,
                 'message' => "User successfully logged out",
+                'data' => []
             ];
 
             return response($response, 200);
         } catch (Exception $e) {
-            $data = [
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage() . 'Something went wrong, try again.'
+            $response = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
             ];
-            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($response, 500);
         }
     }
 
@@ -164,134 +174,185 @@ class AuthController extends Controller
         );
         $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            $data = [
+            $response = [
                 'status' => 406,
-                'message' => $validator->errors()->first()
+                'message' => $validator->errors()->first(),
+                'data' => []
             ];
-            return response()->json($data, 406);
+            return response()->json($response, 406);
         } else {
             try {
                 if ((Hash::check(request('old_password'), Auth::user()->password)) == false) {
-                    $data = [
+                    $response = [
                         'status' => 400,
-                        'message' => "Check your old password."
+                        'message' => "Check your old password.",
+                        'data' => []
                     ];
                 } else if ((Hash::check(request('new_password'), Auth::user()->password)) == true) {
-                    $data = [
+                    $response = [
                         'status' => 400,
-                        'message' => "Please enter a password which is not similar then current password."
+                        'message' => "Please enter a password which is not similar then current password.",
+                        'data' => []
                     ];
                 } else {
                     User::where('id', Auth::user()->id)->update(['password' => Hash::make($request->new_password)]);
-                    $data = [
+                    $response = [
                         'status' => 200,
-                        'message' => "Password updated successfully."
+                        'message' => "Password updated successfully.",
+                        'data' => []
                     ];
-                    return response()->json($data, 200);
+                    return response()->json($response, 200);
                 }
-                return response()->json($data, 400);
+                return response()->json($response, 400);
             } catch (\Exception $e) {
-                $data = [
-                    'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                    'message' => $e->getMessage() . 'Something went wrong, try again.'
+                $response = [
+                    'status' => 500,
+                    'message' => 'Something went wrong, try again.',
+                    'data' => []
                 ];
-                return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+                return response()->json($response, 500);
             }
         }
     }
 
-    public function userData()
+    public function resendOtpCode(Request $request)
     {
-        try {
-            $user = auth()->user();
-            $user = new UserResource($user);
+        $rules = array(
+            'email' => 'required|email',
+        );
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
             $response = [
-                'status' => 200,
-                'data' => $user,
+                'status' => 406,
+                'message' => $validator->errors()->first(),
+                'data' => []
             ];
-            return response($response, 200);
-        } catch (\Exception $e) {
-            $data = [
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage() . 'Something went wrong, try again.'
-            ];
-            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($response, 406);
+        } else {
         }
     }
 
-    public function updateProfile(Request $request)
+    public function verifyOtpCode(Request $request)
     {
-        $user = auth()->user();
-        $validator = Validator::make($request->all(), [
-            'firstname' => ['required', 'string', 'max:255'],
-            'lastname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-        ]);
-
+        $rules = array(
+            'email' => 'required|email',
+            'otp' => 'required|max:6',
+        );
+        $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            $data = [
+            $response = [
                 'status' => 406,
-                'message' => $validator->errors()->first()
+                'message' => $validator->errors()->first(),
+                'data' => []
             ];
-            return response()->json($data, 406);
+            return response()->json($response, 406);
         } else {
             try {
-                $avatarImage = $user->avatar;
-                // dd($request->hasFile('avatar'));
-                if ($request->hasFile('avatar')) {
-                    $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
+                $userOtp = User::where('email', $request->email)->pluck('otp')->first();
+                if ((int)$userOtp === (int)$request->otp && !empty($userOtp)) {
+                    $response = [
+                        'status' => 200,
+                        'message' => "Otp successfully verified",
+                        'data' => []
+                    ];
+                    return response()->json($response, 200);
+                } else {
+                    $response = [
+                        'status' => 400,
+                        'message' => "Error! Entered Otp doesn't match",
+                        'data' => []
+                    ];
+                    return response()->json($response, 400);
                 }
-                $user->update([
-                    'first_name' => $request->firstname,
-                    'last_name' => $request->lastname,
-                    'email' => $request->input('email'),
-                    'phone' => $request->phone,
-                    'address' => $request->address,
-                    'date_of_birth' => $request->dob,
-                    'avatar' => $avatarImage,
-                ]);
-
-                $user = new UserResource($user);
+            } catch (\Exception $ex) {
                 $response = [
-                    'status' => 200,
-                    'message' => "Successful Updated.",
-                    'data' => $user,
+                    'status' => 400,
+                    'message' => 'Something went wrong, try again.',
+                    'data' => []
                 ];
-                return response($response, 200);
-            } catch (\Exception $e) {
-                $data = [
-                    'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                    'message' => $e->getMessage() . 'Something went wrong, try again.'
-                ];
-                return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+                return response()->json($response, 400);
             }
         }
     }
-
 
     public function forgotPassword(Request $request)
     {
-
-        $input = $request->all();
         $rules = array(
-            'email' => "required|email",
+            'email' => 'required|email',
         );
-        $validator = \Validator::make($input, $rules);
+        $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            return $this->error($validator->errors()->first(), 401);
+            $response = [
+                'status' => 406,
+                'message' => $validator->errors()->first(),
+                'data' => []
+            ];
+            return response()->json($response, 406);
         } else {
             try {
+
                 $response = \Password::sendResetLink($request->only('email'));
                 switch ($response) {
-                    case \Password::RESET_LINK_SENT:
-                        return $this->success([], trans($response));
-                    case \Password::INVALID_USER:
-                        return $this->error(trans($response), 401);
+                    case \Password::RESET_LINK_SENT: {
+
+                            $user = User::where('email', $request->email)->first();
+                            $userData =  [
+                                'id' => $user->id,
+                                'name' => $user->first_name . ' ' . $user->last_name,
+                                'email' => $user->email,
+                            ];
+                            $passingData =  [
+                                'user' => $userData,
+                                'otp' => empty($user->otp) ? '' : $user->otp,
+                            ];
+                            $response = [
+                                'status' => 200,
+                                'message' => "If " . $request->email  . " is registered with Cashblack, password reset instructions will be sent to the address.",
+                                'data' => $passingData,
+                            ];
+                            return response()->json($response, 200);
+                        }
+                    case \Password::INVALID_USER: {
+                            $response = [
+                                'status' => 401,
+                                'message' => "Invalid Email",
+                                'data' => []
+                            ];
+                            return response()->json($response, 401);
+                        }
+                    default: {
+                            $user = User::where('email', $request->email)->first();
+                            $userData =  [
+                                'id' => $user->id,
+                                'name' => $user->first_name . ' ' . $user->last_name,
+                                'email' => $user->email,
+                            ];
+                            $passingData =  [
+                                'user' => $userData,
+                                'otp' => empty($user->otp) ? '' : $user->otp,
+                            ];
+                            $response = [
+                                'status' => 200,
+                                'message' => "If " . $request->email  . " is registered with Cashblack, password reset instructions will be sent to the address.",
+                                'data' => $passingData,
+                            ];
+                            return response()->json($response, 200);
+                        }
                 }
             } catch (\Swift_TransportException $ex) {
-                return $this->error($ex->getMessage(), 400);
+                $response = [
+                    'status' => 400,
+                    'message' => 'Something went wrong, try again.',
+                    'data' => []
+                ];
+                return response()->json($response, 400);
             } catch (\Exception $ex) {
-                return $this->error($ex->getMessage(), 400);
+                $response = [
+                    'status' => 400,
+                    'message' => 'Something went wrong, try again.',
+                    'data' => []
+                ];
+                return response()->json($response, 400);
             }
         }
     }
