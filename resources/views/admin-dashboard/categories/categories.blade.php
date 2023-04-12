@@ -583,12 +583,6 @@
                         url: true,
                         required: true
                     },
-                    logo_upload: {
-                        required: true
-                    },
-                    banner_upload: {
-                        required: true
-                    },
                     banner_type: {
                         required: true
                     },
