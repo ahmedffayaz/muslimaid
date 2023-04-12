@@ -8,9 +8,7 @@
                         <div class="nk-block nk-block-lg">
                             <div class="nk-block-head">
                                 <div class="nk-block-head-content">
-                                    {{-- <h4 class="title nk-block-title">Create Page</h4> --}}
                                     <div class="nk-block-des">
-                                        {{-- <p>You can make style out your....</p> --}}
                                     </div>
                                 </div>
                             </div>
@@ -18,7 +16,7 @@
                                 <div class="card-inner">
                                     <div class="card-head">
                                     </div>
-                                    <form action="{{ route('admin.pages.update', $page) }}" class="form-validate pages-form" method="POST">
+                                    <form action="{{ route('admin.pages.update', $page) }}" class="form-validate pages-form" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
                                         <div class="row g-4">
@@ -68,16 +66,26 @@
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <label class="form-label">Banner Image</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-btn">
-                                                            <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white">
-                                                                <i class="fa fa-picture-o"></i> Choose
-                                                            </a>
-                                                        </span>
-                                                        <input id="thumbnail" class="form-control" type="text" name="filepath">
+                                                    <label class="form-label" for="banner_image">Banner <span class="text-danger">*</span></label>
+                                                    <div class="form-control-wrap">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" name="banner_image" id="banner_image" onchange="BannerReadURL(this);">
+                                                            <label class="custom-file-label" for="banner_image">Choose file</label>
+                                                        </div>
                                                     </div>
-                                                    <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <div class="preview-wrapper">
+                                                            @if ($page->banner_image)
+                                                                <img id="banner_image-preview" src="{{ asset($page->banner_image) }}" style="max-height: 60px; max-width: 60px;"
+                                                                    alt="">
+                                                            @else
+                                                                <img id="banner_image-preview" src="" alt="logo" class="d-none"
+                                                                    style="max-height: 60px; max-width: 60px;" />
+                                                            @endif
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
@@ -141,7 +149,7 @@
 
             let _self = $(this);
             let btnHtml = _self.html();
-            
+
             _self
                 .attr('disabled', 'disabled')
                 .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
@@ -155,7 +163,7 @@
                 success: function(data) {
                     viewShortcodesModal.find('.modal-content').html(data);
                     viewShortcodesModal.modal('show');
-            
+
                     _self.removeAttr('disabled').html(btnHtml);
                 }
             });
@@ -217,5 +225,18 @@
                 return false;
             }
         });
+    </script>
+    <script>
+        function BannerReadURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    if (input.id === "banner_image") {
+                        $('#banner_image-preview').attr('src', e.target.result).removeClass('d-none');
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     </script>
 @endpush

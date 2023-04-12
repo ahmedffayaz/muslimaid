@@ -928,3 +928,12 @@ function resolvePageShortCodes($content, $data = [])
 
     return $content;
 }
+function getFaqsContent() {
+    $page = Page::where('slug', 'faqs')->first();
+    if (!$page) {
+        return '';
+    }
+    $content = $page->lb_raw_content;
+    $content = preg_replace('/\[(.*?)\]/', '', $content);
+    return $content;
+}
