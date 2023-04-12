@@ -307,7 +307,7 @@ class AuthController extends Controller
                             ];
                             $response = [
                                 'status' => 200,
-                                'message' => "If" . $request->email  . " is registered with Cashblack, password reset instructions will be sent to the address.",
+                                'message' => "If " . $request->email  . " is registered with Cashblack, password reset instructions will be sent to the address.",
                                 'data' => $passingData,
                             ];
                             return response()->json($response, 200);
@@ -333,7 +333,7 @@ class AuthController extends Controller
                             ];
                             $response = [
                                 'status' => 200,
-                                'message' => "If" . $request->email  . " is registered with Cashblack, password reset instructions will be sent to the address.",
+                                'message' => "If " . $request->email  . " is registered with Cashblack, password reset instructions will be sent to the address.",
                                 'data' => $passingData,
                             ];
                             return response()->json($response, 200);
