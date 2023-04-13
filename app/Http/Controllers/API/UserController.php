@@ -213,7 +213,7 @@ class UserController extends Controller
                 }
             }
             $clicks = $clicks->paginate(20);
-            $clicksData = ClickResource::collection($clicks);
+            $clickData = ClickResource::collection($clicks);
             $meta_data = [
                 "next" => $clicks->nextPageUrl(),
                 "previous" => $clicks->previousPageUrl(),
@@ -228,7 +228,7 @@ class UserController extends Controller
                 'status' => 200,
                 'message' => 'Successful',
                 'data' => [
-                    'clicks' => $clicksData,
+                    'clicks' => $clickData,
                     'options' => [
                         "All Conversion",
                         "yes",
@@ -267,7 +267,7 @@ class UserController extends Controller
                 $tickets->where('status', $request->status);
             }
             $tickets = $tickets->paginate(20);
-            $ticketsData = TicketResource::collection($tickets);
+            $ticketData = TicketResource::collection($tickets);
             $meta_data = [
                 "next" => $tickets->nextPageUrl(),
                 "previous" => $tickets->previousPageUrl(),
@@ -282,7 +282,7 @@ class UserController extends Controller
                 'status' => 200,
                 'message' => 'Successful',
                 'data' => [
-                    'tickets' => $ticketsData,
+                    'tickets' => $ticketData,
                     'meta_data' => $meta_data
                 ]
             ];
