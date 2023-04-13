@@ -20,7 +20,7 @@ class DashboardController extends Controller
         try {
             $user = auth()->user();
             $response = new DashboardResources($user);
-            return response($response, 200);
+            return response()->json($response, 200);
         } catch (\Exception $e) {
             $data = [
                 'status' => 500,

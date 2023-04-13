@@ -26,7 +26,7 @@ class UserController extends Controller
                 'status' => 200,
                 'data' => $user,
             ];
-            return response($response, 200);
+            return response()->json($response, 200);
         } catch (\Exception $e) {
             $data = [
                 'status' => 500,
@@ -75,7 +75,7 @@ class UserController extends Controller
                     'message' => "Successfully Updated.",
                     'data' => $user,
                 ];
-                return response($response, 200);
+                return response()->json($response, 200);
             } catch (\Exception $e) {
                 $data = [
                     'status' => 500,
@@ -119,7 +119,7 @@ class UserController extends Controller
                         'image_url' => url('/') . '/' . ($user->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . $user->avatar) ? 'admin-dashboard/images/avatar.png' : 'storage/users/images/avatar/' . $user->avatar),
                     ],
                 ];
-                return response($response, 200);
+                return response()->json($response, 200);
             }
         } catch (\Exception $e) {
             $data = [
@@ -137,7 +137,7 @@ class UserController extends Controller
             $user = Auth::user();
             $cashbacks = UserCashback::where('user_id', $user->id);
             if (isset($request->status)) {
-                $status = cashbackStatus($request->status);
+                $status = convertCashbackStatusToDbFormat($request->status);
                 $cashbacks->where('status', $status);
             }
             if (isset($request->store_id)) {
@@ -149,7 +149,7 @@ class UserController extends Controller
                 $cashbacks->whereBetween('event_date', [$request->date_from, $request->date_to]);
             }
             $cashbacks = $cashbacks->latest()->paginate(20);
-            $cashbacksData = UserCashbackResource::collection($cashbacks);
+            $cashbackData  = UserCashbackResource::collection($cashbacks);
             $meta_data = [
                 "next" => $cashbacks->nextPageUrl(),
                 "previous" => $cashbacks->previousPageUrl(),
@@ -164,7 +164,7 @@ class UserController extends Controller
                 'status' => 200,
                 'message' => 'Successful',
                 'data' => [
-                    'cashbacks' => $cashbacksData,
+                    'cashbacks' => $cashbackData,
                     'options' => [
                         "Select Status",
                         "Pending",
@@ -178,7 +178,7 @@ class UserController extends Controller
                     'meta_data' => $meta_data
                 ]
             ];
-            return response($response, 200);
+            return response()->json($response, 200);
         } catch (\Exception $e) {
             $data = [
                 'status' => 500,
@@ -237,7 +237,7 @@ class UserController extends Controller
                     'meta_data' => $meta_data
                 ]
             ];
-            return response($response, 200);
+            return response()->json($response, 200);
         } catch (\Exception $e) {
             $data = [
                 'status' => 500,
@@ -286,7 +286,7 @@ class UserController extends Controller
                     'meta_data' => $meta_data
                 ]
             ];
-            return response($response, 200);
+            return response()->json($response, 200);
         } catch (\Exception $e) {
             $data = [
                 'status' => 500,
@@ -299,9 +299,18 @@ class UserController extends Controller
 
     public function userBalance()
     {
-        $user = Auth::user();
-        $balance = number_format((float)Auth::user()->availableBalance(3), 2, '.', '');
-        $arr = array("status" => 200, "message" => "User Balance", "data" => ['available_balance' => $balance]);
-        return response()->json($arr, 500);;
+        try {
+            $user = Auth::user();
+            $balance = number_format((float)Auth::user()->availableBalance(3), 2, '.', '');
+            $arr = array("status" => 200, "message" => "User Balance", "data" => ['available_balance' => $balance]);
+            return response()->json($arr, 500);
+        } catch (\Exception $e) {
+            $data = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
+            ];
+            return response()->json($data, 500);
+        }
     }
 }

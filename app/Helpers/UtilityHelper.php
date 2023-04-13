@@ -32,7 +32,7 @@ function getPageTemplates($slug)
     return $page;
 }
 
-function getmoreCategories()
+function getMoreCategories()
 {
     $categories = Category::where('visibility', 'more')->where('parent_id', 0)->whereStatus('1')->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();
     return $categories;
@@ -105,24 +105,24 @@ function statusBadges($status)
     return '<span class="badge badge-primary">' . $status . '</span>';
 }
 
-function cashbackStatus($status)
+function convertCashbackStatusToDbFormat($status)
 {
     if ($status == 'Confirmed') {
-        return 3;
+        $status = 3;
     } elseif ($status == 'Paid') {
-        return 4;
+        $status = 4;
     } elseif ($status == 'Failed') {
-        return 2;
+        $status = 2;
     } elseif ($status == 'Pending') {
-        return 1;
+        $status = 1;
     } elseif ($status == 'Donated') {
-        return 7;
+        $status = 7;
     } elseif ($status == 'Processing Donation') {
-        return 6;
+        $status = 6;
     } elseif ($status == 'Processing') {
-        return 5;
+        $status = 5;
     }
-    return 1;
+    return $status;
 }
 
 function getHomeSliders()

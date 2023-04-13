@@ -68,7 +68,7 @@ class AuthController extends Controller
                 'data' => $user,
             ];
 
-            return response($response, 200);
+            return response()->json($response, 200);
         } catch (Exception $e) {
             $response = [
                 'status' => 500,
@@ -133,7 +133,7 @@ class AuthController extends Controller
                 'data' => $user,
             ];
 
-            return response($response, 200);
+            return response()->json($response, 200);
         } catch (Exception $e) {
             $response = [
                 'status' => 500,
@@ -154,7 +154,7 @@ class AuthController extends Controller
                 'data' => []
             ];
 
-            return response($response, 200);
+            return response()->json($response, 200);
         } catch (Exception $e) {
             $response = [
                 'status' => 500,
