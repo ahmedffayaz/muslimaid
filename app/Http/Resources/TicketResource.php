@@ -18,7 +18,7 @@ class TicketResource extends JsonResource
             "id" => $this->id,
             "ticket_type" => !empty($this->claim_type) ? $this->claim_type : '',
             "title" => !empty($this->title) ? $this->title : '',
-            "user_id" =>  !empty($this->user_id) ? $this->user_id : '', 
+            "user_id" =>  !empty($this->user_id) ? $this->user_id : '',
             "store_id" => !empty($this->store_id) ? $this->store_id : '',
             "exit_click_id" => !empty($this->click_id) ? $this->click_id : '',
             "cashback_id" => !empty($this->cashback_id) ? $this->cashback_id : '',

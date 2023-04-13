@@ -32,7 +32,8 @@ function getPageTemplates($slug)
     return $page;
 }
 
-function getmoreCategories(){
+function getmoreCategories()
+{
     $categories = Category::where('visibility', 'more')->where('parent_id', 0)->whereStatus('1')->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();
     return $categories;
 }
@@ -53,7 +54,7 @@ function checkCashbackChildCategories($slug, $parentId)
     $category = Category::where('slug', $slug)->where('parent_id', $parentId)->first();
     if (isset($category)) {
         return 1;
-    } 
+    }
     return 0;
 }
 function removeAllTags($text, $limit)
@@ -62,7 +63,7 @@ function removeAllTags($text, $limit)
     if ($limit != 0) {
         $cleanText = substr($cleanText, 0, $limit);
         $cleanText = str_replace('<p>', '<p class="excerpt">', $cleanText);
-        if(strlen($text) > $limit){
+        if (strlen($text) > $limit) {
             $cleanText .= '..';
         }
     }
@@ -104,7 +105,8 @@ function statusBadges($status)
     return '<span class="badge badge-primary">' . $status . '</span>';
 }
 
-function cashbackStatus($status){
+function cashbackStatus($status)
+{
     if ($status == 'Confirmed') {
         return 3;
     } elseif ($status == 'Paid') {
@@ -947,7 +949,8 @@ function resolvePageShortCodes($content, $data = [])
 
     return $content;
 }
-function getFaqsContent() {
+function getFaqsContent()
+{
     $page = Page::where('slug', 'faqs')->first();
     if (!$page) {
         return '';

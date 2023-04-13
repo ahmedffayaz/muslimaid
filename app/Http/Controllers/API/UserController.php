@@ -248,7 +248,7 @@ class UserController extends Controller
         }
     }
 
-    
+
     public function tickets(Request $request)
     {
         try {
