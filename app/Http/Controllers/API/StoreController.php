@@ -44,6 +44,10 @@ class StoreController extends Controller
                     $cashback = $query->getCashback();
                     return (strpos($cashback, '%') !== false);
                 });
+            })->when($request->tag, function ($query) use ($request) {
+                $query->whereHas('tags', function ($query) use ($request) {
+                    $query->where('title', $request->input('tag'));
+                });
             })->whereStatus('active')->paginate(12);
 
             if ($stores->count() == 0) {

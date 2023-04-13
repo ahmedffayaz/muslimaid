@@ -333,7 +333,7 @@ class UserController extends Controller
         }
     }
 
-    
+
     public function referralLink()
     {
         try {
@@ -360,8 +360,8 @@ class UserController extends Controller
     {
         try {
             return response()->json([
-                'status' => 200, 
-                'message' => 'User balance retrieved successfully', 
+                'status' => 200,
+                'message' => 'User balance retrieved successfully',
                 'data' => [
                     'available_balance' => currency(auth()->user()->availableBalance(3), false)
                 ]
