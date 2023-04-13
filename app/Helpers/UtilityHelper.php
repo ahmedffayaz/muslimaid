@@ -107,22 +107,14 @@ function statusBadges($status)
 
 function convertCashbackStatusToDbFormat($status)
 {
-    if ($status == 'Confirmed') {
-        $status = 3;
-    } elseif ($status == 'Paid') {
-        $status = 4;
-    } elseif ($status == 'Failed') {
-        $status = 2;
-    } elseif ($status == 'Pending') {
-        $status = 1;
-    } elseif ($status == 'Donated') {
-        $status = 7;
-    } elseif ($status == 'Processing Donation') {
-        $status = 6;
-    } elseif ($status == 'Processing') {
-        $status = 5;
-    }
-    return $status;
+    if ($status == 'Confirmed') return 3;
+    if ($status == 'Paid') return 4;
+    if ($status == 'Failed') return 2;
+    if ($status == 'Pending') return 1;
+    if ($status == 'Donated') return 7;
+    if ($status == 'Processing Donation') return 6;
+    if ($status == 'Processing') return 5;
+    return 1;
 }
 
 function getHomeSliders()
