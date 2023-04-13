@@ -32,7 +32,8 @@ function getPageTemplates($slug)
     return $page;
 }
 
-function getmoreCategories(){
+function getMoreCategories()
+{
     $categories = Category::where('visibility', 'more')->where('parent_id', 0)->whereStatus('1')->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();
     return $categories;
 }
@@ -53,7 +54,7 @@ function checkCashbackChildCategories($slug, $parentId)
     $category = Category::where('slug', $slug)->where('parent_id', $parentId)->first();
     if (isset($category)) {
         return 1;
-    } 
+    }
     return 0;
 }
 function removeAllTags($text, $limit)
@@ -62,7 +63,7 @@ function removeAllTags($text, $limit)
     if ($limit != 0) {
         $cleanText = substr($cleanText, 0, $limit);
         $cleanText = str_replace('<p>', '<p class="excerpt">', $cleanText);
-        if(strlen($text) > $limit){
+        if (strlen($text) > $limit) {
             $cleanText .= '..';
         }
     }
@@ -102,6 +103,18 @@ function statusBadges($status)
         return '<span class="badge badge-warning">' . $status . '</span>';
     }
     return '<span class="badge badge-primary">' . $status . '</span>';
+}
+
+function convertCashbackStatusToDbFormat($status)
+{
+    if ($status == 'Confirmed') return 3;
+    if ($status == 'Paid') return 4;
+    if ($status == 'Failed') return 2;
+    if ($status == 'Pending') return 1;
+    if ($status == 'Donated') return 7;
+    if ($status == 'Processing Donation') return 6;
+    if ($status == 'Processing') return 5;
+    return 1;
 }
 
 function getHomeSliders()
@@ -928,7 +941,8 @@ function resolvePageShortCodes($content, $data = [])
 
     return $content;
 }
-function getFaqsContent() {
+function getFaqsContent()
+{
     $page = Page::where('slug', 'faqs')->first();
     if (!$page) {
         return '';
