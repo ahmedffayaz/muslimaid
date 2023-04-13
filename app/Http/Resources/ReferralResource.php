@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SearchResources extends JsonResource
+class ReferralResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,11 +15,11 @@ class SearchResources extends JsonResource
     public function toArray($request)
     {
         return [
-            'image' => getImageUrl($this->logo->first()),
-            'id' => $this->id . '/' . $this->slug,
-            'unique_id' => $this->id,
-            'text' => $this->name,
-            'extra' => $this->getCashback(),
+            'id' => $this->id,
+            'name' => $this->first_name . ' ' . $this->last_name,
+            'date' => date('d-M-Y', strtotime($this->referred_at)),
+            'isVerify' => isset($this->is_email_verified) ? 'Yes' : 'No',
+            'status' => $this->status,
         ];
     }
 }

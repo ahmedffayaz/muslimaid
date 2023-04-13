@@ -34,6 +34,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/user/cashback', [API\UserController::class, 'cashback']);
     Route::post('/user/clicks', [API\UserController::class, 'clicks']);
     Route::post('/user/tickets', [API\UserController::class, 'tickets']);
+    Route::post('/user/referral-data', [API\UserController::class, 'userReferrals']);
+    Route::get('/refer_and_earn', [API\UserController::class, 'referralLink']);
 
     Route::post('main_search', [API\HomeController::class, 'mainSearch']);
 
