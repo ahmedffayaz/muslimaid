@@ -150,7 +150,7 @@ class UserController extends Controller
             }
             $cashbacks = $cashbacks->latest()->paginate(20);
             $cashbackData  = UserCashbackResource::collection($cashbacks);
-            $meta_data = [
+            $metaData = [
                 "next" => $cashbacks->nextPageUrl(),
                 "previous" => $cashbacks->previousPageUrl(),
                 "per_page" => 20,
@@ -175,7 +175,7 @@ class UserController extends Controller
                         "Donated",
                         "Processing Donation"
                     ],
-                    'meta_data' => $meta_data
+                    'metaData' => $metaData
                 ]
             ];
             return response()->json($response, 200);
@@ -214,7 +214,7 @@ class UserController extends Controller
             }
             $clicks = $clicks->paginate(20);
             $clickData = ClickResource::collection($clicks);
-            $meta_data = [
+            $metaData = [
                 "next" => $clicks->nextPageUrl(),
                 "previous" => $clicks->previousPageUrl(),
                 "per_page" => 20,
@@ -234,7 +234,7 @@ class UserController extends Controller
                         "yes",
                         "no"
                     ],
-                    'meta_data' => $meta_data
+                    'metaData' => $metaData
                 ]
             ];
             return response()->json($response, 200);
@@ -268,7 +268,7 @@ class UserController extends Controller
             }
             $tickets = $tickets->paginate(20);
             $ticketData = TicketResource::collection($tickets);
-            $meta_data = [
+            $metaData = [
                 "next" => $tickets->nextPageUrl(),
                 "previous" => $tickets->previousPageUrl(),
                 "per_page" => 20,
@@ -283,7 +283,7 @@ class UserController extends Controller
                 'message' => 'Successful',
                 'data' => [
                     'tickets' => $ticketData,
-                    'meta_data' => $meta_data
+                    'metaData' => $metaData
                 ]
             ];
             return response()->json($response, 200);
