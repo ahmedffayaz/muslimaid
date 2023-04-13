@@ -256,7 +256,7 @@ class UserController extends Controller
             $tickets = Ticket::orderBy('id', 'desc')->where('user_id', $user->id);
 
             if (isset($request->ticket_type)) {
-                $tickets->where('ticket_type', $request->ticket_type);
+                $tickets->where('claim_type', $request->ticket_type);
             }
             if (isset($request->date_from) && isset($request->date_to)) {
                 $from = date('Y-m-d', strtotime($request->date_from));
