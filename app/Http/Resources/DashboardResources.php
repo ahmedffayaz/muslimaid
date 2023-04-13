@@ -33,25 +33,25 @@ class DashboardResources extends JsonResource
             "Pending" => [
                 "title" => "Pending",
                 "description" => "Transactions tracked by Cashblack and awaiting retailer confirmation.",
-                "amount" =>  $this->availableBalance(1)
+                "amount" => currency($this->availableBalance(1) , false)
             ],
             "Confirmed" => [
                 "title" =>  "Confirmed",
                 "description" => "Transactions confirmed by the retailer and awaiting cashouts.",
-                "amount" => $this->availableBalance(3)
+                "amount" => currency($this->availableBalance(3) , false)
             ],
             "Payable" => [
                 "title" => "Processing",
                 "description" =>  "Transactions in process of cashouts or donation.",
-                "amount" =>  $this->availableBalance(5)
+                "amount" => currency($this->availableBalance(5) , false)
             ],
             "Paidout" => [
                 "title" => "TOTAL",
                 "description" => "Total sum of all your debit and credit amounts.",
-                "amount" => $this->availableBalance()
+                "amount" => currency($this->availableBalance() , false)
             ],
             "total_debit" => [
-                "amount" => $this->availableBalance()
+                "amount" => currency($this->availableBalance() , false)
             ],
             "limit" => getSpecificSetting('min_cashout_amount')
         ];
