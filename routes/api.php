@@ -54,9 +54,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 Route::apiResource('stores', API\StoreController::class)->only(['index', 'show']);
-Route::get('featured_cashback', [API\StoreController::class, 'featuredCashback']);
-Route::get('slider', [API\StoreController::class, 'slider']);
 Route::get('vouchers', [API\StoreController::class, 'vouchers']);
+Route::get('store-detail/{id}', [API\StoreController::class, 'vouchers']);
 
 Route::post('click/track', [API\ClickController::class, 'track']);
 
@@ -64,3 +63,4 @@ Route::get('home', [API\HomeController::class, 'index']);
 
 Route::get('categories/{letter?}', [API\CategoryController::class, 'index']);
 Route::get('child-categories/{slug}/{letter?}', [API\CategoryController::class, 'show']);
+Route::get('get-category-stores/{slug}', [API\CategoryController::class, 'getCategoryStores']);

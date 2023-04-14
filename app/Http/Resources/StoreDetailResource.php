@@ -14,17 +14,30 @@ class StoreDetailResource extends JsonResource
      */
     public function toArray($request)
     {
-        if ($this->cashback) {
-            return [
-                'title' => $this->name,
-                'url_key' => $this->slug,
-                'banner_image' => getImageUrl($this->images()->where('title', 'cover')->first()),
-                'big_icon' => getImageUrl($this->logo->first()),
-                'description' => $this->when($this->description, $this->description),
-                'terms_conditions' => $this->when($this->terms_conditions, $this->terms_conditions),
-                'cashback' => $this->getCashback(),
-                'cashbacks' => $this->when($this->cashbacks, CashbackResource::collection($this->cashbacks))
-            ];
-        }
+        return [
+            'id' => $this->id,
+            'title' => $this->name,
+            'url_key' => $this->slug,
+            'banner_image' => getImageUrl($this->images()->where('title', 'cover')->first()),
+            'big_icon' => getImageUrl($this->logo->first()),
+            'description' => $this->when($this->description, $this->description),
+            'terms_conditions' => $this->when($this->terms_conditions, $this->terms_conditions),
+            'meta_title' => $this->storeRuleData()->where('key', 'meta:title')->pluck('value')->first(),
+            'meta_description' => $this->storeRuleData()->where('key', 'meta:description')->pluck('value')->first(),
+            'meta_keywords' => $this->storeRuleData()->where('key', 'meta:keywords')->pluck('value')->first(),
+            'status' => $this->status,
+            'deeplink' => $this->deeplink_url,
+            'site_deeplink' => $this->tracking_url,
+            'website_url' => $this->store_url, 
+            'address' => $this->storeAddress()->pluck('address')->first(),
+            'postcode' => $this->storeAddress()->pluck('postal_code')->first(),
+            'city_id'=> $this->storeAddress()->pluck('city')->first(),
+            'latitude'=> $this->storeAddress()->pluck('latitude')->first(),
+            'longitude'=> $this->storeAddress()->pluck('longitude')->first(),
+            "date_updated" => date('d-M-Y', strtotime($this->updated_at)),
+            "date_created" => date('d-M-Y', strtotime($this->created_at)),
+            'cashback' => $this->getCashback(),
+            'cashbacks' => $this->cashback ? $this->when($this->cashbacks, CashbackResource::collection($this->cashbacks)) : (object)[]
+        ];
     }
 }
