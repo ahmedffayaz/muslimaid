@@ -252,6 +252,14 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-12">
+            <div class="form-group">
+                <label class="form-label" for="reviewer">Meta Title</label>
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control" name="meta_title" placeholder="Meta Title" value="{{ $isEdit ? $category->meta_title : '' }}">
+                </div>
+            </div>
+        </div>
         <div class="col-12">
             <div class="form-group">
                 <button type="submit" class="btn-lg btn-primary" id="save-btn"></button>

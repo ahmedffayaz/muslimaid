@@ -102,17 +102,26 @@
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
+                                                    <label class="form-label" for="reviewer">Meta Title</label>
+                                                    <div class="form-control-wrap">
+                                                        <input id="page-title" type="text" class="form-control" name="meta_title" placeholder="Meta Title"
+                                                            value="{{ $page->meta_title }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
                                                     <label class="form-label" for="reviewer">Meta Keywords</label>
                                                     <div class="form-control-wrap">
-                                                        <input id="blog-title" type="text" class="form-control" name="meta_keyword" placeholder="Meta keyword"
+                                                        <input id="page-keyword" type="text" class="form-control" name="meta_keyword" placeholder="Meta keyword"
                                                             value="{{ $page->meta_keyword }}">
                                                     </div>
                                                 </div>
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <button class="btn btn-primary" type="submit">Save</button>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <button class="btn btn-primary" type="submit">Save</button>
 
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -189,8 +198,14 @@
             submitHandler: function(form) {
                 if ($(form).valid()) {
                     var _token = $("input[name=_token]").val();
-                    var form_action = $(this).attr('action');
-                    var formdata = new FormData(this);
+                    var form_action = $(form).attr('action');
+                    var formdata = new FormData(form);
+                    $(form).find('input[type="file"]').each(function() {
+                        var fileInput = $(this)[0];
+                        if (fileInput.files.length > 0) {
+                            formdata.append($(this).attr('name'), fileInput.files[0]);
+                        }
+                    });
                     // Populate hidden form on submit
                     $.ajax({
                         url: form_action,
@@ -204,19 +219,20 @@
                                 toastr.clear();
                                 NioApp.Toast(data.message, 'success');
                             })(NioApp, jQuery);
+                            window.location.href = data.url;
                         },
-                        error: function(error) {
-                            if (error.responseJSON.error) {
+                        error: function(xhr, status, error) {
+                            if (xhr.responseJSON && xhr.responseJSON.error) {
                                 (function(NioApp, $) {
                                     'use strict';
                                     toastr.clear();
-                                    NioApp.Toast(error.responseJSON.error, 'error');
+                                    NioApp.Toast(xhr.responseJSON.error, 'error');
                                 })(NioApp, jQuery);
                             } else {
                                 (function(NioApp, $) {
                                     'use strict';
                                     toastr.clear();
-                                    NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                                    NioApp.Toast(error, 'error');
                                 })(NioApp, jQuery);
                             }
                         }

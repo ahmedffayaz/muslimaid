@@ -32,6 +32,7 @@ class Category extends Model
         'network_id',
         'meta_description',
         'meta_keyword',
+        'meta_title', 
     ];
 
     public function stores()

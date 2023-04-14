@@ -1,7 +1,6 @@
 <form action="{{ route('admin.stores.update_seo', $storeSeoRule) }}" class="gy-3 form-validate is-alter seo_form" method="POST">
     @csrf
     @method('PUT')
-    {{-- <input type="hidden" name="store_editor" value="1"> --}}
     <input type="hidden" name="seo_id" value="{{ $storeSeoRule->id }}">
     <div class="row g-4">
         <div class="col-lg-12">
@@ -12,6 +11,7 @@
                         <option selected disabled>Select Key</option>
                         <option {{ $storeSeoRule->key == 'meta:keywords' ? 'selected' : '' }} value="meta:keywords">Meta:keywords</option>
                         <option {{ $storeSeoRule->key == 'meta:description' ? 'selected' : '' }} value="meta:description">Meta:description</option>
+                        <option {{ $storeSeoRule->key == 'meta:title' ? 'selected' : '' }} value="meta:title">Meta:title</option>
                     </select>
                 </div>
             </div>

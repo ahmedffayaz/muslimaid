@@ -8,6 +8,7 @@
 <title>{{ isset($page) ? $page->title : 'Error 404' }}</title>
 <meta name="description" content="{{ isset($page) ? $page->meta_description : 'Error 404' }}">
 <meta name="keywords" content="{{ isset($page) ? $page->meta_keyword : 'Error 404' }}">
+<meta name="title" content="{{ isset($page) ? $page->meta_title : 'Error 404' }}">
 <style>
     body {
         text-align: center;

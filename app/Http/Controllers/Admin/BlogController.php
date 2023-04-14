@@ -61,6 +61,7 @@ class BlogController extends Controller
         $blog->url = 'http://127.0.0.1:8000/post/'.Str::slug($request->title,'_');
         $blog->meta_keyword = $request->meta_keyword;
         $blog->meta_description = $request->meta_description;
+        $blog->meta_title = $request->meta_title;
         $blog->save();
 
         $inserted_blog = Blog::where('title', $request->title)->get();
@@ -117,6 +118,7 @@ class BlogController extends Controller
         $blog->lb_content = $request->content;
         $blog->meta_keyword = $request->meta_keyword;
         $blog->meta_description = $request->meta_description;
+        $blog->meta_title = $request->meta_title;
         $blog->featured_image = $featured_image;
         $blog->update();
         flash()->success('blog updated successfully');
