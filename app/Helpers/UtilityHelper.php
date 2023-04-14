@@ -626,12 +626,14 @@ function checkStaticpageRule($url)
     if ($seo_rules != null) {
         $meta_description = [];
         $meta_keyword = [];
+        $meta_title = [];
         $title = Str::title(str_replace('-', ' ', $slug));
         foreach ($seo_rules->ruleData as $rule) {
             $rule['key'] == 'meta_description' ?  $meta_description[] = $rule['value'] : '';
             $rule['key'] == 'meta_keyword' ?  $meta_keyword[] = $rule['value'] : '';
+            $rule['key'] == 'meta_title' ?  $meta_title[] = $rule['value'] : '';
         }
-        return  ['title' => $title, 'meta_description' => implode(',', $meta_description), 'meta_keyword' => implode(',', $meta_keyword)];
+        return  ['title' => $title,'meta_title' => implode(',', $meta_title), 'meta_description' => implode(',', $meta_description), 'meta_keyword' => implode(',', $meta_keyword)];
     } elseif ($slug) {
         $route_names = [
             'page' => '\App\Models\Page',
@@ -647,9 +649,10 @@ function checkStaticpageRule($url)
                 $seoRule['name']  = $record->name;
                 $seoRule['meta_description'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:description')->pluck('value')->first();
                 $seoRule['meta_keyword'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:keywords')->pluck('value')->first();
+                 $seoRule['meta_title'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:title')->pluck('value')->first();
                 return $seoRule;
             }
-            if (isset($record) && (($record->title ? $record->title : $record->name) || $record->meta_description && $record->meta_keyword)) {
+            if (isset($record) && (($record->title ? $record->title : $record->name) || $record->meta_description && $record->meta_keyword && $record->meta_title)) {
                 return $record;
             }
         }

@@ -46,7 +46,9 @@ class PagesController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required'
+            'title' => 'required',
+            'banner_image' => 'required'
+        ], [
         ], [
             'title.required' => 'The Title field is required.',
         ]);
@@ -56,7 +58,7 @@ class PagesController extends Controller
             if ($request->has('banner_image')) {
                 $imageName = Str::slug($request->input('title')) . '_banner_' . time() . '.' . $request->banner_image->extension();
                 $request->banner_image->storeAs('public/pages/banners', $imageName);
-                $banner_image = $this->imagePath . $imageName;    
+                $banner_image = $this->imagePath . $imageName;
             }
             $slug = Str::slug($request->input('title'));
             $lastId = Page::orderBy('id', 'desc')->pluck('id')->first();
@@ -71,6 +73,7 @@ class PagesController extends Controller
             $page->description = $request->short_description;
             $page->meta_description = $request->meta_description;
             $page->meta_keyword = $request->meta_keyword;
+            $page->meta_title = $request->meta_title;
             $page->save();
             DB::commit();
 
@@ -132,6 +135,7 @@ class PagesController extends Controller
                 'description' => $request->input('short_description'),
                 'meta_description' => $request->input('meta_description'),
                 'meta_keyword' => $request->input('meta_keyword'),
+                'meta_title' => $request->input('meta_title'),
             ]);
 
             if ($request->has('banner_image')) {
@@ -150,7 +154,8 @@ class PagesController extends Controller
 
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,
-                'message' => 'Page updated'
+                'message' => 'Page updated',
+                'url' => route('admin.pages.index')
             ], JsonResponse::HTTP_OK);
         } catch (Throwable $th) {
             DB::rollBack();

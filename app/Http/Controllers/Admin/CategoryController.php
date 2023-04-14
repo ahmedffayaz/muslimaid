@@ -77,6 +77,7 @@ class CategoryController extends Controller
                 'title' => $request->input('title'),
                 'meta_keyword' => $request->input('meta_keyword'),
                 'meta_description' => $request->input('meta_description'),
+                'meta_title' => $request->input('meta_title'),
                 'slug' => Str::slug($request->name),
             ]);
 
@@ -179,7 +180,8 @@ class CategoryController extends Controller
                 'status' => $request->input('status'),
                 'title' => $request->input('title'),
                 'meta_keyword' => $request->input('meta_keyword'),
-                'meta_description' => $request->input('meta_description')
+                'meta_description' => $request->input('meta_description'),
+                'meta_title' => $request->input('meta_title')
 
             ]);
             if ($category->parent_id == 0) {

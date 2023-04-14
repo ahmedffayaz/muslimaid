@@ -793,6 +793,7 @@
                                         <option selected disabled>Select Key</option>
                                         <option value="meta:keywords">Meta:keywords</option>
                                         <option value="meta:description">Meta:description</option>
+                                        <option value="meta:title">Meta:title</option>
                                     </select>
                                 </div>
                             </div>

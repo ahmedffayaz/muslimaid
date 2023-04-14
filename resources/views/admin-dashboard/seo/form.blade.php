@@ -55,6 +55,7 @@
                                             <div class="form-control-wrap">
                                                 <select class="form-select form-control" id="key-{{ $loop->index + 1 }}" name="type[{{ $loop->index + 1 }}][key]">
                                                     <option selected disabled>Choose key</option>
+                                                    <option value="meta_title" {{ $rule_data->key == 'meta_title' ? 'selected' : '' }}>Meta: Title</option>
                                                     <option value="meta_description" {{ $rule_data->key == 'meta_description' ? 'selected' : '' }}>Meta: Description</option>
                                                     <option value="meta_keyword" {{ $rule_data->key == 'meta_keyword' ? 'selected' : '' }}>Meta: Keyword</option>
                                                 </select>

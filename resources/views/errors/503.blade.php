@@ -9,6 +9,7 @@
 <title>{{ isset($page) ? $page->title : 'Site Maintenance' }}</title>
 <meta name="description" content="{{ isset($page) ? $page->meta_description : 'Site Maintenance' }}">
 <meta name="keywords" content="{{ isset($page) ? $page->meta_keyword : 'Site Maintenance' }}">
+<meta name="title" content="{{ isset($page) ? $page->meta_title : 'Site Maintenance' }}">
 <style>
     body {
         text-align: center;

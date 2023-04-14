@@ -23,5 +23,6 @@ class Page extends Model
         'description',
         'meta_description',
         'meta_keyword',
+        'meta_title',
     ];
 }

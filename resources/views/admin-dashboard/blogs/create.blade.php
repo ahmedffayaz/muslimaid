@@ -76,7 +76,15 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="reviewer">Meta Keywords</label>
                                                     <div class="form-control-wrap">
-                                                        <input id="blog-title" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword" value="">
+                                                        <input id="blog-keyword" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="reviewer">Meta Title</label>
+                                                    <div class="form-control-wrap">
+                                                        <input id="blog-title" type="text" class="form-control " name="meta_title" placeholder="Meta Title" value="">
                                                     </div>
                                                 </div>
                                             </div>
