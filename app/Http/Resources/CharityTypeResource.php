@@ -4,7 +4,7 @@ namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class SearchResources extends JsonResource
+class CharityTypeResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,11 +15,11 @@ class SearchResources extends JsonResource
     public function toArray($request)
     {
         return [
-            'image' => getImageUrl($this->logo->first()),
-            'id' => $this->id . '/' . $this->slug,
-            'unique_id' => $this->id,
-            'text' => $this->name,
-            'extra' => $this->getCashback(),
+            'id' => $this->id,
+            'title' => $this->title,
+            'status' => $this->status == 1 ? 'Active' : 'Inactive',
+            "date_updated" => date('d-M-Y', strtotime($this->updated_at)),
+            "date_created" => date('d-M-Y', strtotime($this->created_at)),
         ];
     }
 }
