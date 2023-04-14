@@ -51,7 +51,7 @@ function getSpecificSetting($type)
 }
 function checkCashbackChildCategories($slug, $parentId)
 {
-    $category = Category::where('slug', $slug)->where('parent_id', $parentId)->first();
+    $category = Category::where('slug', $slug)->where('parent_id', $parentId)->whereStatus('1')->first();
     if (isset($category)) {
         return 1;
     }
@@ -458,7 +458,7 @@ function getStores($limit = null, $offset = 0)
     $categories = Category::where(function ($query) {
         $query->where('visibility', '!=', 'hidden')
             ->orWhereNull('visibility');
-    })->where('parent_id', 0)
+    })->where('parent_id', 0)->whereStatus('1')
         ->when(!empty($limit), function ($q) use ($limit) {
             $q->limit($limit);
         })
@@ -504,7 +504,7 @@ function sidebarCategories()
     $sidebar_categories = Category::where(function ($query) {
         $query->where('visibility', '!=', 'hidden')
             ->orWhereNull('visibility');
-    })->where('feature_sidebar', 1)->orderBy('name', 'ASC')->get();
+    })->where('feature_sidebar', 1)->orderBy('name', 'ASC')->whereStatus('1')->get();
     return $sidebar_categories;
 }
 
@@ -528,7 +528,7 @@ function similarStores($store)
     if (in_array('cashblack-to-your-door', $categorySlugs)) {
         $ip = request()->ip();
         $data = Location::get($ip);
-        $category = Category::where(function ($query) {
+        $category = Category::whereStatus('1')->where(function ($query) {
             $query->where('visibility', '!=', 'hidden')
                 ->orWhereNull('visibility');
         })->whereSlug('cashblack-to-your-door')->with('stores')->first();
