@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\CashoutResource;
 use App\Http\Resources\ClickResource;
 use App\Http\Resources\Home\UserResource;
 use App\Http\Resources\ReferralResource;
 use App\Http\Resources\TicketResource;
 use App\Http\Resources\UserCashbackResource;
+use App\Models\Cashout;
 use App\Models\ExitClick;
 use App\Models\Ticket;
 use App\Models\User;
@@ -333,6 +335,52 @@ class UserController extends Controller
         }
     }
 
+    public function cashouts(Request $request)
+    {
+        try {
+            $cashouts = Cashout::where('user_id',  Auth::user()->id);
+            if (isset($request->status)) {
+                $cashouts->where('status', $request->status);
+            }
+            if (isset($request->payment_method)) {
+                $cashouts->where('payment_method', $request->payment_method);
+            }
+            if (isset($request->date_from) && isset($request->date_to)) {
+                $from = date('Y-m-d', strtotime($request->date_from));
+                $to = date('Y-m-d', strtotime($request->date_to));
+                $cashouts->whereDate('created_at', '>=', $from)->whereDate('created_at', '<=', $to);
+            }
+            $cashouts = $cashouts->latest()->paginate(20);
+            $cashoutData = CashoutResource::collection($cashouts);
+            $metaData = [
+                "next" => $cashouts->nextPageUrl(),
+                "previous" => $cashouts->previousPageUrl(),
+                "per_page" => 20,
+                "total" => $cashouts->total(),
+                "current_page" => $cashouts->currentPage(),
+                "total_pages" => $cashouts->lastPage(),
+                "first" => $cashouts->firstItem(),
+                "last" => $cashouts->lastItem()
+            ];
+            $response = [
+                'status' => 200,
+                'message' => 'Cashout data retrieved successfully',
+                'data' => [
+                    'records' => $cashoutData,
+                    'total' => $cashouts->total(),
+                    'metaData' => $metaData
+                ]
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $data = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
+            ];
+            return response()->json($data, 500);
+        }
+    }
 
     public function referralLink()
     {
