@@ -8,7 +8,6 @@ use App\Models\Store;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
-use App\Http\Resources\SliderResource;
 use App\Http\Resources\StoreDetailResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
 
@@ -98,7 +97,7 @@ class StoreController extends Controller
             $data = [
                 'status' => 200,
                 'message' => 'Success',
-                'data' => ['fav_stores' => new StoreDetailResource($store)]
+                'data' => ['store' => new StoreDetailResource($store)]
             ];
             return response()->json($data, 200);
         } catch (ModelNotFoundException $ex) { // Store not found

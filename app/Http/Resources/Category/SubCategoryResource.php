@@ -15,6 +15,8 @@ class SubCategoryResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
+            'parent_id' => $this->parent_id,
             'title' => $this->name,
             'url_key' => $this->slug,
             'icon' => ($this->logo_type != 'link') ? getBannerImageUrl($this->logo_upload, 'upload', $this) : $this->logo_link,

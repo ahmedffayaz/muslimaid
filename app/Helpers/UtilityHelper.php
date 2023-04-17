@@ -649,7 +649,7 @@ function checkStaticpageRule($url)
                 $seoRule['name']  = $record->name;
                 $seoRule['meta_description'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:description')->pluck('value')->first();
                 $seoRule['meta_keyword'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:keywords')->pluck('value')->first();
-                 $seoRule['meta_title'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:title')->pluck('value')->first();
+                $seoRule['meta_title'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:title')->pluck('value')->first();
                 return $seoRule;
             }
             if (isset($record) && (($record->title ? $record->title : $record->name) || $record->meta_description && $record->meta_keyword && $record->meta_title)) {
