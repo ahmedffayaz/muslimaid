@@ -152,7 +152,8 @@ class CategoryController extends Controller
         }
     }
 
-    public function getCategoryStores($slug){
+    public function getCategoryStores($slug)
+    {
         try {
             $category = Category::where('slug', $slug)->first();
             if (!$category) {
@@ -165,12 +166,12 @@ class CategoryController extends Controller
             }
             $data = [
                 'status' => 200,
-                'message' => 'Success',
+                'message' => 'Category Detail Successfully Retrieved',
                 'data' => [
                     'category' => new SubCategoryResource($category),
-                    'parent' => isset($category->parent) ? new SubCategoryResource($category->parent): (object)[],
-                    'child' => !empty($category->childs) ? SubCategoryResource::collection($category->childs): [],
-                    'stores' => !empty($category->stores) ? StoreResource::collection($category->stores): [],
+                    'parent' => isset($category->parent) ? new SubCategoryResource($category->parent) : (object)[],
+                    'child' => !empty($category->childs) ? SubCategoryResource::collection($category->childs) : [],
+                    'stores' => !empty($category->stores) ? StoreResource::collection($category->stores) : [],
                     'total' => count($category->stores)
                 ]
             ];
