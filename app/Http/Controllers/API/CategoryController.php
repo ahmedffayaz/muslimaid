@@ -166,7 +166,7 @@ class CategoryController extends Controller
             }
             $data = [
                 'status' => 200,
-                'message' => 'Category Detail Successfully Retrieved',
+                'message' => 'Category details successfully retrieved',
                 'data' => [
                     'category' => new SubCategoryResource($category),
                     'parent' => isset($category->parent) ? new SubCategoryResource($category->parent) : (object)[],
