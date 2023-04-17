@@ -171,7 +171,7 @@ class CategoryController extends Controller
                     'category' => new SubCategoryResource($category),
                     'parent' => isset($category->parent) ? new SubCategoryResource($category->parent) : (object)[],
                     'child' => !empty($category->childs) ? SubCategoryResource::collection($category->childs) : [],
-                    'stores' => !empty($category->stores) ? StoreResource::collection($category->stores) : [],
+                    'stores' => !empty($category->stores) ? StoreResource::collection($category->stores()->paginate(20)) : [],
                     'total' => count($category->stores)
                 ]
             ];
