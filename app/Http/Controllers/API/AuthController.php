@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Home\UserResource;
-use App\Jobs\SendEmailJob;
+use App\Jobs\SendOTPEmail;
 use App\Models\Bonus;
 use App\Models\User;
 use App\Traits\ApiResponser;
@@ -53,7 +53,7 @@ class AuthController extends Controller
 
             // verify email
             $this->welcomBonus($user, $bonusStatus);
-            dispatch(new SendEmailJob($user));
+            dispatch(new SendOTPEmail($user));
 
             if (!empty($settings['sendgrid_registered_list_id']) && !empty($settings['sendgrid_api_key'])) {
                 $settings = SiteSetting();
@@ -260,7 +260,7 @@ class AuthController extends Controller
                 ];
                 return response()->json($response, 404);
             } else {
-                dispatch(new SendEmailJob($user));
+                dispatch(new SendOTPEmail($user));
                 $response = [
                     'status' => 200,
                     'message' => "Verification email sent successfully",
