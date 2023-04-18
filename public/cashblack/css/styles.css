@@ -2020,7 +2020,7 @@ button.hamburger:not(.collapsed):before {
 }
 
 .set-size {
-    max-width: 100%;
+    min-width: 100%;
     height: 157px;
 }
 

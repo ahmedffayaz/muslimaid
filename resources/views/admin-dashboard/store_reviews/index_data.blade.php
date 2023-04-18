@@ -43,8 +43,6 @@
                                     <li><a href="{{ route('admin.reviews.edit', $review) }}" class="review-edit" review-id={{ $review->id }}><em
                                                 class="icon ni ni-edit"></em><span>Edit
                                                 Review</span></a></li>
-                                    {{-- <li><a href="{{route('admin.stores.images', $store)}}"><em
-                                        class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
                                     @can('delete reviews')
                                         <li><a form_id="delete-review-{{ $review->id }}" class="delete-review" style="cursor: pointer"> <em
                                                     class="icon ni ni-trash-fill"></em><span>Delete
