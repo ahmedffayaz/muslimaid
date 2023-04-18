@@ -27,14 +27,15 @@
                                 <div class="card-inner">
                                     <div class="card-head">
                                     </div>
-                                    <form action="{{ route('admin.pages.store') }}" class="form-validate pages-form" method="POST">
+                                    <form action="{{ route('admin.pages.store') }}" class="form-validate pages-form" enctype="multipart/form-data" method="POST">
                                         @csrf
                                         <div class="row g-4">
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-label" for="title">Title</label>
                                                     <div class="form-control-wrap">
-                                                        <input id="title" type="text" class="form-control " name="title" placeholder="Title" value="" required>
+                                                        <input id="title" type="text" class="form-control " name="title" placeholder="Title" value="{{ old('title') }}"
+                                                            required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -70,43 +71,59 @@
                                                     </div>
                                                 </fieldset>
                                             </div>
-                                            <div class="col-12">
+                                            <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <label class="form-label">Banner Image</label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-btn">
-                                                            <a id="lfm" data-input="thumbnail" data-preview="holder" class="btn btn-primary text-white">
-                                                                <i class="fa fa-picture-o"></i> Choose
-                                                            </a>
-                                                        </span>
-                                                        <input id="thumbnail" class="form-control" type="text" name="filepath">
+                                                    <label class="form-label" for="banner_image">Banner <span class="text-danger">*</span></label>
+                                                    <div class="form-control-wrap">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" name="banner_image" id="banner_image" onchange="BannerReadURL(this);">
+                                                            <label class="custom-file-label" for="banner_image">Choose file</label>
+                                                        </div>
                                                     </div>
-                                                    <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <div class="preview-wrapper">
+                                                            <img id="banner_image-preview" src="" alt="logo" class="d-none"
+                                                                style="max-height: 60px; max-width: 60px;" />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
+
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label class="form-label" for="reviewer">Page Short Description</label>
-                                                    <textarea class="form-control" name="short_description" placeholder="Page Short Description" value=""></textarea>
+                                                    <textarea class="form-control" name="short_description" placeholder="Page Short Description" value="{{ old('short_description') }}"></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label class="form-label" for="reviewer">Meta Description</label>
-                                                    <textarea class="form-control" name="meta_description" placeholder="Meta Description" value=""></textarea>
+                                                    <textarea class="form-control" name="meta_description" placeholder="Meta Description" value="{{ old('meta_description') }}"></textarea>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label class="form-label" for="reviewer">Meta Keywords</label>
                                                     <div class="form-control-wrap">
-                                                        <input id="blog-title" type="text" class="form-control" name="meta_keyword" placeholder="Meta keyword" value="">
+                                                        <input id="seo-keyword" type="text" class="form-control" name="meta_keyword" placeholder="Meta keyword"
+                                                            value="{{ old('meta_keyword') }}">
                                                     </div>
                                                 </div>
-                                                <div class="col-12">
-                                                    <div class="form-group">
-                                                        <button class="btn btn-primary" type="submit">Save</button>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="reviewer">Meta Title</label>
+                                                    <div class="form-control-wrap">
+                                                        <input id="seo-title" type="text" class="form-control" name="meta_title" placeholder="Meta Title"
+                                                            value="{{ old('meta_title') }}">
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <button class="btn btn-primary" type="submit">Save</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -143,7 +160,7 @@
 
             let _self = $(this);
             let btnHtml = _self.html();
-            
+
             _self
                 .attr('disabled', 'disabled')
                 .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
@@ -157,7 +174,7 @@
                 success: function(data) {
                     viewShortcodesModal.find('.modal-content').html(data);
                     viewShortcodesModal.modal('show');
-            
+
                     _self.removeAttr('disabled').html(btnHtml);
                 }
             });
@@ -172,59 +189,26 @@
         }
     </style>
     <script>
-        $(document).ready(function() {
-
-            // Define function to open filemanager window
-            var lfm = function(options, cb) {
-                var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
-                window.open(route_prefix + '?type=' + options.type || 'file', 'FileManager', 'width=900,height=600');
-                window.SetUrl = cb;
-            };
-
-            // Define LFM summernote button
-            var LFMButton = function(context) {
-                var ui = $.summernote.ui;
-                var button = ui.button({
-                    contents: '<i class="note-icon-picture"></i> ',
-                    tooltip: 'Insert image with filemanager',
-                    click: function() {
-                        lfm({
-                            type: 'image',
-                            prefix: '/filemanager'
-                        }, function(lfmItems, path) {
-                            lfmItems.forEach(function(lfmItem) {
-                                context.invoke('insertImage', lfmItem.url);
-                            });
-                        });
-                    }
-                });
-                return button.render();
-            };
-
-            // Initialize summernote with LFM button in the popover button group
-            // Please note that you can add this button to any other button group you'd like
-            $('#summernote-editor').summernote({
-                toolbar: [
-                    ['popovers', ['lfm']],
-                ],
-                buttons: {
-                    lfm: LFMButton
-                }
-            })
-        });
-    </script>
-    <script>
         $('.form-validate').validate({
             rules: {
                 title: {
+                    required: true
+                },
+                banner_image: {
                     required: true
                 }
             },
             submitHandler: function(form) {
                 if ($(form).valid()) {
                     var _token = $("input[name=_token]").val();
-                    var form_action = $(this).attr('action');
-                    var formdata = new FormData(this);
+                    var form_action = $(form).attr('action');
+                    var formdata = new FormData(form);
+                    $(form).find('input[type="file"]').each(function() {
+                        var fileInput = $(this)[0];
+                        if (fileInput.files.length > 0) {
+                            formdata.append($(this).attr('name'), fileInput.files[0]);
+                        }
+                    });
                     // Populate hidden form on submit
                     $.ajax({
                         url: form_action,
@@ -233,20 +217,25 @@
                         processData: false,
                         contentType: false,
                         success: function(data) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(data.message, 'success');
+                            })(NioApp, jQuery);
                             window.location.href = data.url;
                         },
-                        error: function(error) {
-                            if (error.responseJSON.error) {
+                        error: function(xhr, status, error) {
+                            if (xhr.responseJSON && xhr.responseJSON.error) {
                                 (function(NioApp, $) {
                                     'use strict';
                                     toastr.clear();
-                                    NioApp.Toast(error.responseJSON.error, 'error');
+                                    NioApp.Toast(xhr.responseJSON.error, 'error');
                                 })(NioApp, jQuery);
                             } else {
                                 (function(NioApp, $) {
                                     'use strict';
                                     toastr.clear();
-                                    NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                                    NioApp.Toast(error, 'error');
                                 })(NioApp, jQuery);
                             }
                         }
@@ -255,5 +244,18 @@
                 return false;
             }
         });
+    </script>
+    <script>
+        function BannerReadURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    if (input.id === "banner_image") {
+                        $('#banner_image-preview').attr('src', e.target.result).removeClass('d-none');
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     </script>
 @endpush

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIsHiddenToCategoriesTable extends Migration
+class AddMetaTitleToBlogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddIsHiddenToCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->enum('visibility', ['hidden', 'more'])->after('status')->nullable();
+        Schema::table('blogs', function (Blueprint $table) {
+            $table->string('meta_title')->nullable()->after('meta_keyword');
         });
     }
 
@@ -25,8 +25,8 @@ class AddIsHiddenToCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            //
+        Schema::table('blogs', function (Blueprint $table) {
+            $table->dropColumn('meta_title')->nullable();
         });
     }
 }

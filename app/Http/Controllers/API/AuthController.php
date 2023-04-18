@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Home\UserResource;
 use App\Models\Bonus;
-use App\Models\EmailTemplate;
 use App\Models\User;
 use App\Traits\ApiResponser;
 use App\Traits\WelcomeEmail;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -20,161 +20,343 @@ class AuthController extends Controller
 
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'firstname' => ['required', 'string', 'max:255'],
-            'lastname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
-        if ($validator->fails()) {
-            return $this->error($validator->errors()->first(), 401);
+        try {
+            $validator = Validator::make($request->all(), [
+                'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
+            ]);
+            if ($validator->fails()) {
+                $response = [
+                    'status' => 406,
+                    'message' => $validator->errors()->first(),
+                    'data' => []
+                ];
+                return response()->json($response, 406);
+            }
+
+            $otp = strval(random_int(100000, 999999));
+            $user = User::create([
+                'first_name' => 'unnamed',
+                'last_name' => 'unnamed',
+                'email' => $request->input('email'),
+                'password' => Hash::make($request->input('password')),
+                'otp' => $otp,
+                'status' => 'pending',
+                'registration_type' => 'sign up',
+            ]);
+
+            $user->assignRole('user');
+            $bonus = array_key_exists('welcome_bonus', SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
+            Bonus::create([
+                'user_id' => $user->id,
+                'amount' => $bonus,
+            ]);
+
+            // Send welcome email to user
+            $data = array(
+                'name' => $user->first_name,
+                'email' => $user->email
+            );
+            $merge_subject = ['subject' => null, 'message' => null];
+            $data = array_merge($data, $merge_subject);
+            $this->welcomeEmail($data);
+
+            $user = new UserResource($user);
+            $response = [
+                'status' => 200,
+                'message' => "Successful Registered.",
+                'data' => $user,
+            ];
+
+            return response()->json($response, 200);
+        } catch (Exception $e) {
+            $response = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
+            ];
+            return response()->json($response, 500);
         }
-
-        $user = User::create([
-            'first_name' => $request->input('firstname'),
-            'last_name' => $request->input('lastname'),
-            'email' => $request->input('email'),
-            'password' => Hash::make($request->input('password')),
-            'registration_type' => 'sign up',
-        ]);
-
-        $user->assignRole('user');
-
-        $bonus = array_key_exists('welcome_bonus', SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
-
-        $user_bonus = Bonus::create([
-            'user_id' => $user->id,
-            'amount' => $bonus,
-        ]);
-
-        // Send welcome email to user
-        $data = array(
-            'name' => $user->first_name,
-            'email' => $user->email
-        );
-        $merge_subject = ['subject' => null, 'message' => null];
-        $data = array_merge($data, $merge_subject);
-        $this->welcomeEmail($data);
-
-        return $this->success([
-            'token' => $user->createToken('API Token')->plainTextToken,
-            'id' => $user->id,
-            "first_name" => $user->first_name,
-            "last_name" => $user->last_name,
-            "email" => $user->email,
-            "registration_type" => $user->registration_type,
-            'phone' => $user->phone,
-            'intro' => $user->intro,
-            'profile_image' => $user->avatar ? url('storage/users/images/avatar/'.$user->avatar) : ''
-        ], 'User registered successfully');
     }
 
     public function login(Request $request)
     {
-        $attr = $request->validate([
-            'email' => 'required|string|email|',
-            'password' => 'required|string|min:6',
-        ]);
+        try {
+            $rules = [
+                'email' => 'required|string|email|',
+                'password' => 'required|string|min:6',
+            ];
+            $validator = Validator::make($request->all(), $rules);
+            if ($validator->fails()) {
+                $response = [
+                    'status' => 406,
+                    'message' => $validator->errors()->first(),
+                    'data' => []
+                ];
+                return response()->json($response, 406);
+            }
 
-        if (!Auth::attempt($attr)) {
-            return $this->error('Credentials did not match', 401);
+            $userData = User::where('email', $request->email)->first();
+            if (isset($userData)) {
+                if ($userData->status == 'in_active') {
+                    $response = [
+                        'status' => 401,
+                        'message' => 'Your account is inactive',
+                        'data' => []
+                    ];
+                    return response()->json($response, 401);
+                }
+
+                if ($userData->status == 'pending') {
+                    $response = [
+                        'status' => 401,
+                        'message' => 'Please verify your account before login',
+                        'data' => []
+                    ];
+                    return response()->json($response, 401);
+                }
+            }
+
+            if (!auth()->attempt(['email' => $request->email, 'password' => $request->password])) {
+                $response = [
+                    'status' => 200,
+                    'message' => 'Email or password is incorrect.',
+                    'data' => []
+                ];
+                return response()->json($response, 200);
+            }
+
+            $user = new UserResource(User::where('email', $request->email)->first());
+            $response = [
+                'status' => 200,
+                'message' => "Successful login.",
+                'data' => $user,
+            ];
+
+            return response()->json($response, 200);
+        } catch (Exception $e) {
+            $response = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
+            ];
+            return response()->json($response, 500);
         }
-
-        return $this->success([
-            'token' => auth()->user()->createToken('API Token')->plainTextToken,
-            'id' => auth()->user()->id,
-            'first_name' => auth()->user()->first_name,
-            'last_name' => auth()->user()->last_name,
-            'email' => auth()->user()->email,
-            'phone' => auth()->user()->phone,
-            'intro' => auth()->user()->intro,
-            'profile_image' => auth()->user()->avatar ? url('storage/users/images/avatar/'.auth()->user()->avatar) : ''
-        ], 'User logged in successfully', 200);
     }
 
     public function logout()
     {
-        auth()->user()->tokens()->delete();
+        try {
+            auth()->user()->tokens()->delete();
+            $response = [
+                'status' => 200,
+                'message' => "User successfully logged out",
+                'data' => []
+            ];
 
-        return $this->success([
-            'message' => 'User logged out',
-        ]);
-    }
-
-    public function userData(Request $request)
-    {
-        $user = auth()->user();
-        return [
-            "first_name" => $user->first_name,
-            "last_name" => $user->last_name,
-            "email" => $user->email,
-            "registration_type" => $user->registration_type,
-        ];
-
-    }
-    public function forgotPassword(Request $request)
-    {
-
-        $input = $request->all();
-        $rules = array(
-            'email' => "required|email",
-        );
-        $validator = \Validator::make($input, $rules);
-        if ($validator->fails()) {
-            return $this->error($validator->errors()->first(), 401);
-        } else {
-            try {
-                $response = \Password::sendResetLink($request->only('email'));
-                switch ($response) {
-                    case \Password::RESET_LINK_SENT:
-                        return $this->success([], trans($response));
-                    case \Password::INVALID_USER:
-                        return $this->error(trans($response), 401);
-                }
-            } catch (\Swift_TransportException $ex) {
-                return $this->error($ex->getMessage(), 400);
-            } catch (\Exception $ex) {
-                return $this->error($ex->getMessage(), 400);
-
-            }
+            return response()->json($response, 200);
+        } catch (Exception $e) {
+            $response = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
+            ];
+            return response()->json($response, 500);
         }
     }
 
     public function changePassword(Request $request)
     {
-        $user = auth()->user();
-        $input = $request->all();
-        $userid = $user->id;
         $rules = array(
             'old_password' => 'required',
             'new_password' => 'required|min:8',
             'confirm_password' => 'required|same:new_password',
         );
-        $validator = Validator::make($input, $rules);
+        $validator = Validator::make($request->all(), $rules);
         if ($validator->fails()) {
-            $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
+            $response = [
+                'status' => 406,
+                'message' => $validator->errors()->first(),
+                'data' => []
+            ];
+            return response()->json($response, 406);
         } else {
             try {
                 if ((Hash::check(request('old_password'), Auth::user()->password)) == false) {
-                    $arr = array("status" => 400, "message" => "Check your old password.", "data" => array());
+                    $response = [
+                        'status' => 400,
+                        'message' => "Check your old password.",
+                        'data' => []
+                    ];
                 } else if ((Hash::check(request('new_password'), Auth::user()->password)) == true) {
-                    $arr = array("status" => 400, "message" => "Please enter a password which is not similar then current password.", "data" => array());
+                    $response = [
+                        'status' => 400,
+                        'message' => "Please enter a password which is not similar then current password.",
+                        'data' => []
+                    ];
                 } else {
-                    User::where('id', $userid)->update(['password' => Hash::make($input['new_password'])]);
-                    $arr = array("status" => 200, "message" => "Password updated successfully.", "data" => array());
+                    User::where('id', Auth::user()->id)->update(['password' => Hash::make($request->new_password)]);
+                    $response = [
+                        'status' => 200,
+                        'message' => "Password updated successfully.",
+                        'data' => []
+                    ];
+                    return response()->json($response, 200);
                 }
-            } catch (\Exception $ex) {
-                if (isset($ex->errorInfo[2])) {
-                    $msg = $ex->errorInfo[2];
-                } else {
-                    $msg = $ex->getMessage();
-                }
-                $arr = array("status" => 400, "message" => $msg, "data" => array());
+                return response()->json($response, 400);
+            } catch (\Exception $e) {
+                $response = [
+                    'status' => 500,
+                    'message' => 'Something went wrong, try again.',
+                    'data' => []
+                ];
+                return response()->json($response, 500);
             }
         }
-        return \Response::json($arr);
-
     }
+
+    public function resendOtpCode(Request $request)
+    {
+        $rules = array(
+            'email' => 'required|email',
+        );
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            $response = [
+                'status' => 406,
+                'message' => $validator->errors()->first(),
+                'data' => []
+            ];
+            return response()->json($response, 406);
+        } else {
+        }
+    }
+
+    public function verifyOtpCode(Request $request)
+    {
+        $rules = array(
+            'email' => 'required|email',
+            'otp' => 'required|max:6',
+        );
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            $response = [
+                'status' => 406,
+                'message' => $validator->errors()->first(),
+                'data' => []
+            ];
+            return response()->json($response, 406);
+        } else {
+            try {
+                $userOtp = User::where('email', $request->email)->pluck('otp')->first();
+                if ((int)$userOtp === (int)$request->otp && !empty($userOtp)) {
+                    $response = [
+                        'status' => 200,
+                        'message' => "Otp successfully verified",
+                        'data' => []
+                    ];
+                    return response()->json($response, 200);
+                } else {
+                    $response = [
+                        'status' => 400,
+                        'message' => "Error! Entered Otp doesn't match",
+                        'data' => []
+                    ];
+                    return response()->json($response, 400);
+                }
+            } catch (\Exception $ex) {
+                $response = [
+                    'status' => 400,
+                    'message' => 'Something went wrong, try again.',
+                    'data' => []
+                ];
+                return response()->json($response, 400);
+            }
+        }
+    }
+
+    public function forgotPassword(Request $request)
+    {
+        $rules = array(
+            'email' => 'required|email',
+        );
+        $validator = Validator::make($request->all(), $rules);
+        if ($validator->fails()) {
+            $response = [
+                'status' => 406,
+                'message' => $validator->errors()->first(),
+                'data' => []
+            ];
+            return response()->json($response, 406);
+        } else {
+            try {
+
+                $response = \Password::sendResetLink($request->only('email'));
+                switch ($response) {
+                    case \Password::RESET_LINK_SENT: {
+
+                            $user = User::where('email', $request->email)->first();
+                            $userData =  [
+                                'id' => $user->id,
+                                'name' => $user->first_name . ' ' . $user->last_name,
+                                'email' => $user->email,
+                            ];
+                            $passingData =  [
+                                'user' => $userData,
+                                'otp' => empty($user->otp) ? '' : $user->otp,
+                            ];
+                            $response = [
+                                'status' => 200,
+                                'message' => "If " . $request->email  . " is registered with Cashblack, password reset instructions will be sent to the address.",
+                                'data' => $passingData,
+                            ];
+                            return response()->json($response, 200);
+                        }
+                    case \Password::INVALID_USER: {
+                            $response = [
+                                'status' => 401,
+                                'message' => "Invalid Email",
+                                'data' => []
+                            ];
+                            return response()->json($response, 401);
+                        }
+                    default: {
+                            $user = User::where('email', $request->email)->first();
+                            $userData =  [
+                                'id' => $user->id,
+                                'name' => $user->first_name . ' ' . $user->last_name,
+                                'email' => $user->email,
+                            ];
+                            $passingData =  [
+                                'user' => $userData,
+                                'otp' => empty($user->otp) ? '' : $user->otp,
+                            ];
+                            $response = [
+                                'status' => 200,
+                                'message' => "If " . $request->email  . " is registered with Cashblack, password reset instructions will be sent to the address.",
+                                'data' => $passingData,
+                            ];
+                            return response()->json($response, 200);
+                        }
+                }
+            } catch (\Swift_TransportException $ex) {
+                $response = [
+                    'status' => 400,
+                    'message' => 'Something went wrong, try again.',
+                    'data' => []
+                ];
+                return response()->json($response, 400);
+            } catch (\Exception $ex) {
+                $response = [
+                    'status' => 400,
+                    'message' => 'Something went wrong, try again.',
+                    'data' => []
+                ];
+                return response()->json($response, 400);
+            }
+        }
+    }
+
     public function socialLogin(Request $request)
     {
         $provider_id = $request->input('provider_id');
@@ -190,9 +372,8 @@ class AuthController extends Controller
                 'phone' => $userExists->phone,
                 'intro' => $userExists->intro,
                 "registration_type" => $userExists->registration_type,
-                'profile_image' => $userExists->avatar ? url('storage/users/images/avatar/'.$userExists->avatar) : ''
+                'profile_image' => $userExists->avatar ? url('storage/users/images/avatar/' . $userExists->avatar) : ''
             ], 'User Logged In Successfully');
-
         }
         $validator = Validator::make($request->all(), [
             'firstname' => ['required', 'string', 'max:255'],
@@ -218,7 +399,7 @@ class AuthController extends Controller
 
         $bonus = array_key_exists('welcome_bonus', SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
 
-        $user_bonus = Bonus::create([
+        $userBonus = Bonus::create([
             'user_id' => $user->id,
             'amount' => $bonus,
         ]);
@@ -240,57 +421,7 @@ class AuthController extends Controller
             "registration_type" => $user->registration_type,
             'phone' => $user->phone,
             'intro' => $user->intro,
-            'profile_image' => $user->avatar ? url('storage/users/images/avatar/'.$user->avatar) : ''
+            'profile_image' => $user->avatar ? url('storage/users/images/avatar/' . $user->avatar) : ''
         ], 'User Registered Successfully');
     }
-    public function updateProfile(Request $request)
-    {
-        $user = auth()->user();
-        $input = $request->all();
-        $userid = $user->id;
-        $rules = array(
-            'firstname' => 'required|regex:/^[A-Za-z ]+$/',
-            'lastname' => 'required|regex:/^[A-Za-z ]+$/',
-        );
-        $validator = Validator::make($input, $rules);
-        if ($validator->fails()) {
-            $arr = array("status" => 400, "message" => $validator->errors()->first(), "data" => array());
-        } else {
-            try {
-                $user->update([
-                    'first_name' => $request->firstname,
-                    'last_name' => $request->lastname,
-                    'phone' => $request->phone,
-                    'address' => $request->address,
-                    'intro' => $request->intro,
-                ]);
-                if($request->has('profile_image')){
-
-                    $imageName = $request->firstname.'_user_avatar_'.time().'.png';
-                    $file = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '',$request->input('profile_image')));
-                    \Storage::put('public/users/images/avatar/'.$imageName, $file);
-                    $user->update([
-                       'avatar'=>$imageName
-                   ]);
-
-                }
-                $data = [
-                    'id' => auth()->user()->id,
-                    'first_name' => auth()->user()->first_name,
-                    'last_name' => auth()->user()->last_name,
-                    'email' => auth()->user()->email,
-                    'phone' => auth()->user()->phone,
-                    'address' => auth()->user()->adress,
-                    'intro' => auth()->user()->intro,
-                    'profile_image' => auth()->user()->avatar ? url('storage/users/images/avatar/'.auth()->user()->avatar) : ''
-                ];
-                $arr = array("status" => 200, "message" => "Profile updated successfully.", "data" => $data);
-
-            } catch (\Exception $ex) {
-                $arr = array("status" => 400, "message" => $ex->getMessage(), "data" => array());
-            }
-        }
-        return \Response::json($arr);
-    }
-
 }

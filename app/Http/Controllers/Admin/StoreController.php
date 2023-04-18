@@ -420,7 +420,7 @@ class StoreController extends Controller
             'type' => 'required',
             'sale_commission' => 'required|numeric|min:0.1',
             'network_id' => 'nullable|integer',
-            'tracking_url' =>['required','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'tracking_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'deeplink_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'currency' => $request->input('type') === 'fixed' ? 'required' : '',            
             'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
@@ -547,7 +547,7 @@ class StoreController extends Controller
         $request->validate([
             'type' => 'required',
             'sale_commission' => 'required|numeric|min:0.1',
-            'tracking_url' =>['required','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'tracking_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'deeplink_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'currency' => $request->input('type') === 'fixed' ? 'required' : '',
             'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'

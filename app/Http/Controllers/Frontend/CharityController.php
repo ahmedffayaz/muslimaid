@@ -40,7 +40,7 @@ class CharityController extends Controller
             $query->where('country', $countryId);
         })->when(request('charity_types_id'), function ($query, $charityTypeId) {
             $query->where('charity_types_id', $charityTypeId);
-        })->paginate(12);
+        })->latest()->paginate(12);
         return view('frontend.templates.charity-index', compact('charities'))->render();
     }
 }

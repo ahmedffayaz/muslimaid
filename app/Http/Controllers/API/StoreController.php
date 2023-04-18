@@ -6,10 +6,8 @@ use Exception;
 use App\Models\Page;
 use App\Models\Store;
 use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
-use App\Http\Resources\SliderResource;
 use App\Http\Resources\StoreDetailResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
 
@@ -45,37 +43,44 @@ class StoreController extends Controller
                     $cashback = $query->getCashback();
                     return (strpos($cashback, '%') !== false);
                 });
+            })->when($request->tag, function ($query) use ($request) {
+                $query->whereHas('tags', function ($query) use ($request) {
+                    $query->where('title', $request->input('tag'));
+                });
             })->whereStatus('active')->paginate(12);
 
             if ($stores->count() == 0) {
                 $data = [
-                    'status' => JsonResponse::HTTP_OK,
-                    'message' => 'No store found'
+                    'status' => 200,
+                    'message' => 'No store found',
+                    'data' => []
                 ];
-                return response()->json($data, JsonResponse::HTTP_OK);
+                return response()->json($data, 200);
             }
 
             $data = [
-                'status' => JsonResponse::HTTP_OK,
+                'status' => 200,
                 'message' => 'Success',
                 'data' => [
                     'main_banner_image' => getBannerImageUrl($page),
                     'stores' => StoreResource::collection($stores)
                 ]
             ];
-            return response()->json($data, JsonResponse::HTTP_OK);
+            return response()->json($data, 200);
         } catch (ModelNotFoundException $e) {
             $data = [
-                'status' => JsonResponse::HTTP_NOT_FOUND,
-                'message' => 'Something went wrong, try again.'
+                'status' => 404,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
             ];
-            return response()->json($data, JsonResponse::HTTP_NOT_FOUND);
+            return response()->json($data, 404);
         } catch (Exception $e) {
             $data = [
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage() . 'Something went wrong, try again.'
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
             ];
-            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($data, 500);
         }
     }
 
@@ -90,23 +95,25 @@ class StoreController extends Controller
         try {
             $store = Store::where('slug', $slug)->whereStatus('active')->firstOrFail();
             $data = [
-                'status' => JsonResponse::HTTP_OK,
+                'status' => 200,
                 'message' => 'Success',
-                'data' => ['fav_stores' => new StoreDetailResource($store)]
+                'data' => ['store' => new StoreDetailResource($store)]
             ];
-            return response()->json($data, JsonResponse::HTTP_OK);
+            return response()->json($data, 200);
         } catch (ModelNotFoundException $ex) { // Store not found
             $data = [
-                'status' => JsonResponse::HTTP_NOT_FOUND,
-                'message' => 'Store not found'
+                'status' => 404,
+                'message' => 'Store not found',
+                'data' => []
             ];
-            return response()->json($data, JsonResponse::HTTP_NOT_FOUND);
+            return response()->json($data, 404);
         } catch (Exception $ex) { // Anything that went wrong
             $data = [
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => 'Something went wrong, try again.'
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
             ];
-            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($data, 500);
         }
     }
 

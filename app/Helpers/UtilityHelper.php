@@ -32,7 +32,8 @@ function getPageTemplates($slug)
     return $page;
 }
 
-function getmoreCategories(){
+function getMoreCategories()
+{
     $categories = Category::where('visibility', 'more')->where('parent_id', 0)->whereStatus('1')->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();
     return $categories;
 }
@@ -48,14 +49,21 @@ function getSpecificSetting($type)
     $setting = SiteSetting::where('type', $type)->pluck('value')->first();
     return $setting;
 }
-
+function checkCashbackChildCategories($slug, $parentId)
+{
+    $category = Category::where('slug', $slug)->where('parent_id', $parentId)->whereStatus('1')->first();
+    if (isset($category)) {
+        return 1;
+    }
+    return 0;
+}
 function removeAllTags($text, $limit)
 {
     $cleanText = strip_tags($text, '<p>');
     if ($limit != 0) {
         $cleanText = substr($cleanText, 0, $limit);
         $cleanText = str_replace('<p>', '<p class="excerpt">', $cleanText);
-        if(strlen($text) > $limit){
+        if (strlen($text) > $limit) {
             $cleanText .= '..';
         }
     }
@@ -69,6 +77,7 @@ function getRelatedBlogs($keywords, $id)
     if (!empty($tags[0])) {
         $blogs = Blog::where('id', '!=', $id)->where(function ($query) use ($tags) {
             foreach ($tags as $tag) {
+                $tag = trim($tag);
                 $query->orWhere('meta_keyword', 'like', '%' . $tag . '%');
             }
         })->get();
@@ -94,6 +103,18 @@ function statusBadges($status)
         return '<span class="badge badge-warning">' . $status . '</span>';
     }
     return '<span class="badge badge-primary">' . $status . '</span>';
+}
+
+function convertCashbackStatusToDbFormat($status)
+{
+    if ($status == 'Confirmed') return 3;
+    if ($status == 'Paid') return 4;
+    if ($status == 'Failed') return 2;
+    if ($status == 'Pending') return 1;
+    if ($status == 'Donated') return 7;
+    if ($status == 'Processing Donation') return 6;
+    if ($status == 'Processing') return 5;
+    return 1;
 }
 
 function getHomeSliders()
@@ -437,7 +458,7 @@ function getStores($limit = null, $offset = 0)
     $categories = Category::where(function ($query) {
         $query->where('visibility', '!=', 'hidden')
             ->orWhereNull('visibility');
-    })->where('parent_id', 0)
+    })->where('parent_id', 0)->whereStatus('1')
         ->when(!empty($limit), function ($q) use ($limit) {
             $q->limit($limit);
         })
@@ -483,7 +504,7 @@ function sidebarCategories()
     $sidebar_categories = Category::where(function ($query) {
         $query->where('visibility', '!=', 'hidden')
             ->orWhereNull('visibility');
-    })->where('feature_sidebar', 1)->orderBy('name', 'ASC')->get();
+    })->where('feature_sidebar', 1)->orderBy('name', 'ASC')->whereStatus('1')->get();
     return $sidebar_categories;
 }
 
@@ -507,7 +528,7 @@ function similarStores($store)
     if (in_array('cashblack-to-your-door', $categorySlugs)) {
         $ip = request()->ip();
         $data = Location::get($ip);
-        $category = Category::where(function ($query) {
+        $category = Category::whereStatus('1')->where(function ($query) {
             $query->where('visibility', '!=', 'hidden')
                 ->orWhereNull('visibility');
         })->whereSlug('cashblack-to-your-door')->with('stores')->first();
@@ -605,12 +626,14 @@ function checkStaticpageRule($url)
     if ($seo_rules != null) {
         $meta_description = [];
         $meta_keyword = [];
+        $meta_title = [];
         $title = Str::title(str_replace('-', ' ', $slug));
         foreach ($seo_rules->ruleData as $rule) {
             $rule['key'] == 'meta_description' ?  $meta_description[] = $rule['value'] : '';
             $rule['key'] == 'meta_keyword' ?  $meta_keyword[] = $rule['value'] : '';
+            $rule['key'] == 'meta_title' ?  $meta_title[] = $rule['value'] : '';
         }
-        return  ['title' => $title, 'meta_description' => implode(',', $meta_description), 'meta_keyword' => implode(',', $meta_keyword)];
+        return  ['title' => $title,'meta_title' => implode(',', $meta_title), 'meta_description' => implode(',', $meta_description), 'meta_keyword' => implode(',', $meta_keyword)];
     } elseif ($slug) {
         $route_names = [
             'page' => '\App\Models\Page',
@@ -626,9 +649,10 @@ function checkStaticpageRule($url)
                 $seoRule['name']  = $record->name;
                 $seoRule['meta_description'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:description')->pluck('value')->first();
                 $seoRule['meta_keyword'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:keywords')->pluck('value')->first();
+                $seoRule['meta_title'] = StoreSeoData::where('store_id', $record->id)->where('key', 'meta:title')->pluck('value')->first();
                 return $seoRule;
             }
-            if (isset($record) && (($record->title ? $record->title : $record->name) || $record->meta_description && $record->meta_keyword)) {
+            if (isset($record) && (($record->title ? $record->title : $record->name) || $record->meta_description && $record->meta_keyword && $record->meta_title)) {
                 return $record;
             }
         }
@@ -918,5 +942,15 @@ function resolvePageShortCodes($content, $data = [])
         }
     }
 
+    return $content;
+}
+function getFaqsContent()
+{
+    $page = Page::where('slug', 'faqs')->first();
+    if (!$page) {
+        return '';
+    }
+    $content = $page->lb_raw_content;
+    $content = preg_replace('/\[(.*?)\]/', '', $content);
     return $content;
 }

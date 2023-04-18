@@ -7,12 +7,15 @@ use App\Models\Tag;
 use App\Models\Slide;
 use App\Models\Store;
 use App\Models\Category;
-use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
 use App\Http\Resources\Home\SlideResource;
 use App\Http\Resources\StoreDetailResource;
 use App\Http\Resources\Home\FeaturedCategoryResource;
+use App\Http\Resources\SearchResources;
+use App\Models\Page;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class HomeController extends Controller
 {
@@ -53,7 +56,7 @@ class HomeController extends Controller
             }])->whereStatus(1)->limit(10)->get();
 
             $data = [
-                'status' => JsonResponse::HTTP_OK,
+                'status' => 200,
                 'message' => 'Success',
                 'data' => [
                     'base_url' => url('/'),
@@ -62,13 +65,65 @@ class HomeController extends Controller
                     'featured_categories' => FeaturedCategoryResource::collection($featuredCategories)
                 ]
             ];
-            return response()->json($data, JsonResponse::HTTP_OK);
+            return response()->json($data, 200);
         } catch (Exception $e) {
             $data = [
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => 'Something went wrong, try again'
+                'status' => 500,
+                'message' => 'Something went wrong, try again',
+                'data' => []
             ];
-            return response()->json($data, JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($data, 500);
+        }
+    }
+
+    public function mainSearch(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'search_text' => ['required'],
+            ]);
+
+            if ($validator->fails()) {
+                $data = [
+                    'status' => 406,
+                    'message' => $validator->errors()->first(),
+                    'data' => []
+                ];
+                return response()->json($data, 406);
+            } else {
+                $search = $request->search_text;
+                $page = Page::whereSlug('stores')->whereType('system')->whereStatus('active')->pluck('banner_image')->firstOrFail();
+                $stores =  Store::where('name', 'like', '%' . $search . '%')
+                    ->orWhereHas('storeRuleData', function ($query) use ($search) {
+                        $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $search . '%');
+                    })->whereStatus('active')->get();
+
+                if ($stores->count() == 0) {
+                    $data = [
+                        'status' => 200,
+                        'message' => 'No store found',
+                        'data' => []
+                    ];
+                    return response()->json($data, 200);
+                }
+
+                $data = [
+                    'status' => 200,
+                    'message' => 'Success',
+                    'data' => [
+                        'main_banner_image' => getBannerImageUrl($page),
+                        'stores' => SearchResources::collection($stores)
+                    ]
+                ];
+                return response()->json($data, 200);
+            }
+        } catch (Exception $e) {
+            $data = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
+            ];
+            return response()->json($data, 500);
         }
     }
 }

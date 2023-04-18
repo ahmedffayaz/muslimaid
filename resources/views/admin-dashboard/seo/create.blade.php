@@ -2,7 +2,7 @@
 @section('content')
     @php
         $isEdit = isset($seoData) ? true : false;
-         $url = $isEdit ? route('admin.seo.update', $seoData) : route('admin.seo.store');
+        $url = $isEdit ? route('admin.seo.update', $seoData) : route('admin.seo.store');
     @endphp
     <div class="nk-content ">
         <div class="container-fluid">
@@ -21,35 +21,32 @@
                                             </ul>
                                         </div>
                                     @endif
-                                    <h4 class="title nk-block-title">{{$isEdit ? 'Edit Seo' : 'Add Seo'}}</h4>
+                                    <h4 class="title nk-block-title">{{ $isEdit ? 'Edit Seo' : 'Add Seo' }}</h4>
                                     <div class="nk-block-des">
                                     </div>
                                 </div>
                             </div>
                             <div class="card">
                                 <div class="card-inner">
-                                    <form action="{{ $url }}" class="form-validate is-alter"
-                                        method="POST" enctype="multipart/form-data">
+                                    <form action="{{ $url }}" class="form-validate is-alter" method="POST" enctype="multipart/form-data">
                                         @csrf
-                                        @if($isEdit)
-                                        @method('put')
+                                        @if ($isEdit)
+                                            @method('put')
                                         @endif
                                         <div class="row g-4">
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-label" for="reviewer">Url <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input id="blog-title" type="text" class="form-control "
-                                                            name="url" placeholder="Url" value="{{ $isEdit ? $seoData->url :  url('/') }}"
-                                                            required>
+                                                        <input id="blog-title" type="text" class="form-control " name="url" placeholder="Url"
+                                                            value="{{ $isEdit ? $seoData->url : url('/') }}" required>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 ">
                                                 <div class="form-group">
                                                     <label class="form-label" for="reviewer">Title <span class="text-danger">*</span></label>
-                                                    <input class="form-control " name="title" placeholder="Title"
-                                                        value="{{ $isEdit ? $seoData->title : ''}}" required>
+                                                    <input class="form-control " name="title" placeholder="Title" value="{{ $isEdit ? $seoData->title : '' }}" required>
                                                 </div>
                                             </div>
 
@@ -59,19 +56,23 @@
                                             </div>
                                             {{-- End --}}
                                         </div>
-                                        <div class="seo-fields"  data-count="{{$isEdit ? $seoData->ruleData()->get()!=null ? $seoData->ruleData()->count() : 1  : 1}}">
-                                            @if($isEdit && $seoData)
-                                            @foreach ($seoData->ruleData()->get() as $key => $val)
+                                        <div class="seo-fields" data-count="{{ $isEdit ? ($seoData->ruleData()->get() != null ? $seoData->ruleData()->count() : 1) : 1 }}">
+                                            @if ($isEdit && $seoData)
+                                                @foreach ($seoData->ruleData()->get() as $key => $val)
                                                     <div class="col-lg-11">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="reviewer">Meta Keywords</label>
-
-                                                                <input id="blog-title" type="text" class="form-control " name="value[{{$key}}][keyword]" placeholder="Meta keyword" value="{{ $val->meta_keyword }}" required>
-
+                                                            <label class="form-label" for="reviewer">Meta Title</label>
+                                                            <input id="seo-title" type="text" class="form-control " name="value[{{ $key }}][keyword]"
+                                                                placeholder="Meta Title" value="{{ $val->meta_title }}" required>
                                                         </div>
                                                         <div class="form-group">
-                                                                <label class="form-label" for="reviewer">Meta Description</label>
-                                                                <textarea  class="form-control " name="value[{{$key}}][meta_description]"  placeholder="Meta Description" value="" required>{{ $val->meta_description }}</textarea>
+                                                            <label class="form-label" for="reviewer">Meta Keywords</label>
+                                                            <input id="seo-keyword" type="text" class="form-control " name="value[{{ $key }}][keyword]"
+                                                                placeholder="Meta keyword" value="{{ $val->meta_keyword }}" required>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="reviewer">Meta Description</label>
+                                                            <textarea class="form-control " name="value[{{ $key }}][meta_description]" placeholder="Meta Description" value="" required>{{ $val->meta_description }}</textarea>
                                                         </div>
 
                                                         <div class="col-lg-1" style="margin-left: 817px;color: red;">
@@ -79,10 +80,10 @@
                                                                 <em class="icon ni ni-minus-circle delBtn" data-type_counter="${counter}"></em>
                                                             </span>
                                                         </div>
-                                                        </div>
-                                                    @endforeach
-                                                    @endif
-                                            </div>
+                                                    </div>
+                                                @endforeach
+                                            @endif
+                                        </div>
                                         <div class="col-lg-11" id="corsi"></div>
 
                                         <div class="col-12">
@@ -125,9 +126,9 @@
                         </span>
                     </div>
                     </div>`;
-                    counter++;
-                  $('#corsi').append(html);
-                  $('.seo-fields').attr('data-count', counter);
+            counter++;
+            $('#corsi').append(html);
+            $('.seo-fields').attr('data-count', counter);
         });
 
 
@@ -136,15 +137,19 @@
             let counter = $(this).attr('data-type_count');
             let html = '';
             $(this).siblings().html('');
-            if (val == 'meta_keyword') {
+            if (val == 'meta_title') {
+                html = `
+                    <div class="form-group">
+                        <label class="form-label" for="reviewer">Meta Title</label>
+                            <input id="seo-title" type="text" class="form-control " name="type[${counter}][value]" placeholder="Meta Title" value="" required>
+                    </div>`;
+            }else if (val == 'meta_keyword') {
                 html = `
                     <div class="form-group">
                         <label class="form-label" for="reviewer">Meta Keywords</label>
-
-                            <input id="blog-title" type="text" class="form-control " name="type[${counter}][value]" placeholder="Meta keyword" value="" required>
-
+                            <input id="seo-keyword" type="text" class="form-control " name="type[${counter}][value]" placeholder="Meta keyword" value="" required>
                     </div>`;
-            } else {
+                 } else {
                 html = `
                         <div class="form-group">
                             <label class="form-label" for="reviewer">Meta Description</label>

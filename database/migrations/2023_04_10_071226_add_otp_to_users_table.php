@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddIsHiddenToCategoriesTable extends Migration
+class AddOtpToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,9 @@ class AddIsHiddenToCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::table('categories', function (Blueprint $table) {
-            $table->enum('visibility', ['hidden', 'more'])->after('status')->nullable();
+        Schema::table('users', function (Blueprint $table) {
+            //
+            $table->integer('otp')->after('status')->nullable();
         });
     }
 
@@ -25,7 +26,7 @@ class AddIsHiddenToCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::table('categories', function (Blueprint $table) {
+        Schema::table('users', function (Blueprint $table) {
             //
         });
     }

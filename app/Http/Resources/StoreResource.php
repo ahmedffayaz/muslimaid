@@ -18,10 +18,14 @@ class StoreResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'title' => $this->name,
             'url_key' => $this->slug,
+            'banner_image' => getImageUrl($this->images()->where('title', 'cover')->first()),
             'big_icon' => getImageUrl($this->logo->first()),
-            'cashback' => $this->getCashback()
+            'description' => $this->when($this->description, $this->description),
+            'terms_conditions' => $this->when($this->terms_conditions, $this->terms_conditions),
+            'cashback' => $this->getCashback(),
         ];
     }
 }

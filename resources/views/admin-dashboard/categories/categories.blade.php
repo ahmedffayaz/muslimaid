@@ -203,7 +203,7 @@
                         bannerType()
                         store()
                         validation();
-                            
+
                     }
                 });
             });
@@ -326,6 +326,10 @@
             function store() {
                 $('#category-form').on('submit', function(event) {
                     event.preventDefault();
+                    let form = $(this);
+                    if (!form.valid()) {
+                        return false;
+                    }
                     let btn = $('#save-btn')
                     btn.attr('disabled', 'disabled')
                         .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
@@ -566,7 +570,7 @@
         });
 
         function validation() {
-            $('.form-validate').validate({
+            $('#category-form').validate({
                 errorClass: 'invalid-feedback d-block',
                 rules: {
                     name: {
@@ -577,14 +581,14 @@
                     },
                     logo_link: {
                         url: true,
-                        required:true
+                        required: true
                     },
                     banner_type: {
                         required: true
                     },
                     banner_link: {
                         url: true,
-                        required:true
+                        required: true
                     },
                     status: {
                         required: true

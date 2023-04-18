@@ -15,12 +15,11 @@ class UserCashbackResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'Store'=>$this->store->name,
-            'Order Amount'=> currency($this->order_value),
-            'Cashback'=> currency($this->order_value),
-            'Date'=>\Carbon\Carbon::parse($this->event_date)->isoFormat('Do MMMM YYYY'),
-            'Status'=>$this->statusMap->status
+            'id' => $this->store->name,
+            'title' => $this->store->name,
+            'cashback' => currency($this->order_value),
+            'date' => \Carbon\Carbon::parse($this->event_date)->isoFormat('Do MMMM YYYY'),
+            'status' => $this->statusMap->status
         ];
-
     }
 }
