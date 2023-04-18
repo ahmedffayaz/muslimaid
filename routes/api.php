@@ -22,6 +22,7 @@ Route::post('/resend_otp', [API\AuthController::class, 'resendOtpCode']);
 
 Route::post('/auth/social', [API\AuthController::class, 'socialLogin']);
 Route::post('password/email', [API\AuthController::class, 'forgotPassword']);
+Route::post('main_search', [API\HomeController::class, 'mainSearch']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/auth/logout', [API\AuthController::class, 'logout']);
@@ -38,7 +39,6 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/refer_and_earn', [API\UserController::class, 'referralLink']);
     Route::post('/user/cashouts', [API\UserController::class, 'cashouts']);
 
-    Route::post('main_search', [API\HomeController::class, 'mainSearch']);
     Route::post('/dashboard_data', [API\DashboardController::class, 'index']);
 
     Route::post('/charities', [API\CharityController::class, 'getCharities']);
