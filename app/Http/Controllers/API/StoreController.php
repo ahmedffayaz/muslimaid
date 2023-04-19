@@ -84,6 +84,78 @@ class StoreController extends Controller
         }
     }
 
+    public function favoriteStores()
+    {
+        try {
+            $cashblackStoreIds = Store::whereHas('categories', function ($query) {
+                $query->where('slug', 'cashblack-to-your-door');
+            })->pluck('id');
+            $favoriteStores = auth()->user()->favoriteStores()
+                ->whereNotIn('stores.id', $cashblackStoreIds)
+                ->paginate(20);
+
+            $response = [
+                'status' => 200,
+                'message' => 'Success',
+                'data' => [
+                    'fav_stores' => StoreResource::collection($favoriteStores),
+                    'metaData' => [
+                        "next" => $favoriteStores->nextPageUrl(),
+                        "previous" => $favoriteStores->previousPageUrl(),
+                        "per_page" => 20,
+                        "total" => $favoriteStores->total(),
+                        "current_page" => $favoriteStores->currentPage(),
+                        "total_pages" => $favoriteStores->lastPage(),
+                        "first" => $favoriteStores->firstItem(),
+                        "last" => $favoriteStores->lastItem()
+                    ]
+                ]
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $data = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
+            ];
+            return response()->json($data, 500);
+        }
+    }
+
+    public function favoriteCashbackStores()
+    {
+        try {
+            $favoriteStores = auth()->user()->favoriteStores()->whereHas('categories', function ($query) {
+                $query->where('slug', 'cashblack-to-your-door');
+            })->paginate(20);
+
+            $response = [
+                'status' => 200,
+                'message' => 'Success',
+                'data' => [
+                    'fav_stores' => StoreResource::collection($favoriteStores),
+                    'metaData' => [
+                        "next" => $favoriteStores->nextPageUrl(),
+                        "previous" => $favoriteStores->previousPageUrl(),
+                        "per_page" => 20,
+                        "total" => $favoriteStores->total(),
+                        "current_page" => $favoriteStores->currentPage(),
+                        "total_pages" => $favoriteStores->lastPage(),
+                        "first" => $favoriteStores->firstItem(),
+                        "last" => $favoriteStores->lastItem()
+                    ]
+                ]
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $data = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
+            ];
+            return response()->json($data, 500);
+        }
+    }
     /**
      * Display the specified resource.
      *

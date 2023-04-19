@@ -9,7 +9,11 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Notifications\ResetPasswordNotification;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Laravel\Sanctum\HasApiTokens;
+
+use App\Models\Store;
+use App\Models\Favorite;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -123,5 +127,10 @@ class User extends Authenticatable implements MustVerifyEmail
     public function sendPasswordResetNotification($token)
     {
         $this->notify(new ResetPasswordNotification($token));
+    }
+
+    public function favoriteStores(): MorphToMany
+    {
+        return $this->morphedByMany(Store::class, 'favoritable', 'favorites');
     }
 }

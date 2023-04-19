@@ -104,6 +104,8 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('users/fetch', [App\Http\Controllers\Admin\UserController::class, 'fetch'])->name('users.fetch');
         Route::post('users/search_users',  [App\Http\Controllers\Admin\UserController::class, 'searchUsers'])->name('users.search_users');
         Route::get('users/show', [App\Http\Controllers\Admin\UserController::class, 'showUser'])->name('users.show_user');
+        Route::post('users/add_favorite', [App\Http\Controllers\Admin\UserController::class, 'addFavorite'])->name('add_favorite');
+        Route::post('users/remove_favorite', [App\Http\Controllers\Admin\UserController::class, 'removeFavorite'])->name('remove_favorite');
         Route::resource('users', UserController::class);
 
         // Importers
@@ -294,9 +296,11 @@ Route::namespace('App\Http\Controllers\Client')
     ->group(function () {
         Route::get('dashboard', [App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
         Route::get('profile', [App\Http\Controllers\Client\DashboardController::class, 'edit'])->name('profile');
+        Route::get('favorite_stores', [App\Http\Controllers\Client\DashboardController::class, 'favoriteStores'])->name('favorite_stores');
+        Route::get('favorite_cashblack_to_door', [App\Http\Controllers\Client\DashboardController::class, 'favoriteCashbackStores'])->name('favorite_cashblack_to_door');
         Route::put('profile/update/{user}', [App\Http\Controllers\Client\DashboardController::class, 'update'])->name('profile.update');
         Route::get('cashback', [App\Http\Controllers\Client\DashboardController::class, 'cashback'])->name('cashback');
-        Route::get('cashouts', [App\Http\Controllers\Client\DashboardController::class, 'cashouts'])->name('cashouts'); 
+        Route::get('cashouts', [App\Http\Controllers\Client\DashboardController::class, 'cashouts'])->name('cashouts');
         Route::post('searchCashback', [App\Http\Controllers\Client\DashboardController::class, 'searchCashback'])->name('search_cashback');
         Route::post('searchCashouts', [App\Http\Controllers\Client\DashboardController::class, 'searchCashouts'])->name('search_cashout');
         Route::get('clicks', [App\Http\Controllers\Client\DashboardController::class, 'clicks'])->name('clicks');
@@ -316,7 +320,7 @@ Route::namespace('App\Http\Controllers\Client')
         Route::resource('tickets', TicketController::class)->only(['index', 'create', 'show', 'update']);
         Route::resource('referral', ReferController::class)->only('index');
         Route::post('send-referral-link', [App\Http\Controllers\Client\ReferController::class, 'sendReferralLink'])->name('send-referral-link');
-        Route::get('my-referrals',[App\Http\Controllers\Client\ReferController::class, 'myReferrals'])->name('referral.my-referral');
+        Route::get('my-referrals', [App\Http\Controllers\Client\ReferController::class, 'myReferrals'])->name('referral.my-referral');
         Route::post('search-referrals', [App\Http\Controllers\Client\ReferController::class, 'searchReferrals'])->name('search_referrals');
         Route::get('CharityWithdraw', [App\Http\Controllers\Client\PaymentController::class, 'CharityWithdraw'])->name('CharityWithdraw');
     });

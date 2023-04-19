@@ -23,13 +23,15 @@ $(document).ready(function () {
             var windowBottom = $(window).scrollTop() + windowHeight;
             if (windowBottom > sectionTop + sectionHeight) {
                 $(this).addClass("static-sections");
-            } 
+            }
         });
-        if (Math.round($(window).scrollTop() + $(window).height()) === $(document).height()) {
+        if (
+            Math.round($(window).scrollTop() + $(window).height()) ===
+            $(document).height()
+        ) {
             $(".container").addClass("static-sections");
-        } 
+        }
     });
-    
 
     $(".acc-after-login").on("click", function (e) {
         console.log("first click");
@@ -276,6 +278,11 @@ $(document).ready(function () {
 });
 
 var base_url = $("base").attr("href");
+var csrfToken = $('meta[name="csrf-token"]').attr("content");
+var url = window.location.protocol + "//" + window.location.hostname;
+if (window.location.port) {
+    url += ":" + window.location.port;
+}
 
 function getAlertMessages(data = null, form = null) {
     if (data.success) {
@@ -593,13 +600,54 @@ $(document).on("change", "#stores_par_page", function (e) {
     });
 });
 
+$(document).on("click", ".fav-icon", function (e) {
+    e.preventDefault();
+    var ele = $(this);
+    var favoriteStatus = $(this).hasClass("liked");
+    var storeId = $(this).attr("this-store-id");
+    var user_id = $("body").data("user-id");
+    if (user_id > 0) {
+        if (favoriteStatus) {
+            $(this).removeClass("liked");
+            $.ajax({
+                url: url + "/admin/users/remove_favorite",
+                type: "POST",
+                data: {
+                    storeId: storeId,
+                    _token: csrfToken,
+                },
+                success: function (data) {
+                    $(ele).notify(data.message, data.type);
+                },
+            });
+        } else {
+            $(this).addClass("liked");
+            $.ajax({
+                url: url + "/admin/users/add_favorite",
+                type: "POST",
+                data: {
+                    storeId: storeId,
+                    _token: csrfToken,
+                },
+                success: function (data) {
+                    $(ele).notify(data.message, data.type);
+                },
+            });
+        }
+    } else {
+        var currentUrl = window.location.href;
+        window.location.href =
+            "/login?prvUrl=" + encodeURIComponent(currentUrl);
+    }
+});
+
 $(document).on("submit", "#updatepic-form", function (e) {
     var form = this;
     e.preventDefault();
     if ($(form).valid() == true) {
         var formData = new FormData(this);
         $.ajax({
-            url: base_url + "profile/updatepic_action",
+            url: url + "profile/updatepic_action",
             type: "POST",
             data: formData,
             success: function (data) {
@@ -859,15 +907,20 @@ $(document).on("click", ".like-action-remove", function () {
         dangerMode: true,
     }).then((willDelete) => {
         if (willDelete) {
-            var ajax_url =
-                base_url + "profile/like_action/" + ele.attr("this-store-id");
-            $.post(ajax_url, {}, function (data) {
-                ele.removeClass("not-liked");
-                ele.removeClass("liked");
-                ele.addClass(JSON.parse(data).class);
-                if (JSON.parse(data).removed) {
-                    $(ele).parents("li").remove();
-                }
+            $.ajax({
+                url: url + "/admin/users/remove_favorite",
+                type: "POST",
+                data: {
+                    storeId: ele.attr("this-store-id"),
+                    _token: csrfToken,
+                },
+                success: function (data) {
+                    ele.removeClass("not-liked");
+                    ele.removeClass("liked");
+                    if (data.type) {
+                        $(ele).parents("li").remove();
+                    }
+                },
             });
         } else {
             swal("Your favourite stores list is safe!");
