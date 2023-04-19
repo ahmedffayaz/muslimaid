@@ -4,11 +4,13 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Home\UserResource;
+use App\Jobs\SendOTPEmail;
 use App\Models\Bonus;
 use App\Models\User;
 use App\Traits\ApiResponser;
 use App\Traits\WelcomeEmail;
 use Exception;
+use App\Traits\UserBonus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +18,7 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    use ApiResponser, WelcomeEmail;
+    use ApiResponser, WelcomeEmail, UserBonus;
 
     public function register(Request $request)
     {
@@ -46,25 +48,45 @@ class AuthController extends Controller
             ]);
 
             $user->assignRole('user');
-            $bonus = array_key_exists('welcome_bonus', SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
-            Bonus::create([
-                'user_id' => $user->id,
-                'amount' => $bonus,
-            ]);
+            $bonusStatus = 1;
+            $nameArray = explode(' ', $request->input('name'));
 
-            // Send welcome email to user
-            $data = array(
-                'name' => $user->first_name,
-                'email' => $user->email
-            );
-            $merge_subject = ['subject' => null, 'message' => null];
-            $data = array_merge($data, $merge_subject);
-            $this->welcomeEmail($data);
+            // verify email
+            $this->welcomBonus($user, $bonusStatus);
+            dispatch(new SendOTPEmail($user));
+
+            if (!empty($settings['sendgrid_registered_list_id']) && !empty($settings['sendgrid_api_key'])) {
+                $settings = SiteSetting();
+                $requestBody = [
+                    'list_ids' => [
+                        isset($settings['sendgrid_registered_list_id']) ? $settings['sendgrid_registered_list_id'] : "",
+                    ],
+                    'contacts' => [
+                        [
+                            'email' =>  $request->input('email'),
+                            'first_name' => isset($nameArray[0]) ? $nameArray[0] : '',
+                            'last_name' => isset($nameArray[1]) ? $nameArray[1] : '',
+                        ]
+                    ]
+                ];
+                $apiKey = isset($settings['sendgrid_api_key']) ? $settings['sendgrid_api_key'] : "";
+                $sg = new \SendGrid($apiKey);
+
+                $response = $sg->client->marketing()->contacts()->put($requestBody);
+                if ($response->statusCode() != 201 && $response->statusCode() != 202) {
+                    $response = [
+                        'status' => 500,
+                        'message' => 'Something went wrong, try again.',
+                        'data' => []
+                    ];
+                    return response()->json($response, 500);
+                }
+            }
 
             $user = new UserResource($user);
             $response = [
                 'status' => 200,
-                'message' => "Successful Registered.",
+                'message' => "User registered successfully",
                 'data' => $user,
             ];
 
@@ -229,6 +251,24 @@ class AuthController extends Controller
             ];
             return response()->json($response, 406);
         } else {
+            $user = User::where('email', $request->email)->first();
+            if (!isset($user)) {
+                $response = [
+                    'status' => 404,
+                    'message' => 'User not found',
+                    'data' => []
+                ];
+                return response()->json($response, 404);
+            } else {
+                dispatch(new SendOTPEmail($user));
+                $response = [
+                    'status' => 200,
+                    'message' => "Verification email sent successfully",
+                    'data' => $user,
+                ];
+
+                return response()->json($response, 200);
+            }
         }
     }
 
@@ -248,8 +288,17 @@ class AuthController extends Controller
             return response()->json($response, 406);
         } else {
             try {
-                $userOtp = User::where('email', $request->email)->pluck('otp')->first();
-                if ((int)$userOtp === (int)$request->otp && !empty($userOtp)) {
+                $user = User::where('email', $request->email)->first();
+                if (!isset($user)) {
+                    $response = [
+                        'status' => 404,
+                        'message' => 'Registered user not found',
+                        'data' => []
+                    ];
+                    return response()->json($response, 404);
+                } else if ((int)$user->otp === (int)$request->otp && !empty($user->otp)) {
+                    $user->status = "active";
+                    $user->save();
                     $response = [
                         'status' => 200,
                         'message' => "Otp successfully verified",
@@ -399,7 +448,7 @@ class AuthController extends Controller
 
         $bonus = array_key_exists('welcome_bonus', SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
 
-        $userBonus = Bonus::create([
+        Bonus::create([
             'user_id' => $user->id,
             'amount' => $bonus,
         ]);

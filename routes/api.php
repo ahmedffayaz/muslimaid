@@ -18,10 +18,11 @@ use App\Http\Controllers\API as API;
 Route::post('/auth/register', [API\AuthController::class, 'register']);
 Route::post('/auth/login', [API\AuthController::class, 'login']);
 Route::post('/verify_otp', [API\AuthController::class, 'verifyOtpCode']);
-Route::get('/resend_otp', [API\AuthController::class, 'resendOtpCode']);
+Route::post('/resend_otp', [API\AuthController::class, 'resendOtpCode']);
 
 Route::post('/auth/social', [API\AuthController::class, 'socialLogin']);
 Route::post('password/email', [API\AuthController::class, 'forgotPassword']);
+Route::post('main_search', [API\HomeController::class, 'mainSearch']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/auth/logout', [API\AuthController::class, 'logout']);
@@ -36,21 +37,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/user/tickets', [API\UserController::class, 'tickets']);
     Route::post('/user/referral-data', [API\UserController::class, 'userReferrals']);
     Route::get('/refer_and_earn', [API\UserController::class, 'referralLink']);
+    Route::post('/user/cashouts', [API\UserController::class, 'cashouts']);
 
-    Route::post('main_search', [API\HomeController::class, 'mainSearch']);
     Route::post('/dashboard_data', [API\DashboardController::class, 'index']);
 
     Route::post('/charities', [API\CharityController::class, 'getCharities']);
 
-    Route::get('/user/payment_methods', [API\PaymentController::class, 'paymentMethods']);
-    Route::post('/user/payment_methods', [API\PaymentController::class, 'paymentSave']);
-    Route::get('/user/cashouts', [API\PaymentController::class, 'cashouts']);
-    Route::post('/user/withdraw', [API\PaymentController::class, 'withdraw']);
-
-    Route::get('/user/claims', [API\ClaimController::class, 'claims']);
-    Route::get('/user/show-retailers', [API\ClaimController::class, 'step1']);
-    Route::post('/user/claim-step-2', [API\ClaimController::class, 'step2']);
-    Route::post('/user/claim-step-3', [API\ClaimController::class, 'step3']);
 });
 
 Route::apiResource('stores', API\StoreController::class)->only(['index', 'show']);

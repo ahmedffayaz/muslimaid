@@ -164,6 +164,7 @@ class CategoryController extends Controller
                 ];
                 return response()->json($data, 200);
             }
+            $categoryStores = $category->stores()->paginate(20);
             $data = [
                 'status' => 200,
                 'message' => 'Category details retrieved successfully',
@@ -171,8 +172,18 @@ class CategoryController extends Controller
                     'category' => new SubCategoryResource($category),
                     'parent' => isset($category->parent) ? new SubCategoryResource($category->parent) : (object)[],
                     'child' => !empty($category->childs) ? SubCategoryResource::collection($category->childs) : [],
-                    'stores' => !empty($category->stores) ? StoreResource::collection($category->stores) : [],
-                    'total' => count($category->stores)
+                    'stores' => !empty($category->stores) ? StoreResource::collection($categoryStores) : [],
+                    'total' => count($category->stores),
+                    'metaData' => [
+                        "next" => $categoryStores->nextPageUrl(),
+                        "previous" => $categoryStores->previousPageUrl(),
+                        "per_page" => 20,
+                        "total" => $categoryStores->total(),
+                        "current_page" => $categoryStores->currentPage(),
+                        "total_pages" => $categoryStores->lastPage(),
+                        "first" => $categoryStores->firstItem(),
+                        "last" => $categoryStores->lastItem()
+                    ]
                 ]
             ];
             return response()->json($data, 200);
