@@ -41,6 +41,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/get_fav_stores', [API\StoreController::class, 'favoriteStores']);
     Route::post('/get_fav_cbdoor', [API\StoreController::class, 'favoriteCashbackStores']);
+    Route::post('/add_fav_store', [API\StoreController::class, 'addFavoriteStores']);
+    Route::post('/remove_fav_store', [API\StoreController::class, 'removeFavoriteStores']);
 
     Route::post('/dashboard_data', [API\DashboardController::class, 'index']);
 
@@ -48,6 +50,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 });
 
 Route::apiResource('stores', API\StoreController::class)->only(['index', 'show']);
+Route::post('afrobot', [API\StoreController::class, 'affrobotStores']);
+
 Route::get('vouchers', [API\StoreController::class, 'vouchers']);
 Route::get('store-detail/{id}', [API\StoreController::class, 'vouchers']);
 
