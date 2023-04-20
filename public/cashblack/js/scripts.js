@@ -605,12 +605,12 @@ $(document).on("click", ".fav-icon", function (e) {
     var ele = $(this);
     var favoriteStatus = $(this).hasClass("liked");
     var storeId = $(this).attr("this-store-id");
-    var user_id = $("body").data("user-id");
-    if (user_id > 0) {
+    var userId = $("body").data("user-id");
+    if (userId > 0) {
         if (favoriteStatus) {
             $(this).removeClass("liked");
             $.ajax({
-                url: url + "/admin/users/remove_favorite",
+                url: url + "/admin/users/remove-favorite",
                 type: "POST",
                 data: {
                     storeId: storeId,
@@ -623,7 +623,7 @@ $(document).on("click", ".fav-icon", function (e) {
         } else {
             $(this).addClass("liked");
             $.ajax({
-                url: url + "/admin/users/add_favorite",
+                url: url + "/admin/users/add-favorite",
                 type: "POST",
                 data: {
                     storeId: storeId,
@@ -890,9 +890,9 @@ $(document).on("click", ".like-action", function () {
 });
 
 $(document).on("click", ".like-action-remove", function () {
-    var user_id = $("body").data("user-id");
+    var userId = $("body").data("user-id");
 
-    if (user_id > 0) {
+    if (userId > 0) {
     } else {
         $(".login-form-modal").magnificPopup("open");
         return false;
@@ -908,7 +908,7 @@ $(document).on("click", ".like-action-remove", function () {
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: url + "/admin/users/remove_favorite",
+                url: url + "/admin/users/remove-favorite",
                 type: "POST",
                 data: {
                     storeId: ele.attr("this-store-id"),

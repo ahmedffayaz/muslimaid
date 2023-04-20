@@ -148,8 +148,8 @@ class StoreController extends Controller
                 'status' => 200,
                 'message' => 'Success',
                 'data' => [
-                    'fav_stores' => StoreResource::collection($favoriteStores),
-                    'metaData' => [
+                    'favorite_stores' => StoreResource::collection($favoriteStores),
+                    'meta_data' => [
                         "next" => $favoriteStores->nextPageUrl(),
                         "previous" => $favoriteStores->previousPageUrl(),
                         "per_page" => 20,
@@ -183,8 +183,8 @@ class StoreController extends Controller
                 'status' => 200,
                 'message' => 'Success',
                 'data' => [
-                    'fav_stores' => StoreResource::collection($favoriteStores),
-                    'metaData' => [
+                    'favorite_stores' => StoreResource::collection($favoriteStores),
+                    'meta_data' => [
                         "next" => $favoriteStores->nextPageUrl(),
                         "previous" => $favoriteStores->previousPageUrl(),
                         "per_page" => 20,

@@ -39,10 +39,10 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::get('/refer_and_earn', [API\UserController::class, 'referralLink']);
     Route::post('/user/cashouts', [API\UserController::class, 'cashouts']);
 
-    Route::post('/get_fav_stores', [API\StoreController::class, 'favoriteStores']);
-    Route::post('/get_fav_cbdoor', [API\StoreController::class, 'favoriteCashbackStores']);
-    Route::post('/add_fav_store', [API\StoreController::class, 'addFavoriteStores']);
-    Route::post('/remove_fav_store', [API\StoreController::class, 'removeFavoriteStores']);
+    Route::post('/get-fav-stores', [API\StoreController::class, 'favoriteStores']);
+    Route::post('/get-fav-cbdoor', [API\StoreController::class, 'favoriteCashbackStores']);
+    Route::post('/add-fav-store', [API\StoreController::class, 'addFavoriteStores']);
+    Route::post('/remove-fav-store', [API\StoreController::class, 'removeFavoriteStores']);
 
     Route::post('/dashboard_data', [API\DashboardController::class, 'index']);
 
