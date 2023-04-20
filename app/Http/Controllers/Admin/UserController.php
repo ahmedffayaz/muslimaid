@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendEmailJob;
+use App\Models\Favorite;
+use App\Models\Store;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -86,7 +89,7 @@ class UserController extends Controller
             DB::commit();
             //send email to user to verify email address
             dispatch(new SendEmailJob($user));
-            
+
             flash()->success('New user added successfully');
             return redirect()->route('admin.users.index');
         } catch (Throwable $th) {
@@ -352,5 +355,27 @@ class UserController extends Controller
     public function showUser()
     {
         return view('admin-dashboard.users.show');
+    }
+
+    public function addFavorite(Request $request)
+    {
+        $model = Store::find($request->storeId);
+        if ($model) {
+            Auth::user()->favoriteStores()->syncWithoutDetaching([$model->id]);
+        }
+        return response()->json(
+            ['message' => 'Store added to favorite list.', 'type' => 'success']
+        );
+    }
+
+    public function removeFavorite(Request $request)
+    {
+        $model = Store::find($request->storeId);
+        if ($model) {
+            Auth::user()->favoriteStores()->detach($model->id);
+        }
+        return response()->json(
+            ['message' => 'Store removed from favorite list.', 'type' => 'info']
+        );
     }
 }

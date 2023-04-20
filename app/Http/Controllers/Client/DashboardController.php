@@ -9,6 +9,7 @@ use App\Models\ExitClick;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -196,5 +197,26 @@ class DashboardController extends Controller
         }
         $cashouts = $cashouts->latest()->paginate(20);
         return view('frontend.client-dashboard.cashout-table', compact('cashouts'));
+    }
+
+    public function favoriteStores()
+    {
+        $title = "favorite_stores";
+        $cashblackStoreIds = Store::whereHas('categories', function ($query) {
+            $query->where('slug', 'cashblack-to-your-door');
+        })->pluck('id');
+        $favoriteStores = auth()->user()->favoriteStores()
+            ->whereNotIn('stores.id', $cashblackStoreIds)
+            ->paginate(20);
+        return view('frontend.client-dashboard.favorite-stores', compact('favoriteStores', 'title'));
+    }
+
+    public function favoriteCashbackStores()
+    {
+        $title = "favorite_cashblack_to_door";
+        $favoriteStores = auth()->user()->favoriteStores()->whereHas('categories', function ($query) {
+            $query->where('slug', 'cashblack-to-your-door');
+        })->paginate(20);
+        return view('frontend.client-dashboard.favorite-stores', compact('favoriteStores', 'title'));
     }
 }
