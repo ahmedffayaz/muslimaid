@@ -38,6 +38,12 @@ function getMoreCategories()
     return $categories;
 }
 
+function checkFavorite($storeId)
+{
+    $isFavorite = auth()->user()->favoriteStores()->where('stores.id', $storeId)->pluck('stores.id')->first();
+    return $isFavorite;
+}
+
 function getCuisineTags($store)
 {
     $tags = $store->categories->where('parent_id', 158)->pluck('name')->toArray();
@@ -633,7 +639,7 @@ function checkStaticpageRule($url)
             $rule['key'] == 'meta_keyword' ?  $meta_keyword[] = $rule['value'] : '';
             $rule['key'] == 'meta_title' ?  $meta_title[] = $rule['value'] : '';
         }
-        return  ['title' => $title,'meta_title' => implode(',', $meta_title), 'meta_description' => implode(',', $meta_description), 'meta_keyword' => implode(',', $meta_keyword)];
+        return  ['title' => $title, 'meta_title' => implode(',', $meta_title), 'meta_description' => implode(',', $meta_description), 'meta_keyword' => implode(',', $meta_keyword)];
     } elseif ($slug) {
         $route_names = [
             'page' => '\App\Models\Page',

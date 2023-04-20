@@ -46,7 +46,6 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . Auth::user()->id],
         ]);
 
         if ($validator->fails()) {
@@ -65,7 +64,6 @@ class UserController extends Controller
                 Auth::user()->update([
                     'first_name' => $request->firstname,
                     'last_name' => $request->lastname,
-                    'email' => $request->input('email'),
                     'phone' => $request->phone,
                     'address' => $request->address,
                     'date_of_birth' => $request->dob,

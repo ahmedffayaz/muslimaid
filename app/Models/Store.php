@@ -96,6 +96,11 @@ class Store extends Model
         return $this->morphToMany(Tag::class, 'taggable');
     }
 
+    public function favorites(): MorphToMany
+    {
+        return $this->morphToMany(Favorite::class, 'favoritable');
+    }
+
     public function editorPicks()
     {
         return $this->hasMany(EditorPick::class);
@@ -120,13 +125,13 @@ class Store extends Model
     {
         $currency = ($this->type == 'fixed' && isset($this->cashback->currencyData)) ? $this->cashback->currencyData->symbol : '';
         if ($this->custom_cashback_percentage  && !empty($this->cashback->sale_commission)) {
-            if(!is_numeric($this->custom_cashback_percentage)){
+            if (!is_numeric($this->custom_cashback_percentage)) {
                 $this->custom_cashback_percentage = substr($this->custom_cashback_percentage, 0, -1);
             }
             return $this->cashback->type == 'fixed'
                 ? currencyOrPercentage(($this->custom_cashback_percentage / 100) * $this->cashback->sale_commission, 'fixed', $currency) . ' Cashback'
                 : currencyOrPercentage(($this->custom_cashback_percentage / 100) * $this->cashback->sale_commission, 'percentage') . ' Cashback';
-        } elseif(!empty($this->cashback->sale_commission)) {
+        } elseif (!empty($this->cashback->sale_commission)) {
             return $this->cashback->type == 'fixed'
                 ? currencyOrPercentage((SiteSetting()['cashback_percentage'] / 100) * $this->cashback->sale_commission, 'fixed', $currency) . ' Cashback'
                 : currencyOrPercentage((SiteSetting()['cashback_percentage'] / 100) * $this->cashback->sale_commission, 'percentage') . ' Cashback';
