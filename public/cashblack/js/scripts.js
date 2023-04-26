@@ -635,9 +635,7 @@ $(document).on("click", ".fav-icon", function (e) {
             });
         }
     } else {
-        var currentUrl = window.location.href;
-        window.location.href =
-            "/login?prvUrl=" + encodeURIComponent(currentUrl);
+        $("#signin-favorite-modal").modal("show");
     }
 });
 
