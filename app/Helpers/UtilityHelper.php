@@ -134,20 +134,46 @@ function getHomeSliders()
 }
 
 //feature store for cashblack
-function getFeaturesStores($feature_tag)
+function getFeaturesStores($featureTag, $categorySlug = null)
 {
-    $stores = Store::whereHas('tags', function ($query) use ($feature_tag) {
-        $query->where('title', $feature_tag);
-    })->latest()->get();
-    return $stores;
+    $stores = Store::whereHas('tags', function ($query) use ($featureTag) {
+        $query->where('title', $featureTag);
+    });
+    if ($categorySlug != null) {
+        $stores = $stores->whereHas('categories', function ($query) use ($categorySlug) {
+            return $query->where('categories.slug', $categorySlug);
+        });
+    }
+    $tagStores = $stores->latest()->get();
+    return $tagStores;
 }
 
-function getFeaturesCharities($feature_tag)
+function firstTopCategoryofStore($topStore)
 {
-    $charities = Charity::whereHas('tags', function ($query) use ($feature_tag) {
-        $query->where('title', $feature_tag);
+    $category = $topStore->categories()->whereHas('tags', function ($query) {
+        $query->where('title', 'top_categories');
+    })->orderby('updated_at')->first();
+    return $category;
+}
+
+function getFeaturesCharities($featureTag)
+{
+    $charities = Charity::whereHas('tags', function ($query) use ($featureTag) {
+        $query->where('title', $featureTag);
     })->latest()->get();
     return $charities;
+}
+
+
+function getFeaturesCategories($featureTag)
+{
+    $categories = Category::whereHas('tags', function ($query) use ($featureTag) {
+        $query->where('title', $featureTag);
+    })->where(function ($query) {
+        $query->where('visibility', '!=', 'hidden')
+            ->orWhereNull('visibility');
+    })->where('parent_id', 0)->whereStatus('1')->latest()->get();
+    return $categories;
 }
 
 function separatePageKeywords($content)
@@ -649,7 +675,16 @@ function checkStaticpageRule($url)
         ];
 
         foreach ($route_names as $model) {
-            $record = $model::where('slug', $slug)->first();
+            $record = $model::where('slug', $slug);
+            if ($slug == '/' && $model == '\App\Models\Page') {
+                $record = $model::where('slug', $slug);
+                if (empty(auth()->user())) {
+                    $record->where('title', 'Before Login');
+                } else {
+                    $record->where('title', 'After Login');
+                }
+            }
+            $record = $record->first();
             if ($model == '\App\Models\Store' && isset($record)) {
                 $seoRule = array();
                 $seoRule['name']  = $record->name;
