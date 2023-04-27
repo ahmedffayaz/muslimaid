@@ -758,12 +758,12 @@ function getImageUrl($url)
         $baseDir = $url->is_fake ? 'frontend/images/logos/' : '';
 
         return strpos($url->image, 'http') !== false
-            ? (!$url->image ? asset('cashblack/img/no-logo.png') : (@getimagesize($url->image) ?  $url->image : asset('cashblack/img/no-logo.png')))
+            ? (!$url->image ? asset('cashblack/img/no-logo.png') : $url->image)
             : asset($baseDir . ltrim($url->image, '/'));
     }
 
     return strpos($url, 'http') !== false
-        ? (@getimagesize($url) ?  $url : asset('cashblack/img/no-logo.png'))
+        ? $url
         : asset($url);
 }
 
