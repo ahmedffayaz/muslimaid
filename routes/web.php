@@ -70,7 +70,9 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::get('stores/seo/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreSeoRule'])->name('stores.seo.delete');
         Route::get('stores/address/{id}',  [App\Http\Controllers\Admin\StoreController::class, 'editStoreAddress'])->name('stores.edit_address');
         Route::put('stores/address/update',  [App\Http\Controllers\Admin\StoreController::class, 'updateStoreAddress'])->name('stores.update_address');
-        Route::get('stores/address/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreAddress'])->name('stores.address.delete');
+        Route::delete('/stores/address/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreAddress'])->name('stores.address.delete');
+        Route::delete('/stores/voucher/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreVoucher'])->name('stores.voucher.delete');
+
         Route::resource('stores', StoreController::class);
         Route::resource('storecashbacks', StoreCashbackController::class)->only('index');
 
@@ -210,8 +212,8 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('sliders/sort_slides', [App\Http\Controllers\Admin\SliderController::class, 'sortSlides'])->name('sort_slides');
         Route::resource('sliders', SliderController::class)->only(['index', 'store', 'edit']);
         Route::resource('slides', SlidesController::class)->except(['index', 'show']);
-
-        Route::resource('pages', PagesController::class)->except(['show']);
+        Route::resource('pages', PagesController::class);
+       
         Route::post('pages/view-short-codes', [App\Http\Controllers\Admin\PagesController::class, 'getAvailableShortCodes'])->name('pages.view-short-codes');
 
         Route::resource('blogs', BlogController::class)->except(['show']);

@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
+use App\Models\Tag;
 use App\Models\Store;
 use App\Models\Slider;
 use App\Models\Network;
+use App\Models\Voucher;
 use App\Models\Category;
 use App\Models\Currency;
 use App\Models\EditorPick;
@@ -19,13 +21,12 @@ use App\Models\StoreCashback;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Tag;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\File;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class StoreController extends Controller
 {
@@ -911,8 +912,12 @@ class StoreController extends Controller
 
     public function deleteStoreAddress($id)
     {
-        StoreAddress::where('id', $id)->delete();
-        flash()->success('Seo rule deleted');
+        $storeAddress = StoreAddress::find($id);
+        if (!$storeAddress) {
+            return response()->json(['status' => 'error', 'message' => 'Store Address not found']);
+        }
+        $storeAddress->delete();
+        return response()->json(['status' => 'success', 'message' => 'Store Address deleted successfully.']);
     }
 
     public function editStoreSeoRule($id)
@@ -983,4 +988,16 @@ class StoreController extends Controller
             return redirect()->back();
         }
     }
+    public function deleteStoreVoucher($id)
+    {
+        $voucher = Voucher::find($id);
+        if (!$voucher) {
+            return response()->json(['status' => 'error', 'message' => 'Voucher not found']);
+        }
+
+        $voucher->delete();
+
+        return response()->json(['status' => 'success', 'message' => 'Voucher deleted successfully.']);
+    }
+
 }
