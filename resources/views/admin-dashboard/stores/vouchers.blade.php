@@ -43,7 +43,7 @@
     
         <div class="nk-tb-col nk-tb-col-tools pr-0">
             <a href="" voucher-id='{{$voucher->id}}' class='voucher-edit a_link'><em class="icon ni ni-edit"></em></a>
-            
+            <a href="" voucher-delete-id={{$voucher->id}} class="delete-voucher"><em class="icon ni ni-trash"></em><span></span></a>
         </div>
     </div><!-- .nk-tb-item -->
     

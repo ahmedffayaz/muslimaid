@@ -390,7 +390,7 @@
 </div><!-- .modal -->
 <!-- @@ Voucher Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="voucher-modal">
-    <div class="modal-dialog modal-md" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header align-center">
                 <div class="nk-file-title">
@@ -1420,6 +1420,7 @@
                     success: function(data) {
                         if (data.success) {
                             $('#add-voucher-modal').modal('hide');
+                            $("#add_voucher_validation").trigger("reset");
                             (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
@@ -2169,6 +2170,35 @@
                 $('.sote-override-network').show();
             }
             $("#store_form").submit();
+        });
+        $(document).ready(function() {
+            $(document).on('click', '.delete-voucher', function(event) {
+                var voucherid = $(this).attr('voucher-delete-id');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!'
+                }).then(function(result) {
+                    if (result.value) {
+                        pageurl = 'stores/voucher/delete/' + voucherid;
+                        var _token = $("input[name=_token]").val();
+                        $.ajax({
+                            url: pageurl,
+                            method: "GET",
+                            data: {
+                                _token: _token
+                            },
+                            success: function(data) {
+                                fetchVouchers();
+                            }
+                        });
+                        Swal.fire('Deleted!', 'Voucher has been deleted.', 'success');
+                    }
+                });
+                event.preventDefault();
+            });
         });
     </script>
     
