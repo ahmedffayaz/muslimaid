@@ -70,8 +70,11 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::get('stores/seo/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreSeoRule'])->name('stores.seo.delete');
         Route::get('stores/address/{id}',  [App\Http\Controllers\Admin\StoreController::class, 'editStoreAddress'])->name('stores.edit_address');
         Route::put('stores/address/update',  [App\Http\Controllers\Admin\StoreController::class, 'updateStoreAddress'])->name('stores.update_address');
-        Route::get('stores/address/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreAddress'])->name('stores.address.delete');
-        Route::get('stores/voucher/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreVoucher'])->name('stores.voucher.delete');
+        // Route::get('stores/address/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreAddress'])->name('stores.address.delete');
+        Route::delete('/stores/address/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreAddress'])->name('stores.address.delete');
+      
+        Route::delete('/stores/voucher/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreVoucher'])->name('stores.voucher.delete');
+
         Route::resource('stores', StoreController::class);
         Route::resource('storecashbacks', StoreCashbackController::class)->only('index');
 

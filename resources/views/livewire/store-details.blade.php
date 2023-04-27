@@ -190,12 +190,16 @@
                                                         <label class="form-label" for="default-06">Tags</label>
                                                         <div class="form-control-wrap ">
                                                             <div class="">
-                                                                @php 
-                                                                    $storeTagsIds = $store->tags()->pluck('tag_id')->toArray();
+                                                                @php
+                                                                    $storeTagsIds = $store
+                                                                        ->tags()
+                                                                        ->pluck('tag_id')
+                                                                        ->toArray();
                                                                 @endphp
                                                                 <select class="form-control form-select select-2" name="tags[]" multiple>
-                                                                    @foreach($tags as $tag)
-                                                                        <option @if (in_array($tag->id, $storeTagsIds)) selected @endif value="{{$tag->id}}">{{ $tag->title }}</option>
+                                                                    @foreach ($tags as $tag)
+                                                                        <option @if (in_array($tag->id, $storeTagsIds)) selected @endif value="{{ $tag->id }}">
+                                                                            {{ $tag->title }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
@@ -1169,7 +1173,6 @@
                             initializeSelect2($(this));
                         });
                         $('#voucher').find(".promotion_end_date").datepicker();
-                        console.log($('#voucher').find(".promotion_end_date").datepicker());
                         $('#voucher').find(".promotion_start_date").datepicker();
                         checkVoucherType();
                         attachFormValidator($(document).find('#model_edit'));
@@ -1567,15 +1570,17 @@
         });
 
         // Add Cashback Form
-        $(document).ready(function () {
-            $(document).on('click', '.add-cashbacks', function (event) {
+        $(document).ready(function() {
+            $(document).on('click', '.add-cashbacks', function(event) {
                 event.preventDefault();
                 let storeId = "{{ encrypt($store->id) }}";
                 $.ajax({
                     url: "{{ route('admin.stores.cashbacks.create') }}",
                     type: "GET",
-                    data: { storeId: storeId },
-                    success: function (data) {
+                    data: {
+                        storeId: storeId
+                    },
+                    success: function(data) {
                         $('.cashback-modal').modal('show');
                         $('.title').text('Add Cashback');
                         $('#edit-cashback').html(data);
@@ -1826,15 +1831,19 @@
                         var _token = $("input[name=_token]").val();
                         $.ajax({
                             url: pageurl,
-                            method: "GET",
+                            method: "DELETE",
                             data: {
                                 _token: _token
                             },
-                            success: function(data) {
+                            success: function(response) {
+                                if (response.status == 'success') {
+                                    Swal.fire('Deleted!', response.message, 'success');
+                                } else {
+                                    Swal.fire('Error!', response.message, 'error');
+                                }
                                 fetchAddress();
                             }
                         });
-                        Swal.fire('Deleted!', 'Address has been deleted.', 'success');
                     }
                 });
                 event.preventDefault();
@@ -2057,7 +2066,7 @@
                 $('.currency-div').hide();
                 $('#currency').removeAttr('required').val('');
             }
-                $('#currency option:first-child').prop('selected', true);
+            $('#currency option:first-child').prop('selected', true);
         }
 
         $(document.body).on("change", "#type", function() {
@@ -2186,20 +2195,23 @@
                         var _token = $("input[name=_token]").val();
                         $.ajax({
                             url: pageurl,
-                            method: "GET",
+                            method: "DELETE",
                             data: {
                                 _token: _token
                             },
-                            success: function(data) {
+                            success: function(response) {
+                                if (response.status == 'success') {
+                                    Swal.fire('Deleted!', response.message, 'success');
+                                } else {
+                                    Swal.fire('Error!', response.message, 'error');
+                                }
                                 fetchVouchers();
                             }
                         });
-                        Swal.fire('Deleted!', 'Voucher has been deleted.', 'success');
                     }
                 });
                 event.preventDefault();
             });
         });
     </script>
-    
 @endpush

@@ -912,8 +912,12 @@ class StoreController extends Controller
 
     public function deleteStoreAddress($id)
     {
-        StoreAddress::where('id', $id)->delete();
-        flash()->success('Address deleted');
+        $storeAddress = StoreAddress::find($id);
+        if (!$storeAddress) {
+            return response()->json(['status' => 'error', 'message' => 'Store Address not found']);
+        }
+        $storeAddress->delete();
+        return response()->json(['status' => 'success', 'message' => 'Store Address deleted successfully.']);
     }
 
     public function editStoreSeoRule($id)
@@ -986,7 +990,14 @@ class StoreController extends Controller
     }
     public function deleteStoreVoucher($id)
     {
-        Voucher::where('id', $id)->delete();
-        flash()->success('Voucher deleted');
+        $voucher = Voucher::find($id);
+        if (!$voucher) {
+            return response()->json(['status' => 'error', 'message' => 'Voucher not found']);
+        }
+
+        $voucher->delete();
+
+        return response()->json(['status' => 'success', 'message' => 'Voucher deleted successfully.']);
     }
+
 }
