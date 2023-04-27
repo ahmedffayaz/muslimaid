@@ -148,8 +148,9 @@ function getFeaturesStores($featureTag, $categorySlug = null)
     return $tagStores;
 }
 
-function firstTopCategoryofStore($topStore){
-    $category = $topStore->categories()->whereHas('tags', function ($query)  {
+function firstTopCategoryofStore($topStore)
+{
+    $category = $topStore->categories()->whereHas('tags', function ($query) {
         $query->where('title', 'top_categories');
     })->orderby('updated_at')->first();
     return $category;
