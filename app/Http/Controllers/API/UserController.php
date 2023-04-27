@@ -92,7 +92,7 @@ class UserController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'file' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg'],
+                'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg'],
             ]);
 
             if ($validator->fails()) {
@@ -104,8 +104,8 @@ class UserController extends Controller
                 return response()->json($data, 406);
             } else {
                 $avatarImage = Auth::user()->avatar;
-                if ($request->hasFile('file')) {
-                    $avatarImage = storeUserAvatar($request->file('file'), $avatarImage);
+                if ($request->hasFile('avatar')) {
+                    $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
                 }
                 Auth::user()->update([
                     'avatar' => $avatarImage,
@@ -115,7 +115,7 @@ class UserController extends Controller
                     'status' => 200,
                     'message' => "Successfully Updated.",
                     'data' => [
-                        'image_url' => url('/') . '/' . (Auth::user()->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . Auth::user()->avatar) ? 'admin-dashboard/images/avatar.png' : 'storage/users/images/avatar/' . Auth::user()->avatar),
+                        'avatar' => url('/') . '/' . (Auth::user()->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . Auth::user()->avatar) ? 'admin-dashboard/images/avatar.png' : 'storage/users/images/avatar/' . Auth::user()->avatar),
                     ],
                 ];
                 return response()->json($response, 200);
