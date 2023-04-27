@@ -17,7 +17,14 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $page = Page::whereSlug('/')->whereType('system')->first();
+
+        $page = Page::whereSlug('/')->whereType('system');
+        if (empty(auth()->user())) {
+            $page->where('title', 'Before Login');
+        } else {
+            $page->where('title', 'After Login');
+        }
+        $page = $page->first();
         if (empty($page)) abort(404);
 
         $featureTag = Tag::where('title', 'featured1_homepage')->pluck('id')->first();

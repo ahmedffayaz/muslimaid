@@ -134,12 +134,18 @@ function getHomeSliders()
 }
 
 //feature store for cashblack
-function getFeaturesStores($feature_tag)
+function getFeaturesStores($feature_tag, $categorySlug = null, $existedStoresId = null)
 {
     $stores = Store::whereHas('tags', function ($query) use ($feature_tag) {
         $query->where('title', $feature_tag);
-    })->latest()->get();
-    return $stores;
+    });
+    if ($categorySlug != null) {
+        $stores = $stores->whereHas('categories', function ($query) use ($categorySlug) {
+            return $query->where('categories.slug', $categorySlug);
+        })->whereNotIn('id', $existedStoresId);
+    }
+    $tagStores = $stores->latest()->get();
+    return $tagStores;
 }
 
 function getFeaturesCharities($feature_tag)
@@ -148,6 +154,18 @@ function getFeaturesCharities($feature_tag)
         $query->where('title', $feature_tag);
     })->latest()->get();
     return $charities;
+}
+
+
+function getFeaturesCategories($feature_tag)
+{
+    $categories = Category::whereHas('tags', function ($query) use ($feature_tag) {
+        $query->where('title', $feature_tag);
+    })->where(function ($query) {
+        $query->where('visibility', '!=', 'hidden')
+            ->orWhereNull('visibility');
+    })->where('parent_id', 0)->whereStatus('1')->latest()->get();
+    return $categories;
 }
 
 function separatePageKeywords($content)
@@ -649,7 +667,16 @@ function checkStaticpageRule($url)
         ];
 
         foreach ($route_names as $model) {
-            $record = $model::where('slug', $slug)->first();
+            $record = $model::where('slug', $slug);
+            if ($slug == '/' && $model == '\App\Models\Page') {
+                $record = $model::where('slug', $slug);
+                if (empty(auth()->user())) {
+                    $record->where('title', 'Before Login');
+                } else {
+                    $record->where('title', 'After Login');
+                }
+            }
+            $record = $record->first();
             if ($model == '\App\Models\Store' && isset($record)) {
                 $seoRule = array();
                 $seoRule['name']  = $record->name;
@@ -723,12 +750,12 @@ function getImageUrl($url)
         $baseDir = $url->is_fake ? 'frontend/images/logos/' : '';
 
         return strpos($url->image, 'http') !== false
-            ? (!$url->image ? asset('cashblack/img/no-logo.png') : $url->image)
+            ? (!$url->image ? asset('cashblack/img/no-logo.png') : (@getimagesize($url->image) ?  $url->image : asset('cashblack/img/no-logo.png')))
             : asset($baseDir . ltrim($url->image, '/'));
     }
 
     return strpos($url, 'http') !== false
-        ? $url
+        ? (@getimagesize($url) ?  $url : asset('cashblack/img/no-logo.png'))
         : asset($url);
 }
 

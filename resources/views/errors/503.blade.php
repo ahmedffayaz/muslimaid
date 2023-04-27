@@ -48,15 +48,5 @@
 </style>
 
 <article>
-    @if (isset($keywords[0]) && $keywords[0] != '')
-        @foreach ($keywords as $keyword)
-            @include('errors.partial.503_partial', ['keyword' => $keyword])
-        @endforeach
-    @else
-        <img src="{{ asset('admin-dashboard/images/Maintenance-bro.png') }}" alt="503">
-        <h1>We&rsquo;ll be back soon!</h1>
-        <div>
-            <p>Sorry for the inconvenience but we&rsquo;re performing some maintenance at the moment. We&rsquo;ll be back online shortly!</p>
-        </div>
-    @endif
+    {!! resolvePageShortCodes($page->lb_content, $__data) !!}
 </article>
