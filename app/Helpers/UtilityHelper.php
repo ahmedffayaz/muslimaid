@@ -134,33 +134,33 @@ function getHomeSliders()
 }
 
 //feature store for cashblack
-function getFeaturesStores($feature_tag, $categorySlug = null, $existedStoresId = null)
+function getFeaturesStores($featureTag, $categorySlug = null)
 {
-    $stores = Store::whereHas('tags', function ($query) use ($feature_tag) {
-        $query->where('title', $feature_tag);
+    $stores = Store::whereHas('tags', function ($query) use ($featureTag) {
+        $query->where('title', $featureTag);
     });
     if ($categorySlug != null) {
         $stores = $stores->whereHas('categories', function ($query) use ($categorySlug) {
             return $query->where('categories.slug', $categorySlug);
-        })->whereNotIn('id', $existedStoresId);
+        });
     }
     $tagStores = $stores->latest()->get();
     return $tagStores;
 }
 
-function getFeaturesCharities($feature_tag)
+function getFeaturesCharities($featureTag)
 {
-    $charities = Charity::whereHas('tags', function ($query) use ($feature_tag) {
-        $query->where('title', $feature_tag);
+    $charities = Charity::whereHas('tags', function ($query) use ($featureTag) {
+        $query->where('title', $featureTag);
     })->latest()->get();
     return $charities;
 }
 
 
-function getFeaturesCategories($feature_tag)
+function getFeaturesCategories($featureTag)
 {
-    $categories = Category::whereHas('tags', function ($query) use ($feature_tag) {
-        $query->where('title', $feature_tag);
+    $categories = Category::whereHas('tags', function ($query) use ($featureTag) {
+        $query->where('title', $featureTag);
     })->where(function ($query) {
         $query->where('visibility', '!=', 'hidden')
             ->orWhereNull('visibility');
