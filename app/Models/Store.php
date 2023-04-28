@@ -39,6 +39,7 @@ class Store extends Model
         'latitude',
         'longitude',
         'is_api',
+        'competitors',
     ];
 
     public function network()

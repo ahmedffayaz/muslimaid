@@ -171,7 +171,8 @@ class StoreController extends Controller
             'deeplink_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'store_url' => 'required|url',
             'description' => 'nullable',
-            'terms_conditions' => 'nullable'
+            'terms_conditions' => 'nullable',
+            'competitors' => 'nullable'
         ]);
 
         try {
@@ -195,6 +196,7 @@ class StoreController extends Controller
                 'override_categories' => $request->has('override_categories') ? 1 : 0,
                 'override_cashback' => $request->has('override_cashback') ? 1 : 0,
                 'editor_pick' => 0,
+                'competitors' => $request->input('competitors'),
             ]);
 
             if ($request->has('tags')) {
