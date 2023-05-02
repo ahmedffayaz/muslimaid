@@ -48,7 +48,7 @@ class AuthController extends Controller
             ]);
 
             $user->assignRole('user');
-            $bonusStatus = 1;
+            $bonusStatus = 3;
             $nameArray = explode(' ', $request->input('name'));
 
             // verify email

@@ -50,15 +50,20 @@ class PaymentController extends Controller
     public function cashout(Request $request)
     {
         $user = Auth::user();
+        $errorMessage = 0;
+        if (!($user->first_name && $user->last_name && $user->email && $user->phone && $user->address && $user->date_of_birth)) {
+            $errorMessage = 1;
+            flash()->error('Please first complete your profile to withdraw');
+        }
         $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
         if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0) {
             $min = SiteSetting()['min_cashout_amount'];
         } else if (isset(SiteSetting()['next_cashout_amount']) && $previousCashouts > 0) {
             $min = SiteSetting()['next_cashout_amount'];
-        } else if($previousCashouts == 0) {
+        } else if ($previousCashouts == 0) {
             $min = 1;
-        }else{
-            $min = 2;  
+        } else {
+            $min = 2;
         }
         $method = $user->paymentInfo()->where('payment_method', $request->payment_method)->first();
 
@@ -72,6 +77,9 @@ class PaymentController extends Controller
 
         if ($balance < $min) {
             flash()->error("You have insufficient balance for withdrawl. You need to have at least $min in your balance for withdrawal.");
+            return redirect()->back();
+        }
+        if ($errorMessage == 1) {
             return redirect()->back();
         }
         $cashout = Cashout::create([
@@ -135,10 +143,10 @@ class PaymentController extends Controller
             $min = SiteSetting()['min_cashout_amount'];
         } else if (isset(SiteSetting()['next_cashout_amount']) && $previousCashouts > 0) {
             $min = SiteSetting()['next_cashout_amount'];
-        } else if($previousCashouts == 0) {
+        } else if ($previousCashouts == 0) {
             $min = 1;
-        }else{
-            $min = 2;  
+        } else {
+            $min = 2;
         }
 
         $cashout_status = $user->cashouts()->where('status', '=', 'pending')->first();

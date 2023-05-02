@@ -96,7 +96,7 @@ class HomeController extends Controller
                 $stores =  Store::where('name', 'like', '%' . $search . '%')
                     ->orWhereHas('storeRuleData', function ($query) use ($search) {
                         $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $search . '%');
-                    })->whereStatus('active')->get();
+                    })->whereStatus('active')->paginate(20)->appends(request()->input());
 
                 if ($stores->count() == 0) {
                     $data = [
@@ -112,7 +112,17 @@ class HomeController extends Controller
                     'message' => 'Success',
                     'data' => [
                         'main_banner_image' => getBannerImageUrl($page),
-                        'stores' => SearchResources::collection($stores)
+                        'stores' => SearchResources::collection($stores),
+                        'meta_data' => [
+                            "next" => $stores->nextPageUrl(),
+                            "previous" => $stores->previousPageUrl(),
+                            "per_page" => 20,
+                            "total" => $stores->total(),
+                            "current_page" => $stores->currentPage(),
+                            "total_pages" => $stores->lastPage(),
+                            "first" => $stores->firstItem(),
+                            "last" => $stores->lastItem()
+                        ]
                     ]
                 ];
                 return response()->json($data, 200);
