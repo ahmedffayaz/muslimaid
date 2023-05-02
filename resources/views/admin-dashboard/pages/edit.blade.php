@@ -196,6 +196,7 @@
                 }
             },
             submitHandler: function(form) {
+                Laraberg.update();
                 if ($(form).valid()) {
                     var _token = $("input[name=_token]").val();
                     var form_action = $(form).attr('action');
