@@ -17,14 +17,11 @@ class HomeController extends Controller
 {
     public function index()
     {
-
-        $page = Page::whereSlug('/')->whereType('system');
         if (empty(auth()->user())) {
-            $page->where('title', 'Before Login');
+            $page = Page::whereSlug('/home-page-before-login')->whereType('system')->first();
         } else {
-            $page->where('title', 'After Login');
+            $page = Page::whereSlug('/home-page-after-login')->whereType('system')->first();
         }
-        $page = $page->first();
         if (empty($page)) abort(404);
 
         $featureTag = Tag::where('title', 'featured1_homepage')->pluck('id')->first();
