@@ -69,7 +69,6 @@ class RegisterController extends Controller
         }
 
         return Validator::make($data, $rules);
-
     }
 
     public function showRegistrationForm(Request $request)
@@ -100,7 +99,7 @@ class RegisterController extends Controller
 
             $user->assignRole('user');
 
-            $bonusStatus = 1;
+            $bonusStatus = 3;
 
             $this->welcomBonus($user, $bonusStatus);
             //send email to user to verify email address
@@ -115,6 +114,8 @@ class RegisterController extends Controller
                     'contacts' => [
                         [
                             'email' => $data['email'],
+                            'first_name' => $data['firstname'],
+                            'last_name' => $data['lastname'],
                         ]
                     ]
                 ];

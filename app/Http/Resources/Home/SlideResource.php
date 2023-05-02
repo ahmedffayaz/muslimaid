@@ -24,7 +24,7 @@ class SlideResource extends JsonResource
             'banner_image' => $bannerImage,
             'description' => $this->description,
             'link' => $this->link,
-            'urk_key' => $this->when($this->slider_type == 'store', optional($this->store)->slug),
+            'url_key' => $this->when($this->slider_type == 'store', optional($this->store)->slug),
             'title' => $this->when($this->slider_type == 'store', optional($this->store)->name)
         ];
     }

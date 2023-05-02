@@ -761,7 +761,7 @@ $(document).on("click", ".verify_meeting", function (e) {
 });
 
 $(document).on("click", ".refererLink", function (e) {
-    $("#ref_link").notify("Code is copied successfully.", "success");
+    $("#ref_link").notify("Link is copied successfully.", "success");
 });
 
 $(document).on("submit", ".invite-friend", function (e) {
