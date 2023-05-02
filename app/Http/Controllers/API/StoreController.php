@@ -48,7 +48,7 @@ class StoreController extends Controller
                 $query->whereHas('tags', function ($query) use ($request) {
                     $query->where('title', $request->input('tag'));
                 });
-            })->whereStatus('active')->paginate(12);
+            })->whereStatus('active')->paginate(20)->appends(request()->input());
 
             if ($stores->count() == 0) {
                 $data = [
@@ -64,7 +64,17 @@ class StoreController extends Controller
                 'message' => 'Success',
                 'data' => [
                     'main_banner_image' => getBannerImageUrl($page),
-                    'stores' => StoreResource::collection($stores)
+                    'stores' => StoreResource::collection($stores),
+                    'meta_data' => [
+                        "next" => $stores->nextPageUrl(),
+                        "previous" => $stores->previousPageUrl(),
+                        "per_page" => 20,
+                        "total" => $stores->total(),
+                        "current_page" => $stores->currentPage(),
+                        "total_pages" => $stores->lastPage(),
+                        "first" => $stores->firstItem(),
+                        "last" => $stores->lastItem()
+                    ]
                 ]
             ];
             return response()->json($data, 200);
@@ -99,7 +109,7 @@ class StoreController extends Controller
                             $query->orWhere('value', 'like', '%' . $keyword . '%');
                         }
                     });
-                })->whereStatus('active')->paginate(12);
+                })->whereStatus('active')->paginate(20)->appends(request()->input());
                 $data = [
                     'status' => 200,
                     'message' => 'Success',
@@ -185,7 +195,7 @@ class StoreController extends Controller
             })->pluck('id');
             $favoriteStores = auth()->user()->favoriteStores()
                 ->whereNotIn('stores.id', $cashblackStoreIds)
-                ->paginate(20);
+                ->paginate(20)->appends(request()->input());
 
             $response = [
                 'status' => 200,
@@ -220,7 +230,7 @@ class StoreController extends Controller
         try {
             $favoriteStores = auth()->user()->favoriteStores()->whereHas('categories', function ($query) {
                 $query->where('slug', 'cashblack-to-your-door');
-            })->paginate(20);
+            })->paginate(20)->appends(request()->input());
 
             $response = [
                 'status' => 200,
@@ -366,7 +376,7 @@ class StoreController extends Controller
             $stores = $stores->orderBy('id', 'DESC');
         }
         $limit = $request->has('per_page') ? $request->get('per_page') : 10;
-        $stores = $stores->paginate($limit);
+        $stores = $stores->paginate($limit)->appends(request()->input());
         $stores->appends(
             [
                 'search'   => $request->get('search'),

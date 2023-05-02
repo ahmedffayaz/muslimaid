@@ -247,7 +247,7 @@
                                         <li class="">
                                             <a href="{{ route('admin.seo.index') }}" class="">
                                                 <span class="nk-menu-icon"><em class="icon ni ni-menu"></em></span>
-                                                <span class="nk-menu-text">Seo Rules</span>
+                                                <span class="nk-menu-text">SEO Rules</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
                                         <li>

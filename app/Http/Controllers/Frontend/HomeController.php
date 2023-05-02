@@ -17,7 +17,6 @@ class HomeController extends Controller
 {
     public function index()
     {
-
         if (empty(auth()->user())) {
             $page = Page::whereSlug('/home-page-before-login')->whereType('system')->first();
         } else {

@@ -20,6 +20,7 @@ class SearchResources extends JsonResource
             'unique_id' => $this->id,
             'text' => $this->name,
             'extra' => $this->getCashback(),
+            'url_key' => $this->slug,
         ];
     }
 }

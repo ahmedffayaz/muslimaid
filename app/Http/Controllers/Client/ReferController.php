@@ -41,7 +41,9 @@ class ReferController extends Controller
                 ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
             }
 
-            flash()->error($validator->getMessageBag()->toArray());
+            $messages = $validator->errors()->all();
+            $errorMessage = implode("<br>", $messages);
+            flash()->error($errorMessage);
             return redirect()->back();
         }
 
