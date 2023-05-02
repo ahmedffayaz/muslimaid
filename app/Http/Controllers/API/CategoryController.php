@@ -27,7 +27,7 @@ class CategoryController extends Controller
                 $query->where('name', 'like', $request->input('letter') . '%');
             })->with(['childs' => function ($query) {
                 $query->withCount('stores');
-            }])->withCount('stores')->where('parent_id', 0)->paginate(12);
+            }])->withCount('stores')->where('parent_id', 0)->paginate(20)->appends(request()->input());
 
             if ($categories->count() == 0) {
                 $data = [
@@ -43,7 +43,17 @@ class CategoryController extends Controller
                 'message' => 'Success',
                 'data' => [
                     'main_banner' => getBannerImageUrl($page),
-                    'categories' => CategoryResource::collection($categories)
+                    'categories' => CategoryResource::collection($categories),
+                    'meta_data' => [
+                        "next" => $categories->nextPageUrl(),
+                        "previous" => $categories->previousPageUrl(),
+                        "per_page" => 20,
+                        "total" => $categories->total(),
+                        "current_page" => $categories->currentPage(),
+                        "total_pages" => $categories->lastPage(),
+                        "first" => $categories->firstItem(),
+                        "last" => $categories->lastItem()
+                    ]
                 ]
             ];
 
@@ -67,7 +77,7 @@ class CategoryController extends Controller
                 $query->whereSlug($slug)->where('parent_id', '!=', 0)->whereStatus(1);
             })->with(['categories' => function ($query) use ($slug) {
                 $query->whereSlug($slug)->where('parent_id', '!=', 0)->whereStatus(1);
-            }])->whereStatus('active')->paginate(12);
+            }])->whereStatus('active')->paginate(20)->appends(request()->input());
 
             if ($stores->count() == 0) {
                 $data = [
@@ -86,7 +96,17 @@ class CategoryController extends Controller
                         [
                             'main_banner' => getBannerImageUrl($stores[0]->categories->first()->banner_upload),
                             'title' => $stores[0]->categories->first()->name,
-                            'stores' => StoreResource::collection($stores)
+                            'stores' => StoreResource::collection($stores),
+                            'meta_data' => [
+                                "next" => $stores->nextPageUrl(),
+                                "previous" => $stores->previousPageUrl(),
+                                "per_page" => 20,
+                                "total" => $stores->total(),
+                                "current_page" => $stores->currentPage(),
+                                "total_pages" => $stores->lastPage(),
+                                "first" => $stores->firstItem(),
+                                "last" => $stores->lastItem()
+                            ]
                         ]
                     ],
                 ]
@@ -130,14 +150,24 @@ class CategoryController extends Controller
                 $query->whereSlug($slug)->where('parent_id', 0)->whereStatus(1);
             })->with(['categories' => function ($query) use ($slug) {
                 $query->whereSlug($slug)->where('parent_id', 0)->whereStatus(1);
-            }])->whereStatus('active')->paginate(12);
+            }])->whereStatus('active')->paginate(20)->appends(request()->input());
 
             $data = [
                 'status' => 200,
                 'message' => 'Success',
                 'data' => [
                     'main_banner' => ($stores[0]->categories[0]->banner_type != 'link') ? getBannerImageUrl($stores[0]->categories[0]->banner_upload, 'upload', $stores[0]->categories[0]) : $stores[0]->categories[0]->banner_link,
-                    'categories' => StoreResource::collection($stores)
+                    'categories' => StoreResource::collection($stores),
+                    'meta_data' => [
+                        "next" => $stores->nextPageUrl(),
+                        "previous" => $stores->previousPageUrl(),
+                        "per_page" => 20,
+                        "total" => $stores->total(),
+                        "current_page" => $stores->currentPage(),
+                        "total_pages" => $stores->lastPage(),
+                        "first" => $stores->firstItem(),
+                        "last" => $stores->lastItem()
+                    ]
                 ]
             ];
 
@@ -164,7 +194,7 @@ class CategoryController extends Controller
                 ];
                 return response()->json($data, 200);
             }
-            $categoryStores = $category->stores()->paginate(20);
+            $categoryStores = $category->stores()->paginate(20)->appends(request()->input());
             $data = [
                 'status' => 200,
                 'message' => 'Category details retrieved successfully',

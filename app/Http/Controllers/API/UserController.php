@@ -92,7 +92,7 @@ class UserController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'avatar' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg'],
+                'file' => ['required', 'image', 'mimes:jpeg,png,jpg,gif,svg'],
             ]);
 
             if ($validator->fails()) {
@@ -104,8 +104,8 @@ class UserController extends Controller
                 return response()->json($data, 406);
             } else {
                 $avatarImage = Auth::user()->avatar;
-                if ($request->hasFile('avatar')) {
-                    $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
+                if ($request->hasFile('file')) {
+                    $avatarImage = storeUserAvatar($request->file('file'), $avatarImage);
                 }
                 Auth::user()->update([
                     'avatar' => $avatarImage,
@@ -115,7 +115,7 @@ class UserController extends Controller
                     'status' => 200,
                     'message' => "Successfully Updated.",
                     'data' => [
-                        'avatar' => url('/') . '/' . (Auth::user()->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . Auth::user()->avatar) ? 'admin-dashboard/images/avatar.png' : 'storage/users/images/avatar/' . Auth::user()->avatar),
+                        'image_url' => url('/') . '/' . (Auth::user()->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . Auth::user()->avatar) ? 'admin-dashboard/images/avatar.png' : 'storage/users/images/avatar/' . Auth::user()->avatar),
                     ],
                 ];
                 return response()->json($response, 200);
@@ -146,7 +146,7 @@ class UserController extends Controller
             if (isset($request->date_from) && isset($request->date_to)) {
                 $cashbacks->whereBetween('event_date', [$request->date_from, $request->date_to]);
             }
-            $cashbacks = $cashbacks->latest()->paginate(20);
+            $cashbacks = $cashbacks->latest()->paginate(20)->appends(request()->input());
             $cashbackData  = UserCashbackResource::collection($cashbacks);
             $metaData = [
                 "next" => $cashbacks->nextPageUrl(),
@@ -209,7 +209,7 @@ class UserController extends Controller
                     $clicks->whereDoesntHave('cashback');
                 }
             }
-            $clicks = $clicks->paginate(20);
+            $clicks = $clicks->paginate(20)->appends(request()->input());
             $clickData = ClickResource::collection($clicks);
             $metaData = [
                 "next" => $clicks->nextPageUrl(),
@@ -261,7 +261,7 @@ class UserController extends Controller
             if (isset($request->status)) {
                 $tickets->where('status', $request->status);
             }
-            $tickets = $tickets->paginate(20);
+            $tickets = $tickets->paginate(20)->appends(request()->input());
             $ticketData = TicketResource::collection($tickets);
             $metaData = [
                 "next" => $tickets->nextPageUrl(),
@@ -301,7 +301,7 @@ class UserController extends Controller
                 $to = date('Y-m-d', strtotime($request->date_to));
                 $referrals->whereDate('referred_at', '>=', $from)->whereDate('referred_at', '<=', $to);
             }
-            $referrals = $referrals->latest()->paginate(20);
+            $referrals = $referrals->latest()->paginate(20)->appends(request()->input());
             $referralData = ReferralResource::collection($referrals);
             $metaData = [
                 "next" => $referrals->nextPageUrl(),
@@ -348,7 +348,7 @@ class UserController extends Controller
                 $to = date('Y-m-d', strtotime($request->date_to));
                 $cashouts->whereDate('created_at', '>=', $from)->whereDate('created_at', '<=', $to);
             }
-            $cashouts = $cashouts->latest()->paginate(20);
+            $cashouts = $cashouts->latest()->paginate(20)->appends(request()->input());
             $cashoutData = CashoutResource::collection($cashouts);
             $metaData = [
                 "next" => $cashouts->nextPageUrl(),
