@@ -43,6 +43,5 @@ class StoreDetails extends Component
         $this->store = Store::where('slug',$value)->first();
         $this->slug = $this->store->slug;
         $this->emit('storeChange');
-        // $this->city_id = $value;
     }
 }
