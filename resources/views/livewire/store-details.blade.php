@@ -205,6 +205,16 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="competitors">Competitors</label>
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="competitors" value="{{ $store->competitors }}" name="competitors">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
                                                             <label class="form-label" for="default-06">Status @if ($store->status == 'error')
