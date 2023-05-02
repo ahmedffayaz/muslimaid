@@ -18,6 +18,19 @@
     padding: 0;
 }
 
+.swal-button--confirm{
+    background-color: #3baa34 !important;
+}
+
+.swal-button--danger{
+    background-color: #df4740 !important;
+}
+
+.img-height{
+    height: 135px;
+    min-width: 200px;
+}
+
 .storeTimings ul {
     -moz-column-count: 2;
     -webkit-column-count: 2;
@@ -3547,6 +3560,7 @@ button.hamburger:not(.collapsed):before {
     border: 1px solid #d9d9d9;
     padding: 1rem;
     border-radius: 5px;
+    min-height: 450px;
 }
 
 .blog-box-content .blog-img {

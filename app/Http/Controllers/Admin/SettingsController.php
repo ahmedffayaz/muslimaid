@@ -160,7 +160,7 @@ class SettingsController extends Controller
                     function ($attribute, $value, $fail) use ($request) {
                         $welcomeBonus = $request->input('welcome_bonus');
                         if ($value <= $welcomeBonus) {
-                            $fail('Min CashOut Value must be equal to or greater than the welcome bonus.');
+                            $fail('Min Cashout Value must be greater than the welcome bonus.');
                         }
                     },
                 ],
@@ -169,7 +169,7 @@ class SettingsController extends Controller
                 'referral_bonus' => 'Value must be equal to or greater than 0.1.',
                 'welcome_bonus' => 'Value must be equal to or greater than 0.1.',
                 'min_cashout_amount' => 'Value must be equal to or greater than 0.1',
-                'min_cashout_amount.min' => 'Min CashOut Value must be equal to or greater than the welcome bonus.',
+                'min_cashout_amount.min' => 'Min Cashout Value must be greater than the welcome bonus.',
                 'next_cashout_amount' => 'Value must be equal to or greater than 0.1',
             ]);
 
