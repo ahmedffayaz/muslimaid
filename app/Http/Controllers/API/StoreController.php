@@ -151,7 +151,7 @@ class StoreController extends Controller
                 $links = $request->links;
                 $query = Store::orderBy('id');
                 foreach ($links as $link) {
-                    $query->where('competitors', 'LIKE', '%'.$link.'%');
+                    $query->orWhere('competitors', 'LIKE', '%'.$link.'%');
                 }
                 $stores = $query->whereStatus('active')->paginate(12);
                 $data = [

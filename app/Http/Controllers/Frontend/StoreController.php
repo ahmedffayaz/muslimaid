@@ -27,9 +27,12 @@ class StoreController extends Controller
     }
     public function storesView(Request $request)
     {
-       $allStores = Store::where('status', 'active');
-       $letter = $request->input('letter');
-        if (isset($request->orderBy)&& !isset($letter)) {
+        $allStores = Store::where('status', 'active');
+        if (!empty($request->storesType)) {
+            $allStores = $allStores->has('vouchers');
+        }
+        $letter = $request->input('letter');
+        if (isset($request->orderBy) && !isset($letter)) {
             if ($request->orderBy == 'popularity') {
                 $allStores = $allStores->withCount('clicks')->orderByDesc('clicks_count')->paginate($request->input('perPage'));
             } else if ($request->orderBy == 'cashback-amount') {
@@ -44,7 +47,7 @@ class StoreController extends Controller
                     return $store->getCashback();
                 })->paginate($request->input('perPage'));
             } else if ($request->orderBy == 'cashback-percentage') {
-                $allStores =$allStores->whereHas('cashbacks', function ($query) {
+                $allStores = $allStores->whereHas('cashbacks', function ($query) {
                     $query->where('type', 'percentage');
                 })->get()->filter(function ($store) {
                     $cashback = $store->getCashback();
@@ -56,12 +59,12 @@ class StoreController extends Controller
                 $orderByArr = explode('-', $request->orderBy);
                 $allStores = $allStores->orderBy($orderByArr[0], $orderByArr[1])->paginate($request->input('perPage'));
             }
-        }elseif(isset($letter)){
+        } elseif (isset($letter)) {
             $allStores = $allStores->where('name', 'like', $letter . '%')->paginate($request->input('perPage'));
-         } else {
+        } else {
             $allStores = $allStores->latest()->paginate($request->input('perPage'));
         }
         $viewType = isset($request->viewType) ? $request->viewType : 'grid-view';
-        return view('frontend.stores.stores-view', compact('allStores','letter', 'viewType'))->render();
+        return view('frontend.stores.stores-view', compact('allStores', 'letter', 'viewType'))->render();
     }
 }
