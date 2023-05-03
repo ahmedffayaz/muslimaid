@@ -114,7 +114,7 @@ class LoginController extends Controller
             if ($request->hasSession()) {
                 $request->session()->put('auth.password_confirmed_at', time());
             }
-
+            Session::flash('login-welcome');
             return $this->sendLoginResponse($request);
         }
 
