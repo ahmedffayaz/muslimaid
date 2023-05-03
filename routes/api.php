@@ -51,6 +51,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
 Route::apiResource('stores', API\StoreController::class)->only(['index', 'show']);
 Route::post('afrobot', [API\StoreController::class, 'affrobotStores']);
+Route::post('competitor-stores', [API\StoreController::class, 'competitorStores']);
 
 Route::get('vouchers', [API\StoreController::class, 'vouchers']);
 Route::get('store-detail/{id}', [API\StoreController::class, 'vouchers']);

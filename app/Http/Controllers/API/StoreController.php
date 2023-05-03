@@ -144,6 +144,49 @@ class StoreController extends Controller
         }
     }
 
+    public function competitorStores(Request $request)
+    {
+        try {
+            if ($request->links) {
+                $links = $request->links;
+                $query = Store::orderBy('id');
+                foreach ($links as $link) {
+                    $query->where('competitors', 'LIKE', '%'.$link.'%');
+                }
+                $stores = $query->whereStatus('active')->paginate(12);
+                $data = [
+                    'status' => 200,
+                    'message' => 'Success',
+                    'data' => [
+                        'stores' => StoreResource::collection($stores)
+                    ]
+                ];
+                return response()->json($data, 200);
+            } else {
+                $data = [
+                    'status' => 200,
+                    'message' => 'No store found',
+                    'data' => []
+                ];
+                return response()->json($data, 200);
+            }
+        } catch (ModelNotFoundException $e) {
+            $data = [
+                'status' => 404,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
+            ];
+            return response()->json($data, 404);
+        } catch (Exception $e) {
+            $data = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
+            ];
+            return response()->json($data, 500);
+        }
+    }
+
     public function favoriteStores()
     {
         try {
