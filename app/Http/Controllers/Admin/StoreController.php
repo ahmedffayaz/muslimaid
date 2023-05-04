@@ -31,7 +31,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 class StoreController extends Controller
 {
     private $iconPath = 'stores/cashbacks';
-     public $imagePath = 'storage/stores/images/';
+    public $imagePath = 'storage/stores/images/';
     public function __construct()
     {
         $this->middleware('permission:view stores', ['only' => ['index']]);
@@ -54,6 +54,28 @@ class StoreController extends Controller
         return view('admin-dashboard.stores.index', compact('stores', 'route', 'networks', 'slider'));
     }
 
+    function deleteRevglueStores()
+    {
+        $chunkSize = 1000; // adjust the chunk size as needed
+        $res = 0;
+        Store::where('network_id', 1)->chunk($chunkSize, function ($stores) {
+            foreach ($stores as $store) {
+                $store->reviews()->forceDelete();
+                $store->vouchers()->forceDelete();
+                $store->cashbacks()->forceDelete();
+                $store->storeRuleData()->forceDelete();
+                $store->storeAddress()->forceDelete();
+                $store->clicks()->forceDelete();
+                $store->categories()->detach();
+                foreach ($store->images as $images) {
+                    Storage::delete(['public/stores/images/' . $images->image]);
+                    $images->forceDelete();
+                }
+                $store->forceDelete();
+            }
+        });
+        dd($res);
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -77,8 +99,8 @@ class StoreController extends Controller
         $validator = Validator::make($request->all(), [
             'store_name' => 'required|max:255',
             'network_id' => 'required',
-            'tracking_url' =>['required','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
-            'deeplink_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'tracking_url' => ['required', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'store_url' => 'required|url',
             'description' => 'nullable'
         ]);
@@ -106,7 +128,7 @@ class StoreController extends Controller
                 'slug' =>   isset($storeSlug) ? $slug . ($lastId + 1) : $slug,
                 'is_api' => 'no',
             ]);
-            if(($lastId + 1) !=  $store->id){
+            if (($lastId + 1) !=  $store->id) {
                 $store->update([
                     'slug' =>   isset($storeSlug) ? $slug . $store->id : $slug,
                 ]);
@@ -167,8 +189,8 @@ class StoreController extends Controller
         $request->validate([
             'store_name' => 'required|max:255',
             'network_id' => 'required',
-            'tracking_url' =>['required','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
-            'deeplink_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'tracking_url' => ['required', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'store_url' => 'required|url',
             'description' => 'nullable',
             'terms_conditions' => 'nullable',
@@ -179,7 +201,7 @@ class StoreController extends Controller
             DB::beginTransaction();
             $slug = Str::slug($request->input('store_name'));
             $lastId = Store::orderBy('id', 'desc')->pluck('id')->first();
-            $storeSlug = Store::where('slug', $slug)->where('id', '!=' , $store->id)->first();
+            $storeSlug = Store::where('slug', $slug)->where('id', '!=', $store->id)->first();
             $store->update([
                 'name' => $request->input('store_name'),
                 'override_network' => $request->has('store_override_network') ? 1 : 0,
@@ -202,7 +224,7 @@ class StoreController extends Controller
             if ($request->has('tags')) {
                 $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
                 if ($tags->count() > 0) $store->tags()->sync($tags);
-            }else{
+            } else {
                 $store->tags()->detach();
             }
 
@@ -423,9 +445,9 @@ class StoreController extends Controller
             'type' => 'required',
             'sale_commission' => 'required|numeric|min:0.1',
             'network_id' => 'nullable|integer',
-            'tracking_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
-            'deeplink_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
-            'currency' => $request->input('type') === 'fixed' ? 'required' : '',            
+            'tracking_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'currency' => $request->input('type') === 'fixed' ? 'required' : '',
             'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
         ]);
 
@@ -434,8 +456,8 @@ class StoreController extends Controller
             $cashback->update($request->all());
 
             if ($request->hasFile('cashback_icon')) {
-                if (!empty($cashback->image) && Storage::exists('public/'.$cashback->image)) {
-                    File::delete(public_path('storage/'.$cashback->image));
+                if (!empty($cashback->image) && Storage::exists('public/' . $cashback->image)) {
+                    File::delete(public_path('storage/' . $cashback->image));
                 }
                 $cashbackIcon = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
                 $cashback->image = $cashbackIcon;
@@ -491,8 +513,8 @@ class StoreController extends Controller
         try {
             DB::beginTransaction();
             $storeCashback = $cashback->where('id', $request->storeCashbackId)->first();
-            if (!empty($storeCashback->image) && Storage::exists('public/'.$storeCashback->image)) {
-                File::delete(public_path('storage/'.$storeCashback->image));
+            if (!empty($storeCashback->image) && Storage::exists('public/' . $storeCashback->image)) {
+                File::delete(public_path('storage/' . $storeCashback->image));
             }
             $storeCashback->delete();
 
@@ -550,8 +572,8 @@ class StoreController extends Controller
         $request->validate([
             'type' => 'required',
             'sale_commission' => 'required|numeric|min:0.1',
-            'tracking_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
-            'deeplink_url' =>['nullable','regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'tracking_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'currency' => $request->input('type') === 'fixed' ? 'required' : '',
             'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
         ]);
@@ -676,7 +698,7 @@ class StoreController extends Controller
     public function createEditorPick(Request $request)
     {
         try {
-            
+
             $existingPicks = EditorPick::where('category_id', $request->input('category_id'))->get();
             DB::beginTransaction();
             foreach ($existingPicks as $existingPick) {
@@ -1001,5 +1023,4 @@ class StoreController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Voucher deleted successfully.']);
     }
-
 }
