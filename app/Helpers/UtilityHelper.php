@@ -40,7 +40,11 @@ function getMoreCategories()
 
 function checkFavorite($storeId)
 {
-    $isFavorite = auth()->user()->favoriteStores()->where('stores.id', $storeId)->pluck('stores.id')->first();
+    if (empty(auth()->user())) {
+        $isFavorite = [];
+    } else {
+        $isFavorite = auth()->user()->favoriteStores()->where('stores.id', $storeId)->pluck('stores.id')->first();
+    }
     return $isFavorite;
 }
 
