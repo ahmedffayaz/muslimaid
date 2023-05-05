@@ -57,24 +57,29 @@ class StoreController extends Controller
     function deleteRevglueStores()
     {
         $chunkSize = 1000; // adjust the chunk size as needed
-        $res = 0;
-        Store::where('network_id', 1)->chunk($chunkSize, function ($stores) {
-            foreach ($stores as $store) {
-                $store->reviews()->forceDelete();
-                $store->vouchers()->forceDelete();
-                $store->cashbacks()->forceDelete();
-                $store->storeRuleData()->forceDelete();
-                $store->storeAddress()->forceDelete();
-                $store->clicks()->forceDelete();
-                $store->categories()->detach();
-                foreach ($store->images as $images) {
-                    Storage::delete(['public/stores/images/' . $images->image]);
-                    $images->forceDelete();
+        DB::beginTransaction();
+        try {
+            Store::where('network_id', 1)->chunk($chunkSize, function ($stores) {
+                foreach ($stores as $store) {
+                    $store->reviews()->forceDelete();
+                    $store->vouchers()->forceDelete();
+                    $store->cashbacks()->forceDelete();
+                    $store->storeRuleData()->forceDelete();
+                    $store->storeAddress()->forceDelete();
+                    $store->clicks()->forceDelete();
+                    $store->categories()->detach();
+                    foreach ($store->images as $images) {
+                        Storage::delete(['public/stores/images/' . $images->image]);
+                        $images->forceDelete();
+                    }
+                    $store->forceDelete();
                 }
-                $store->forceDelete();
-            }
-        });
-        dd($res);
+            });
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e->getMessage());
+        }
     }
     /**
      * Show the form for creating a new resource.
