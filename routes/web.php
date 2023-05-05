@@ -72,6 +72,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::put('stores/address/update',  [App\Http\Controllers\Admin\StoreController::class, 'updateStoreAddress'])->name('stores.update_address');
         Route::delete('/stores/address/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreAddress'])->name('stores.address.delete');
         Route::delete('/stores/voucher/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreVoucher'])->name('stores.voucher.delete');
+        Route::get('/stores/delete-revglue-stores', [App\Http\Controllers\Admin\StoreController::class, 'deleteRevglueStores'])->name('stores.revglue.delete');
 
         Route::resource('stores', StoreController::class);
         Route::resource('storecashbacks', StoreCashbackController::class)->only('index');
@@ -213,7 +214,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::resource('sliders', SliderController::class)->only(['index', 'store', 'edit']);
         Route::resource('slides', SlidesController::class)->except(['index', 'show']);
         Route::resource('pages', PagesController::class);
-       
+
         Route::post('pages/view-short-codes', [App\Http\Controllers\Admin\PagesController::class, 'getAvailableShortCodes'])->name('pages.view-short-codes');
 
         Route::resource('blogs', BlogController::class)->except(['show']);

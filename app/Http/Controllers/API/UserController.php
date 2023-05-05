@@ -388,6 +388,7 @@ class UserController extends Controller
                 'message' => 'Successful',
                 'data' => [
                     "ref_link" => url('/register-form?referby=' . encrypt(auth()->user()->id)),
+                    "main_banner_image" => url('/cashblack/img/favicon.png'),
                     "email_placeholder" => "Enter single or multiple emails (separate with comma)"
                 ],
             ];
