@@ -69,7 +69,7 @@
                                     <div class="tab-pane active" id="tabItem4">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
-                                                <h5 class="title">Store Information</h5>
+                                                <h5>Store Information</h5>
                                             </div><!-- .nk-block-head -->
                                             <form action="{{ route('admin.stores.update', $store) }}" id="store_form" class="gy-3 form-validate is-alter" method="POST"
                                                 enctype="multipart/form-data">
@@ -181,7 +181,7 @@
                                                                     class="icon ni ni-question" data-toggle="tooltip" data-placement="top"
                                                                     title="Define custom cashback percentage for this store, keep empty to use global setting"></em></label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="custom_cashback_percentage"
+                                                                <input type="number" class="form-control" id="custom_cashback_percentage"
                                                                     value="{{ $store->custom_cashback_percentage }}" name="custom_cashback_percentage">
                                                             </div>
                                                         </div>
@@ -210,7 +210,8 @@
                                                         <div class="form-group">
                                                             <label class="form-label" for="competitors">Competitors</label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="competitors" value="{{ $store->competitors }}" name="competitors">
+                                                                <input type="text" class="form-control" id="competitors" value="{{ $store->competitors }}"
+                                                                    name="competitors">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -265,7 +266,7 @@
                                                         </div>
                                                     </div>
                                                 </form>
-                                                <h5 class="title mt-3">Categories</h5>
+                                                <h5 class="mt-3">Categories</h5>
                                                 <form action="{{ route('admin.stores.categories.update') }}" id="store_cat_form" class="gy-3 form-validate is-alter"
                                                     method="POST" enctype="multipart/form-data">
                                                     @csrf
@@ -314,26 +315,26 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        <h5 class="title mb-4 d-inline-block mt-3">Cashbacks</h5>
+                                        <h5 class="mb-4 d-inline-block mt-3">Cashbacks</h5>
                                         <span id='cashbacks-data' class="mt-4"></span>
                                     </div>
                                     <div class="tab-pane" id="tabItem7">
-                                        <h5 class="title mb-4  d-inline-block">Vouchers</h5>
+                                        <h5 class="mb-4  d-inline-block">Vouchers</h5>
                                         <span id='vouchers-data' class="mt-4"></span>
                                     </div>
                                     <div class="tab-pane" id="tabItem8">
-                                        <h5 class="title mb-4 d-inline">Reviews</h5>
+                                        <h5 class="mb-4 d-inline">Reviews</h5>
                                         <span id='reviews-data'></span>
                                     </div>
                                     <div class="tab-pane" id="tabItem9">
                                         <span id="images-data"></span>
                                     </div>
                                     <div class="tab-pane" id="tabItem10">
-                                        <h5 class="title mb-4  d-inline-block">Address</h5>
+                                        <h5 class="mb-4  d-inline-block">Address</h5>
                                         <span id="address-data" class="mt-4"></span>
                                     </div>
                                     <div class="tab-pane" id="tabItem11">
-                                        <h5 class="title mb-4  d-inline-block">SEO Rules</h5>
+                                        <h5 class="mb-4  d-inline-block">SEO Rules</h5>
                                         <span id="seo-data" class="mt-4"></span>
                                     </div>
                                 </div>
@@ -1273,7 +1274,6 @@
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(data.message, 'success');
-                                $('#custom_cashback_percentage').val(data['percentage']);
                             })(NioApp, jQuery);
                             fetchVouchers();
                         } else {
@@ -1453,7 +1453,6 @@
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(data.message, 'success');
-                                $('#custom_cashback_percentage').val(data['percentage']);
                             })(NioApp, jQuery);
                             fetchVouchers();
                         } else {
@@ -1523,38 +1522,53 @@
                 var url = form.attr('action');
                 var data = form.serialize();
 
-                $.ajax({
-                    url: url,
-                    type: 'POST',
-                    data: data,
-                    success: function(data) {
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(data.message, 'success');
-                        })(NioApp, jQuery);
-                        fetchCashbacks();
+                // Display SweetAlert confirmation dialog
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Once deleted, this cashback cannot be recovered!',
+                    icon: 'warning',
+                    buttons: {
+                        cancel: true,
+                        confirm: {
+                            text: 'Delete',
+                            className: 'swal-button--danger',
+                        },
                     },
-                    error: function(error) {
-                        if (error.responseJSON.error) {
-                            (function(NioApp, $) {
-                                'use strict';
-                                toastr.clear();
-                                NioApp.Toast(error.responseJSON.error, 'error');
-                            })(NioApp, jQuery);
-                        } else {
-                            (function(NioApp, $) {
-                                'use strict';
-                                toastr.clear();
-                                NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
-                            })(NioApp, jQuery);
-                        }
+                    dangerMode: true,
+                }).then((willDelete) => {
+                    if (willDelete) {
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: data,
+                            success: function(data) {
+                                (function(NioApp, $) {
+                                    'use strict';
+                                    NioApp.Toast(data.message, 'success');
+                                })(NioApp, jQuery);
+                                fetchCashbacks();
+                            },
+                            error: function(error) {
+                                if (error.responseJSON.error) {
+                                    (function(NioApp, $) {
+                                        'use strict';
+                                        NioApp.Toast(error.responseJSON.error, 'error');
+                                    })(NioApp, jQuery);
+                                } else {
+                                    (function(NioApp, $) {
+                                        'use strict';
+                                        NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                                    })(NioApp, jQuery);
+                                }
+                            }
+                        });
                     }
                 });
             });
         });
 
-        // Cashback Update
+
+        // Cashback Create , Update Form
         $(document).ready(function() {
             $(document).on('submit', '.cashback_form', function(event) {
                 event.preventDefault();
@@ -1571,7 +1585,6 @@
                             'use strict';
                             toastr.clear();
                             NioApp.Toast(data.message, 'success');
-                            $('#custom_cashback_percentage').val(data['percentage']);
                         })(NioApp, jQuery);
                         fetchCashbacks();
                     },
@@ -2151,8 +2164,6 @@
             var network_commission = $('#sale_commission').val();
             var cashback = $('#cashback').val();
             var percentage = ((cashback / network_commission) * 100).toFixed(2);
-            $('#custom_cashback_percentagee').val(percentage);
-            $('#custom_cashback_percentage').val(percentage);
         }
 
         function calcCashback() {
@@ -2238,5 +2249,13 @@
                 event.preventDefault();
             });
         });
+        function initializeSelect2() {
+            $('.select-2').select2({
+                placeholder: function() {
+                    $(this).data('placeholder');
+
+                }
+            });
+        }
     </script>
 @endpush

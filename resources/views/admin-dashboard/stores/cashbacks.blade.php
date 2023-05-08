@@ -33,14 +33,16 @@
                     <span>{{ $cashback->detail }}</span>
                 </div>
 
-                <div class="nk-tb-col nk-tb-col-tools pr-2 text-right d-flex">
+                <div class="nk-tb-col nk-tb-col-tools pr-2 text-right">
                     @if ($store->override_cashback)
-                        <a href="" cashback-id='{{ $cashback->id }}' class='cashback-edit a_link'><em class="icon ni ni-edit"></em></a>
-                        <form action="{{ route('admin.stores.cashbacks.delete', $store) }}" id="store-cashback-form-id" method="POST">
-                            @csrf
-                            <input type="hidden" name="storeCashbackId" value="{{ $cashback->id }}">
-                            <a href="javascript:void(0);" class='cashback-delete a_link'><em class="icon ni ni-trash-fill"></em></a>
-                        </form>
+                        <div class="d-flex">
+                            <a href="" cashback-id='{{ $cashback->id }}' class='cashback-edit a_link'><em class="icon ni ni-edit"></em></a>
+                            <form action="{{ route('admin.stores.cashbacks.delete', $store) }}" id="store-cashback-form-id" method="POST">
+                                @csrf
+                                <input type="hidden" name="storeCashbackId" value="{{ $cashback->id }}">
+                                <a href="javascript:void(0);" class='cashback-delete a_link'><em class="icon ni ni-trash-fill"></em></a>
+                            </form>
+                        </div>
                     @endif
                 </div>
             </div><!-- .nk-tb-item -->
