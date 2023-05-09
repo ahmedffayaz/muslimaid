@@ -16,6 +16,7 @@ use App\Models\StoreReview;
 use Illuminate\Support\Str;
 use App\Models\StoreAddress;
 use App\Models\StoreSeoData;
+use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Models\StoreCashback;
 use Illuminate\Http\JsonResponse;
@@ -75,6 +76,17 @@ class StoreController extends Controller
                     $store->forceDelete();
                 }
             });
+            $cashbacks = UserCashback::doesntHave('store')->get();
+            foreach ($cashbacks as $cashback) {
+                $deleted = $cashback->forceDelete();
+            }        
+            $cashbacks = UserCashback::doesntHave('store')->get();
+            foreach ($cashbacks as $cashback) {
+                $cashback->forceDelete();
+                UserCashback::where('id', $cashback->id)->delete();
+
+            }
+            
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
@@ -199,7 +211,8 @@ class StoreController extends Controller
             'store_url' => 'required|url',
             'description' => 'nullable',
             'terms_conditions' => 'nullable',
-            'competitors' => 'nullable'
+            'competitors' => 'nullable',
+            'custom_cashback_percentage' => 'nullable|numeric'
         ]);
 
         try {
