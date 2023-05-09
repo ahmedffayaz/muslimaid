@@ -2,22 +2,24 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\CashoutResource;
-use App\Http\Resources\ClickResource;
-use App\Http\Resources\Home\UserResource;
-use App\Http\Resources\ReferralResource;
-use App\Http\Resources\TicketResource;
-use App\Http\Resources\UserCashbackResource;
+use App\Models\User;
+use App\Models\Ticket;
+use App\Jobs\SendEmail;
 use App\Models\Cashout;
 use App\Models\ExitClick;
-use App\Models\Ticket;
-use App\Models\User;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
+use App\Models\EmailTemplate;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\ClickResource;
+use App\Http\Resources\TicketResource;
+use App\Http\Resources\CashoutResource;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\ReferralResource;
+use App\Http\Resources\Home\UserResource;
 use Illuminate\Support\Facades\Validator;
+use App\Http\Resources\UserCashbackResource;
 
 class UserController extends Controller
 {
@@ -420,6 +422,48 @@ class UserController extends Controller
                 'data' => []
             ];
             return response()->json($data, 500);
+        }
+    }
+    public function sendReferralLink(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'referral_email' => 'required|email',
+        ]);
+
+        if ($validator->fails()) {
+            $data = [
+                'status' => 406,
+                'message' => $validator->errors()->first(),
+                'data' => []
+            ];
+            return response()->json($data, 406);
+        } else {
+            try {
+                $emailTemplate = EmailTemplate::where('key', 'referral_link')->first();
+                $link = url('') . '/register-form?referby=' . encrypt(auth()->user()->id);
+                $filteredMessage  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{LINK}}'], [SiteSetting()['website_title'], url('/'), $link], $emailTemplate->message);
+    
+                $emailData = array(
+                    'subject' => $emailTemplate->subject,
+                    'email_message' => $filteredMessage,
+                    'email' => $request->referral_email
+                );
+    
+                SendEmail::dispatch($emailData);
+                $response = [
+                    'status' => 200,
+                    'message' => 'Email Successfully Sent',
+                    'data' => [],
+                ];
+                return response()->json($response, 200);
+            } catch (\Exception $e) {
+                $data = [
+                    'status' => 500,
+                    'message' => 'Something went wrong, try again.',
+                    'data' => []
+                ];
+                return response()->json($data, 500);
+            }
         }
     }
 }
