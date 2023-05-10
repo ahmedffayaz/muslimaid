@@ -1935,9 +1935,6 @@
                 },
                 deeplink_url: {
                     url: true
-                },
-                store_url: {
-                    url: true
                 }
             }
         });
