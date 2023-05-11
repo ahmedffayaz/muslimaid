@@ -2,14 +2,15 @@
 
 namespace App\Http\Controllers\Client;
 
+use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Store;
 use App\Models\Cashout;
+use App\Models\Category;
 use App\Models\ExitClick;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -69,13 +70,17 @@ class DashboardController extends Controller
         if ($request->hasFile('avatar')) {
             $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
         }
-
+        $dateOfBirth = Carbon::createFromFormat('d/m/Y', $request->date_of_birth)->format('Y-m-d');
         $user->update([
             'first_name' => $request->firstname,
             'last_name' => $request->lastname,
-            'date_of_birth' => $request->date_of_birth,
+            'date_of_birth' => $dateOfBirth,
             'phone' => $request->phone,
             'address' => $request->address,
+            'address_line_2' => $request->address_line_2,
+            'street' => $request->street,
+            'country' => $request->country,
+            'postal_code' => $request->postal_code,
             'avatar' => $avatarImage
         ]);
 

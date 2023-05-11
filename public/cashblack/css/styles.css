@@ -2033,9 +2033,10 @@ button.hamburger:not(.collapsed):before {
 }
 
 .set-size {
-    min-width: 100%;
-    height: 157px;
+    width: 100%;
+    height: 100px;
 }
+
 
 .set-image {
     max-width: 100px;
@@ -3027,9 +3028,9 @@ button.hamburger:not(.collapsed):before {
     font-size: 1.125rem;
 }
 
-.store-listing.list-view .category-item__detail {
+/* .store-listing.list-view .category-item__detail {
     margin-left: 0.5rem;
-}
+} */
 
 .store-listing.list-view .cta button {
     width: 8.75rem;
@@ -3396,8 +3397,7 @@ button.hamburger:not(.collapsed):before {
 .fav-icon.liked {
     color: #3baa34;
 }
-
-.store-listing .fav-icon {
+.store-listing.grid-view .fav-icon {
     border: 0;
     width: auto;
     height: auto;
@@ -3407,7 +3407,19 @@ button.hamburger:not(.collapsed):before {
     right: 10px;
     top: 10px;
 }
+.store-listing.list-view .fav-icon {
+    border: 0;
+    height: auto;
+    position: absolute;
+    transform: none;
+    left: auto;
+    right: 35px;
+    top: 10px;
+}
 
+.icon-view{
+    width: auto;
+}
 .store-listing .fav-icon:before {
     content: "\f417";
     font-size: 1rem;
@@ -3849,7 +3861,8 @@ button.hamburger:not(.collapsed):before {
 }
 
 .takeaway-listing.list-view .item-name-tags {
-    flex: 0 0 210px;
+      /* flex: 0 0 210px; */
+      flex: 0 0 473px;
 }
 
 .takeaway-listing.list-view .takeaway-item__logo {

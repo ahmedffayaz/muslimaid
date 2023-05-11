@@ -444,9 +444,6 @@
                         exit_click_id: {
                             required: true
                         },
-                        order_value: {
-                            required: true
-                        },
                         network_commission: {
                             required: true
                         },
