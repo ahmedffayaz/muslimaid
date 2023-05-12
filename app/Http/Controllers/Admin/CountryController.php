@@ -21,7 +21,7 @@ class CountryController extends Controller
      */
     public function index()
     {
-        $countries = Country::all();
+        $countries = Country::latest()->paginate(20);
         $regions = Region::all();
         $currencies = Currency::all();
         return view('admin-dashboard.countries.index', compact('countries', 'regions', 'currencies'));

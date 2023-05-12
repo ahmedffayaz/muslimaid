@@ -18,17 +18,17 @@
     padding: 0;
 }
 
-.swal-button--confirm{
+.swal-button--confirm {
     background-color: #3baa34 !important;
 }
 
-.swal-button--danger{
+.swal-button--danger {
     background-color: #df4740 !important;
 }
 
-.img-height{
-    height: 135px;
-    min-width: 200px;
+.img-height {
+    height: auto;
+    width: 100%;
 }
 
 .storeTimings ul {
@@ -134,11 +134,22 @@
     }
 }
 
+@media (max-width: 1000px) {
+    .accept-cookies {
+        display: none;
+    }
+}
+
 .stats-quick-view .icon img {
     max-height: 60px;
 }
 
 .local-store-takeways {
+    display: flex;
+}
+
+.category-item__logo {
+    align-items: center;
     display: flex;
 }
 
@@ -1141,13 +1152,6 @@ textarea {
 
 .navbar .navbar-nav .more-link.dropdown-toggle::after {
     border: 0;
-    /*  content:"\f282";
-    font-family:"bootstrap-icons"; 
-    position:relative;
-    top:5px;
-    right:-5px;
-    width:18px;
-    height:8px;*/
 }
 
 .navbar .navbar-nav .more-link i {
@@ -2003,9 +2007,12 @@ button.hamburger:not(.collapsed):before {
 }
 
 .img-fluid-size {
-    overflow: hidden;
-    height: 280px;
-    width: 340px;
+    height: auto;
+    width: 100%;
+}
+
+.store-logo {
+    max-width: 150px;
 }
 
 .takeaway-brands__item {
@@ -2014,6 +2021,11 @@ button.hamburger:not(.collapsed):before {
     overflow: hidden;
     display: flex;
     justify-content: center;
+}
+
+.takeaway-brands__item img {
+    align-self: normal;
+    max-width: 100%;
 }
 
 @media (max-width: 767px) {
@@ -2027,14 +2039,16 @@ button.hamburger:not(.collapsed):before {
 }
 
 .takeaway-brands__item img {
-    /* align-self: center;
-    max-width: 100%; */
     min-width: 270px;
 }
 
 .set-size {
-    min-width: 100%;
-    height: 157px;
+    width: 100%;
+    height: 100px;
+}
+
+.category-item__logo {
+    min-height: 200px;
 }
 
 .set-image {
