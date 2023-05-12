@@ -14,14 +14,13 @@ class CharityResource extends JsonResource
      */
     public function toArray($request)
     {
-
         return [
             'id' => $this->id,
             'title' => $this->title,
             'charity_type_id' => $this->charity_types_id,
             'country_id' => $this->country,
-            'small_image' => empty($this->logo_upload) ? $this->logo_link : $this->logo_upload,
-            'large_image' => empty($this->banner_upload) ? $this->banner_link : $this->banner_upload,
+            'small_image' => empty($this->logo_upload) ? $this->logo_link : url($this->logo_upload),
+            'large_image' => empty($this->banner_upload) ? $this->banner_link : url($this->banner_upload),
             'status' => $this->status == 1 ? 'Active' : 'Inactive',
             'large_image_type' => $this->banner_type,
             'small_image_type' => $this->logo_type,

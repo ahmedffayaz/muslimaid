@@ -9,7 +9,7 @@
                             <div class="nk-block-head-content">
                                 <h3 class="nk-block-title page-title">Cashbacks</h3>
                                 <div class="nk-block-des text-soft">
-                                    <p>Total {{ $coms->total() }} cashbacks.</p>
+                                    <p>You have total {{ $coms->total() }}  cashbacks.</p>
                                 </div>
                             </div><!-- .nk-block-head-content -->
                             <div class="nk-block-head-content">
