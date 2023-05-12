@@ -3028,10 +3028,6 @@ button.hamburger:not(.collapsed):before {
     font-size: 1.125rem;
 }
 
-/* .store-listing.list-view .category-item__detail {
-    margin-left: 0.5rem;
-} */
-
 .store-listing.list-view .cta button {
     width: 8.75rem;
 }
@@ -3861,7 +3857,6 @@ button.hamburger:not(.collapsed):before {
 }
 
 .takeaway-listing.list-view .item-name-tags {
-      /* flex: 0 0 210px; */
       flex: 0 0 473px;
 }
 

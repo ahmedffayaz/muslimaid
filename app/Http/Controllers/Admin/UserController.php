@@ -152,7 +152,7 @@ class UserController extends Controller
                 'postal_code' => $request->input('postal_code'),
                 'status' => $request->input('status'),
                 'avatar' => $avatarImage,
-                'date_of_birth' =>  $request->input('date_of_birth'),
+                'date_of_birth' => $request->input('date_of_birth'),
             ]);
 
             $user->syncRoles($request->input('roles'));

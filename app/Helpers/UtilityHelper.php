@@ -999,3 +999,20 @@ function getFaqsContent()
     $content = preg_replace('/\[(.*?)\]/', '', $content);
     return $content;
 }
+function scopeFormattedAddress($user)
+{
+    $address = '';
+    if (!empty($user->address)) {
+        $address .= $user->address;
+    }
+    if (!empty($user->address_line_2)) {
+        $address .= ' ' . $user->address_line_2;
+    }
+    if (!empty($user->street)) {
+        $address .= ' ' . $user->street;
+    }
+    if (!empty($user->country)) {
+        $address .= ' ' . $user->country;
+    }
+    return $address;
+}
