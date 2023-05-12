@@ -1152,13 +1152,6 @@ textarea {
 
 .navbar .navbar-nav .more-link.dropdown-toggle::after {
     border: 0;
-    /*  content:"\f282";
-    font-family:"bootstrap-icons"; 
-    position:relative;
-    top:5px;
-    right:-5px;
-    width:18px;
-    height:8px;*/
 }
 
 .navbar .navbar-nav .more-link i {
@@ -2046,8 +2039,6 @@ button.hamburger:not(.collapsed):before {
 }
 
 .takeaway-brands__item img {
-    /* align-self: center;
-    max-width: 100%; */
     min-width: 270px;
 }
 
