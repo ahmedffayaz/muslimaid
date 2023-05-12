@@ -146,9 +146,13 @@ class UserController extends Controller
                 'email' => $request->input('email'),
                 'phone' => $request->input('phone'),
                 'address' => $request->input('address'),
+                'address_line_2' => $request->input('address_line_2'),
+                'street' => $request->input('street'),
+                'country' => $request->input('address'),
+                'postal_code' => $request->input('postal_code'),
                 'status' => $request->input('status'),
                 'avatar' => $avatarImage,
-                'date_of_birth' => $request->date_of_birth,
+                'date_of_birth' => $request->input('date_of_birth'),
             ]);
 
             $user->syncRoles($request->input('roles'));

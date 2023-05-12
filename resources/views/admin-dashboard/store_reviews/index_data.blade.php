@@ -2,7 +2,7 @@
     <div class="nk-tb-item nk-tb-head">
 
         <div class="nk-tb-col tb-col-mb"><span class="sub-text">Reviwer</span></div>
-        <div class="nk-tb-col tb-col-mb" style="width:60%"><span class="sub-text">Review</span></div>
+        <div class="nk-tb-col tb-col-mb" style="width:30%"><span class="sub-text">Review</span></div>
         <div class="nk-tb-col "><span class="sub-text">Store</span></div>
         <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Status</span></div>
         <div class="nk-tb-col nk-tb-col-tools text-right">

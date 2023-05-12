@@ -141,6 +141,43 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="address_line_2">Address line 2</label>
+                                                            <div class="form-control-wrap">
+                                                                <textarea type="text" class="form-control" id="address_line_2" value="{{ $user->address_line_2 ?? '' }}" name="address_line_2">{{ $user->address_line_2 }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="street">Street</label>
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="street" value="{{ $user->street }}" name="street">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="country">Country</label>
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="country" value="{{ $user->country }}" name="country">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="postal_code">postal Code</label>
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="postal_code" value="{{ $user->postal_code }}" name="postal_code">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
                                                             <label class="form-label" for="status">Status</label>

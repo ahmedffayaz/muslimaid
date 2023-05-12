@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Frontend;
 
 use Exception;
 use Throwable;
+use App\Models\User;
 use App\Models\Store;
 use App\Models\ExitClick;
 use App\Models\SiteSetting;
@@ -121,7 +122,15 @@ class ClickController extends Controller
             $storeId = decrypt($hash);
             $store = Store::find($storeId);
             $url = decrypt($url);
-            $cashbackId = isset($request->cashbackId) ? decrypt($request->cashbackId) : '';
+            if (auth()->check()) {
+                $cashbackId = isset($request->cashbackId) ? decrypt($request->cashbackId) : '';
+            } else {
+                $adminUser = User::whereHas('roles', function ($query) {
+                    $query->where('name', 'admin');
+                })->first();
+                $adminCashbackId = $adminUser->id;
+                $cashbackId = isset($adminCashbackId) ? $adminCashbackId : '';
+            }
 
             return view('frontend.stores.exit-click', compact('store', 'url', 'cashbackId'));
         } catch (Throwable $th) {

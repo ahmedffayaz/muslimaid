@@ -1,0 +1,38 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class AddMoreFieldsToUsersTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('address_line_2')->nullable()->after('phone');
+            $table->string('street')->nullable()->after('address_line_2');
+            $table->string('country')->nullable()->after('street');
+            $table->string('postal_code')->nullable()->after('country');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('address_line_2');
+            $table->dropColumn('street');
+            $table->dropColumn('country');
+            $table->dropColumn('postal_code');
+        });
+    }
+}

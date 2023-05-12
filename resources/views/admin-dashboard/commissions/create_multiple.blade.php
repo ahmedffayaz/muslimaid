@@ -77,7 +77,7 @@
                         <div class="form-group">
                             <label class="form-label" for="phone-no-1">Network Commission <span class="text-danger">*</span></label>
                             <div class="form-control-wrap">
-                                <input type="number" class="form-control" step="0.1"  min="0.1" id="phone-no-1"  placeholder="Network Commission" name="network_commission[]" >
+                                <input type="number" class="form-control" step="0.01"  min="0.01" id="phone-no-1"  placeholder="Network Commission" name="network_commission[]" >
                             </div>
                         </div>
                     </div>
