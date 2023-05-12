@@ -18,15 +18,15 @@
     padding: 0;
 }
 
-.swal-button--confirm{
+.swal-button--confirm {
     background-color: #3baa34 !important;
 }
 
-.swal-button--danger{
+.swal-button--danger {
     background-color: #df4740 !important;
 }
 
-.img-height{
+.img-height {
     height: auto;
     width: 100%;
 }
@@ -133,11 +133,12 @@
         margin-top: 1rem;
     }
 }
+
 @media (max-width: 1000px) {
     .accept-cookies {
-      display: none;
+        display: none;
     }
-  }
+}
 
 .stats-quick-view .icon img {
     max-height: 60px;
@@ -147,7 +148,7 @@
     display: flex;
 }
 
-.category-item__logo{
+.category-item__logo {
     align-items: center;
     display: flex;
 }
@@ -2017,7 +2018,7 @@ button.hamburger:not(.collapsed):before {
     width: 100%;
 }
 
-.store-logo{
+.store-logo {
     max-width: 150px;
 }
 
@@ -2028,10 +2029,12 @@ button.hamburger:not(.collapsed):before {
     display: flex;
     justify-content: center;
 }
+
 .takeaway-brands__item img {
     align-self: normal;
     max-width: 100%;
 }
+
 @media (max-width: 767px) {
     .takeaway-brands__item {
         max-width: 245px;
@@ -2053,7 +2056,7 @@ button.hamburger:not(.collapsed):before {
     height: 100px;
 }
 
-.category-item__logo{
+.category-item__logo {
     min-height: 200px;
 }
 
