@@ -793,6 +793,11 @@ function dbDate($date)
     return Carbon::parse($date)->format('Y-m-d H:i:s');
 }
 
+function changeDateFormat($date){
+    $parsedDate = DateTime::createFromFormat('d/m/Y', $date);
+    return $parsedDate->format('Y-m-d H:i:s');
+}
+
 /**
  * @param $date
  * Date format in 'm/d/Y'
@@ -998,21 +1003,4 @@ function getFaqsContent()
     $content = $page->lb_raw_content;
     $content = preg_replace('/\[(.*?)\]/', '', $content);
     return $content;
-}
-function scopeFormattedAddress($user)
-{
-    $address = '';
-    if (!empty($user->address)) {
-        $address .= $user->address;
-    }
-    if (!empty($user->address_line_2)) {
-        $address .= ' ' . $user->address_line_2;
-    }
-    if (!empty($user->street)) {
-        $address .= ' ' . $user->street;
-    }
-    if (!empty($user->country)) {
-        $address .= ' ' . $user->country;
-    }
-    return $address;
 }

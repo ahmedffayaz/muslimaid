@@ -137,4 +137,26 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->morphedByMany(Store::class, 'favoritable', 'favorites');
     }
+    public function formattedAddress()
+    {
+        $address = '';
+    
+        if (!empty($this->address)) {
+            $address .= $this->address;
+        }
+    
+        if (!empty($this->address_line_2)) {
+            $address .= ' ' . $this->address_line_2;
+        }
+    
+        if (!empty($this->street)) {
+            $address .= ' ' . $this->street;
+        }
+    
+        if (!empty($this->country)) {
+            $address .= ' ' . $this->country;
+        }
+    
+        return $address;
+    }
 }
