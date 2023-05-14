@@ -793,7 +793,7 @@ function dbDate($date)
     return Carbon::parse($date)->format('Y-m-d H:i:s');
 }
 
-function changeDateFormat($date){
+function formatDateForUk($date){
     $parsedDate = DateTime::createFromFormat('d/m/Y', $date);
     return $parsedDate->format('Y-m-d H:i:s');
 }

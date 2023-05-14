@@ -73,7 +73,7 @@ class DashboardController extends Controller
         $user->update([
             'first_name' => $request->firstname,
             'last_name' => $request->lastname,
-            'date_of_birth' => changeDateFormat($request->date_of_birth),
+            'date_of_birth' => formatDateForUk($request->date_of_birth),
             'phone' => $request->phone,
             'address' => $request->address,
             'address_line_2' => $request->address_line_2,
