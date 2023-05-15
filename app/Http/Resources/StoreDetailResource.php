@@ -14,6 +14,7 @@ class StoreDetailResource extends JsonResource
      */
     public function toArray($request)
     {
+        $header_token = $request->bearerToken();
         return [
             'id' => $this->id,
             'title' => $this->name,
@@ -38,7 +39,7 @@ class StoreDetailResource extends JsonResource
             "date_created" => date('d-M-Y', strtotime($this->created_at)),
             'cashback' => $this->getCashback(),
             'cashbacks' => $this->cashback ? $this->when($this->cashbacks, CashbackResource::collection($this->cashbacks)) : (object)[],
-            'is_fav' => checkFavorite($this->id) ? true : false,
+            'is_fav' => checkFavorite($this->id, $header_token) ? true : false,
         ];
     }
 }
