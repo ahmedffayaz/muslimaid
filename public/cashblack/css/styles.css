@@ -2357,7 +2357,7 @@ button.hamburger:not(.collapsed):before {
     max-width: inherit;
 }
 
-.img-fluid-size {
+.img-view-size {
     width: 100px;
     height: 90px;
 }
