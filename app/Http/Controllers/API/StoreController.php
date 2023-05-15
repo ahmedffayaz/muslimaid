@@ -228,7 +228,7 @@ class StoreController extends Controller
     public function favoriteCashbackStores()
     {
         try {
-            $favoriteStores = auth()->user()->favoriteStores()->whereHas('categories', function ($query) {
+            $favoriteStores = auth()->user()->favoriteStores()->whereStatus('active')->whereHas('categories', function ($query) {
                 $query->where('slug', 'cashblack-to-your-door');
             })->paginate(20)->appends(request()->input());
 
