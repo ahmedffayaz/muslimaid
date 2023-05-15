@@ -816,7 +816,7 @@ textarea {
 
     .acc-dropdown .acc-btn {
         width: 95% !important;
-        color: #ffffff !important;
+        color: #ffffff;
         margin-top: 5px !important;
         margin-right: 5px !important;
         margin-left: 5px !important;
@@ -2357,7 +2357,7 @@ button.hamburger:not(.collapsed):before {
     max-width: inherit;
 }
 
-.img-fluid-size {
+.img-view-size {
     width: 100px;
     height: 90px;
 }
