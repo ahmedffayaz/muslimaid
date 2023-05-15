@@ -70,11 +70,10 @@ class DashboardController extends Controller
         if ($request->hasFile('avatar')) {
             $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
         }
-        $dateOfBirth = Carbon::createFromFormat('d/m/Y', $request->date_of_birth)->format('Y-m-d');
         $user->update([
             'first_name' => $request->firstname,
             'last_name' => $request->lastname,
-            'date_of_birth' => $dateOfBirth,
+            'date_of_birth' => formatDateForUk($request->date_of_birth),
             'phone' => $request->phone,
             'address' => $request->address,
             'address_line_2' => $request->address_line_2,
