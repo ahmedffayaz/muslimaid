@@ -17,7 +17,7 @@ class StoreResource extends JsonResource
      */
     public function toArray($request)
     {
-        $header_token = $request->bearerToken();
+        $headerToken = $request->bearerToken();
         return [
             'id' => $this->id,
             'title' => $this->name,
@@ -27,7 +27,7 @@ class StoreResource extends JsonResource
             'description' => $this->when($this->description, $this->description),
             'terms_conditions' => $this->when($this->terms_conditions, $this->terms_conditions),
             'cashback' => $this->getCashback(),
-            'is_fav' => checkFavorite($this->id, $header_token) ? true : false,
+            'is_fav' => checkFavorite($this->id, $headerToken) ? true : false,
         ];
     }
 }
