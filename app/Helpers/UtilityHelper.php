@@ -1,30 +1,31 @@
 <?php
 
-use App\Models\Blog;
 use Carbon\Carbon;
+use App\Models\Blog;
+use App\Models\Page;
 use App\Models\User;
 use App\Models\Store;
+use App\Models\Slider;
 use App\Models\Ticket;
 use App\Models\Cashout;
+use App\Models\Charity;
 use App\Models\SeoRule;
 use App\Models\Category;
-use App\Models\Charity;
 use App\Models\Currency;
-use App\Models\Page;
 use App\Models\UserVerify;
 use App\Models\SiteSetting;
 use App\Models\StoreReview;
 use Illuminate\Support\Str;
-use App\Models\EmailTemplate;
-use App\Models\Slider;
 use App\Models\StoreSeoData;
+use App\Models\EmailTemplate;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManagerStatic as Image;
+use Laravel\Sanctum\PersonalAccessToken;
 use Stevebauman\Location\Facades\Location;
+use Intervention\Image\ImageManagerStatic as Image;
 
 function getPageTemplates($slug)
 {
@@ -38,15 +39,25 @@ function getMoreCategories()
     return $categories;
 }
 
-function checkFavorite($storeId)
+function checkFavorite($storeId, $header_token = null)
 {
     if (empty(auth()->user())) {
         $isFavorite = [];
+        if ($header_token != null) {
+            [$tokenId, $tokenValue] = explode('|', $header_token);
+
+            $personalAccessToken = PersonalAccessToken::where('id', $tokenId)->first();
+            if ($personalAccessToken) {
+                $user = User::with('favoriteStores')->find($personalAccessToken->tokenable_id);
+                $isFavorite = $user->favoriteStores->where('id', $storeId)->pluck('id')->first();
+            }
+        }
     } else {
         $isFavorite = auth()->user()->favoriteStores()->where('stores.id', $storeId)->pluck('stores.id')->first();
     }
     return $isFavorite;
 }
+
 
 function getCuisineTags($store)
 {
@@ -793,7 +804,8 @@ function dbDate($date)
     return Carbon::parse($date)->format('Y-m-d H:i:s');
 }
 
-function formatDateForUk($date){
+function formatDateForUk($date)
+{
     $parsedDate = DateTime::createFromFormat('d/m/Y', $date);
     return $parsedDate->format('Y-m-d H:i:s');
 }
