@@ -64,3 +64,4 @@ Route::get('home', [API\HomeController::class, 'index']);
 Route::get('categories/{letter?}', [API\CategoryController::class, 'index']);
 Route::get('child-categories/{slug}/{letter?}', [API\CategoryController::class, 'show']);
 Route::get('get-category-stores/{slug}', [API\CategoryController::class, 'getCategoryStores']);
+Route::post('exit-click', [API\StoreController::class, 'getCashbackStore']);

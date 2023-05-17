@@ -1617,7 +1617,7 @@ button.hamburger:not(.collapsed):before {
 
 #footer .footer-newsletter input[type="text"] {
     background-color: #f4f4f4;
-    border: 0;
+    border: 1px solid #dcdcdc;
     border-radius: 0;
     line-height: 38px;
 }
@@ -2192,7 +2192,10 @@ button.hamburger:not(.collapsed):before {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
 }
-
+.img-adjust{
+    height: 200px;
+    width: 100%;
+}
 .newsletter-form {
     display: flex;
 }
@@ -2205,7 +2208,6 @@ button.hamburger:not(.collapsed):before {
 }
 
 .newsletter-form .input-fields {
-    border: 1px solid #dcdcdc;
     margin-right: 10px;
 
 }
@@ -3009,7 +3011,7 @@ button.hamburger:not(.collapsed):before {
 }
 
 .category-listing.other-offers .list-item .upto-offer {
-    flex: 0 0 180px;
+    flex: 0 0 250px;
 }
 
 .category-listing.other-offers .list-item .cta {
