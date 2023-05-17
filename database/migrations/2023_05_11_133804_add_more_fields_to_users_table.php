@@ -14,7 +14,7 @@ class AddMoreFieldsToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $$table->string('address_2')->nullable()->after('address');
+            $table->string('address_2')->nullable()->after('address');
             $table->string('street')->nullable()->after('address_2');
             $table->unsignedBigInteger('country_id')->nullable()->after('street');
             $table->string('postal_code')->nullable()->after('country_id');
