@@ -34,9 +34,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'registration_type',
         'phone',
         'address',
-        'address_line_2',
+        'address_2',
         'street',
-        'country',
+        'country_id',
         'postal_code',
         'intro',
         'avatar',
@@ -153,10 +153,14 @@ class User extends Authenticatable implements MustVerifyEmail
             $address .= ' ' . $this->street;
         }
     
-        if (!empty($this->country)) {
-            $address .= ' ' . $this->country;
+        if (!empty($this->country_id)) {
+            $address .= ' ' . optional($this->country)->name;
         }
     
         return $address;
+    }
+    public function country()
+    {
+        return $this->hasOne(Country::class, 'id', 'country_id');
     }
 }
