@@ -23,4 +23,8 @@ class Country extends Model
     {
         return $this->belongsTo(Region::class);
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

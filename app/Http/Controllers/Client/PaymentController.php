@@ -51,7 +51,7 @@ class PaymentController extends Controller
     {
         $user = Auth::user();
         $errorMessage = 0;
-        if (!($user->first_name && $user->last_name && $user->email && $user->phone && $user->address && $user->date_of_birth && $user->address_line_2 && $user->street && $user->country && $user->postal_code)) {
+        if (!($user->first_name && $user->last_name && $user->email && $user->phone && $user->address && $user->date_of_birth && $user->address_2 && $user->street && $user->country_id && $user->postal_code)) {
             $errorMessage = 1;
             flash()->error('Please first complete your profile to withdraw');
         }

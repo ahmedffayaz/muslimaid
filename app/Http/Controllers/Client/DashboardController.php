@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\User;
 use App\Models\Store;
 use App\Models\Cashout;
+use App\Models\Country;
 use App\Models\Category;
 use App\Models\ExitClick;
 use App\Models\UserCashback;
@@ -44,7 +45,8 @@ class DashboardController extends Controller
     public function edit()
     {
         $user = Auth::user();
-        return view('frontend.client-dashboard.edit-profile', compact('user'));
+        $countries = Country::where('status','1')->get();
+        return view('frontend.client-dashboard.edit-profile', compact('user','countries'));
     }
 
     /**
@@ -76,9 +78,9 @@ class DashboardController extends Controller
             'date_of_birth' => formatDateForUk($request->date_of_birth),
             'phone' => $request->phone,
             'address' => $request->address,
-            'address_line_2' => $request->address_line_2,
+            'address_2' => $request->address_2,
             'street' => $request->street,
-            'country' => $request->country,
+            'country_id' => $request->country_id,
             'postal_code' => $request->postal_code,
             'avatar' => $avatarImage
         ]);
