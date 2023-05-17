@@ -2192,10 +2192,12 @@ button.hamburger:not(.collapsed):before {
     padding-left: 0.75rem;
     padding-right: 0.75rem;
 }
-.img-adjust{
+
+.img-adjust {
     height: 200px;
     width: 100%;
 }
+
 .newsletter-form {
     display: flex;
 }
@@ -2800,8 +2802,8 @@ button.hamburger:not(.collapsed):before {
 }
 
 .category-listing .list-item .category-item__logo {
-    flex: 0 0 110px;
-    text-align: center;
+    flex: 0 0 110px !important;
+    text-align: center !important;
 }
 
 @media (min-width: 992px) {
@@ -2966,6 +2968,17 @@ button.hamburger:not(.collapsed):before {
         flex: 0 0 15vw;
     }
 }
+
+/* @media (min-width: 768px) {
+    .category-listing.store-listing.list-view {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    
+    .category-listing.store-listing.list-view .upto-offer {
+      flex: 0 0 15vw;
+    }
+  } */
 
 .category-listing.fav-stores .list-item .brand-name {
     font-size: 1.125rem;
@@ -5324,7 +5337,6 @@ input [type="number"] {
 
     .acc-dropdown .acc-btn {
         width: 95%;
-        color: #ffffff;
         margin-top: 5px;
         margin-right: 5px;
         margin-left: 5px;
