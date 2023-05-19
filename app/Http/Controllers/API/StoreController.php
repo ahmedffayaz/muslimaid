@@ -5,12 +5,15 @@ namespace App\Http\Controllers\API;
 use Exception;
 use App\Models\Page;
 use App\Models\Store;
+use App\Models\ExitClick;
+use App\Models\SiteSetting;
 use Illuminate\Http\Request;
+use App\Models\RedeemedVoucher;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
+use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\StoreDetailResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
-use Illuminate\Support\Facades\Validator;
 
 class StoreController extends Controller
 {
@@ -173,14 +176,14 @@ class StoreController extends Controller
         } catch (ModelNotFoundException $e) {
             $data = [
                 'status' => 404,
-                'message' => 'Something went wrong, try again.',
+                'message' => $e->getMessage(),
                 'data' => []
             ];
             return response()->json($data, 404);
         } catch (Exception $e) {
             $data = [
                 'status' => 500,
-                'message' => 'Something went wrong, try again.',
+                'message' => $e->getMessage(),
                 'data' => []
             ];
             return response()->json($data, 500);
