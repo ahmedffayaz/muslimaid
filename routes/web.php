@@ -278,7 +278,6 @@ Route::any('charity/search', [App\Http\Controllers\Frontend\CharityController::c
 
 
 Route::get('newsletter', [App\Http\Controllers\Frontend\NewsletterController::class, 'index'])->name('newsletter.index');
-Route::post('newsletter', [App\Http\Controllers\Frontend\NewsletterController::class, 'store'])->name('newsletter.store');
 
 Route::get('contact', [App\Http\Controllers\Frontend\ContactController::class, 'index'])->name('contact.index');
 Route::post('contact', [App\Http\Controllers\Frontend\ContactController::class, 'store'])->name('contact.store');

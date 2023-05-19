@@ -2989,7 +2989,9 @@ button.hamburger:not(.collapsed):before {
 .brand-name {
     height: 38px;
 }
-
+.d-block{
+    display: block !important;
+}
 .category-listing.fav-stores .list-item .brand-name span {
     display: block;
 }

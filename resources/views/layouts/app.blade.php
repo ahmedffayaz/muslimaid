@@ -76,16 +76,6 @@
                                 </div>
                             </li>
                         @endguest
-                        {{-- <div class="dropdown">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                              Dropdown button
-                            </button>
-                            <div class="dropdown-menu">
-                              <a class="dropdown-item" href="#">Link 1</a>
-                              <a class="dropdown-item" href="#">Link 2</a>
-                              <a class="dropdown-item" href="#">Link 3</a>
-                            </div>
-                          </div> --}}
                           <li class="nav-item dropdown">
                             <a id="navbarDropdown2" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                               Language  <span class="caret"></span>
