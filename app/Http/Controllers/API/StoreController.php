@@ -176,14 +176,14 @@ class StoreController extends Controller
         } catch (ModelNotFoundException $e) {
             $data = [
                 'status' => 404,
-                'message' => 'Something went wrong, try again.',
+                'message' => $e->getMessage(),
                 'data' => []
             ];
             return response()->json($data, 404);
         } catch (Exception $e) {
             $data = [
                 'status' => 500,
-                'message' => 'Something went wrong, try again.',
+                'message' => $e->getMessage(),
                 'data' => []
             ];
             return response()->json($data, 500);
