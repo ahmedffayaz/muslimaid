@@ -20,7 +20,7 @@
                                     <div class="nk-download">
                                         <div class="data">
                                             <div class="thumb mb-1"><img
-                                                    src="{{ isset($network->logo) && $network->logo != '' ? asset('admin-dashboard/images/' . $network->logo) : asset('frontend/images/products/product-16.jpg') }}"
+                                                    src="{{ isset($network->logo) && $network->logo != '' ? asset('admin-dashboard/images/' . $network->logo) : ($network->name == 'Awin' ? asset('admin-dashboard/images/awin-logo.svg') : asset('frontend/images/products/product-16.jpg')) }}"
                                                     alt=""></div>
                                             <div class="info">
                                                 <h6 class="title"><span class="name">{{ $network->name }}</span></h6>
@@ -52,8 +52,8 @@
                                         <div class="actions">
                                             <span class="tooltip-importer"
                                                 @if (count($queue)) data-toggle='tooltip' data-placement='top' title='Importer is running on background please wait' @endif>
-                                                <button href="{{ route('admin.importer.importer_setting_form', $network->id) }}" class="btn btn-success importer_btn"
-                                                    @if (count($queue)) style="pointer-events:none;opacity: .6;" @endif>
+                                                <button href="{{ route('admin.importer.importer_setting_form', $network->id) }}" data-network-name="{{ $network->name }}"
+                                                    class="btn btn-success importer_btn" @if (count($queue)) style="pointer-events:none;opacity: .6;" @endif>
                                                     <em class="icon ni ni-download"></em>
                                                     <span>Importer</span>
                                                 </button>
@@ -216,23 +216,23 @@
     <script>
         $(document).ready(function() {
             $(document).on('click', '.save_importer', function(event) {
-                event.preventDefault();
-
-                var formElement = document.querySelector("#settings_form");
-                fd = new FormData(formElement);
-
-                $.ajax({
-                    url: '{{ route('admin.importer.save_settings') }}',
-                    method: "POST",
-                    data: fd,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    enctype: 'multipart/form-data',
-                    success: function(data) {
-                        $(".setting-message").text(data);
-                    }
-                });
+                if (!$(".save_importer").hasClass("disabled")) {
+                    event.preventDefault();
+                    var formElement = document.querySelector("#settings_form");
+                    fd = new FormData(formElement);
+                    $.ajax({
+                        url: '{{ route('admin.importer.save_settings') }}',
+                        method: "POST",
+                        data: fd,
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        enctype: 'multipart/form-data',
+                        success: function(data) {
+                            $(".setting-message").text(data);
+                        }
+                    });
+                }
             });
         });
     </script>
@@ -279,6 +279,7 @@
     <script>
         $(document).ready(function() {
             $(document).on('click', '.importer_btn', function(event) {
+                var networkName = $(this).attr("data-network-name");
                 event.preventDefault();
 
                 $.ajax({
@@ -288,6 +289,15 @@
                     success: function(data) {
                         $('#modalAlert').modal('show');
                         $('#setting_form').html(data);
+                        if ($.inArray(networkName.toLowerCase(), ['awin', 'cj', 'webgains']) !== -1) {
+                            $(".run-importer").removeClass("disabled");
+                            $(".save_importer").removeClass("disabled");
+                            $("a.run-importer").attr("href", "{{ route('admin.importer.import') }}");
+                        } else {
+                            $(".run-importer").addClass("disabled");
+                            $(".save_importer").addClass("disabled");
+                            $("a.run-importer").attr("href", "javascript:void(0);");
+                        }
                     }
                 });
             });
