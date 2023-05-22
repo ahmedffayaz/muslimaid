@@ -415,7 +415,7 @@ textarea {
 
 .badge-info {
     color: #fff;
-    background-color: #17a2b8;
+    background-color: #b74e4e;
 }
 
 .badge-secondary {
@@ -430,7 +430,7 @@ textarea {
 
 .badge-warning {
     color: #212529;
-    background-color: #ffc107;
+    background-color: #437987;
 }
 
 .hero {
@@ -2023,10 +2023,10 @@ button.hamburger:not(.collapsed):before {
     justify-content: center;
 }
 
-.takeaway-brands__item img {
+/* .takeaway-brands__item img {
     align-self: normal;
     max-width: 100%;
-}
+} */
 
 @media (max-width: 767px) {
     .takeaway-brands__item {
@@ -2038,8 +2038,13 @@ button.hamburger:not(.collapsed):before {
     }
 }
 
-.takeaway-brands__item img {
+/* .takeaway-brands__item img {
     min-width: 270px;
+} */
+.without-cashback-btn:hover{
+    color: #000;
+    background-color: #ffc107;
+    border-color: #ffc107;
 }
 
 .set-size {
