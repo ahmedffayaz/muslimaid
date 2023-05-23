@@ -130,7 +130,7 @@
             var title = $("input[name=title]").val();
             var mapped_id = $("select[name=mapped_id]").val();
             $.ajax({
-              url:'{{route("admin.importedcategories.search_importedcategories")}}?page='+page,
+              url:'{{route(getAdminPrefix() . ".importedcategories.search_importedcategories")}}?page='+page,
               method:"POST",
               data:{_token:_token,parent_id:parent_id,title:title,mapped_id:mapped_id},
               success:function(data)
@@ -154,7 +154,7 @@
             var title = $("input[name=title]").val();
             var mapped_id = $("select[name=mapped_id]").val();
             $.ajax({
-              url:'{{route("admin.importedcategories.search_importedcategories")}}',
+              url:'{{route(getAdminPrefix() . ".importedcategories.search_importedcategories")}}',
               method:"POST",
               data:{_token:_token,parent_id:parent_id,title:title,mapped_id:mapped_id},
               success:function(data)

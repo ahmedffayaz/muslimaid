@@ -172,7 +172,7 @@
                 var status = $("select[name=status").val();
                 var store_name = $("input[name=store_name]").val();
                 $.ajax({
-                    url: '{{route("admin.stores.search_stores")}}?page=' + page,
+                    url: '{{route(getAdminPrefix() . ".stores.search_stores")}}?page=' + page,
                     method: "POST",
                     data: {
                         _token: _token,
@@ -213,7 +213,7 @@
             }
 
             $.ajax({
-                url: '{{route("admin.stores.search_stores")}}',
+                url: '{{route(getAdminPrefix() . ".stores.search_stores")}}',
                 method: "POST",
                 data: {
                     _token: _token,

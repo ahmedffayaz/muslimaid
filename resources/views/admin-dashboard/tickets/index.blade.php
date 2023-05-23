@@ -159,7 +159,7 @@
             var priority = $("select[name=priority").val();
             var title = $("input[name=title]").val();
             $.ajax({
-              url:'{{route("admin.tickets.search")}}?page='+page,
+              url:'{{route(getAdminPrefix() . ".tickets.search")}}?page='+page,
               method:"POST",
               data:{_token:_token,user_id:user_id,ticket_id:ticket_id,category:category,status:status,priority:priority,page:page},
               success:function(data)
@@ -190,7 +190,7 @@
             var priority = $("select[name=priority").val();
             var title = $("input[name=title]").val();
             $.ajax({
-              url:'{{route("admin.tickets.search")}}',
+              url:'{{route(getAdminPrefix() . ".tickets.search")}}',
               method:"POST",
               data:{_token:_token,user_id:user_id,ticket_id:ticket_id,category:category,status:status},
               success:function(data)

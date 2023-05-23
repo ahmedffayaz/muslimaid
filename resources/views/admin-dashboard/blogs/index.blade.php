@@ -88,7 +88,7 @@
             
             var status = $("select[name=status]").val();
             $.ajax({
-                url:'{{route("admin.reviews.search_reviews")}}?page='+page,
+                url:'{{route(getAdminPrefix() . ".reviews.search_reviews")}}?page='+page,
                 method:"POST",
                 data:{_token:_token,reviewer:reviewer,store_id:store_id,status:status},
                 success:function(data)
@@ -116,7 +116,7 @@
         
         var status = $("select[name=status]").val();
         $.ajax({
-        url:'{{route("admin.reviews.search_reviews")}}',
+        url:'{{route(getAdminPrefix() . ".reviews.search_reviews")}}',
             method:"POST",
             data:{_token:_token,reviewer:reviewer,store_id:store_id,status:status},
             success:function(data)

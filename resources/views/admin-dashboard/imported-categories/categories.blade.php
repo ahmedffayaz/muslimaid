@@ -298,7 +298,7 @@
             var status = $("select[name=status").val();
             var name = $("input[name=name]").val();
             $.ajax({
-                url: '{{route("admin.users.search_users")}}',
+                url: '{{route(getAdminPrefix() . ".users.search_users")}}',
                 method: "POST",
                 data: {
                     _token: _token,

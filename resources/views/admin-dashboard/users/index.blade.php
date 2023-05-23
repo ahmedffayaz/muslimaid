@@ -127,7 +127,7 @@
             var status = $("select[name=status").val();
             var name = $("input[name=name]").val();
             $.ajax({
-              url:'{{route("admin.users.search_users")}}?page='+page,
+              url:'{{route(getAdminPrefix() . ".users.search_users")}}?page='+page,
               method:"POST",
               data:{_token:_token,type:type,name:name,status:status},
               success:function(data)
@@ -155,7 +155,7 @@
             var name = $("input[name=name]").val();
             var email = $("input[name=email]").val();
             $.ajax({
-              url:'{{route("admin.users.search_users")}}',
+              url:'{{route(getAdminPrefix() . ".users.search_users")}}',
               method:"POST",
               data:{_token:_token,email:email,name:name,status:status},
               success:function(data)

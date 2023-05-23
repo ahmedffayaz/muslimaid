@@ -172,7 +172,7 @@
             var group= $("input[name=group]").val();
             var key = $("select[name=group]").val();
             $.ajax({
-              url:'{{route("admin.translations.search_translations")}}?page='+page,
+              url:'{{route(getAdminPrefix() . ".translations.search_translations")}}?page='+page,
               method:"POST",
               data:{_token:_token,group:group,key:key},
               success:function(data)
@@ -199,7 +199,7 @@
             var group = $("input[name=group]").val();
             var key = $("input[name=key]").val();
             $.ajax({
-              url:'{{route("admin.translations.search_translations")}}',
+              url:'{{route(getAdminPrefix() . ".translations.search_translations")}}',
               method:"POST",
               data:{_token:_token,group:group,key:key},
               success:function(data)

@@ -131,7 +131,7 @@
            
             var status = $("select[name=status]").val();
             $.ajax({
-              url:'{{route("admin.settings.search_settings")}}?page='+page,
+              url:'{{route(getAdminPrefix() . ".settings.search_settings")}}?page='+page,
               method:"POST",
               data:{_token:_token,title:title,key:key},
               success:function(data)
@@ -156,7 +156,7 @@
            
             var status = $("select[name=status]").val();
             $.ajax({
-              url:'{{route("admin.settings.search_settings")}}',
+              url:'{{route(getAdminPrefix() . ".settings.search_settings")}}',
               method:"POST",
               data:{_token:_token,title:title,key:key},
               success:function(data)

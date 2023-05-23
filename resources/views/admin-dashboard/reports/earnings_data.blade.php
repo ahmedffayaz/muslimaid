@@ -124,7 +124,7 @@ $(document).ready(function(){
         var start_date = $("input[name=start_date]").val();
         var end_date = $("input[name=end_date]").val();
         $.ajax({
-        url:'{{route("admin.reports.search_earnings")}}?page='+page,
+        url:'{{route(getAdminPrefix() . ".reports.search_earnings")}}?page='+page,
         method:"POST",
         data:{_token:_token,store_id:store_id,start_date:start_date,end_date:end_date,status_id:status_id,page:page},
         success:function(data)

@@ -74,7 +74,7 @@ $(document).ready(function(){
         var start_date = $("input[name=start_date]").val();
         var end_date = $("input[name=end_date]").val();
         $.ajax({
-          url:'{{route("admin.reports.search_performance")}}?page='+page,
+          url:'{{route(getAdminPrefix() . ".reports.search_performance")}}?page='+page,
           method:"POST",
           data:{_token:_token,store_id:store_id,start_date:start_date,end_date:end_date,page:page},
           success:function(data)

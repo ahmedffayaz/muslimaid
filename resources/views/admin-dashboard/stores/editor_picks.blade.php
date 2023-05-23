@@ -220,7 +220,7 @@
             var status = $("select[name=status").val();
             var store_name = $("input[name=store_name]").val();
             $.ajax({
-              url:'{{route("admin.stores.search_editor_picks")}}?page='+page,
+              url:'{{route(getAdminPrefix() . ".stores.search_editor_picks")}}?page='+page,
               method:"POST",
               data:{_token:_token,network_id:network_id,store_id:store_id,store_name:store_name,status:status,page:page},
               success:function(data)
@@ -245,7 +245,7 @@
             var status = $("select[name=status").val();
             var store_name = $("input[name=store_name]").val();
             $.ajax({
-              url:'{{route("admin.stores.search_editor_picks")}}',
+              url:'{{route(getAdminPrefix() . ".stores.search_editor_picks")}}',
               method:"POST",
               data:{_token:_token,network_id:network_id,store_id:store_id,store_name:store_name,status:status},
               success:function(data)

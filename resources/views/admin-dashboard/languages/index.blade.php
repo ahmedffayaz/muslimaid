@@ -162,7 +162,7 @@
             var code = $("input[name=code]").val();
            
             $.ajax({
-              url:'{{route("admin.languages.search_languages")}}?page='+page,
+              url:'{{route(getAdminPrefix() . ".languages.search_languages")}}?page='+page,
               method:"POST",
               data:{_token:_token,name:name,code:code},
               success:function(data)
@@ -190,7 +190,7 @@
             var code = $("input[name=code]").val();
            
             $.ajax({
-              url:'{{route("admin.languages.search_languages")}}',
+              url:'{{route(getAdminPrefix() . ".languages.search_languages")}}',
               method:"POST",
               data:{_token:_token,name:name,code:code},
               success:function(data)
