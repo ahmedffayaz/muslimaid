@@ -61,7 +61,7 @@
                                         @endcan
                                         @can('view charities')
                                         <li class="">
-                                            <a href="/admin/charities" class="">
+                                            <a href="{{ '/' . getAdminPrefix() . '/charities' }}"  class="">
                                                 <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
                                                 <span class="nk-menu-text">Charities</span>
                                             </a>
@@ -69,7 +69,7 @@
                                         @endcan
                                         @can('view countries')
                                         <li class="">
-                                            <a href="/admin/countries" class="">
+                                            <a  href="{{ '/' . getAdminPrefix() . '/countries' }}"  class="">
                                                 <span class="nk-menu-icon"><em class="icon ni ni-flag"></em></span>
                                                 <span class="nk-menu-text">Countries</span>
                                             </a>
@@ -202,7 +202,7 @@
                                             </a>
                                         </li><!-- .nk-menu-item -->
                                         <li class="">
-                                            <a href="/admin/menu" class="">
+                                            <a href="{{ '/' . getAdminPrefix() . '/menu' }}" class="">
                                                 <span class="nk-menu-icon"><em class="icon ni ni-menu"></em></span>
                                                 <span class="nk-menu-text">Menu</span>
                                             </a>
