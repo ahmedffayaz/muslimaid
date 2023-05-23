@@ -93,7 +93,7 @@
                     </div>
                     <div class="card card-preview mb-4">
                         <div class="card-inner">
-                            <form action="{{ route('admin.reports.search_earnings') }}" class="form-validate is-alter earnings_form" method="POST">
+                            <form action="{{ route(getAdminPrefix() . '.reports.search_earnings') }}" class="form-validate is-alter earnings_form" method="POST">
                                 @csrf
                                 <div class="row g-4 justify-content-md-center">
 
@@ -182,7 +182,7 @@
                 var start_date = $("input[name=start_date]").val();
                 var end_date = $("input[name=end_date]").val();
                 $.ajax({
-                    url: '{{ route('admin.reports.search_earnings') }}',
+                    url: '{{ route(getAdminPrefix() . '.reports.search_earnings') }}',
                     method: "POST",
                     data: {
                         _token: _token,

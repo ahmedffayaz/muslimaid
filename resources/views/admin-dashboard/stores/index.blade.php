@@ -22,16 +22,16 @@
                                                 <em class="icon ni ni-upload-cloud"></em>
                                                 <span>Import Fake Stores</span>
                                             </button>
-                                            <form action="{{ route('admin.stores.import-fake-data') }}" id="fake-data-importer-form" method="post">@csrf</form>
+                                            <form action="{{ route(getAdminPrefix() . '.stores.import-fake-data') }}" id="fake-data-importer-form" method="post">@csrf</form>
                                         </li>
                                         <li class="nk-block-tools-opt">
-                                            <a href="{{route('admin.stores.create')}}" class="btn btn-primary btn-sm">
+                                            <a href="{{route(getAdminPrefix() . '.stores.create')}}" class="btn btn-primary btn-sm">
                                                 <em class="icon ni ni-plus"></em>
                                                 <span>Add Store</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light">
+                                            <a href="{{route(getAdminPrefix() . '.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light">
                                                 <em class="icon ni ni-download-cloud"></em>
                                                 <span>Export</span>
                                             </a>
@@ -44,7 +44,7 @@
                 </div><!-- .nk-block-head -->
                 <div class="card card-preview mb-4">
                     <div class="card-inner">
-                        <form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
+                        <form action="{{route(getAdminPrefix() . '.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
                             @csrf
                             <div class="row g-4 justify-content-md-center">
                                 <div class="col-lg-2 col-md-6">
@@ -143,7 +143,7 @@
             <span class="sr-only">Loading...</span>
             </div></div>`);
 
-                pageurl = "{{route('admin.stores.fetch')}}?page="
+                pageurl = "{{route(getAdminPrefix() . '.stores.fetch')}}?page="
                 var _token = $("input[name=_token]").val();
 
                 $.ajax({

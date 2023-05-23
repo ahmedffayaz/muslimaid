@@ -1,4 +1,4 @@
-<form action="{{ route('admin.stores.update_seo', $storeSeoRule) }}" class="gy-3 form-validate is-alter seo_form" method="POST">
+<form action="{{ route(getAdminPrefix() . '.stores.update_seo', $storeSeoRule) }}" class="gy-3 form-validate is-alter seo_form" method="POST">
     @csrf
     @method('PUT')
     <input type="hidden" name="seo_id" value="{{ $storeSeoRule->id }}">

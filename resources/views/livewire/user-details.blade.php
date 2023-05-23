@@ -70,7 +70,7 @@
                                             <div class="nk-block-head">
                                                 <h5 class="title">User Information</h5>
                                             </div>
-                                            <form action="{{ route('admin.users.update', $user) }}" enctype="multipart/form-data" class="gy-3 is-alter user-form"
+                                            <form action="{{ route(getAdminPrefix() . '.users.update', $user) }}" enctype="multipart/form-data" class="gy-3 is-alter user-form"
                                                 id="user-edit-form" method="POST">
                                                 @csrf
                                                 @method('PUT')
@@ -231,7 +231,7 @@
 
                                     <div class="tab-pane" id="tabItem8">
                                         <h5 class="title mb-4">Payment Info</h5>
-                                        <form action="{{ route('admin.users.payment_save') }}" class="gy-3 form-validate is-alter" id='payment_form' method="POST">
+                                        <form action="{{ route(getAdminPrefix() . '.users.payment_save') }}" class="gy-3 form-validate is-alter" id='payment_form' method="POST">
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ $user->id }}">
                                             <div class="row g-4">
@@ -320,7 +320,7 @@
                                     </div>
                                     <div class="tab-pane" id="tabItem9">
                                         <h5 class="title mb-4">Change Password</h5>
-                                        <form action="{{ route('admin.users.save_password', $user) }}" class="gy-3 form-validate is-alter" id='password_form'
+                                        <form action="{{ route(getAdminPrefix() . '.users.save_password', $user) }}" class="gy-3 form-validate is-alter" id='password_form'
                                             method="POST">
                                             @csrf
                                             @method('PUT')
@@ -417,7 +417,7 @@
         });
 
         function fetchCashbacks(page) {
-            pageurl = "{{ route('admin.users.cashbacks') }}?page=" + page
+            pageurl = "{{ route(getAdminPrefix() . '.users.cashbacks') }}?page=" + page
 
             var _token = $("input[name=_token]").val();
             var user = $('.user_id_checker').text();
@@ -450,7 +450,7 @@
         }
 
         function fetchClicks(page) {
-            pageurl = "{{ route('admin.users.clicks') }}?page=" + page
+            pageurl = "{{ route(getAdminPrefix() . '.users.clicks') }}?page=" + page
 
             var _token = $("input[name=_token]").val();
             var user = $('.user_id_checker').text();

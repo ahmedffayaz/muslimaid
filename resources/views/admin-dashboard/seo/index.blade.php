@@ -63,7 +63,7 @@
             // Show modal
             $('#show-modal').on('click', function (event) {
                 event.preventDefault();
-                let url = "{{ route('admin.seo.create') }}";
+                let url = "{{ route(getAdminPrefix() . '.seo.create') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -145,7 +145,7 @@
             $(document).on('click', '.edit-form',function (event) {
                 event.preventDefault();
                 let id = $(this).data('id');
-                let url = "{{ route('admin.seo.edit', ':id') }}";
+                let url = "{{ route(getAdminPrefix() . '.seo.edit', ':id') }}";
                 // Replace id
                 url = url.replace(':id', id);
                 $.ajax({
@@ -172,7 +172,7 @@
                     save_btn.attr('disabled', 'disabled').button('refresh');
 
                     let method = "POST";
-                    let url = "{{ route('admin.seo.store') }}";
+                    let url = "{{ route(getAdminPrefix() . '.seo.store') }}";
                     let id = $('#id').val()
                     let fd = new FormData(this);
                     let base_url = window.location.origin;
@@ -180,7 +180,7 @@
                         fd.set('url', append_url_val)
 
                     if(id){
-                        url = "{{ route('admin.seo.update', ':id') }}";
+                        url = "{{ route(getAdminPrefix() . '.seo.update', ':id') }}";
                         url = url.replace(':id', id);
                         fd.append('_method', 'PUT');
                     }

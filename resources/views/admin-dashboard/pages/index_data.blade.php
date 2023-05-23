@@ -12,7 +12,7 @@
 @foreach ($pages as $page)
     <div class="nk-tb-item">
         <div class="nk-tb-col">
-            <div class="tb-lead"><span><a href="{{ route('admin.pages.edit', $page) }}" class="a_link">{{ $page->title }}</a></span></div>
+            <div class="tb-lead"><span><a href="{{ route(getAdminPrefix() . '.pages.edit', $page) }}" class="a_link">{{ $page->title }}</a></span></div>
         </div>
         <div class="nk-tb-col">
             <span>{{ $page->slug }}</span>
@@ -49,14 +49,14 @@
                         <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <ul class="link-list-opt no-bdr">
-                                <li><a href="{{ route('admin.pages.edit', $page) }}"><em class="icon ni ni-edit"></em><span>Edit Page</span></a></li>
+                                <li><a href="{{ route(getAdminPrefix() . '.pages.edit', $page) }}"><em class="icon ni ni-edit"></em><span>Edit Page</span></a></li>
                                 @if ($page->type == 'general' && $page->status == 'inactive')
                                     <li>
                                         <a class='delete' form_id="delete-page-{{ $page->id }}" style="cursor: pointer">
                                             <em class="icon ni ni-trash-fill"></em>
                                             <span>Delete Page</span>
                                         </a>
-                                        <form action="{{ route('admin.pages.destroy', $page) }}" id="delete-page-{{ $page->id }}" method="POST" class="m-0">
+                                        <form action="{{ route(getAdminPrefix() . '.pages.destroy', $page) }}" id="delete-page-{{ $page->id }}" method="POST" class="m-0">
                                             @method('DELETE')
                                             @csrf
                                         </form>

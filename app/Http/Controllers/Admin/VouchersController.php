@@ -87,7 +87,7 @@ class VouchersController extends Controller
             }
 
             flash()->success('Voucher added successfully.');
-            return redirect()->route('admin.vouchers.index');
+            return redirect()->route(getAdminPrefix() . '.vouchers.index');
         } catch (Exception $e) {
             $message = 'Something went wrong! Unable to add the voucher.';
 
@@ -98,7 +98,7 @@ class VouchersController extends Controller
                 );
             }
             flash()->error($message);
-            return redirect()->route('admin.vouchers.index');
+            return redirect()->route(getAdminPrefix() . '.vouchers.index');
         }
     }
 
@@ -160,7 +160,7 @@ class VouchersController extends Controller
                 );
             }
             flash()->success('Voucher updated successfully.');
-            return redirect()->route('admin.vouchers.index');
+            return redirect()->route(getAdminPrefix() . '.vouchers.index');
         } catch (Exception $e) {
             $message = 'Something went wrong! Unable to update the voucher.';
 
@@ -172,7 +172,7 @@ class VouchersController extends Controller
             }
 
             flash()->error($message);
-            return redirect()->route('admin.vouchers.index');
+            return redirect()->route(getAdminPrefix() . '.vouchers.index');
         }
     }
 
@@ -242,7 +242,7 @@ class VouchersController extends Controller
             return Response::download($filename, 'vouchers.csv', $headers);
         } catch (\Throwable $th) {
             flash()->error('Error while exporting the vouchers');
-            return redirect()->route('admin.stores.index');
+            return redirect()->route(getAdminPrefix() . '.stores.index');
         }
     }
 

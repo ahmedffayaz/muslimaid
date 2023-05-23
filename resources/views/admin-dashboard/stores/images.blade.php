@@ -60,7 +60,7 @@
                                         <div class="dropdown-menu dropdown-menu-right" style="">
                                             <ul class="link-list-plain no-bdr">
                                                 <li><a href="{{asset($item->image)}}" target="_blank"><em class="icon ni ni-eye"></em><span>View</span></a></li>
-                                                <li><a href="{{route('admin.stores.images.delete',$item)}}"><em class="icon ni ni-trash"></em><span>Delete</span></a></li>
+                                                <li><a href="{{route(getAdminPrefix() . '.stores.images.delete',$item)}}"><em class="icon ni ni-trash"></em><span>Delete</span></a></li>
                                             </ul>
                                         </div>
                                     </div>
@@ -91,7 +91,7 @@
                 </div>
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
-        <form action="{{route('admin.stores.images.upload',$store)}}" class="form-validate" method="POST" enctype="multipart/form-data">
+        <form action="{{route(getAdminPrefix() . '.stores.images.upload',$store)}}" class="form-validate" method="POST" enctype="multipart/form-data">
 
             <div class="modal-body modal-body-md">
                     @csrf

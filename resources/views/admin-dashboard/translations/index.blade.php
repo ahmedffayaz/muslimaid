@@ -17,8 +17,8 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li><a href="{{route('admin.translations.create')}}"  class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-plus"></em><span>Add Translation</span></a></li>
-                                        {{-- <li><a href="{{route('admin.settings.export', $settings)}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
+                                        <li><a href="{{route(getAdminPrefix() . '.translations.create')}}"  class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-plus"></em><span>Add Translation</span></a></li>
+                                        {{-- <li><a href="{{route(getAdminPrefix() . '.settings.export', $settings)}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
 
                                     </ul>
                                 </div>
@@ -36,7 +36,7 @@
                                 </a>
                                 <div class="accordion-body collapse" id="accordion-item-1-1" data-parent="#accordion-1">
                                     <div class="accordion-inner">
-                                        <div><form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
+                                        <div><form action="{{route(getAdminPrefix() . '.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
                                             @csrf
                                             <div class="row g-4">
                                                 <div class="col-lg-4">
@@ -106,7 +106,7 @@
                     <em class="icon ni ni-cross"></em>
                 </a>
             </div>
-            <form action="{{route('admin.languages.store')}}" class="form-validate is-alter" method="POST">
+            <form action="{{route(getAdminPrefix() . '.languages.store')}}" class="form-validate is-alter" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
@@ -147,7 +147,7 @@
             <span class="sr-only">Loading...</span>
             </div></div>`);
 
-             pageurl = "{{route('admin.translations.fetch')}}?page="
+             pageurl = "{{route(getAdminPrefix() . '.translations.fetch')}}?page="
              var _token = $("input[name=_token]").val();
             $.ajax({
 

@@ -40,7 +40,7 @@
                                         <div class="nk-tb-item">
                                             <div class="nk-tb-col">
                                                 <div class="tb-lead"><span><a class="edit-charity"
-                                                            href="{{ route('admin.charities.charity_type_edit', $charity) }}"
+                                                            href="{{ route(getAdminPrefix() . '.charities.charity_type_edit', $charity) }}"
                                                             class="a_link">{{ $charity->title }}</a></span></div>
                                             </div>
                                             <div class="nk-tb-col">
@@ -59,7 +59,7 @@
                                                             <div class="dropdown-menu dropdown-menu-right">
                                                                 <ul class="link-list-opt no-bdr">
                                                                     <li><a class="edit-charity"
-                                                                            href="{{ route('admin.charities.charity_type_edit', $charity) }}"><em
+                                                                            href="{{ route(getAdminPrefix() . '.charities.charity_type_edit', $charity) }}"><em
                                                                                 class="icon ni ni-edit"></em><span>Edit
                                                                             </span></a></li>
                                                                     <li><a class='delete'
@@ -67,7 +67,7 @@
                                                                             style="cursor: pointer"> <em
                                                                                 class="icon ni ni-trash-fill"></em><span>Delete</span></a>
                                                                         <form
-                                                                            action="{{ route('admin.charity_type_delete', $charity->id) }}"
+                                                                            action="{{ route(getAdminPrefix() . '.charity_type_delete', $charity->id) }}"
                                                                             id="delete-{{ $charity->id }}" method=""
                                                                             class="m-0">
                                                                             @csrf

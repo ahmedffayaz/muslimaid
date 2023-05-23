@@ -17,7 +17,7 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li><a href="{{route('admin.networks.categories.export', $network)}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
+                                        <li><a href="{{route(getAdminPrefix() . '.networks.categories.export', $network)}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
 
                                     </ul>
                                 </div>
@@ -106,7 +106,7 @@
         
          if(route=='index'){
             
-             pageurl = "{{route('admin.importedcategories.fetch')}}?page="
+             pageurl = "{{route(getAdminPrefix() . '.importedcategories.fetch')}}?page="
              var _token = $("input[name=_token]").val();
              var network_id = "{{$network->id}}"
                 $.ajax({

@@ -28,11 +28,11 @@
                                             </li>
                                             @endif
                                             <li>
-                                                <a href="{{route('admin.networks.index')}}" class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light">
+                                                <a href="{{route(getAdminPrefix() . '.networks.index')}}" class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light">
                                                     <span>Back</span>
                                                 </a>
                                             </li>
-                                            {{-- <li><a href="{{route('admin.users.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
+                                            {{-- <li><a href="{{route(getAdminPrefix() . '.users.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
                                         </ul>
                                     </div>
                                 </div><!-- .toggle-wrap -->
@@ -63,9 +63,9 @@
                                                 </div>
                                                 <div class="col-md-2">
                                                     <span class="float-right">
-                                                        <a href="{{route('admin.importedcategories.edit',$importedcategory)}}" category-id='{{$importedcategory->id}}' class='category-edit'><em class="icon ni ni-edit text-primary"></em></a>
+                                                        <a href="{{route(getAdminPrefix() . '.importedcategories.edit',$importedcategory)}}" category-id='{{$importedcategory->id}}' class='category-edit'><em class="icon ni ni-edit text-primary"></em></a>
                                                         <a onclick="$('#delete-form-{{$importedcategory->id}}').submit();" style="cursor: pointer"> <em class="icon ni ni-trash-fill text-danger"></em></a>
-                                                        <form action="{{ route('admin.importedcategories.destroy', $importedcategory) }}" id="delete-form-{{$importedcategory->id}}" method="POST" class="m-0">
+                                                        <form action="{{ route(getAdminPrefix() . '.importedcategories.destroy', $importedcategory) }}" id="delete-form-{{$importedcategory->id}}" method="POST" class="m-0">
                                                             @method('DELETE')
                                                             @csrf
 
@@ -119,7 +119,7 @@
                     <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-upload bg-warning"></em>
                     <h4 class="nk-modal-title">Import Categories</h4>
                     <div class="nk-modal-action">
-                        <form action="{{ route('admin.networks.categories.import', $network->id) }}" method="post" id="categories-import-form" enctype="multipart/form-data">
+                        <form action="{{ route(getAdminPrefix() . '.networks.categories.import', $network->id) }}" method="post" id="categories-import-form" enctype="multipart/form-data">
                             @csrf()
                             <div class="form-group">
                                 <div class="form-control-wrap" style="width: 70%; margin: 0 auto; text-align: left;">

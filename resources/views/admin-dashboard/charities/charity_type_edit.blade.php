@@ -1,4 +1,4 @@
-<form action="{{ route('admin.charitiestype-update', $charityType->id) }}" class="" method="POST">
+<form action="{{ route(getAdminPrefix() . '.charitiestype-update', $charityType->id) }}" class="" method="POST">
     @method('PUT')
     @csrf
     <div class="row g-4">

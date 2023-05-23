@@ -71,12 +71,12 @@ class TranslationController extends Controller
         $data = LanguageLine::where('group', $request->group)->where('key', $request->key)->first();
         if (!empty($data)) {
            flash()->error('group and key already exist');
-           return redirect()->route('admin.translations.index');
+           return redirect()->route(getAdminPrefix() . '.translations.index');
         }
         
         LanguageLine::create($request->all());
         flash()->success('translation added successfully');
-        return redirect()->route('admin.translations.index');
+        return redirect()->route(getAdminPrefix() . '.translations.index');
         
     }
 
@@ -120,7 +120,7 @@ class TranslationController extends Controller
         $translation = LanguageLine::find($id);
         $translation->update($request->all());
         flash()->success('translation updated successfully');
-        return redirect()->route('admin.translations.index');
+        return redirect()->route(getAdminPrefix() . '.translations.index');
     }
 
     /**

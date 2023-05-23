@@ -69,13 +69,13 @@ class LanguageController extends Controller
 
             flash()->success('language added successfully');
 
-            return redirect()->route('admin.languages.index');
+            return redirect()->route(getAdminPrefix() . '.languages.index');
 
         } catch (\Exception $e) {
 
             flash()->error('Something went wrong!');
 
-            return redirect()->route('admin.languages.index');
+            return redirect()->route(getAdminPrefix() . '.languages.index');
 
         }
     }
@@ -98,12 +98,12 @@ class LanguageController extends Controller
             $language->delete();
 
             flash()->success('language delete successfully');
-            return redirect()->route('admin.languages.index');
+            return redirect()->route(getAdminPrefix() . '.languages.index');
 
         } catch (\Exception $e) {
 
             flash()->error('Something went wrong!');
-            return redirect()->route('admin.languages.index');
+            return redirect()->route(getAdminPrefix() . '.languages.index');
         }
     }
     function fetch(Request $request)

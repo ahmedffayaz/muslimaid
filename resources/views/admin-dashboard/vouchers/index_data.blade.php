@@ -13,7 +13,7 @@
         <div class="nk-tb-item" @if ($voucher->promotion_end_date < \Carbon\Carbon::now()) style="background-color:#f1f1f1" @endif>
 
             <div class="nk-tb-col ">
-                <a href="{{ route('admin.stores.show_store') }}?slug={{ $voucher->store->slug }}" class="a_link">
+                <a href="{{ route(getAdminPrefix() . '.stores.show_store') }}?slug={{ $voucher->store->slug }}" class="a_link">
                     <span><b>{{ $voucher->store->id ?? '' }} - {{ $voucher->store->name ?? '' }}</b></span>
                     <br>
                     <span>{{ $voucher->store->network->name ?? '' }}</span>
@@ -52,7 +52,7 @@
                             <div class="dropdown-menu dropdown-menu-right">
                                 <ul class="link-list-opt no-bdr">
                                     <li>
-                                        <a class="edit-voucher" href="{{ route('admin.vouchers.edit', $voucher) }}">
+                                        <a class="edit-voucher" href="{{ route(getAdminPrefix() . '.vouchers.edit', $voucher) }}">
                                             <em class="icon ni ni-edit"></em>
                                             <span>Edit Voucher</span>
                                         </a>
@@ -62,7 +62,7 @@
                                             <em class="icon ni ni-trash-fill"></em>
                                             <span>Delete Voucher</span>
                                         </a>
-                                        <form action="{{ route('admin.vouchers.destroy', $voucher) }}" id="delete-voucher-{{ $voucher->id }}" method="POST" class="m-0">
+                                        <form action="{{ route(getAdminPrefix() . '.vouchers.destroy', $voucher) }}" id="delete-voucher-{{ $voucher->id }}" method="POST" class="m-0">
                                             @method('DELETE')
                                             @csrf
                                         </form>

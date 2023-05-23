@@ -13,7 +13,7 @@
         <div class="nk-tb-item">
 
             <div class="nk-tb-col" style="width: 30%">
-                <a href="{{ route('admin.users.show_user') }}?user_id={{ $user->id }}">
+                <a href="{{ route(getAdminPrefix() . '.users.show_user') }}?user_id={{ $user->id }}">
                     <div class="user-card">
                         <div class="user-avatar {{ getRandomColorClass() }}">
                             <span>
@@ -59,10 +59,10 @@
                             <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <ul class="link-list-opt no-bdr">
-                                    <li><a href="{{ route('admin.users.show_user') }}?user_id={{ $user->id }}"><em class="icon ni ni-edit"></em><span>Edit
+                                    <li><a href="{{ route(getAdminPrefix() . '.users.show_user') }}?user_id={{ $user->id }}"><em class="icon ni ni-edit"></em><span>Edit
                                                 user</span></a></li>
                                     <li>
-                                        <form action="{{ route('admin.users.destroy', $user) }}" id="delete-form-{{ $user->id }}" method="POST">
+                                        <form action="{{ route(getAdminPrefix() . '.users.destroy', $user) }}" id="delete-form-{{ $user->id }}" method="POST">
                                             @method('DELETE')
                                             @csrf
                                         </form>

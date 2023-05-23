@@ -1,4 +1,4 @@
-<form action="{{ route('admin.vouchers.update', $voucher) }}" class="gy-3 form-validate is-alter voucher_form " id="model_edit" method="POST">
+<form action="{{ route(getAdminPrefix() . '.vouchers.update', $voucher) }}" class="gy-3 form-validate is-alter voucher_form " id="model_edit" method="POST">
     @csrf
     @method('PUT')
     <div class="row g-4">

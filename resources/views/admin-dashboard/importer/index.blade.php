@@ -24,7 +24,7 @@
                                 <div class="card-head">
                                     <h5 class="card-title">Importer</h5>
                                 </div>
-                                <form action="{{route('admin.networks.store')}}" class="gy-3" method="POST">
+                                <form action="{{route(getAdminPrefix() . '.networks.store')}}" class="gy-3" method="POST">
                                     @csrf
                                     <div class="row g-3 align-center">
                                         <div class="col-lg-5">
@@ -78,7 +78,7 @@
                                     <div class="row g-3">
                                         <div class="col-lg-7 offset-lg-5">
                                             <div class="form-group mt-2">
-                                                <a href="{{route('admin.importer.import')}}" class="btn btn-lg btn-primary">Run Importer</a>
+                                                <a href="{{route(getAdminPrefix() . '.importer.import')}}" class="btn btn-lg btn-primary">Run Importer</a>
                                             </div>
                                         </div>
                                     </div>

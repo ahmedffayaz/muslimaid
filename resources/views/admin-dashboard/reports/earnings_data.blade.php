@@ -27,7 +27,7 @@
                     <div class="nk-tb-col">
                         @if(isset($com->store))
                             @if ($com->store_id)
-                                <div class="icon-text"><a href="{{route('admin.stores.show_store')}}?slug={{$com->store->slug}}">
+                                <div class="icon-text"><a href="{{route(getAdminPrefix() . '.stores.show_store')}}?slug={{$com->store->slug}}">
                                     <span class="tb-lead"> <em class="text-primary icon ni ni-cart-fill mr-2"></em>{{$com->store->name}}</span></a>
                                 </div>
                             @else
@@ -142,7 +142,7 @@ $(document).ready(function(){
             <span class="sr-only">Loading...</span>
             </div></div>`);
 
-        var pageurl = "{{route('admin.reports.fetch_earnings')}}?page="
+        var pageurl = "{{route(getAdminPrefix() . '.reports.fetch_earnings')}}?page="
         var _token = $("input[name=_token]").val();
         $.ajax({
             url:pageurl+page,

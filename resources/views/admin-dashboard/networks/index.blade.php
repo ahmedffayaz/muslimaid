@@ -52,7 +52,7 @@
                                         <div class="actions">
                                             <span class="tooltip-importer"
                                                 @if (count($queue)) data-toggle='tooltip' data-placement='top' title='Importer is running on background please wait' @endif>
-                                                <button href="{{ route('admin.importer.importer_setting_form', $network->id) }}" class="btn btn-success importer_btn"
+                                                <button href="{{ route(getAdminPrefix() . '.importer.importer_setting_form', $network->id) }}" class="btn btn-success importer_btn"
                                                     @if (count($queue)) style="pointer-events:none;opacity: .6;" @endif>
                                                     <em class="icon ni ni-download"></em>
                                                     <span>Importer</span>
@@ -68,7 +68,7 @@
                                                             <span>Settings</span>
                                                         </a>
 
-                                                        <a href="{{ route('admin.networks.categories', $network) }}">
+                                                        <a href="{{ route(getAdminPrefix() . '.networks.categories', $network) }}">
                                                             <em class="icon ni ni-eye"></em>
                                                             <span>Categories</span>
                                                         </a>
@@ -109,7 +109,7 @@
                         <h4 class="nk-modal-title">Run Importer</h4>
                         <div class="nk-modal-text" id="setting_form"></div>
                         <div class="nk-modal-action">
-                            <a href="{{ route('admin.importer.import') }}" class="btn btn-sm btn-mw btn-primary run-importer">Run Importer</a>
+                            <a href="{{ route(getAdminPrefix() . '.importer.import') }}" class="btn btn-sm btn-mw btn-primary run-importer">Run Importer</a>
                             <a href="" class="btn btn-sm btn-mw btn-primary save_importer">Save for later</a>
                         </div>
                         <div class="nk-modal-action">
@@ -173,7 +173,7 @@
                 var formElement = document.querySelector("#settings_form");
 
                 $.ajax({
-                    url: '{{ route('admin.importer.import') }}',
+                    url: '{{ route(getAdminPrefix() . '.importer.import') }}',
                     method: "POST",
                     data: new FormData(formElement),
                     processData: false,
@@ -198,7 +198,7 @@
                 var networkName = $(this).attr('network-name');
                 var _token = $("input[name=_token]").val();
                 $.ajax({
-                    url: '{{ route('admin.networks.settings') }}',
+                    url: '{{ route(getAdminPrefix() . '.networks.settings') }}',
                     method: "POST",
                     data: {
                         _token: _token,
@@ -222,7 +222,7 @@
                 fd = new FormData(formElement);
 
                 $.ajax({
-                    url: '{{ route('admin.importer.save_settings') }}',
+                    url: '{{ route(getAdminPrefix() . '.importer.save_settings') }}',
                     method: "POST",
                     data: fd,
                     processData: false,

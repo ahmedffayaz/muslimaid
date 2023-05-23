@@ -18,7 +18,7 @@
                                         data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
-                                            <li class="nk-block-tools-opt"><a href="{{ route('admin.reviews.create') }}"
+                                            <li class="nk-block-tools-opt"><a href="{{ route(getAdminPrefix() . '.reviews.create') }}"
                                                     class="btn btn-primary btn-sm"><em
                                                         class="icon ni ni-plus"></em><span>Add Review</span></a></li>
                                         </ul>
@@ -29,7 +29,7 @@
                     </div><!-- .nk-block-head -->
                     <div class="card card-preview mb-4">
                         <div class="card-inner">
-                            <form action="{{ route('admin.stores.search_stores') }}"
+                            <form action="{{ route(getAdminPrefix() . '.stores.search_stores') }}"
                                 class="form-validate is-alter search_form" method="POST">
                                 @csrf
                                 <div class="row g-4">
@@ -134,7 +134,7 @@
                         <span class="sr-only">Loading...</span>
                     </div></div>`);
 
-                    pageurl = "{{ route('admin.reviews.fetch') }}?page="
+                    pageurl = "{{ route(getAdminPrefix() . '.reviews.fetch') }}?page="
                     var _token = $("input[name=_token]").val();
                     $.ajax({
                         url: pageurl + page,
@@ -161,7 +161,7 @@
                     var store_id = $("select[name=store_id]").val();
                     var status = $("select[name=status]").val();
                     $.ajax({
-                        url: '{{ route('admin.reviews.search_reviews') }}?page=' + page,
+                        url: '{{ route(getAdminPrefix() . '.reviews.search_reviews') }}?page=' + page,
                         method: "POST",
                         data: {
                             _token: _token,
@@ -195,7 +195,7 @@
 
                 var status = $("select[name=status]").val();
                 $.ajax({
-                    url: '{{ route('admin.reviews.search_reviews') }}',
+                    url: '{{ route(getAdminPrefix() . '.reviews.search_reviews') }}',
                     method: "POST",
                     data: {
                         _token: _token,

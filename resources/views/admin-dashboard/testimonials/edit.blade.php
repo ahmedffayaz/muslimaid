@@ -28,7 +28,7 @@
                                     <div class="card-head">
                                         <h5 class="card-title">Testimonial Info</h5>
                                     </div>
-                                    <form action="{{ route('admin.testimonials.update', $testimonial) }}" class="form-validate is-alter" method="POST"
+                                    <form action="{{ route(getAdminPrefix() . '.testimonials.update', $testimonial) }}" class="form-validate is-alter" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')

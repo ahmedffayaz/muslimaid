@@ -27,7 +27,7 @@
                                     <div class="card-head">
                                         <h5 class="card-title">Charity Info</h5>
                                     </div>
-                                    <form action="{{ route('admin.charities.store') }}" class="gy-3 form-validate is-alter charity-form" method="POST"
+                                    <form action="{{ route(getAdminPrefix() . '.charities.store') }}" class="gy-3 form-validate is-alter charity-form" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="row g-4">

@@ -94,13 +94,13 @@
                             <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <ul class="link-list-opt no-bdr">
-                                    <li><a href="{{ route('admin.commissions.edit', $commission) }}" cashback-id='{{ $commission->id }}' class='cashback-edit'><em
+                                    <li><a href="{{ route(getAdminPrefix() . '.commissions.edit', $commission) }}" cashback-id='{{ $commission->id }}' class='cashback-edit'><em
                                                 class="icon ni ni-edit"></em><span>Edit</span></a></li>
-                                    <li><a href="{{ route('admin.commissions.history', $commission) }}" class='cashback-history'><em class="icon ni ni-eye"></em><span>Status
+                                    <li><a href="{{ route(getAdminPrefix() . '.commissions.history', $commission) }}" class='cashback-history'><em class="icon ni ni-eye"></em><span>Status
                                                 History</span></a></li>
                                     <li><a onclick="$('#delete-commission-{{ $commission->id }}').submit();" style="cursor: pointer"> <em
                                                 class="icon ni ni-trash-fill"></em><span>Delete</span></a>
-                                        <form action="{{ route('admin.commissions.destroy', $commission) }}" id="delete-commission-{{ $commission->id }}" method="POST"
+                                        <form action="{{ route(getAdminPrefix() . '.commissions.destroy', $commission) }}" id="delete-commission-{{ $commission->id }}" method="POST"
                                             class="m-0">
                                             @method('DELETE')
                                             @csrf

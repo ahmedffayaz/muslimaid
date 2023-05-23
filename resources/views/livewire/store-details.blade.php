@@ -71,7 +71,7 @@
                                             <div class="nk-block-head">
                                                 <h5>Store Information</h5>
                                             </div><!-- .nk-block-head -->
-                                            <form action="{{ route('admin.stores.update', $store) }}" id="store_form" class="gy-3 form-validate is-alter" method="POST"
+                                            <form action="{{ route(getAdminPrefix() . '.stores.update', $store) }}" id="store_form" class="gy-3 form-validate is-alter" method="POST"
                                                 enctype="multipart/form-data">
                                                 @csrf
                                                 @method('PUT')
@@ -248,7 +248,7 @@
                                     <div class="tab-pane" id="tabItem5">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
-                                                <form action="{{ route('admin.stores.override_categories', $store) }}" id="override-categories-form"
+                                                <form action="{{ route(getAdminPrefix() . '.stores.override_categories', $store) }}" id="override-categories-form"
                                                     class="gy-3 form-validate is-alter" method="POST" enctype="multipart/form-data">
                                                     @csrf
                                                     @method('PUT')
@@ -267,7 +267,7 @@
                                                     </div>
                                                 </form>
                                                 <h5 class="mt-3">Categories</h5>
-                                                <form action="{{ route('admin.stores.categories.update') }}" id="store_cat_form" class="gy-3 form-validate is-alter"
+                                                <form action="{{ route(getAdminPrefix() . '.stores.categories.update') }}" id="store_cat_form" class="gy-3 form-validate is-alter"
                                                     method="POST" enctype="multipart/form-data">
                                                     @csrf
                                                     @method('POST')
@@ -297,7 +297,7 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="tabItem6">
-                                        <form action="{{ route('admin.stores.override_cashback', $store) }}" id="override-cashback-form"
+                                        <form action="{{ route(getAdminPrefix() . '.stores.override_cashback', $store) }}" id="override-cashback-form"
                                             class="gy-3 form-validate is-alter" method="POST" enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
@@ -358,7 +358,7 @@
                 </div>
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
-            <form action="{{ route('admin.stores.images.upload', $store) }}" class="form-validate file-upload" method="POST" enctype="multipart/form-data">
+            <form action="{{ route(getAdminPrefix() . '.stores.images.upload', $store) }}" class="form-validate file-upload" method="POST" enctype="multipart/form-data">
                 <div class="modal-body modal-body-md">
                     @csrf
                     <div class="row gy-4">
@@ -434,7 +434,7 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="add-voucher-form" class=" p-4">
-                <form action="{{ route('admin.vouchers.store') }}" class="gy-3 form-validate is-alter add_voucher_form" id="add_voucher_validation" method="POST">
+                <form action="{{ route(getAdminPrefix() . '.vouchers.store') }}" class="gy-3 form-validate is-alter add_voucher_form" id="add_voucher_validation" method="POST">
                     @csrf
                     <input type="hidden" name="store_id" value="{{ $store->id }}">
                     <div class="row g-4">
@@ -597,7 +597,7 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="cashback" class=" p-4">
-                <form action="{{ route('admin.stores.cashbacks.store') }}" class="gy-3 form-validate is-alter cashback_form_add" method="POST">
+                <form action="{{ route(getAdminPrefix() . '.stores.cashbacks.store') }}" class="gy-3 form-validate is-alter cashback_form_add" method="POST">
                     @csrf
                     <input type="hidden" name="store_id" value="{{ $store->id }}">
                     <div class="row g-4">
@@ -725,7 +725,7 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="" class=" p-4">
-                <form action="{{ route('admin.reviews.store') }}" class="gy-3 form-validate is-alter review_form_add" method="POST">
+                <form action="{{ route(getAdminPrefix() . '.reviews.store') }}" class="gy-3 form-validate is-alter review_form_add" method="POST">
                     @csrf
                     <input type="hidden" name="store_id" value="{{ $store->id }}">
                     <div class="row g-4">
@@ -796,7 +796,7 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="add-seorule-form" class=" p-4">
-                <form action="{{ route('admin.stores.save_seo_rule') }}" class="gy-3 form-validate is-alter add_seorule_form" id="theForm" method="POST">
+                <form action="{{ route(getAdminPrefix() . '.stores.save_seo_rule') }}" class="gy-3 form-validate is-alter add_seorule_form" id="theForm" method="POST">
                     @csrf
                     <input type="hidden" name="store_id" value="{{ $store->id }}">
                     <div class="row g-4">
@@ -864,7 +864,7 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="add-address-form" class=" p-4">
-                <form action="{{ route('admin.stores.save_address') }}" class="gy-3 form-validate is-alter add_address_form" method="POST">
+                <form action="{{ route(getAdminPrefix() . '.stores.save_address') }}" class="gy-3 form-validate is-alter add_address_form" method="POST">
                     @csrf
                     <input type="hidden" name="store_id" value="{{ $store->id }}">
                     <div class="row g-4">
@@ -955,7 +955,7 @@
 @push('scripts')
     <script>
         function fetchVouchers() {
-            pageurl = "{{ route('admin.stores.vouchers') }}"
+            pageurl = "{{ route(getAdminPrefix() . '.stores.vouchers') }}"
             var _token = $("input[name=_token]").val();
             var store = $('.store_id_checker').text();
             $.ajax({
@@ -972,7 +972,7 @@
         }
 
         function fetchCashbacks() {
-            pageurl = "{{ route('admin.stores.cashbacks') }}"
+            pageurl = "{{ route(getAdminPrefix() . '.stores.cashbacks') }}"
             var _token = $("input[name=_token]").val();
             var store = $('.store_id_checker').text();
             $.ajax({
@@ -989,7 +989,7 @@
         }
 
         function fetchReviews() {
-            pageurl = "{{ route('admin.stores.reviews') }}"
+            pageurl = "{{ route(getAdminPrefix() . '.stores.reviews') }}"
             var _token = $("input[name=_token]").val();
             var store = $('.store_id_checker').text();
             $.ajax({
@@ -1006,7 +1006,7 @@
         }
 
         function fetchImages() {
-            pageurl = "{{ route('admin.stores.fetchimages') }}"
+            pageurl = "{{ route(getAdminPrefix() . '.stores.fetchimages') }}"
             var _token = $("input[name=_token]").val();
             var store = $('.store_id_checker').text();
             $.ajax({
@@ -1023,7 +1023,7 @@
         }
 
         function fetchAddress() {
-            pageurl = "{{ route('admin.stores.storeaddress') }}"
+            pageurl = "{{ route(getAdminPrefix() . '.stores.storeaddress') }}"
             var _token = $("input[name=_token]").val();
             var store = $('.store_id_checker').text();
             $.ajax({
@@ -1040,7 +1040,7 @@
         }
 
         function fetchSeoRules() {
-            pageurl = "{{ route('admin.stores.fetchseorules') }}"
+            pageurl = "{{ route(getAdminPrefix() . '.stores.fetchseorules') }}"
             var _token = $("input[name=_token]").val();
             var store = $('.store_id_checker').text();
             $.ajax({
@@ -1613,7 +1613,7 @@
                 event.preventDefault();
                 let storeId = "{{ encrypt($store->id) }}";
                 $.ajax({
-                    url: "{{ route('admin.stores.cashbacks.create') }}",
+                    url: "{{ route(getAdminPrefix() . '.stores.cashbacks.create') }}",
                     type: "GET",
                     data: {
                         storeId: storeId

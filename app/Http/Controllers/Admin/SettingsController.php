@@ -59,7 +59,7 @@ class SettingsController extends Controller
         $inputs['type'] = str_replace([' ', '-', '.'], '_', $request->input('type'));
         $setting = SiteSetting::create($inputs);
         flash()->success('setting saved successfully');
-        return redirect()->route('admin.settings.index');
+        return redirect()->route(getAdminPrefix() . '.settings.index');
     }
 
     /**
@@ -86,7 +86,7 @@ class SettingsController extends Controller
         $inputs['type'] = str_replace([' ', '-', '.'], '_', $request->input('type'));
         $setting->update($inputs);
         flash()->success('setting updated successfully');
-        return redirect()->route('admin.settings.index');
+        return redirect()->route(getAdminPrefix() . '.settings.index');
     }
 
     /**
@@ -99,13 +99,13 @@ class SettingsController extends Controller
     {
         if ($setting->default) {
             flash()->error('default settings can not be deleted');
-            return redirect()->route('admin.settings.index');
+            return redirect()->route(getAdminPrefix() . '.settings.index');
         }
 
         $setting->delete();
 
         flash()->success('setting deleted successfully');
-        return redirect()->route('admin.settings.index');
+        return redirect()->route(getAdminPrefix() . '.settings.index');
     }
 
     function fetch(Request $request)

@@ -26,13 +26,13 @@
     
    
     <div class="nk-tb-col">
-        <span><a href="{{route('admin.stores.show_store')}}?slug={{$store->slug}}"><div class="tb-lead">{{$store->id}}
+        <span><a href="{{route(getAdminPrefix() . '.stores.show_store')}}?slug={{$store->slug}}"><div class="tb-lead">{{$store->id}}
             <img width="40px" class="float-right" alt="{{ $store->name }}" src="{{ $store->logo->first() && !$store->logo->first()->is_fake ? asset($store->logo->first()->image) : asset('frontend/images/' . ($store->logo->first() ? 'logos/'.$store->logo->first()->image : 'products/product-16.jpg')) }}">
         </div></a></span><br>
         
     </div>
     <div class="nk-tb-col">
-        <span><a href="{{route('admin.stores.show_store')}}?slug={{$store->slug}}"><div class="tb-lead">{{$store->name}} </div></a></span>
+        <span><a href="{{route(getAdminPrefix() . '.stores.show_store')}}?slug={{$store->slug}}"><div class="tb-lead">{{$store->name}} </div></a></span>
     <span>{{$store->network->name}}</span>
     </div>
    
@@ -82,11 +82,11 @@
                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="link-list-opt no-bdr">
-                            <li><a href="{{route('admin.stores.show_store')}}?slug={{$store->slug}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li>
-                            {{-- <li><a href="{{route('admin.stores.images', $store)}}"><em class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
+                            <li><a href="{{route(getAdminPrefix() . '.stores.show_store')}}?slug={{$store->slug}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li>
+                            {{-- <li><a href="{{route(getAdminPrefix() . '.stores.images', $store)}}"><em class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
                             <li><a  onclick="$('#delete-store-{{$store->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Store</span></a>
                                                     
-                            <form action="{{ route('admin.stores.destroy', $store) }}" id="delete-store-{{$store->id}}" method="POST" class="m-0">
+                            <form action="{{ route(getAdminPrefix() . '.stores.destroy', $store) }}" id="delete-store-{{$store->id}}" method="POST" class="m-0">
                                 @method('DELETE')
                                 @csrf
                                 

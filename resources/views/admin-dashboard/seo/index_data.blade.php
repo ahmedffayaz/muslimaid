@@ -43,7 +43,7 @@
                                         <em class="icon ni ni-trash-fill"></em>
                                         <span>Delete</span>
                                     </a>
-                                    <form action="{{ route('admin.seo.destroy', $seo) }}" id="delete-blog-{{$seo->id}}" method="POST" class="m-0">
+                                    <form action="{{ route(getAdminPrefix() . '.seo.destroy', $seo) }}" id="delete-blog-{{$seo->id}}" method="POST" class="m-0">
                                         @method('DELETE')
                                         @csrf
                                     </form>

@@ -53,7 +53,7 @@ class ImportedCategoryController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return redirect()->route('admin.importedcategories.create')
+            return redirect()->route(getAdminPrefix() . '.importedcategories.create')
                         ->withErrors($validator)
                         ->withInput();
         }
@@ -63,11 +63,11 @@ class ImportedCategoryController extends Controller
                 'name' => $request->input('name'),
             ]);
 
-            return redirect()->route('admin.importedcategories.index');
+            return redirect()->route(getAdminPrefix() . '.importedcategories.index');
 
 
         } catch (Exception $exception) {
-            return redirect()->route('admin.importedcategories.index');
+            return redirect()->route(getAdminPrefix() . '.importedcategories.index');
         }
     }
 
@@ -108,10 +108,10 @@ class ImportedCategoryController extends Controller
                     ]);
              }
              flash()->success('Category updated');
-            return redirect()->route('admin.networks.categories',$importedcategory->network);
+            return redirect()->route(getAdminPrefix() . '.networks.categories',$importedcategory->network);
         } catch (\Throwable $th) {
             flash()->error($th->getMessage().'Something went wrong!');
-            return redirect()->route('admin.networks.categories',$importedcategory->network);
+            return redirect()->route(getAdminPrefix() . '.networks.categories',$importedcategory->network);
         }
     }
 
@@ -125,7 +125,7 @@ class ImportedCategoryController extends Controller
     {
         $importedcategory->delete();
         flash()->success('category deleted successfully');
-        return redirect()->route('admin.networks.categories',$importedcategory->network);
+        return redirect()->route(getAdminPrefix() . '.networks.categories',$importedcategory->network);
 
     }
     function fetch(Request $request)

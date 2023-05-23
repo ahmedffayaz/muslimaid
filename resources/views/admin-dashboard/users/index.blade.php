@@ -17,8 +17,8 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li><a href="{{route('admin.users.create')}}" class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-plus"></em><span>Add user</span></a></li>
-                                       <li><a href="{{route('admin.users.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
+                                        <li><a href="{{route(getAdminPrefix() . '.users.create')}}" class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-plus"></em><span>Add user</span></a></li>
+                                       <li><a href="{{route(getAdminPrefix() . '.users.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
                                     </ul>
                                 </div>
                             </div><!-- .toggle-wrap -->
@@ -28,7 +28,7 @@
                 @include('flash::message')
                 <div class="card card-preview mb-4">
                     <div class="card-inner">
-                        <form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
+                        <form action="{{route(getAdminPrefix() . '.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
                             @csrf
                             <div class="row g-4">
                                 <div class="col-lg-3">
@@ -102,7 +102,7 @@
             <span class="sr-only">Loading...</span>
             </div></div>`);
             
-             pageurl = "{{route('admin.users.fetch')}}?page="
+             pageurl = "{{route(getAdminPrefix() . '.users.fetch')}}?page="
              var _token = $("input[name=_token]").val();
             $.ajax({
 

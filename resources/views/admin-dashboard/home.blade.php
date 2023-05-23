@@ -72,7 +72,7 @@
             $('#home_data').html(`<div class="spinner-border float-right" style="width: 3rem; height: 3rem;" role="status">
   <span class="sr-only">Loading...</span>
 </div>`);
-            pageurl = "{{ route('admin.home.index_data') }}"
+            pageurl = "{{ route(getAdminPrefix() . '.home.index_data') }}"
             var _token = $("input[name=_token]").val();
             $.ajax({
 

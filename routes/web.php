@@ -19,8 +19,8 @@ use Illuminate\Support\Facades\Redirect;
 // Admin routes
 Route::namespace('App\Http\Controllers\Admin')
     ->middleware(['auth', 'role:admin|data|finance'])
-    ->as('admin.')
-    ->prefix('admin')
+    ->as(getAdminPrefix().'.')
+    ->prefix(getAdminPrefix())
     ->group(function () {
         Route::get('home/{period?}', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
         Route::get('/', function () {

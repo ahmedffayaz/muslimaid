@@ -52,7 +52,7 @@
                                                 <div class="nk-block-head">
                                                     <h5 class="title">General Settings</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
                                                     @csrf
                                                     @method('POST')
 
@@ -101,7 +101,7 @@
                                                 <div class="nk-block-head">
                                                     <h5 class="title">Maintenance Mode</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 maintenance-form" method="POST">
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 maintenance-form" method="POST">
                                                     @csrf
                                                     @method('POST')
                                                     <div class="row g-3 align-center">
@@ -127,7 +127,7 @@
                                                 <div class="nk-block-head">
                                                     <h5 class="title">Website Settings</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST"
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" method="POST"
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     @method('POST')
@@ -341,7 +341,7 @@
                                                 <div class="nk-block-head">
                                                     <h5 class="title">Mailer Settings</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
                                                     @csrf
                                                     @method('POST')
                                                     <div class="row g-3 align-center">
@@ -590,7 +590,7 @@
                                                             title=" Provide social account links to display social media options for user to follow you on social networks."></em>
                                                     </h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
                                                     @csrf
                                                     @method('POST')
                                                     <div class="row g-3 align-center">
@@ -829,7 +829,7 @@
                                                 <div class="nk-block-head">
                                                     <h5 class="title">Google map key Settings</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
                                                     @csrf
                                                     @method('POST')
                                                     <div class="row g-3 align-center">
@@ -872,7 +872,7 @@
                                                 <div class="nk-block-head">
                                                     <h5 class="title">Cashback Settings</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" id="form-validate" method="POST">
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" id="form-validate" method="POST">
                                                     @csrf
                                                     @method('POST')
                                                     <div class="row g-3 align-center">
@@ -1019,7 +1019,7 @@
                                                 <div class="nk-block-head">
                                                     <h5 class="title">Google Recaptcha Settings</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
                                                     @csrf
                                                     @method('POST')
                                                     <div class="row g-3 align-center">
@@ -1257,7 +1257,7 @@
                 var _token = $("input[name=_token]").val();
                 $.ajax({
                     type: 'POST',
-                    url: "{{ route('admin.settings.maintenance') }}",
+                    url: "{{ route(getAdminPrefix() . '.settings.maintenance') }}",
                     data: {
                         _token: _token,
                         maintenance: maintenance

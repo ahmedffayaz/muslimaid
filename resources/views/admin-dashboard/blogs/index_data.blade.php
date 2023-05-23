@@ -13,7 +13,7 @@
 <div class="nk-tb-item">
     
     <div class="nk-tb-col">
-        <div class="tb-lead"><span><a href="{{route('admin.blogs.edit', $blog)}}" class="a_link">{{$blog->title}}</a></span></div>
+        <div class="tb-lead"><span><a href="{{route(getAdminPrefix() . '.blogs.edit', $blog)}}" class="a_link">{{$blog->title}}</a></span></div>
     </div>
     <div class="nk-tb-col">
         <span>{{$blog->slug}}</span>
@@ -35,10 +35,10 @@
                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="link-list-opt no-bdr">
-                            <li><a href="{{route('admin.blogs.edit', $blog)}}"><em class="icon ni ni-edit"></em><span>Edit Blog</span></a></li>
+                            <li><a href="{{route(getAdminPrefix() . '.blogs.edit', $blog)}}"><em class="icon ni ni-edit"></em><span>Edit Blog</span></a></li>
                            <li><a  form_id="delete-blog-{{$blog->id}}"  class="delete" style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Blog</span></a>
                                                     
-                                <form action="{{ route('admin.blogs.destroy', $blog) }}" id="delete-blog-{{$blog->id}}" method="POST" class="m-0">
+                                <form action="{{ route(getAdminPrefix() . '.blogs.destroy', $blog) }}" id="delete-blog-{{$blog->id}}" method="POST" class="m-0">
                                     @method('DELETE')
                                     @csrf
                                     

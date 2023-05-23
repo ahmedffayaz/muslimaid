@@ -18,12 +18,12 @@
     
    
     <div class="nk-tb-col">
-        <span><a href="{{route('admin.tickets.show',$ticket)}}"><div class="tb-lead @if(count($ticket->newReply) || $ticket->new_ticket) icon-status icon-status-info @endif">{{$ticket->ticket_id}}</div></a></span><br>
+        <span><a href="{{route(getAdminPrefix() . '.tickets.show',$ticket)}}"><div class="tb-lead @if(count($ticket->newReply) || $ticket->new_ticket) icon-status icon-status-info @endif">{{$ticket->ticket_id}}</div></a></span><br>
         
     </div>
    
     <div class="nk-tb-col  ">
-        <span class=""><a href="{{route('admin.tickets.show',$ticket)}}"><div class="tb-lead">{{$ticket->title}}</div></a></span>
+        <span class=""><a href="{{route(getAdminPrefix() . '.tickets.show',$ticket)}}"><div class="tb-lead">{{$ticket->title}}</div></a></span>
     </div>
     
     
@@ -59,9 +59,9 @@
                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="link-list-opt no-bdr">
-                            <li><a href="{{route('admin.tickets.show', $ticket)}}"><em class="icon ni ni-eye"></em><span>View Ticket</span></a></li>
-                            {{-- <li><a href="{{route('admin.tickets.show', $ticket)}}"><em class="icon ni ni-check"></em><span>Mark as Closed</span></a></li> --}}
-                            {{-- <li><a href="{{route('admin.stores.images', $store)}}"><em class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
+                            <li><a href="{{route(getAdminPrefix() . '.tickets.show', $ticket)}}"><em class="icon ni ni-eye"></em><span>View Ticket</span></a></li>
+                            {{-- <li><a href="{{route(getAdminPrefix() . '.tickets.show', $ticket)}}"><em class="icon ni ni-check"></em><span>Mark as Closed</span></a></li> --}}
+                            {{-- <li><a href="{{route(getAdminPrefix() . '.stores.images', $store)}}"><em class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
                     
                         </ul>
                     </div>

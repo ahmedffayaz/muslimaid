@@ -27,7 +27,7 @@
                                 <div class="card-inner">
                                     <div class="card-head">
                                     </div>
-                                    <form action="{{ route('admin.pages.store') }}" class="form-validate pages-form" enctype="multipart/form-data" method="POST">
+                                    <form action="{{ route(getAdminPrefix() . '.pages.store') }}" class="form-validate pages-form" enctype="multipart/form-data" method="POST">
                                         @csrf
                                         <div class="row g-4">
                                             <div class="col-lg-6">
@@ -166,7 +166,7 @@
                 .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
 
             $.ajax({
-                url: `{{ route('admin.pages.view-short-codes') }}`,
+                url: `{{ route(getAdminPrefix() . '.pages.view-short-codes') }}`,
                 method: 'post',
                 data: {
                     _token: $('input[name=_token]').val(),

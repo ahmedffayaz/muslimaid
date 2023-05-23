@@ -16,7 +16,7 @@
                     </div><!-- .nk-block-head -->
                     <div class="card card-preview mb-4">
                         <div class="card-inner">
-                            <form action="{{ route('admin.reports.search_performance') }}" class="form-validate is-alter performance_search_form" method="POST">
+                            <form action="{{ route(getAdminPrefix() . '.reports.search_performance') }}" class="form-validate is-alter performance_search_form" method="POST">
                                 @csrf
                                 <div class="row g-4">
 
@@ -92,7 +92,7 @@
                 var start_date = $("input[name=start_date]").val();
                 var end_date = $("input[name=end_date]").val();
                 $.ajax({
-                    url: '{{ route('admin.reports.search_performance') }}',
+                    url: '{{ route(getAdminPrefix() . '.reports.search_performance') }}',
                     method: "POST",
                     data: {
                         _token: _token,

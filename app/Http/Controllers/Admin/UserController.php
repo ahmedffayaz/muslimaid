@@ -91,7 +91,7 @@ class UserController extends Controller
             dispatch(new SendEmailJob($user));
 
             flash()->success('New user added successfully');
-            return redirect()->route('admin.users.index');
+            return redirect()->route(getAdminPrefix() . '.users.index');
         } catch (Throwable $th) {
             DB::rollBack();
             flash()->error('Something went wrong, try again');
@@ -165,7 +165,7 @@ class UserController extends Controller
                 );
             } else {
                 flash()->success('User updated successfully');
-                return redirect()->route('admin.users.index');
+                return redirect()->route(getAdminPrefix() . '.users.index');
             }
         } catch (Exception $e) {
             DB::rollBack();
@@ -187,7 +187,7 @@ class UserController extends Controller
         $user->delete();
 
         flash()->success('User deleted successfully');
-        return redirect()->route('admin.users.index');
+        return redirect()->route(getAdminPrefix() . '.users.index');
     }
 
     function fetch(Request $request)
@@ -230,7 +230,7 @@ class UserController extends Controller
             return Response::download($filename, 'users.csv', $headers);
         } catch (\Throwable $th) {
             flash()->error('Error while exporting the users');
-            return redirect()->route('admin.users.index');
+            return redirect()->route(getAdminPrefix() . '.users.index');
         }
     }
 
@@ -268,7 +268,7 @@ class UserController extends Controller
 
         if (!$request->ajax()) {
             flash()->success('Payment method added successfully');
-            return redirect()->route('admin.users.index');
+            return redirect()->route(getAdminPrefix() . '.users.index');
         }
 
         return array(
@@ -306,7 +306,7 @@ class UserController extends Controller
 
         if (!$request->ajax()) {
             flash()->success('Password changed successfully');
-            return redirect()->route('admin.users.index');
+            return redirect()->route(getAdminPrefix() . '.users.index');
         }
 
         return array(

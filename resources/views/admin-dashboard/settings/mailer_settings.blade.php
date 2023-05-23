@@ -18,7 +18,7 @@
                         <div class="card-inner">
                             <h5 class="card-title">Mailer Setting</h5>
                             <p>Here are your mailer settings of your website.</p>
-                            <form action="{{route('admin.settings.mailer_settings_save')}}" class="gy-3 form-settings" method="POST">
+                            <form action="{{route(getAdminPrefix() . '.settings.mailer_settings_save')}}" class="gy-3 form-settings" method="POST">
                                 @csrf
                                 @method('POST')
                                 <div class="row g-3 align-center">

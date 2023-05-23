@@ -42,11 +42,11 @@
                         <a href="#" class="dropdown-toggle btn btn-sm btn-icon btn-trigger mt-n1 mr-n1" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <ul class="link-list-opt no-bdr">
-                                <li><a href="{{route('admin.stores.show_store')}}?slug={{$store->slug}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li>
-                                {{-- <li><a href="{{route('admin.stores.images', $store)}}"><em class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
+                                <li><a href="{{route(getAdminPrefix() . '.stores.show_store')}}?slug={{$store->slug}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li>
+                                {{-- <li><a href="{{route(getAdminPrefix() . '.stores.images', $store)}}"><em class="icon ni ni-eye"></em><span>View Store Images</span></a></li> --}}
                                 <li><a   class='delete-store'  form_id = "delete-store-{{$store->id}}"  style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Store</span></a>
                                                         
-                                <form action="{{ route('admin.stores.destroy', $store) }}" id="delete-store-{{$store->id}}" method="POST" class="m-0">
+                                <form action="{{ route(getAdminPrefix() . '.stores.destroy', $store) }}" id="delete-store-{{$store->id}}" method="POST" class="m-0">
                                     @method('DELETE')
                                     @csrf
                                     
@@ -54,7 +54,7 @@
                             </li>
                             </ul>
                         </div>
-                    </div><a href="{{route('admin.stores.show_store')}}?slug={{$store->slug}}"><img  @if($store->logo->first())
+                    </div><a href="{{route(getAdminPrefix() . '.stores.show_store')}}?slug={{$store->slug}}"><img  @if($store->logo->first())
                         onerror="{{asset('frontend/images/logos/'.mt_rand(1, 20).'.png')}}"
                         @if($store->logo->first()->is_fake)
                             src="{{asset('frontend/images/logos/'.$store->logo->first()->image)}}"
@@ -96,7 +96,7 @@
                             
                             <span  class="project-title">
                                 <div class="project-info">
-                                    <h6 class="title mb-2"><a href="{{route('admin.stores.show_store')}}?slug={{$store->slug}}">{{$store->id}} - {{$store->name}}</a></h6>
+                                    <h6 class="title mb-2"><a href="{{route(getAdminPrefix() . '.stores.show_store')}}?slug={{$store->slug}}">{{$store->id}} - {{$store->name}}</a></h6>
                                     <div>
                                         <span>Network: {{$store->network->name}}</span>
                                     </div>
@@ -131,11 +131,11 @@
                         </div> --}}
                     
                         <div class="project-meta">
-                            {{-- <a  href="{{route('admin.stores.show_store')}}?slug={{$store->slug}}"><em class="icon ni ni-edit text-primary"></em></a>
+                            {{-- <a  href="{{route(getAdminPrefix() . '.stores.show_store')}}?slug={{$store->slug}}"><em class="icon ni ni-edit text-primary"></em></a>
 
                             <a href="" onclick="$('#delete-store-{{$store->id}}').submit();"  style="cursor: pointer"> <em class="icon ni ni-trash-fill text-danger"></em></a>
                                                             
-                                <form action="{{ route('admin.stores.destroy', $store) }}" id="delete-store-{{$store->id}}" method="POST" class="m-0">
+                                <form action="{{ route(getAdminPrefix() . '.stores.destroy', $store) }}" id="delete-store-{{$store->id}}" method="POST" class="m-0">
                                     @method('DELETE')
                                     @csrf
                                     

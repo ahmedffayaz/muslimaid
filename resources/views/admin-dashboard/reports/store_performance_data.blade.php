@@ -22,7 +22,7 @@
                 
                 <div class="nk-tb-item">
                     <div class="nk-tb-col">
-                        <div class="icon-text"><a href="@if($click->store){{route('admin.stores.show_store')}}?slug={{$click->store->slug}}@else # @endif">
+                        <div class="icon-text"><a href="@if($click->store){{route(getAdminPrefix() . '.stores.show_store')}}?slug={{$click->store->slug}}@else # @endif">
                             
                             <span class="tb-lead"> <em class="text-primary icon ni ni-cart-fill mr-2"></em>{{$click->store->name ?? ''}}</span></a>
                         </div>
@@ -90,7 +90,7 @@ $(document).ready(function(){
          
         var _token = $("input[name=_token]").val();
         $.ajax({
-            url:"{{route('admin.reports.fetch_performance')}}?page="+page,
+            url:"{{route(getAdminPrefix() . '.reports.fetch_performance')}}?page="+page,
             method:"POST",
             data:{_token:_token, page:page},
             success:function(data)
