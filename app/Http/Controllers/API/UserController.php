@@ -7,6 +7,7 @@ use App\Models\Ticket;
 use App\Jobs\SendEmail;
 use App\Models\Cashout;
 use App\Models\ExitClick;
+use App\Models\PaymentInfo;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
@@ -442,13 +443,13 @@ class UserController extends Controller
                 $emailTemplate = EmailTemplate::where('key', 'referral_link')->first();
                 $link = url('') . '/register-form?referby=' . encrypt(auth()->user()->id);
                 $filteredMessage  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{LINK}}'], [SiteSetting()['website_title'], url('/'), $link], $emailTemplate->message);
-    
+
                 $emailData = array(
                     'subject' => $emailTemplate->subject,
                     'email_message' => $filteredMessage,
                     'email' => $request->referral_email
                 );
-    
+
                 SendEmail::dispatch($emailData);
                 $response = [
                     'status' => 200,
@@ -464,6 +465,45 @@ class UserController extends Controller
                 ];
                 return response()->json($data, 500);
             }
+        }
+    }
+    public function userBankDetails(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'payment_method' => 'required',
+                'paypal_email' => $request->input('payment_method') === 'paypal' ? 'required' : '',
+                'account_name' => $request->input('payment_method') === 'bank' ? 'required' : '',
+                'bank_title' => $request->input('payment_method') === 'bank' ? 'required' : '',
+                'account_number' => $request->input('payment_method') === 'bank' ? 'required' : '',
+                'bank_sort_code' => $request->input('payment_method') === 'bank' ? 'required' : '',
+                'bic' => $request->input('payment_method') === 'bank' ? 'required' : '',
+            ]);
+            if ($validator->fails()) {
+                $data = [
+                    'status' => 406,
+                    'message' => $validator->errors()->first(),
+                    'data' => []
+                ];
+                return response()->json($data, 406);
+            }
+            $payment = PaymentInfo::updateOrCreate([
+                'user_id'   => Auth::user()->id,
+                'payment_method'   => $request->payment_method,
+            ], $request->all());
+            $response = [
+                'status' => 200,
+                'message' => 'Successful',
+                'data' => $payment,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $data = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
+            ];
+            return response()->json($data, 500);
         }
     }
 }

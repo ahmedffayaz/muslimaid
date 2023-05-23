@@ -31,6 +31,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/update_profile', [API\UserController::class, 'updateProfile']);
     Route::post('/update_avatar', [API\UserController::class, 'updateAvatar']);
     Route::get('/user_data', [API\UserController::class, 'userData']);
+    Route::post('/user_bank_details', [API\UserController::class, 'userBankDetails']);
     Route::get('/user/user-balance', [API\UserController::class, 'userBalance']);
     Route::post('/user/cashback', [API\UserController::class, 'cashback']);
     Route::post('/user/clicks', [API\UserController::class, 'clicks']);
