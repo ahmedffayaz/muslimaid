@@ -18,7 +18,7 @@
                                     <div class="card-head">
                                         <h5 class="card-title">Store Info</h5>
                                     </div>
-                                    <form action="{{ route('admin.stores.update', $store) }}" id="store_form" class="gy-3 form-validate is-alter" method="POST"
+                                    <form action="{{ route(getAdminPrefix() . '.stores.update', $store) }}" id="store_form" class="gy-3 form-validate is-alter" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')

@@ -2,7 +2,7 @@
 @section('content')
     @php
         $isEdit = isset($seoData) ? true : false;
-        $url = $isEdit ? route('admin.seo.update', $seoData) : route('admin.seo.store');
+        $url = $isEdit ? route(getAdminPrefix() . '.seo.update', $seoData) : route(getAdminPrefix() . '.seo.store');
     @endphp
     <div class="nk-content ">
         <div class="container-fluid">

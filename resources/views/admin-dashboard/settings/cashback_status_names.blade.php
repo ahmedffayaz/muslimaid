@@ -18,7 +18,7 @@
                         <div class="card-inner">
                             <h5 class="card-title">Cashback Statuses</h5>
                             <p>Here you can change the titles for the statuses assigned to cashback.</p>
-                            <form action="{{route('admin.settings.cashback_statuses_save')}}" class="gy-3 form-settings" method="POST">
+                            <form action="{{route(getAdminPrefix() . '.settings.cashback_statuses_save')}}" class="gy-3 form-settings" method="POST">
                                 @csrf
                                 @method('POST')
                                 @foreach ($statuses as $status)

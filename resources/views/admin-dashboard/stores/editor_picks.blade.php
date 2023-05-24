@@ -17,9 +17,9 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li class="nk-block-tools-opt"><a href="{{route('admin.stores.index')}}" class="btn btn-primary btn-sm"><em class="icon ni ni-cart-fill"></em><span>All Stores</span></a></li>
-                                        <li class="nk-block-tools-opt"><a href="{{route('admin.stores.create')}}"  data-toggle="modal" data-target="#category-modal" class="btn btn-primary btn-sm"><em class="icon ni ni-plus"></em><span>Add Editor Pick</span></a></li>
-                                        <li><a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
+                                        <li class="nk-block-tools-opt"><a href="{{route(getAdminPrefix() . '.stores.index')}}" class="btn btn-primary btn-sm"><em class="icon ni ni-cart-fill"></em><span>All Stores</span></a></li>
+                                        <li class="nk-block-tools-opt"><a href="{{route(getAdminPrefix() . '.stores.create')}}"  data-toggle="modal" data-target="#category-modal" class="btn btn-primary btn-sm"><em class="icon ni ni-plus"></em><span>Add Editor Pick</span></a></li>
+                                        <li><a href="{{route(getAdminPrefix() . '.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
                                       
                                     </ul>
                                 </div>
@@ -37,7 +37,7 @@
                                 </a>
                                 <div class="accordion-body collapse" id="accordion-item-1-1" data-parent="#accordion-1">
                                     <div class="accordion-inner">
-                                        <div><form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
+                                        <div><form action="{{route(getAdminPrefix() . '.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
                                             @csrf
                                             <div class="row g-4 justify-content-md-center">
                                                 <div class="col-lg-2">
@@ -138,7 +138,7 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="" class=" p-4">
-                <form action="{{route('admin.stores.create_editor_picks')}}" class="gy-3 form-validate is-alter category_form" method="POST" enctype="multipart/form-data">
+                <form action="{{route(getAdminPrefix() . '.stores.create_editor_picks')}}" class="gy-3 form-validate is-alter category_form" method="POST" enctype="multipart/form-data">
                     @csrf
                     <div class="row g-4">
                         <div class="col-lg-12">
@@ -198,7 +198,7 @@
         
          if(route=='index'){
             
-             pageurl = "{{route('admin.stores.fetch_editor_picks')}}?page="
+             pageurl = "{{route(getAdminPrefix() . '.stores.fetch_editor_picks')}}?page="
              var _token = $("input[name=_token]").val();
             $.ajax({
 
@@ -220,7 +220,7 @@
             var status = $("select[name=status").val();
             var store_name = $("input[name=store_name]").val();
             $.ajax({
-              url:'{{route("admin.stores.search_editor_picks")}}?page='+page,
+              url:'{{route(getAdminPrefix() . ".stores.search_editor_picks")}}?page='+page,
               method:"POST",
               data:{_token:_token,network_id:network_id,store_id:store_id,store_name:store_name,status:status,page:page},
               success:function(data)
@@ -245,7 +245,7 @@
             var status = $("select[name=status").val();
             var store_name = $("input[name=store_name]").val();
             $.ajax({
-              url:'{{route("admin.stores.search_editor_picks")}}',
+              url:'{{route(getAdminPrefix() . ".stores.search_editor_picks")}}',
               method:"POST",
               data:{_token:_token,network_id:network_id,store_id:store_id,store_name:store_name,status:status},
               success:function(data)

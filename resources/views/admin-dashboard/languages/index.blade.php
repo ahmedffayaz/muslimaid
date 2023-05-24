@@ -18,7 +18,7 @@
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
                                         <li><a href=""  class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light" data-toggle="modal" data-target="#modalForm"><em class="icon ni ni-plus"></em><span>Add Language</span></a></li>
-                                        {{-- <li><a href="{{route('admin.settings.export', $settings)}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
+                                        {{-- <li><a href="{{route(getAdminPrefix() . '.settings.export', $settings)}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
 
                                     </ul>
                                 </div>
@@ -28,7 +28,7 @@
                 </div><!-- .nk-block-head -->
                 <div class="card card-preview mb-4">
                     <div class="card-inner">
-                        <form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
+                        <form action="{{route(getAdminPrefix() . '.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
                             @csrf
                             <div class="row g-4">
                                 <div class="col-lg-4">
@@ -95,7 +95,7 @@
                     <em class="icon ni ni-cross"></em>
                 </a>
             </div>
-            <form action="{{route('admin.languages.store')}}" class="form-validate is-alter" method="POST">
+            <form action="{{route(getAdminPrefix() . '.languages.store')}}" class="form-validate is-alter" method="POST">
                 @csrf
                 <div class="modal-body">
                     <div class="form-group">
@@ -136,7 +136,7 @@
             <span class="sr-only">Loading...</span>
             </div></div>`);
 
-             pageurl = "{{route('admin.languages.fetch')}}?page="
+             pageurl = "{{route(getAdminPrefix() . '.languages.fetch')}}?page="
              var _token = $("input[name=_token]").val();
             $.ajax({
 
@@ -162,7 +162,7 @@
             var code = $("input[name=code]").val();
            
             $.ajax({
-              url:'{{route("admin.languages.search_languages")}}?page='+page,
+              url:'{{route(getAdminPrefix() . ".languages.search_languages")}}?page='+page,
               method:"POST",
               data:{_token:_token,name:name,code:code},
               success:function(data)
@@ -190,7 +190,7 @@
             var code = $("input[name=code]").val();
            
             $.ajax({
-              url:'{{route("admin.languages.search_languages")}}',
+              url:'{{route(getAdminPrefix() . ".languages.search_languages")}}',
               method:"POST",
               data:{_token:_token,name:name,code:code},
               success:function(data)

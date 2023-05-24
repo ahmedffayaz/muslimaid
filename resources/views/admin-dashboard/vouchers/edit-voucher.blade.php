@@ -10,7 +10,7 @@
 @php
     $isEdit = isset($voucher) ? true : false;
 @endphp
-<form action="{{ $isEdit ? route('admin.vouchers.update', $voucher) : route('admin.vouchers.store') }}" class="gy-3 is-alter" id="create-edit-voucher-form" method="POST">
+<form action="{{ $isEdit ? route(getAdminPrefix() . '.vouchers.update', $voucher) : route(getAdminPrefix() . '.vouchers.store') }}" class="gy-3 is-alter" id="create-edit-voucher-form" method="POST">
     @csrf
     @if ($isEdit)
         @method('PUT')

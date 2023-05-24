@@ -181,6 +181,6 @@ class SeoController extends Controller
         SeoRuleData::where('seo_rule_id',$seo['id'])->delete();
         $seo->delete();
         flash()->success('Seo rule deleted successfully');
-        return redirect()->route('admin.seo.index');
+        return redirect()->route(getAdminPrefix() . '.seo.index');
     }
 }

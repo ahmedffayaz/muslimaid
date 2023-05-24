@@ -129,16 +129,16 @@
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
                                                                     <ul class="link-list-opt no-bdr d-block ml-0">
-                                                                        <a href="{{ route('admin.categories.picks', $category) }}" category-id='{{ $category->id }}'
+                                                                        <a href="{{ route(getAdminPrefix() . '.categories.picks', $category) }}" category-id='{{ $category->id }}'
                                                                             class='picks-edit'>
                                                                             <em class="icon ni ni-cart-fill"></em>
                                                                             Editor Picks
                                                                         </a>
-                                                                        <a href="{{ route('admin.categories.edit', $category) }}" category-id='{{ $category->id }}'
+                                                                        <a href="{{ route(getAdminPrefix() . '.categories.edit', $category) }}" category-id='{{ $category->id }}'
                                                                             class='category-edit'>
                                                                             <em class="icon ni ni-edit"></em> Edit
                                                                         </a>
-                                                                        <a class='category-delete' data-action="{{ route('admin.categories.destroy', $category) }}"
+                                                                        <a class='category-delete' data-action="{{ route(getAdminPrefix() . '.categories.destroy', $category) }}"
                                                                             data-id="{{ $category->id }}" style="cursor: pointer">
                                                                             <em class="icon ni ni-trash-fill"></em>
                                                                             Delete
@@ -190,7 +190,7 @@
             $(document).on('click', '#show-modal', function(event) {
                 event.preventDefault();
                 $.ajax({
-                    url: "{{ route('admin.categories.create') }}",
+                    url: "{{ route(getAdminPrefix() . '.categories.create') }}",
                     type: 'GET',
                     success: function(response) {
                         $('.title').text('Create Category');
@@ -440,7 +440,7 @@
                 var status = $("select[name=status").val();
                 var name = $("input[name=name]").val();
                 $.ajax({
-                    url: '{{ route('admin.users.search_users') }}',
+                    url: '{{ route(getAdminPrefix() . '.users.search_users') }}',
                     method: "POST",
                     data: {
                         _token: _token,
@@ -598,7 +598,7 @@
         }
         $(document).on('change', '.get_parent', function(event) {
             id = $('.get_parent').val();
-            url = '{{ route('admin.categories.sort') }}';
+            url = '{{ route(getAdminPrefix() . '.categories.sort') }}';
             $.ajax({
                 url: url,
                 type: 'get',

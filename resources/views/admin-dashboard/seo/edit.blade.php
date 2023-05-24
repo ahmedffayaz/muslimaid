@@ -25,7 +25,7 @@
                                 <div class="card-inner">
                                     <div class="card-head">
                                     </div>
-                                    <form action="{{ route('admin.seo.update', $seo) }}" class="form-validate is-alter" method="POST">
+                                    <form action="{{ route(getAdminPrefix() . '.seo.update', $seo) }}" class="form-validate is-alter" method="POST">
                                         @csrf
                                         @method('PUT')
                                         <div class="row g-4">

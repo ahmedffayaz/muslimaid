@@ -262,7 +262,7 @@ class WebgainsImporter implements ShouldQueue
                     }
                 } catch (Exception $e) {
                     flash()->error('Error while running importer');
-                    return redirect()->route('admin.stores.index');
+                    return redirect()->route(getAdminPrefix() . '.stores.index');
                 }
             }
         }

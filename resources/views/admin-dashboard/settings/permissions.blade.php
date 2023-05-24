@@ -18,7 +18,7 @@
                         <div class="card-inner">
                             <h5 class="card-title">Permissions</h5>
                             <p>Here you can update permissions for roles.</p>
-                            <form action="{{route('admin.settings.update_permissions')}}" class="gy-3 form-settings" method="POST">
+                            <form action="{{route(getAdminPrefix() . '.settings.update_permissions')}}" class="gy-3 form-settings" method="POST">
                                 @csrf
                                 @method('POST')
                                 <div class="row g-3 align-center">

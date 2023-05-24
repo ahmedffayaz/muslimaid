@@ -21,7 +21,7 @@
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
                                             <li class="nk-block-tools-opt">
-                                                <a href="{{ route('admin.pages.create') }}" class="btn btn-primary btn-sm">
+                                                <a href="{{ route(getAdminPrefix() . '.pages.create') }}" class="btn btn-primary btn-sm">
                                                     <em class="icon ni ni-plus"></em><span>Add Page</span>
                                                 </a>
                                             </li>
@@ -72,7 +72,7 @@
                         </div>
                     `);
 
-                    pageurl = "{{ route('admin.reviews.fetch') }}?page="
+                    pageurl = "{{ route(getAdminPrefix() . '.reviews.fetch') }}?page="
                     var _token = $("input[name=_token]").val();
                     $.ajax({
                         url: pageurl + page,
@@ -105,7 +105,7 @@
 
                     var status = $("select[name=status]").val();
                     $.ajax({
-                        url: '{{ route('admin.reviews.search_reviews') }}?page=' + page,
+                        url: '{{ route(getAdminPrefix() . '.reviews.search_reviews') }}?page=' + page,
                         method: "POST",
                         data: {
                             _token: _token,
@@ -140,7 +140,7 @@
 
                 var status = $("select[name=status]").val();
                 $.ajax({
-                    url: '{{ route('admin.reviews.search_reviews') }}',
+                    url: '{{ route(getAdminPrefix() . '.reviews.search_reviews') }}',
                     method: "POST",
                     data: {
                         _token: _token,

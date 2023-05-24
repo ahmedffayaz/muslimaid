@@ -15,7 +15,7 @@
                     <em class="icon ni ni-cross"></em>
                 </a>
             </div>
-            <form action="{{route('admin.lines.store')}}" class="form-validate is-alter" method="POST">
+            <form action="{{route(getAdminPrefix() . '.lines.store')}}" class="form-validate is-alter" method="POST">
                 @csrf
                 <input type="hidden" name="translation_id" value="{{$translation->id}}">
                 <div class="modal-body">

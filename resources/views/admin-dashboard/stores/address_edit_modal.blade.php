@@ -1,4 +1,4 @@
-<form action="{{ route('admin.stores.update_address') }}" class="gy-3 form-validate is-alter address_form" method="POST">
+<form action="{{ route(getAdminPrefix() . '.stores.update_address') }}" class="gy-3 form-validate is-alter address_form" method="POST">
     @csrf
     @method('PUT')
     <input type="hidden" name="address_id" value="{{ $address->id }}">

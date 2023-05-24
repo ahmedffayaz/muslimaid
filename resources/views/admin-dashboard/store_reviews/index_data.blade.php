@@ -14,14 +14,14 @@
     @foreach ($reviews as $review)
         <div class="nk-tb-item">
             <div class="nk-tb-col">
-                <span><a href="{{ route('admin.reviews.edit', $review) }}" class="review-edit text-dark @if ($review->status != 'active') icon-status icon-status-info @endif"
+                <span><a href="{{ route(getAdminPrefix() . '.reviews.edit', $review) }}" class="review-edit text-dark @if ($review->status != 'active') icon-status icon-status-info @endif"
                         review-id={{ $review->id }}>{{ $review->user->first_name . ' ' . $review->user->last_name }}</a></span>
             </div>
 
             <div class="nk-tb-col">
-                <span><a href="{{ route('admin.reviews.edit', $review) }}" class="review-edit a_link" review-id={{ $review->id }}>{!! $review->review !!}</a></span>
+                <span><a href="{{ route(getAdminPrefix() . '.reviews.edit', $review) }}" class="review-edit a_link" review-id={{ $review->id }}>{!! $review->review !!}</a></span>
             </div>
-            <div class="nk-tb-col"><a href="{{ route('admin.stores.show_store') }}?slug={{ $review->store->slug }}" class="a_link">
+            <div class="nk-tb-col"><a href="{{ route(getAdminPrefix() . '.stores.show_store') }}?slug={{ $review->store->slug }}" class="a_link">
                     <span><b>{{ $review->store->id ?? '' }} - {{ $review->store->name ?? '' }}</b></span><br>
                     <span>{{ $review->store->network->name ?? '' }}</span></a>
             </div>
@@ -40,7 +40,7 @@
                             <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                             <div class="dropdown-menu dropdown-menu-right">
                                 <ul class="link-list-opt no-bdr">
-                                    <li><a href="{{ route('admin.reviews.edit', $review) }}" class="review-edit" review-id={{ $review->id }}><em
+                                    <li><a href="{{ route(getAdminPrefix() . '.reviews.edit', $review) }}" class="review-edit" review-id={{ $review->id }}><em
                                                 class="icon ni ni-edit"></em><span>Edit
                                                 Review</span></a></li>
                                     @can('delete reviews')
@@ -48,7 +48,7 @@
                                                     class="icon ni ni-trash-fill"></em><span>Delete
                                                     Review</span></a>
 
-                                            <form action="{{ route('admin.reviews.destroy', $review) }}" id="delete-review-{{ $review->id }}" method="POST" class="m-0">
+                                            <form action="{{ route(getAdminPrefix() . '.reviews.destroy', $review) }}" id="delete-review-{{ $review->id }}" method="POST" class="m-0">
                                                 @method('DELETE')
                                                 @csrf
 

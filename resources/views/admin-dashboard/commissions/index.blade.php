@@ -31,7 +31,7 @@
                                                                 <em class="icon ni ni-sign-gbp"></em>
                                                                 <span>Add Cashback</span>
                                                             </a>
-                                                            <a href="{{ route('admin.commissions.create_multiple') }}">
+                                                            <a href="{{ route(getAdminPrefix() . '.commissions.create_multiple') }}">
                                                                 <em class="icon ni ni-sign-gbp"></em>
                                                                 <span>Add Multiple Cashback</span>
                                                             </a>
@@ -40,7 +40,7 @@
                                                 </div>
                                             </li>
                                             <li>
-                                                <a href="{{ route('admin.commissions.export') }}" data-toggle="tooltip" data-placement="top" title="Export cashbacks to CSV"
+                                                <a href="{{ route(getAdminPrefix() . '.commissions.export') }}" data-toggle="tooltip" data-placement="top" title="Export cashbacks to CSV"
                                                     id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light">
                                                     <em class="icon ni ni-download-cloud"></em><span>Export</span>
                                                 </a>
@@ -53,7 +53,7 @@
                     </div><!-- .nk-block-head -->
                     <div class="card card-preview mb-4">
                         <div class="card-inner">
-                            <form action="{{ route('admin.stores.search_stores') }}" class="form-validate is-alter search_form" method="POST">
+                            <form action="{{ route(getAdminPrefix() . '.stores.search_stores') }}" class="form-validate is-alter search_form" method="POST">
                                 @csrf
                                 <div class="row g-4">
                                     <div class="col-lg-3 col-md-9">
@@ -164,7 +164,7 @@
             <span class="sr-only">Loading...</span>
             </div></div>`);
 
-                    pageurl = "{{ route('admin.commissions.fetch') }}?page="
+                    pageurl = "{{ route(getAdminPrefix() . '.commissions.fetch') }}?page="
                     var _token = $("input[name=_token]").val();
                     $.ajax({
 
@@ -196,7 +196,7 @@
                     var status_id = $("select[name=status_id]").val();
                     var user_id = $("select[name=user_id]").val();
                     $.ajax({
-                        url: '{{ route('admin.commissions.search_commissions') }}?page=' + page,
+                        url: '{{ route(getAdminPrefix() . '.commissions.search_commissions') }}?page=' + page,
                         method: "POST",
                         data: {
                             _token: _token,
@@ -234,7 +234,7 @@
                 var status_id = $("select[name=status_id]").val();
                 var user = $("input[name=user]").val();
                 $.ajax({
-                    url: '{{ route('admin.commissions.search_commissions') }}',
+                    url: '{{ route(getAdminPrefix() . '.commissions.search_commissions') }}',
                     method: "POST",
                     data: {
                         _token: _token,
@@ -300,7 +300,7 @@
             $(document).on('submit', '.update_cashback_form', function(e) {
                 e.preventDefault();
                 var page = $('.pagination li.active span').html();
-                var pageurl = "{{ route('admin.commissions.fetch') }}?page="
+                var pageurl = "{{ route(getAdminPrefix() . '.commissions.fetch') }}?page="
                 var _token = $("input[name=_token]").val();
                 var form_action = $(this).attr('action');
                 var formdata = new FormData(this);
@@ -339,7 +339,7 @@
             // Show modal
             $('#show-cashback-modal').on('click', function(event) {
                 event.preventDefault();
-                let url = "{{ route('admin.commissions.create') }}";
+                let url = "{{ route(getAdminPrefix() . '.commissions.create') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',

@@ -55,6 +55,12 @@ function getPageTemplates($slug)
     return $page;
 }
 
+
+function getAdminPrefix()
+{
+    return (env('ADMIN_PREFIX') ? env('ADMIN_PREFIX') : 'admin');
+}
+
 function getMoreCategories()
 {
     $categories = Category::where('visibility', 'more')->where('parent_id', 0)->whereStatus('1')->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();

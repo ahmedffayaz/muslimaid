@@ -271,7 +271,7 @@ class CommissionController extends Controller
             return Response::download($filename, 'cashbacks.csv', $headers);
         } catch (Exception $exception) {
             flash()->error('Error while exporting cashbacks');
-            return redirect()->route('admin.commissions.index');
+            return redirect()->route(getAdminPrefix() . '.commissions.index');
         }
     }
 
@@ -350,7 +350,7 @@ class CommissionController extends Controller
             }
 
             flash()->success('New cashbacks added');
-            return route('admin.commissions.index');
+            return route(getAdminPrefix() . '.commissions.index');
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'status' => JsonResponse::HTTP_NOT_FOUND,
@@ -450,7 +450,7 @@ class CommissionController extends Controller
             return Response::download($file, $filename, $headers);
         } catch (Exception $exception) {
             flash()->error('File does not exist.');
-            return redirect()->route('admin.commissions.create_multiple');
+            return redirect()->route(getAdminPrefix() . '.commissions.create_multiple');
         }
     }
 }

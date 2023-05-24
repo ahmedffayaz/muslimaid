@@ -89,10 +89,10 @@ class StoreReviewsController extends Controller
                 );
             }
             flash()->success('Review added successfully.');
-            return redirect()->route('admin.reviews.index');
+            return redirect()->route(getAdminPrefix() . '.reviews.index');
         } catch (\Throwable $th) {
             flash()->error('something went wrong! unable to add the Review');
-            return redirect()->route('admin.reviews.index');
+            return redirect()->route(getAdminPrefix() . '.reviews.index');
         }
     }
 
@@ -150,7 +150,7 @@ class StoreReviewsController extends Controller
                 );
             }
             flash()->error('Something went wrong! unable to update the review');
-            return redirect()->route('admin.reviews.index');
+            return redirect()->route(getAdminPrefix() . '.reviews.index');
         }
     }
 

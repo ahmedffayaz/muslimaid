@@ -21,7 +21,7 @@
                                 <div class="card-head">
                                     <h5 class="card-title">Setting</h5>
                                 </div>
-                                <form action="{{route('admin.settings.update', $setting)}}" class="gy-3 form-validate is-alter" method="POST">
+                                <form action="{{route(getAdminPrefix() . '.settings.update', $setting)}}" class="gy-3 form-validate is-alter" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="row g-4">

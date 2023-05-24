@@ -24,7 +24,7 @@
                                 <div class="card-head">
                                     <h5 class="card-title">Network Info</h5>
                                 </div>
-                                <form action="{{route('admin.networks.update', $network)}}" class="gy-3" method="POST">
+                                <form action="{{route(getAdminPrefix() . '.networks.update', $network)}}" class="gy-3" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="row g-3 align-center">

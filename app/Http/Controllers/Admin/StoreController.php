@@ -153,7 +153,7 @@ class StoreController extends Controller
             DB::commit();
 
             flash()->success('New store added');
-            return redirect()->route('admin.stores.show_store', 'slug=' . $store->slug);
+            return redirect()->route(getAdminPrefix() . '.stores.show_store', 'slug=' . $store->slug);
         } catch (Exception $e) {
             DB::rollBack();
             flash()->error('Error while adding new store');
@@ -321,7 +321,7 @@ class StoreController extends Controller
             return Response::download($filename, 'stores.csv', $headers);
         } catch (\Throwable $th) {
             flash()->error('Error while exporting the stores');
-            return redirect()->route('admin.stores.index');
+            return redirect()->route(getAdminPrefix() . '.stores.index');
         }
     }
 

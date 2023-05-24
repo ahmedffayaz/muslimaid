@@ -135,7 +135,7 @@ class CharityController extends Controller
 
             DB::commit();
             flash()->success('New Charity added');
-            return redirect()->route('admin.charities.index');
+            return redirect()->route(getAdminPrefix() . '.charities.index');
         } catch (Throwable $th) {
             DB::rollBack();
             flash()->error('Something went wrong, try again');
@@ -196,7 +196,7 @@ class CharityController extends Controller
             ]);
             DB::commit();
             flash()->success('Charities Types updated');
-            return redirect()->route('admin.charities.charity_type_view');
+            return redirect()->route(getAdminPrefix() . '.charities.charity_type_view');
         } catch (Throwable $th) {
             DB::rollBack();
             flash()->error('Something went wrong');
@@ -316,7 +316,7 @@ class CharityController extends Controller
 
             if (!$request->ajax()) {
                 flash()->success('Charity updated');
-                return redirect()->route('admin.charities.index');
+                return redirect()->route(getAdminPrefix() . '.charities.index');
             } else {
                 return 1;
             }
@@ -340,7 +340,7 @@ class CharityController extends Controller
             $Charity->delete();
             DB::commit();
             flash()->success('Charity deleted');
-            return redirect()->route('admin.charities.index');
+            return redirect()->route(getAdminPrefix() . '.charities.index');
         } catch (Throwable $th) {
             DB::rollBack();
             flash()->error('Something went wrong, try again');

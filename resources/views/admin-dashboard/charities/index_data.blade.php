@@ -14,7 +14,7 @@
 @foreach ($charities as $charity)
 <div class="nk-tb-item">
     <div class="nk-tb-col">
-        <div class="tb-lead"><span><a href="{{route('admin.charities.edit',$charity)}}" class="a_link">{{$charity->title}}</a></span></div>
+        <div class="tb-lead"><span><a href="{{route(getAdminPrefix() . '.charities.edit',$charity)}}" class="a_link">{{$charity->title}}</a></span></div>
     </div>
     <div class="nk-tb-col">
         <span>{{ substr(strip_tags($charity->description),0,50) }}..</span>
@@ -33,10 +33,10 @@
                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="link-list-opt no-bdr">
-                            <li><a href="{{route('admin.charities.edit',$charity)}}"><em class="icon ni ni-edit"></em><span>Edit Charity</span></a></li>
+                            <li><a href="{{route(getAdminPrefix() . '.charities.edit',$charity)}}"><em class="icon ni ni-edit"></em><span>Edit Charity</span></a></li>
                             <li><a  class='delete'  form_id = "delete-{{$charity->id}}"   style="cursor: pointer"> <em class="icon ni ni-trash-fill"></em><span>Delete Charity</span></a>
                                                     
-                                <form action="{{ route('admin.charities.destroy',$charity) }}" id="delete-{{$charity->id}}" method="POST" class="m-0">
+                                <form action="{{ route(getAdminPrefix() . '.charities.destroy',$charity) }}" id="delete-{{$charity->id}}" method="POST" class="m-0">
                                     @method('DELETE')
                                     @csrf
                                     

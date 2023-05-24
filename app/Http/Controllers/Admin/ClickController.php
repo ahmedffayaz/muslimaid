@@ -71,7 +71,7 @@ class ClickController extends Controller
         } catch (Throwable $th) {
             flash()->error('Error while exporting exit clics');
 
-            return redirect()->route('admin.clicks.index');
+            return redirect()->route(getAdminPrefix() . '.clicks.index');
         }
     }
 
