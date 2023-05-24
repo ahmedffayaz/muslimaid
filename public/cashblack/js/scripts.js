@@ -918,6 +918,9 @@ $(document).on("click", ".like-action-remove", function () {
                     ele.removeClass("liked");
                     if (data.type) {
                         $(ele).parents("li").remove();
+                        swal(storeTitle + " has been removed from the favorite stores list.", {
+                            icon: "success",
+                          });
                     }
                 },
             });
@@ -1221,3 +1224,32 @@ if (cookie_consent != "") {
 }
 
 /*Cookie Consent Popup End*/
+function showLogoutConfirmation() {
+    swal({
+      title: 'Logout',
+      text: 'Are you sure you want to logout?',
+      icon: 'info',
+      buttons: {
+        cancel: {
+          text: 'Cancel',
+          value: null,
+          visible: true,
+          className: '',
+          closeModal: true,
+        },
+        confirm: {
+          text: 'Logout',
+          value: true,
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      },
+      closeOnClickOutside: false,
+      closeOnEsc: false
+    }).then((result) => {
+      if (result) {
+        document.getElementById('logout-form').submit();
+      } 
+    });
+  }
