@@ -13,6 +13,12 @@ class Kernel extends HttpKernel
      *
      * @var array
      */
+    protected function createModuleMiddleware($path)
+    {
+        return 'module-access:' . $path;
+    }
+
+
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
@@ -46,6 +52,10 @@ class Kernel extends HttpKernel
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+        'module-access' => [
+            \App\Http\Middleware\ModulesMiddleware::class,
+            // Add other module access control middleware here
+        ],
     ];
 
     /**
@@ -69,5 +79,6 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'is_verify_email' => \App\Http\Middleware\IsVerifyEmail::class,
+        'module-access' => \App\Http\Middleware\ModulesMiddleware::class,
     ];
 }

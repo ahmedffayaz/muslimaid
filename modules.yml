@@ -1,0 +1,23 @@
+Modules:
+  SMTP:
+    Sendgrid: on
+    mailchimp: off
+  Charities:
+    List: on
+    Cashout: on
+  Categories:
+    List: on
+Networks:
+  CJ:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: On
+  Awin:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: On
