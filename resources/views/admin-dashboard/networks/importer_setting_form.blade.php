@@ -4,8 +4,8 @@
     <input type="hidden" name="network_name" value="{{$network->name}}">
     @if(getImporterYMLSettings('Networks_'. $network->name . '_Importer_Stores' ))
     <div class="custom-control custom-control-sm custom-checkbox mr-2">
-        <input @if(@$network->importerSetting->import_stores) checked @endif type="checkbox"
-        class="custom-control-input" id="stores" name="stores">
+        <input @if (@$network->importerSetting->import_stores) checked @endif type="checkbox" class="custom-control-input" id="stores" name="stores"
+            {{ in_array(strtolower($network->name), ['awin', 'cj', 'webgains']) ? '' : 'disabled' }}>
         <label class="custom-control-label" for="stores">Stores</label>
     </div>
     @endif
@@ -18,8 +18,8 @@
     @endif
     @if(getImporterYMLSettings('Networks_'. $network->name . '_Importer_Cashbacks' ))
     <div class="custom-control custom-control-sm custom-checkbox mr-2">
-        <input @if(@$network->importerSetting->import_cashbacks) checked @endif type="checkbox"
-        class="custom-control-input" id="cashback" name="cashback">
+        <input @if (@$network->importerSetting->import_cashbacks) checked @endif type="checkbox" class="custom-control-input" id="cashback" name="cashback"
+            {{ in_array(strtolower($network->name), ['awin', 'cj', 'webgains']) ? '' : 'disabled' }}>
         <label class="custom-control-label" for="cashback">Cashbacks</label>
     </div>
     @endif

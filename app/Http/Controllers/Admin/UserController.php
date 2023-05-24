@@ -244,7 +244,6 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'payment_method' => 'required',
             'paypal_email' => $request->input('payment_method') === 'paypal' ? 'required' : '',
-
             'account_name' => $request->input('payment_method') === 'bank' ? 'required' : '',
             'bank_title' => $request->input('payment_method') === 'bank' ? 'required' : '',
             'account_number' => $request->input('payment_method') === 'bank' ? 'required' : '',
