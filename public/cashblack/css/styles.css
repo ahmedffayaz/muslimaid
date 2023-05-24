@@ -425,11 +425,11 @@ textarea {
 
 .badge-light {
     color: #212529;
-    background-color: #f8f9fa;
+    background-color: #ffc107;
 }
 
 .badge-warning {
-    color: #212529;
+    color: #f8f9fa;
     background-color: #437987;
 }
 
@@ -2041,7 +2041,7 @@ button.hamburger:not(.collapsed):before {
 /* .takeaway-brands__item img {
     min-width: 270px;
 } */
-.without-cashback-btn:hover{
+.without-cashback-btn:hover {
     color: #000;
     background-color: #ffc107;
     border-color: #ffc107;
@@ -2052,10 +2052,13 @@ button.hamburger:not(.collapsed):before {
     height: 100px;
 }
 
-.category-item__logo {
+.img-fix-size {
     min-height: 200px;
 }
 
+.buttons-margin {
+    margin-top: 0.2rem
+}
 
 .set-image {
     max-width: 100px;
@@ -2806,10 +2809,10 @@ button.hamburger:not(.collapsed):before {
     }
 }
 
-.category-listing .list-item .category-item__logo {
+/* .category-listing .list-item .category-item__logo {
     flex: 0 0 110px !important;
     text-align: center !important;
-}
+} */
 
 @media (min-width: 992px) {
     .category-listing .list-item .category-item__logo {
@@ -2996,9 +2999,11 @@ button.hamburger:not(.collapsed):before {
         height: 38px;
     }
 }
-.d-block{
+
+.d-block {
     display: block !important;
 }
+
 .category-listing.fav-stores .list-item .brand-name span {
     display: block;
 }
