@@ -21,7 +21,7 @@
                                     <div class="card-head">
                                         <h5 class="card-title">User Info</h5>
                                     </div>
-                                    <form action="{{ route('admin.users.store') }}" enctype="multipart/form-data" class="gy-3 user-form is-alter" method="POST">
+                                    <form action="{{ route(getAdminPrefix() . '.users.store') }}" enctype="multipart/form-data" class="gy-3 user-form is-alter" method="POST">
                                         @csrf
                                         <div class="row g-4">
                                             <div class="col-lg-12 text-center">

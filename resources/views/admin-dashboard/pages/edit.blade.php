@@ -16,7 +16,7 @@
                                 <div class="card-inner">
                                     <div class="card-head">
                                     </div>
-                                    <form action="{{ route('admin.pages.update', $page) }}" class="form-validate pages-form" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route(getAdminPrefix() . '.pages.update', $page) }}" class="form-validate pages-form" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
                                         <div class="row g-4">
@@ -164,7 +164,7 @@
                 .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
 
             $.ajax({
-                url: `{{ route('admin.pages.view-short-codes') }}`,
+                url: `{{ route(getAdminPrefix() . '.pages.view-short-codes') }}`,
                 method: 'post',
                 data: {
                     _token: $('input[name=_token]').val(),

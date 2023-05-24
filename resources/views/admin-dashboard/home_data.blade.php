@@ -7,7 +7,7 @@
                 <div class="card">
                     <div class="card-body p-0">
                         <div class="media p-3">
-                            <a href="{{ route('admin.reports.earnings') }}" class="media-body"
+                            <a href="{{ route(getAdminPrefix() . '.reports.earnings') }}" class="media-body"
                                 style="display: contents;">
                                 <div class="media-body">
                                     <h6 class="title">Revenue</h6>
@@ -28,7 +28,7 @@
                 <div class="card">
                     <div class="card-body p-0">
                         <div class="media p-3">
-                            <a href="{{ route('admin.reports.earnings') }}" class="media-body"
+                            <a href="{{ route(getAdminPrefix() . '.reports.earnings') }}" class="media-body"
                                 style="display: contents;">
                                 <div class="media-body">
                                     <h6 class="title">Pending Revenue</h6>
@@ -48,7 +48,7 @@
                 <div class="card">
                     <div class="card-body p-0">
                         <div class="media p-3">
-                            <a href="{{ route('admin.commissions.index') }}" class="media-body"
+                            <a href="{{ route(getAdminPrefix() . '.commissions.index') }}" class="media-body"
                                 style="display: contents;">
                                 <div class="media-body">
                                     <h6 class="title">Cashbacks</h6>
@@ -68,7 +68,7 @@
                 <div class="card">
                     <div class="card-body p-0">
                         <div class="media p-3">
-                            <a href="{{ route('admin.users.index') }}" class="media-body" style="display: contents;">
+                            <a href="{{ route(getAdminPrefix() . '.users.index') }}" class="media-body" style="display: contents;">
                                 <div class="media-body">
                                     <h6 class="title">New Users</h6>
                                     <h3 class="mb-0 mt-2">{{ count($users) }}</h3>
@@ -95,7 +95,7 @@
                         <h6 class="title">New/Pending Tickets</h6>
                     </div>
                     <div class="card-tools">
-                        <a href="{{ route('admin.tickets.index') }}" class="link">All Tickets</a>
+                        <a href="{{ route(getAdminPrefix() . '.tickets.index') }}" class="link">All Tickets</a>
                     </div>
                 </div>
             </div>
@@ -107,7 +107,7 @@
 
                 @foreach ($tickets->take(5) as $ticket)
                 <li class="nk-support-item">
-                    <a href="{{ route('admin.tickets.show', $ticket) }}"
+                    <a href="{{ route(getAdminPrefix() . '.tickets.show', $ticket) }}"
                         class=" @if (count($new_tickets)) icon-status icon-status-info @endif">
                         <div class="user-avatar text-uppercase
                                 <?php
@@ -130,7 +130,7 @@
                         </div>
                     </a>
                     <div class="nk-support-content">
-                        <a href="{{ route('admin.tickets.show', $ticket) }}">
+                        <a href="{{ route(getAdminPrefix() . '.tickets.show', $ticket) }}">
                             <div class="title">
                                 <span>{{ $ticket->user->first_name }} {{ $ticket->user->last_name }}</span>
                                 @if ($ticket->status == 'open')
@@ -175,40 +175,40 @@
                 </div>
                 <ul class="nk-store-statistics">
                     <li class="item">
-                        <a href="{{ route('admin.stores.index') }}">
+                        <a href="{{ route(getAdminPrefix() . '.stores.index') }}">
                             <div class="info">
                                 <div class="title">Total Stores</div>
                                 <div class="count">{{ count($stores) }}</div>
                             </div>
 
-                        </a><a href="{{ route('admin.stores.index') }}">
+                        </a><a href="{{ route(getAdminPrefix() . '.stores.index') }}">
                             <em class="icon bg-primary-dim ni ni-bag"></em></a>
                     </li>
                     <li class="item">
-                        <a href="{{ route('admin.users.index') }}">
+                        <a href="{{ route(getAdminPrefix() . '.users.index') }}">
                             <div class="info">
                                 <div class="title">Total Users</div>
                                 <div class="count">{{ count($total_users) }}</div>
                             </div>
-                        </a><a href="{{ route('admin.users.index') }}">
+                        </a><a href="{{ route(getAdminPrefix() . '.users.index') }}">
                             <em class="icon bg-info-dim ni ni-users"></em></a>
                     </li>
                     <li class="item">
-                        <a href="{{ route('admin.commissions.index') }}">
+                        <a href="{{ route(getAdminPrefix() . '.commissions.index') }}">
                             <div class="info">
                                 <div class="title">Total Cashbacks</div>
                                 <div class="count">{{ count($total_coms) }}</div>
                             </div>
-                        </a><a href="{{ route('admin.commissions.index') }}">
+                        </a><a href="{{ route(getAdminPrefix() . '.commissions.index') }}">
                             <em class="icon bg-pink-dim ni ni-box"></em></a>
                     </li>
                     <li class="item">
-                        <a href="{{ route('admin.clicks.index') }}">
+                        <a href="{{ route(getAdminPrefix() . '.clicks.index') }}">
                             <div class="info">
                                 <div class="title">Total Clicks</div>
                                 <div class="count">{{ count($total_clicks) }}</div>
                             </div>
-                        </a><a href="{{ route('admin.clicks.index') }}">
+                        </a><a href="{{ route(getAdminPrefix() . '.clicks.index') }}">
                             <em class="icon bg-success-dim ni ni-arrow-up-right"></em></a>
                     </li>
 
@@ -271,7 +271,7 @@
                             <h6 class="title">Latest Cashback</h6>
                         </div>
                         <div class="card-tools">
-                            <a href="{{ route('admin.commissions.index') }}" class="link ml-2 a_link">View All</a>
+                            <a href="{{ route(getAdminPrefix() . '.commissions.index') }}" class="link ml-2 a_link">View All</a>
                         </div>
                     </div>
                 </div>
@@ -322,7 +322,7 @@
                 @endforeach
                 @if ($coms->count() > 10)
                 <span class="p-3 text-center d-block">
-                    +{{ $coms->count() - 10 }} More <a href="{{ route('admin.commissions.index') }}"
+                    +{{ $coms->count() - 10 }} More <a href="{{ route(getAdminPrefix() . '.commissions.index') }}"
                         class="link ml-1 a_link">View All</a>
 
                 </span>
@@ -344,7 +344,7 @@
                             <h6 class="title">New Users</h6>
                         </div>
                         <div class="card-tools">
-                            <a href="{{ route('admin.users.index') }}" class="link a_link">View All</a>
+                            <a href="{{ route(getAdminPrefix() . '.users.index') }}" class="link a_link">View All</a>
                         </div>
                     </div>
                 </div>
@@ -371,7 +371,7 @@
                             <span>{{ $user->first_name[0] }}{{ $user->last_name[0] }}</span>
                         </div>
                         <div class="user-info">
-                            <a href="{{ route('admin.users.show_user') }}?user_id={{ $user->id }}"><span
+                            <a href="{{ route(getAdminPrefix() . '.users.show_user') }}?user_id={{ $user->id }}"><span
                                     class="lead-text">{{ $user->first_name }}
                                     {{ $user->last_name }}</span></a>
                             <span class="sub-text">{{ $user->email }}</span>
@@ -382,7 +382,7 @@
                                     data-toggle="dropdown" aria-expanded="false"><em class="icon ni ni-more-h"></em></a>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <ul class="link-list-opt no-bdr">
-                                        <li><a href="{{ route('admin.users.show_user') }}?user_id={{ $user->id }}"><em
+                                        <li><a href="{{ route(getAdminPrefix() . '.users.show_user') }}?user_id={{ $user->id }}"><em
                                                     class="icon ni ni-eye"></em><span>View
                                                     user</span></a></li>
 
@@ -395,7 +395,7 @@
                 @endforeach
                 @if ($users->count() > 10)
                 <span class="p-3 text-center d-block">
-                    +{{ $users->count() - 10 }} More <a href="{{ route('admin.commissions.index') }}"
+                    +{{ $users->count() - 10 }} More <a href="{{ route(getAdminPrefix() . '.commissions.index') }}"
                         class="link ml-1 a_link">View All</a>
 
                 </span>
@@ -415,7 +415,7 @@
                         <h6 class="title">Pending Reviews</span></h6>
                     </div>
                     <div class="card-tools">
-                        <a href="{{ route('admin.reviews.index') }}" class="a_link">View All</a>
+                        <a href="{{ route(getAdminPrefix() . '.reviews.index') }}" class="a_link">View All</a>
 
                     </div>
                 </div>
@@ -443,7 +443,7 @@
                     </div>
 
                     <div class="nk-tb-col">
-                        <a href="{{ route('admin.stores.show_store') }}?slug={{ $review->store->slug }}">
+                        <a href="{{ route(getAdminPrefix() . '.stores.show_store') }}?slug={{ $review->store->slug }}">
                             <span><b>{{ $review->store->name ?? '' }}</b></span><br>
                             <span>{{ $review->store->network->name ?? '' }}</span></a>
                     </div>
@@ -462,7 +462,7 @@
                                         data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                     <div class="dropdown-menu dropdown-menu-right">
                                         <ul class="link-list-opt no-bdr">
-                                            <li><a href="{{ route('admin.reviews.edit', $review) }}" class="review-edit"
+                                            <li><a href="{{ route(getAdminPrefix() . '.reviews.edit', $review) }}" class="review-edit"
                                                     review-id={{ $review->id }}><em
                                                         class="icon ni ni-edit"></em><span>Edit Review</span></a></li>
                                             <li><a onclick="$('#delete-review-{{ $review->id }}').submit();"
@@ -470,7 +470,7 @@
                                                         class="icon ni ni-trash-fill"></em><span>Delete
                                                         Review</span></a>
 
-                                                <form action="{{ route('admin.reviews.destroy', $review) }}"
+                                                <form action="{{ route(getAdminPrefix() . '.reviews.destroy', $review) }}"
                                                     id="delete-review-{{ $review->id }}" method="POST" class="m-0">
                                                     @method('DELETE')
                                                     @csrf

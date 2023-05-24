@@ -47,11 +47,11 @@ class NetworkController extends Controller
             ]);
 
             flash()->success('New network added');
-            return redirect()->route('admin.networks.index');
+            return redirect()->route(getAdminPrefix() . '.networks.index');
         } catch (Exception $exception) {
 
             flash()->error('Error while adding new network');
-            return redirect()->route('admin.networks.index');
+            return redirect()->route(getAdminPrefix() . '.networks.index');
         }
     }
 
@@ -92,7 +92,7 @@ class NetworkController extends Controller
         } catch (\Throwable $th) {
 
             flash()->error('Error while exporting categories');
-            return redirect()->route('admin.networks.index');
+            return redirect()->route(getAdminPrefix() . '.networks.index');
         }
     }
 

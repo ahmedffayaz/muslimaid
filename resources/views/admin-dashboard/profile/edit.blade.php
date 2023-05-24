@@ -29,9 +29,9 @@
                                         <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                         <div class="toggle-expand-content" data-content="pageMenu">
                                             <ul class="nk-block-tools g-3">
-                                                {{-- <li class="nk-block-tools-opt"><a href="{{route('admin.stores.edit',$store)}}" class="btn btn-primary btn-sm"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li> --}}
+                                                {{-- <li class="nk-block-tools-opt"><a href="{{route(getAdminPrefix() . '.stores.edit',$store)}}" class="btn btn-primary btn-sm"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li> --}}
 
-                                                {{-- <li><a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
+                                                {{-- <li><a href="{{route(getAdminPrefix() . '.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
 
                                             </ul>
                                         </div>
@@ -64,7 +64,7 @@
                                                     <h5 class="title">Profile Settings</h5>
                                                     {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.profile.update', $profile) }}" class="gy-3 form-settings form-validate is-alter" method="POST"
+                                                <form action="{{ route(getAdminPrefix() . '.profile.update', $profile) }}" class="gy-3 form-settings form-validate is-alter" method="POST"
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     @method('PUT')
@@ -190,7 +190,7 @@
                                         </div>
                                         <div class="tab-pane" id="tabItem9">
                                             <h5 class="title mb-4">Change Password</h5>
-                                            <form action="{{ route('admin.profile.save_password', $profile) }}" class="gy-3 form-validate is-alter" id='password_form'
+                                            <form action="{{ route(getAdminPrefix() . '.profile.save_password', $profile) }}" class="gy-3 form-validate is-alter" id='password_form'
                                                 method="POST">
                                                 @csrf
                                                 @method('PUT')

@@ -16,7 +16,7 @@
                                 <div class="card-inner">
                                     <div class="card-head">
                                     </div>
-                                    <form action="{{ route('admin.blogs.update', $blog) }}" class="" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route(getAdminPrefix() . '.blogs.update', $blog) }}" class="" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         @method('PUT')
                                         <div class="row g-4">

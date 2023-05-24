@@ -20,7 +20,7 @@
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
                                        
-                                        <li class="nk-block-tools-opt"><a href="{{route('admin.stores.create')}}" class="btn btn-primary"><em class="icon ni ni-plus"></em><span>Add Store</span></a></li>
+                                        <li class="nk-block-tools-opt"><a href="{{route(getAdminPrefix() . '.stores.create')}}" class="btn btn-primary"><em class="icon ni ni-plus"></em><span>Add Store</span></a></li>
                                     </ul>
                                 </div>
                             </div><!-- .toggle-wrap -->
@@ -64,7 +64,7 @@
                                                 <a href="#" class="dropdown-toggle btn btn-sm btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                                 <div class="dropdown-menu dropdown-menu-right">
                                                     <ul class="link-list-opt no-bdr">
-                                                        {{-- <li><a href="{{route('admin.stores.edit', $store)}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li> --}}
+                                                        {{-- <li><a href="{{route(getAdminPrefix() . '.stores.edit', $store)}}"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li> --}}
                                                     </ul>
                                                 </div>
                                             </div>

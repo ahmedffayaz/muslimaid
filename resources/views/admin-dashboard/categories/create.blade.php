@@ -1,7 +1,7 @@
 @php
     $isEdit = isset($category) ? true : false;
 @endphp
-<form action="{{ $isEdit ? route('admin.categories.update', $category) : route('admin.categories.store') }}" class="gy-3 is-alter" method="POST" enctype="multipart/form-data"
+<form action="{{ $isEdit ? route(getAdminPrefix() . '.categories.update', $category) : route(getAdminPrefix() . '.categories.store') }}" class="gy-3 is-alter" method="POST" enctype="multipart/form-data"
     id="category-form">
     @csrf
     <div class="row g-4">

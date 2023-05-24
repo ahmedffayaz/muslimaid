@@ -147,7 +147,7 @@ class ImporterController extends Controller
             }
         }
         flash()->success('cashbacks imported successfully');
-        return redirect()->route('admin.commissions.index');
+        return redirect()->route(getAdminPrefix() . '.commissions.index');
     }
 
     public function import_coupons()
@@ -319,7 +319,7 @@ class ImporterController extends Controller
             $page++;
         }
         flash()->success('vouchers imported successfully');
-        return redirect()->route('admin.vouchers.index');
+        return redirect()->route(getAdminPrefix() . '.vouchers.index');
     }
 
     /**
@@ -514,7 +514,7 @@ class ImporterController extends Controller
                         }
                     } catch (Exception $e) {
                         flash()->error('Error while running importer');
-                        return redirect()->route('admin.stores.index');
+                        return redirect()->route(getAdminPrefix() . '.stores.index');
                     }
                 }
 

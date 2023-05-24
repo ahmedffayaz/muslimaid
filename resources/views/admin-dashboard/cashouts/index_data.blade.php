@@ -68,7 +68,7 @@
     <div class="nk-tb-col nk-tb-col-tools">
         <ul class="nk-tb-actions gx-1">
             <li class="nk-tb-action">
-                <a href="{{route('admin.cashouts.show',$cashout)}}" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="View Cashout">
+                <a href="{{route(getAdminPrefix() . '.cashouts.show',$cashout)}}" class="btn btn-trigger btn-icon" data-toggle="tooltip" data-placement="top" title="View Cashout">
                     <em class="icon ni ni-eye-fill"></em>
                 </a>
             </li>

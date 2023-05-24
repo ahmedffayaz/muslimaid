@@ -42,8 +42,8 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        {{-- <li class="nk-block-tools-opt"><a href="{{route('admin.stores.edit',$store)}}" class="btn btn-primary btn-sm"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li> --}}
-                                        {{-- <li><a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
+                                        {{-- <li class="nk-block-tools-opt"><a href="{{route(getAdminPrefix() . '.stores.edit',$store)}}" class="btn btn-primary btn-sm"><em class="icon ni ni-edit"></em><span>Edit Store</span></a></li> --}}
+                                        {{-- <li><a href="{{route(getAdminPrefix() . '.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
                                     </ul>
                                 </div>
                             </div><!-- .toggle-wrap -->
@@ -66,7 +66,7 @@
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">User</span>
-                                                <span class="profile-ud-value"><a href="{{route('admin.users.show_user')}}?user_id={{$cashout->user->id}}" class="a_link">{{$cashout->user->id}} - @if($cashout->user->first_name != 'unnamed' || $cashout->user->last_name != 'unnamed') {{$cashout->user->first_name}} {{$cashout->user->last_name}} - @endif {{$cashout->user->email}}</a></span>
+                                                <span class="profile-ud-value"><a href="{{route(getAdminPrefix() . '.users.show_user')}}?user_id={{$cashout->user->id}}" class="a_link">{{$cashout->user->id}} - @if($cashout->user->first_name != 'unnamed' || $cashout->user->last_name != 'unnamed') {{$cashout->user->first_name}} {{$cashout->user->last_name}} - @endif {{$cashout->user->email}}</a></span>
                                             </div>
                                         </div>
                                         <div class="profile-ud-item">
@@ -157,7 +157,7 @@
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">Store</span>
                                                     @if ($cashback->store_id)
-                                                        <span class="profile-ud-value"><a href="{{route('admin.stores.show_store')}}?slug={{$cashback->store->slug}}">
+                                                        <span class="profile-ud-value"><a href="{{route(getAdminPrefix() . '.stores.show_store')}}?slug={{$cashback->store->slug}}">
                                                             {{ $cashback->store->name }}</a></span>
                                                    @else
                                                         <span class="profile-ud-value"> {{ ucfirst(str_replace('_', ' ', $cashback->type)) }}</span>
@@ -223,7 +223,7 @@
                                                 {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
 
-                                            <form action="{{route('admin.cashouts.update',$cashout)}}" class="gy-3 form-validate is-alter"  id="form_withdraw" method="POST">
+                                            <form action="{{route(getAdminPrefix() . '.cashouts.update',$cashout)}}" class="gy-3 form-validate is-alter"  id="form_withdraw" method="POST">
                                                 @csrf
                                                 @method('PUT')
                                                 <div class="row g-4">

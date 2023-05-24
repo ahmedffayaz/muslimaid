@@ -280,6 +280,7 @@ $(document).ready(function () {
 var base_url = $("base").attr("href");
 var csrfToken = $('meta[name="csrf-token"]').attr("content");
 var url = window.location.protocol + "//" + window.location.hostname;
+var adminPrefix = "{{ getAdminPrefix() }}";
 if (window.location.port) {
     url += ":" + window.location.port;
 }
@@ -610,7 +611,7 @@ $(document).on("click", ".fav-icon", function (e) {
         if (favoriteStatus) {
             $(this).removeClass("liked");
             $.ajax({
-                url: url + "/admin/users/remove-favorite",
+                url: url + "/" + adminPrefix + "/users/remove-favorite",
                 type: "POST",
                 data: {
                     storeId: storeId,
@@ -623,7 +624,7 @@ $(document).on("click", ".fav-icon", function (e) {
         } else {
             $(this).addClass("liked");
             $.ajax({
-                url: url + "/admin/users/add-favorite",
+                url: url + "/" + adminPrefix + "/users/add-favorite",
                 type: "POST",
                 data: {
                     storeId: storeId,
@@ -906,7 +907,7 @@ $(document).on("click", ".like-action-remove", function () {
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: url + "/admin/users/remove-favorite",
+                url: url + "/" + adminPrefix + "/users/remove-favorite",
                 type: "POST",
                 data: {
                     storeId: ele.attr("this-store-id"),
@@ -917,6 +918,9 @@ $(document).on("click", ".like-action-remove", function () {
                     ele.removeClass("liked");
                     if (data.type) {
                         $(ele).parents("li").remove();
+                        swal(storeTitle + " has been removed from the favorite stores list.", {
+                            icon: "success",
+                          });
                     }
                 },
             });
@@ -1220,3 +1224,32 @@ if (cookie_consent != "") {
 }
 
 /*Cookie Consent Popup End*/
+function showLogoutConfirmation() {
+    swal({
+      title: 'Logout',
+      text: 'Are you sure you want to logout?',
+      icon: 'info',
+      buttons: {
+        cancel: {
+          text: 'Cancel',
+          value: null,
+          visible: true,
+          className: '',
+          closeModal: true,
+        },
+        confirm: {
+          text: 'Logout',
+          value: true,
+          visible: true,
+          className: '',
+          closeModal: true
+        }
+      },
+      closeOnClickOutside: false,
+      closeOnEsc: false
+    }).then((result) => {
+      if (result) {
+        document.getElementById('logout-form').submit();
+      } 
+    });
+  }

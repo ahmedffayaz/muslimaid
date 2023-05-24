@@ -17,12 +17,12 @@
                                     <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
-                                            <li class="nk-block-tools-opt"><a href="{{ route('admin.charities.create') }}" class="btn btn-primary btn-sm"><em
+                                            <li class="nk-block-tools-opt"><a href="{{ route(getAdminPrefix() . '.charities.create') }}" class="btn btn-primary btn-sm"><em
                                                         class="icon ni ni-plus"></em><span>Add Charity</span></a></li>
                                             <li class="nk-block-tools-opt"><a href="#add-charity-modal" class="btn btn-primary btn-sm" data-toggle="modal"><em
                                                         class="icon ni ni-plus"></em><span>Create Charity Type</span></a>
                                             </li>
-                                            <li class="nk-block-tools-opt"><a href="{{ route('admin.charities.charity_type_view') }}" class="btn btn-primary btn-sm"><em
+                                            <li class="nk-block-tools-opt"><a href="{{ route(getAdminPrefix() . '.charities.charity_type_view') }}" class="btn btn-primary btn-sm"><em
                                                         class="icon ni ni-plus"></em><span>View Charity Type</span></a>
                                             </li>
                                         </ul>
@@ -33,7 +33,7 @@
                     </div><!-- .nk-block-head -->
                     <div class="card card-preview mb-4">
                         <div class="card-inner">
-                            <form action="{{ route('admin.charities.search') }}" class="is-alter search_form" method="POST">
+                            <form action="{{ route(getAdminPrefix() . '.charities.search') }}" class="is-alter search_form" method="POST">
                                 @csrf
                                 <div class="row g-4">
                                     {{-- <div class="col-lg-2"></div> --}}
@@ -124,7 +124,7 @@
                                     <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
                                 </div>
                                 <div class="p-4">
-                                    <form action="{{ route('admin.admin-charities-store') }}" class="gy-3 form-validate is-alter " id="add-charity-form" method="POST">
+                                    <form action="{{ route(getAdminPrefix() . '.admin-charities-store') }}" class="gy-3 form-validate is-alter " id="add-charity-form" method="POST">
                                         @csrf
                                         <div class="row g-4">
                                             <div class="col-12">
@@ -178,7 +178,7 @@
             let btn = $('#save-btn')
             btn.attr('disabled', 'disabled')
                 .append('<span class="spinner-border spinner-border-sm ml-1" role="status"></span>');
-            let url = "{{ route('admin.admin-charities-store') }}";
+            let url = "{{ route(getAdminPrefix() . '.admin-charities-store') }}";
             let method = 'POST';
             let form = $('#add-charity-form');
             let formData = new FormData(form[0]);
@@ -255,7 +255,7 @@
                 var status = $("select[name=status").val();
                 var country = $("select[name=country").val();
                 $.ajax({
-                    url: '{{ route('admin.charities.search') }}',
+                    url: '{{ route(getAdminPrefix() . '.charities.search') }}',
                     method: "POST",
                     data: {
                         _token: _token,

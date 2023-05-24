@@ -37,7 +37,7 @@
                     @if ($store->override_cashback)
                         <div class="d-flex">
                             <a href="" cashback-id='{{ $cashback->id }}' class='cashback-edit a_link'><em class="icon ni ni-edit"></em></a>
-                            <form action="{{ route('admin.stores.cashbacks.delete', $store) }}" id="store-cashback-form-id" method="POST">
+                            <form action="{{ route(getAdminPrefix() . '.stores.cashbacks.delete', $store) }}" id="store-cashback-form-id" method="POST">
                                 @csrf
                                 <input type="hidden" name="storeCashbackId" value="{{ $cashback->id }}">
                                 <a href="javascript:void(0);" class='cashback-delete a_link'><em class="icon ni ni-trash-fill"></em></a>

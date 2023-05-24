@@ -83,7 +83,7 @@ class TestimonialController extends Controller
         $testimonial->save();
 
         flash()->success('Testimonial added successfully.');
-        return redirect()->route('admin.testimonials.index');;
+        return redirect()->route(getAdminPrefix() . '.testimonials.index');;
     }
 
     /**
@@ -143,7 +143,7 @@ class TestimonialController extends Controller
         $testimonial->order_no = $request->order_no;
         $testimonial->save();
         flash()->success('Testimonial updated successfully');
-        return redirect()->route('admin.testimonials.index');
+        return redirect()->route(getAdminPrefix() . '.testimonials.index');
     }
 
     /**
@@ -156,7 +156,7 @@ class TestimonialController extends Controller
     {
         $testimonial->delete();
         flash()->success('Testimonial deleted successfully');
-        return redirect()->route('admin.testimonials.index');
+        return redirect()->route(getAdminPrefix() . '.testimonials.index');
     }
 
     public function userDetails($id)

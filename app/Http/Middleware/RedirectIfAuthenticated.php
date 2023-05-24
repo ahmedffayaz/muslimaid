@@ -24,7 +24,7 @@ class RedirectIfAuthenticated
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
                 if(Auth::user()->hasRole('admin')){
-                    return redirect()->intended('/admin/home');
+                    return redirect()->intended('/' . getAdminPrefix() . '/home');
                 } else {
                     return redirect('/');
                 }

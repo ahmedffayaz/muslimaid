@@ -17,8 +17,8 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        {{-- <li class="nk-block-tools-opt"><a href="{{route('admin.ticketCategory.index')}}" class="btn btn-primary btn-sm"><em class="icon ni ni-plus"></em><span>Manage Ticket Category</span></a></li> --}}
-                                        {{-- <li><a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
+                                        {{-- <li class="nk-block-tools-opt"><a href="{{route(getAdminPrefix() . '.ticketCategory.index')}}" class="btn btn-primary btn-sm"><em class="icon ni ni-plus"></em><span>Manage Ticket Category</span></a></li> --}}
+                                        {{-- <li><a href="{{route(getAdminPrefix() . '.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
                                     </ul>
                                 </div>
                             </div><!-- .toggle-wrap -->
@@ -27,7 +27,7 @@
                 </div><!-- .nk-block-head -->
                 <div class="card card-preview mb-4">
                     <div class="card-inner">
-                        <form action="{{route('admin.tickets.search')}}" class="form-validate is-alter search_form" method="POST">
+                        <form action="{{route(getAdminPrefix() . '.tickets.search')}}" class="form-validate is-alter search_form" method="POST">
                             @csrf
                             <div class="row g-4">
                                 <div class="col-lg-2">
@@ -129,7 +129,7 @@
             <span class="sr-only">Loading...</span>
             </div></div>`);
 
-             pageurl = "{{route('admin.tickets.fetch')}}?page="
+             pageurl = "{{route(getAdminPrefix() . '.tickets.fetch')}}?page="
              var _token = $("input[name=_token]").val();
             $.ajax({
 
@@ -159,7 +159,7 @@
             var priority = $("select[name=priority").val();
             var title = $("input[name=title]").val();
             $.ajax({
-              url:'{{route("admin.tickets.search")}}?page='+page,
+              url:'{{route(getAdminPrefix() . ".tickets.search")}}?page='+page,
               method:"POST",
               data:{_token:_token,user_id:user_id,ticket_id:ticket_id,category:category,status:status,priority:priority,page:page},
               success:function(data)
@@ -190,7 +190,7 @@
             var priority = $("select[name=priority").val();
             var title = $("input[name=title]").val();
             $.ajax({
-              url:'{{route("admin.tickets.search")}}',
+              url:'{{route(getAdminPrefix() . ".tickets.search")}}',
               method:"POST",
               data:{_token:_token,user_id:user_id,ticket_id:ticket_id,category:category,status:status},
               success:function(data)

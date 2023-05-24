@@ -17,8 +17,8 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li><a href="{{route('admin.settings.create')}}" class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-plus"></em><span>Add Setting</span></a></li>
-                                        <li><a href="{{route('admin.settings.export', $settings)}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
+                                        <li><a href="{{route(getAdminPrefix() . '.settings.create')}}" class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-plus"></em><span>Add Setting</span></a></li>
+                                        <li><a href="{{route(getAdminPrefix() . '.settings.export', $settings)}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
 
                                     </ul>
                                 </div>
@@ -36,7 +36,7 @@
                                 </a>
                                 <div class="accordion-body collapse" id="accordion-item-1-1" data-parent="#accordion-1">
                                     <div class="accordion-inner">
-                                        <div><form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
+                                        <div><form action="{{route(getAdminPrefix() . '.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
                                             @csrf
                                             <div class="row g-4">
                                                 <div class="col-lg-4">
@@ -107,7 +107,7 @@
         
          if(route=='index'){
             
-             pageurl = "{{route('admin.settings.fetch')}}?page="
+             pageurl = "{{route(getAdminPrefix() . '.settings.fetch')}}?page="
              var _token = $("input[name=_token]").val();
             $.ajax({
 
@@ -131,7 +131,7 @@
            
             var status = $("select[name=status]").val();
             $.ajax({
-              url:'{{route("admin.settings.search_settings")}}?page='+page,
+              url:'{{route(getAdminPrefix() . ".settings.search_settings")}}?page='+page,
               method:"POST",
               data:{_token:_token,title:title,key:key},
               success:function(data)
@@ -156,7 +156,7 @@
            
             var status = $("select[name=status]").val();
             $.ajax({
-              url:'{{route("admin.settings.search_settings")}}',
+              url:'{{route(getAdminPrefix() . ".settings.search_settings")}}',
               method:"POST",
               data:{_token:_token,title:title,key:key},
               success:function(data)

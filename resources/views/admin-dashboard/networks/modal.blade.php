@@ -1,6 +1,6 @@
 <h4 class="nk-modal-title">{{ $networkFullName }} Settings</h4>
 <div class="nk-modal-text">
-    <form class="network_form_settings" action="{{ route('admin.settings.settings_save') }}" method="post">
+    <form class="network_form_settings" action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" method="post">
         @csrf
         <div class="form-group">
             <label class="form-label" for="{{ $networkName }}_website_id">Website ID</label>

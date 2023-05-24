@@ -303,7 +303,7 @@ class CategoryController extends Controller
             return Response::download($filename, 'categories.csv', $headers);
         } catch (\Throwable $th) {
             flash()->error('Error while exporting categories');
-            return redirect()->route('admin.categories.index');
+            return redirect()->route(getAdminPrefix() . '.categories.index');
         }
     }
 

@@ -126,7 +126,7 @@
         $(document).ready(function() {
             // show default 5 fields
             $.ajax({
-                url: "{{ route('admin.commissions.form') }}",
+                url: "{{ route(getAdminPrefix() . '.commissions.form') }}",
                 type: 'GET',
                 success: function(response) {
                     $('#multiple_cashbacks_form').html(response);
@@ -140,7 +140,7 @@
             $('#show-modal').on('click', function(event) {
                 event.preventDefault();
                 $.ajax({
-                    url: "{{ route('admin.commissions.import.form') }}",
+                    url: "{{ route(getAdminPrefix() . '.commissions.import.form') }}",
                     type: 'GET',
                     success: function(response) {
                         $('.title').text('Import Cashbacks');

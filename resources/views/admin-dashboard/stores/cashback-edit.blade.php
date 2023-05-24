@@ -1,7 +1,7 @@
 @php
     $isEdit = isset($cashback) ? true : false;
     $isEditStore = isset($store) ? true : false;
-    $url = $isEdit ? route('admin.stores.cashbacks.update', $cashback) : route('admin.stores.cashbacks.store');
+    $url = $isEdit ? route(getAdminPrefix() . '.stores.cashbacks.update', $cashback) : route(getAdminPrefix() . '.stores.cashbacks.store');
 @endphp
 <form action="{{ $url }}" class="gy-3 form-validate is-alter cashback_form" method="POST">
     @csrf

@@ -78,7 +78,7 @@ class BlogController extends Controller
         }
 
         flash()->success('New blog post created successfully');
-        return redirect()->route('admin.blogs.index');
+        return redirect()->route(getAdminPrefix() . '.blogs.index');
     }
 
     /**
@@ -122,7 +122,7 @@ class BlogController extends Controller
         $blog->featured_image = $featured_image;
         $blog->update();
         flash()->success('blog updated successfully');
-        return redirect()->route('admin.blogs.index');
+        return redirect()->route(getAdminPrefix() . '.blogs.index');
     }
 
     /**
@@ -135,7 +135,7 @@ class BlogController extends Controller
     {
         $blog->delete();
         flash()->success('blog deleted successfully');
-        return redirect()->route('admin.blogs.index');
+        return redirect()->route(getAdminPrefix() . '.blogs.index');
     }
 
     public function runValidation($request)

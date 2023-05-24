@@ -1,7 +1,7 @@
 @php
     $isImport = isset($csvData) ? true : false;
 @endphp
-<form action="{{ route('admin.commissions.store_multiple') }}" class="gy-3 form-validate is-alter" method="POST" id="save_form" autocomplete="off">
+<form action="{{ route(getAdminPrefix() . '.commissions.store_multiple') }}" class="gy-3 form-validate is-alter" method="POST" id="save_form" autocomplete="off">
     @csrf
     @method('POST')
     <div class="fields-container">

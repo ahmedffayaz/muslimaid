@@ -25,7 +25,7 @@
                                 <div class="card-inner">
                                     <div class="card-head">
                                     </div>
-                                    <form action="{{ route('admin.blogs.store') }}" class="form-validate is-alter" enctype="multipart/form-data" method="POST">
+                                    <form action="{{ route(getAdminPrefix() . '.blogs.store') }}" class="form-validate is-alter" enctype="multipart/form-data" method="POST">
                                         @csrf
                                         <div class="row g-4">
                                             <div class="col-lg-12">

@@ -58,7 +58,7 @@
                                                             class="icon ni ni-check"></em><span>Mark as
                                                             Closed</span></a>
 
-                                                    <form action="{{ route('admin.tickets.close', $ticket) }}"
+                                                    <form action="{{ route(getAdminPrefix() . '.tickets.close', $ticket) }}"
                                                         id="close-{{ $ticket->id }}" method="POST" class="m-0">
                                                         @method('PUT')
                                                         @csrf
@@ -108,7 +108,7 @@
                                                 <div class="nk-reply-entry entry">
                                                     @if ($ticket->ticket_type == 'claim')
                                                     Store: <a
-                                                        href="{{ route('admin.stores.show_store') }}?slug={{ $ticket->store->slug }}">{{
+                                                        href="{{ route(getAdminPrefix() . '.stores.show_store') }}?slug={{ $ticket->store->slug }}">{{
                                                         $ticket->store->id }}
                                                         - {{ $ticket->store->name }}</a><br>
                                                     Purchase Amount: {{ currency($ticket->claim_amount) }}<br>
@@ -171,7 +171,7 @@
                                             <div class="tab-content">
                                                 <div class="tab-pane active" id="reply-form">
                                                     <div class="nk-reply-form-editor">
-                                                        <form method="POST" action="{{ route('admin.replies.store') }}"
+                                                        <form method="POST" action="{{ route(getAdminPrefix() . '.replies.store') }}"
                                                             class="form-validate">
                                                             @csrf
                                                             <input type="hidden" name="ticket_id"

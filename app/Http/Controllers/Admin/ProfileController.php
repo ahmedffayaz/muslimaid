@@ -83,7 +83,7 @@ class ProfileController extends Controller
 
         if (!$request->ajax()) {
             flash()->success('Password changed successfully');
-            return redirect()->route('admin.profile.index');
+            return redirect()->route(getAdminPrefix() . '.profile.index');
         } else {
             return array(
                 'message' => 'Password updated successfully',

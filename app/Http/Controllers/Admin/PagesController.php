@@ -79,12 +79,12 @@ class PagesController extends Controller
 
             if (!$request->ajax()) {
                 flash()->success('New Page created successfully');
-                return redirect()->route('admin.pages.edit', $page->id);
+                return redirect()->route(getAdminPrefix() . '.pages.edit', $page->id);
             } else {
                 return response()->json([
                     'status' => JsonResponse::HTTP_OK,
                     'message' => 'Page created successfully',
-                    'url' => route('admin.pages.edit', $page->id)
+                    'url' => route(getAdminPrefix() . '.pages.edit', $page->id)
                 ], JsonResponse::HTTP_OK);
             }
         } catch (Throwable $th) {
@@ -149,13 +149,13 @@ class PagesController extends Controller
 
             if (!$request->ajax()) {
                 flash()->success('Page updated');
-                return redirect()->route('admin.pages.index');
+                return redirect()->route(getAdminPrefix() . '.pages.index');
             }
 
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,
                 'message' => 'Page updated',
-                'url' => route('admin.pages.index')
+                'url' => route(getAdminPrefix() . '.pages.index')
             ], JsonResponse::HTTP_OK);
         } catch (Throwable $th) {
             DB::rollBack();
@@ -198,7 +198,7 @@ class PagesController extends Controller
         $page->delete();
 
         flash()->success('Page deleted');
-        return redirect()->route('admin.pages.index');
+        return redirect()->route(getAdminPrefix() . '.pages.index');
     }
 
     public function runValidation($request)

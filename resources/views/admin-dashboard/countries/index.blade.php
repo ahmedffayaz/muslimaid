@@ -109,7 +109,7 @@
             $(document).on('click', '.edit-form', function(event) {
                 event.preventDefault();
                 let id = $(this).data('id');
-                let url = "{{ route('admin.countries.edit', ':id') }}";
+                let url = "{{ route(getAdminPrefix() . '.countries.edit', ':id') }}";
                 // Replace id
                 url = url.replace(':id', id);
                 $.ajax({
@@ -137,7 +137,7 @@
                     let formdata = new FormData(this);
 
                     if (id) {
-                        url = "{{ route('admin.countries.update', ':id') }}";
+                        url = "{{ route(getAdminPrefix() . '.countries.update', ':id') }}";
                         url = url.replace(':id', id);
                         formdata.append('_method', 'PUT');
                     }
@@ -227,7 +227,7 @@
                 var currency_id = $("select[name=currency_id").val();
                 var status = $("select[name=status").val();
                 $.ajax({
-                    url: '{{ route('admin.countries.search') }}',
+                    url: '{{ route(getAdminPrefix() . '.countries.search') }}',
                     method: "POST",
                     data: {
                         _token: _token,

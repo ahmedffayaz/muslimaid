@@ -21,7 +21,7 @@
                                 <div class="card-head">
                                     <h5 class="card-title">Translation</h5>
                                 </div>
-                                <form action="{{route('admin.translations.store')}}" class="gy-3 form-validate is-alter" method="POST">
+                                <form action="{{route(getAdminPrefix() . '.translations.store')}}" class="gy-3 form-validate is-alter" method="POST">
                                     @csrf
                                     <div class="row g-4">
                                         <div class="col-lg-6">
