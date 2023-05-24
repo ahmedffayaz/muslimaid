@@ -26,6 +26,28 @@ use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\PersonalAccessToken;
 use Stevebauman\Location\Facades\Location;
 use Intervention\Image\ImageManagerStatic as Image;
+use Symfony\Component\Yaml\Yaml;
+
+function getImporterYMLSettings($path )
+{
+    $moduleSettings  = Yaml::parseFile(base_path('modules.yml'));
+
+    $pathParts = explode('_', $path);
+    $moduleConfig = $moduleSettings;
+    foreach ($pathParts as $part) {
+        if (isset($moduleConfig[$part])) {
+            $moduleConfig = $moduleConfig[$part];
+        } else {
+            return 1;
+        }
+    }
+
+    if (in_array($moduleConfig,['on','On','ON',1])) {
+        return 1;
+    }
+
+    return 0;
+}
 
 function getPageTemplates($slug)
 {
