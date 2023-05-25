@@ -359,26 +359,4 @@ class UserController extends Controller
     {
         return view('admin-dashboard.users.show');
     }
-
-    public function addFavorite(Request $request)
-    {
-        $model = Store::find($request->storeId);
-        if ($model) {
-            Auth::user()->favoriteStores()->syncWithoutDetaching([$model->id]);
-        }
-        return response()->json(
-            ['message' => 'Store added to favorite list.', 'type' => 'success']
-        );
-    }
-
-    public function removeFavorite(Request $request)
-    {
-        $model = Store::find($request->storeId);
-        if ($model) {
-            Auth::user()->favoriteStores()->detach($model->id);
-        }
-        return response()->json(
-            ['message' => 'Store removed from favorite list.', 'type' => 'info']
-        );
-    }
 }
