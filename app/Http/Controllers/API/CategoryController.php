@@ -25,6 +25,8 @@ class CategoryController extends Controller
 
             $categories = Category::when($request->has('letter'), function ($query) use ($request) {
                 $query->where('name', 'like', $request->input('letter') . '%');
+            })->when($request->has('parent_id'), function ($query) use ($request) {
+                $query->where('id', $request->input('parent_id'));
             })->with(['childs' => function ($query) {
                 $query->withCount('stores');
             }])->withCount('stores')->where('parent_id', 0)->paginate(20)->appends(request()->input());
@@ -221,6 +223,58 @@ class CategoryController extends Controller
             $data = [
                 'status' => 500,
                 'message' =>  $e->getMessage(),
+                'data' => []
+            ];
+            return response()->json($data, 500);
+        }
+    }
+    public function cuisineFilter(Request $request)
+    {
+        try {
+            $page = Page::whereSlug('stores')->whereType('system')->whereStatus('active')->pluck('banner_image')->firstOrFail();
+            $category = Category::where(function ($query) {
+                $query->where('visibility', '!=', 'hidden')
+                    ->orWhereNull('visibility');
+            })->whereSlug('cashblack-to-your-door')->with('stores')->whereStatus('1')->first();
+            $allStores =  $category->stores();
+            $categoryCuisine = $request->cuisine;
+            if (isset($request->cuisine)) {
+                $allStores->whereHas('categories', function ($query) use ($categoryCuisine) {
+                    $query->where('name', $categoryCuisine);
+                });
+            }
+            $stores = $allStores->paginate(20)->appends(request()->input());
+            if ($stores->count() == 0) {
+                $data = [
+                    'status' => 200,
+                    'message' => 'No store found',
+                    'data' => []
+                ];
+                return response()->json($data, 200);
+            }
+            $data = [
+                'status' => 200,
+                'message' => 'Success',
+                'data' => [
+                    'main_banner_image' => getBannerImageUrl($page),
+                    'stores' => StoreResource::collection($stores),
+                    'meta_data' => [
+                        "next" => $stores->nextPageUrl(),
+                        "previous" => $stores->previousPageUrl(),
+                        "per_page" => 20,
+                        "total" => $stores->total(),
+                        "current_page" => $stores->currentPage(),
+                        "total_pages" => $stores->lastPage(),
+                        "first" => $stores->firstItem(),
+                        "last" => $stores->lastItem()
+                    ]
+                ]
+            ];
+            return response()->json($data, 200);
+        } catch (Exception $e) {
+            $data = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
                 'data' => []
             ];
             return response()->json($data, 500);

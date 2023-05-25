@@ -107,8 +107,6 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('users/fetch', [App\Http\Controllers\Admin\UserController::class, 'fetch'])->name('users.fetch');
         Route::post('users/search_users',  [App\Http\Controllers\Admin\UserController::class, 'searchUsers'])->name('users.search_users');
         Route::get('users/show', [App\Http\Controllers\Admin\UserController::class, 'showUser'])->name('users.show_user');
-        Route::post('users/add-favorite', [App\Http\Controllers\Admin\UserController::class, 'addFavorite'])->name('add-favorite');
-        Route::post('users/remove-favorite', [App\Http\Controllers\Admin\UserController::class, 'removeFavorite'])->name('remove-favorite');
         Route::resource('users', UserController::class);
 
         // Importers
@@ -298,6 +296,8 @@ Route::namespace('App\Http\Controllers\Client')
     ->group(function () {
         Route::get('dashboard', [App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
         Route::get('profile', [App\Http\Controllers\Client\DashboardController::class, 'edit'])->name('profile');
+        Route::post('users/add-favorite', [App\Http\Controllers\Client\DashboardController::class, 'addFavorite'])->name('add-favorite');
+        Route::post('users/remove-favorite', [App\Http\Controllers\Client\DashboardController::class, 'removeFavorite'])->name('remove-favorite');
         Route::get('favorite-stores', [App\Http\Controllers\Client\DashboardController::class, 'favoriteStores'])->name('favorite-stores');
         Route::get('favorite-cashblack-to-door', [App\Http\Controllers\Client\DashboardController::class, 'favoriteCashbackStores'])->name('favorite-cashblack-to-door');
         Route::put('profile/update/{user}', [App\Http\Controllers\Client\DashboardController::class, 'update'])->name('profile.update');

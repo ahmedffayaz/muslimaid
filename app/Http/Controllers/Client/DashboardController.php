@@ -226,4 +226,25 @@ class DashboardController extends Controller
         })->paginate(20);
         return view('frontend.client-dashboard.favorite-stores', compact('favoriteStores', 'title'));
     }
+    public function addFavorite(Request $request)
+    {
+        $model = Store::find($request->storeId);
+        if ($model) {
+            Auth::user()->favoriteStores()->syncWithoutDetaching([$model->id]);
+        }
+        return response()->json(
+            ['message' => 'Store added to favorite list.', 'type' => 'success']
+        );
+    }
+
+    public function removeFavorite(Request $request)
+    {
+        $model = Store::find($request->storeId);
+        if ($model) {
+            Auth::user()->favoriteStores()->detach($model->id);
+        }
+        return response()->json(
+            ['message' => 'Store removed from favorite list.', 'type' => 'info']
+        );
+    }
 }
