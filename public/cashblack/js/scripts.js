@@ -564,9 +564,10 @@ $("#listview").click(function () {
         $(".category-listing").removeClass("grid-view");
         $(".category-listing").addClass("list-view");
     }
+    $(".store-grid-img").removeClass("img-fix-size");
     setCookie("views", "lists", 365);
 });
-
+$(".store-grid-img").addClass("img-fix-size");
 $("#gridview").click(function () {
     if (!$(this).hasClass("active")) {
         $(this).addClass("active");
