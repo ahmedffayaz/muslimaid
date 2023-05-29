@@ -2,9 +2,10 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\User;
+use App\Models\Country;
 use Livewire\Component;
 use Spatie\Permission\Models\Role;
-use App\Models\User;
 
 
 class UserDetails extends Component
@@ -13,6 +14,7 @@ class UserDetails extends Component
     public $user;
     public $users;
     public $user_id;
+     public $countries;
 
     protected $queryString = ['user_id'];
 
@@ -25,6 +27,7 @@ class UserDetails extends Component
         $this->user = User::find($this->user_id);
         $this->users = User::role('user')->latest()->orderBy('id', 'DESC')->get();
         $this->roles = Role::all();
+        $this->countries = Country::whereStatus('1')->get();
     }
 
     public function render()
