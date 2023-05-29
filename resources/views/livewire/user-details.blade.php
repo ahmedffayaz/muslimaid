@@ -164,7 +164,15 @@
                                                         <div class="form-group">
                                                             <label class="form-label" for="country">Country</label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="country" value="{{ $user->country }}" name="country">
+                                                                <div class="form-control-select">
+                                                                    <select class="form-control" id="country" name="country" required>
+                                                                        @foreach ($countries as $country)
+                                                                            <option value="{{ $country->id }}" {{ $country->id == $user->country_id ? 'selected' : '' }}>
+                                                                                {{ $country->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
