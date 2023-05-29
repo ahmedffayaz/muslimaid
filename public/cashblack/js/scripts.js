@@ -280,7 +280,6 @@ $(document).ready(function () {
 var base_url = $("base").attr("href");
 var csrfToken = $('meta[name="csrf-token"]').attr("content");
 var url = window.location.protocol + "//" + window.location.hostname;
-var adminPrefix = "{{ getAdminPrefix() }}";
 if (window.location.port) {
     url += ":" + window.location.port;
 }
@@ -565,9 +564,10 @@ $("#listview").click(function () {
         $(".category-listing").removeClass("grid-view");
         $(".category-listing").addClass("list-view");
     }
+    $(".store-grid-img").removeClass("img-fix-size");
     setCookie("views", "lists", 365);
 });
-
+$(".store-grid-img").addClass("img-fix-size");
 $("#gridview").click(function () {
     if (!$(this).hasClass("active")) {
         $(this).addClass("active");
@@ -611,7 +611,7 @@ $(document).on("click", ".fav-icon", function (e) {
         if (favoriteStatus) {
             $(this).removeClass("liked");
             $.ajax({
-                url: url + "/" + adminPrefix + "/users/remove-favorite",
+                url: url + "/account/users/remove-favorite",
                 type: "POST",
                 data: {
                     storeId: storeId,
@@ -624,7 +624,7 @@ $(document).on("click", ".fav-icon", function (e) {
         } else {
             $(this).addClass("liked");
             $.ajax({
-                url: url + "/" + adminPrefix + "/users/add-favorite",
+                url: url + "/account/users/add-favorite",
                 type: "POST",
                 data: {
                     storeId: storeId,
@@ -907,7 +907,7 @@ $(document).on("click", ".like-action-remove", function () {
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: url + "/" + adminPrefix + "/users/remove-favorite",
+                url: url + "/account/users/remove-favorite",
                 type: "POST",
                 data: {
                     storeId: ele.attr("this-store-id"),

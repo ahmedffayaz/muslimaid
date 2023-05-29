@@ -157,6 +157,10 @@ class User extends Authenticatable implements MustVerifyEmail
         if (!empty($this->country_id)) {
             $address .= ' ' . optional($this->country)->name;
         }
+
+        if (!empty($this->postal_code)) {
+            $address .= ' ' . $this->postal_code;
+        }
     
         return $address;
     }
