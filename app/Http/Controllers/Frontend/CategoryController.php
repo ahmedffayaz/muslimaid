@@ -32,8 +32,6 @@ class CategoryController extends Controller
     {
         $ip =  request()->ip(); //Dynamic IP address get
         $data = Location::get($ip);
-        $cuisineCategory = Category::where('slug', 'cuisine')->first();
-        $childCuisines = $cuisineCategory->childs->pluck('name')->all();
         $category = Category::where(function ($query) {
             $query->where('visibility', '!=', 'hidden')
                 ->orWhereNull('visibility');
@@ -67,7 +65,7 @@ class CategoryController extends Controller
         $stores = $stores->sortBy('distance')->values()->paginate(25);
         $stores->appends(['orderBy' => $request->orderBy]);
         $cuisine = isset( $request->cuisine) ?  $request->cuisine : '';
-        return view('frontend.categories.show', compact('category', 'stores', 'slug','cuisine','childCuisines'));
+        return view('frontend.categories.show', compact('category', 'stores', 'slug','cuisine'));
     }
 
 
