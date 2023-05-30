@@ -93,6 +93,12 @@ function getCuisineTags($store)
     return $tags;
 }
 
+function getCuisineChilds(){
+    $cuisineCategory = Category::where('slug', 'cuisine')->first();
+    $childCuisines = $cuisineCategory->childs->pluck('name')->all();
+    return $childCuisines;
+}
+
 function getSpecificSetting($type)
 {
     $setting = SiteSetting::where('type', $type)->pluck('value')->first();

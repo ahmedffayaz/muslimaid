@@ -16,7 +16,7 @@
             : ($settings['favicon'] == 'default.png'
                 ? asset('admin-dashboard/images/favicon.png')
                 : ($settings['favicon'] == 'cashblack-default.png'
-                    ? asset('cashblack/img/favicon.png')
+                    ? asset('storage/__asset/img/favicon.png')
                     : asset('storage/dashboard/images/logo/' . $settings['favicon']))) }}">
 
     <!-- Page Title  -->

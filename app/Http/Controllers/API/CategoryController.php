@@ -237,10 +237,11 @@ class CategoryController extends Controller
                     ->orWhereNull('visibility');
             })->whereSlug('cashblack-to-your-door')->with('stores')->whereStatus('1')->first();
             $allStores =  $category->stores();
-            $categoryCuisine = $request->cuisine;
-            if (isset($request->cuisine)) {
-                $allStores->whereHas('categories', function ($query) use ($categoryCuisine) {
-                    $query->where('name', $categoryCuisine);
+            $cuisineCategories = $request->input('cuisine');
+            if (!empty($cuisineCategories)) {
+                $cuisineNames = explode(',', $cuisineCategories);
+                $allStores->whereHas('categories', function ($query) use ($cuisineNames) {
+                    $query->whereIn('name', $cuisineNames);
                 });
             }
             $stores = $allStores->paginate(20)->appends(request()->input());
