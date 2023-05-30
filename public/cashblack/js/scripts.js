@@ -567,7 +567,6 @@ $("#listview").click(function () {
     $(".store-grid-img").removeClass("img-fix-size");
     setCookie("views", "lists", 365);
 });
-$(".store-grid-img").addClass("img-fix-size");
 $("#gridview").click(function () {
     if (!$(this).hasClass("active")) {
         $(this).addClass("active");
@@ -579,6 +578,7 @@ $("#gridview").click(function () {
         $(".category-listing").removeClass("list-view");
         $(".category-listing").addClass("grid-view");
     }
+    $(".store-grid-img").addClass("img-fix-size");
     setCookie("views", "grids", 365);
 });
 
