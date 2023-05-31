@@ -12,7 +12,7 @@ d-xl-none
                         : ($settings['website_logo'] == 'default.png'
                             ? asset('admin-dashboard/images/logo.png')
                             : ($settings['website_logo'] == 'cashblack-default.png'
-                                ? asset('cashblack/img/logo.png')
+                                ? asset('storage/__asset/img/logo.png')
                                 : asset('storage/dashboard/images/logo/' . $settings['website_logo']))) }}"
                     alt="logo">
                 <img class="logo-dark logo-img"
@@ -21,7 +21,7 @@ d-xl-none
                         : ($settings['website_logo'] == 'default.png'
                             ? asset('admin-dashboard/images/logo-dark.png')
                             : ($settings['website_logo'] == 'cashblack-default.png'
-                                ? asset('cashblack/img/logo.png')
+                                ? asset('storage/__asset/img/logo.png')
                                 : asset('storage/dashboard/images/logo/' . $settings['website_logo']))) }}"
                     alt="logo-dark">
             </a>
