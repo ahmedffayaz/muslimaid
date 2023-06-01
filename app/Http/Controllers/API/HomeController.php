@@ -32,28 +32,14 @@ class HomeController extends Controller
 
             $featuredStores = Store::select('id', 'name', 'slug', 'status')
                 ->whereHas('tags', function ($query) use ($featuredTag) {
-                    $query->when(isset($featuredTag), function ($query) {
-                        $query->where('title', 'app_featured1_homepage');
-                    }, function ($query) {
-                        $query->where('title', 'app_featured_homepage');
-                    });
+                    $query->where('title', 'app_featured1_homepage');
                 })->latest()->take(10)->whereStatus('active')->get();
 
+
             $featuredCategories = Category::whereHas('tags', function ($query) use ($featuredTag) {
-                $query->when(isset($featuredTag), function ($query) {
-                    $query->where('title', 'app_featured1_homepage');
-                }, function ($query) {
-                    $query->where('title', 'app_featured_homepage');
-                });
-            })->with(['stores' => function ($query) use ($featuredTag) {
-                $query->whereHas('categories.tags', function ($query) use ($featuredTag) {
-                    $query->when(isset($featuredTag), function ($query) {
-                        $query->where('title', 'app_featured1_homepage');
-                    }, function ($query) {
-                        $query->where('title', 'app_featured_homepage');
-                    });
-                })->whereStatus('active')->limit(10);
-            }])->whereStatus(1)->limit(10)->get();
+                $query->where('title', 'app_featured1_homepage');
+            })->with('stores')->whereStatus(1)->limit(10)->get();
+
 
             $data = [
                 'status' => 200,
