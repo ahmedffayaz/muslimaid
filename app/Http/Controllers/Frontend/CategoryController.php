@@ -64,8 +64,8 @@ class CategoryController extends Controller
         $stores = sortByDistance($data, $stores);
         $stores = $stores->sortBy('distance')->values()->paginate(25);
         $stores->appends(['orderBy' => $request->orderBy]);
-        $cuisine = isset( $request->cuisine) ?  $request->cuisine : '';
-        return view('frontend.categories.show', compact('category', 'stores', 'slug','cuisine'));
+        $cuisine = isset($request->cuisine) ?  $request->cuisine : '';
+        return view('frontend.categories.show', compact('category', 'stores', 'slug', 'cuisine'));
     }
 
 
@@ -79,9 +79,9 @@ class CategoryController extends Controller
                 ->orWhereNull('visibility');
         })->whereSlug($slug)->with('stores')->whereStatus('1')->first();
         $allStores = $category->stores();
-        $categoryCuisine = $request->cuisine;
-        if(isset($request->cuisine)){
-            $allStores->whereHas('categories', function ($query) use ($categoryCuisine){
+        $categoryCuisine = $request->input('cuisine');
+        if (!empty($categoryCuisine)) {
+            $allStores =  $allStores->whereHas('categories', function ($query) use ($categoryCuisine) {
                 $query->where('name', $categoryCuisine);
             });
         }

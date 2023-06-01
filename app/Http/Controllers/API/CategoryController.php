@@ -22,14 +22,14 @@ class CategoryController extends Controller
     {
         try {
             $page = Page::where('slug', 'categories')->whereType('system')->pluck('banner_image')->firstOrFail();
-
             $categories = Category::when($request->has('letter'), function ($query) use ($request) {
                 $query->where('name', 'like', $request->input('letter') . '%');
             })->when($request->has('parent_id'), function ($query) use ($request) {
                 $query->where('id', $request->input('parent_id'));
             })->with(['childs' => function ($query) {
-                $query->withCount('stores');
-            }])->withCount('stores')->where('parent_id', 0)->paginate(20)->appends(request()->input());
+                $query->orderBy('name', 'asc')->withCount('stores');
+            }])->withCount('stores')->where('parent_id', 0)->orderBy('name', 'asc')->paginate(20)->appends(request()->input());
+
 
             if ($categories->count() == 0) {
                 $data = [
@@ -238,10 +238,10 @@ class CategoryController extends Controller
             })->whereSlug('cashblack-to-your-door')->with('stores')->whereStatus('1')->first();
             $allStores =  $category->stores();
             $cuisineCategories = $request->input('cuisine');
+
             if (!empty($cuisineCategories)) {
-                $cuisineNames = explode(',', $cuisineCategories);
-                $allStores->whereHas('categories', function ($query) use ($cuisineNames) {
-                    $query->whereIn('name', $cuisineNames);
+                $allStores = $allStores->whereHas('categories', function ($query) use ($cuisineCategories) {
+                    $query->whereIn('name', $cuisineCategories);
                 });
             }
             $stores = $allStores->paginate(20)->appends(request()->input());
