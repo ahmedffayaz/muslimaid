@@ -16,7 +16,7 @@ class CharityController extends Controller
         $page = Page::where('slug', 'charities')->whereType('system')->first();
         if (empty($page)) abort(404);
         $charities = Charity::whereStatus(1)->orderBy('id', 'DESC')->paginate(12);      
-        $countries = Country::where('status', '1')->latest()->get();
+        $countries = Country::where('status','1')->whereHas('charities')->latest()->get();
         $charityTypes = CharityType::where('status', '1')->latest()->get();
         return view('frontend.pages.single-page', compact('page', 'charities', 'countries', 'charityTypes'));
     }

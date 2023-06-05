@@ -64,8 +64,9 @@ class CategoryController extends Controller
         $stores = sortByDistance($data, $stores);
         $stores = $stores->sortBy('distance')->values()->paginate(25);
         $stores->appends(['orderBy' => $request->orderBy]);
+        $totalCount = $category->stores()->where('status', 'active')->count(); 
         $cuisine = isset($request->cuisine) ?  $request->cuisine : '';
-        return view('frontend.categories.show', compact('category', 'stores', 'slug', 'cuisine'));
+        return view('frontend.categories.show', compact('category', 'stores', 'slug', 'cuisine','totalCount'));
     }
 
 
@@ -90,7 +91,7 @@ class CategoryController extends Controller
                 $allStores = $allStores->with('clicks')->paginate($request->input('perPage'));
                 $allStores = sortByDistance($data, $allStores);
             } else if ($request->orderBy == 'cashback-amount') {
-                $allStores = $allStores->whereHas('cashbacks', function ($query) {
+                $cashbackAmountStores = $allStores->whereHas('cashbacks', function ($query) {
                     $query->where('type', 'fixed')->whereHas('currencyData', function ($query) {
                         $query->where('symbol', '£');
                     });
@@ -100,15 +101,19 @@ class CategoryController extends Controller
                 })->sortByDesc(function ($store) {
                     return $store->getCashback();
                 })->paginate($request->input('perPage'));
+                $cashbackPercentageStores = $category->stores()->where('status', 'active')->get();
+                $allStores = $cashbackAmountStores->concat($cashbackPercentageStores)->paginate($request->input('perPage'));
                 $allStores = sortByDistance($data, $allStores);
             } else if ($request->orderBy == 'cashback-percentage') {
                 $allStores = $allStores->whereHas('cashbacks', function ($query) {
                     $query->where('type', 'percentage');
                 })->get()->filter(function ($store) {
                     $cashback = $store->getCashback();
-                    return (strpos($cashback, '%') !== false);
+                    $percentage = (int) filter_var($cashback, FILTER_SANITIZE_NUMBER_INT);
+                    $store->cashbackPercentage = $percentage;
+                    return $percentage;
                 })->sortByDesc(function ($store) {
-                    return $store->getCashback();
+                    return $store->cashbackPercentage;
                 })->paginate($request->input('perPage'));
                 $allStores = sortByDistance($data, $allStores);
             } else {
@@ -126,5 +131,22 @@ class CategoryController extends Controller
             'view' => view('frontend.categories.view', compact('allStores', 'slug', 'viewType'))->render(),
             'stores' => $allStores
         ];
+    }
+
+    public function  loadMoreButton(Request $request)
+    {
+        $perPage = $request->input('perpage');
+        $offset = $request->input('offset');
+        $category = Category::where(function ($query) {
+            $query->where('visibility', '!=', 'hidden')
+                ->orWhereNull('visibility');
+        })->whereSlug("cashblack-to-your-door")->whereStatus('1')->first();
+    
+        $allStores = $category->stores()->where('status', 'active')->distinct()->skip($offset)->take($perPage)->get();
+        $html = view('frontend.categories.load-button-stores', ['allStores' => $allStores])->render();
+        return response()->json([
+            'html' => $html,
+            'nextOffset' => $offset + $perPage,
+        ]);
     }
 }

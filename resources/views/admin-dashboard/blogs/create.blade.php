@@ -32,7 +32,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="reviewer">Title <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
-                                                        <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="" required>
+                                                        <input id="blog-title" type="text" class="form-control " name="title" placeholder="Title" value="{{ old('title') }}" required>
                                                     </div>
                                                 </div>
                                             </div>
@@ -46,7 +46,7 @@
                                                     </div>
                                                 </fieldset>
                                             </div>
-                                            <div class="col-lg-12">
+                                            <div class="col-lg-8">
                                                 <div class="form-group">
                                                     <label class="form-label" for="featured_image">Banner <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
@@ -66,17 +66,25 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="reviewer">Publish Date</label>
+                                                    <div class="form-control-wrap">
+                                                        <input id="blog-date" type="date" class="form-control " name="publish_date" placeholder="Publish Date" value="{{ old('publish_date') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label class="form-label" for="reviewer">Meta Description</label>
-                                                    <textarea class="form-control " name="meta_description" placeholder="Meta Description" value=""></textarea>
+                                                    <textarea class="form-control " name="meta_description" placeholder="Meta Description" value="">{{ old('meta_description') }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label class="form-label" for="reviewer">Meta Keywords</label>
                                                     <div class="form-control-wrap">
-                                                        <input id="blog-keyword" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword" value="">
+                                                        <input id="blog-keyword" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword" value="{{ old('meta_keyword') }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -84,7 +92,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="reviewer">Meta Title</label>
                                                     <div class="form-control-wrap">
-                                                        <input id="blog-title" type="text" class="form-control " name="meta_title" placeholder="Meta Title" value="">
+                                                        <input id="blog-title" type="text" class="form-control " name="meta_title" placeholder="Meta Title" value="{{ old('meta_title') }}">
                                                     </div>
                                                 </div>
                                             </div>
