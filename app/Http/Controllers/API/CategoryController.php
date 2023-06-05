@@ -29,8 +29,6 @@ class CategoryController extends Controller
             })->with(['childs' => function ($query) {
                 $query->orderBy('name', 'asc')->withCount('stores');
             }])->withCount('stores')->where('parent_id', 0)->orderBy('name', 'asc')->paginate(20)->appends(request()->input());
-
-
             if ($categories->count() == 0) {
                 $data = [
                     'status' => 200,
@@ -89,7 +87,6 @@ class CategoryController extends Controller
                 ];
                 return response()->json($data, 200);
             }
-
             $data = [
                 'status' => 200,
                 'message' => 'success',
@@ -124,15 +121,24 @@ class CategoryController extends Controller
         }
     }
 
-    public function getCashblackYourDoor(Request $request, $slug)
+    
+    public function getCategoryStores(Request $request, $slug)
     {
         try {
-
-            $stores = Store::when($request->has('letter'), function ($query) use ($request) {
+            $category = Category::where('slug', $slug)->first();
+            if (!$category) {
+                $data = [
+                    'status' => 200,
+                    'message' => 'No Category found',
+                    'data' => []
+                ];
+                return response()->json($data, 200);
+            }
+            $categoryStores = $category->stores()->when($request->has('letter'), function ($query) use ($request) {
                 $query->where('name', 'like', $request->input('letter') . '%');
             })->when($request->orderBy == 'latest', function ($query) use ($request) {
                 $query->latest();
-            })->when($request->orgerBy == 'popularity', function ($query) use ($request) {
+            })->when($request->orderBy == 'popularity', function ($query) use ($request) {
                 $query->withCount('clicks')->orderByDesc('clicks_count');
             })->when($request->orderBy == 'cashback-amount', function ($query) use ($request) {
                 $query->whereHas('cashbacks', function ($query) {
@@ -154,49 +160,10 @@ class CategoryController extends Controller
                 $query->whereSlug($slug)->where('parent_id', 0)->whereStatus(1);
             }])->whereStatus('active')->paginate(20)->appends(request()->input());
 
-            $data = [
-                'status' => 200,
-                'message' => 'Success',
-                'data' => [
-                    'main_banner' => ($stores[0]->categories[0]->banner_type != 'link') ? getBannerImageUrl($stores[0]->categories[0]->banner_upload, 'upload', $stores[0]->categories[0]) : $stores[0]->categories[0]->banner_link,
-                    'categories' => StoreResource::collection($stores),
-                    'meta_data' => [
-                        "next" => $stores->nextPageUrl(),
-                        "previous" => $stores->previousPageUrl(),
-                        "per_page" => 20,
-                        "total" => $stores->total(),
-                        "current_page" => $stores->currentPage(),
-                        "total_pages" => $stores->lastPage(),
-                        "first" => $stores->firstItem(),
-                        "last" => $stores->lastItem()
-                    ]
-                ]
-            ];
-
-            return response()->json($data, 200);
-        } catch (Exception $e) {
-            $data = [
-                'status' => 500,
-                'message' => 'Something went wrong, try again',
-                'data' => []
-            ];
-            return response()->json($data, 500);
-        }
-    }
-
-    public function getCategoryStores($slug)
-    {
-        try {
-            $category = Category::where('slug', $slug)->first();
-            if (!$category) {
-                $data = [
-                    'status' => 200,
-                    'message' => 'No Category found',
-                    'data' => []
-                ];
-                return response()->json($data, 200);
-            }
-            $categoryStores = $category->stores()->paginate(20)->appends(request()->input());
+            $cuisine = Category::where('id', '158')->with(['childs' => function ($query) {
+                $query->orderBy('name', 'asc')->withCount('stores');
+            }])->withCount('stores')->where('parent_id', 0)->orderBy('name', 'asc')->get();
+          
             $data = [
                 'status' => 200,
                 'message' => 'Category details retrieved successfully',
@@ -205,6 +172,7 @@ class CategoryController extends Controller
                     'parent' => isset($category->parent) ? new SubCategoryResource($category->parent) : (object)[],
                     'child' => !empty($category->childs) ? SubCategoryResource::collection($category->childs) : [],
                     'stores' => !empty($category->stores) ? StoreResource::collection($categoryStores) : [],
+                    'cuisine' => count($cuisine) ? CategoryResource::collection($cuisine) : [],
                     'total' => count($category->stores),
                     'metaData' => [
                         "next" => $categoryStores->nextPageUrl(),
