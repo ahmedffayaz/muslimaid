@@ -266,7 +266,7 @@ Route::get('stores-reviews/{id}', [App\Http\Controllers\Frontend\StoreReviewCont
 Route::get('categories', [App\Http\Controllers\Frontend\CategoryController::class, 'index'])->name('categories.index');
 Route::get('categories/{slug}', [App\Http\Controllers\Frontend\CategoryController::class, 'show'])->name('categories.show');
 Route::get('categories/{slug}/search', [App\Http\Controllers\Frontend\CategoryController::class, 'categoriesView'])->name('categories.view');
-
+Route::get('/load-more', [App\Http\Controllers\Frontend\CategoryController::class, 'loadMoreButton'])->name('load-more');
 Route::get('blogs', [App\Http\Controllers\Frontend\BlogController::class, 'index'])->name('blogs.index');
 Route::get('blogs/{slug}', [App\Http\Controllers\Frontend\BlogController::class, 'show'])->name('blogs.show');
 
