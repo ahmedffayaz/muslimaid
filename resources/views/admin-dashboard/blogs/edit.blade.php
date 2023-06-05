@@ -36,7 +36,7 @@
                                                     </div>
                                                 </fieldset>
                                             </div>
-                                            <div class="col-lg-12">
+                                            <div class="col-lg-8">
                                                 <div class="form-group">
                                                     <label class="form-label" for="featured_image">Banner <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap">
@@ -61,6 +61,14 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="reviewer">Publish Date</label>
+                                                    <div class="form-control-wrap">
+                                                        <input id="publish_date" type="date" class="form-control " name="publish_date" placeholder="Publish Date" value="{{ $blog->publish_date }}">
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label class="form-label" for="reviewer">Meta Description</label>
@@ -71,7 +79,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="reviewer">Meta Keywords</label>
                                                     <div class="form-control-wrap">
-                                                        <input id="blog-title" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword"
+                                                        <input id="blog-keyword" type="text" class="form-control " name="meta_keyword" placeholder="Meta keyword"
                                                             value="{{ $blog->meta_keyword }}">
                                                     </div>
                                                 </div>
@@ -84,6 +92,7 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                           
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <button class="btn btn-primary" type="submit">Save</button>

@@ -62,6 +62,7 @@ class BlogController extends Controller
         $blog->meta_keyword = $request->meta_keyword;
         $blog->meta_description = $request->meta_description;
         $blog->meta_title = $request->meta_title;
+        $blog->publish_date = $request->publish_date;
         $blog->save();
 
         $inserted_blog = Blog::where('title', $request->title)->get();
@@ -119,6 +120,7 @@ class BlogController extends Controller
         $blog->meta_keyword = $request->meta_keyword;
         $blog->meta_description = $request->meta_description;
         $blog->meta_title = $request->meta_title;
+        $blog->publish_date = $request->publish_date;
         $blog->featured_image = $featured_image;
         $blog->update();
         flash()->success('blog updated successfully');

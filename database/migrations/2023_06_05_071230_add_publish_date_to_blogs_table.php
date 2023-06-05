@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddCompetitorsToStoresTable extends Migration
+class AddPublishDateToBlogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddCompetitorsToStoresTable extends Migration
      */
     public function up()
     {
-        Schema::table('stores', function (Blueprint $table) {
-            $table->Text('competitors')->nullable()->after('is_api');
+        Schema::table('blogs', function (Blueprint $table) {
+            $table->date('publish_date')->nullable()->after('meta_description');
         });
     }
 
@@ -25,8 +25,8 @@ class AddCompetitorsToStoresTable extends Migration
      */
     public function down()
     {
-        Schema::table('stores', function (Blueprint $table) {
-            $table->dropColumn('competitors');
+        Schema::table('blogs', function (Blueprint $table) {
+            $table->dropColumn('publish_date');
         });
     }
 }
