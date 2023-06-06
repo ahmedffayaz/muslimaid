@@ -53,7 +53,7 @@
                                             <span class="tooltip-importer"
                                                 @if (count($queue)) data-toggle='tooltip' data-placement='top' title='Importer is running on background please wait' @endif>
 
-                                                <button href="{{ route(getAdminPrefix() . '.importer.importer_setting_form', $network->id) }}" class="btn btn-success importer_btn"
+                                                <button href="{{ route(getAdminPrefix() . '.importer.importer_setting_form', $network->id) }}" class="btn btn-success importer_btn" data-network-name="{{ $network->name }}"
                                                     @if (count($queue)) style="pointer-events:none;opacity: .6;" @endif>
                                                     <em class="icon ni ni-download"></em>
                                                     <span>Importer</span>
@@ -292,15 +292,9 @@
                     success: function(data) {
                         $('#modalAlert').modal('show');
                         $('#setting_form').html(data);
-                        if ($.inArray(networkName.toLowerCase(), ['awin', 'cj', 'webgains']) !== -1) {
-                            $(".run-importer").removeClass("disabled");
-                            $(".save_importer").removeClass("disabled");
-                            $("a.run-importer").attr("href", "{{ route('admin.importer.import') }}");
-                        } else {
-                            $(".run-importer").addClass("disabled");
-                            $(".save_importer").addClass("disabled");
-                            $("a.run-importer").attr("href", "javascript:void(0);");
-                        }
+                        $(".run-importer").removeClass("disabled");
+                        $(".save_importer").removeClass("disabled");
+                        $("a.run-importer").attr("href", "{{ route('admin.importer.import') }}");
                     }
                 });
             });

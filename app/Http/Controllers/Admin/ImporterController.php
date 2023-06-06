@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
+use Carbon\Carbon;
 use App\Models\Store;
 use App\Jobs\Importer;
 use App\Models\Network;
@@ -46,13 +47,19 @@ class ImporterController extends Controller
             'import_stores'     => $request->has('stores') ? 1 : 0,
             'import_vouchers'   => $request->has('vouchers') ? 1 : 0,
             'import_cashbacks'   => $request->has('cashback') ? 1 : 0,
-            'last_import_at'   => \Carbon\Carbon::now()->toDateTimeString()
+            'last_import_at'   => Carbon::now()->toDateTimeString()
         ]);
 
+        $importerOptions = [
+            'stores' => isset($request->stores) ? 1 : 0,
+            'vouchers' => isset($request->vouchers) ? 1 : 0,
+            'cashback' => isset($request->cashback) ? 1 : 0
+        ];
+
         if ($request->network_name == "CJ") {
-            $importer = new Importer();
+            $importer = new Importer($importerOptions);
         } else if ($request->network_name == "Webgains") {
-            $importer = new WebgainsImporter();
+            $importer = new WebgainsImporter($importerOptions);
         } else if ($request->network_name == "Awin") {
             $importer = new AwinImporter();
         }

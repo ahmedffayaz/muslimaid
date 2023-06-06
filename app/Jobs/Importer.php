@@ -26,15 +26,16 @@ use Faker\Factory as Faker;
 class Importer implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    protected $data;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -44,16 +45,17 @@ class Importer implements ShouldQueue
      */
     public function handle()
     {
+        $data = $this->data;
         ini_set('max_execution_time', 900);
         //fetching importer settings
-        $network = Network::where('id', 1)->first();
-        $setting = ImporterSetting::where('network_id', 1)->first();
+        $network = Network::where('name', 'like', 'CJ')->first();
+        $setting = ImporterSetting::where('network_id', $network->id)->first();
         $settings = SiteSetting::latest()->get()->pluck('value', 'type');
 
 
         //importing advertisers/stores/merchents
 
-        if ($setting->import_stores == 1) {
+        if ($data['stores'] == 1) {
             $total_records = 1;
             $fetched_records = 0;
             $page = 1;

@@ -28,15 +28,16 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 class WebgainsImporter implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    protected $data;
 
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($data)
     {
-        //
+        $this->data = $data;
     }
 
     /**
@@ -46,12 +47,13 @@ class WebgainsImporter implements ShouldQueue
      */
     public function handle()
     {
+        $data = $this->data;
         //fetching importer settings
-        $network = Network::where('id', 2)->first();
-        $setting = ImporterSetting::where('network_id', 2)->first();
+        $network = Network::where('name', 'like', 'Webgains')->first();
+        $setting = ImporterSetting::where('network_id', $network->id)->first();
         $settings = SiteSetting::latest()->get()->pluck('value', 'type');
 
-        if ($setting->import_stores == 1) {
+        if ($data['stores'] == 1) {
 
             $cu = curl_init();
 
@@ -82,7 +84,7 @@ class WebgainsImporter implements ShouldQueue
                             'name'         => $results['name'],
                             'slug'         => Str::slug($results['name']),
                             'advertiser_id' => $results['id'],
-                            'network_id'   => 2,
+                            'network_id'   => $network->id,
                             'tracking_url' => $store_link,
                             'store_url'    => $results['homepageURL'],
                             'status' => 'error',
@@ -267,7 +269,7 @@ class WebgainsImporter implements ShouldQueue
             }
         }
 
-        if ($setting->import_vouchers == 1) {
+        if ($data['vouchers'] == 1) {
 
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
@@ -306,7 +308,7 @@ class WebgainsImporter implements ShouldQueue
             }
         }
 
-        if ($setting->import_cashbacks == 1) {
+        if ($data['cashback'] == 1) {
             $cashback_percent_setting = SiteSetting::where('type', 'cashback_percentage')->first()->value;
             $startdate = date('Y-m-d\TH:i:s', strtotime(' -31 days'));
             $enddate = date('Y-m-d\TH:i:s');
