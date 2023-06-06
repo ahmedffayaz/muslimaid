@@ -18,6 +18,7 @@ use App\Models\StoreCashback;
 use App\Jobs\WebgainsImporter;
 use App\Models\ImporterSetting;
 use App\Models\ImportedCategory;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
@@ -62,6 +63,11 @@ class ImporterController extends Controller
             $importer = new WebgainsImporter($importerOptions);
         } else if ($request->network_name == "Awin") {
             $importer = new AwinImporter();
+        } else {
+            return response()->json([
+                'status' => JsonResponse::HTTP_NOT_FOUND,
+                'error' => 'Network not found'
+            ], JsonResponse::HTTP_NOT_FOUND);
         }
 
         dispatch($importer);

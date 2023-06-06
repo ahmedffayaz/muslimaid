@@ -55,7 +55,7 @@ class Importer implements ShouldQueue
 
         //importing advertisers/stores/merchents
 
-        if ($data['stores'] == 1) {
+        if ($setting->import_stores == 1) {
             $total_records = 1;
             $fetched_records = 0;
             $page = 1;
