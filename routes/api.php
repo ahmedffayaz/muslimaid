@@ -63,7 +63,6 @@ Route::post('click/track', [API\ClickController::class, 'track']);
 Route::get('home', [API\HomeController::class, 'index']);
 
 Route::get('categories/{letter?}', [API\CategoryController::class, 'index']);
-Route::post('filter-cuisine', [API\CategoryController::class, 'cuisineFilter']);
 Route::get('child-categories/{slug}/{letter?}', [API\CategoryController::class, 'show']);
 Route::get('get-category-stores/{slug}', [API\CategoryController::class, 'getCategoryStores']);
 Route::post('exit-click', [API\StoreController::class, 'getCashbackStore']);
