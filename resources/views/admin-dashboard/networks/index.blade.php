@@ -190,6 +190,14 @@
                         $(".tooltip-importer").attr('data-placement', 'top')
                         $(".tooltip-importer").attr('title', 'Importer is fetching data please wait')
                         $(".tooltip-importer").attr('data-original-title', 'Importer is fetching data please wait')
+                    },
+                    error: function(data) {
+                        console.log(data);
+                        (function(NioApp, $){
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(data.responseJSON.error, 'error');
+                        })(NioApp, jQuery);
                     }
                 });
 

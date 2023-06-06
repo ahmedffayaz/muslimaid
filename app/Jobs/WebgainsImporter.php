@@ -53,7 +53,7 @@ class WebgainsImporter implements ShouldQueue
         $setting = ImporterSetting::where('network_id', $network->id)->first();
         $settings = SiteSetting::latest()->get()->pluck('value', 'type');
 
-        if ($data['stores'] == 1) {
+        if ($setting->import_stores == 1) {
 
             $cu = curl_init();
 
@@ -269,7 +269,7 @@ class WebgainsImporter implements ShouldQueue
             }
         }
 
-        if ($data['vouchers'] == 1) {
+        if ($setting->import_vouchers == 1) {
 
             $curl = curl_init();
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
@@ -308,7 +308,7 @@ class WebgainsImporter implements ShouldQueue
             }
         }
 
-        if ($data['cashback'] == 1) {
+        if ($setting->import_cashbacks == 1) {
             $cashback_percent_setting = SiteSetting::where('type', 'cashback_percentage')->first()->value;
             $startdate = date('Y-m-d\TH:i:s', strtotime(' -31 days'));
             $enddate = date('Y-m-d\TH:i:s');
