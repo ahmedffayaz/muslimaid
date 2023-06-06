@@ -121,7 +121,6 @@ class CategoryController extends Controller
         }
     }
 
-
     public function getCategoryStores(Request $request, $slug)
     {
         try {
@@ -170,7 +169,6 @@ class CategoryController extends Controller
             $cuisine = Category::where('id', '158')->with(['childs' => function ($query) {
                 $query->orderBy('name', 'asc')->withCount('stores');
             }])->withCount('stores')->where('parent_id', 0)->orderBy('name', 'asc')->get();
-
             $data = [
                 'status' => 200,
                 'message' => 'Category details retrieved successfully',
