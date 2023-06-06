@@ -45,5 +45,12 @@ return [
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect'      => env('GOOGLE_URL'),
     ],
-
+    'firebase' => [
+        'credentials' => [
+            'file' => env('FIREBASE_CREDENTIALS'),
+            'auto_discovery' => env('FIREBASE_CREDENTIALS_AUTO_DISCOVERY', false),
+        ],
+        'database_uri' => env('FIREBASE_DATABASE_URI'),
+        'storage_bucket' => env('FIREBASE_STORAGE_BUCKET'),
+    ],
 ];
