@@ -12,7 +12,7 @@ Networks:
     Importer:
       Stores: off
       Vouchers: off
-      Cashbacks: On
+      Cashbacks: on
   Awin:
     Settings:
       Client_id:
@@ -20,4 +20,68 @@ Networks:
     Importer:
       Stores: off
       Vouchers: off
-      Cashbacks: On
+      Cashbacks: on
+  Webgains:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: on
+  RevGlue:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: on
+  Local Stores Ecommerce:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: on
+  Local Stores Lead Generation:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: on
+  Commission Junction - USD:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: on
+  Impact:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: on
+  Partnerize:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: on
+  Afrofiliate:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: on
