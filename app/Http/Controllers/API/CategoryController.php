@@ -121,7 +121,6 @@ class CategoryController extends Controller
         }
     }
 
-    
     public function getCategoryStores(Request $request, $slug)
     {
         try {
@@ -134,36 +133,42 @@ class CategoryController extends Controller
                 ];
                 return response()->json($data, 200);
             }
+            $categoryCuisine = $request->input('cuisine');
             $categoryStores = $category->stores()->when($request->has('letter'), function ($query) use ($request) {
-                $query->where('name', 'like', $request->input('letter') . '%');
-            })->when($request->orderBy == 'latest', function ($query) use ($request) {
-                $query->latest();
-            })->when($request->orderBy == 'popularity', function ($query) use ($request) {
-                $query->withCount('clicks')->orderByDesc('clicks_count');
-            })->when($request->orderBy == 'cashback-amount', function ($query) use ($request) {
-                $query->whereHas('cashbacks', function ($query) {
-                    $query->whereType('fixed');
-                })->get()->filter(function ($query) {
-                    $cashback = $query->getCashback();
-                    return (strpos($cashback, '£') !== false);
-                });
-            })->when($request->orderBy == 'cashback-percentage', function ($query) {
-                $query->whereHas('cashbacks', function ($query) {
-                    $query->where('type', 'percentage');
-                })->get()->filter(function ($query) {
-                    $cashback = $query->getCashback();
-                    return (strpos($cashback, '%') !== false);
-                });
-            })->whereHas('categories', function ($query) use ($slug) {
-                $query->whereSlug($slug)->where('parent_id', 0)->whereStatus(1);
-            })->with(['categories' => function ($query) use ($slug) {
-                $query->whereSlug($slug)->where('parent_id', 0)->whereStatus(1);
-            }])->whereStatus('active')->paginate(20)->appends(request()->input());
+                    $query->where('name', 'like', $request->input('letter') . '%');
+                })->when($request->orderBy == 'latest', function ($query) use ($request) {
+                    $query->latest();
+                })->when($request->orderBy == 'popularity', function ($query) use ($request) {
+                    $query->withCount('clicks')->orderByDesc('clicks_count');
+                })->when($request->orderBy == 'cashback-amount', function ($query) use ($request) {
+                    $query->whereHas('cashbacks', function ($query) {
+                        $query->whereType('fixed');
+                    })->get()->filter(function ($query) {
+                        $cashback = $query->getCashback();
+                        return (strpos($cashback, '£') !== false);
+                    });
+                })->when($request->orderBy == 'cashback-percentage', function ($query) {
+                    $query->whereHas('cashbacks', function ($query) {
+                        $query->where('type', 'percentage');
+                    })->get()->filter(function ($query) {
+                        $cashback = $query->getCashback();
+                        return (strpos($cashback, '%') !== false);
+                    });
+                })
+                ->whereHas('categories', function ($query) use ($slug) {
+                    $query->whereSlug($slug)->where('parent_id', 0)->whereStatus(1);
+                })->with(['categories' => function ($query) use ($slug) {
+                    $query->whereSlug($slug)->where('parent_id', 0)->whereStatus(1);
+                }])->whereStatus('active')->when($categoryCuisine, function ($query) use ($categoryCuisine) {
+                    $query->whereHas('categories', function ($query) use ($categoryCuisine) {
+                        $query->whereIn('name', $categoryCuisine);
+                    });
+                })->paginate(20)->appends(request()->input());
+
 
             $cuisine = Category::where('id', '158')->with(['childs' => function ($query) {
                 $query->orderBy('name', 'asc')->withCount('stores');
             }])->withCount('stores')->where('parent_id', 0)->orderBy('name', 'asc')->get();
-          
             $data = [
                 'status' => 200,
                 'message' => 'Category details retrieved successfully',
@@ -196,57 +201,5 @@ class CategoryController extends Controller
             return response()->json($data, 500);
         }
     }
-    public function cuisineFilter(Request $request)
-    {
-        try {
-            $page = Page::whereSlug('stores')->whereType('system')->whereStatus('active')->pluck('banner_image')->firstOrFail();
-            $category = Category::where(function ($query) {
-                $query->where('visibility', '!=', 'hidden')
-                    ->orWhereNull('visibility');
-            })->whereSlug('cashblack-to-your-door')->with('stores')->whereStatus('1')->first();
-            $allStores =  $category->stores();
-            $cuisineCategories = $request->input('cuisine');
-
-            if (!empty($cuisineCategories)) {
-                $allStores = $allStores->whereHas('categories', function ($query) use ($cuisineCategories) {
-                    $query->whereIn('name', $cuisineCategories);
-                });
-            }
-            $stores = $allStores->paginate(20)->appends(request()->input());
-            if ($stores->count() == 0) {
-                $data = [
-                    'status' => 200,
-                    'message' => 'No store found',
-                    'data' => []
-                ];
-                return response()->json($data, 200);
-            }
-            $data = [
-                'status' => 200,
-                'message' => 'Success',
-                'data' => [
-                    'main_banner_image' => getBannerImageUrl($page),
-                    'stores' => StoreResource::collection($stores),
-                    'meta_data' => [
-                        "next" => $stores->nextPageUrl(),
-                        "previous" => $stores->previousPageUrl(),
-                        "per_page" => 20,
-                        "total" => $stores->total(),
-                        "current_page" => $stores->currentPage(),
-                        "total_pages" => $stores->lastPage(),
-                        "first" => $stores->firstItem(),
-                        "last" => $stores->lastItem()
-                    ]
-                ]
-            ];
-            return response()->json($data, 200);
-        } catch (Exception $e) {
-            $data = [
-                'status' => 500,
-                'message' => 'Something went wrong, try again.',
-                'data' => []
-            ];
-            return response()->json($data, 500);
-        }
-    }
+   
 }

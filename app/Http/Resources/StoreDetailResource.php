@@ -38,7 +38,7 @@ class StoreDetailResource extends JsonResource
             "date_updated" => date('d-M-Y', strtotime($this->updated_at)),
             "date_created" => date('d-M-Y', strtotime($this->created_at)),
             'cashback' => $this->getCashback(),
-            'cashbacks' => $this->cashback ? $this->when($this->cashbacks, CashbackResource::collection($this->cashbacks)) : (object)[],
+            'cashbacks' => $this->cashback ? $this->when($this->cashbacks, CashbackResource::collection($this->cashbacks)) : [],
             'is_fav' => checkFavorite($this->id, $headerToken) ? true : false,
         ];
     }
