@@ -18,8 +18,8 @@ use Illuminate\Bus\Queueable;
 use App\Models\ImporterSetting;
 use App\Models\ImportedCategory;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use App\Models\CashbackStatusChange;
+use Carbon\Carbon;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -540,8 +540,8 @@ class Importer implements ShouldQueue
                             'network_order_id' => $cashback['orderId'],
                             'order_value' => $cashback['saleAmountPubCurrency'],
                             'status' => $status,
-                            'event_date' => \Carbon\Carbon::parse($cashback['eventDate'])->toDateTimeString(),
-                            'click_date' => \Carbon\Carbon::parse($cashback['clickDate'])->toDateTimeString(),
+                            'event_date' => Carbon::parse($cashback['eventDate'])->toDateTimeString(),
+                            'click_date' => Carbon::parse($cashback['clickDate'])->toDateTimeString(),
                         ]);
 
                         $change_status = CashbackStatusChange::create([
@@ -566,8 +566,8 @@ class Importer implements ShouldQueue
                             'network_commission' => $cashback['pubCommissionAmountPubCurrency'],
                             'order_value' => $cashback['saleAmountPubCurrency'],
                             'status' => $status,
-                            'event_date' => \Carbon\Carbon::parse($cashback['eventDate'])->toDateTimeString(),
-                            'click_date' => \Carbon\Carbon::parse($cashback['clickDate'])->toDateTimeString(),
+                            'event_date' => Carbon::parse($cashback['eventDate'])->toDateTimeString(),
+                            'click_date' => Carbon::parse($cashback['clickDate'])->toDateTimeString(),
                         ]);
                     }
                 }
