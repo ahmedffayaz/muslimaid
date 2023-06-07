@@ -58,9 +58,9 @@ class ImporterController extends Controller
         ];
 
         if ($request->network_name == "CJ") {
-            $importer = new Importer($importerOptions);
+            $importer = new Importer();
         } else if ($request->network_name == "Webgains") {
-            $importer = new WebgainsImporter($importerOptions);
+            $importer = new WebgainsImporter();
         } else if ($request->network_name == "Awin") {
             $importer = new AwinImporter();
         } else {
@@ -552,15 +552,25 @@ class ImporterController extends Controller
 
     public function saveSettings(Request $request)
     {
-        $settings = ImporterSetting::updateOrCreate([
-            'network_id'   => $request->network_id,
-        ], [
-            'import_stores'    => $request->has('stores') ? 1 : 0,
-            'import_vouchers'  => $request->has('vouchers') ? 1 : 0,
-            'import_cashbacks' => $request->has('cashback') ? 1 : 0,
-        ]);
+        try {
+            ImporterSetting::updateOrCreate([
+                'network_id'   => $request->network_id,
+            ], [
+                'import_stores'    => $request->has('stores') ? 1 : 0,
+                'import_vouchers'  => $request->has('vouchers') ? 1 : 0,
+                'import_cashbacks' => $request->has('cashback') ? 1 : 0,
+            ]);
 
-        return 'Settings saved';
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Settings saved'
+            ], JsonResponse::HTTP_OK);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Something went wrong, try again'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     public function importerSettingForm($id)

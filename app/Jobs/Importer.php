@@ -33,9 +33,9 @@ class Importer implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct()
     {
-        $this->data = $data;
+        // ...
     }
 
     /**
@@ -45,16 +45,13 @@ class Importer implements ShouldQueue
      */
     public function handle()
     {
-        $data = $this->data;
         ini_set('max_execution_time', 900);
         //fetching importer settings
         $network = Network::where('name', 'like', 'CJ')->first();
         $setting = ImporterSetting::where('network_id', $network->id)->first();
         $settings = SiteSetting::latest()->get()->pluck('value', 'type');
 
-
         //importing advertisers/stores/merchents
-
         if ($setting->import_stores == 1) {
             $total_records = 1;
             $fetched_records = 0;

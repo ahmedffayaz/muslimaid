@@ -9,6 +9,9 @@ Modules:
     List: on
 Networks:
   CJ:
+    Settings:
+      Client_id:
+      Client_secret:
     Importer:
       Stores: off
       Vouchers: off
