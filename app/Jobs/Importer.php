@@ -82,7 +82,6 @@ class Importer implements ShouldQueue
                 $array = json_decode(json_encode($data), TRUE);
 
                 $adverts = $data->advertisers->advertiser;
-                // Log::info($array['advertisers']['@attributes']);
 
                 foreach ($adverts as $advertiser) {
 
@@ -467,7 +466,6 @@ class Importer implements ShouldQueue
         if ($setting->import_cashbacks == 1) {
 
             //importing cashbacks
-
             $cashback_percent_setting = SiteSetting::where('type', 'cashback_percentage')->first()->value;
             $total_callback = 0;
             $beforePostingDate = date('Y-m-d\TH:i:s\z');
