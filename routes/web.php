@@ -26,9 +26,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::get('/', function () {
             return Redirect::to('admin/home');
         });
-
         Route::post('dataByPeriod', [App\Http\Controllers\HomeController::class, 'dataByPeriod'])->name('home.index_data');
-
         // Networks
         Route::get('networks/categories/{network}', [App\Http\Controllers\Admin\NetworkController::class, 'categories'])->name('networks.categories');
         Route::post('networks/categories_import/{network}', [App\Http\Controllers\Admin\NetworkController::class, 'importCategories'])->name('networks.categories.import');
@@ -287,6 +285,8 @@ Route::get('offers', [App\Http\Controllers\Frontend\OfferController::class, 'ind
 Route::get('trending', [App\Http\Controllers\Frontend\TrendingController::class, 'index'])->name('trending.index');
 
 Route::get('pages/{slug}', [App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('pages.show');
+ // fcm token
+Route::post('/fcmregistration', [App\Http\Controllers\FirebaseController::class, 'store'])->name('fcmregistration');
 
 // CLient Dashboard routes
 Route::namespace('App\Http\Controllers\Client')
@@ -330,3 +330,6 @@ Route::namespace('App\Http\Controllers\Client')
 Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
+
+
+

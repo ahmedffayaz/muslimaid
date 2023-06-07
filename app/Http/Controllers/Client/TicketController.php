@@ -78,10 +78,12 @@ class TicketController extends Controller
             'message' => $request->input('product'),
 
         ]);
-        $this->sendEmailNotification($ticket);
+        // dd("jdfs");
+        // $this->sendEmailNotification($ticket);
+  
         $title = 'Notification Title';
         $message = 'Notification Message';
-        $deviceToken = 'BJXFogKusnyY0eGmsGla3EhY6xF5FkeLNAqH93kyLR7MBjeBa-hLrQTOSet0OBTUvTXzw7rdKav7S52eDQYIkaE';
+        $deviceToken = auth()->user()->devices()->first()->fcm_token;
 
         dispatch(new SendNotification($title, $message, $deviceToken));
         flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
