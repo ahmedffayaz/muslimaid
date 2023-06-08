@@ -28,6 +28,8 @@ class StoreResource extends JsonResource
             'terms_conditions' => $this->when($this->terms_conditions, $this->terms_conditions),
             'cashback' => $this->getCashback(),
             'is_fav' => checkFavorite($this->id, $headerToken) ? true : false,
-        ];
+            'lat'=> optional($this->storeAddress->first())->latitude,
+            'long' => optional($this->storeAddress->first())->longitude,
+         ];
     }
 }

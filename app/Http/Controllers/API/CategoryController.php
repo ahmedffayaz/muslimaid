@@ -156,7 +156,7 @@ class CategoryController extends Controller
                     });
                 })
                 ->whereHas('categories', function ($query) use ($slug) {
-                    $query->whereSlug($slug)->where('parent_id', 0)->whereStatus(1);
+                    $query->whereSlug($slug)->whereStatus(1);
                 })->with(['categories' => function ($query) use ($slug) {
                     $query->whereSlug($slug)->where('parent_id', 0)->whereStatus(1);
                 }])->whereStatus('active')->when($categoryCuisine, function ($query) use ($categoryCuisine) {
