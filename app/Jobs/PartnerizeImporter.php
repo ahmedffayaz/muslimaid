@@ -87,21 +87,6 @@ class PartnerizeImporter implements ShouldQueue
 
         $userCashbacks = $transactions['transaction_queries'];
 
-        foreach ($userCashbacks as $transaction) {
-            $advertiserId = $transaction->transaction_query->campaign->advertiser_id;
-
-            // Skip transaction without advertiser ID
-            if (!array_key_exists('advertiser_id', $advertiserId) || empty($advertiserId)) continue;
-
-            // Make sure the store of the transaction exists in our database
-            $dbStoreKey = array_search($advertiserId, array_column($dbStores, 'advertiser_id'));
-            if (empty($dbStoreKey)) continue;
-
-            // If the db store's cashback is set to be overridden by admin, then we will skip this
-            if ($dbStores[$dbStoreKey]['override_cashback']) continue;
-
-        }
-
         return;
     }
 }
