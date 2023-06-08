@@ -5,21 +5,21 @@
     @if(getImporterYMLSettings('Networks_'. $network->name . '_Importer_Stores' ))
     <div class="custom-control custom-control-sm custom-checkbox mr-2">
         <input @if (@$network->importerSetting->import_stores) checked @endif type="checkbox"
-            class="custom-control-input" id="stores" name="stores">
+            class="custom-control-input importer-setting" id="stores" name="stores">
         <label class="custom-control-label" for="stores">Stores</label>
     </div>
     @endif
     @if (getImporterYMLSettings('Networks_'. $network->name . '_Importer_Vouchers' ))
     <div class="custom-control custom-control-sm custom-checkbox mr-2">
         <input @if(@$network->importerSetting->import_vouchers) checked @endif type="checkbox"
-            class="custom-control-input" id="vouchers" name="vouchers">
+            class="custom-control-input importer-setting" id="vouchers" name="vouchers">
         <label class="custom-control-label" for="vouchers">Vouchers</label>
     </div>
     @endif
     @if(getImporterYMLSettings('Networks_'. $network->name . '_Importer_Cashbacks' ))
     <div class="custom-control custom-control-sm custom-checkbox mr-2">
         <input @if (@$network->importerSetting->import_cashbacks) checked @endif type="checkbox"
-            class="custom-control-input" id="cashback" name="cashback">
+            class="custom-control-input importer-setting" id="cashback" name="cashback">
         <label class="custom-control-label" for="cashback">Cashbacks</label>
     </div>
     @endif

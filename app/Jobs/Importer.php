@@ -2,26 +2,29 @@
 
 namespace App\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Http\Request;
+use Exception;
+use Carbon\Carbon;
 use App\Models\Store;
-use App\Models\ImportedCategory;
-use App\Models\StoreCashback;
-use App\Models\StoreImage;
-use App\Models\UserCashback;
+use App\Models\Network;
 use App\Models\Voucher;
 use App\Models\ExitClick;
-use App\Models\ImporterSetting;
+use App\Models\StoreImage;
 use App\Models\SiteSetting;
-use App\Models\CashbackStatusChange;
-use App\Models\Network;
-use Illuminate\Support\Facades\DB;
 use Faker\Factory as Faker;
+use Illuminate\Support\Str;
+use App\Models\UserCashback;
+use Illuminate\Http\Request;
+use App\Models\StoreCashback;
+use Illuminate\Bus\Queueable;
+use App\Models\ImporterSetting;
+use App\Models\ImportedCategory;
+use Illuminate\Support\Facades\DB;
+use App\Models\CashbackStatusChange;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class Importer implements ShouldQueue
 {
@@ -33,9 +36,9 @@ class Importer implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($data)
+    public function __construct()
     {
-        $this->data = $data;
+        // ...
     }
 
     /**
@@ -45,16 +48,13 @@ class Importer implements ShouldQueue
      */
     public function handle()
     {
-        $data = $this->data;
         ini_set('max_execution_time', 900);
         //fetching importer settings
         $network = Network::where('name', 'like', 'CJ')->first();
         $setting = ImporterSetting::where('network_id', $network->id)->first();
         $settings = SiteSetting::latest()->get()->pluck('value', 'type');
 
-
         //importing advertisers/stores/merchents
-
         if ($setting->import_stores == 1) {
             $total_records = 1;
             $fetched_records = 0;
@@ -92,9 +92,9 @@ class Importer implements ShouldQueue
 
                             $store = Store::create([
                                 'name'         => $advertiser->{'advertiser-name'},
-                                'slug'         => \Str::slug($advertiser->{'advertiser-name'}),
+                                'slug'         => Str::slug($advertiser->{'advertiser-name'}),
                                 'advertiser_id' => $advertiser->{'advertiser-id'},
-                                'network_id'   => 1,
+                                'network_id'   => $network->id,
                                 'tracking_url' => $advertiser->{'program-url'},
                                 'store_url'    => $advertiser->{'program-url'},
                                 'status' => 'error',
@@ -148,7 +148,7 @@ class Importer implements ShouldQueue
 
 
                                 if ($action->commission->default) {
-                                    $c_type = \Str::contains($action->commission->default, '%') ? 'percentage' : 'fixed';
+                                    $c_type = Str::contains($action->commission->default, '%') ? 'percentage' : 'fixed';
                                     if ($c_type == 'percentage') {
                                         $sale_commission =  str_replace('%', '', $action->commission->default);
                                         $currency = null;
@@ -180,7 +180,7 @@ class Importer implements ShouldQueue
                                 }
                                 if ($action->commission->itemlist) {
                                     foreach ($action->commission->itemlist as $item) {
-                                        $c_type = \Str::contains($item, '%') ? 'percentage' : 'fixed';
+                                        $c_type = Str::contains($item, '%') ? 'percentage' : 'fixed';
 
                                         if ($c_type == 'percentage') {
                                             $sale_commission =  str_replace('%', '', $item);
@@ -224,7 +224,7 @@ class Importer implements ShouldQueue
                                 if (!$category_parent) {
                                     $category_parent = new ImportedCategory();
                                     $category_parent->name = $advertiser->{'primary-category'}->{'parent'};
-                                    $category_parent->network_id = 1;
+                                    $category_parent->network_id = $network->id;
                                     $category_parent->save();
                                 }
 
@@ -244,7 +244,7 @@ class Importer implements ShouldQueue
 
                                     $category_child = new ImportedCategory();
                                     $category_child->name = $advertiser->{'primary-category'}->{'child'};
-                                    $category_child->network_id = 1;
+                                    $category_child->network_id = $network->id;
                                     $category_child->save();
                                 }
                                 DB::table('category_store')->insert([
@@ -315,7 +315,7 @@ class Importer implements ShouldQueue
                                 foreach ($advertiser->actions->action as $action) {
 
                                     if ($action->commission->default) {
-                                        $c_type = \Str::contains($action->commission->default, '%') ? 'percentage' : 'fixed';
+                                        $c_type = Str::contains($action->commission->default, '%') ? 'percentage' : 'fixed';
 
                                         if ($c_type == 'percentage') {
                                             $sale_commission =  str_replace('%', '', $action->commission->default);
@@ -350,7 +350,7 @@ class Importer implements ShouldQueue
                                     if ($action->commission->itemlist) {
 
                                         foreach ($action->commission->itemlist as $item) {
-                                            $c_type = \Str::contains($item, '%') ? 'percentage' : 'fixed';
+                                            $c_type = Str::contains($item, '%') ? 'percentage' : 'fixed';
 
                                             if ($c_type == 'percentage') {
                                                 $sale_commission =  str_replace('%', '', $item);
@@ -398,7 +398,7 @@ class Importer implements ShouldQueue
                                     if (!$category_parent) {
                                         $category_parent = new ImportedCategory();
                                         $category_parent->name = $advertiser->{'primary-category'}->{'parent'};
-                                        $category_parent->network_id = 1;
+                                        $category_parent->network_id = $network->id;
                                         $category_parent->save();
                                     }
 
@@ -418,7 +418,7 @@ class Importer implements ShouldQueue
 
                                         $category_child = new ImportedCategory();
                                         $category_child->name = $advertiser->{'primary-category'}->{'child'};
-                                        $category_child->network_id = 1;
+                                        $category_child->network_id = $network->id;
                                         $category_child->save();
                                     }
                                     DB::table('category_store')->insert([
@@ -451,7 +451,7 @@ class Importer implements ShouldQueue
                             }
                             $store->update();
                         }
-                    } catch (\Execption $e) {
+                    } catch (Exception $e) {
                         flash()->error('Error while running importer');
                         return redirect()->route(getAdminPrefix() . '.stores.index');
                     }
@@ -466,7 +466,6 @@ class Importer implements ShouldQueue
         if ($setting->import_cashbacks == 1) {
 
             //importing cashbacks
-
             $cashback_percent_setting = SiteSetting::where('type', 'cashback_percentage')->first()->value;
             $total_callback = 0;
             $beforePostingDate = date('Y-m-d\TH:i:s\z');
@@ -541,8 +540,8 @@ class Importer implements ShouldQueue
                             'network_order_id' => $cashback['orderId'],
                             'order_value' => $cashback['saleAmountPubCurrency'],
                             'status' => $status,
-                            'event_date' => \Carbon\Carbon::parse($cashback['eventDate'])->toDateTimeString(),
-                            'click_date' => \Carbon\Carbon::parse($cashback['clickDate'])->toDateTimeString(),
+                            'event_date' => Carbon::parse($cashback['eventDate'])->toDateTimeString(),
+                            'click_date' => Carbon::parse($cashback['clickDate'])->toDateTimeString(),
                         ]);
 
                         $change_status = CashbackStatusChange::create([
@@ -567,8 +566,8 @@ class Importer implements ShouldQueue
                             'network_commission' => $cashback['pubCommissionAmountPubCurrency'],
                             'order_value' => $cashback['saleAmountPubCurrency'],
                             'status' => $status,
-                            'event_date' => \Carbon\Carbon::parse($cashback['eventDate'])->toDateTimeString(),
-                            'click_date' => \Carbon\Carbon::parse($cashback['clickDate'])->toDateTimeString(),
+                            'event_date' => Carbon::parse($cashback['eventDate'])->toDateTimeString(),
+                            'click_date' => Carbon::parse($cashback['clickDate'])->toDateTimeString(),
                         ]);
                     }
                 }

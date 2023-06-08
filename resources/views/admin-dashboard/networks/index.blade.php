@@ -192,7 +192,6 @@
                         $(".tooltip-importer").attr('data-original-title', 'Importer is fetching data please wait')
                     },
                     error: function(data) {
-                        console.log(data);
                         (function(NioApp, $){
                             'use strict';
                             toastr.clear();
@@ -201,6 +200,33 @@
                     }
                 });
 
+            });
+
+            $(document).on('change', '.importer-setting', function(event) {
+                var formElement = document.querySelector('#settings_form');
+
+                $.ajax({
+                    url: '{{ route(getAdminPrefix() . '.importer.save_settings') }}',
+                    method: 'POST',
+                    data: new FormData(formElement),
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function(response) {
+                        (function(NioApp, $){
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(response.message, 'success');
+                        })(NioApp, jQuery);
+                    },
+                    error: function(data) {
+                        (function(NioApp, $){
+                            'use strict';
+                            toastr.clear();
+                            NioApp.Toast(data.responseJSON.error, 'error');
+                        })(NioApp, jQuery);
+                    }
+                });
             });
 
             $(document).on('click', '.view-settings', function(event) {

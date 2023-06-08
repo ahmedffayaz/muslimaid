@@ -156,7 +156,7 @@ class AwinImporter implements ShouldQueue
 
     /**
      * Import users' cashbacks
-     * 
+     *
      * @return void
      */
     private function importUsersCashbacks()
