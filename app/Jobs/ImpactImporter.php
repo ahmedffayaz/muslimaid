@@ -54,10 +54,6 @@ class ImpactImporter implements ShouldQueue
      */
     private function importStores()
     {
-        $total_records = 1;
-        $fetched_records = 0;
-        $page = 1;
-
         $curl = curl_init();
 
         // Replace with your actual API endpoint
