@@ -72,6 +72,15 @@
                 </div>
             </div>
         @endif
+        @if (isset($settings[$networkName . '_account_sid']))
+            <div class="form-group">
+                <label class="form-label" for="{{ $networkName }}_account_sid">Account SID</label>
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control" name="{{ $networkName }}_account_sid" id="{{ $networkName }}_account_sid"
+                        value="{{ $settings[$networkName . '_account_sid'] }}" required>
+                </div>
+            </div>
+        @endif
         <div class="nk-modal-action">
             <button type="submit" class="btn btn-mw btn-primary">Save</button>
         </div>

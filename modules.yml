@@ -71,7 +71,7 @@ Networks:
     Importer:
       Stores: off
       Vouchers: off
-      Cashbacks: on
+      Cashbacks: off
   Partnerize:
     Settings:
       Client_id:
