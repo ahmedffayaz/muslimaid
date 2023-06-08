@@ -88,7 +88,6 @@ class PartnerizeImporter implements ShouldQueue
         $userCashbacks = $transactions['transaction_queries'];
 
         foreach ($userCashbacks as $transaction) {
-            // Log::info(!array_key_exists('advertiser_id', $transaction->transaction_query->campaign->advertiser_id));
             $advertiserId = $transaction->transaction_query->campaign->advertiser_id;
 
             // Skip transaction without advertiser ID
@@ -102,5 +101,7 @@ class PartnerizeImporter implements ShouldQueue
             if ($dbStores[$dbStoreKey]['override_cashback']) continue;
 
         }
+
+        return;
     }
 }
