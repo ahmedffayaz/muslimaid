@@ -864,7 +864,7 @@
                                             <div class="nk-block-head">
                                                 <h5 class="title">APIs Integration</h5>
                                             </div><!-- .nk-block-head -->
-                                            
+
                                         </div>
                                     </div> --}}
                                         <div class="tab-pane" id="tabItem9">
@@ -931,11 +931,13 @@
                                                                     @if ($settings['payment_method_bank']) checked @endif value="1">
                                                                 <label class="custom-control-label" for="payment_method_bank">Bank Transfer</label>
                                                             </div>
-                                                            <div class="custom-control custom-switch d-block mt-2">
-                                                                <input type="checkbox" class="custom-control-input" id="payment_method_charity" name="payment_method_charity"
-                                                                    @if ($settings['payment_method_charity']) checked @endif value="1">
-                                                                <label class="custom-control-label" for="payment_method_charity">Charity</label>
-                                                            </div>
+                                                            @if(getImporterYMLSettings(config('app.charity_yaml_path')))
+                                                                <div class="custom-control custom-switch d-block mt-2">
+                                                                    <input type="checkbox" class="custom-control-input" id="payment_method_charity" name="payment_method_charity"
+                                                                        @if ($settings['payment_method_charity']) checked @endif value="1">
+                                                                    <label class="custom-control-label" for="payment_method_charity">Charity</label>
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                     <div class="row g-3 align-center">
@@ -1148,10 +1150,10 @@
                     minValue: 0.1
                 },
                 min_cashout_amount: {
-                    minValue: 0.1 
+                    minValue: 0.1
                 },
                 next_cashout_amount: {
-                    minValue: 0.1 
+                    minValue: 0.1
                 }
             }
         });

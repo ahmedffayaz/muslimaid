@@ -17,6 +17,10 @@ use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('is_charity_module_access', ['only' => ['CharityCashout']]);
+    }
     /**
      * Display a listing of the resource.
      *
@@ -24,11 +28,14 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        $charities = Charity::latest()->get();
         $stores = Store::paginate('10');
         $usercashback = UserCashback::where('status', '3')->get();
         $term = null;
-        return view('frontend.client-dashboard.withdraw', compact('stores', 'term', 'charities', 'usercashback'));
+        if (getImporterYMLSettings(config('app.charity_yaml_path'))) {
+            $charities = Charity::latest()->get();
+            return view('frontend.client-dashboard.withdraw', compact('stores', 'term', 'charities', 'usercashback'));
+        }
+        return view('frontend.client-dashboard.withdraw', compact('stores', 'term', 'usercashback'));
     }
 
     public function paymentDetails()

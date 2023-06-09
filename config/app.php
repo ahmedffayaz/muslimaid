@@ -58,6 +58,8 @@ return [
 
     'cashback_percent' => '50',
 
+    'charity_yaml_path' => 'Modules_Charities_List',
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

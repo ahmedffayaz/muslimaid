@@ -209,13 +209,14 @@ class SettingsController extends Controller
                     'value'     =>  $request->has('payment_method_bank') ? 1 : 0
                 ]);
 
-                SiteSetting::updateOrCreate([
-                    'type'   => 'payment_method_charity',
-                    'title'  => 'Payment Method Charity',
-
-                ], [
-                    'value'     =>  $request->has('payment_method_charity') ? 1 : 0
-                ]);
+                if (getImporterYMLSettings(config('app.charity_yaml_path'))) {
+                    SiteSetting::updateOrCreate([
+                        'type'   => 'payment_method_charity',
+                        'title'  => 'Payment Method Charity',
+                    ], [
+                        'value'     =>  $request->has('payment_method_charity') ? 1 : 0
+                    ]);
+                }
             }
 
             if ($request->has('dashboard_logo')) {
