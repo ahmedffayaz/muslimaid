@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Jobs;
+
+use Exception;
+use App\Models\User;
+use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use App\Notifications\FirebaseNotification;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Kreait\Firebase\Messaging\CloudMessage;
+use Illuminate\Support\Facades\Notification;
+use Kreait\Laravel\Firebase\Facades\Firebase;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
+
+class SendNotification implements ShouldQueue
+{
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    protected $title;
+    protected $message;
+    protected $deviceToken;
+    /**
+     * Create a new job instance.
+     *
+     * @return void
+     */
+    public function __construct($title, $message, $deviceToken)
+    {
+        $this->title = $title;
+        $this->message = $message;
+        $this->deviceToken = $deviceToken;
+    }
+
+
+
+    /**
+     * Execute the job.
+     *
+     * @return void
+     */
+    public function handle()
+    {
+        $title = $this->title;
+        $message = $this->message;
+        $deviceToken = $this->deviceToken;
+        $admin = User::first();
+        $auth = auth()->user();
+        $userSchema = isset($auth) ? $auth : $admin;
+
+        $notification = [
+            'title' => $title,
+            'body' => $message,
+        ];
+        $firebaseMessage = CloudMessage::fromArray([
+            'notification' => $notification,
+            'token' => $deviceToken,
+        ]);
+
+        try {
+
+            Firebase::messaging()->send($firebaseMessage);
+            Notification::send($userSchema, new FirebaseNotification($notification));
+        } catch (Exception $e) {
+            Log::error('Exception occurred while sending notification: ' . $e->getMessage());
+        }
+    }
+}

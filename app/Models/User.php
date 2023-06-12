@@ -141,19 +141,19 @@ class User extends Authenticatable implements MustVerifyEmail
     public function formattedAddress()
     {
         $address = '';
-    
+
         if (!empty($this->address)) {
             $address .= $this->address;
         }
-    
+
         if (!empty($this->address_line_2)) {
             $address .= ' ' . $this->address_line_2;
         }
-    
+
         if (!empty($this->street)) {
             $address .= ' ' . $this->street;
         }
-    
+
         if (!empty($this->country_id)) {
             $address .= ' ' . optional($this->country)->name;
         }
@@ -161,11 +161,15 @@ class User extends Authenticatable implements MustVerifyEmail
         if (!empty($this->postal_code)) {
             $address .= ' ' . $this->postal_code;
         }
-    
+
         return $address;
     }
     public function country()
     {
         return $this->hasOne(Country::class, 'id', 'country_id');
+    }
+    public function devices()
+    {
+        return $this->hasMany(UserDevice::class);
     }
 }

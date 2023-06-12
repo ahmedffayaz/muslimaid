@@ -16,6 +16,7 @@
         "harimayco/laravel-menu": "^1.4",
         "intervention/image": "^2.5",
         "knuckleswtf/scribe": "^3.37",
+        "kreait/laravel-firebase": "^4.2",
         "laracasts/flash": "^3.2",
         "laravel/framework": "^8.12",
         "laravel/sanctum": "^2.11",

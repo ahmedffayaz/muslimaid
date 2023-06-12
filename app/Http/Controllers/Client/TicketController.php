@@ -9,6 +9,7 @@ use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Jobs\SendEmailToUser;
 use App\Jobs\SendEmailToAdmin;
+use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -22,7 +23,7 @@ class TicketController extends Controller
      */
     public function index()
     {
-        $tickets = Ticket::paginate(20); 
+        $tickets = Ticket::paginate(20);
         return view('frontend.client-dashboard.tickets.index', compact('tickets'));
     }
 
@@ -77,7 +78,13 @@ class TicketController extends Controller
             'message' => $request->input('product'),
 
         ]);
-        $this->sendEmailNotification($ticket);
+         $this->sendEmailNotification($ticket);
+  
+        $title = 'Ticket Created';
+        $message = 'Your ticket is created ';
+        $deviceToken = auth()->user()->devices()->first()->fcm_token;
+
+        dispatch(new SendNotification($title, $message, $deviceToken));
         flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
         return redirect()->route('account.tickets.index');
     }

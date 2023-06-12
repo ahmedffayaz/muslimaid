@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Language;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
 
@@ -67,5 +68,25 @@ class HomeController extends Controller
             'status' => true,
             'message' => 'Language changed!'
         ]);
+    }
+    public function userNotifications(Request $request)
+    {
+        $offset = $request->offset;
+        $Notifications = retrieveNotification($offset);
+        $nextCount = auth()->user()->notifications()->whereNull('read_at')->latest()->count();
+        return view('frontend.layouts.includes.notifications', compact('Notifications', 'nextCount', 'offset'))->render();
+    }
+
+    public function userNotificationsCount()
+    {
+        $Notifications = retrieveNotification(0);
+        return count($Notifications);
+    }
+
+    public function clearNotifications()
+    {
+        $res = DB::table('notifications')->where('notifiable_id', auth()->user()->id)
+            ->update(['read_at' => date('Y-m-d h:i:s')]);
+        return $res;
     }
 }

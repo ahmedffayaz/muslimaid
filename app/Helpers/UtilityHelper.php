@@ -1050,3 +1050,10 @@ function getFaqsContent()
     $content = preg_replace('/\[(.*?)\]/', '', $content);
     return $content;
 }
+
+function retrieveNotification($offset)
+{
+	$take = $offset + 1;
+	$notifications = auth()->user()->notifications()->whereNull('read_at')->latest()->take($take)->get();
+	return $notifications;
+}
