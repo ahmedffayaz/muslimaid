@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\User;
+use App\Jobs\SendNotification;
 use Illuminate\Console\Command;
 use App\Jobs\FirebaseNotificationJob;
 use Illuminate\Support\Facades\Notification;
@@ -41,14 +42,15 @@ class SendFirebaseNotifications extends Command
     public function handle()
     {
         try {
-            $allUsers = User::whereStatus('active')->with('devices')->get();
-            // $notifications = Notification::whereStatus(Notification::STATUS_PENDING)->with(['user', 'user.devices'])->get();
-            $notifications = Notification::whereStatus('active')->with(['user', 'user.devices'])->get();
+            $allUsers = User::where('status', 'active')->with('devices')->get();
+            $notifications = Notification::where('status', 'active')->with(['user', 'user.devices'])->get();
+        
             foreach ($notifications as $notification) {
-                FirebaseNotificationJob::dispatch($notification, $allUsers);
+                SendNotification::dispatch($notification, $allUsers);
             }
         } catch (\Exception $e) {
             return $this->error($e->getMessage());
         }
+        
     }
 }

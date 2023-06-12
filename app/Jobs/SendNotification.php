@@ -3,10 +3,13 @@
 namespace App\Jobs;
 
 use Exception;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
+use App\Notifications\FirebaseNotification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Kreait\Firebase\Messaging\CloudMessage;
@@ -32,7 +35,7 @@ class SendNotification implements ShouldQueue
         $this->message = $message;
         $this->deviceToken = $deviceToken;
     }
-    
+
 
 
     /**
@@ -45,21 +48,23 @@ class SendNotification implements ShouldQueue
         $title = $this->title;
         $message = $this->message;
         $deviceToken = $this->deviceToken;
+        $admin = User::first();
+        $auth = auth()->user();
+        $userSchema = isset($auth) ? $auth : $admin;
 
         $notification = [
             'title' => $title,
             'body' => $message,
         ];
-
-        // dd($notification); // Add this line for debugging
-
         $firebaseMessage = CloudMessage::fromArray([
             'notification' => $notification,
             'token' => $deviceToken,
         ]);
-        
+
         try {
+
             Firebase::messaging()->send($firebaseMessage);
+            Notification::send($userSchema, new FirebaseNotification($notification));
         } catch (Exception $e) {
             Log::error('Exception occurred while sending notification: ' . $e->getMessage());
         }

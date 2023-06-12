@@ -247,7 +247,9 @@ Route::get('account/verify/{token}', [App\Http\Controllers\Auth\VerifyController
 Route::get('/', [App\Http\Controllers\Frontend\HomeController::class, 'index']);
 Route::post('/quick-search', [App\Http\Controllers\Frontend\HomeController::class, 'quickSearch'])->name('quick-search');
 Route::get('set-locale/{locale}', [App\Http\Controllers\Frontend\HomeController::class, 'setLocale']);
-
+Route::post('/user-notifications', [App\Http\Controllers\Frontend\HomeController::class, 'userNotifications'])->name('userNotifications');
+Route::get('/user-notifications-count', [App\Http\Controllers\Frontend\HomeController::class, 'userNotificationsCount'])->name('userNotificationsCount');
+Route::get('/clear-notifications', [App\Http\Controllers\Frontend\HomeController::class, 'clearNotifications'])->name('clearNotifications');
 Route::get('search', [App\Http\Controllers\Frontend\SearchController::class, 'index'])->name('search.index');
 Route::post('search', [App\Http\Controllers\Frontend\SearchController::class, 'suggestions'])->name('search.suggestions');
 

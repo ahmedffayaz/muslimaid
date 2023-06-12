@@ -78,11 +78,10 @@ class TicketController extends Controller
             'message' => $request->input('product'),
 
         ]);
-        // dd("jdfs");
-        // $this->sendEmailNotification($ticket);
+         $this->sendEmailNotification($ticket);
   
-        $title = 'Notification Title';
-        $message = 'Notification Message';
+        $title = 'Ticket Created';
+        $message = 'Your ticket is created ';
         $deviceToken = auth()->user()->devices()->first()->fcm_token;
 
         dispatch(new SendNotification($title, $message, $deviceToken));
