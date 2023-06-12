@@ -72,6 +72,33 @@
                 </div>
             </div>
         @endif
+        @if (isset($settings[$networkName . '_account_sid']))
+            <div class="form-group">
+                <label class="form-label" for="{{ $networkName }}_account_sid">Account SID</label>
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control" name="{{ $networkName }}_account_sid" id="{{ $networkName }}_account_sid"
+                        value="{{ $settings[$networkName . '_account_sid'] }}" required>
+                </div>
+            </div>
+        @endif
+        @if (isset($settings[$networkName . '_application_key']))
+            <div class="form-group">
+                <label class="form-label" for="{{ $networkName }}_application_key">Application Key</label>
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control" name="{{ $networkName }}_application_key" id="{{ $networkName }}_application_key"
+                        value="{{ $settings[$networkName . '_application_key'] }}" required>
+                </div>
+            </div>
+        @endif
+        @if (isset($settings[$networkName . '_user_api_key']))
+            <div class="form-group">
+                <label class="form-label" for="{{ $networkName }}_user_api_key">User API Key</label>
+                <div class="form-control-wrap">
+                    <input type="text" class="form-control" name="{{ $networkName }}_user_api_key" id="{{ $networkName }}_user_api_key"
+                        value="{{ $settings[$networkName . '_user_api_key'] }}" required>
+                </div>
+            </div>
+        @endif
         <div class="nk-modal-action">
             <button type="submit" class="btn btn-mw btn-primary">Save</button>
         </div>

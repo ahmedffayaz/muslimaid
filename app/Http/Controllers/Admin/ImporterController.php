@@ -21,6 +21,8 @@ use App\Models\ImportedCategory;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Jobs\ImpactImporter;
+use App\Jobs\PartnerizeImporter;
 use App\Models\CashbackStatusChange;
 
 class ImporterController extends Controller
@@ -63,6 +65,10 @@ class ImporterController extends Controller
             $importer = new WebgainsImporter();
         } else if ($request->network_name == "Awin") {
             $importer = new AwinImporter();
+        } else if ($request->network_name == 'Impact') {
+            $importer = new ImpactImporter();
+        } else if ($request->network_name == 'Partnerize') {
+            $importer = new PartnerizeImporter();
         } else {
             return response()->json([
                 'status' => JsonResponse::HTTP_NOT_FOUND,
