@@ -1053,7 +1053,7 @@ function getFaqsContent()
 
 function retrieveNotification($offset)
 {
-	$take = $offset + 1;
+	$take = $offset + 10;
 	$notifications = auth()->user()->notifications()->whereNull('read_at')->latest()->take($take)->get();
 	return $notifications;
 }

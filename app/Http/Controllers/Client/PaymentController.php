@@ -10,6 +10,7 @@ use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Jobs\SendEmailToUser;
 use App\Jobs\SendEmailToAdmin;
+use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
 use Illuminate\Support\Facades\Auth;
@@ -138,6 +139,11 @@ class PaymentController extends Controller
         SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
         SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
 
+        $title = 'Cashout Request Completion';
+        $message = 'Your cashout request has been completed against ' . $request->payment_method;
+        $deviceToken = auth()->user()->devices()->first()->fcm_token;
+
+        dispatch(new SendNotification($title, $message, $deviceToken));
         flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $balance . " to reach your " . $request->payment_method . " account.");
         return redirect()->back();
     }
@@ -218,7 +224,11 @@ class PaymentController extends Controller
 
         SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
         SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+        $title = 'Cashout Request Completion';
+        $message = 'Your cashout request has been completed against ' . $request->payment_method;
+        $deviceToken = auth()->user()->devices()->first()->fcm_token;
 
+        dispatch(new SendNotification($title, $message, $deviceToken));
         flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $request->amount . " to reach your " . $request->payment_method . " account.");
         return redirect()->back();
     }

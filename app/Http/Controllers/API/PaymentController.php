@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\APi;
 
-use Illuminate\Support\Facades\Response;
 use App\Models\Store;
 use App\Models\Cashout;
 use App\Models\PaymentInfo;
@@ -10,130 +9,216 @@ use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
+use App\Models\UserCashback;
 
 class PaymentController extends Controller
 {
     use ApiResponser;
 
-    public function  paymentMethods(Request $request){
 
-        $input = $request->all();
-        $rules = array(
-            'payment_method' => 'required|in:bank,paypal',
-        );
-        $validator = Validator::make($input, $rules);
-        if ($validator->fails()) {
-            $arr = array("status" => 429, "message" => $validator->errors()->first(), "data" => array());
-            return Response::json($arr);
-        }
-        $user =\Auth::user();
-
-        if($request->payment_method == 'bank'){
-            if($user->bankInfo){
-                $bank = $user->bankInfo->only('account_name','account_number','bank_title','bank_sort_code','bic');
-                $arr = array("status" => 200, "message" =>"User bank account details", "data" => $bank);
-
-            }else{
-                $arr = array("status" => 404, "message" => "User bank details not available", "data" => array());
-            }
-        }
-
-        if($request->payment_method == 'paypal'){
-            if($user->paypalInfo){
-                $paypal = $user->paypalInfo->only('paypal_email');
-                $arr = array("status" => 200, "message" =>"User paypal account details", "data" => $paypal);
-
-            }else{
-                $arr = array("status" => 404, "message" => "User paypal details not available", "data" => array());
-            }
-        }
-        
-        return \Response::json($arr);
-    }
-    
-    public function cashouts(){
+    public function cashouts()
+    {
         $user     = \Auth::user();
         $cashouts = $user->cashouts;
         return $cashouts;
-
-    }
-  
-    public function paymentSave(Request $request){
-
-        $payment = PaymentInfo::updateOrCreate([
-            'user_id'   => \Auth::user()->id,
-            'payment_method'   => $request->payment_method,
-        ],$request->all());
-
-        return $this->success([
-            'message'=>'Payment method saved'
-        ]);
-
     }
 
-    public function withdraw(Request $request){
 
-        $input = $request->all();
-        $rules = array(
-            'payment_method' => 'required|in:bank,paypal',
-        );
-        $validator = Validator::make($input, $rules);
-        if ($validator->fails()) {
-            $arr = array("status" => 429, "message" => $validator->errors()->first(), "data" => array());
-            return \Response::json($arr);
-        }
-        if(array_key_exists('min_cashout_amount',SiteSetting()->toArray()))
-            $min = SiteSetting()['min_cashout_amount'];
-        else $min = 1; 
-        $user = \Auth::user();
-        $method = $user->paymentInfo()->where('payment_method',$request->payment_method)->first();
-        if(!$method)
-        {
-            $arr = array("status" => 400, "message" => "Payment method not found, please add your payment method information", "data" => array());
-            return \Response::json($arr);
-        }
-        $balance = $user->availableBalance(3);
-        $cashbacks = $user->balance;
-        if($balance < $min){
-            $arr = array("status" => 400, "message" => "You have insufficient balance for withdrawl.", "data" => array());
-            return \Response::json($arr);
-        }
-        $cashout = Cashout::create([
-            'user_id'       => $user->id,
-            'amount'        => $balance,
-            'cashout_type'  => $method->payment_method,
-            'paypal_email'  => $method->paypal_email,
-            'address'       => $method->address,
-            'city'          => $method->city,
-            'postcode'      => $method->postcode,
-            'country'       => $method->country,
-            'account_name'  => $method->account_name,
-            'bank_title'    => $method->bank_title,
-            'account_number'=> $method->account_number,
-            'bank_sort_code'=> $method->bank_sort_code,
-            'new_cashout'   => '1',
-            'bic'           => $method->bic,
-            'payment_method'=> $method->payment_method, 
-            'status'        =>'pending'
-        ]);
 
-        foreach($cashbacks as $cashback){
+    public function accountWithdraw(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'payment_method' => 'required',
+            ]);
+            if ($validator->fails()) {
+                $data = [
+                    'status' => 406,
+                    'message' => $validator->errors()->first(),
+                    'data' => []
+                ];
+                return response()->json($data, 406);
+            }
+            $user = Auth::user();
+            if (!($user->first_name && $user->last_name && $user->email && $user->phone && $user->address && $user->date_of_birth && $user->street && $user->country_id && $user->postal_code)) {
+                $data = [
+                    'status' => 406,
+                    'message' => 'Please first complete your profile to withdraw',
+                    'data' => []
+                ];
+                return response()->json($data, 406);
+            }
+            $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
+            if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0) {
+                $min = SiteSetting()['min_cashout_amount'];
+            } else if (isset(SiteSetting()['next_cashout_amount']) && $previousCashouts > 0) {
+                $min = SiteSetting()['next_cashout_amount'];
+            } else if ($previousCashouts == 0) {
+                $min = 1;
+            } else {
+                $min = 2;
+            }
+            $method = $user->paymentInfo()->where('payment_method', $request->payment_method)->first();
+            if (!$method && $request->payment_method != 'charity') {
+                $data = [
+                    'status' => 406,
+                    'message' => 'Payment method not found, please add your payment method information',
+                    'data' => []
+                ];
+            }
+            $balance = $user->availableBalance(3);
+            $cashbacks = $user->balance;
+            if ($balance < $min) {
+                $data = [
+                    'status' => 406,
+                    'message' => "You have insufficient balance for withdrawl. You need to have at least $min in your balance for withdrawal.",
+                    'data' => []
+                ];
+            }
+            $cashoutStatuses = $user->cashouts()->pluck('status')->all();
+            $availableBalance =$user->availableBalance(3);
+            $minimumCashoutAmount = getMinimumCashoutAmount();
+            if ($availableBalance < $minimumCashoutAmount || (in_array('pending', $cashoutStatuses) || in_array('processing donation', $cashoutStatuses))) {
+                $data = [
+                    'status' => 406,
+                    'message' => 'You are not eligible to withdraw at the moment.',
+                    'data' => []
+                ];
+                return response()->json($data, 406);
+            }
+            $cashout = Cashout::create([
+                'user_id' => $user->id,
+                'amount' => $balance,
+                'cashout_type' => $method->payment_method,
+                'paypal_email' => $method->paypal_email,
+                'address' => $method->address,
+                'city' => $method->city,
+                'postcode' => $method->postcode,
+                'country' => $method->country,
+                'account_name' => $method->account_name,
+                'bank_title' => $method->bank_title,
+                'account_number' => $method->account_number,
+                'bank_sort_code' => $method->bank_sort_code,
+                'new_cashout' => '1',
+                'bic' => $method->bic,
+                'payment_method' => $method->payment_method,
+                'status' => 'pending'
+            ]);
+            foreach ($cashbacks as $cashback) {
+                $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
+                $change_status = CashbackStatusChange::create([
+                    'user_cashback_id' => $cashback->id,
+                    'cashback_status_id' => $cashback->status
+                ]);
+            }
 
-            $cashback->update(['status'=>5,'cashout_id'=>$cashout->id]);
-            $change_status = CashbackStatusChange::create([
-                'user_cashback_id'   => $cashback->id,
+            if ($user->bonus && $user->bonus->status == 'unpaid') {
+                $user->bonus->update([
+                    'status' => 'paid',
+                    'cashout_id' => $cashout->id
+                ]);
+            }
+            $data = [
+                'status' => 200,
+                'message' => "We're processing your withdrawal. Please allow 4 working days for " . $balance . " to reach your " . $request->payment_method . " account.",
+                'data' => '',
+            ];
+            return response()->json($data, 200);
+        } catch (\Exception $e) {
+            $data = [
+                'status' => 500,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+            return response()->json($data, 500);
+        }
+    }
+    public function CharityCashout(Request $request, Cashout $cashout)
+    {
+        try {
+            $user = Auth::user();
+            $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
+            if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0) {
+                $min = SiteSetting()['min_cashout_amount'];
+            } else if (isset(SiteSetting()['next_cashout_amount']) && $previousCashouts > 0) {
+                $min = SiteSetting()['next_cashout_amount'];
+            } else if ($previousCashouts == 0) {
+                $min = 1;
+            } else {
+                $min = 2;
+            }
+            $cashout_status = $user->cashouts()->pluck('status')->all();
+            $balance_old = $user->availableBalance(3);
+            $balance = ($balance_old - $request->amount);
+            $minimumCashoutAmount = getMinimumCashoutAmount();
+            if ($balance_old < $min) {
+                $data = [
+                    'status' => 406,
+                    'message' => "You have insufficient balance for withdrawl. You need to have at least $min in your balance for withdrawal.",
+                    'data' => []
+                ];
+            }
+            $validator = Validator::make($request->all(), [
+                'charity_types_id' => 'required',
+                'payment_method' => 'required',
+                'amount' => 'required',
+                'id'=> 'required'
+            ]);
+    
+            if ($validator->fails()) {
+                $data = [
+                    'status' => 406,
+                    'message' => $validator->errors()->first(),
+                    'data' => []
+                ];
+                return response()->json($data, 406);
+            }
+            $cashout = Cashout::create([
+                'user_id' => $user->id,
+                'charity_types_id' => $request->charity_types_id,
+                'cashout_type' => $request->payment_method,
+                'amount' => $request->amount,
+                'new_cashout' => '1',
+                'payment_method' => $request->payment_method,
+                'status' => 'processing donation'
+            ]);
+            $cashback = $user->cashbacks()->where('id', $request->id)->first();
+            $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
+            $cashback->statusHistory()->create([
                 'cashback_status_id' => $cashback->status
             ]);
-        }
-
-        if($user->bonus && $user->bonus->status == 'unpaid'){
-            $user->bonus->update([
-                'status'     => 'paid',
-                'cashout_id' => $cashout->id
+    
+            if ($user->bonus && $user->bonus->status == 'unpaid') {
+                $user->bonus->update([
+                    'status' => 'paid',
+                    'cashout_id' => $cashout->id
                 ]);
+            }
+            $data = [
+                'status' => 200,
+                'message' => "We're processing your withdrawal. Please allow 4 working days for " . $request->amount  . " to reach your " . $request->payment_method . " account.",
+                'data' => '',
+            ];
+            return response()->json($data, 200);
+
+            if ($balance_old < $minimumCashoutAmount || (in_array('pending', $cashout_status) || in_array('processing donation', $cashout_status))) {
+                $data = [
+                    'status' => 406,
+                    'message' => 'You are not eligible to withdraw at the moment.',
+                    'data' => []
+                ];
+                return response()->json($data, 406);
+            }
+        } catch (\Exception $e) {
+            $data = [
+                'status' => 500,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+            return response()->json($data, 500);
         }
-        $arr = array("status" => 400, "message" => "We're processing your withdrawal. Please allow 4 working days for ".$balance." to reach your ".$request->payment_method." account.", "data" => ['balance'=>$balance, 'Method'=>$request->payment_method]);
-        return \Response::json($arr);
     }
 }
