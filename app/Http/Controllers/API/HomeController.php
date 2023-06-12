@@ -40,7 +40,24 @@ class HomeController extends Controller
                 $query->where('title', 'app_featured1_homepage');
             })->with('stores')->whereStatus(1)->limit(10)->get();
 
+            $topCategories = Category::whereHas('tags', function ($query) {
+                $query->where('title', 'top_categories');
+            })->whereStatus(1)->limit(10)->get();
+            $stores = Store::whereHas('tags', function ($query) {
+                $query->where('title', 'top_stores');
+            })->get();
 
+            $topOffers = [];
+            foreach ($topCategories as $category) {
+
+                $topStores = $stores->filter(function ($store) use ($category) {
+                    return $store->categories()->where('slug', $category->slug)->exists();
+                });
+                $topOffers[] = [
+                    'category' => $category->name,
+                    'stores' => StoreDetailResource::collection($topStores),
+                ];
+            }
             $data = [
                 'status' => 200,
                 'message' => 'Success',
@@ -48,14 +65,15 @@ class HomeController extends Controller
                     'base_url' => url('/'),
                     'main_banner_images' => SlideResource::collection($slides),
                     'featured_stores' => StoreDetailResource::collection($featuredStores),
-                    'featured_categories' => FeaturedCategoryResource::collection($featuredCategories)
+                    'featured_categories' => FeaturedCategoryResource::collection($featuredCategories),
+                    'top_offers' => $topOffers,
                 ]
             ];
             return response()->json($data, 200);
         } catch (Exception $e) {
             $data = [
                 'status' => 500,
-                'message' => 'Something went wrong, try again',
+                'message' =>  $e->getMessage(),
                 'data' => []
             ];
             return response()->json($data, 500);

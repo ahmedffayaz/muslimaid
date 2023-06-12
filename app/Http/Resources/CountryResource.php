@@ -20,7 +20,7 @@ class CountryResource extends JsonResource
             'iso_code' => $this->iso_code,
             'region' => !empty($this->region) ? $this->region->name : '',
             'currency_id' => $this->currency_id,
-            'banner_image' => url($this->type_value),
+            'banner_image' => isFileExist($this->type_value ) ?  url($this->type_value) : asset('frontend/images/banners/categories/cashback.png'),
             'status' => $this->status == 1 ? 'Active' : 'Inactive',
             'banner_image_type' => $this->upload_type,
             "date_updated" => date('d-M-Y', strtotime($this->updated_at)),

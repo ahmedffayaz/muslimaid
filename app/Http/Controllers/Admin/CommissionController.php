@@ -10,6 +10,7 @@ use App\Models\SiteSetting;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
+use App\Jobs\SendNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -125,6 +126,11 @@ class CommissionController extends Controller
 
                 SendEmail::dispatch($data);
             }
+            $title = 'Cashback request completion';
+            $message = 'Your cashback is created with' . $click->store->name;
+            $deviceToken = auth()->user()->devices()->first()->fcm_token;
+
+            dispatch(new SendNotification($title, $message, $deviceToken));
             if ($request->ajax()) {
                 return response()->json([
                     'status' => JsonResponse::HTTP_OK,
