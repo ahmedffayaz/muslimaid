@@ -82,7 +82,7 @@ class DashboardController extends Controller
             'street' => $request->street,
             'country_id' => $request->country_id,
             'postal_code' => $request->postal_code,
-            'avatar' => $avatarImage,  
+            'avatar' => $avatarImage,
             'title' => $request->title,
         ]);
 

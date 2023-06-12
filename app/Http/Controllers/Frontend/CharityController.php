@@ -11,11 +11,16 @@ use App\Http\Controllers\Controller;
 
 class CharityController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('is_charity_module_access', ['only' => ['index', 'show', 'search']]);
+    }
+
     public function index(Request $request)
     {
         $page = Page::where('slug', 'charities')->whereType('system')->first();
         if (empty($page)) abort(404);
-        $charities = Charity::whereStatus(1)->orderBy('id', 'DESC')->paginate(12);      
+        $charities = Charity::whereStatus(1)->orderBy('id', 'DESC')->paginate(12);
         $countries = Country::where('status','1')->whereHas('charities')->latest()->get();
         $charityTypes = CharityType::where('status', '1')->latest()->get();
         return view('frontend.pages.single-page', compact('page', 'charities', 'countries', 'charityTypes'));

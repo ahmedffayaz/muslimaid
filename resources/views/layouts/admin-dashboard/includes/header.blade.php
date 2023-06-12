@@ -59,14 +59,16 @@
                                                 </a>
                                             </li><!-- .nk-menu-item -->
                                         @endcan
-                                        @can('view charities')
-                                        <li class="">
-                                            <a href="{{ '/' . getAdminPrefix() . '/charities' }}"  class="">
-                                                <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
-                                                <span class="nk-menu-text">Charities</span>
-                                            </a>
-                                        </li><!-- .nk-menu-item -->
-                                        @endcan
+                                        @if (getImporterYMLSettings(config('app.charity_yaml_path')))
+                                            @can('view charities')
+                                            <li class="">
+                                                <a href="{{ '/' . getAdminPrefix() . '/charities' }}"  class="">
+                                                    <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
+                                                    <span class="nk-menu-text">Charities</span>
+                                                </a>
+                                            </li><!-- .nk-menu-item -->
+                                            @endcan
+                                        @endif
                                         @can('view countries')
                                         <li class="">
                                             <a  href="{{ '/' . getAdminPrefix() . '/countries' }}"  class="">

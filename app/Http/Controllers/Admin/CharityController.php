@@ -17,6 +17,17 @@ use Illuminate\Support\Facades\Validator;
 class CharityController extends Controller
 {
     public $imagePath = 'storage/charities/images/';
+
+    function __construct()
+    {
+        $this->middleware('is_charity_module_access', [
+            'only' => [
+                'index', 'searchCharities', 'create', 'store', 'charityTypeView', 'charityTypeStore',
+                'charityTypeEdit', 'charityTypeUpdate', 'charityTypeDestroy', 'edit', 'update', 'destroy'
+                ]
+            ]);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -61,7 +72,7 @@ class CharityController extends Controller
     {
         $charitiestypes = CharityType::where('status', '1')->get();
         $countries = Country::where('status', '1')->get();
-        $tags = Tag::where('type', 'charities')->get(); 
+        $tags = Tag::where('type', 'charities')->get();
         return view('admin-dashboard.charities.create', compact('charitiestypes', 'countries', 'tags'));
     }
 
@@ -123,7 +134,7 @@ class CharityController extends Controller
                     $charity->banner_upload = 'category_default_banner.png';
                     $charity->update();
                 }
-              
+
             }
 
             if ($request->has('tags')) {
@@ -230,7 +241,7 @@ class CharityController extends Controller
     {
         $CharityType = CharityType::latest()->get();
         $countries = Country::all();
-        $tags = Tag::where('type', 'charities')->get(); 
+        $tags = Tag::where('type', 'charities')->get();
         return view('admin-dashboard.charities.edit', compact('charity', 'CharityType', 'countries', 'tags'));
     }
 
@@ -271,7 +282,7 @@ class CharityController extends Controller
                 'description' => $request->input('description'),
                 'status' => $request->input('status'),
             ];
-            
+
             if ($request->input('logo_type') == 'upload' && $request->has('logo_upload')) {
                 $imageName = Str::slug($request->input('name')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
                 $request->logo_upload->storeAs('public/charities/images', $imageName);
@@ -286,7 +297,7 @@ class CharityController extends Controller
                     File::delete(public_path($charity->logo_upload));
                 }
             }
-            
+
             if ($request->input('banner_type') == 'upload' && $request->has('banner_upload')) {
                 $imageName = Str::slug($request->input('name')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
                 $request->banner_upload->storeAs('public/charities/images', $imageName);
@@ -301,10 +312,10 @@ class CharityController extends Controller
                     File::delete(public_path($charity->banner_upload));
                 }
             }
-            
+
             $charity->update($inputData);
 
-            
+
             if ($request->has('tags')) {
                 $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
                 if ($tags->count() > 0) $charity->tags()->sync($tags);
