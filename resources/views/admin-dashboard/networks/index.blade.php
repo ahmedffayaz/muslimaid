@@ -328,7 +328,7 @@
                         $('#setting_form').html(data);
                         $(".run-importer").removeClass("disabled");
                         $(".save_importer").removeClass("disabled");
-                        $("a.run-importer").attr("href", "{{ route('admin.importer.import') }}");
+                        $("a.run-importer").attr("href", "{{ route(getAdminPrefix() . '.importer.import') }}");
                     }
                 });
             });
