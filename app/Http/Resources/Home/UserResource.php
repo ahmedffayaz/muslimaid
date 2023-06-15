@@ -22,7 +22,11 @@ class UserResource extends JsonResource
         $userPermissions = $permissions->implode(',');
 
         $token = $this->createToken('API Token')->plainTextToken;
-
+        if($this->first_name && $this->last_name && $this->email && $this->phone && $this->address && $this->date_of_birth && $this->street && $this->country_id && $this->postal_code) {
+            $is_profile_complete = 1;
+        } else{
+           $is_profile_complete = 0;
+        }
         $user = [
             "id" => $this->id,
             "name" => $this->first_name . ' ' . $this->last_name,
@@ -51,7 +55,8 @@ class UserResource extends JsonResource
             "referral_code" => empty($this->referred_by) ? '' : $this->referred_by,
             "email_preference" => $this->email_preference ? 'Yes' : 'No',
             "token" => $token,
-            "balance" => currency($this->availableBalance(3))
+            "balance" => currency($this->availableBalance(3)),
+            "is_profile_complete"=>  $is_profile_complete
         ];
 
         $data = [

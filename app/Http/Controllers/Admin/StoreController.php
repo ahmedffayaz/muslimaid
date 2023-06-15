@@ -57,7 +57,7 @@ class StoreController extends Controller
 
     function deleteRevglueStores()
     {
-        $chunkSize = 1000; // adjust the chunk size as needed
+        $chunkSize = 1000;
         DB::beginTransaction();
         try {
             Store::where('network_id', 1)->chunk($chunkSize, function ($stores) {
@@ -88,6 +88,24 @@ class StoreController extends Controller
             }
             
             DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e->getMessage());
+        }
+    }
+
+    function changeNetwork(Request $request){
+        $chunkSize = 1000; 
+        $getNetwork = $request->getNetwork;
+        $changeNetwork = $request->changeNetwork;
+        DB::beginTransaction();
+        try {
+            DB::commit();
+            DB::table('stores')->where('network_id', $getNetwork)->orderBy('id')->chunk($chunkSize, function ($stores) use ($changeNetwork) {
+                foreach ($stores as $store) {
+                    DB::table('stores')->where('id', $store->id)->update(['network_id' => $changeNetwork]);
+                }
+            });
         } catch (\Exception $e) {
             DB::rollback();
             dd($e->getMessage());
