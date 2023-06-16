@@ -93,24 +93,6 @@ class StoreController extends Controller
             dd($e->getMessage());
         }
     }
-
-    function changeNetwork(Request $request){
-        $chunkSize = 1000; 
-        $getNetwork = $request->getNetwork;
-        $changeNetwork = $request->changeNetwork;
-        DB::beginTransaction();
-        try {
-            DB::commit();
-            DB::table('stores')->where('network_id', $getNetwork)->orderBy('id')->chunk($chunkSize, function ($stores) use ($changeNetwork) {
-                foreach ($stores as $store) {
-                    DB::table('stores')->where('id', $store->id)->update(['network_id' => $changeNetwork]);
-                }
-            });
-        } catch (\Exception $e) {
-            DB::rollback();
-            dd($e->getMessage());
-        }
-    }
     /**
      * Show the form for creating a new resource.
      *
