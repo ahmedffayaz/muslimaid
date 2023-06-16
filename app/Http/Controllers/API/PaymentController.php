@@ -4,15 +4,19 @@ namespace App\Http\Controllers\APi;
 
 use App\Models\Store;
 use App\Models\Cashout;
+use App\Models\CharityType;
 use App\Models\PaymentInfo;
+use App\Models\UserCashback;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\StoreResource;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use App\Models\UserCashback;
+use App\Http\Resources\CharityTypeResource;
+use App\Http\Resources\UserCashbackResource;
 
 class PaymentController extends Controller
 {
@@ -79,7 +83,7 @@ class PaymentController extends Controller
                 ];
             }
             $cashoutStatuses = $user->cashouts()->pluck('status')->all();
-            $availableBalance =$user->availableBalance(3);
+            $availableBalance = $user->availableBalance(3);
             $minimumCashoutAmount = getMinimumCashoutAmount();
             if ($availableBalance < $minimumCashoutAmount || (in_array('pending', $cashoutStatuses) || in_array('processing donation', $cashoutStatuses))) {
                 $data = [
@@ -165,9 +169,9 @@ class PaymentController extends Controller
                 'charity_types_id' => 'required',
                 'payment_method' => 'required',
                 'amount' => 'required',
-                'id'=> 'required'
+                'id' => 'required'
             ]);
-    
+
             if ($validator->fails()) {
                 $data = [
                     'status' => 406,
@@ -190,7 +194,7 @@ class PaymentController extends Controller
             $cashback->statusHistory()->create([
                 'cashback_status_id' => $cashback->status
             ]);
-    
+
             if ($user->bonus && $user->bonus->status == 'unpaid') {
                 $user->bonus->update([
                     'status' => 'paid',
@@ -212,6 +216,40 @@ class PaymentController extends Controller
                 ];
                 return response()->json($data, 406);
             }
+        } catch (\Exception $e) {
+            $data = [
+                'status' => 500,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+            return response()->json($data, 500);
+        }
+    }
+    public function charityTypesCashouts()
+    {
+        try {
+
+            $user_id = auth()->user()->id;
+
+            $usercashbacks = UserCashback::where('status', '3')
+                ->where('user_id', $user_id)
+                ->get();
+
+            $usercashbacks_id = $usercashbacks->pluck('id')->toArray();
+
+            $charityTypeData = CharityTypeResource::collection(CharityType::where('status', '1')->get());
+
+            $data = [
+                'status' => 200,
+                'message' => 'Success',
+                'data' => [
+                    'status' => 200,
+                    'message' => 'Successful',
+                    'usercashbacks' => UserCashbackResource::collection($usercashbacks),
+                    'charity_types' => $charityTypeData,
+                ],
+            ];
+            return response()->json($data, 200);
         } catch (\Exception $e) {
             $data = [
                 'status' => 500,

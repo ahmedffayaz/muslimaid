@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/charities', [API\CharityController::class, 'getCharities']);
     Route::post('/withdraw', [API\PaymentController::class, 'accountWithdraw']);
     Route::post('/charity_withdraw', [API\PaymentController::class, 'CharityCashout']);
+    Route::get('/charity_user_cashbacks_and_types', [API\PaymentController::class, 'charityTypesCashouts']);
 });
 
 Route::apiResource('stores', API\StoreController::class)->only(['index', 'show']);

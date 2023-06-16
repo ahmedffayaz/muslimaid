@@ -15,6 +15,7 @@ class CashbackResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'cashback' => $this->getCashback(),
             'icon' => !empty($this->image) ? getImageUrl(asset('storage/' . $this->image)) : null,
             'detail' => $this->detail,
