@@ -191,10 +191,7 @@
                                                         <div class="form-control-wrap ">
                                                             <div class="">
                                                                 @php
-                                                                    $storeTagsIds = $store
-                                                                        ->tags()
-                                                                        ->pluck('tag_id')
-                                                                        ->toArray();
+                                                                    $storeTagsIds = $store->tags()->pluck('tag_id')->toArray();
                                                                 @endphp
                                                                 <select class="form-control form-select select-2" name="tags[]" multiple>
                                                                     @foreach ($tags as $tag)
@@ -210,8 +207,7 @@
                                                         <div class="form-group">
                                                             <label class="form-label" for="competitors">Competitors</label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="competitors" value="{{ $store->competitors }}"
-                                                                    name="competitors">
+                                                                <textarea class="form-control" id="competitors" name="competitors" rows="5">{{ $store->competitors }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
