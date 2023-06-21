@@ -141,9 +141,9 @@ class LoginController extends Controller
             'password' => 'required|string',
         ];
         // Check if reCAPTCHA key is set
-        if (!empty(getSpecificSetting('google_recaptcha_site_key')) && !empty(getSpecificSetting('google_recaptcha_secret_key'))) {
-            $rules['g-recaptcha-response'] = 'required|captcha';
-        }
+        // if (!empty(getSpecificSetting('google_recaptcha_site_key')) && !empty(getSpecificSetting('google_recaptcha_secret_key'))) {
+        //     $rules['g-recaptcha-response'] = 'required|captcha';
+        // }
 
         $request->validate($rules);
     }
