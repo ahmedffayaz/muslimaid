@@ -124,6 +124,7 @@ class CategoryController extends Controller
     public function getCategoryStores(Request $request, $slug)
     {
         try {
+            $slug = isset($request->child) ? $request->child : $slug;
             $category = Category::where('slug', $slug)->first();
             if (!$category) {
                 $data = [

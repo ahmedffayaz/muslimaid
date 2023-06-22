@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Ticket;
-use App\Models\TicketCategory;
-use App\Models\User;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Ticket;
+use Illuminate\Http\Request;
+use App\Jobs\SendNotification;
+use App\Models\TicketCategory;
+use App\Http\Controllers\Controller;
 
 class TicketsController extends Controller
 {
@@ -56,6 +57,11 @@ class TicketsController extends Controller
         $ticket->update(['status'=>'closed',
         'closing_time'=> Carbon::now(),
         'closed_by'=>auth()->user()->id]);
+        $title = 'Ticket Closed';
+        $message = 'Your ticket has been closed.';
+        $deviceToken = auth()->user()->devices()->first()->fcm_token;
+
+        dispatch(new SendNotification($title, $message, $deviceToken));
         flash()->success('Ticket closed');
                 return redirect()->back();
     }

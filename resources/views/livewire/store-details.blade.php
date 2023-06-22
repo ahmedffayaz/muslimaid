@@ -171,7 +171,7 @@
                                                             <label class="form-label" for="store_url">Store url <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="store_url" value="{{ $store->store_url }}"
-                                                                    name="store_url" placeholder="https://example.com/item/abc-id-1345" required>
+                                                                    name="store_url" placeholder="https://example.com" required>
                                                             </div>
                                                         </div>
                                                     </div>

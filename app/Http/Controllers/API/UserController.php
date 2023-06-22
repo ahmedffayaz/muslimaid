@@ -506,4 +506,16 @@ class UserController extends Controller
             return response()->json($data, 500);
         }
     }
+    // public function accountWithdraw(Request $request){
+    //     try {
+
+    //     } catch (\Exception $e) {
+    //         $data = [
+    //             'status' => 500,
+    //             'message' => 'Something went wrong, try again.',
+    //             'data' => []
+    //         ];
+    //         return response()->json($data, 500);
+    //     }
+    // }
 }

@@ -41,6 +41,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/send_refer_email', [API\UserController::class, 'sendReferralLink']);
     Route::post('/user/cashouts', [API\UserController::class, 'cashouts']);
 
+
     Route::post('/get-fav-stores', [API\StoreController::class, 'favoriteStores']);
     Route::post('/get-fav-cbdoor', [API\StoreController::class, 'favoriteCashbackStores']);
     Route::post('/add-fav-store', [API\StoreController::class, 'addFavoriteStores']);
@@ -49,6 +50,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/dashboard_data', [API\DashboardController::class, 'index']);
 
     Route::post('/charities', [API\CharityController::class, 'getCharities']);
+    Route::post('/withdraw', [API\PaymentController::class, 'accountWithdraw']);
+    Route::post('/charity_withdraw', [API\PaymentController::class, 'CharityCashout']);
+    Route::get('/charity_user_cashbacks_and_types', [API\PaymentController::class, 'charityTypesCashouts']);
 });
 
 Route::apiResource('stores', API\StoreController::class)->only(['index', 'show']);

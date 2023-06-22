@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\TicketReply;
 use Illuminate\Http\Request;
+use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -35,7 +36,11 @@ class RepliesController extends Controller
         ]);
 
         $reply->ticket->update(['status' => 'pending']);
+        $title = 'Admin Replied';
+        $message = 'Your  ticket has been replied by Admin';
+        $deviceToken = auth()->user()->devices()->first()->fcm_token;
 
+        dispatch(new SendNotification($title, $message, $deviceToken));
         return back();
     }
 }

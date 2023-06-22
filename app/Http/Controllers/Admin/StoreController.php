@@ -57,7 +57,7 @@ class StoreController extends Controller
 
     function deleteRevglueStores()
     {
-        $chunkSize = 1000; // adjust the chunk size as needed
+        $chunkSize = 1000;
         DB::beginTransaction();
         try {
             Store::where('network_id', 1)->chunk($chunkSize, function ($stores) {

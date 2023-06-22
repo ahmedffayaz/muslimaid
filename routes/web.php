@@ -71,7 +71,6 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::delete('/stores/address/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreAddress'])->name('stores.address.delete');
         Route::delete('/stores/voucher/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreVoucher'])->name('stores.voucher.delete');
         Route::get('/stores/delete-revglue-stores', [App\Http\Controllers\Admin\StoreController::class, 'deleteRevglueStores'])->name('stores.revglue.delete');
-
         Route::resource('stores', StoreController::class);
         Route::resource('storecashbacks', StoreCashbackController::class)->only('index');
 

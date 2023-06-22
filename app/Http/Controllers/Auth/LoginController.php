@@ -149,7 +149,6 @@ class LoginController extends Controller
     }
     protected function redirectTo()
     {
-
         if (Session::has('prvUrl')) {
             return session('prvUrl');
         } else {
