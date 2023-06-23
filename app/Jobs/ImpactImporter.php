@@ -32,7 +32,7 @@ class ImpactImporter implements ShouldQueue
      */
     public function __construct()
     {
-        $this->network = Network::where('name', 'like', 'Awin')->first();
+        $this->network = Network::where('name', 'like', 'Impact')->first();
         $this->importerSetting = ImporterSetting::where('network_id', $this->network->id)->first();
         $this->siteSettings = SiteSetting::latest()->get()->pluck('value', 'type');
     }
