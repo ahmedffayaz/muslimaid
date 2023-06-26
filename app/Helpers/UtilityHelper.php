@@ -971,8 +971,15 @@ function isWithdrawalAllowed()
 function getSiteLogo()
 {
     $settings = SiteSetting();
-    $siteLogo = (empty($settings['website_logo']) ? asset('admin-dashboard/images/logo.png') : ($settings['website_logo'] == 'default.png' ? asset('admin-dashboard/images/logo.png') : ($settings['website_logo'] == 'cashblack-default.png'
-        ? asset('cashblack/img/logo.png') : asset('storage/dashboard/images/logo/' . $settings['website_logo']))));
+    if (!isset($settings['website_logo']))  $siteLogo = asset('admin-dashboard/images/logo.png');
+    if ($settings['website_logo'] == 'default.png') $siteLogo = asset('admin-dashboard/images/logo.png');
+    if ($settings['website_logo'] == 'cashblack-default.png') $siteLogo = asset('cashblack/img/logo.png');
+
+    if (Storage::disk('public')->exists('dashboard/images/logo/' . $settings['website_logo']))
+        $siteLogo = asset('storage/dashboard/images/logo/' . $settings['website_logo']);
+    else
+        $siteLogo = asset('admin-dashboard/images/logo.png');
+
     return $siteLogo;
 }
 
@@ -1019,8 +1026,16 @@ function getCurrencySymbol($symbol = null)
 function getSiteFavicon()
 {
     $settings = SiteSetting();
-    $siteLogo = (empty($settings['favicon']) ? asset('admin-dashboard/images/favicon.png') : ($settings['favicon'] == 'default.png' ? asset('admin-dashboard/images/favicon.png') : ($settings['favicon'] == 'cashblack-default.png'
-        ? asset('cashblack/img/favicon.png') : asset('storage/dashboard/images/logo/' . $settings['favicon']))));
+
+    if (!isset($settings['favicon'])) $siteLogo = asset('admin-dashboard/images/favicon.png');
+    if ($settings['favicon'] == 'default.png') $siteLogo = asset('admin-dashboard/images/favicon.png');
+    if ($settings['favicon'] == 'cashblack-default.png') $siteLogo = asset('cashblack/img/favicon.png');
+
+    if (Storage::disk('public')->exists('dashboard/images/logo/' . $settings['favicon']))
+        $siteLogo = asset('storage/dashboard/images/logo/' . $settings['favicon']);
+    else
+        $siteLogo = asset('admin-dashboard/images/favicon.png');
+
     return $siteLogo;
 }
 
