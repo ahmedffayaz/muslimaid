@@ -807,7 +807,7 @@ function getImageUrl($url)
         $baseDir = $url->is_fake ? 'frontend/images/logos/' : '';
 
         return strpos($url->image, 'http') !== false
-            ? (!$url->image ? asset('cashblack/img/no-logo.png') : $url->image)
+            ? (!$url->image ? asset('storage/__asset/img/no-logo.png') : $url->image)
             : asset($baseDir . ltrim($url->image, '/'));
     }
 
@@ -971,16 +971,17 @@ function isWithdrawalAllowed()
 function getSiteLogo()
 {
     $settings = SiteSetting();
+    // dd(empty($settings['website_logo']));
     $siteLogo = (empty($settings['website_logo']) ? asset('admin-dashboard/images/logo.png') : ($settings['website_logo'] == 'default.png' ? asset('admin-dashboard/images/logo.png') : ($settings['website_logo'] == 'cashblack-default.png'
-        ? asset('cashblack/img/logo.png') : asset('storage/dashboard/images/logo/' . $settings['website_logo']))));
-    return $siteLogo;
+        ? asset('storage/__asset/img/logo.png') : asset('storage/dashboard/images/logo/' . $settings['website_logo']))));
+        return $siteLogo;
 }
 
 function getDashboardLogo()
 {
     $settings = SiteSetting();
     $siteLogo = (empty($settings['dashboard_logo']) ? asset('admin-dashboard/images/logo-dark.png') : ($settings['dashboard_logo'] == 'default.png' ? asset('admin-dashboard/images/logo-dark.png') : ($settings['dashboard_logo'] == 'cashblack-default.png'
-        ? asset('cashblack/img/logo.png') : asset('storage/dashboard/images/logo/' . $settings['dashboard_logo']))));
+        ? asset('storage/__asset/img/logo.png') : asset('storage/dashboard/images/logo/' . $settings['dashboard_logo']))));
     return $siteLogo;
 }
 
@@ -1020,7 +1021,7 @@ function getSiteFavicon()
 {
     $settings = SiteSetting();
     $siteLogo = (empty($settings['favicon']) ? asset('admin-dashboard/images/favicon.png') : ($settings['favicon'] == 'default.png' ? asset('admin-dashboard/images/favicon.png') : ($settings['favicon'] == 'cashblack-default.png'
-        ? asset('cashblack/img/favicon.png') : asset('storage/dashboard/images/logo/' . $settings['favicon']))));
+        ? asset('storage/__asset/img/favicon.png') : asset('storage/dashboard/images/logo/' . $settings['favicon']))));
     return $siteLogo;
 }
 

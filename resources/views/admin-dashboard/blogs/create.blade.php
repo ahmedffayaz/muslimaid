@@ -1,310 +1,158 @@
-<?php
-
-namespace App\Http\Controllers\API;
-
-use Exception;
-use App\Models\Page;
-use App\Models\Store;
-use App\Models\Category;
-use App\Traits\ApiResponser;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Resources\StoreResource;
-use App\Http\Resources\Category\CategoryResource;
-use App\Http\Resources\Category\SubCategoryResource;
-use App\Http\Resources\StoreDetailResource;
-
-class CategoryController extends Controller
-{
-    use ApiResponser;
-
-    public function index(Request $request)
-    {
-        try {
-            $page = Page::where('slug', 'categories')->whereType('system')->pluck('banner_image')->firstOrFail();
-            $categories = Category::when($request->has('letter'), function ($query) use ($request) {
-                $query->where('name', 'like', $request->input('letter') . '%');
-            })->when($request->has('parent_id'), function ($query) use ($request) {
-                $query->where('id', $request->input('parent_id'));
-            })->with(['childs' => function ($query) {
-                $query->orderBy('name', 'asc')->withCount('stores');
-            }])->withCount('stores')->where('parent_id', 0)->orderBy('name', 'asc')->paginate(20)->appends(request()->input());
-            if ($categories->count() == 0) {
-                $data = [
-                    'status' => 200,
-                    'message' => 'No store found',
-                    'data' => []
-                ];
-                return response()->json($data, 200);
-            }
-
-            $data = [
-                'status' => 200,
-                'message' => 'Success',
-                'data' => [
-                    'main_banner' => getBannerImageUrl($page),
-                    'categories' => CategoryResource::collection($categories),
-                    'meta_data' => [
-                        "next" => $categories->nextPageUrl(),
-                        "previous" => $categories->previousPageUrl(),
-                        "per_page" => 20,
-                        "total" => $categories->total(),
-                        "current_page" => $categories->currentPage(),
-                        "total_pages" => $categories->lastPage(),
-                        "first" => $categories->firstItem(),
-                        "last" => $categories->lastItem()
-                    ]
-                ]
-            ];
-
-            return response()->json($data, 200);
-        } catch (Exception $e) {
-            $data = [
-                'status' => 500,
-                'message' => 'Something went wrong, try again',
-                'data' => []
-            ];
-            return response()->json($data, 500);
+@extends('layouts.admin-dashboard.app')
+@section('content')
+    <div class="nk-content ">
+        <div class="container-fluid">
+            <div class="nk-content-inner">
+                <div class="nk-content-body">
+                    <div class="components-preview mx-auto">
+                        <div class="nk-block nk-block-lg">
+                            <div class="nk-block-head">
+                                <div class="nk-block-head-content">
+                                    <div class="nk-block-des">
+                                    </div>
+                                </div>
+                            </div>
+                            @if ($errors->any())
+                                <div class="alert alert-danger">
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <div class="card">
+                                <div class="card-inner">
+                                    <div class="card-head">
+                                    </div>
+                                    <form action="{{ route(getAdminPrefix() . '.blogs.store') }}" class="form-validate is-alter"  enctype="multipart/form-data"
+                                        method="POST">
+                                        @csrf
+                                        <div class="row g-4">
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="reviewer">Title <span class="text-danger">*</span></label>
+                                                    <div class="form-control-wrap">
+                                                        <input id="blog-title" type="text" class="form-control "
+                                                            name="title" placeholder="Title" value="" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <fieldset class="uk-fieldset">
+                                                    <div class="laraberg-sidebar">
+                                                        <textarea name="excerpt" placeholder="Excerpt"></textarea>
+                                                    </div>
+                                                    <div class="uk-margin">
+                                                        <textarea name="content" id="content" hidden></textarea>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="col-lg-8">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="featured_image">Banner <span class="text-danger">*</span></label>
+                                                    <div class="form-control-wrap">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" name="featured_image" id="featured_image" onchange="BannerReadURL(this);">
+                                                            <label class="custom-file-label" for="featured_image">Choose file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <div class="preview-wrapper">
+                                                            <img id="featured_image-preview" src="" alt="logo" class="d-none"
+                                                                style="max-height: 60px; max-width: 60px;" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="reviewer">Publish Date</label>
+                                                    <div class="form-control-wrap">
+                                                        <input id="publish_date" type="date" class="form-control " name="publish_date" placeholder="Publish Date" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="reviewer">Meta Description</label>
+                                                    <textarea class="form-control " name="meta_description" placeholder="Meta Description" value=""></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="reviewer">Meta Keywords</label>
+                                                    <div class="form-control-wrap">
+                                                        <input id="blog-title" type="text" class="form-control "
+                                                            name="meta_keyword" placeholder="Meta keyword" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="form-group">
+                                                    <button onclock="remobe_bug()" class="btn btn-primary add-blog"
+                                                        type="submit">Save</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div><!-- .nk-block -->
+                    </div><!-- .components-preview -->
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+@push('scripts')
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            Laraberg.init('content', {
+                height: '600px',
+                laravelFilemanager: true,
+                sidebar: true
+            })
+        });
+        window.onbeforeunload = function() {
+            return null;
+        };
+    </script>
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
+    <style>
+        .popover {
+            top: auto;
+            left: auto;
         }
-    }
-
-    public function show(Request $request, $slug)
-    {
-        try {
-            $stores = Store::when($request->has('letter'), function ($query) use ($request) {
-                $query->where('name', 'like', $request->input('letter') . '%');
-            })->whereHas('categories', function ($query) use ($slug) {
-                $query->whereSlug($slug)->where('parent_id', '!=', 0)->whereStatus(1);
-            })->with(['categories' => function ($query) use ($slug) {
-                $query->whereSlug($slug)->where('parent_id', '!=', 0)->whereStatus(1);
-            }])->whereStatus('active')->paginate(20)->appends(request()->input());
-
-            if ($stores->count() == 0) {
-                $data = [
-                    'status' => 200,
-                    'message' => 'No store found',
-                    'data' => []
-                ];
-                return response()->json($data, 200);
+    </style>
+    <script>
+        function BannerReadURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    if (input.id === "featured_image") {
+                        $('#featured_image-preview').attr('src', e.target.result).removeClass('d-none');
+                    }
+                }
+                reader.readAsDataURL(input.files[0]);
             }
-            $data = [
-                'status' => 200,
-                'message' => 'success',
-                'data' => [
-                    'categories' => [
-                        [
-                            'main_banner' => getBannerImageUrl($stores[0]->categories->first()->banner_upload),
-                            'title' => $stores[0]->categories->first()->name,
-                            'stores' => StoreResource::collection($stores),
-                            'meta_data' => [
-                                "next" => $stores->nextPageUrl(),
-                                "previous" => $stores->previousPageUrl(),
-                                "per_page" => 20,
-                                "total" => $stores->total(),
-                                "current_page" => $stores->currentPage(),
-                                "total_pages" => $stores->lastPage(),
-                                "first" => $stores->firstItem(),
-                                "last" => $stores->lastItem()
-                            ]
-                        ]
-                    ],
-                ]
-            ];
-
-            return response()->json($data, 200);
-        } catch (Exception $e) {
-            return response()->json([
-                'status' => 500,
-                'message' => 'Something went wrong, try again',
-                'data' => []
-            ], 500);
         }
-    }
+    </script>
+    <script>
+        jQuery.validator.addMethod("regex", function(value, element) {
+            return this.optional(element) || /^[\w. ]+$/i.test(value);
+        }, "Letters, numbers, and underscores only please");
 
-    // public function getCashblackYourDoor(Request $request, $slug)
-    // {
-    //     try {
-
-    //         $stores = Store::when($request->has('letter'), function ($query) use ($request) {
-    //             $query->where('name', 'like', $request->input('letter') . '%');
-    //         })->when($request->orderBy == 'latest', function ($query) use ($request) {
-    //             $query->latest();
-    //         })->when($request->orgerBy == 'popularity', function ($query) use ($request) {
-    //             $query->withCount('clicks')->orderByDesc('clicks_count');
-    //         })->when($request->orderBy == 'cashback-amount', function ($query) use ($request) {
-    //             $query->whereHas('cashbacks', function ($query) {
-    //                 $query->whereType('fixed');
-    //             })->get()->filter(function ($query) {
-    //                 $cashback = $query->getCashback();
-    //                 return (strpos($cashback, '£') !== false);
-    //             });
-    //         })->when($request->orderBy == 'cashback-percentage', function ($query) {
-    //             $query->whereHas('cashbacks', function ($query) {
-    //                 $query->where('type', 'percentage');
-    //             })->get()->filter(function ($query) {
-    //                 $cashback = $query->getCashback();
-    //                 return (strpos($cashback, '%') !== false);
-    //             });
-    //         })->whereHas('categories', function ($query) use ($slug) {
-    //             $query->whereSlug($slug)->where('parent_id', 0)->whereStatus(1);
-    //         })->with(['categories' => function ($query) use ($slug) {
-    //             $query->whereSlug($slug)->where('parent_id', 0)->whereStatus(1);
-    //         }])->whereStatus('active')->paginate(20)->appends(request()->input());
-    //         $data = [
-    //             'status' => 200,
-    //             'message' => 'Success',
-    //             'data' => [
-    //                 'main_banner' => ($stores[0]->categories[0]->banner_type != 'link') ? getBannerImageUrl($stores[0]->categories[0]->banner_upload, 'upload', $stores[0]->categories[0]) : $stores[0]->categories[0]->banner_link,
-    //                 'categories' => StoreResource::collection($stores),
-    //                 'meta_data' => [
-    //                     "next" => $stores->nextPageUrl(),
-    //                     "previous" => $stores->previousPageUrl(),
-    //                     "per_page" => 20,
-    //                     "total" => $stores->total(),
-    //                     "current_page" => $stores->currentPage(),
-    //                     "total_pages" => $stores->lastPage(),
-    //                     "first" => $stores->firstItem(),
-    //                     "last" => $stores->lastItem()
-    //                 ]
-    //             ]
-    //         ];
-
-    //         return response()->json($data, 200);
-    //     } catch (Exception $e) {
-    //         $data = [
-    //             'status' => 500,
-    //             'message' => 'Something went wrong, try again',
-    //             'data' => []
-    //         ];
-    //         return response()->json($data, 500);
-    //     }
-    // }
-
-    public function getCategoryStores(Request $request, $slug)
-    {
-        try {
-            $category = Category::where('slug', $slug)->first();
-            if (!$category) {
-                $data = [
-                    'status' => 200,
-                    'message' => 'No Category found',
-                    'data' => []
-                ];
-                return response()->json($data, 200);
+        $('.form-validate').validate({
+            rules: {
+                title: {
+                    required: true,
+                    regex: true
+                }
             }
-            $categoryStores = $category->stores()->when($request->has('letter'), function ($query) use ($request) {
-                $query->where('name', 'like', $request->input('letter') . '%');
-            })->when($request->orderBy == 'latest', function ($query) use ($request) {
-                $query->latest();
-            })->when($request->orderBy == 'popularity', function ($query) use ($request) {
-                $query->withCount('clicks')->orderByDesc('clicks_count');
-            })->when($request->orderBy == 'cashback-amount', function ($query) use ($request) {
-                $query->whereHas('cashbacks', function ($query) {
-                    $query->whereType('fixed');
-                })->get()->filter(function ($query) {
-                    $cashback = $query->getCashback();
-                    return (strpos($cashback, '£') !== false);
-                });
-            })->when($request->orderBy == 'cashback-percentage', function ($query) {
-                $query->whereHas('cashbacks', function ($query) {
-                    $query->where('type', 'percentage');
-                })->get()->filter(function ($query) {
-                    $cashback = $query->getCashback();
-                    return (strpos($cashback, '%') !== false);
-                });
-            })->whereHas('categories', function ($query) use ($slug) {
-                $query->whereSlug($slug)->where('parent_id', 0)->whereStatus(1);
-            })->with(['categories' => function ($query) use ($slug) {
-                $query->whereSlug($slug)->where('parent_id', 0)->whereStatus(1);
-            }])->whereStatus('active')->paginate(20)->appends(request()->input());
-
-            $cuisine = Category::where('id', '158')->with(['childs' => function ($query) {
-                $query->orderBy('name', 'asc')->withCount('stores');
-            }])->withCount('stores')->where('parent_id', 0)->orderBy('name', 'asc')->get();
-          
-            $data = [
-                'status' => 200,
-                'message' => 'Category details retrieved successfully',
-                'data' => [
-                    'category' => new SubCategoryResource($category),
-                    'parent' => isset($category->parent) ? new SubCategoryResource($category->parent) : (object)[],
-                    'child' => !empty($category->childs) ? SubCategoryResource::collection($category->childs) : [],
-                    'stores' => !empty($category->stores) ? StoreResource::collection($categoryStores) : [],
-                    'cuisine' => count($cuisine) ? CategoryResource::collection($cuisine) : [],
-                    'total' => count($category->stores),
-                    'metaData' => [
-                        "next" => $categoryStores->nextPageUrl(),
-                        "previous" => $categoryStores->previousPageUrl(),
-                        "per_page" => 20,
-                        "total" => $categoryStores->total(),
-                        "current_page" => $categoryStores->currentPage(),
-                        "total_pages" => $categoryStores->lastPage(),
-                        "first" => $categoryStores->firstItem(),
-                        "last" => $categoryStores->lastItem()
-                    ]
-                ]
-            ];
-            return response()->json($data, 200);
-        } catch (Exception $e) {
-            $data = [
-                'status' => 500,
-                'message' =>  $e->getMessage(),
-                'data' => []
-            ];
-            return response()->json($data, 500);
-        }
-    }
-    public function cuisineFilter(Request $request)
-    {
-        try {
-            $page = Page::whereSlug('stores')->whereType('system')->whereStatus('active')->pluck('banner_image')->firstOrFail();
-            $category = Category::where(function ($query) {
-                $query->where('visibility', '!=', 'hidden')
-                    ->orWhereNull('visibility');
-            })->whereSlug('cashblack-to-your-door')->with('stores')->whereStatus('1')->first();
-            $allStores =  $category->stores();
-            $cuisineCategories = $request->input('cuisine');
-
-            if (!empty($cuisineCategories)) {
-                $allStores = $allStores->whereHas('categories', function ($query) use ($cuisineCategories) {
-                    $query->whereIn('name', $cuisineCategories);
-                });
-            }
-            $stores = $allStores->paginate(20)->appends(request()->input());
-            if ($stores->count() == 0) {
-                $data = [
-                    'status' => 200,
-                    'message' => 'No store found',
-                    'data' => []
-                ];
-                return response()->json($data, 200);
-            }
-            $data = [
-                'status' => 200,
-                'message' => 'Success',
-                'data' => [
-                    'main_banner_image' => getBannerImageUrl($page),
-                    'stores' => StoreResource::collection($stores),
-                    'meta_data' => [
-                        "next" => $stores->nextPageUrl(),
-                        "previous" => $stores->previousPageUrl(),
-                        "per_page" => 20,
-                        "total" => $stores->total(),
-                        "current_page" => $stores->currentPage(),
-                        "total_pages" => $stores->lastPage(),
-                        "first" => $stores->firstItem(),
-                        "last" => $stores->lastItem()
-                    ]
-                ]
-            ];
-            return response()->json($data, 200);
-        } catch (Exception $e) {
-            $data = [
-                'status' => 500,
-                'message' => 'Something went wrong, try again.',
-                'data' => []
-            ];
-            return response()->json($data, 500);
-        }
-    }
-}
+        });
+    </script>
+@endpush

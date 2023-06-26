@@ -21,14 +21,34 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         try {
+           
             $page = Page::where('slug', 'categories')->whereType('system')->pluck('banner_image')->firstOrFail();
-            $categories = Category::when($request->has('letter'), function ($query) use ($request) {
-                $query->where('name', 'like', $request->input('letter') . '%');
-            })->when($request->has('parent_id'), function ($query) use ($request) {
+            $categories = Category::when($request->has('parent_id'), function ($query) use ($request) {
                 $query->where('id', $request->input('parent_id'));
-            })->with(['childs' => function ($query) {
+            })
+            ->with(['childs' => function ($query) {
                 $query->orderBy('name', 'asc')->withCount('stores');
-            }])->withCount('stores')->where('parent_id', 0)->orderBy('name', 'asc')->paginate(20)->appends(request()->input());
+            }])
+            ->withCount('stores')
+            ->where('parent_id', 0)
+            ->where('name', '!=', 'more') // Exclude the category with the name 'more'
+            ->orderBy('name', 'asc')
+            ->paginate(20)
+            ->appends(request()->input());
+            
+            // Get the 'more' category separately
+            $moreCategory = Category::where('name', 'more')
+                ->with(['childs' => function ($query) {
+                    $query->orderBy('name', 'asc')->withCount('stores');
+                }])
+                ->withCount('stores')
+                ->where('parent_id', 0)
+                ->first();
+            
+            // Append the 'more' category at the end of the categories collection
+            if ($moreCategory) {
+                $categories->push($moreCategory);
+            }
             if ($categories->count() == 0) {
                 $data = [
                     'status' => 200,

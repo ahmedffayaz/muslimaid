@@ -524,6 +524,7 @@ class StoreController extends Controller
 
     public function deleteCashback(Request $request, StoreCashback $cashback)
     {
+        // dd($cashback);
         $request->validate([
             'storeCashbackId' => 'required'
         ]);
