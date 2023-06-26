@@ -105,11 +105,9 @@ class AfrofiliateImporter implements ShouldQueue
                 $exitClick = ExitClick::where('id', $store['sub1'])->first();
             }
             if (isset($exitClick)) {
-                $realStoreId=$exitClick->store_id;
-                $userId=$exitClick->user_id;
-
+                $realStoreId = $exitClick->store_id;
+                $userId = $exitClick->user_id;
                 $userCashbackAmount = ($store['revenue'] / 100) * (isset($exitClick->current_cashback_percentage) ? $exitClick->current_cashback_percentage : $this->siteSettings['cashback_percentage']);
-
                 $userCashback = UserCashback::updateOrCreate([
                     'exit_click_id' =>  $exitClick->id,
                     'network_commission_id' =>  $store['order_id']
@@ -126,17 +124,18 @@ class AfrofiliateImporter implements ShouldQueue
                     'click_date' => Carbon::createFromTimestamp($store['click_unix_timestamp'])->toDateTimeString(),
 
                 ]);
-                
+
                 $transactionStatus = $userCashback->status;
-                CashbackStatusChange::updateOrCreate([
-                    'user_cashback_id' => $userCashback->id,
-                    'cashback_status_id' => $cashbackStatuses->where('status', $transactionStatus)->first()->id
-                ], [
-                    'user_cashback_id' => $userCashback->id,
-                    'cashback_status_id' => $cashbackStatuses->where('status', $transactionStatus)->first()->id
-                ]);
-            } else {
-                continue;
+                $id = $userCashback->id;
+                if($transactionStatus){
+                    CashbackStatusChange::updateOrCreate([
+                        'user_cashback_id' => $id,
+                        'cashback_status_id' => $transactionStatus
+                    ]);
+                } 
+                else {
+                    continue;
+                 }
             }
         }
         return;

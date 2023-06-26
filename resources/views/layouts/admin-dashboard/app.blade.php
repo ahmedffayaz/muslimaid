@@ -11,13 +11,7 @@
     <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
     <!-- Fav Icon  -->
     <link rel="shortcut icon"
-        href="{{ !isset($settings['favicon'])
-            ? asset('admin-dashboard/images/favicon.png')
-            : ($settings['favicon'] == 'default.png'
-                ? asset('admin-dashboard/images/favicon.png')
-                : ($settings['favicon'] == 'cashblack-default.png'
-                    ? asset('storage/__asset/img/favicon.png')
-                    : asset('storage/dashboard/images/logo/' . $settings['favicon']))) }}">
+        href="{{ getSiteFavicon() }}">
 
     <!-- Page Title  -->
     <title>{{ $settings['website_title'] }} | Admin Panel</title>
