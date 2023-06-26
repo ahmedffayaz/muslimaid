@@ -77,9 +77,9 @@ Networks:
       Client_id:
       Client_secret:
     Importer:
-      Stores: off
-      Vouchers: off
-      Cashbacks: off
+      Stores: on
+      Vouchers: on
+      Cashbacks: on
   Afrofiliate:
     Settings:
       Client_id:
@@ -87,4 +87,4 @@ Networks:
     Importer:
       Stores: off
       Vouchers: off
-      Cashbacks: off
+      Cashbacks: on

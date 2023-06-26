@@ -12,17 +12,18 @@ use App\Models\ExitClick;
 use App\Jobs\AwinImporter;
 use App\Models\SiteSetting;
 use Illuminate\Support\Str;
+use App\Jobs\ImpactImporter;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Models\StoreCashback;
 use App\Jobs\WebgainsImporter;
 use App\Models\ImporterSetting;
+use App\Jobs\PartnerizeImporter;
 use App\Models\ImportedCategory;
+use App\Jobs\AfrofiliateImporter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Jobs\ImpactImporter;
-use App\Jobs\PartnerizeImporter;
 use App\Models\CashbackStatusChange;
 
 class ImporterController extends Controller
@@ -58,7 +59,6 @@ class ImporterController extends Controller
             'vouchers' => isset($request->vouchers) ? 1 : 0,
             'cashback' => isset($request->cashback) ? 1 : 0
         ];
-
         if ($request->network_name == "CJ") {
             $importer = new Importer();
         } else if ($request->network_name == "Webgains") {
@@ -69,7 +69,9 @@ class ImporterController extends Controller
             $importer = new ImpactImporter();
         } else if ($request->network_name == 'Partnerize') {
             $importer = new PartnerizeImporter();
-        } else {
+        } else if ($request->network_name == 'Afrofiliate') {
+            $importer = new AfrofiliateImporter();
+        }else {
             return response()->json([
                 'status' => JsonResponse::HTTP_NOT_FOUND,
                 'error' => 'Network not found'
