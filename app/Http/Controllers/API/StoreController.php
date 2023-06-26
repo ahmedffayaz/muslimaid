@@ -51,7 +51,7 @@ class StoreController extends Controller
                 $query->whereHas('tags', function ($query) use ($request) {
                     $query->where('title', $request->input('tag'));
                 });
-            })->whereStatus('active')->paginate(20)->appends(request()->input());
+            })->whereStatus('active')->orderBy('name', 'asc')->paginate(20)->appends(request()->input());
             if ($stores->count() == 0) {
                 $data = [
                     'status' => 200,

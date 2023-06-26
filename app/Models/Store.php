@@ -57,11 +57,14 @@ class Store extends Model
         return $this->hasOne(StoreCashback::class)->where('default', 1);
     }
 
+    // public function cashbacks()
+    // {
+    //     return $this->hasMany(StoreCashback::class);
+    // }
     public function cashbacks()
     {
-        return $this->hasMany(StoreCashback::class);
+        return $this->hasMany(StoreCashback::class, 'store_id');
     }
-
     public function images()
     {
         return $this->hasMany(StoreImage::class);
