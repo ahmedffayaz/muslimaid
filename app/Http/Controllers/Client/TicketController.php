@@ -90,6 +90,7 @@ class TicketController extends Controller
     }
     public function step2(Request $request)
     {
+       
         $validator = Validator::make($request->all(), [
             'store_id' => 'required',
         ], [
