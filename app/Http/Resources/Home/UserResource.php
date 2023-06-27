@@ -29,6 +29,7 @@ class UserResource extends JsonResource
         }
         $user = [
             "id" => $this->id,
+            "title" => $this->title,
             "name" => $this->first_name . ' ' . $this->last_name,
             "user_type" => ucwords($userRoles),
             "permission" =>  ucwords($userPermissions),
@@ -38,6 +39,10 @@ class UserResource extends JsonResource
             "status" => $this->status,
             "dob" => date('d-M-Y', strtotime($this->date_of_birth)),
             "address" => empty($this->address) ? '' : $this->address,
+            "address_2" => $this->address_2,
+            "street" => $this->street,
+            'country_id' => $request->country_id,
+            'postal_code' => $request->postal_code,
             "avatar" => url('/') . '/' .  ($this->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . $this->avatar) ? 'admin-dashboard/images/avatar.png' : 'storage/users/images/avatar/' . $this->avatar),
             "avatar_type" => "upload",
             "is_verify" => $this->is_email_verified ? 'Yes' : 'No',

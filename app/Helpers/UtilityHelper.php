@@ -807,7 +807,7 @@ function getImageUrl($url)
         $baseDir = $url->is_fake ? 'frontend/images/logos/' : '';
 
         return strpos($url->image, 'http') !== false
-            ? (!$url->image ? asset('cashblack/img/no-logo.png') : $url->image)
+            ? (!$url->image ? asset('storage/__asset/img/no-logo.png') : $url->image)
             : asset($baseDir . ltrim($url->image, '/'));
     }
 
@@ -971,6 +971,7 @@ function isWithdrawalAllowed()
 function getSiteLogo()
 {
     $settings = SiteSetting();
+
     if (!isset($settings['website_logo']))  $siteLogo = asset('admin-dashboard/images/logo.png');
     if ($settings['website_logo'] == 'default.png') $siteLogo = asset('admin-dashboard/images/logo.png');
     if ($settings['website_logo'] == 'cashblack-default.png') $siteLogo = asset('cashblack/img/logo.png');
@@ -987,7 +988,7 @@ function getDashboardLogo()
 {
     $settings = SiteSetting();
     $siteLogo = (empty($settings['dashboard_logo']) ? asset('admin-dashboard/images/logo-dark.png') : ($settings['dashboard_logo'] == 'default.png' ? asset('admin-dashboard/images/logo-dark.png') : ($settings['dashboard_logo'] == 'cashblack-default.png'
-        ? asset('cashblack/img/logo.png') : asset('storage/dashboard/images/logo/' . $settings['dashboard_logo']))));
+        ? asset('storage/__asset/img/logo.png') : asset('storage/dashboard/images/logo/' . $settings['dashboard_logo']))));
     return $siteLogo;
 }
 
@@ -1026,7 +1027,6 @@ function getCurrencySymbol($symbol = null)
 function getSiteFavicon()
 {
     $settings = SiteSetting();
-
     if (!isset($settings['favicon'])) $siteLogo = asset('admin-dashboard/images/favicon.png');
     if ($settings['favicon'] == 'default.png') $siteLogo = asset('admin-dashboard/images/favicon.png');
     if ($settings['favicon'] == 'cashblack-default.png') $siteLogo = asset('cashblack/img/favicon.png');

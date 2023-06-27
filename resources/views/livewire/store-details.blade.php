@@ -1517,7 +1517,6 @@
                 var form = $(this).closest('form');
                 var url = form.attr('action');
                 var data = form.serialize();
-
                 // Display SweetAlert confirmation dialog
                 Swal.fire({
                     title: 'Are you sure?',

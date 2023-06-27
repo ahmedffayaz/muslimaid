@@ -17,9 +17,9 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $route='index';
+        $route = 'index';
         $blogs = Blog::latest()->paginate(10);
-        return view('admin-dashboard.blogs.index',compact('blogs','route'));
+        return view('admin-dashboard.blogs.index', compact('blogs', 'route'));
     }
 
     /**
@@ -43,14 +43,14 @@ class BlogController extends Controller
         $validated = $request->validate([
             'title' => 'required|regex:/^[\w. ]+$/',
             'featured_image' => 'required',
-        ],$messages = [
+        ], $messages = [
             'title.required' => 'The Title field is required.',
             'featured_image.required' => 'The Featured Image is required.',
         ]);
         if ($request->has('featured_image')) {
             $imageName = Str::slug($request->input('title')) . '_banner_' . time() . '.' . $request->featured_image->extension();
             $request->featured_image->storeAs('public/blogs/images', $imageName);
-            $featured_image = $this->imagePath . $imageName;    
+            $featured_image = $this->imagePath . $imageName;
         }
         $blog = new Blog;
         $blog->title = $request->title;
@@ -58,7 +58,7 @@ class BlogController extends Controller
         $blog->excerpt = $request->excerpt;
         $blog->lb_content = $request->content;
         $blog->featured_image = $featured_image;
-        $blog->url = 'http://127.0.0.1:8000/post/'.Str::slug($request->title,'_');
+        $blog->url = 'http://127.0.0.1:8000/post/' . Str::slug($request->title, '_');
         $blog->meta_keyword = $request->meta_keyword;
         $blog->meta_description = $request->meta_description;
         $blog->meta_title = $request->meta_title;
@@ -68,12 +68,12 @@ class BlogController extends Controller
         $inserted_blog = Blog::where('title', $request->title)->get();
         $counter = count($inserted_blog);
 
-        if($counter>1){
-            if($blog->slug == ''){
+        if ($counter > 1) {
+            if ($blog->slug == '') {
                 $blog->slug = $blog->id;
                 $blog->save();
-            }else{
-                $blog->slug = $blog->slug."_".$counter;
+            } else {
+                $blog->slug = $blog->slug . "_" . $counter;
                 $blog->save();
             }
         }
@@ -90,7 +90,7 @@ class BlogController extends Controller
      */
     public function edit(Blog $blog)
     {
-        return view('admin-dashboard.blogs.edit',compact('blog'));
+        return view('admin-dashboard.blogs.edit', compact('blog'));
     }
 
     /**
@@ -104,7 +104,7 @@ class BlogController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|regex:/^[\w. ]+$/',
-        ],$messages = [
+        ], $messages = [
             'title.required' => 'The Title field is required.',
         ]);
         $featured_image =  $blog->featured_image;
@@ -112,7 +112,6 @@ class BlogController extends Controller
             $imageName = Str::slug($request->input('title')) . '_banner_' . time() . '.' . $request->featured_image->extension();
             $request->featured_image->storeAs('public/blogs/images', $imageName);
             $featured_image = $this->imagePath . $imageName;
-            
         }
         $blog->title = $request->title;
         $blog->excerpt = $request->excerpt;
