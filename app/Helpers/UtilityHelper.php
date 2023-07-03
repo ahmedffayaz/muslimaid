@@ -972,11 +972,11 @@ function getSiteLogo()
 {
     $settings = SiteSetting();
 
-    if (!isset($settings['website_logo']))  $siteLogo = asset('admin-dashboard/images/logo.png');
-    if ($settings['website_logo'] == 'default.png') $siteLogo = asset('admin-dashboard/images/logo.png');
-    if ($settings['website_logo'] == 'cashblack-default.png') $siteLogo = asset('cashblack/img/logo.png');
-
-    if (Storage::disk('public')->exists('dashboard/images/logo/' . $settings['website_logo']))
+    if (!isset($settings['website_logo'])) $siteLogo = asset('admin-dashboard/images/logo.png');
+    else if ($settings['website_logo'] == 'default.png') $siteLogo = asset('admin-dashboard/images/logo.png');
+    else if ($settings['website_logo'] == 'cashblack-default.png') $siteLogo = asset('cashblack/img/logo.png');
+    else if ($settings['website_logo'] == 'logo.png') $siteLogo = asset('storage/__asset/images/logo/logo.png');
+    else if (Storage::disk('public')->exists('dashboard/images/logo/' . $settings['website_logo']))
         $siteLogo = asset('storage/dashboard/images/logo/' . $settings['website_logo']);
     else
         $siteLogo = asset('admin-dashboard/images/logo.png');
@@ -1027,16 +1027,16 @@ function getCurrencySymbol($symbol = null)
 function getSiteFavicon()
 {
     $settings = SiteSetting();
-    if (!isset($settings['favicon'])) $siteLogo = asset('admin-dashboard/images/favicon.png');
-    if ($settings['favicon'] == 'default.png') $siteLogo = asset('admin-dashboard/images/favicon.png');
-    if ($settings['favicon'] == 'cashblack-default.png') $siteLogo = asset('cashblack/img/favicon.png');
-
-    if (Storage::disk('public')->exists('dashboard/images/logo/' . $settings['favicon']))
-        $siteLogo = asset('storage/dashboard/images/logo/' . $settings['favicon']);
+    if (!isset($settings['favicon'])) $siteFavicon = asset('admin-dashboard/images/favicon.png');
+    else if ($settings['favicon'] == 'default.png') $siteFavicon = asset('admin-dashboard/images/favicon.png');
+    else if ($settings['favicon'] == 'cashblack-default.png') $siteFavicon = asset('cashblack/img/favicon.png');
+    else if ($settings['favicon'] == 'favicon.ico' || $settings['favicon'] == 'favicon.png') $siteFavicon = asset('storage/__asset/images/logo/' . $settings['favicon']);
+    else if (Storage::disk('public')->exists('dashboard/images/logo/' . $settings['favicon']))
+        $siteFavicon = asset('storage/dashboard/images/logo/' . $settings['favicon']);
     else
-        $siteLogo = asset('admin-dashboard/images/favicon.png');
+        $siteFavicon = asset('admin-dashboard/images/favicon.png');
 
-    return $siteLogo;
+    return $siteFavicon;
 }
 
 function resolvePageShortCodes($content, $data = [])
