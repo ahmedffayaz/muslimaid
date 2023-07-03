@@ -10,8 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
     <!-- Fav Icon  -->
-    <link rel="shortcut icon"
-        href="{{ getSiteFavicon() }}">
+    <link rel="shortcut icon" href="{{ getSiteFavicon() }}">
 
     <!-- Page Title  -->
     <title>{{ $settings['website_title'] }} | Admin Panel</title>
