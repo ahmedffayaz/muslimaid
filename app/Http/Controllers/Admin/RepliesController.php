@@ -38,9 +38,10 @@ class RepliesController extends Controller
         $reply->ticket->update(['status' => 'pending']);
         $title = 'Admin Replied';
         $message = 'Your  ticket has been replied by Admin';
+        $url = url('account/tickets');
         $deviceToken = auth()->user()->devices()->first()->fcm_token;
 
-        dispatch(new SendNotification($title, $message, $deviceToken));
+        dispatch(new SendNotification($title, $message, $deviceToken,$url));
         return back();
     }
 }
