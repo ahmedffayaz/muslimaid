@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Client;
 
+use App\Models\Ticket;
 use App\Models\TicketReply;
 use Illuminate\Http\Request;
+use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use App\Jobs\SendNotification;
 use Illuminate\Support\Facades\Validator;
 
 class RepliesController extends Controller
@@ -34,13 +35,13 @@ class RepliesController extends Controller
             'ticket_id' => $request->input('ticket_id'),
             'reply_by' => 'user'
         ]);
-
         $reply->ticket->update(['status' => 'pending']);
         $title = 'Ticket Replied';
         $message = 'Your ticket has been replied';
+        $url = url('account/tickets');
         $deviceToken = auth()->user()->devices()->first()->fcm_token;
 
-        dispatch(new SendNotification($title, $message, $deviceToken));
+        dispatch(new SendNotification($title, $message, $deviceToken,$url));
         return back();
     }
 }

@@ -57,7 +57,8 @@ class FirebaseNotification extends Notification
     {
         return [
             'title' => $this->data['title'],
-            'body' => $this->data['body']
+            'body' => $this->data['body'],
+            'url' => $this->data['url']
         ];
     }
 }

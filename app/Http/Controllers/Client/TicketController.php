@@ -81,10 +81,11 @@ class TicketController extends Controller
          $this->sendEmailNotification($ticket);
   
         $title = 'Ticket Created';
-        $message = 'Your ticket is created ';
+        $message = 'Your ticket is created';
+        $url = url('account/tickets');
         $deviceToken = auth()->user()->devices()->first()->fcm_token;
 
-        dispatch(new SendNotification($title, $message, $deviceToken));
+        dispatch(new SendNotification($title, $message, $deviceToken, $url));
         flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
         return redirect()->route('account.tickets.index');
     }

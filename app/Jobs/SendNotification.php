@@ -20,7 +20,7 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 class SendNotification implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-
+    private $url;
     protected $title;
     protected $message;
     protected $deviceToken;
@@ -29,11 +29,12 @@ class SendNotification implements ShouldQueue
      *
      * @return void
      */
-    public function __construct($title, $message, $deviceToken)
+    public function __construct($title, $message, $deviceToken, $url)
     {
         $this->title = $title;
         $this->message = $message;
         $this->deviceToken = $deviceToken;
+        $this->url = $url;
     }
 
 
@@ -48,6 +49,7 @@ class SendNotification implements ShouldQueue
         $title = $this->title;
         $message = $this->message;
         $deviceToken = $this->deviceToken;
+        $url =  $this->url;
         $admin = User::first();
         $auth = auth()->user();
         $userSchema = isset($auth) ? $auth : $admin;
@@ -55,6 +57,7 @@ class SendNotification implements ShouldQueue
         $notification = [
             'title' => $title,
             'body' => $message,
+            'url' => $url,
         ];
         $firebaseMessage = CloudMessage::fromArray([
             'notification' => $notification,
