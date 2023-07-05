@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\File;
 use App\Http\Requests\CategoryRequest;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\Rule;
 
 
 class CategoryController extends Controller
@@ -57,8 +58,50 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'logo_type' => 'required',
+            'banner_type' => 'required',
+            'status' => 'required',
+            'sort' => 'required|integer|min:1',
+            'logo_upload' => [
+                Rule::requiredIf(function() use ($request){
+                    return $request->logo_type == "upload";
+                }),
+                'nullable', 'mimes:jpeg,png,jpg'
+            ],
+            'banner_upload' => [
+                Rule::requiredIf(function () use ($request){
+                    return $request->banner_type == "upload";
+                }),
+                'nullable', 'mimes:jpeg,png,jpg' 
+            ],
+            'logo_link' => [
+                Rule::requiredIf(function() use ($request){
+                    return $request->logo_type == "link";
+                }),
+                'nullable', 'sometimes', 'url'
+            ],
+            'banner_link' => [
+                Rule::requiredIf(function() use ($request){
+                    return $request->banner_type == "link";
+                }),
+                'nullable', 'sometimes', 'url'
+            ]
+        ]);
+
+        if($validator->fails()){
+            if(!$request->ajax()){
+                flash()->error($validator->errors()->first());
+                return redirect()->back()->withInput();
+            }
+
+            return response()->json(['status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+            'error' => $validator->errors()->first()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         try {
             DB::beginTransaction();
@@ -162,8 +205,39 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, Category $category)
+    public function update(Request $request, Category $category)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'status' => 'required',
+            'sort' => 'required|integer|min:1',
+            'logo_link' => [
+                Rule::requiredIf(function () use ($request){
+                    return $request->logo_type == "link";
+            }),
+            'url','sometimes','nullable'
+            ],
+            'banner_link' => [
+                Rule::requiredIf(function () use ($request){
+                    return $request->banner_type == "link";
+            }),
+            'url','sometimes','nullable'
+            ],
+            'logo_upload' => 'sometimes|mimes:jpeg,png,jpg',
+            'banner_upload' => 'sometimes|mimes:jpeg,png,jpg'
+        ]);
+
+        if($validator->fails()){
+            if(!$request->ajax()){
+                flash()->error($validator->errors()->first());
+                return redirect()->back()->withInput();
+            }
+
+            return response()->json(['status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+            'error' => $validator->errors()->first()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
         try {
             DB::beginTransaction();
             $category->update([
