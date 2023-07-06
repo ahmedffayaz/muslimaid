@@ -53,7 +53,7 @@ class VouchersController extends Controller
                 Rule::requiredIf(function () use ($request){
                     return $request->promotion_type === "Coupon";
             }),
-            'nullable', 'alpha_num', 'min:4', 'max:8'
+            'nullable', 'alpha_num', 'min:3', 'max:20'
             ],
             'promotion_start_date' => 'required|date',
             'promotion_end_date' => 'required|after:promotion_start_date',
@@ -130,7 +130,7 @@ class VouchersController extends Controller
                 Rule::requiredIf(function () use ($request){
                     return $request->promotion_type === "Coupon";
             }),
-            'nullable', 'alpha_num', 'min:4', 'max:8'
+            'nullable', 'alpha_num', 'min:3', 'max:20'
             ],
             'promotion_start_date' => 'required',
             'promotion_end_date' => 'required|after:promotion_start_date',
@@ -186,11 +186,21 @@ class VouchersController extends Controller
 
     public function destroy(Voucher $voucher)
     {
-        $voucher->delete();
-        return response()->json([
-            'status' => JsonResponse::HTTP_OK,
-            'message' => 'Voucher deleted successfully'
-        ], JsonResponse::HTTP_OK);
+        try{
+            DB::beginTransaction();
+            $voucher->delete();
+            DB::commit();
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Voucher deleted successfully'
+            ], JsonResponse::HTTP_OK);
+        }catch(Exception $e){
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => 'Voucher deleted successfully'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     function fetch(Request $request)
