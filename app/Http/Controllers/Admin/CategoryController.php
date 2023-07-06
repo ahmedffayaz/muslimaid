@@ -70,7 +70,7 @@ class CategoryController extends Controller
                 Rule::requiredIf(function() use ($request){
                     return $request->logo_type == "upload";
                 }),
-                'nullable', 'mimes:jpeg,png,jpg'
+                'nullable', 'mimes:jpeg,png,jpg,svg'
             ],
             'banner_upload' => [
                 Rule::requiredIf(function () use ($request){
@@ -99,7 +99,7 @@ class CategoryController extends Controller
             }
 
             return response()->json(['status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-            'error' => $validator->errors()->first()
+            'errors' => $validator->errors()
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
@@ -223,7 +223,7 @@ class CategoryController extends Controller
             }),
             'url','sometimes','nullable'
             ],
-            'logo_upload' => 'sometimes|mimes:jpeg,png,jpg',
+            'logo_upload' => 'sometimes|mimes:jpeg,png,jpg,svg',
             'banner_upload' => 'sometimes|mimes:jpeg,png,jpg'
         ]);
 
@@ -234,7 +234,7 @@ class CategoryController extends Controller
             }
 
             return response()->json(['status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-            'error' => $validator->errors()->first()
+            'errors' => $validator->errors()
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
