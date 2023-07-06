@@ -434,11 +434,11 @@
                     @csrf
                     <input type="hidden" name="store_id" value="{{ $store->id }}">
                     <div class="row g-4">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="form-group">
-                                <label class="form-label" for="full-name-1">Title <span class="text-danger">*</span></label>
+                                <label class="form-label" for="link_name">Title <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="full-name-1" name="link_name" value="{{ old('link_name') }}" required>
+                                    <input type="text" class="form-control" placeholder="Title" id="link_name" name="link_name" value="{{ old('link_name') }}" required>
                                     @error('link_name')
                                         <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -447,13 +447,14 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="vsale_commission">Sale commission <span class="text-danger">*</span></label>
+                                <label class="form-label" for="tracking_url">Tracking URL</label>
                                 <div class="form-control-wrap">
-                                    <input type="number" min="0.1" step="0.1" class="form-control" id="vsale_commission" name="sale_commission"
-                                        value="{{ old('sale_commission') }}" required>
-                                    @error('vsale_commission')
+                                    <input type="url" class="form-control" placeholder="Keep empty to use store's Tracking URL" id="tracking_url" name="tracking_url" value="{{ old('click_url') }}" required>
+                                    @error('tracking_url')
                                         <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -463,10 +464,10 @@
                         </div>
                         <div class="col-lg-6">
                             <div class="form-group">
-                                <label class="form-label" for="click_url">Click url <span class="text-danger">*</span></label>
+                                <label class="form-label" for="deeplink_url">Deeplink URL</label>
                                 <div class="form-control-wrap">
-                                    <input type="url" class="form-control" id="click_url" name="click_url" value="{{ old('click_url') }}" required>
-                                    @error('click_url')
+                                    <input type="url" class="form-control" placeholder="Keep empty to use store's Deeplink URL" id="deeplink_url" name="deeplink_url" value="{{ old('destination') }}" required>
+                                    @error('deeplink_url')
                                         <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -474,26 +475,17 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="phone-no-1">Destination url <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="url" class="form-control" id="phone-no-1" name="destination" value="{{ old('destination') }}" required>
-                                    @error('destination')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-12">
                             <div class="card">
                                 <input name="description" type="hidden">
-                                <label class="form-label" for="phone-no-1">Description</label>
+                                <label class="form-label" for="description">Description</label>
                                 <textarea name="description" class="form-control "> {{ old('description') }}</textarea>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <div class="form-group">
@@ -521,6 +513,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label class="form-label" for="promotion_start_date">Promotion Start Date <span class="text-danger">*</span></label>
@@ -549,6 +543,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-12">
                             <div class="form-group">
                                 <button type="submit" class="btn btn-lg btn-primary">Save</button>
