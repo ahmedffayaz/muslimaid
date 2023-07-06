@@ -95,7 +95,7 @@
         </div>
         <div class="col-lg-6 logo_link">
             <div class="form-group">
-                <label class="form-label" for="logo_link">Logo Link </label>
+                <label class="form-label" for="logo_link">Logo Link @if($isEdit == false) <span class="text-danger">*</span> @endif </label>
                 <div class="form-control-wrap">
                     <input type="text" class="form-control" id="logo_link" name="logo_link" value="{{ $isEdit ? $category->logo_link : '' }}" required
                         onchange="readLinkURL(this);">
@@ -115,7 +115,7 @@
         </div>
         <div class="col-lg-6 logo_upload">
             <div class="form-group">
-                <label class="form-label" for="logo_upload">Logo Upload</label>
+                <label class="form-label" for="logo_upload">Logo Upload @if($isEdit == false) <span class="text-danger">*</span> @endif </label>
                 <div class="form-control-wrap">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" name="logo_upload" id="logo_upload"
@@ -151,7 +151,7 @@
         </div>
         <div class="col-lg-6 banner_link">
             <div class="form-group">
-                <label class="form-label" for="banner_link">Banner Link</label>
+                <label class="form-label" for="banner_link">Banner Link  @if($isEdit == false) <span class="text-danger">*</span> @endif </label>
                 <div class="form-control-wrap">
                     <input type="text" class="form-control" id="banner_link" name="banner_link" value="{{ $isEdit ? $category->banner_link : '' }}" required
                         onchange="readLinkURL(this);">
@@ -172,7 +172,7 @@
         </div>
         <div class="col-lg-6 banner_upload">
             <div class="form-group">
-                <label class="form-label" for="banner_upload">Banner Upload</label>
+                <label class="form-label" for="banner_upload">Banner Upload  @if($isEdit == false) <span class="text-danger">*</span> @endif </label>
                 <div class="form-control-wrap">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" name="banner_upload" id="banner_upload"
