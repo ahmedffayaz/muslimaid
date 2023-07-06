@@ -12,18 +12,15 @@ class Voucher extends Model
 
     protected $fillable = [
         'store_id',
+        'name',
+        'tracking_url',
+        'deeplink_url',
         'description',
-        'image',
-        'click_url',
-        'sale_commission',
-        'destination',
-        'link_id',
-        'link_name',
-        'link_type',
-        'coupon_code',
         'promotion_type',
-        'promotion_end_date',
+        'coupon_code',
         'promotion_start_date',
+        'promotion_end_date',
+        'image',
     ];
 
     public function store()

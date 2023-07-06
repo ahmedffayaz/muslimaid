@@ -290,7 +290,8 @@
             checkVoucherType();
         });
         $(document).on('click', '.delete', function(event) {
-            var form_id = $(this).attr('form_id');
+            var url = $(this).attr('data-action');
+            console.log(url);
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -298,8 +299,30 @@
                 showCancelButton: true,
                 confirmButtonText: 'Yes, delete it!'
             }).then(function(result) {
-                if (result.value) {
-                    $('#' + form_id).submit();
+                if (result.value == true) {
+                    $.ajax({
+                        url: url,
+                        method: 'DELETE',
+                        data: {
+                            '_token': "{{ csrf_token() }}",
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(response.message, 'success');
+                            })(NioApp, jQuery);
+                            fetchVouchers();
+                        },
+                        error: function(error) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.message, 'error');
+                            })(NioApp, jQuery);
+                        }
+                    });
                 }
                 event.preventDefault();
             });
@@ -407,18 +430,12 @@
                         required: true,
                         customdate: true,
                     },
-                    click_url: {
-                        required: true,
+                    tracking_url: {
                         url: true
                     },
-                    destination: {
-                        required: true,
+                    deeplink_url: {
                         url: true
                     },
-                    sale_commission: {
-                        required: true,
-                        minValue: 0.1,
-                    }
                 },
                 messages: {
                     promotion_end_date: {

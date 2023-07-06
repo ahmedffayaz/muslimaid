@@ -7,6 +7,7 @@ use App\Models\Store;
 use App\Models\Network;
 use App\Models\Voucher;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
@@ -41,16 +42,20 @@ class VouchersController extends Controller
 
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
-            'link_name' => 'required|max:255',
+            'name' => 'required|max:255',
+            'store_id' => 'required|integer',
+            'tracking_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'description' => 'nullable|max:255',
-            'click_url' => 'required|url',
-            'coupon_code' => $request->input('promotion_type') === 'Coupon' ? 'required' : '',
-            'sale_commission' => 'required|numeric|min:0.1',
-            'destination' => 'required|url',
-            'promotion_type' => 'required',
-            'promotion_start_date' => 'required',
+            'promotion_type' => 'required|alpha',
+            'coupon_code' => [ 
+                Rule::requiredIf(function () use ($request){
+                    return $request->promotion_type === "Coupon";
+            }),
+            'nullable', 'alpha_num', 'min:4', 'max:8'
+            ],
+            'promotion_start_date' => 'required|date',
             'promotion_end_date' => 'required|after:promotion_start_date',
         ]);
 
@@ -67,14 +72,13 @@ class VouchersController extends Controller
 
         try {
             Voucher::create([
-                'link_name' => $request->input('link_name'),
+                'name' => $request->input('name'),
                 'store_id' => $request->input('store_id'),
+                'tracking_url' => $request->input('tracking_url'),
+                'deeplink_url' => $request->input('deeplink_url'),
                 'description' => $request->input('description'),
-                'click_url' => $request->input('click_url'),
-                'sale_commission' => $request->input('sale_commission'),
-                'coupon_code' => $request->input('coupon_code'),
-                'destination' => $request->input('destination'),
                 'promotion_type' => $request->input('promotion_type'),
+                'coupon_code' => $request->input('coupon_code'),
                 'promotion_start_date' => \Carbon\Carbon::parse($request->input('promotion_start_date'))->format('Y-m-d'),
                 'promotion_end_date' => \Carbon\Carbon::parse($request->input('promotion_end_date'))->format('Y-m-d'),
             ]);
@@ -116,13 +120,18 @@ class VouchersController extends Controller
     public function update(Request $request, Voucher $voucher)
     {
         $validator = Validator::make($request->all(), [
-            'link_name' => 'required|max:255',
+            'name' => 'required|max:255',
+            'store_id' => 'required|integer',
+            'tracking_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'description' => 'nullable|max:255',
-            'click_url' => 'required|url',
-            'sale_commission' => 'required|numeric|min:0.1',
-            'coupon_code' => $request->input('promotion_type') === 'Coupon' ? 'required' : '',
-            'destination' => 'required|url',
-            'promotion_type' => 'required',
+            'promotion_type' => 'required|alpha',
+            'coupon_code' => [ 
+                Rule::requiredIf(function () use ($request){
+                    return $request->promotion_type === "Coupon";
+            }),
+            'nullable', 'alpha_num', 'min:4', 'max:8'
+            ],
             'promotion_start_date' => 'required',
             'promotion_end_date' => 'required|after:promotion_start_date',
         ]);
@@ -141,14 +150,13 @@ class VouchersController extends Controller
         try {
             $storeId = $request->input('store_id') ? $request->input('store_id') : $voucher->store_id;
             $voucher->update([
-                'link_name' => $request->input('link_name'),
+                'name' => $request->input('name'),
                 'store_id' => $storeId,
+                'tracking_url' => $request->input('tracking_url'),
+                'deeplink_url' => $request->input('deeplink_url'),
                 'description' => $request->input('description'),
-                'click_url' => $request->input('click_url'),
-                'sale_commission' => $request->input('sale_commission'),
-                'coupon_code' => $request->input('coupon_code'),
-                'destination' => $request->input('destination'),
                 'promotion_type' => $request->input('promotion_type'),
+                'coupon_code' => $request->input('coupon_code'),
                 'promotion_start_date' => \Carbon\Carbon::parse($request->input('promotion_start_date'))->format('Y-m-d'),
                 'promotion_end_date' => \Carbon\Carbon::parse($request->input('promotion_end_date'))->format('Y-m-d'),
             ]);
@@ -179,9 +187,10 @@ class VouchersController extends Controller
     public function destroy(Voucher $voucher)
     {
         $voucher->delete();
-        flash()->success('Voucher deleted successfully');
-
-        return redirect()->back();
+        return response()->json([
+            'status' => JsonResponse::HTTP_OK,
+            'message' => 'Voucher deleted successfully'
+        ], JsonResponse::HTTP_OK);
     }
 
     function fetch(Request $request)
