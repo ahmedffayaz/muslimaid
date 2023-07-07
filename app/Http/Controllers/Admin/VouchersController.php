@@ -48,7 +48,7 @@ class VouchersController extends Controller
             'tracking_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'description' => 'nullable|max:255',
-            'promotion_type' => 'required|alpha',
+            'promotion_type' => 'required|string',
             'coupon_code' => [ 
                 Rule::requiredIf(function () use ($request){
                     return $request->promotion_type === "Coupon";
@@ -125,7 +125,7 @@ class VouchersController extends Controller
             'tracking_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'description' => 'nullable|max:255',
-            'promotion_type' => 'required|alpha',
+            'promotion_type' => 'required|string',
             'coupon_code' => [ 
                 Rule::requiredIf(function () use ($request){
                     return $request->promotion_type === "Coupon";

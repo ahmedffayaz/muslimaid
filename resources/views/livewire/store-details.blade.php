@@ -436,10 +436,10 @@
                     <div class="row g-4">
                         <div class="col-lg-12">
                             <div class="form-group">
-                                <label class="form-label" for="link_name">Title <span class="text-danger">*</span></label>
+                                <label class="form-label" for="name">Name <span class="text-danger">*</span></label>
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" placeholder="Title" id="link_name" name="link_name" value="{{ old('link_name') }}" required>
-                                    @error('link_name')
+                                    <input type="text" class="form-control" placeholder="Name" id="name" name="name" value="{{ old('name') }}" required>
+                                    @error('name')
                                         <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -453,7 +453,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="tracking_url">Tracking URL</label>
                                 <div class="form-control-wrap">
-                                    <input type="url" class="form-control" placeholder="Keep empty to use store's Tracking URL" id="tracking_url" name="tracking_url" value="{{ old('click_url') }}" required>
+                                    <input type="url" class="form-control" placeholder="Keep empty to use store's Tracking URL" id="tracking_url" name="tracking_url" value="{{ old('tracking_url') }}">
                                     @error('tracking_url')
                                         <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -466,7 +466,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="deeplink_url">Deeplink URL</label>
                                 <div class="form-control-wrap">
-                                    <input type="url" class="form-control" placeholder="Keep empty to use store's Deeplink URL" id="deeplink_url" name="deeplink_url" value="{{ old('destination') }}" required>
+                                    <input type="url" class="form-control" placeholder="Keep empty to use store's Deeplink URL" id="deeplink_url" name="deeplink_url" value="{{ old('deeplink_url') }}">
                                     @error('deeplink_url')
                                         <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -1211,18 +1211,12 @@
                     promotion_end_date: {
                         required: true,
                     },
-                    click_url: {
-                        required: true,
+                    tracking_url: {
                         url: true
                     },
-                    destination: {
-                        required: true,
+                    deeplink_url: {
                         url: true
                     },
-                    sale_commission: {
-                        required: true,
-                        minValue: 0.1,
-                    }
                 },
             });
 
@@ -2237,6 +2231,17 @@
                 event.preventDefault();
             });
         });
+        
+        function checkVoucherType() {
+            if ($('#promotion_type').val() == 'Coupon') {
+                $('.coupon-div').show();
+                $('#coupon_code').attr('required', 'required');
+            } else {
+                $('.coupon-div').hide();
+                $('#coupon_code').removeAttr('required').val('');
+            }
+        }
+        
         function initializeSelect2() {
             $('.select-2').select2({
                 placeholder: function() {
@@ -2245,5 +2250,14 @@
                 }
             });
         }
+        $('.modal').on('hidden.bs.modal', function () {
+            $(this)
+            .find("input,textarea,select")
+            .val('')
+            .end()
+            .find("input[type=checkbox], input[type=radio]")
+            .prop("checked", "")
+            .end();
+        });
     </script>
 @endpush
