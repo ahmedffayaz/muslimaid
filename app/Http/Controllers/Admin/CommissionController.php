@@ -127,7 +127,7 @@ class CommissionController extends Controller
                 SendEmail::dispatch($data);
             }
             $title = 'Cashback request completion';
-            $message = 'Your cashback is created with' . $click->store->name;
+            $message = 'Your cashback is created with ' . $click->store->name . 'Store';
             $url = url('account/cashback');
             $deviceToken = auth()->user()->devices()->first()->fcm_token;
 
