@@ -11,6 +11,7 @@ use App\Jobs\SendEmailToUser;
 use App\Jobs\SendEmailToAdmin;
 use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -71,15 +72,18 @@ class TicketController extends Controller
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput()
-                ->with('error', $validator->errors()->first());
+                ->with([
+                    'error' => $validator->errors()->first(),
+                    'input' => $request->all()
+                ]);
         }
         $ticket->update([
             'claim_amount' => $request->input('amount'),
             'message' => $request->input('product'),
 
         ]);
-         $this->sendEmailNotification($ticket);
-  
+        $this->sendEmailNotification($ticket);
+
         $title = 'Ticket Created';
         $message = 'Your ticket is created';
         $url = url('account/tickets');
@@ -91,7 +95,7 @@ class TicketController extends Controller
     }
     public function step2(Request $request)
     {
-       
+
         $validator = Validator::make($request->all(), [
             'store_id' => 'required',
         ], [
@@ -140,47 +144,67 @@ class TicketController extends Controller
 
     public function step3(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'click_id' => 'required',
-        ], [
-            'click_id.required' => 'This field is required',
-        ]);
-        if ($validator->fails()) {
-            return redirect()->route('account.tickets.step2')
-                ->withErrors($validator)
-                ->withInput()
-                ->with('error',  $validator->errors()->first());
-        }
-        $click_id = $request->input('click_id');
-        $click = ExitClick::where('id', $click_id)->first();
-        $claim_type = $request->input('claim_type');
-        $message = 'l';
-        $claim = new Ticket;
-        $claim->store_id = $click->store_id;
-        $claim->user_id = $click->user_id;
-        $claim->click_id = $click->id;
-        $claim->ticket_id = strtoupper(Str::random(12));
-        $claim->cashback_id = $click->cashback->id ?? NULL;
-        $claim->claim_amount = $click->cashback->order_value ?? NULL;
-        $claim->claim_type = $claim_type;
-        $claim->title = 'Claim: ' . $claim_type;
-        if ($claim_type == 'missing cashback') {
-            $claim->category_id = '1';
-        } else if ($claim_type == 'declined cashback') {
-            $claim->category_id = '2';
-        } else if ($claim_type == 'incorrect amount') {
-            $claim->category_id = '3';
-        }
-        $claim->ticket_type = 'claim';
-        $claim->status = 'open';
-        $claim->save();
-        if ($claim_type == 'incorrect amount' || $claim_type == 'declined cashback') {
-            flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
-            return redirect()->route('account.tickets.index');
-            $this->sendEmailNotification($claim);
-        }
+        try {
+            $routeMethod = $request->method();
+            if ($routeMethod == 'GET') {
+                $amount = old('amount');
+                $product = old('product');
+                $click_id = old('click_id');
+            } else {
+                $validator = Validator::make($request->all(), [
+                    'click_id' => 'required',
+                ], [
+                    'click_id.required' => 'This field is required',
+                ]);
+                if ($validator->fails()) {
+                    return redirect()->route('account.tickets.step2')
+                        ->withErrors($validator)
+                        ->withInput()
+                        ->with('error',  $validator->errors()->first());
+                }
+                $click_id = $request->input('click_id');
+            }
+            $click = ExitClick::where('id', $click_id)->first();
+            $claim_type = $request->input('claim_type');
+            $message = 'l';
+            if ($routeMethod != 'GET') {
+                $claim = new Ticket;
+                $claim->store_id = $click->store_id;
+                $claim->user_id = $click->user_id;
+                $claim->click_id = $click->id;
+                $claim->ticket_id = strtoupper(Str::random(12));
+                $claim->cashback_id = $click->cashback->id ?? NULL;
+                $claim->claim_amount = $click->cashback->order_value ?? NULL;
+                $claim->claim_type = $claim_type;
+                $claim->title = 'Claim: ' . $claim_type;
+                if ($claim_type == 'missing cashback') {
+                    $claim->category_id = '1';
+                } else if ($claim_type == 'declined cashback') {
+                    $claim->category_id = '2';
+                } else if ($claim_type == 'incorrect amount') {
+                    $claim->category_id = '3';
+                }
+                $claim->ticket_type = 'claim';
+                $claim->status = 'open';
+                $claim->save();
+            } else {
+                $claim = Ticket::where([
+                    'store_id' => $click->store_id,
+                    'user_id' => $click->user_id,
+                    'click_id' => $click->id,
+                ])->first();
+            }
+            if ($claim_type == 'incorrect amount' || $claim_type == 'declined cashback') {
+                flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
+                return redirect()->route('account.tickets.index');
+                $this->sendEmailNotification($claim);
+            }
 
-        return view('frontend.client-dashboard.tickets.ticket_step3', compact('claim'));
+            return view('frontend.client-dashboard.tickets.ticket_step3', compact('claim', 'click_id'));
+        } catch (Exception $e) {
+            return redirect()->route('account.tickets.step2')
+            ->withInput();
+        }
     }
 
     public function sendEmailNotification(Ticket $ticket)
