@@ -97,6 +97,7 @@ class RevGlueImporter implements ShouldQueue
                 if (!in_array($store['rg_store_id'], $dbStores)) {
 
                     $newStores[] = [
+                        'id' => $store['rg_store_id'],
                         'network_id' => $this->network->id,
                         'advertiser_id' => $store['rg_store_id'],
                         'name' => $store['store_title'],
@@ -110,7 +111,7 @@ class RevGlueImporter implements ShouldQueue
                     ];
 
                     $newStoresLogos[] = [
-                        'store_id' => $nextPk + $key,
+                        'store_id' => $store['rg_store_id'],
                         'title' => 'logo',
                         'image' => empty($store['image_url']) ? (mt_rand(1, 20) . '.png') : $store['image_url'],
                         'image_type' => 'store_logo',
@@ -119,7 +120,7 @@ class RevGlueImporter implements ShouldQueue
                     ];
 
                     $newStoresBanners[] = [
-                        'store_id' => $nextPk + $key,
+                        'store_id' => $store['rg_store_id'],
                         'title' => 'Cover',
                         'image' => empty($store['store_banner_large']) ? (mt_rand(1, 20) . '.png') : $store['store_banner_large'],
                         'image_type' => 'store_logo',
