@@ -19,7 +19,7 @@ class ClickResource extends JsonResource
             'title' => $this->store->name,
             'url_key' => $this->store->slug,
             'date' => \Carbon\Carbon::parse($this->created_at)->isoFormat('Do MMMM YYYY'),
-            'converted' => isset($this->cashback) ? 'Converted' : 'Not Converted'
+            'converted' => isset($this->cashback) ? 'Purchase' : 'Not Purchase'
         ];
     }
 }

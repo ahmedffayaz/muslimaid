@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use Carbon\Carbon;
+use App\Models\Store;
 use App\Models\Ticket;
 use App\Models\ExitClick;
 use Illuminate\Support\Str;
@@ -108,18 +109,24 @@ class TicketController extends Controller
             return response()->json($data, 500);
         }
     }
+
+    //  on first page of tickets, getting exit clicks of stores  and get unique stores,  this function works that 
     public function TicketStores()
     {
         try {
             $clicks = auth()->user()->clicks()->whereHas('store')->pluck('store_id')->unique();
             $clicksWithNames = [];
+            
             foreach ($clicks as $click) {
-                $clicksWithNames[] = [
-                    'click_store_id' => $click,
-                    'store_name' => $click->store->name
-                ];
+                $store = Store::find($click);
+                if ($store) {
+                    $clicksWithNames[] = [
+                        'click_store_id' => $click,
+                        'store_name' => $store->name
+                    ];
+                }
             }
-
+            
             return response()->json([
                 'status' => 200,
                 'message' => "User click Stores retrieved successfully.",
@@ -134,6 +141,8 @@ class TicketController extends Controller
             return response()->json($data, 500);
         }
     }
+
+    //on second page of ticket, clicks display with basis of claim_type , this function works with these conditions
 
     public function TicketClicks(Request $request)
     {

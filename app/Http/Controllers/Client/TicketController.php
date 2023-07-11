@@ -61,11 +61,11 @@ class TicketController extends Controller
     public function update(Request $request, Ticket $ticket)
     {
         $validator = Validator::make($request->all(), [
-            'amount' => 'required|integer',
+            'amount' => 'required|numeric',
             'product' => 'required|max:255',
         ], [
             'amount.required' => 'Amount is required',
-            'amount.integer' => 'Amount should be integer',
+            'amount.numeric' => 'Amount should be numeric',
             'product.required' => 'Product description is required',
         ]);
         if ($validator->fails()) {
@@ -203,7 +203,7 @@ class TicketController extends Controller
             return view('frontend.client-dashboard.tickets.ticket_step3', compact('claim', 'click_id'));
         } catch (Exception $e) {
             return redirect()->route('account.tickets.step2')
-            ->withInput();
+                ->withInput();
         }
     }
 
