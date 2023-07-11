@@ -41,6 +41,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/send_refer_email', [API\UserController::class, 'sendReferralLink']);
     Route::post('/user/cashouts', [API\UserController::class, 'cashouts']);
     Route::post('create_ticket',[API\TicketController::class,'createTicket']);
+    Route::get('ticket_stores',[API\TicketController::class,'TicketStores']);
+    Route::post('ticket_clicks',[API\TicketController::class,'TicketClicks']);
 
 
     Route::post('/get-fav-stores', [API\StoreController::class, 'favoriteStores']);
