@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Models\Page;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -10,6 +11,8 @@ class SearchController extends Controller
 {
     public function index(Request $request, Store $stores)
     {
+        $page = Page::where('slug', 'search')->whereIn('type', ['special', 'general'])->first();
+        if (empty($page)) abort(404);
         $stores = $stores->newQuery();
         $term = null;
         $search = $request->input('search');
@@ -24,7 +27,7 @@ class SearchController extends Controller
 
         $stores = $stores->latest()->paginate(20);
 
-        return view('frontend.pages.search', compact('stores', 'term'));
+        return view('frontend.pages.search', compact('stores', 'term', 'page'));
     }
 
     public function suggestions(Request $request)
