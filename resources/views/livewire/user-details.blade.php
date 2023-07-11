@@ -176,12 +176,13 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
                                                             <label class="form-label" for="postal_code">postal Code</label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="postal_code" value="{{ $user->postal_code }}" name="postal_code">
+                                                                <input type="text" class="form-control" id="postal_code" value="{{ $user->postal_code }}"
+                                                                    name="postal_code">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -239,7 +240,8 @@
 
                                     <div class="tab-pane" id="tabItem8">
                                         <h5 class="title mb-4">Payment Info</h5>
-                                        <form action="{{ route(getAdminPrefix() . '.users.payment_save') }}" class="gy-3 form-validate is-alter" id='payment_form' method="POST">
+                                        <form action="{{ route(getAdminPrefix() . '.users.payment_save') }}" class="gy-3 form-validate is-alter" id='payment_form'
+                                            method="POST">
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ $user->id }}">
                                             <div class="row g-4">
@@ -338,6 +340,9 @@
                                                         <label class="form-label" for="password">New Password <span class="text-danger">*</span></label>
                                                         <div class="form-control-wrap">
                                                             <input type="password" class="form-control" id="password" value="" name="password" required>
+                                                            <i class="far fa-eye toggle-password admin_eye_icon"
+                                                                data-target="#current_password"></i>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -348,6 +353,9 @@
                                                         <div class="form-control-wrap">
                                                             <input type="password" class="form-control" id="password_confirmation" value=""
                                                                 name="password_confirmation" required>
+                                                            <i class="far fa-eye toggle-password admin_eye_icon"
+                                                                data-target="#new_password"></i>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -685,6 +693,24 @@
                 if ($(form).valid())
                     return false;
             }
+        });
+
+        function togglePasswordVisibility() {
+            var target = $(this).closest('.form-group').find('input[type="password"], input[type="text"]');
+            if (target.length === 1) {
+                var fieldType = target.prop('type');
+                console.log(fieldType);
+                if (fieldType === 'password') {
+                    target.prop('type', 'text');
+                    $(this).removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    target.prop('type', 'password');
+                    $(this).removeClass('fa-eye-slash').addClass('fa-eye');
+                }
+            }
+        }
+        $(document).ready(function() {
+            $(".toggle-password").click(togglePasswordVisibility);
         });
     </script>
 @endpush

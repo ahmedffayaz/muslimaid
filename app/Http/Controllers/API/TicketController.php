@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use Carbon\Carbon;
 use App\Models\Ticket;
 use App\Models\ExitClick;
 use Illuminate\Support\Str;
@@ -98,6 +99,127 @@ class TicketController extends Controller
                 'message' => "We've received your claim. Please allow up to six months to get a decision from the retailer.",
                 'data' => null,
             ]);
+        } catch (\Exception $e) {
+            $data = [
+                'status' => 500,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+            return response()->json($data, 500);
+        }
+    }
+    public function TicketStores()
+    {
+        try {
+            $clicks = auth()->user()->clicks()->whereHas('store')->pluck('store_id')->unique();
+            $clicksWithNames = [];
+            foreach ($clicks as $click) {
+                $clicksWithNames[] = [
+                    'click_store_id' => $click,
+                    'store_name' => $click->store->name
+                ];
+            }
+
+            return response()->json([
+                'status' => 200,
+                'message' => "User click Stores retrieved successfully.",
+                'data' => $clicksWithNames,
+            ]);
+        } catch (\Exception $e) {
+            $data = [
+                'status' => 500,
+                'message' => $e->getMessage(),
+                'data' => []
+            ];
+            return response()->json($data, 500);
+        }
+    }
+
+    public function TicketClicks(Request $request)
+    {
+        try {
+            $store_id = $request->input('store_id');
+            $user = Auth::user();
+            $clicks = $user->clicks()->where('store_id', $store_id)->get();
+            $claim = $request->input('claim_type');
+            if ($claim  == 'missing cashback') {
+                if ($clicks->count() <= 0) {
+                    $response = [
+                        'status' => 404,
+                        'message' => 'Cashbacks not found',
+                        'data' => []
+                    ];
+                    return response()->json($response, 404);
+                }
+                $data = [];
+                foreach ($clicks as $click) {
+                    $data[] = [
+                        'click_id' => $click->id,
+                        'created_at' => Carbon::parse($click->created_at)->isoFormat('Do MMMM YYYY hh:mm:ss')
+                    ];
+                }
+                return response()->json([
+                    'status' => 200,
+                    'message' => "User click  retrieved successfully.",
+                    'data' => $data,
+                ]);
+            }
+            if ($claim == 'declined cashback') {
+                $cashbacks =  UserCashback::where([
+                    'store_id' => $store_id,
+                    'user_id' => $user->id,
+                ])->where('status', 2)->get();
+                if ($cashbacks->count() <= 0) {
+                    $response = [
+                        'status' => 404,
+                        'message' => 'Cashbacks not found',
+                        'data' => []
+                    ];
+                    return response()->json($response, 404);
+                }
+                $data = [];
+                foreach ($cashbacks as $cashback) {
+                    $data[] = [
+                        'click_id' => $cashback->exit_click_id,
+                        'created_at' => Carbon::parse($cashback->event_date)->isoFormat('Do MMMM YYYY'),
+                        'order_value' => currency($cashback->order_value),
+                        'amount' => currency($cashback->amount),
+                    ];
+                }
+                return response()->json([
+                    'status' => 200,
+                    'message' => "User click  retrieved successfully.",
+                    'data' => $data,
+                ]);
+            }
+            if ($claim == 'incorrect amount') {
+                $cashbacks =  UserCashback::where([
+                    'store_id' => $store_id,
+                    'user_id' => $user->id,
+                ])->whereIn('status', [1, 4, 3])->get();
+                if ($cashbacks->count() <= 0) {
+                    $response = [
+                        'status' => 404,
+                        'message' => 'Cashbacks not found',
+                        'data' => []
+                    ];
+                    return response()->json($response, 404);
+                }
+                $data = [];
+                foreach ($cashbacks as $cashback) {
+                    $data[] = [
+                        'click_id' => $cashback->exit_click_id,
+                        'created_at' => Carbon::parse($cashback->event_date)->isoFormat('Do MMMM YYYY'),
+                        'order_value' => currency($cashback->order_value),
+                        'amount' => currency($cashback->amount),
+                    ];
+                }
+                return response()->json([
+                    'status' => 200,
+                    'message' => "User click  retrieved successfully.",
+                    'data' => $data,
+                ]);
+            }
         } catch (\Exception $e) {
             $data = [
                 'status' => 500,
