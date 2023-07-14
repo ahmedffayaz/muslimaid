@@ -34,24 +34,52 @@ class StoreController extends Controller
             })->when($request->orderBy == 'popularity', function ($query) {
                 $query->withCount('clicks')->orderByDesc('clicks_count');
             })->when($request->orderBy == 'cashback-amount', function ($query) {
-                $query->whereHas('cashbacks', function ($query) {
+                $cashbackAmountStores = $query->whereHas('cashbacks', function ($query) {
                     $query->whereType('fixed');
                 })->get()->filter(function ($query) {
                     $cashback = $query->getCashback();
                     return (strpos($cashback, '£') !== false);
+                })->map(function ($cashbackAmountStore) {
+                    // remove symbol and " Cashback" and append into stores
+                    $cashback = $cashbackAmountStore->getCashback();
+                    $removeSymbol = str_replace("£", "", $cashback);
+                    $removeCashback = str_replace(" Cashback", "", $removeSymbol);
+
+                    $cashbackAmountStore['get_cashback'] = $removeCashback;
+                    return $cashbackAmountStore;
                 });
+
+                return $cashbackAmountStores->each->append('get_cashback');
             })->when($request->orderBy == 'cashback-percentage', function ($query) {
-                $query->whereHas('cashbacks', function ($query) {
+                $cashbackPercentageStores = $query->whereHas('cashbacks', function ($query) {
                     $query->where('type', 'percentage');
                 })->get()->filter(function ($query) {
                     $cashback = $query->getCashback();
                     return (strpos($cashback, '%') !== false);
+                })->map(function ($cashbackPercentageStore) {
+                    // remove % and " Cashback" and append into stores
+                    $cashback = $cashbackPercentageStore->getCashback();
+                    $removeSymbol = str_replace("%", "", $cashback);
+                    $removeCashback = str_replace(" Cashback", "", $removeSymbol);
+
+                    $cashbackPercentageStore['get_cashback'] = $removeCashback;
+                    return $cashbackPercentageStore;
                 });
+
+                return $cashbackPercentageStores->each->append('get_cashback');
             })->when($request->tag, function ($query) use ($request) {
                 $query->whereHas('tags', function ($query) use ($request) {
                     $query->where('title', $request->input('tag'));
                 });
-            })->whereStatus('active')->orderBy('name', 'asc')->paginate(20)->appends(request()->input());
+            })->where('status', 'active');
+
+            if ($request->orderBy == 'cashback-amount' || $request->orderBy == 'cashback-percentage') {
+                $stores = $stores->sortByDesc('get_cashback');
+            } else {
+                $stores = $stores->orderBy('name', 'asc');
+            }
+
+            $stores = $stores->paginate(20)->appends(request()->input());
             if ($stores->count() == 0) {
                 $data = [
                     'status' => 200,
