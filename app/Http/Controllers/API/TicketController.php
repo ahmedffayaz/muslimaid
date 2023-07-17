@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -47,7 +48,7 @@ class TicketController extends Controller
 
             if ($claimType == 'missing cashback') {
                 $store_id = $request->input('store_id');
-
+                $click_id = $request->input('click_id');
                 $clicks = $user->clicks->where('store_id', $store_id);
             } elseif ($claimType == 'declined cashback' || $claimType == 'incorrect amount') {
                 $store_id = $request->input('store_id');
@@ -72,15 +73,17 @@ class TicketController extends Controller
                     ], 400);
                 }
             }
+
             $click = ExitClick::where('id', $click_id)->first();
+
             $ticket = new Ticket;
             $ticket->store_id = $request->input('store_id');
             $ticket->user_id = $user->id;
             $ticket->click_id = $request->input('click_id');
             $ticket->ticket_id = strtoupper(Str::random(12));
             $ticket->cashback_id = $click->cashback->id ?? null;
-            $ticket->cashback_id = null;
             $ticket->claim_amount = $request->input('amount');
+            $ticket->message = $request->input('product') ?? null;
             $ticket->claim_type = $claimType;
             $ticket->title = 'Claim: ' . $claimType;
             $ticket->category_id = $claimType == 'missing cashback' ? 1 : ($claimType == 'declined cashback' ? 2 : 3);
@@ -110,13 +113,13 @@ class TicketController extends Controller
         }
     }
 
-    //  on first page of tickets, getting exit clicks of stores  and get unique stores,  this function works that 
+    //  on first page of tickets, getting exit clicks of stores  and get unique stores,  this function works that
     public function TicketStores()
     {
         try {
             $clicks = auth()->user()->clicks()->whereHas('store')->pluck('store_id')->unique();
             $clicksWithNames = [];
-            
+
             foreach ($clicks as $click) {
                 $store = Store::find($click);
                 if ($store) {
@@ -126,7 +129,7 @@ class TicketController extends Controller
                     ];
                 }
             }
-            
+
             return response()->json([
                 'status' => 200,
                 'message' => "User click Stores retrieved successfully.",

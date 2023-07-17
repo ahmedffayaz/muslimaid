@@ -116,8 +116,8 @@ class TicketController extends Controller
         }
         if ($claim == 'declined cashback') {
             $cashback =  UserCashback::where([
-                'store_id' => $store_id,
-                'user_id' => $user->id,
+                'store_id' => 5,
+                'user_id' => 22,
             ])->where('status', 2)->get();
 
             if (count($cashback)) {
