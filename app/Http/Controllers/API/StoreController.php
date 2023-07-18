@@ -32,7 +32,7 @@ class StoreController extends Controller
                 })->when($request->orderBy == 'popularity', function ($query) {
                     $query->withCount('clicks')->orderByDesc('clicks_count');
                 })->when($request->orderBy == 'cashback-amount' || $request->orderBy == 'cashback-percentage', function ($query) use ($request) {
-                    $query->whereHas('cashbacks', function ($query) use ($request) {
+                    $query->whereHas('cashback', function ($query) use ($request) {
                         $query->whereNotNull('sale_commission');
                         $query->when($request->orderBy == 'cashback-amount', function ($query) {
                             $query->whereType('fixed');
@@ -113,7 +113,7 @@ class StoreController extends Controller
 
             $data = [
                 'status' => 500,
-                'message' => 'Something went wrong, try again.',
+                'message' => $e->getMessage() . ' Something went wrong, try again.',
                 'data' => []
             ];
             return response()->json($data, 500);
