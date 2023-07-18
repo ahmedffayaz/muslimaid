@@ -31,8 +31,7 @@ class CategoryController extends Controller
 
     public function show(Request $request, $slug)
     {
-        // $ip =  request()->ip(); //Dynamic IP address get
-        $ip = '182.191.122.32';
+        $ip =  request()->ip(); //Dynamic IP address get
         $data = Location::get($ip);
         $category = Category::where(function ($query) {
             $query->where('visibility', '!=', 'hidden')
@@ -77,7 +76,6 @@ class CategoryController extends Controller
         }
 
         $stores = $category->stores()->where('status', 'active')->with('logo', 'storeAddress')->get();
-        // $stores = $stores->paginate(25);
         $stores = sortByDistance($data, $stores);
         $stores = $stores->sortBy('distance')->values()->paginate(25);
         $stores->appends(['orderBy' => $request->orderBy]);
@@ -90,8 +88,7 @@ class CategoryController extends Controller
 
     public function categoriesView(Request $request, $slug)
     {
-        // $ip =  request()->ip(); //Dynamic IP address get
-        $ip = '182.191.122.32';
+        $ip =  request()->ip(); //Dynamic IP address get
         $data = Location::get($ip);
         $category = Category::where(function ($query) {
             $query->where('visibility', '!=', 'hidden')
@@ -164,8 +161,7 @@ class CategoryController extends Controller
 
     public function  loadMoreButton(Request $request)
     {
-        // $ip =  request()->ip(); //Dynamic IP address get
-        $ip = '182.191.122.32';
+        $ip =  request()->ip(); //Dynamic IP address get
         $data = Location::get($ip);
 
         $perPage = $request->input('perpage');
