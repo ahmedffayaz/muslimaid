@@ -630,17 +630,21 @@ function sortByDistance($data, $stores, $isSortBy = false)
 {
     // Calculate distance between user and each store
     foreach ($stores as $store) {
-        $store->storeAddress = $store->storeAddress->first();
+        if (isset($store->storeAddress)) {
+            $store->storeAddress = optional($store->storeAddress)->first();
 
-        if (isset($store->storeAddress) && isset($data->longitude)) {
-            $latitudeTo = $store->storeAddress->latitude;
-            $longitudeTo = $store->storeAddress->longitude;
+            if (isset($store->storeAddress) && isset($data->longitude)) {
+                $latitudeTo = $store->storeAddress->latitude;
+                $longitudeTo = $store->storeAddress->longitude;
 
-            $distance = calculateDistance($data->latitude, $data->longitude, $latitudeTo, $longitudeTo);
+                $distance = calculateDistance($data->latitude, $data->longitude, $latitudeTo, $longitudeTo);
 
-            $store->distance = number_format((float)$distance, 2, '.', '');
+                $store->distance = number_format((float)$distance, 2, '.', '');
+            } else {
+                $store->distance = 'Unknown';
+            }
         } else {
-            $store->distance = 'Unknown';
+            $store['distance'] = 'Unknown';
         }
     }
 

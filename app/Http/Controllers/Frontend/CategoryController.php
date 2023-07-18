@@ -7,6 +7,7 @@ use App\Models\Store;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Log;
 use Stevebauman\Location\Facades\Location;
 
 class CategoryController extends Controller
@@ -30,7 +31,8 @@ class CategoryController extends Controller
 
     public function show(Request $request, $slug)
     {
-        $ip =  request()->ip(); //Dynamic IP address get
+        // $ip =  request()->ip(); //Dynamic IP address get
+        $ip = '182.191.122.32';
         $data = Location::get($ip);
         $category = Category::where(function ($query) {
             $query->where('visibility', '!=', 'hidden')
@@ -40,31 +42,46 @@ class CategoryController extends Controller
         if (empty($category)) abort(404);
 
         if ($request->ajax()) {
-            if ($request->has('id')) {
-                $stores = Store::when($request->has('id'), function ($query) use ($request) {
-                    $query->whereHas('categories', function ($query) use ($request) {
-                        $query->whereIn('category_id', $request->id);
+            $stores = Store::when($request->has('id'), function ($query) use ($request) {
+                $query->whereHas('categories', function ($query) use ($request) {
+                    $query->whereIn('category_id', $request->id);
+                });
+            })->when($request->has('cuisines'), function ($query) use ($category, $request) {
+                if ($request->cuisines == 'all') {
+
+                } else {
+                    $query->whereHas('categories', function ($query) use ($category, $request) {
+                        $query->whereIn('name', $request->cuisines);
                     });
-                })->with('logo', 'storeAddress')->where('status', 'active')->get();
-            } else {
-                $stores = Store::when(optional($category)->id, function ($query) use ($category) {
-                    $query->whereHas('categories', function ($query) use ($category) {
-                        $query->where('category_id', $category->id);
-                    });
-                })->where('status', 'active')->with('logo', 'storeAddress')->get();
-            }
+                }
+            })->when(optional($category)->id, function ($query) use ($category) {
+                $query->whereHas('categories', function ($query) use ($category) {
+                    $query->where('category_id', $category->id);
+                });
+            })->with('logo', 'storeAddress')->whereStatus('active')->get();
+
             $stores = $this->categoriesView($request, $slug);
-            $stores = sortByDistance($data, $stores);
+
+            if ($request->cuisines) {
+                $viewType = 'grid-view';
+                $allStores = $stores['stores'];
+                return response()->json([
+                    'stores' => view('frontend.categories.view', compact('allStores', 'slug', 'viewType'))->render(),
+                ]);
+            }
+
+            $stores = sortByDistance($data, $stores['stores']);
             $stores = $stores->sortBy('distance')->values()->paginate(25);
+
             return view('frontend.stores.stores', compact('stores'));
         }
 
-        $stores = $category->stores()->where('status', 'active')->with('logo', 'storeAddress');
-        $stores = $stores->paginate(25);
+        $stores = $category->stores()->where('status', 'active')->with('logo', 'storeAddress')->get();
+        // $stores = $stores->paginate(25);
         $stores = sortByDistance($data, $stores);
         $stores = $stores->sortBy('distance')->values()->paginate(25);
         $stores->appends(['orderBy' => $request->orderBy]);
-        $totalCount = $category->stores()->where('status', 'active')->count(); 
+        $totalCount = $category->stores()->where('status', 'active')->count();
         $cuisine = isset($request->cuisine) ?  $request->cuisine : '';
         return view('frontend.categories.show', compact('category', 'stores', 'slug', 'cuisine','totalCount'));
     }
@@ -73,7 +90,8 @@ class CategoryController extends Controller
 
     public function categoriesView(Request $request, $slug)
     {
-        $ip =  request()->ip(); //Dynamic IP address get
+        // $ip =  request()->ip(); //Dynamic IP address get
+        $ip = '182.191.122.32';
         $data = Location::get($ip);
         $category = Category::where(function ($query) {
             $query->where('visibility', '!=', 'hidden')
@@ -86,6 +104,13 @@ class CategoryController extends Controller
                 $query->where('name', $categoryCuisine);
             });
         }
+
+        if (!empty($request->input('cuisenes'))) {
+            $allStores = $allStores->whereHas('categories', function ($query) use ($request) {
+                $query->whereIn('name', $request->input('cuisines'));
+            });
+        }
+
         if (isset($request->orderBy)) {
             if ($request->orderBy == 'popularity') {
                 $allStores = $allStores->with('clicks')->paginate($request->input('perPage'));
@@ -121,6 +146,10 @@ class CategoryController extends Controller
                 $allStores = $allStores->orderBy($orderByArr[0], $orderByArr[1])->paginate($request->input('perPage'));
                 $allStores = sortByDistance($data, $allStores);
             }
+        } else if ($request->input('cuisines')) {
+            $allStores = $allStores->get();
+            $allStores = sortByDistance($data, $allStores, true);
+            $allStores = !empty($request->input('perPage')) ? $allStores->paginate($request->input('perPage')) : $allStores->paginate(25);
         } else {
             $allStores = $allStores->latest()->get();
             $allStores = sortByDistance($data, $allStores, true);
@@ -135,14 +164,20 @@ class CategoryController extends Controller
 
     public function  loadMoreButton(Request $request)
     {
+        // $ip =  request()->ip(); //Dynamic IP address get
+        $ip = '182.191.122.32';
+        $data = Location::get($ip);
+
         $perPage = $request->input('perpage');
         $offset = $request->input('offset');
         $category = Category::where(function ($query) {
             $query->where('visibility', '!=', 'hidden')
                 ->orWhereNull('visibility');
         })->whereSlug("cashblack-to-your-door")->whereStatus('1')->first();
-    
-        $allStores = $category->stores()->where('status', 'active')->distinct()->skip($offset)->take($perPage)->get();
+
+        $allStores = $category->stores()->where('status', 'active')->distinct()->get();
+        $allStores = sortByDistance($data, $allStores, true);
+        $allStores = $allStores->skip($offset)->take($perPage);
         $html = view('frontend.categories.load-button-stores', ['allStores' => $allStores])->render();
         return response()->json([
             'html' => $html,
