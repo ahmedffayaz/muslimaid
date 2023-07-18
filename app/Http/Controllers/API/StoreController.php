@@ -113,7 +113,7 @@ class StoreController extends Controller
 
             $data = [
                 'status' => 500,
-                'message' => $e->getMessage() . 'Something went wrong, try again.',
+                'message' => 'Something went wrong, try again.',
                 'data' => []
             ];
             return response()->json($data, 500);
