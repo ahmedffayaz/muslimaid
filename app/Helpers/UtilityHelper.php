@@ -1033,7 +1033,7 @@ function getSiteFavicon()
     $settings = SiteSetting();
     if (!isset($settings['favicon'])) $siteFavicon = asset('admin-dashboard/images/favicon.png');
     else if ($settings['favicon'] == 'default.png') $siteFavicon = asset('admin-dashboard/images/favicon.png');
-    else if ($settings['favicon'] == 'cashblack-default.png') $siteFavicon = asset('cashblack/img/favicon.png');
+    else if ($settings['favicon'] == 'cashblack-default.png') $siteFavicon = asset('storage/__asset/img/favicon.png');
     else if ($settings['favicon'] == 'favicon.ico' || $settings['favicon'] == 'favicon.png') $siteFavicon = asset('storage/__asset/images/logo/' . $settings['favicon']);
     else if (Storage::disk('public')->exists('dashboard/images/logo/' . $settings['favicon']))
         $siteFavicon = asset('storage/dashboard/images/logo/' . $settings['favicon']);
