@@ -46,10 +46,18 @@ class PaymentController extends Controller
 
     public function paymentSave(Request $request)
     {
+        $accountNumber = $request->input('account_number_hidden');
+        $bankSortCode = $request->input('bank_sort_code_hidden');
         $payment = PaymentInfo::updateOrCreate([
             'user_id'   => Auth::user()->id,
             'payment_method'   => $request->payment_method,
-        ], $request->all());
+        ], [
+            'account_name' => $request->input('account_name'),
+            'bank_title' => $request->input('bank_title'),
+            'account_number' => $accountNumber,
+            'bank_sort_code' => $bankSortCode,
+            'bic' => $request->input('bic'),
+        ]);
 
         flash()->success('Payment method updated successfully');
         return redirect()->back();
@@ -144,7 +152,7 @@ class PaymentController extends Controller
         $url = url('account/withdraw');
         $deviceToken = auth()->user()->devices()->first()->fcm_token;
 
-        dispatch(new SendNotification($title, $message, $deviceToken,$url));
+        dispatch(new SendNotification($title, $message, $deviceToken, $url));
         flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $balance . " to reach your " . $request->payment_method . " account.");
         return redirect()->back();
     }
@@ -230,7 +238,7 @@ class PaymentController extends Controller
         $deviceToken = auth()->user()->devices()->first()->fcm_token;
         $url = url('account/withdraw');
 
-        dispatch(new SendNotification($title, $message, $deviceToken,$url));
+        dispatch(new SendNotification($title, $message, $deviceToken, $url));
         flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $request->amount . " to reach your " . $request->payment_method . " account.");
         return redirect()->back();
     }

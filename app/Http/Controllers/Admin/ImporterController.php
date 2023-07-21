@@ -24,6 +24,7 @@ use App\Jobs\AfrofiliateImporter;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Jobs\RevGlueImporter;
 use App\Models\CashbackStatusChange;
 
 class ImporterController extends Controller
@@ -71,7 +72,9 @@ class ImporterController extends Controller
             $importer = new PartnerizeImporter();
         } else if ($request->network_name == 'Afrofiliate') {
             $importer = new AfrofiliateImporter();
-        }else {
+        } else if ($request->network_name == 'RevGlue') {
+            $importer = new RevGlueImporter();
+        } else {
             return response()->json([
                 'status' => JsonResponse::HTTP_NOT_FOUND,
                 'error' => 'Network not found'

@@ -630,17 +630,21 @@ function sortByDistance($data, $stores, $isSortBy = false)
 {
     // Calculate distance between user and each store
     foreach ($stores as $store) {
-        $store->storeAddress = $store->storeAddress->first();
+        if (isset($store->storeAddress)) {
+            $store->storeAddress = optional($store->storeAddress)->first();
 
-        if (isset($store->storeAddress) && isset($data->longitude)) {
-            $latitudeTo = $store->storeAddress->latitude;
-            $longitudeTo = $store->storeAddress->longitude;
+            if (isset($store->storeAddress) && isset($data->longitude)) {
+                $latitudeTo = $store->storeAddress->latitude;
+                $longitudeTo = $store->storeAddress->longitude;
 
-            $distance = calculateDistance($data->latitude, $data->longitude, $latitudeTo, $longitudeTo);
+                $distance = calculateDistance($data->latitude, $data->longitude, $latitudeTo, $longitudeTo);
 
-            $store->distance = number_format((float)$distance, 2, '.', '');
+                $store->distance = number_format((float)$distance, 2, '.', '');
+            } else {
+                $store->distance = 'Unknown';
+            }
         } else {
-            $store->distance = 'Unknown';
+            $store['distance'] = 'Unknown';
         }
     }
 
@@ -1029,7 +1033,7 @@ function getSiteFavicon()
     $settings = SiteSetting();
     if (!isset($settings['favicon'])) $siteFavicon = asset('admin-dashboard/images/favicon.png');
     else if ($settings['favicon'] == 'default.png') $siteFavicon = asset('admin-dashboard/images/favicon.png');
-    else if ($settings['favicon'] == 'cashblack-default.png') $siteFavicon = asset('cashblack/img/favicon.png');
+    else if ($settings['favicon'] == 'cashblack-default.png') $siteFavicon = asset('storage/__asset/img/favicon.png');
     else if ($settings['favicon'] == 'favicon.ico' || $settings['favicon'] == 'favicon.png') $siteFavicon = asset('storage/__asset/images/logo/' . $settings['favicon']);
     else if (Storage::disk('public')->exists('dashboard/images/logo/' . $settings['favicon']))
         $siteFavicon = asset('storage/dashboard/images/logo/' . $settings['favicon']);

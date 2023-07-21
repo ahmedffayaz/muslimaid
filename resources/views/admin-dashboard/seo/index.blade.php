@@ -223,21 +223,51 @@
             }
 
             // Delete table record
-            $(document).on('click', '.delete', function(event) {
-                var form_id = $(this).attr('form_id');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!'
-                }).then(function(result) {
-                    if (result.value) {
-                        $('#' + form_id).submit();
-                    }
-                });
-                event.preventDefault();
+            $(document).on('click', '.seo-delete', function(event) {
+            event.preventDefault();
+            id = $(this).data('id')
+            url = $(this).data('action');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function(result) {
+                if (result.value) {
+                    $.ajax({
+                        url: url,
+                        type: 'DELETE',
+                        data: {
+                            '_token': "{{ csrf_token() }}",
+                            'id': id
+                        },
+                        success: function(response) {
+                            $('#table-data').load(location.href + ' #table-data');
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(response.success, 'success');
+                            })(NioApp, jQuery);
+                        },
+                        error: function(error) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        }
+                    });
+                } else {
+                    (function(NioApp, $) {
+                        'use strict';
+                        toastr.clear();
+                        NioApp.Toast('Something went wrong, try again', 'error');
+                    })(NioApp, jQuery);
+                }
             });
+            // event.preventDefault();
+        });
         });
     </script>
 @endpush

@@ -5,10 +5,7 @@ namespace App\Http\Controllers\API;
 use Exception;
 use App\Models\Page;
 use App\Models\Store;
-use App\Models\ExitClick;
-use App\Models\SiteSetting;
 use Illuminate\Http\Request;
-use App\Models\RedeemedVoucher;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
 use Illuminate\Support\Facades\Validator;
@@ -27,31 +24,52 @@ class StoreController extends Controller
         try {
             $page = Page::whereSlug('stores')->whereType('system')->whereStatus('active')->pluck('banner_image')->firstOrFail();
 
-            $stores = Store::when($request->has('letter'), function ($query) use ($request) {
-                $query->where('name', 'like', $request->input('letter') . '%');
-            })->when($request->orderBy == 'latest', function ($query) {
-                $query->latest();
-            })->when($request->orderBy == 'popularity', function ($query) {
-                $query->withCount('clicks')->orderByDesc('clicks_count');
-            })->when($request->orderBy == 'cashback-amount', function ($query) {
-                $query->whereHas('cashbacks', function ($query) {
-                    $query->whereType('fixed');
-                })->get()->filter(function ($query) {
-                    $cashback = $query->getCashback();
-                    return (strpos($cashback, '£') !== false);
-                });
-            })->when($request->orderBy == 'cashback-percentage', function ($query) {
-                $query->whereHas('cashbacks', function ($query) {
-                    $query->where('type', 'percentage');
-                })->get()->filter(function ($query) {
-                    $cashback = $query->getCashback();
-                    return (strpos($cashback, '%') !== false);
-                });
-            })->when($request->tag, function ($query) use ($request) {
-                $query->whereHas('tags', function ($query) use ($request) {
-                    $query->where('title', $request->input('tag'));
-                });
-            })->whereStatus('active')->orderBy('name', 'asc')->paginate(20)->appends(request()->input());
+            $stores = Store::with(['images', 'logo', 'storeAddress'])
+                ->when($request->has('letter'), function ($query) use ($request) {
+                    $query->where('name', 'like', $request->input('letter') . '%');
+                })->when($request->orderBy == 'latest', function ($query) {
+                    $query->latest();
+                })->when($request->orderBy == 'popularity', function ($query) {
+                    $query->withCount('clicks')->orderByDesc('clicks_count');
+                })->when($request->orderBy == 'cashback-amount' || $request->orderBy == 'cashback-percentage', function ($query) use ($request) {
+                    $query->whereHas('cashback', function ($query) use ($request) {
+                        $query->whereNotNull('sale_commission');
+                        $query->when($request->orderBy == 'cashback-amount', function ($query) {
+                            $query->whereType('fixed');
+                        })->when($request->orderBy == 'cashback-percentage', function ($query) {
+                            $query->whereType('percentage');
+                        });
+                    })->with(['cashback' => function ($query) use ($request) {
+                        $query->whereNotNull('sale_commission')->select(['id', 'store_id', 'sale_commission', 'type']);
+                        $query->when($request->orderBy == 'cashback-amount', function ($query) {
+                            $query->whereType('fixed');
+                        })->when($request->orderBy == 'cashback-percentage', function ($query) {
+                            $query->whereType('percentage');
+                        });
+                    }]);
+                })
+                ->when($request->tag, function ($query) use ($request) {
+                    $query->whereHas('tags', function ($query) use ($request) {
+                        $query->where('title', $request->input('tag'));
+                    });
+                })->where('status', 'active');
+
+            if ($request->orderBy == 'cashback-amount' || $request->orderBy == 'cashback-percentage') {
+                $setting = SiteSetting();
+                $stores = $stores->get()
+                    ->map(function ($store) use ($setting) {
+                        $percentage = $store->custom_cashback_percentage;
+                        if (!$percentage) {
+                            $percentage = $setting['cashback_percentage'];
+                        }
+                        $store['get_cashback'] = ($percentage / 100) * $store->cashback->sale_commission;
+                        return $store;
+                    })->sortByDesc('get_cashback')->values();
+            } else {
+                $stores = $stores->orderBy('name', 'asc');
+            }
+
+            $stores = $stores->paginate(20)->appends(request()->input());
             if ($stores->count() == 0) {
                 $data = [
                     'status' => 200,
@@ -61,16 +79,16 @@ class StoreController extends Controller
                 return response()->json($data, 200);
             }
             if ($request->tag === 'afrobot_homepage') {
-                $storeResource = StoreDetailResource::collection($stores);
+                $stores = StoreDetailResource::collection($stores);
             } else {
-                $storeResource = StoreResource::collection($stores);
+                $stores = StoreResource::collection($stores);
             }
             $data = [
                 'status' => 200,
                 'message' => 'Success',
                 'data' => [
                     'main_banner_image' => getBannerImageUrl($page),
-                    'stores' => $storeResource,
+                    'stores' => $stores,
                     'meta_data' => [
                         "next" => $stores->nextPageUrl(),
                         "previous" => $stores->previousPageUrl(),
@@ -92,9 +110,10 @@ class StoreController extends Controller
             ];
             return response()->json($data, 404);
         } catch (Exception $e) {
+
             $data = [
                 'status' => 500,
-                'message' => 'Something went wrong, try again.',
+                'message' => $e->getMessage() . ' Something went wrong, try again.',
                 'data' => []
             ];
             return response()->json($data, 500);
@@ -223,7 +242,7 @@ class StoreController extends Controller
                 ]
             ];
             return response()->json($response, 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $data = [
                 'status' => 500,
                 'message' => 'Something went wrong, try again.',

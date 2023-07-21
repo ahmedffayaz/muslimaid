@@ -31,6 +31,11 @@
     -o-transform: translate(-50%, -50%);
     -ms-transform: translate(-50%, -50%);
 }
+.admin_eye_icon{
+    margin-right: 10px;
+    float: right;
+    margin-top: -24px;
+}
 </style>
 
 @section('content')

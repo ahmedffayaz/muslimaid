@@ -58,36 +58,40 @@ class UserController extends Controller
                 'data' => []
             ];
             return response()->json($data, 406);
-        } else {
-            try {
-                $avatarImage = Auth::user()->avatar;
-                if ($request->hasFile('avatar')) {
-                    $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
-                }
-                Auth::user()->update([
-                    'first_name' => $request->firstname,
-                    'last_name' => $request->lastname,
-                    'phone' => $request->phone,
-                    'address' => $request->address,
-                    'date_of_birth' => $request->dob,
-                    'avatar' => $avatarImage,
-                ]);
-
-                $user = new UserResource(auth()->user());
-                $response = [
-                    'status' => 200,
-                    'message' => "Successfully Updated.",
-                    'data' => $user,
-                ];
-                return response()->json($response, 200);
-            } catch (\Exception $e) {
-                $data = [
-                    'status' => 500,
-                    'message' => 'Something went wrong, try again.',
-                    'data' => []
-                ];
-                return response()->json($data, 500);
+        }
+        try {
+            $avatarImage = Auth::user()->avatar;
+            if ($request->hasFile('avatar')) {
+                $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
             }
+            Auth::user()->update([
+                'title' => $request->title,
+                'first_name' => $request->firstname,
+                'last_name' => $request->lastname,
+                'phone' => $request->phone,
+                'address' => $request->address,
+                "address_2" => $request->address_2,
+                'date_of_birth' => $request->dob,
+                'street' => $request->street,
+                'country_id' => $request->country_id,
+                'postal_code' => $request->postal_code,
+                'avatar' => $avatarImage,
+            ]);
+
+            $user = new UserResource(auth()->user());
+            $response = [
+                'status' => 200,
+                'message' => "Successfully Updated.",
+                'data' => $user,
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception $e) {
+            $data = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
+            ];
+            return response()->json($data, 500);
         }
     }
 
