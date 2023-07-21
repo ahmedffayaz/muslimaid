@@ -195,11 +195,19 @@ class SeoController extends Controller
                     'error' => $e->getMessage()
                 ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
             }
-        } else {
-            SeoRuleData::where('seo_rule_id',$seo['id'])->delete();
-            $seo->delete();
-            flash()->success('Seo rule deleted successfully');
-            return redirect()->route(getAdminPrefix() . '.seo.index');
+        }else{
+            try{
+                DB::beginTransaction();
+                SeoRuleData::where('seo_rule_id',$seo['id'])->delete();
+                $seo->delete();
+                DB::commit();
+                flash()->success('Seo rule deleted successfully');
+                return redirect()->route(getAdminPrefix() . '.seo.index');
+            } catch (Exception $e){
+                DB::rollBack();
+                flash()->error('Something went wrong, try again');
+                return redirect()->route(getAdminPrefix(). '.seo.index');
+            }
         }
     }
 }
