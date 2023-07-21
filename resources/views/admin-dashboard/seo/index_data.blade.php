@@ -39,14 +39,11 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a  form_id="delete-blog-{{$seo->id}}"  class="delete" style="cursor: pointer">
+                                    <a class='seo-delete' data-action="{{ route(getAdminPrefix() . '.seo.destroy', $seo) }}"
+                                        data-id="{{ $seo->id }}" style="cursor: pointer">
                                         <em class="icon ni ni-trash-fill"></em>
-                                        <span>Delete</span>
+                                        Delete
                                     </a>
-                                    <form action="{{ route(getAdminPrefix() . '.seo.destroy', $seo) }}" id="delete-blog-{{$seo->id}}" method="POST" class="m-0">
-                                        @method('DELETE')
-                                        @csrf
-                                    </form>
                                 </li>
                             </ul>
                         </div>
