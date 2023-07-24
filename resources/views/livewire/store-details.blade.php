@@ -453,7 +453,9 @@
                             <div class="form-group">
                                 <label class="form-label" for="tracking_url">Tracking URL</label>
                                 <div class="form-control-wrap">
-                                    <input type="url" class="form-control" placeholder="Keep empty to use store's Tracking URL" id="tracking_url" name="tracking_url" value="{{ old('tracking_url') }}">
+                                    <input type="url" class="form-control" placeholder="Keep empty to use store's Tracking URL" id="tracking_url" name="tracking_url" value="{{ old('tracking_url') }}" style="width: 79%">
+                                    <span style="position: absolute; right:0; top:5px; width:20%" data-toggle="tooltip" data-placement="left"
+                                        title="This parameter containing ID of the click will be concatenated with tracking URL of the store ({{ $store? $store->tracking_url : '' }})">?ref=XXX</span>
                                     @error('tracking_url')
                                         <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -466,7 +468,10 @@
                             <div class="form-group">
                                 <label class="form-label" for="deeplink_url">Deeplink URL</label>
                                 <div class="form-control-wrap">
-                                    <input type="url" class="form-control" placeholder="Keep empty to use store's Deeplink URL" id="deeplink_url" name="deeplink_url" value="{{ old('deeplink_url') }}">
+                                    <span style="position:absolute; left:0; top:5px; width:7%" data-toggle="tooltip" data-placement="right"
+                                        title="This parameter containing URL of the click will be concatenated with deeplink URL of the store ({{ $store? $store->deeplink_url : '' }})">&u=</span>
+                                    <input type="url" class="form-control" placeholder="Keep empty to use store's Deeplink URL" id="deeplink_url" name="deeplink_url" value="{{ old('deeplink_url') }}"
+                                    style="position: relative; left:30px; width: 93%">
                                     @error('deeplink_url')
                                         <span class="invalid-feedback d-block" role="alert">
                                             <strong>{{ $message }}</strong>

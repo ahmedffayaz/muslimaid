@@ -18,7 +18,9 @@
                     <label class="form-label" for="tracking_url">Tracking URL</label>
                     <div class="form-control-wrap">
                         <input type="url" class="form-control" id="tracking_url" value="{{ $voucher->tracking_url }}"
-                            name="tracking_url" placeholder="Keep empty to use store's Tracking URL">
+                            name="tracking_url" placeholder="Keep empty to use store's Tracking URL" style="width: 79%">
+                            <span style="position: absolute; right:0; top:5px; width:20%" data-toggle="tooltip" data-placement="left"
+                                title="This parameter containing ID of the click will be concatenated with tracking URL of the store ({{ $voucher->store->tracking_url ? $voucher->store->tracking_url : '' }})">{{ $voucher->store->network->click_ref }}XXX</span>
                     </div>
                 </div>
             </div>
@@ -26,8 +28,10 @@
                 <div class="form-group">
                     <label class="form-label" for="deeplink_url">Deeplink URL</label>
                     <div class="form-control-wrap">
+                        <span style="position:absolute; left:0; top:5px; width:7%" data-toggle="tooltip" data-placement="right"
+                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store ({{ $voucher->store->deeplink_url ? $voucher->store->deeplink_url : '' }})">{{ $voucher->store->network->deeplink_identifier }}</span>
                         <input type="url" class="form-control" id="deeplink_url" value="{{ $voucher->deeplink_url }}" name="deeplink_url"
-                         placeholder="Keep empty to use store's Deeplink URL">
+                            placeholder="Keep empty to use store's Deeplink URL" style="position: relative; left:30px; width: 93%">
                     </div>
                 </div>
             </div>
