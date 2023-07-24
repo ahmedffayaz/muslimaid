@@ -22,7 +22,7 @@ class UserResource extends JsonResource
         $userPermissions = $permissions->implode(',');
 
         $token = $this->createToken('API Token')->plainTextToken;
-        if($this->first_name && $this->last_name && $this->email && $this->phone && $this->address && $this->date_of_birth && $this->street && $this->country_id && $this->postal_code) {
+        if($this->first_name && $this->last_name && $this->email && $this->phone && $this->address && $this->date_of_birth) {
             $is_profile_complete = 1;
         } else{
            $is_profile_complete = 0;
@@ -54,7 +54,7 @@ class UserResource extends JsonResource
             "phone" => $this->phone,
             "account_name" => empty($this->bankInfo) ? '' : $this->bankInfo->account_name,
             "bank_title" => empty($this->bankInfo) ? '' : $this->bankInfo->bank_title,
-            "account_number" => empty($this->bankInfo) ? '' : $this->bankInfo->account_number,   
+            "account_number" => empty($this->bankInfo) ? '' : $this->bankInfo->account_number,
             "bank_sort_code" => empty($this->bankInfo) ? '' : $this->bankInfo->bank_sort_code,
             "bic" => empty($this->bankInfo) ? '' : $this->bankInfo->bic,
             "referral_code" => empty($this->referred_by) ? '' : $this->referred_by,
