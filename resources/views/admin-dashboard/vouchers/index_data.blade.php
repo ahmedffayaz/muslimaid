@@ -13,7 +13,7 @@
         <div class="nk-tb-item" @if ($voucher->promotion_end_date < \Carbon\Carbon::now()) style="background-color:#f1f1f1" @endif>
 
             <div class="nk-tb-col ">
-                <a href="{{ route(getAdminPrefix() . '.stores.show_store') }}?slug={{ $voucher->store->slug }}" class="a_link">
+                <a href="{{ route(getAdminPrefix() . '.stores.show_store') }}?slug={{ optional($voucher->store)->slug }}" class="a_link">
                     <span><b>{{ $voucher->store->id ?? '' }} - {{ $voucher->store->name ?? '' }}</b></span>
                     <br>
                     <span>{{ $voucher->store->network->name ?? '' }}</span>
