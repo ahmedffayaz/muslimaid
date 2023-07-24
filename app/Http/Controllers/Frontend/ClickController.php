@@ -13,6 +13,8 @@ use App\Models\RedeemedVoucher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Voucher;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ClickController extends Controller
@@ -142,6 +144,44 @@ class ClickController extends Controller
             }
             flash()->error('Something went wrong. Try again');
             return redirect()->back();
+        }
+    }
+
+    public function redeemVoucher(Request $request){
+        $validator = Validator::make($request->all(), [
+            'store_id' => 'required',
+            'voucher_id' => 'required'
+        ]);
+
+        if($validator->fails()){
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $validator->errors()->first()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        if(auth()->check()){
+            
+        } else {
+            $store_id = decrypt($request->store_id);
+            $voucher_id = decrypt($request->voucher_id);
+            $store = Store::findOrFail($store_id);
+            $voucher = Voucher::findOrFail($voucher_id);
+
+            $customCashbackPercentage = $store->custom_cashback_percentage;
+            $cashbackPercent = $customCashbackPercentage ? $customCashbackPercentage : SiteSetting::where('type', 'cashback_percentage')->first()->value;
+            if(!$cashbackPercent){
+                $cashbackPercent = 0;
+            }
+
+            $click = ExitClick::create([
+                    'store_id' => $store_id,
+                    'user_id' => 1,
+                    'network_id' => $store->network->id,
+                    'exit_url' => '#',
+                    'current_cashback_percentage' => $cashbackPercent
+                ]);
+            
         }
     }
 }
