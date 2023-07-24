@@ -18,6 +18,7 @@ class CreateExitClicksTable extends Migration
             $table->unsignedBigInteger('store_id');
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('network_id')->nullable();
+            $table->unsignedBigInteger('voucher_id')->nullable();
             $table->string('network_click_ref')->nullable();
             $table->longText('exit_url')->nullable();
             $table->double('current_cashback_percentage')->nullable();
