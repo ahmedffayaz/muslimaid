@@ -452,6 +452,12 @@
 
 
         }
+        $('#add-voucher-modal').on('hidden.bs.modal', function (){
+            $('#add-voucher-form-placeholder').html('');
+        });
+        $('#edit-voucher-modal').on('hidden.bs.modal', function (){
+            $('#edit-voucher-form-placeholder').html('');
+        });
 
         attachFormValidator($(document).find('#add-voucher-form'));
     </script>

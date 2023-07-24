@@ -2259,5 +2259,8 @@
             .prop("checked", "")
             .end();
         });
+        $('#voucher-modal').on('hidden.bs.modal', function () {
+            $('#voucher').html('');
+        })
     </script>
 @endpush
