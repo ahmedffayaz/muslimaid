@@ -2,10 +2,10 @@
 
     <div class="nk-tb-item nk-tb-head">
         <div class="nk-tb-col "><span class="sub-text">Store</span></div>
-        <div class="nk-tb-col tb-col-mb"><span class="sub-text">Deal title</span></div>
+        <div class="nk-tb-col tb-col-mb"><span class="sub-text">Name</span></div>
         <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Coupon</span></div>
-        <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Click Url</span></div>
-        <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Commission</span></div>
+        <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Deeplink URL</span></div>
+        <!-- <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Commission</span></div> -->
         <div class="nk-tb-col nk-tb-col-tools text-right"><span class="sub-text">Action</span></div>
     </div>
 
@@ -13,7 +13,7 @@
         <div class="nk-tb-item" @if ($voucher->promotion_end_date < \Carbon\Carbon::now()) style="background-color:#f1f1f1" @endif>
 
             <div class="nk-tb-col ">
-                <a href="{{ route(getAdminPrefix() . '.stores.show_store') }}?slug={{ $voucher->store->slug }}" class="a_link">
+                <a href="{{ route(getAdminPrefix() . '.stores.show_store') }}?slug={{ optional($voucher->store)->slug }}" class="a_link">
                     <span><b>{{ $voucher->store->id ?? '' }} - {{ $voucher->store->name ?? '' }}</b></span>
                     <br>
                     <span>{{ $voucher->store->network->name ?? '' }}</span>
@@ -25,7 +25,7 @@
             </div>
 
             <div class="nk-tb-col ">
-                <span>{{ $voucher->link_name }}</span>
+                <span>{{ $voucher->name }}</span>
             </div>
 
             <div class="nk-tb-col text-center ">
@@ -34,15 +34,15 @@
 
             <div class="nk-tb-col text-center">
                 <h5>
-                    <a href='{{ $voucher->click_url ?? '#' }}' target="_blank" class="a_link">
+                    <a href="{{ $voucher->deeplink_url ?? '#' }}" target="_blank" class="a_link">
                         <em class="icon ni ni-link-alt"></em>
                     </a>
                 </h5>
             </div>
 
-            <div class="nk-tb-col  text-center">
+            <!-- <div class="nk-tb-col  text-center">
                 <span>{{ $voucher->sale_commission ?? '' }}</span>
-            </div>
+            </div> -->
 
             <div class="nk-tb-col nk-tb-col-tools">
                 <ul class="nk-tb-actions gx-1">
@@ -58,13 +58,13 @@
                                         </a>
                                     </li>
                                     <li>
-                                        <a class='delete' form_id="delete-voucher-{{ $voucher->id }}" style="cursor: pointer">
+                                        <a class='delete' data-action="{{ route(getAdminPrefix() . '.vouchers.destroy', $voucher) }}" form_id="delete-voucher-{{ $voucher->id }}" style="cursor: pointer">
                                             <em class="icon ni ni-trash-fill"></em>
                                             <span>Delete Voucher</span>
                                         </a>
                                         <form action="{{ route(getAdminPrefix() . '.vouchers.destroy', $voucher) }}" id="delete-voucher-{{ $voucher->id }}" method="POST" class="m-0">
-                                            @method('DELETE')
                                             @csrf
+                                            @method('DELETE')
                                         </form>
                                     </li>
                                 </ul>
