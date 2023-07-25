@@ -119,7 +119,7 @@ class ClickController extends Controller
     }
 
     public function redirect(Request $request, $hash, $url)
-    { 
+    {
         try {
             $storeId = decrypt($hash);
             $store = Store::find($storeId);
@@ -147,13 +147,14 @@ class ClickController extends Controller
         }
     }
 
-    public function redeemVoucher(Request $request, $storeId, $voucherId){ 
+    public function redeemVoucher(Request $request, $storeId, $voucherId)
+    {
         $validator = Validator::make($request->all(), [
             'store_id' => 'required',
             'voucher_id' => 'required'
         ]);
 
-        if($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
                 'error' => $validator->errors()->first()
@@ -173,94 +174,46 @@ class ClickController extends Controller
         $customCashbackPercentage = $store->custom_cashback_percentage;
         $cashbackPercent = $customCashbackPercentage ? $customCashbackPercentage : SiteSetting::where('type', 'cashback_percentage')->first()->value;
 
-        if(!$cashbackPercent){
+        if (!$cashbackPercent) {
             $cashbackPercent = 0;
         }
 
-        if(auth()->check()){
-
-            try{
-                DB::beginTransaction();
-                $click = ExitClick::create([
-                    'store_id' => $storeId,
-                    'user_id' => auth()->user()->id,
-                    'network_id' => $store->network->id,
-                    'exit_url' => '#',
-                    'voucher_id' => $voucherId,
-                    'current_cashback_percentage' => $cashbackPercent
-                ]);
-                if($deeplinkUrl != null){
-                $click->exit_url =  $trackingUrl . $clickIdentifier . $click->id . $deeplinkIdentifier . $deeplinkUrl;
-                } else {
-                    $click->exit_url =  $trackingUrl . $clickIdentifier . $click->id;
-                }
-                $click->update();
-                $hashStoreId = encrypt($store->id);
-                $url = encrypt($click->exit_url);
-                DB::commit();
-                if($request->ajax()){
-                    return array(
-                        'status' => JsonResponse::HTTP_OK,
-                        'url' => route('click.redirect', [$hashStoreId, $url])
-                    );
-                }
-                return redirect()->route('click.redirect', $hashStoreId, $url);
-
-            } catch (Exception $e){
-                DB::rollBack();
-                if ($request->ajax()) {
-                    return response()->json([
-                        'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                        'error' => 'Something went wrong. Try again'
-                    ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
-                }
-                flash()->error('Something went wrong. Try again');
-                return redirect()->back();
+        try {
+            DB::beginTransaction();
+            $click = ExitClick::create([
+                'store_id' => $storeId,
+                'user_id' => auth()->user()->id ?? 1,
+                'network_id' => $store->network->id,
+                'exit_url' => '#',
+                'voucher_id' => $voucherId,
+                'current_cashback_percentage' => $cashbackPercent
+            ]);
+            $click->exit_url = $deeplinkUrl != null ? $trackingUrl . $clickIdentifier . $click->id . $deeplinkIdentifier . $deeplinkUrl : $trackingUrl . $clickIdentifier . $click->id;
+            $click->update();
+            $hashStoreId = encrypt($store->id);
+            $url = encrypt($click->exit_url);
+            DB::commit();
+            if ($request->ajax()) {
+                return array(
+                    'status' => JsonResponse::HTTP_OK,
+                    'url' => route('click.redirect', [$hashStoreId, $url])
+                );
             }
-               
-        } else {
-
-            try{
-                DB::beginTransaction();
-                $click = ExitClick::create([
-                        'store_id' => $storeId,
-                        'user_id' => 1,
-                        'network_id' => $store->network->id,
-                        'exit_url' => '#',
-                        'voucher_id' => $voucherId,
-                        'current_cashback_percentage' => $cashbackPercent
-                    ]);
-                    if($deeplinkUrl != null){
-                        $click->exit_url =  $trackingUrl . $clickIdentifier . $click->id . $deeplinkIdentifier . $deeplinkUrl;
-                    } else {
-                        $click->exit_url =  $trackingUrl . $clickIdentifier . $click->id;
-                    }
-                $click->update();
-                $hashStoreId = encrypt($store->id);
-                $url = encrypt($click->exit_url);
-                DB::commit();
-                if($request->ajax()){
-                    return array(
-                        'status' => JsonResponse::HTTP_OK,
-                        'url' => route('click.redirect', [$hashStoreId, $url])
-                    );
-                }
-                return redirect()->route('click.redirect', $hashStoreId, $url);
-
-            } catch (Exception $e){
-                DB::rollBack();
-                if ($request->ajax()) {
-                    return response()->json([
-                        'status' => JsonResponse::HTTP_NOT_FOUND,
-                        'error' => 'Something went wrong. Try again'
-                    ], JsonResponse::HTTP_NOT_FOUND);
-                }
-                flash()->error('Something went wrong. Try again');
-                return redirect()->back();
+            return redirect()->route('click.redirect', $hashStoreId, $url);
+        } catch (Exception $e) {
+            DB::rollBack();
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                    'error' => 'Something went wrong. Try again'
+                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
             }
+            flash()->error('Something went wrong. Try again');
+            return redirect()->back();
         }
     }
-    public function decryptVoucher($voucher){
+    public function decryptVoucher($voucher)
+    {
         $voucherCode = decrypt($voucher);
         return response()->json([
             'status' => JsonResponse::HTTP_OK,
@@ -268,4 +221,3 @@ class ClickController extends Controller
         ], JsonResponse::HTTP_OK);
     }
 }
- 
