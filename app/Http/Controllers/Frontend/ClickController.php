@@ -119,7 +119,7 @@ class ClickController extends Controller
     }
 
     public function redirect(Request $request, $hash, $url)
-    {
+    { 
         try {
             $storeId = decrypt($hash);
             $store = Store::find($storeId);
@@ -147,7 +147,7 @@ class ClickController extends Controller
         }
     }
 
-    public function redeemVoucher(Request $request, $storeId, $voucherId){
+    public function redeemVoucher(Request $request, $storeId, $voucherId){ 
         $validator = Validator::make($request->all(), [
             'store_id' => 'required',
             'voucher_id' => 'required'
@@ -189,7 +189,11 @@ class ClickController extends Controller
                     'voucher_id' => $voucherId,
                     'current_cashback_percentage' => $cashbackPercent
                 ]);
+                if($deeplinkUrl != null){
                 $click->exit_url =  $trackingUrl . $clickIdentifier . $click->id . $deeplinkIdentifier . $deeplinkUrl;
+                } else {
+                    $click->exit_url =  $trackingUrl . $clickIdentifier . $click->id;
+                }
                 $click->update();
                 $hashStoreId = encrypt($store->id);
                 $url = encrypt($click->exit_url);
@@ -226,7 +230,11 @@ class ClickController extends Controller
                         'voucher_id' => $voucherId,
                         'current_cashback_percentage' => $cashbackPercent
                     ]);
-                $click->exit_url =  $trackingUrl . $clickIdentifier . $click->id . $deeplinkIdentifier . $deeplinkUrl;
+                    if($deeplinkUrl != null){
+                        $click->exit_url =  $trackingUrl . $clickIdentifier . $click->id . $deeplinkIdentifier . $deeplinkUrl;
+                    } else {
+                        $click->exit_url =  $trackingUrl . $clickIdentifier . $click->id;
+                    }
                 $click->update();
                 $hashStoreId = encrypt($store->id);
                 $url = encrypt($click->exit_url);
@@ -252,4 +260,12 @@ class ClickController extends Controller
             }
         }
     }
+    public function decryptVoucher($voucher){
+        $voucherCode = decrypt($voucher);
+        return response()->json([
+            'status' => JsonResponse::HTTP_OK,
+            'voucherCode' => $voucherCode
+        ], JsonResponse::HTTP_OK);
+    }
 }
+ 
