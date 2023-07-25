@@ -2,18 +2,14 @@
 
 namespace App\Http\Controllers\APi;
 
-use App\Models\Store;
 use App\Models\Cashout;
 use App\Models\CharityType;
-use App\Models\PaymentInfo;
 use App\Models\UserCashback;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Resources\StoreResource;
-use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\CharityTypeResource;
 use App\Http\Resources\UserCashbackResource;
@@ -25,12 +21,10 @@ class PaymentController extends Controller
 
     public function cashouts()
     {
-        $user     = \Auth::user();
+        $user = Auth::user();
         $cashouts = $user->cashouts;
         return $cashouts;
     }
-
-
 
     public function accountWithdraw(Request $request)
     {
@@ -140,6 +134,7 @@ class PaymentController extends Controller
             return response()->json($data, 500);
         }
     }
+
     public function CharityCashout(Request $request, Cashout $cashout)
     {
         try {
@@ -180,6 +175,16 @@ class PaymentController extends Controller
                 ];
                 return response()->json($data, 406);
             }
+
+            if ($balance_old < $minimumCashoutAmount || (in_array('pending', $cashout_status) || in_array('processing donation', $cashout_status))) {
+                $data = [
+                    'status' => 406,
+                    'message' => 'You are not eligible to withdraw at the moment.',
+                    'data' => []
+                ];
+                return response()->json($data, 406);
+            }
+
             $cashout = Cashout::create([
                 'user_id' => $user->id,
                 'charity_types_id' => $request->charity_types_id,
@@ -189,11 +194,15 @@ class PaymentController extends Controller
                 'payment_method' => $request->payment_method,
                 'status' => 'processing donation'
             ]);
-            $cashback = $user->cashbacks()->where('id', $request->id)->first();
-            $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
-            $cashback->statusHistory()->create([
-                'cashback_status_id' => $cashback->status
-            ]);
+
+            foreach ($request->id as $requestId) {
+                $cashback = $user->cashbacks()->where('id', $requestId)->first();
+                $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
+
+                $cashback->statusHistory()->create([
+                    'cashback_status_id' => $cashback->status
+                ]);
+            }
 
             if ($user->bonus && $user->bonus->status == 'unpaid') {
                 $user->bonus->update([
@@ -207,15 +216,6 @@ class PaymentController extends Controller
                 'data' => '',
             ];
             return response()->json($data, 200);
-
-            if ($balance_old < $minimumCashoutAmount || (in_array('pending', $cashout_status) || in_array('processing donation', $cashout_status))) {
-                $data = [
-                    'status' => 406,
-                    'message' => 'You are not eligible to withdraw at the moment.',
-                    'data' => []
-                ];
-                return response()->json($data, 406);
-            }
         } catch (\Exception $e) {
             $data = [
                 'status' => 500,
@@ -225,6 +225,7 @@ class PaymentController extends Controller
             return response()->json($data, 500);
         }
     }
+
     public function charityTypesCashouts()
     {
         try {
