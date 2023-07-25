@@ -15,7 +15,7 @@ class UserCashbackResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'id' => $this->store->id,
+            'id' => $this->id,
             'title' => $this->store->name,
             'order_value' => currency($this->order_value),
             'cashback' => currency($this->amount),
