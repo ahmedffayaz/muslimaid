@@ -22,7 +22,7 @@ class UserResource extends JsonResource
         $userPermissions = $permissions->implode(',');
 
         $token = $this->createToken('API Token')->plainTextToken;
-        if($this->first_name && $this->last_name && $this->email && $this->phone && $this->address && $this->date_of_birth) {
+        if($this->first_name && $this->last_name && $this->email && $this->phone && $this->address && $this->date_of_birth && $this->street && $this->country_id && $this->postal_code) {
             $is_profile_complete = 1;
         } else{
            $is_profile_complete = 0;
