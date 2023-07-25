@@ -14,7 +14,7 @@ class AddTitleFieldToUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->enum('title', ['Mr', 'Mrs', 'Miss', 'Ms'])->nullable()->after('id');
+            $table->enum('title', ['Mr', 'Mrs', 'Miss', 'Mx'])->nullable()->after('id');
         });
     }
 
