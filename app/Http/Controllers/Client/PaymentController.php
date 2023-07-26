@@ -46,6 +46,20 @@ class PaymentController extends Controller
 
     public function paymentSave(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'account_name' => 'required|string',
+            'account_number_hidden' => 'required|regex:/^[0-9]+$/|size:8',
+            'bank_sort_code_hidden' => 'required|regex:/^[0-9]+$/|size:6' 
+        ]);
+        $validator->setAttributeNames([
+            'account_number_hidden' => 'Account Number',
+            'bank_sort_code_hidden' => 'Sort Code'
+        ]);
+        if($validator->fails()){
+            flash()->error($validator->errors()->first());
+            return redirect()->back();
+        }
+
         $accountNumber = $request->input('account_number_hidden');
         $bankSortCode = $request->input('bank_sort_code_hidden');
         $payment = PaymentInfo::updateOrCreate([
@@ -243,3 +257,4 @@ class PaymentController extends Controller
         return redirect()->back();
     }
 }
+                      
