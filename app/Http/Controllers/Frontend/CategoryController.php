@@ -102,10 +102,12 @@ class CategoryController extends Controller
             });
         }
 
-        if (!empty($request->input('cuisenes'))) {
-            $allStores = $allStores->whereHas('categories', function ($query) use ($request) {
-                $query->whereIn('name', $request->input('cuisines'));
-            });
+        if (!empty($request->input('cuisines'))) {
+            if($request->cuisines[0] != "all"){
+                $allStores = $allStores->whereHas('categories', function ($query) use ($request) {
+                    $query->whereIn('name', $request->input('cuisines'));
+                });
+            }
         }
 
         if (isset($request->orderBy)) {
