@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class DashboardController extends Controller
 {
@@ -61,9 +62,11 @@ class DashboardController extends Controller
         $request->validate([
             'firstname' => 'required|regex:/^[A-Za-z ]+$/',
             'lastname' => 'required|regex:/^[A-Za-z ]+$/',
+            'phone' => 'nullable|regex:/^\+44\d{10}$/',
         ], [
             'firstname.required' => 'First name is required.',
-            'lastname.required' => 'Last name is required.'
+            'lastname.required' => 'Last name is required.',
+            'phone.regex' => 'The phone number must be valid UK phone number'
         ]);
 
         $user = auth()->user();
@@ -75,7 +78,7 @@ class DashboardController extends Controller
         $user->update([
             'first_name' => $request->firstname,
             'last_name' => $request->lastname,
-            'date_of_birth' => formatDateForUk($request->date_of_birth),
+            'date_of_birth' => $request->date_of_birth != null ? formatDateForUk($request->date_of_birth) : $request->date_of_birth,
             'phone' => $request->phone,
             'address' => $request->address,
             'address_2' => $request->address_2,
