@@ -37,9 +37,14 @@ class HomeController extends Controller
 
             $featuredCategories = Category::whereHas('tags', function ($query) use ($featuredTag) {
                 $query->where('title', 'app_featured1_homepage');
-            })->with(['stores' => function ($query) {
-                $query->where('status', 'active')->limit(10);
-            }])->whereStatus(1)->limit(10)->get();
+            })->whereStatus(1)->get();
+            $featuredCategories->map(function ($category) {
+                $category->stores = $category->stores()
+                    ->where('status', 'active')
+                    ->limit(10)
+                    ->get();
+                return $category;
+            });
 
             $topCategories = Category::whereHas('tags', function ($query) {
                 $query->where('title', 'top_categories');
