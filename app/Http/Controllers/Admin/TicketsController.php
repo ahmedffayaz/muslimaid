@@ -60,9 +60,9 @@ class TicketsController extends Controller
         $title = 'Ticket Closed';
         $message = 'Your ticket has been closed.';
         $url = url('account/tickets');
-        $deviceToken = auth()->user()->devices()->first()->fcm_token;
+        $deviceToken = optional(auth()->user()->devices()->first())->fcm_token;
 
-        dispatch(new SendNotification($title, $message, $deviceToken,$url));
+        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken,$url)) : '';
         flash()->success('Ticket closed');
                 return redirect()->back();
     }

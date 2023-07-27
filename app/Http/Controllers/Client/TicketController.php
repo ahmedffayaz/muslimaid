@@ -87,9 +87,9 @@ class TicketController extends Controller
         $title = 'Ticket Created';
         $message = 'Your ticket is created';
         $url = url('account/tickets');
-        $deviceToken = auth()->user()->devices()->first()->fcm_token;
+        $deviceToken = optional(auth()->user()->devices()->first())->fcm_token;
 
-        dispatch(new SendNotification($title, $message, $deviceToken, $url));
+        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url)) : '';
         flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
         return redirect()->route('account.tickets.index');
     }
