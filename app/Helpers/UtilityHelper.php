@@ -225,6 +225,16 @@ function getFeaturesCategories($featureTag)
     return $categories;
 }
 
+function getFeaturesChildCategories($featureTag, $categoryId)
+{
+    $categories = Category::whereHas('tags', function ($query) use ($featureTag) {
+        $query->where('title', $featureTag);
+    })->where(function ($query) {
+        $query->where('visibility', '!=', 'hidden')->orWhereNull('visibility');
+    })->where('parent_id', $categoryId)->whereStatus('1')->latest()->get();
+    return $categories;
+}
+
 function separatePageKeywords($content)
 {
     $content_keyword = explode('{{', $content);
@@ -818,6 +828,18 @@ function getImageUrl($url)
     return strpos($url, 'http') !== false
         ? $url
         : asset($url);
+}
+
+function getCategoryImageUrl($category)
+{
+    if ($category->logo_type == 'upload') {
+        return !file_exists(public_path($category->logo_upload)) ? asset('storage/__asset/images/error-images/no-logo.png') : asset($category->logo_upload);
+    }
+
+    if ($category->logo_type == 'link')
+        return $category->logo_link;
+
+    return null;
 }
 
 /**
