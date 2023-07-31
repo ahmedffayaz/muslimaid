@@ -225,16 +225,6 @@ function getFeaturesCategories($featureTag)
     return $categories;
 }
 
-function getFeaturesChildCategories($featureTag, $categoryId)
-{
-    $categories = Category::whereHas('tags', function ($query) use ($featureTag) {
-        $query->where('title', $featureTag);
-    })->where(function ($query) {
-        $query->where('visibility', '!=', 'hidden')->orWhereNull('visibility');
-    })->where('parent_id', $categoryId)->whereStatus('1')->latest()->get();
-    return $categories;
-}
-
 function separatePageKeywords($content)
 {
     $content_keyword = explode('{{', $content);
