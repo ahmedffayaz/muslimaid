@@ -1,5 +1,5 @@
 @if ($store->override_cashback)
-    <a href="#cashback-modal" class="btn btn-primary btn-sm float-right add-cashbacks" id="add-cashbacks"><em class="icon ni ni-upload-cloud"></em> <span>Add cashback</span></a>
+    <a href="#" class="btn btn-primary btn-sm float-right add-cashbacks" id="add-cashbacks"><em class="icon ni ni-upload-cloud"></em> <span>Add cashback</span></a>
 @endif
 <div class="nk-tb-list nk-tb-ulist" style="table-layout: auto">
     @if (count($store->cashbacks))

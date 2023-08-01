@@ -1,5 +1,5 @@
 @if($store->storeAddress()->count() == 0)
-<a href="#add-address-modal" class="btn btn-primary float-right btn-sm" data-toggle="modal"><em class="icon ni ni-plus"></em> <span>Add Address</span></a>
+<a href="#" class="btn btn-primary float-right btn-sm add-address" data-toggle="modal"><em class="icon ni ni-plus"></em> <span>Add Address</span></a>
 @endif
 <div class="nk-tb-list nk-tb-ulist mt-3" style="table-layout: auto">
 

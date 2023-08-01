@@ -1,4 +1,4 @@
-@if(count($store->images) < 2)<a href="#file-upload" class="btn btn-primary float-right" data-toggle="modal"><em class="icon ni ni-upload-cloud"></em> <span>Upload</span></a>
+@if(count($store->images) < 2)<a href="#" class="btn btn-primary float-right add-image" data-toggle="modal"><em class="icon ni ni-upload-cloud"></em> <span>Upload</span></a>
 @endif
 @if(count($store->images))
 <div class="nk-block">

@@ -15,6 +15,7 @@
                                     <span class="badge badge-dim badge-pill badge-outline-primary">{{ $store->network->name }}</span>
                                 </h3>
                                 <div class="store_id_checker d-none">{{ $store->id }}</div>
+                                <div id="store_id_checker_encrypted" class="d-none">{{ encrypt($store->id) }}</div>
                                 <div class="nk-block-des">
                                 </div>
                             </div>
@@ -343,59 +344,10 @@
     </div>
 </div>
 <!-- @@ File Upload Modal @e -->
-<div class="modal fade" tabindex="-1" role="dialog" id="file-upload">
+<div class="modal fade" tabindex="-1" role="dialog" id="file-upload-modal">
     <div class="modal-dialog modal-md" role="document">
-        <div class="modal-content">
-            <div class="modal-header align-center">
-                <div class="nk-file-title">
-                    <div class="nk-file-name">
-                        <div class="nk-file-name-text"><span class="title">Upload image for {{ $store->name }}</span></div>
-                    </div>
-                </div>
-                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
-            </div>
-            <form action="{{ route(getAdminPrefix() . '.stores.images.upload', $store) }}" class="form-validate file-upload" method="POST" enctype="multipart/form-data">
-                <div class="modal-body modal-body-md">
-                    @csrf
-                    <div class="row gy-4">
-                        <div class="col-lg-12 mx-auto">
-                            <div class="form-group">
-                                <div class="text-center mb-4 logo">
-                                    <label for="logo-input">
-                                        <img id="blah" src="{{ asset('admin-dashboard/images/cloud-uploading.png') }}" alt="store logo" width="150px" />
-                                        <input id="logo-input" name="image" class="d-none" type='file' onchange="readURL(this);" required />
-                                        <br> <br><span>Click here to select image <span class="text-danger">*</span></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="form-label" for="title">Type</label>
-                                <div class="form-control-wrap ">
-                                    <div class="form-control-select">
-                                        <select class="form-control" id="title" name="title" required>
-                                            <option value="logo">Logo</option>
-                                            <option value="Cover">Cover</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer modal-footer-stretch bg-light">
-                    <div class="modal-footer-between">
-                        <div class="g"></div>
-                        <div class="g">
-                            <ul class="btn-toolbar g-3">
-                                <li><a href="#file-share" data-dismiss="modal"class="btn btn-outline-light btn-white">Cancel</a></li>
-                                <li><button type="submit" class="btn btn-primary file-dl-toast">Upload</button></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div><!-- .modal-footer -->
-            </form>
+        <div class="modal-content add-image-modal-content">
+            
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
@@ -430,133 +382,6 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="add-voucher-form" class=" p-4">
-                <form action="{{ route(getAdminPrefix() . '.vouchers.store') }}" class="gy-3 form-validate is-alter add_voucher_form" id="add_voucher_validation" method="POST">
-                    @csrf
-                    <input type="hidden" name="store_id" value="{{ $store->id }}">
-                    <div class="row g-4">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="form-label" for="name">Name <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" placeholder="Name" id="name" name="name" value="{{ old('name') }}" required>
-                                    @error('name')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="tracking_url">Tracking URL</label>
-                                <div class="form-control-wrap">
-                                    <input type="url" class="form-control" placeholder="Keep empty to use store's Tracking URL" id="tracking_url" name="tracking_url" value="{{ old('tracking_url') }}" style="width: 79%">
-                                    <span style="position: absolute; right:0; top:5px; width:20%" data-toggle="tooltip" data-placement="left"
-                                        title="This parameter containing ID of the click will be concatenated with tracking URL of the store ({{ $store? $store->tracking_url : '' }})">?ref=XXX</span>
-                                    @error('tracking_url')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="deeplink_url">Deeplink URL</label>
-                                <div class="form-control-wrap">
-                                    <span style="position:absolute; left:0; top:5px; width:7%" data-toggle="tooltip" data-placement="right"
-                                        title="This parameter containing URL of the click will be concatenated with deeplink URL of the store ({{ $store? $store->deeplink_url : '' }})">&u=</span>
-                                    <input type="url" class="form-control" placeholder="Keep empty to use store's Deeplink URL" id="deeplink_url" name="deeplink_url" value="{{ old('deeplink_url') }}"
-                                    style="position: relative; left:30px; width: 93%">
-                                    @error('deeplink_url')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <input name="description" type="hidden">
-                                <label class="form-label" for="description">Description</label>
-                                <textarea name="description" class="form-control "> {{ old('description') }}</textarea>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <label class="form-label" for="promotion_type">Promotion Type <span class="text-danger">*</span></label>
-                                    <div class="form-control-wrap ">
-                                        <select class="form-select form-control select-2" data-search="on" id="promotion_type" name="promotion_type"
-                                            value="{{ old('promotion_type') }}" required>
-                                            <option value="Coupon">Coupon</option>
-                                            <option value="Sale/Discount">Sale/Discount</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 coupon-div">
-                            <div class="form-group">
-                                <label class="form-label" for="coupon_code">Coupon Code <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="coupon_code" name="coupon_code" value="{{ old('coupon_code') }}" required>
-                                    @error('coupon_code')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="promotion_start_date">Promotion Start Date <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control date-picker promotion_start_date" value="{{ old('promotion_start_date') }}"
-                                        id="promotion_start_date" name="promotion_start_date" autocomplete="off" required>
-                                    @error('promotion_start_date')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="promotion_end_date">Promotion End Date <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control date-picker promotion_end_date" value="{{ old('promotion_end_date') }}"
-                                        id="promotion_end_date" name="promotion_end_date" autocomplete="off" required>
-                                    @error('promotion_end_date')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -594,98 +419,6 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="cashback" class=" p-4">
-                <form action="{{ route(getAdminPrefix() . '.stores.cashbacks.store') }}" class="gy-3 form-validate is-alter cashback_form_add" method="POST">
-                    @csrf
-                    <input type="hidden" name="store_id" value="{{ $store->id }}">
-                    <div class="row g-4">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="type">Type <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap ">
-                                    <select class="form-control form-select select-2" id="type" name="type" required>
-                                        <option value="percentage">Percentage</option>
-                                        <option value="fixed">Fixed</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="sale_commission">Commission <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="number" class="form-control" min="0" step="0.1" id="sale_commission" value="" name="sale_commission"
-                                        required>
-                                </div>
-                            </div>
-                        </div>
-                        @if ($store->override_network)
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="form-label" for="network_id">Network</label>
-                                    <div class="form-control-wrap">
-                                        <select class="form-control form-select select-2" id="network_id" name="network_id">
-                                            @foreach ($networks as $network)
-                                                <option value="{{ $network->id }}">{{ $network->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="form-label" for="tracking_url">Tracking URL</label>
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control" id="tracking_url" name="tracking_url"
-                                            placeholder="https://example.com/item/abc-id-1345" required style="width: 83%">
-                                        <span style="position: absolute; right:0; top:5px; width:17%" data-toggle="tooltip" data-placement="left"
-                                            title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">{{ $store->network->click_ref }}XXX</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="form-label" for="sale_commission">Deeplink URL</label>
-                                    <div class="form-control-wrap">
-                                        <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
-                                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">{{ $store->network->deeplink_identifier }}</span>
-                                        <input type="text" class="form-control" id="deeplink_url"
-                                            value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}" name="deeplink_url"
-                                            placeholder="https://example.com/item/abc-id-1345" style="position: relative; left:30px; width: 95%">
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="form-label" for="cashback_icon">Icon Upload</label>
-                                <div class="form-control-wrap">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" name="cashback_icon" id="cashback_icon" onchange="readURL(this);">
-                                        <label class="custom-file-label" for="cashback_icon">Choose file</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <div class="preview-wrapper">
-                                        <img id="logo-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <label class="form-label" for="phone-no-1">Detail</label>
-                                <textarea name="detail" class="form-control "></textarea>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
@@ -793,38 +526,6 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="add-seorule-form" class=" p-4">
-                <form action="{{ route(getAdminPrefix() . '.stores.save_seo_rule') }}" class="gy-3 form-validate is-alter add_seorule_form" id="theForm" method="POST">
-                    @csrf
-                    <input type="hidden" name="store_id" value="{{ $store->id }}">
-                    <div class="row g-4">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="form-label" for="full-name-1">Key <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <select class="form-control key" id="key" name="key" required>
-                                        <option selected disabled>Select Key</option>
-                                        <option value="meta:keywords">Meta:keywords</option>
-                                        <option value="meta:description">Meta:description</option>
-                                        <option value="meta:title">Meta:title</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12 key_value">
-                            <div class="form-group">
-                                <label class="form-label" for="vsale_commission">Value <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <textarea class="form-control" id="value" value="" name="value" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -861,59 +562,6 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="add-address-form" class=" p-4">
-                <form action="{{ route(getAdminPrefix() . '.stores.save_address') }}" class="gy-3 form-validate is-alter add_address_form" method="POST">
-                    @csrf
-                    <input type="hidden" name="store_id" value="{{ $store->id }}">
-                    <div class="row g-4">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="full-name-1">City <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="city" name="city" value="" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="vsale_commission">Postal code <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="postal_code" name="postal_code" value="" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="latitude">Latitude <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="number" class="form-control" min="-90" max="90" step="any" id="latitude" name="latitude"
-                                        value="" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="longitude">Longitude <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="number" class="form-control" min="-180" max="180" step="any" id="longitude" name="longitude"
-                                        value="" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="form-label" for="vsale_commission">Address <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <textarea class="form-control" id="address" value="" name="address" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -1192,6 +840,7 @@
                     success: function(data) {
                         $('#voucher-modal').modal('show');
                         $('#voucher').html(data);
+                        $('.title').text('Edit Voucher');
                         $('.select-2').each(function() {
                             initializeSelect2($(this));
                         });
@@ -1245,6 +894,9 @@
                 success: function(data) {
                     $('#seo-modal').modal('show');
                     $('#seo').html(data);
+                    $('.select-2').each(function() {
+                        initializeSelect2($(this));
+                    });
                 }
             });
 
@@ -1440,6 +1092,7 @@
                         if (data.success) {
                             $('#add-voucher-modal').modal('hide');
                             $("#add_voucher_validation").trigger("reset");
+                            $("#add-voucher-form").html('');
                             (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
@@ -1495,6 +1148,9 @@
                             $('.network_url').css('cssText', 'display: none !important');
                             $('.sote-override-network').show();
                         }
+                        $('.select-2').each(function() {
+                            initializeSelect2($(this));
+                        });
                         checkCashbackType();
                         calcCashback();
                         NioApp.BS.tooltip('[data-toggle="tooltip"]');
@@ -1601,7 +1257,7 @@
         $(document).ready(function() {
             $(document).on('click', '.add-cashbacks', function(event) {
                 event.preventDefault();
-                let storeId = "{{ encrypt($store->id) }}";
+                let storeId = $('#store_id_checker_encrypted').text();
                 $.ajax({
                     url: "{{ route(getAdminPrefix() . '.stores.cashbacks.create') }}",
                     type: "GET",
@@ -1609,9 +1265,12 @@
                         storeId: storeId
                     },
                     success: function(data) {
-                        $('.cashback-modal').modal('show');
+                        $('#cashback-modal').modal('show');
                         $('.title').text('Add Cashback');
-                        $('#edit-cashback').html(data);
+                        $('#cashback').html(data);
+                        $('.select-2').each(function() {
+                            initializeSelect2($(this));
+                        });
                         if ($('#store_override_network').is(":checked")) {
                             $('.sote-override-network').hide();
                             $('.network_url').css('cssText', 'display: block !important');
@@ -1751,7 +1410,7 @@
                     contentType: false,
                     processData: false,
                     success: function(data) {
-                        $('#file-upload').modal('hide');
+                        $('#file-upload-modal').modal('hide');
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
@@ -2257,6 +1916,107 @@
         }
         $('#voucher-modal').on('hidden.bs.modal', function () {
             $('#voucher').html('');
+        });
+
+        //To load the form for adding image
+        $(document).ready(function (){
+            $(document).on('click', '.add-image', function(event) {
+                var token = "{{ csrf_token() }}";
+                var store = $('.store_id_checker').text();
+                var url = "{{ route(getAdminPrefix(). '.stores.add.image.form' ) }}"
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data: {
+                        _token: token,
+                        store_id: store
+                    },
+                    success: function (response){
+                        $('.add-image-modal-content').html(response);
+                        $('#file-upload-modal').modal('show');
+                    }
+                });
+            });
         })
+
+        //To load the form for adding voucher
+        $(document).ready(function (){
+            $(document).on('click', '.add-voucher', function(event) {
+                var token = "{{ csrf_token() }}";
+                var url = "{{ route(getAdminPrefix(). '.stores.add.voucher.form') }}"
+                var store = $('.store_id_checker').text();
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data: {
+                        _token: token,
+                        store_id: store
+                    },
+                    success: function (response){
+                        $('.title').text('Add Voucher');
+                        $('#add-voucher-form').html(response);
+                        $('#add-voucher-modal').modal('show');
+                        $('.select-2').each(function() {
+                            initializeSelect2($(this));
+                        });
+                        $('#add-voucher-form').find(".promotion_end_date").datepicker();
+                        $('#add-voucher-form').find(".promotion_start_date").datepicker();
+                        NioApp.BS.tooltip('[data-toggle="tooltip"]');
+                    }
+                });
+            });
+        })
+        //To load the form for adding address
+        $(document).ready(function (){
+            $(document).on('click', '.add-address', function (event){
+                var token = "{{ csrf_token() }}";
+                var url = "{{ route(getAdminPrefix(). '.stores.add.address.form') }}";
+                var store = $('.store_id_checker').text();
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data: {
+                        _token: token,
+                        store_id: store
+                    },
+                    success: function (response){
+                        $("#add-address-form").html(response);
+                        $("#add-address-modal").modal('show');
+                    }
+                })
+            });
+        })
+
+        //To load the form for adding SEO
+        $(document).ready(function (){
+            $(document).on('click', '.add-seo-rule', function (event){
+                var token = "{{ csrf_token() }}";
+                var url = "{{ route(getAdminPrefix(). '.stores.add.seo.rule.form') }}";
+                var store = $('.store_id_checker').text();
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data: {
+                        _token: token,
+                        store_id: store
+                    },
+                    success: function (response){
+                        $('#add-seorule-form').html(response);
+                        $('#add-seorule-modal').modal('show');
+                        $('.select-2').each(function() {
+                            initializeSelect2($(this));
+                        });
+                    }
+                })
+            });
+        })
+
+        $('#edit-cashback-modal').on('hidden.bs.modal', function (){
+            $('#edit-cashback').html('');
+        });
+        $('#cashback-modal').on('hidden.bs.modal', function (){
+            $('#cashback').html('');
+        });
+
     </script>
 @endpush

@@ -1,4 +1,4 @@
-<a href="#add-seorule-modal" class="btn btn-primary float-right btn-sm" data-toggle="modal"><em class="icon ni ni-plus"></em> <span>Add SEO Rule</span></a>
+<a href="#" class="btn btn-primary float-right btn-sm add-seo-rule" data-toggle="modal"><em class="icon ni ni-plus"></em> <span>Add SEO Rule</span></a>
 
 <div class="nk-tb-list nk-tb-ulist mt-3" style="table-layout: auto">
     @if(count($store->storeRuleData))

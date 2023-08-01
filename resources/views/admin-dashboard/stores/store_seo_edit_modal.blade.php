@@ -7,7 +7,7 @@
             <div class="form-group">
                 <label class="form-label" for="full-name-1">Key <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
-                    <select class="form-control key" id="editkey" name="key" required>
+                    <select class="form-control select-2 key" id="editkey" name="key" required>
                         <option selected disabled>Select Key</option>
                         <option {{ $storeSeoRule->key == 'meta:keywords' ? 'selected' : '' }} value="meta:keywords">Meta:keywords</option>
                         <option {{ $storeSeoRule->key == 'meta:description' ? 'selected' : '' }} value="meta:description">Meta:description</option>
