@@ -894,6 +894,9 @@
                 success: function(data) {
                     $('#seo-modal').modal('show');
                     $('#seo').html(data);
+                    $('.select-2').each(function() {
+                        initializeSelect2($(this));
+                    });
                 }
             });
 
@@ -1145,6 +1148,9 @@
                             $('.network_url').css('cssText', 'display: none !important');
                             $('.sote-override-network').show();
                         }
+                        $('.select-2').each(function() {
+                            initializeSelect2($(this));
+                        });
                         checkCashbackType();
                         calcCashback();
                         NioApp.BS.tooltip('[data-toggle="tooltip"]');
@@ -1262,6 +1268,9 @@
                         $('#cashback-modal').modal('show');
                         $('.title').text('Add Cashback');
                         $('#cashback').html(data);
+                        $('.select-2').each(function() {
+                            initializeSelect2($(this));
+                        });
                         if ($('#store_override_network').is(":checked")) {
                             $('.sote-override-network').hide();
                             $('.network_url').css('cssText', 'display: block !important');
@@ -1994,10 +2003,20 @@
                     success: function (response){
                         $('#add-seorule-form').html(response);
                         $('#add-seorule-modal').modal('show');
+                        $('.select-2').each(function() {
+                            initializeSelect2($(this));
+                        });
                     }
                 })
             });
         })
+
+        $('#edit-cashback-modal').on('hidden.bs.modal', function (){
+            $('#edit-cashback').html('');
+        });
+        $('#cashback-modal').on('hidden.bs.modal', function (){
+            $('#cashback').html('');
+        });
 
     </script>
 @endpush

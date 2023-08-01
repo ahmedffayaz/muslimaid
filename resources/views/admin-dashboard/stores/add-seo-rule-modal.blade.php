@@ -6,7 +6,7 @@
             <div class="form-group">
                 <label class="form-label" for="full-name-1">Key <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
-                    <select class="form-control key" id="key" name="key" required>
+                    <select class="form-control key select-2" id="key" name="key" required>
                         <option selected disabled>Select Key</option>
                         <option value="meta:keywords">Meta:keywords</option>
                         <option value="meta:description">Meta:description</option>
