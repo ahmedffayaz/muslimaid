@@ -71,6 +71,10 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::delete('/stores/address/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreAddress'])->name('stores.address.delete');
         Route::delete('/stores/voucher/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreVoucher'])->name('stores.voucher.delete');
         Route::get('/stores/delete-revglue-stores', [App\Http\Controllers\Admin\StoreController::class, 'deleteRevglueStores'])->name('stores.revglue.delete');
+        Route::post('stores/add_image_form', [App\Http\Controllers\Admin\StoreController::class, 'addImageModal'])->name('stores.add.image.form');
+        Route::post('stores/add_voucher_form', [App\Http\Controllers\Admin\StoreController::class, 'addVoucherModal'])->name('stores.add.voucher.form');
+        Route::post('/stores/add_address_form', [App\Http\Controllers\Admin\StoreController::class, 'addAddressModal'])->name('stores.add.address.form');
+        Route::post('/stores/add_seo_rule_form', [App\Http\Controllers\Admin\StoreController::class, 'addSEORuleModal'])->name('stores.add.seo.rule.form');
         Route::resource('stores', StoreController::class);
         Route::resource('storecashbacks', StoreCashbackController::class)->only('index');
 

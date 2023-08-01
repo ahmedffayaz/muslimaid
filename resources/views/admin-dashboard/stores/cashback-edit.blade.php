@@ -14,12 +14,10 @@
             <div class="form-group">
                 <label class="form-label" for="type">Type <span class="text-danger">*</span></label>
                 <div class="form-control-wrap ">
-                    <div class="form-control-select">
-                        <select class="form-control" id="type" name="type" required>
+                        <select class="form-control select-2" id="type" name="type" required>
                             <option @if ($isEdit && $cashback->type == 'percentage') selected @endif value="percentage">Percentage</option>
                             <option @if ($isEdit && $cashback->type == 'fixed') selected @endif value="fixed">Fixed</option>
                         </select>
-                    </div>
                 </div>
             </div>
         </div>
