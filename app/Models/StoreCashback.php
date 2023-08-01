@@ -14,6 +14,7 @@ class StoreCashback extends Model
     protected $fillable = [
         'store_id',
         'network_id',
+        'advertiser_id',
         'cashback_name',
         'type',
         'value',
