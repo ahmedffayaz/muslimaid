@@ -1042,4 +1042,25 @@ class StoreController extends Controller
 
         return response()->json(['status' => 'success', 'message' => 'Voucher deleted successfully.']);
     }
+
+    public function addImageModal(Request $request){
+
+        $store = Store::findOrFail($request->store_id);
+        return view('admin-dashboard.stores.add-image-modal', compact('store'))->render();
+    }
+
+    public function addVoucherModal(Request $request){
+        $store = Store::findOrFail($request->store_id);
+        return view('admin-dashboard.stores.add-voucher-modal', compact('store'))->render();
+    }
+
+    public function addAddressModal(Request $request){
+        $store = Store::findOrFail($request->store_id);
+        return view('admin-dashboard.stores.add-address-modal', compact('store'))->render();
+    }
+
+    public function addSEORuleModal(Request $request){
+        $store = Store::findOrFail($request->store_id);
+        return view('admin-dashboard.stores.add-seo-rule-modal', compact('store'))->render();
+    }
 }
