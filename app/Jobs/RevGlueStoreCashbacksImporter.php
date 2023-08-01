@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Network;
 use App\Models\SiteSetting;
 use App\Models\StoreCashback;
 use Illuminate\Bus\Queueable;
@@ -17,6 +18,7 @@ class RevGlueStoreCashbacksImporter implements ShouldQueue
 
     private $stores;
     private $siteSettings;
+    private $network;
 
     /**
      * Create a new job instance.
@@ -27,6 +29,7 @@ class RevGlueStoreCashbacksImporter implements ShouldQueue
     {
         $this->stores = $stores;
         $this->siteSettings = SiteSetting::latest()->get()->pluck('value', 'type');
+        $this->network = $this->network = Network::whereName('RevGlue')->first();
     }
 
     /**
@@ -45,7 +48,7 @@ class RevGlueStoreCashbacksImporter implements ShouldQueue
             curl_setopt(
                 $curl,
                 CURLOPT_URL,
-                "https://www.revglue.com/partner/stores_cashback/MTA3Mw==/json"
+                "https://www.revglue.com/partner/stores_cashback/" . $this->siteSettings['revglue_api_key'] . "/json"
             );
 
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -71,41 +74,23 @@ class RevGlueStoreCashbacksImporter implements ShouldQueue
             // Skip in case of empty commission groups data
             if (!array_key_exists('response', $storeCashbacks) || empty($storeCashbacks['response']['stores'])) continue;
 
-            foreach ($storeCashbacks['response']['stores'] as $key => $cashback) {
-                $commissionType = array_key_exists('type', $cashback) && (strpos(strtolower($cashback['cashback_type']), 'percentage') !== false) ? 'percentage' : 'fixed';
-
-                $saleCommission = array_key_exists('percentage', $cashback) && !empty($cashback['percentage']) ? $cashback['percentage'] : 0;
-
-                $saleCommission = array_key_exists('cashback_value', $cashback) && !empty($cashback['cashback_value']) ? $cashback['cashback_value'] : $saleCommission;
-
-                // Skip commission group in case of no sale commission
-                if (empty($saleCommission)) continue;
-
-                $storeCashback = StoreCashback::where([
-                    'store_id' => $store->id,
-                    'type' => $commissionType,
-                    'sale_commission' => $saleCommission,
-                ])->first();
-
-                if (empty($storeCashback)) {
-                    StoreCashback::create([
-                        'store_id' => $cashback['rg_store_id'],
-                        'type' => $commissionType,
-                        'cashback_name' => null,
-                        'image' => '#',
-                        'click_url' =>  '#',
-                        'sale_commission' => $saleCommission,
-                        'currency' => null,
-                        'detail' => $cashback['description'],
-                        'network_detail' => null,
-                        'default' => 1
-                    ]);
-                } else {
-                    $storeCashback->update([
-                        'detail' => $cashback['description'],
-                        'network_detail' => null,
-                    ]);
-                }
+            foreach ($storeCashbacks['response']['stores'] as $cashback) {
+                if ($store->advertiser_id != $cashback['rg_store_id']) continue;
+                StoreCashback::updateOrCreate([
+                    'advertiser_id' => $cashback['store_cashback_id'],
+                    'network_id' => $this->network->id,
+                    'store_id' => $store->id
+                ], [
+                    'type' => $cashback['cashback_type'],
+                    'cashback_name' => null,
+                    'image' => '#',
+                    'click_url' =>  '#',
+                    'sale_commission' => $cashback['cashback_value'],
+                    'currency' => null,
+                    'detail' => $cashback['description'],
+                    'network_detail' => null,
+                    'default' => 1
+                ]);
             }
         }
     }

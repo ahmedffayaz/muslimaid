@@ -59,7 +59,7 @@ class RevGlueImporter implements ShouldQueue
         curl_setopt(
             $curl,
             CURLOPT_URL,
-            "https://www.revglue.com/partner/cashback_stores/MTA3Mw==/json"
+            "https://www.revglue.com/partner/cashback_stores/" . $this->siteSettings['revglue_api_key'] . "/json"
         );
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
@@ -80,7 +80,7 @@ class RevGlueImporter implements ShouldQueue
         $stores = json_decode($curlResponse, true);
 
         $dbStores = Store::whereNetworkId($this->network->id)
-            ->whereIn('advertiser_id', array_column($stores, 'id'))
+            ->whereIn('advertiser_id', array_column($stores['response']['stores'], 'rg_store_id'))
             ->pluck('advertiser_id')
             ->toArray();
 
@@ -97,21 +97,20 @@ class RevGlueImporter implements ShouldQueue
                 if (!in_array($store['rg_store_id'], $dbStores)) {
 
                     $newStores[] = [
-                        'id' => $store['rg_store_id'],
                         'network_id' => $this->network->id,
                         'advertiser_id' => $store['rg_store_id'],
                         'name' => $store['store_title'],
                         'description' => $store['store_description'],
                         'slug' => Str::slug($store['store_title']),
                         'tracking_url' => $store['website_url'],
-                        'store_url' => null,
+                        'store_url' => $store['website_url'],
                         'status' => $store['status'],
                         'status_description' => null,
                         'network_status' => null,
                     ];
 
                     $newStoresLogos[] = [
-                        'store_id' => $store['rg_store_id'],
+                        'store_id' => $nextPk + $key,
                         'title' => 'logo',
                         'image' => empty($store['image_url']) ? (mt_rand(1, 20) . '.png') : $store['image_url'],
                         'image_type' => 'store_logo',
@@ -120,7 +119,7 @@ class RevGlueImporter implements ShouldQueue
                     ];
 
                     $newStoresBanners[] = [
-                        'store_id' => $store['rg_store_id'],
+                        'store_id' => $nextPk + $key,
                         'title' => 'Cover',
                         'image' => empty($store['store_banner_large']) ? (mt_rand(1, 20) . '.png') : $store['store_banner_large'],
                         'image_type' => 'store_logo',
@@ -168,7 +167,7 @@ class RevGlueImporter implements ShouldQueue
         $storesChunks = Store::where('network_id', $this->network->id)->orderBy('id', 'DESC')->get()->chunk(15);
 
         foreach ($storesChunks as $key => $storesChunk) {
-            RevGlueStoreCashbacksImporter::dispatch($storesChunk)->delay(now()->addMinutes($key + 1));
+            RevGlueStoreCashbacksImporter::dispatch($storesChunk);
         }
     }
 }
