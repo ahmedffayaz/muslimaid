@@ -102,7 +102,8 @@ class RevGlueImporter implements ShouldQueue
                         'name' => $store['store_title'],
                         'description' => $store['store_description'],
                         'slug' => Str::slug($store['store_title']),
-                        'tracking_url' => $store['website_url'],
+                        'tracking_url' => $store['deeplink'],
+                        'deeplink_url' => $store['deeplink'],
                         'store_url' => $store['website_url'],
                         'status' => $store['status'],
                         'status_description' => null,
@@ -148,7 +149,14 @@ class RevGlueImporter implements ShouldQueue
             }
         }
 
-        Store::insert($newStores);
+        foreach ($newStores as $newStore) {
+            // Removing / from URL
+            $newStore['tracking_url'] = rtrim($newStore['tracking_url'], '/');
+            $newStore['deeplink_url'] = rtrim($newStore['deeplink_url'], '/');
+
+            Store::create($newStore);
+        }
+
         StoreImage::insert($newStoresLogos);
         StoreImage::insert($newStoresBanners);
         DB::table('category_store')->insert($newStoreCategories);
