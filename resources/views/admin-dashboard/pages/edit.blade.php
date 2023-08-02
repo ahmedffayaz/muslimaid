@@ -78,11 +78,11 @@
                                                     <div class="form-group">
                                                         <div class="preview-wrapper">
                                                             @if ($page->banner_image)
-                                                                <img id="banner_image-preview" src="{{ asset($page->banner_image) }}" style="max-height: 60px; max-width: 60px;"
+                                                                <img id="banner_image-preview" src="{{ asset($page->banner_image) }}" style="max-height: 200px; max-width: 200px;"
                                                                     alt="">
                                                             @else
                                                                 <img id="banner_image-preview" src="" alt="logo" class="d-none"
-                                                                    style="max-height: 60px; max-width: 60px;" />
+                                                                    style="max-height: 200px; max-width: 200px;" />
                                                             @endif
                                                         </div>
                                                     </div>
