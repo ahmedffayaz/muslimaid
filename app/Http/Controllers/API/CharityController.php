@@ -22,7 +22,7 @@ class CharityController extends Controller
                 $query->whereHas('tags', function ($query) use ($request) {
                     $query->where('title', $request->tag);
                 });
-            })->latest()->paginate(20)->appends(request()->input());
+            })->orderBy('title', 'asc')->latest()->paginate(20)->appends(request()->input());
             $charityData = CharityResource::collection($charities);
 
             $metaData = [
