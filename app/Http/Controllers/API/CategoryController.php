@@ -21,7 +21,6 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         try {
-           
             $page = Page::where('slug', 'categories')->whereType('system')->pluck('banner_image')->firstOrFail();
             $categories = Category::when($request->has('parent_id'), function ($query) use ($request) {
                 $query->where('id', $request->input('parent_id'));
@@ -32,6 +31,8 @@ class CategoryController extends Controller
             ->withCount('stores')
             ->where('parent_id', 0)
             ->where('name', '!=', 'more') // Exclude the category with the name 'more'
+            ->where('visibility', 'visible')
+            ->where('status', '1')
             ->orderBy('name', 'asc')
             ->paginate(20)
             ->appends(request()->input());
