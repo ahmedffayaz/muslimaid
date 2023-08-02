@@ -85,7 +85,7 @@
                                                     <div class="form-group">
                                                         <div class="preview-wrapper">
                                                             <img id="banner_image-preview" src="" alt="logo" class="d-none"
-                                                                style="max-height: 60px; max-width: 60px;" />
+                                                                style="max-height: 200px; max-width: 200px;" />
                                                         </div>
                                                     </div>
                                                 </div>

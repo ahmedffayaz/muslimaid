@@ -730,11 +730,11 @@ function checkStaticpageRule($url)
         foreach ($route_names as $model) {
             $record = $model::where('slug', $slug);
             if ($slug == '/' && $model == '\App\Models\Page') {
-                $record = $model::where('slug', $slug);
+                $record = $model;
                 if (empty(auth()->user())) {
-                    $record->where('title', 'Before Login');
+                    $record = $record::where('title', 'Home Page Before Login');
                 } else {
-                    $record->where('title', 'After Login');
+                    $record = $record::where('title', 'Home Page After Login');
                 }
             }
             $record = $record->first();
