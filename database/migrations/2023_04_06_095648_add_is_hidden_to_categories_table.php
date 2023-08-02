@@ -14,7 +14,7 @@ class AddIsHiddenToCategoriesTable extends Migration
     public function up()
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->enum('visibility', ['hidden', 'more'])->after('status')->nullable();
+            $table->enum('visibility', ['visible','hidden', 'more'])->after('status')->nullable();
         });
     }
 
