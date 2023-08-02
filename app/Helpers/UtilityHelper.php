@@ -699,7 +699,7 @@ function isGoogleEnabled()
     }
 }
 
-function checkStaticpageRule($url)
+function checkSEOpageRule($url)
 {
     $slug = request()->route('slug');
     if (!isset($slug)) {
