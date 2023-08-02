@@ -102,8 +102,7 @@ class RevGlueImporter implements ShouldQueue
                         'name' => $store['store_title'],
                         'description' => $store['store_description'],
                         'slug' => Str::slug($store['store_title']),
-                        'tracking_url' => $store['deeplink'],
-                        'deeplink_url' => $store['deeplink'],
+                        'tracking_url' => rtrim($store['deeplink'], '/'),
                         'store_url' => $store['website_url'],
                         'status' => $store['status'],
                         'status_description' => null,
@@ -136,7 +135,7 @@ class RevGlueImporter implements ShouldQueue
                         if ($newStoreCategoriesId) {
                             foreach ($newStoreCategoriesId as $newStoreCategoryId) {
                                 $newStoreCategories[] = [
-                                    'store_id' => $store['rg_store_id'],
+                                    'store_id' => $nextPk + $key,
                                     'category_id' => $newStoreCategoryId,
                                 ];
                             }
@@ -150,10 +149,9 @@ class RevGlueImporter implements ShouldQueue
         }
 
         foreach ($newStores as $newStore) {
-            // Removing / from URL
-            $newStore['tracking_url'] = rtrim($newStore['tracking_url'], '/');
-            $newStore['deeplink_url'] = rtrim($newStore['deeplink_url'], '/');
-
+            $slug = Str::slug($newStore['slug']);
+            $lastId = Store::orderBy('id', 'desc')->where('slug', $slug)->pluck('id')->first();
+            $newStore['slug'] = isset($lastId) ? $newStore['slug'] . '-' . ($lastId + 1) : $newStore['slug'];
             Store::create($newStore);
         }
 
