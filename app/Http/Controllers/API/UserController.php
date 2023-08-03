@@ -21,6 +21,7 @@ use App\Http\Resources\ReferralResource;
 use App\Http\Resources\Home\UserResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserCashbackResource;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
@@ -197,12 +198,18 @@ class UserController extends Controller
     public function clicks(Request $request)
     {
         try {
-            $clicks = ExitClick::where('user_id', Auth::user()->id);
+            $clicks = ExitClick::where('user_id', Auth::user()->id)->whereHas('store');
 
             if (isset($request->store_id)) {
-                $clicks->whereHas('store', function ($query) use ($request) {
-                    $query->where('id', $request->store_id);
-                });
+                $clicks = ExitClick::where('user_id', Auth::user()->id);
+                if($request->store_id != 'all'){
+                    $clicks->whereHas('store', function ($query) use ($request) {
+                        $query->where('id', $request->store_id);
+                    });
+                }
+                if($request->store_id == 'all'){
+                    $clicks->whereHas('store');
+                }
             }
             if (isset($request->date_from) && isset($request->date_to)) {
                 $from = date('Y-m-d', strtotime($request->date_from));
