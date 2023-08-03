@@ -112,7 +112,7 @@ class RevGlueImporter implements ShouldQueue
                     $newStoresLogos[] = [
                         'store_id' => $nextPk + $key,
                         'title' => 'logo',
-                        'image' => empty($store['image_url']) ? (mt_rand(1, 20) . '.png') : $store['image_url'],
+                        'image' => empty($store['store_icon_large']) ? (mt_rand(1, 20) . '.png') : $store['store_icon_large'],
                         'image_type' => 'store_logo',
                         'is_uploaded' => '',
                         'is_fake' => empty($store['image_url']) ? 1 : 0
