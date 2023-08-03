@@ -185,7 +185,7 @@ class CategoryController extends Controller
                     $query->whereHas('categories', function ($query) use ($categoryCuisine) {
                         $query->whereIn('name', $categoryCuisine);
                     });
-                })->paginate(20)->appends(request()->input());
+                })->orderBy('name', 'asc')->paginate(20)->appends(request()->input());
 
 
             $cuisine = Category::where('id', '158')->with(['childs' => function ($query) {
