@@ -151,7 +151,7 @@ class PaymentController extends Controller
             }
             $cashout_status = $user->cashouts()->pluck('status')->all();
             $balance_old = $user->availableBalance(3);
-            $balance = ($balance_old - $request->amount);
+            $balance = $balance_old - $request->amount;
             $minimumCashoutAmount = getMinimumCashoutAmount();
             if ($balance_old < $min) {
                 $data = [
@@ -200,7 +200,8 @@ class PaymentController extends Controller
                 $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
 
                 $cashback->statusHistory()->create([
-                    'cashback_status_id' => $cashback->status
+                    'cashback_status_id' => $cashback->status,
+                    'user_cashback_id' => $cashback->id
                 ]);
             }
 
