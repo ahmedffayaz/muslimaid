@@ -481,7 +481,7 @@ class UserController extends Controller
     }
     public function userBankDetails(Request $request)
     {
-        //try {
+        try {
             $validator = Validator::make($request->all(), [
                 'payment_method' => 'required',
                 'paypal_email' => $request->input('payment_method') === 'paypal' ? 'required' : '',
@@ -507,14 +507,14 @@ class UserController extends Controller
                 'data' => new PaymentInfoResource($payment),
             ];
             return response()->json($response, 200);
-        //} catch (\Exception $e) {
+        } catch (\Exception $e) {
             $data = [
                 'status' => 500,
                 'message' => 'Something went wrong, try again.',
                 'data' => []
             ];
             return response()->json($data, 500);
-        //}
+        }
     }
     // public function accountWithdraw(Request $request){
     //     try {
