@@ -2,18 +2,20 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Controllers\Controller;
-use App\Http\Resources\Home\UserResource;
-use App\Jobs\SendOTPEmail;
-use App\Models\Bonus;
+use Exception;
 use App\Models\User;
+use App\Models\Bonus;
+use App\Traits\UserBonus;
+use App\Jobs\SendOTPEmail;
+use App\Models\UserDevice;
 use App\Traits\ApiResponser;
 use App\Traits\WelcomeEmail;
-use Exception;
-use App\Traits\UserBonus;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Resources\Home\UserResource;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -146,6 +148,15 @@ class AuthController extends Controller
                     'data' => []
                 ];
                 return response()->json($response, 200);
+            }
+
+            if($request->fcmtoken != null){
+                DB::beginTransaction();
+                auth()->user()->devices()->updateOrCreate([
+                    'fcm_token' => $request->fcmtoken,
+                    'type' => UserDevice::TYPE_API
+                ]);
+                DB::commit();
             }
 
             $user = new UserResource(User::where('email', $request->email)->first());

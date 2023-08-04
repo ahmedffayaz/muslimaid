@@ -9,9 +9,11 @@ class UserDevice extends Model
 {
     use HasFactory;
     const TYPE_WEB = 'web';
+    const TYPE_API = 'api';
     protected $fillable = [
         'user_id',
         'fcm_token',
+        'type'
     ];
     public function user()
     {
