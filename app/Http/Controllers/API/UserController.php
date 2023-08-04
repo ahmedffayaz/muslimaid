@@ -19,6 +19,7 @@ use App\Http\Resources\CashoutResource;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ReferralResource;
 use App\Http\Resources\Home\UserResource;
+use App\Http\Resources\PaymentInfoResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserCashbackResource;
 use Illuminate\Support\Facades\Log;
@@ -480,15 +481,13 @@ class UserController extends Controller
     }
     public function userBankDetails(Request $request)
     {
-        try {
+        //try {
             $validator = Validator::make($request->all(), [
                 'payment_method' => 'required',
                 'paypal_email' => $request->input('payment_method') === 'paypal' ? 'required' : '',
                 'account_name' => $request->input('payment_method') === 'bank' ? 'required' : '',
-                'bank_title' => $request->input('payment_method') === 'bank' ? 'required' : '',
                 'account_number' => $request->input('payment_method') === 'bank' ? 'required' : '',
                 'bank_sort_code' => $request->input('payment_method') === 'bank' ? 'required' : '',
-                'bic' => $request->input('payment_method') === 'bank' ? 'required' : '',
             ]);
             if ($validator->fails()) {
                 $data = [
@@ -505,17 +504,17 @@ class UserController extends Controller
             $response = [
                 'status' => 200,
                 'message' => 'Successful',
-                'data' => $payment,
+                'data' => new PaymentInfoResource($payment),
             ];
             return response()->json($response, 200);
-        } catch (\Exception $e) {
+        //} catch (\Exception $e) {
             $data = [
                 'status' => 500,
                 'message' => 'Something went wrong, try again.',
                 'data' => []
             ];
             return response()->json($data, 500);
-        }
+        //}
     }
     // public function accountWithdraw(Request $request){
     //     try {
