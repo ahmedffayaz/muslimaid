@@ -149,11 +149,11 @@ class PaymentController extends Controller
             } else {
                 $min = 2;
             }
-            $cashout_status = $user->cashouts()->pluck('status')->all();
-            $balance_old = $user->availableBalance(3);
-            $balance = ($balance_old - $request->amount);
+            $cashoutStatus = $user->cashouts()->pluck('status')->all();
+            $balanceOld = $user->availableBalance(3);
+            $balance = $balanceOld - $request->amount;
             $minimumCashoutAmount = getMinimumCashoutAmount();
-            if ($balance_old < $min) {
+            if ($balanceOld < $min) {
                 $data = [
                     'status' => 406,
                     'message' => "You have insufficient balance for withdrawl. You need to have at least $min in your balance for withdrawal.",
@@ -176,7 +176,7 @@ class PaymentController extends Controller
                 return response()->json($data, 406);
             }
 
-            if ($balance_old < $minimumCashoutAmount || (in_array('pending', $cashout_status) || in_array('processing donation', $cashout_status))) {
+            if ($balanceOld < $minimumCashoutAmount || (in_array('pending', $cashoutStatus) || in_array('processing donation', $cashoutStatus))) {
                 $data = [
                     'status' => 406,
                     'message' => 'You are not eligible to withdraw at the moment.',
@@ -200,7 +200,8 @@ class PaymentController extends Controller
                 $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
 
                 $cashback->statusHistory()->create([
-                    'cashback_status_id' => $cashback->status
+                    'cashback_status_id' => $cashback->status,
+                    'user_cashback_id' => $cashback->id
                 ]);
             }
 
