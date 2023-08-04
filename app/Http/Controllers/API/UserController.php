@@ -504,7 +504,7 @@ class UserController extends Controller
             $response = [
                 'status' => 200,
                 'message' => 'Successful',
-                'data' => new PaymentInfoResource($payment),
+                'data' => $payment,
             ];
             return response()->json($response, 200);
         } catch (\Exception $e) {
