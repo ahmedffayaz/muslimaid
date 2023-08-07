@@ -220,7 +220,7 @@ class PaymentController extends Controller
 
             $this->sendEmail($cashout);
             $this->sendNotification($request->payment_method);
-            
+
             $data = [
                 'status' => 200,
                 'message' => "We're processing your withdrawal. Please allow 4 working days for " . $request->amount  . " to reach your " . $request->payment_method . " account.",
@@ -272,7 +272,7 @@ class PaymentController extends Controller
         }
     }
 
-    public function sendEmail(Cashout $cashout){
+    function sendEmail(Cashout $cashout){
         $userEmailTemplateKey = 'user_new_cashout_request';
         $adminEmailTemplateKey = 'admin_new_cashout_request';
         $filterMessageVariables = ['{{AMOUNT}}', '{{METHOD}}'];
@@ -287,7 +287,7 @@ class PaymentController extends Controller
         SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
     }
 
-    public function sendNotification($payment_method){
+    function sendNotification($payment_method){
         $title = 'Cashout Request Completion';
         $message = 'Your cashout request has been completed against ' . $payment_method;
         $url = url('/api/user/cashouts');
