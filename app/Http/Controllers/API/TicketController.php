@@ -10,6 +10,7 @@ use Illuminate\Support\Str;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendNotification;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -90,6 +91,12 @@ class TicketController extends Controller
             $ticket->ticket_type = 'claim';
             $ticket->status = 'open';
             $ticket->save();
+            $title = 'Ticket Created';
+            $message = 'Your ticket is created';
+            $url = url('/api/user/tickets');
+            $deviceToken = optional(auth()->user()->devices()->whereType('api')->first())->fcm_token;
+            $deviceToken != null? dispatch(new SendNotification($title, $message, $deviceToken, $url)) : '';
+            sendEmailNotification($ticket);
             if ($claimType == 'incorrect amount' || $claimType == 'declined cashback') {
                 return response()->json([
                     'status' => 200,

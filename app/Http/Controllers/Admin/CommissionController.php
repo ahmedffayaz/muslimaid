@@ -129,7 +129,7 @@ class CommissionController extends Controller
             $title = 'Cashback request completion';
             $message = 'Your cashback is created with ' . $click->store->name . 'Store';
             $url = url('account/cashback');
-            $deviceToken = optional(auth()->user()->devices()->first())->fcm_token;
+            $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
 
             $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken,$url)) : '';
             if ($request->ajax()) {

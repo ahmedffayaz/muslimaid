@@ -164,7 +164,7 @@ class PaymentController extends Controller
         $title = 'Cashout Request Completion';
         $message = 'Your cashout request has been completed against ' . $request->payment_method;
         $url = url('account/withdraw');
-        $deviceToken = optional(auth()->user()->devices()->first())->fcm_token;
+        $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
 
         $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url)) : '';
         flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $balance . " to reach your " . $request->payment_method . " account.");
@@ -249,7 +249,7 @@ class PaymentController extends Controller
         SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
         $title = 'Cashout Request Completion';
         $message = 'Your cashout request has been completed against ' . $request->payment_method;
-        $deviceToken = optional(auth()->user()->devices()->first())->fcm_token;
+        $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
         $url = url('account/withdraw');
 
         $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url)) : '';

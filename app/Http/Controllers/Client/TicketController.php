@@ -82,12 +82,12 @@ class TicketController extends Controller
             'message' => $request->input('product'),
 
         ]);
-        $this->sendEmailNotification($ticket);
+        sendEmailNotification($ticket);
 
         $title = 'Ticket Created';
         $message = 'Your ticket is created';
         $url = url('account/tickets');
-        $deviceToken = optional(auth()->user()->devices()->first())->fcm_token;
+        $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
 
         $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url)) : '';
         flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
@@ -205,24 +205,5 @@ class TicketController extends Controller
             return redirect()->route('account.tickets.step2')
                 ->withInput();
         }
-    }
-
-    public function sendEmailNotification(Ticket $ticket)
-    {
-        $userEmailTemplateKey = 'user_new_ticket';
-        $adminEmailTemplateKey = 'admin_new_ticket';
-        $filterMessageVariables = ['{{TICKET_ID}}', '{{TICKETTYPE}}'];
-        $requestFilteredMessage = [$ticket->ticket_id, $ticket->claim_type];
-
-        $subject = ['subject' => null];
-        $data = [
-            'name' => $ticket->user->first_name . ' ' . $ticket->user->last_name,
-            'email' => $ticket->user->email,
-            'message' => $ticket->message,
-        ];
-        $data = array_merge($data, $subject);
-
-        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
-        SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
     }
 }

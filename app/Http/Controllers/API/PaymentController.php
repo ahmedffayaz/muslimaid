@@ -7,6 +7,9 @@ use App\Models\CharityType;
 use App\Models\UserCashback;
 use App\Traits\ApiResponser;
 use Illuminate\Http\Request;
+use App\Jobs\SendEmailToUser;
+use App\Jobs\SendEmailToAdmin;
+use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
 use Illuminate\Support\Facades\Auth;
@@ -119,6 +122,9 @@ class PaymentController extends Controller
                     'cashout_id' => $cashout->id
                 ]);
             }
+            $this->sendEmail($cashout);
+            $this->sendNotification($request->payment_method);
+            
             $data = [
                 'status' => 200,
                 'message' => "We're processing your withdrawal. Please allow 4 working days for " . $balance . " to reach your " . $request->payment_method . " account.",
@@ -211,6 +217,10 @@ class PaymentController extends Controller
                     'cashout_id' => $cashout->id
                 ]);
             }
+
+            $this->sendEmail($cashout);
+            $this->sendNotification($request->payment_method);
+
             $data = [
                 'status' => 200,
                 'message' => "We're processing your withdrawal. Please allow 4 working days for " . $request->amount  . " to reach your " . $request->payment_method . " account.",
@@ -260,5 +270,28 @@ class PaymentController extends Controller
             ];
             return response()->json($data, 500);
         }
+    }
+
+    function sendEmail(Cashout $cashout){
+        $userEmailTemplateKey = 'user_new_cashout_request';
+        $adminEmailTemplateKey = 'admin_new_cashout_request';
+        $filterMessageVariables = ['{{AMOUNT}}', '{{METHOD}}'];
+        $requestFilteredMessage = [$cashout->amount, $cashout->payment_method];
+        $data = [
+            'name' => $cashout->user->first_name . ' ' . $cashout->user->last_name,
+            'email' => $cashout->user->email,
+            'subject' => null,
+            'message' => null
+        ];
+        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+        SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+    }
+
+    function sendNotification($payment_method){
+        $title = 'Cashout Request Completion';
+        $message = 'Your cashout request has been completed against ' . $payment_method;
+        $url = url('/api/user/cashouts');
+        $deviceToken = optional(auth()->user()->devices()->whereType('api')->first())->fcm_token;
+        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url)) : '';
     }
 }
