@@ -150,7 +150,7 @@ class AuthController extends Controller
                 return response()->json($response, 200);
             }
 
-            if($request->fcmtoken != null){
+            if($request->has('fcmtoken')){
                 DB::beginTransaction();
                 auth()->user()->devices()->updateOrCreate([
                     'fcm_token' => $request->fcmtoken,

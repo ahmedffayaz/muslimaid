@@ -17,7 +17,10 @@ use App\Models\SiteSetting;
 use App\Models\StoreReview;
 use Illuminate\Support\Str;
 use App\Models\StoreSeoData;
+use App\Jobs\SendEmailToUser;
 use App\Models\EmailTemplate;
+use App\Jobs\SendEmailToAdmin;
+use Symfony\Component\Yaml\Yaml;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Event;
@@ -26,7 +29,6 @@ use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\PersonalAccessToken;
 use Stevebauman\Location\Facades\Location;
 use Intervention\Image\ImageManagerStatic as Image;
-use Symfony\Component\Yaml\Yaml;
 
 function getImporterYMLSettings($path )
 {
@@ -1087,4 +1089,23 @@ function retrieveNotification($offset)
 	$take = $offset + 10;
 	$notifications = auth()->user()->notifications()->whereNull('read_at')->latest()->take($take)->get();
 	return $notifications;
+}
+
+function sendEmailNotification(Ticket $ticket)
+{
+    $userEmailTemplateKey = 'user_new_ticket';
+    $adminEmailTemplateKey = 'admin_new_ticket';
+    $filterMessageVariables = ['{{TICKET_ID}}', '{{TICKETTYPE}}'];
+    $requestFilteredMessage = [$ticket->ticket_id, $ticket->claim_type];
+
+    $subject = ['subject' => null];
+    $data = [
+        'name' => $ticket->user->first_name . ' ' . $ticket->user->last_name,
+        'email' => $ticket->user->email,
+        'message' => $ticket->message,
+    ];
+    $data = array_merge($data, $subject);
+
+    SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+    SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
 }

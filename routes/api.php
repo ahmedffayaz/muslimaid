@@ -56,6 +56,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/withdraw', [API\PaymentController::class, 'accountWithdraw']);
     Route::post('/charity_withdraw', [API\PaymentController::class, 'CharityCashout']);
     Route::get('/charity_user_cashbacks_and_types', [API\PaymentController::class, 'charityTypesCashouts']);
+
+    Route::post('/enable_notifications', [API\FirebaseController::class, 'enableNotifications']);
+    Route::get('/disable_notifications', [API\FirebaseController::class, 'disableNotifications']);
 });
 
 Route::apiResource('stores', API\StoreController::class)->only(['index', 'show']);
