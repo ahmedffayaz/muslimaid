@@ -33,7 +33,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->softDeletes();
             $table->enum('provider', ['email', 'google', 'facebook']);
-            $table->string('provider_id')->nullable();
+            $table->text('provider_id')->nullable();
         });
     }
 
