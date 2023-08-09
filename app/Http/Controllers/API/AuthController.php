@@ -200,12 +200,23 @@ class AuthController extends Controller
 
     public function changePassword(Request $request)
     {
-        $rules = array(
-            'old_password' => 'required',
-            'new_password' => 'required|min:8',
-            'confirm_password' => 'required|same:new_password',
-        );
+        $rules = [
+            'old_password' => ['required'],
+            'new_password' => ['required'],
+            'confirm_password' => ['required', 'same:new_password'],
+        ];
+
+        $passwordRules = env('PASSWORD_VALIDATION', '');
+        if(!empty($passwordRules)){
+            $additionalRules = explode('|', $passwordRules);
+            $rules['new_password'] = array_merge($rules['new_password'], $additionalRules);
+            $rules['confirm_password'] = array_merge($rules['new_password'], $additionalRules);
+        }else {
+            $rules['new_password'][] = 'string';
+            $rules['confirm_password'][] = 'string';
+        }
         $validator = Validator::make($request->all(), $rules);
+        
         if ($validator->fails()) {
             $response = [
                 'status' => 406,

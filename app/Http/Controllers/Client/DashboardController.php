@@ -164,9 +164,19 @@ class DashboardController extends Controller
     public function savePassword(Request $request)
     {
         $user = Auth::user();
-        $validator = Validator::make($request->all(), [
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        $rules = [
+            'password' => ['required', 'confirmed']
+        ];
+
+        $passwordRules = env('PASSWORD_VALIDATION', '');
+        if(!empty($passwordRules)){
+            $additionalRules = explode('|', $passwordRules);
+            $rules['password'] = array_merge($rules['password'], $additionalRules);
+        }else {
+            $rules['password'][] = 'string';
+        }
+
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             flash()->error($validator->errors()->first());
