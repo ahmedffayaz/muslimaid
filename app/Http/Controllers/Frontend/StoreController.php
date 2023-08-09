@@ -64,9 +64,9 @@ class StoreController extends Controller
                 $allStores = $allStores->orderBy($orderByArr[0], $orderByArr[1])->paginate($request->input('perPage'));
             }
         } elseif (isset($letter)) {
-            $allStores = $allStores->where('name', 'like', $letter . '%')->paginate($request->input('perPage'));
+            $allStores = $allStores->where('name', 'like', $letter . '%')->orderBy('name', 'asc')->paginate($request->input('perPage'));
         } else {
-            $allStores = $allStores->latest()->paginate($request->input('perPage'));
+            $allStores = $allStores->orderBy('name', 'asc')->paginate($request->input('perPage'));
         }
         $viewType = isset($request->viewType) ? $request->viewType : 'grid-view';
         return view('frontend.stores.stores-view', compact('allStores', 'letter', 'viewType'));
