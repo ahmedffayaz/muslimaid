@@ -223,7 +223,7 @@ function getFeaturesCategories($featureTag)
     })->where(function ($query) {
         $query->where('visibility', '!=', 'hidden')
             ->orWhereNull('visibility');
-    })->where('parent_id', 0)->whereStatus('1')->latest()->get();
+    })->whereStatus('1')->latest()->get();
     return $categories;
 }
 
