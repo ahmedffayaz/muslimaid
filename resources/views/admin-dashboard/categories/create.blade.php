@@ -218,7 +218,7 @@
                 </div>
             </div>
         </div>
-        @if ($isEdit && $category->parent_id === 0)
+        @if ($isEdit)
             <div class="col-md-12">
                 <label class="form-label" for="default-06">Tags</label>
                 <div class="form-control-wrap ">

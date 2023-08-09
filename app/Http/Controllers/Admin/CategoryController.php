@@ -257,13 +257,11 @@ class CategoryController extends Controller
                 'meta_title' => $request->input('meta_title')
 
             ]);
-            if ($category->parent_id == 0) {
-                if ($request->has('tags')) {
-                    $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
-                    if ($tags->count() > 0) $category->tags()->sync($tags);
-                } else {
-                    $category->tags()->detach();
-                }
+            if ($request->has('tags')) {
+                $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
+                if ($tags->count() > 0) $category->tags()->sync($tags);
+            } else {
+                $category->tags()->detach();
             }
             if ($request->input('logo_type') == 'upload') {
                 if ($request->has('logo_upload')) {
