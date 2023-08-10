@@ -201,7 +201,8 @@ class PaymentController extends Controller
 
         $validator = Validator::make($request->all(), [
             'charity_types_id' => 'required',
-            'amount' => 'required',
+            'id' => 'required',
+
         ]);
 
         if ($validator->fails()) {
@@ -210,21 +211,32 @@ class PaymentController extends Controller
                 ->withInput();
         }
 
+        $amount = 0;
+        //To decrypt and fetch the cashback amounts
+        foreach($request->id as $encryptedId){
+            $decryptedId = decrypt($encryptedId);
+            $amount = $amount + UserCashback::where('id', $decryptedId)->first()->amount;
+        }
+
         $cashout = Cashout::create([
             'user_id' => $user->id,
             'charity_types_id' => $request->charity_types_id,
             'cashout_type' => $request->payment_method,
-            'amount' => $request->amount,
+            'amount' => $amount,
             'new_cashout' => '1',
             'payment_method' => $request->payment_method,
             'status' => 'processing donation'
         ]);
 
-        $cashback = $user->cashbacks()->where('id', $request->id)->first();
-        $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
-        $cashback->statusHistory()->create([
-            'cashback_status_id' => $cashback->status
-        ]);
+        foreach($request->id as $encryptedId){
+            $decryptedId = decrypt($encryptedId);
+            $cashback = $user->cashbacks()->where('id', $decryptedId)->first();
+            $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
+            $cashback->statusHistory()->create([
+                'cashback_status_id' => $cashback->status,
+                'user_cashback_id' => $cashback->id
+            ]);
+        }
 
         if ($user->bonus && $user->bonus->status == 'unpaid') {
             $user->bonus->update([
