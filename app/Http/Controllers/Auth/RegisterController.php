@@ -61,8 +61,16 @@ class RegisterController extends Controller
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'confirmed'],
         ];
+
+        $passwordRules = env('PASSWORD_VALIDATION', '');
+        if(!empty($passwordRules)){
+            $additionalRules = explode('|', $passwordRules);
+            $rules['password'] = array_merge($rules['password'], $additionalRules);
+        }else {
+            $rules['password'][] = 'string';
+        }
         // Check if reCAPTCHA key is set
         if (!empty(getSpecificSetting('google_recaptcha_site_key')) && !empty(getSpecificSetting('google_recaptcha_secret_key'))) {
             $rules['g-recaptcha-response'] = 'required|captcha';

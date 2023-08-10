@@ -283,9 +283,19 @@ class UserController extends Controller
 
     public function savePassword(Request $request, User $user)
     {
-        $validator = Validator::make($request->all(), [
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        $rules = [
+            'password' => ['required', 'confirmed']
+        ];
+        
+        $passwordRules = env('PASSWORD_VALIDATION', '');
+        if(!empty($passwordRules)){
+            $additionalRules = explode('|', $passwordRules);
+            $rules['password'] = array_merge($rules['password'], $additionalRules);
+        }else {
+            $rules['password'][] = 'string';
+        }
+
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             if (!$request->ajax()) {
