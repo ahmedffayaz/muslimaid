@@ -26,7 +26,7 @@ class CategoryController extends Controller
                 $query->where('id', $request->input('parent_id'));
             })
             ->with(['childs' => function ($query) {
-                $query->orderBy('name', 'asc')->withCount('stores');
+                $query->where('status', '1')->orderBy('sort', 'asc')->withCount('stores');
             }])
             ->withCount('stores')
             ->where('parent_id', 0)
