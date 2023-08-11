@@ -26,7 +26,12 @@ class StoreController extends Controller
 
             $stores = Store::with(['images', 'logo', 'storeAddress'])
                 ->when($request->has('letter'), function ($query) use ($request) {
+                    if($request->letter != '0-9'){
                     $query->where('name', 'like', $request->input('letter') . '%');
+                    } else {
+                        $paramLetter = '0-9';
+                        $query->where('name', 'REGEXP', "^[{$paramLetter}]");
+                    }
                 })->when($request->orderBy == 'latest', function ($query) {
                     $query->latest();
                 })->when($request->orderBy == 'popularity', function ($query) {
