@@ -64,7 +64,12 @@ class StoreController extends Controller
                 $allStores = $allStores->orderBy($orderByArr[0], $orderByArr[1])->paginate($request->input('perPage'));
             }
         } elseif (isset($letter)) {
-            $allStores = $allStores->where('name', 'like', $letter . '%')->orderBy('name', 'asc')->paginate($request->input('perPage'));
+            if($letter != '0-9') {
+                $allStores = $allStores->where('name', 'like', $letter . '%')->orderBy('name', 'asc')->paginate($request->input('perPage'));
+            } else {
+                $paramLetter = '0-9';
+                $allStores = $allStores->where('name', 'REGEXP', "^[{$paramLetter}]")->orderBy('name', 'asc')->paginate($request->input('perPage'));;
+            }
         } else {
             $allStores = $allStores->orderBy('name', 'asc')->paginate($request->input('perPage'));
         }
