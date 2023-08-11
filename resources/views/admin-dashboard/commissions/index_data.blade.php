@@ -8,9 +8,7 @@
         <div class="nk-tb-col  text-center"><span class="sub-text">Exit Click Id</span></div>
         <div class="nk-tb-col  text-center"><span class="sub-text">Event Time</span></div>
         <div class="nk-tb-col  text-right"><span class="sub-text">Status</span></div>
-        <div class="nk-tb-col nk-tb-col-tools text-right">
-            <span class="sub-text">Action</span>
-        </div>
+        <div class="nk-tb-col nk-tb-col-tools text-right"><span class="sub-text" style="min-width: 40px">Action</span></div>
     </div><!-- .nk-tb-item -->
     @foreach ($coms as $commission)
         <div class="nk-tb-item">
