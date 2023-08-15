@@ -6,6 +6,7 @@ use App\Models\TicketReply;
 use Illuminate\Http\Request;
 use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
+use App\Models\Ticket;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -35,13 +36,15 @@ class RepliesController extends Controller
             'reply_by'=>'admin'
         ]);
 
+        $ticket = Ticket::findOrFail($request->ticket_id);
+
         $reply->ticket->update(['status' => 'pending']);
         $title = 'Admin Replied';
         $message = 'Your  ticket has been replied by Admin';
         $url = url('account/tickets');
-        $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
-
-        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken,$url)) : '';
+        $user = $ticket->user()->get();
+        $deviceToken = optional($ticket->user->devices()->whereType('web')->first())->fcm_token;
+        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
         return back();
     }
 }

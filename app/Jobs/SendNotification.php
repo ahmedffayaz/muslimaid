@@ -24,17 +24,19 @@ class SendNotification implements ShouldQueue
     protected $title;
     protected $message;
     protected $deviceToken;
+    protected $user;
     /**
      * Create a new job instance.
      *
      * @return void
      */
-    public function __construct($title, $message, $deviceToken, $url)
+    public function __construct($title, $message, $deviceToken, $url, $user)
     {
         $this->title = $title;
         $this->message = $message;
         $this->deviceToken = $deviceToken;
         $this->url = $url;
+        $this->user = $user;
     }
 
 
@@ -50,9 +52,7 @@ class SendNotification implements ShouldQueue
         $message = $this->message;
         $deviceToken = $this->deviceToken;
         $url =  $this->url;
-        $admin = User::first();
-        $auth = auth()->user();
-        $userSchema = isset($auth) ? $auth : $admin;
+        $userSchema = $this->user;
 
         $notification = [
             'title' => $title,

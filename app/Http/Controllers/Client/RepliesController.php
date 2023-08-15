@@ -6,6 +6,7 @@ use App\Models\Ticket;
 use App\Models\TicketReply;
 use Illuminate\Http\Request;
 use App\Jobs\SendNotification;
+use App\Models\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -37,11 +38,12 @@ class RepliesController extends Controller
         ]);
         $reply->ticket->update(['status' => 'pending']);
         $title = 'Ticket Replied';
-        $message = 'Your ticket has been replied';
+        $message = 'User replied to the ticket';
         $url = url('account/tickets');
-        $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
+        $user = User::first();
+        $deviceToken = optional($user->devices()->whereType('web')->first())->fcm_token;
 
-        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken,$url)) : '';
+        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
         return back();
     }
 }

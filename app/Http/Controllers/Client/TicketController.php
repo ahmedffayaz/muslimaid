@@ -11,6 +11,7 @@ use App\Jobs\SendEmailToUser;
 use App\Jobs\SendEmailToAdmin;
 use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -83,13 +84,15 @@ class TicketController extends Controller
 
         ]);
         sendEmailNotification($ticket);
-
+        
         $title = 'Ticket Created';
-        $message = 'Your ticket is created';
+        $message = 'A new ticket has been created';
         $url = url('account/tickets');
-        $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
+        $deviceToken = optional(User::first()->devices()->whereType('web')->first())->fcm_token;
+        $user = User::first();
+        
+        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
 
-        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url)) : '';
         flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
         return redirect()->route('account.tickets.index');
     }

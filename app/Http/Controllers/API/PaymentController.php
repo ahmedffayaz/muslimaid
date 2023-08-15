@@ -291,7 +291,8 @@ class PaymentController extends Controller
         $title = 'Cashout Request Completion';
         $message = 'Your cashout request has been completed against ' . $payment_method;
         $url = url('/api/user/cashouts');
+        $user = Auth::user();
         $deviceToken = optional(auth()->user()->devices()->whereType('api')->first())->fcm_token;
-        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url)) : '';
+        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
     }
 }
