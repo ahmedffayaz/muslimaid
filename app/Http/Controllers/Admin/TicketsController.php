@@ -54,17 +54,20 @@ class TicketsController extends Controller
 
     public function closeTicket(Ticket $ticket)
     {
-        $ticket->update(['status'=>'closed',
-        'closing_time'=> Carbon::now(),
-        'closed_by'=>auth()->user()->id]);
+        $ticket->update([
+            'status'=> 'closed',
+            'closing_time'=> Carbon::now(),
+            'closed_by'=> auth()->user()->id
+        ]);
         $title = 'Ticket Closed';
         $message = 'Your ticket has been closed.';
         $url = url('account/tickets');
-        $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
+        $deviceToken = optional($ticket->user->devices()->whereType('web')->first())->fcm_token;
+        $user = $ticket->user()->get();
 
-        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken,$url)) : '';
+        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
         flash()->success('Ticket closed');
-                return redirect()->back();
+        return redirect()->back();
     }
 
     function fetch(Request $request)

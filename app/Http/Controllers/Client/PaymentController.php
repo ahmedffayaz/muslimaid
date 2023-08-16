@@ -166,7 +166,7 @@ class PaymentController extends Controller
         $url = url('account/withdraw');
         $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
 
-        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url)) : '';
+        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
         flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $balance . " to reach your " . $request->payment_method . " account.");
         return redirect()->back();
     }
@@ -264,7 +264,7 @@ class PaymentController extends Controller
         $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
         $url = url('account/withdraw');
 
-        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url)) : '';
+        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
         flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $request->amount . " to reach your " . $request->payment_method . " account.");
         return redirect()->back();
     }

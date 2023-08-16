@@ -127,11 +127,12 @@ class CommissionController extends Controller
                 SendEmail::dispatch($data);
             }
             $title = 'Cashback request completion';
-            $message = 'Your cashback is created with ' . $click->store->name . 'Store';
+            $message = 'Your cashback is created with ' . $click->store->name . ' Store';
             $url = url('account/cashback');
-            $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
+            $deviceToken = optional($click->user->devices()->whereType('web')->first())->fcm_token;
+            $user = $click->user()->get();
 
-            $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken,$url)) : '';
+            $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
             if ($request->ajax()) {
                 return response()->json([
                     'status' => JsonResponse::HTTP_OK,
