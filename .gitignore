@@ -14,3 +14,6 @@ npm-debug.log
 yarn-error.log
 .vscode
 modules.yml
+/.scribe
+/public/vendor/scribe
+/resources/views/scribe
