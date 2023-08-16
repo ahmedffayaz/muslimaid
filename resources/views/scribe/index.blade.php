@@ -224,7 +224,7 @@
                             <li><a href="http://github.com/knuckleswtf/scribe">Documentation powered by Scribe ✍</a></li>
                     </ul>
         <ul class="toc-footer" id="last-updated">
-        <li>Last updated: August 15 2023</li>
+        <li>Last updated: August 16 2023</li>
     </ul>
 </div>
 
@@ -342,11 +342,11 @@ fetch(url, {
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"firstname\": \"iokhqgjocikszihbfituzzlbhoeggpwpxfxjyetrqibusbibgdtqjurjioitinklwugtvdvhxpuhbkuwhjhphjoprymznbzypvomwpqyrqksuohpnscrejprcnbbvectaxxivcbepivvhjguabyzlybcezajplwghammlhvyvnyutksfmojgaenikih\",
-    \"lastname\": \"xvxiwytryyklalkxcjispxaaouvhqexwxdejsoilmennbdkirwygugfkvmpeihhvorpembtkykcdfctnioobnoatqcuittmiwjohpourrwgoghgzzqcpbikilbnwoatmlvyvdkmyhmpypwzrfrwebooumueaugcvwfmmmkouguwlbyf\",
-    \"email\": \"urvotqfsxsjheenxghkgbjudmuxfcsiwrhewdsahualxvempbxbtwddvhxiwjyumwoukwkpzdoulkllyodgoiduqibcpttfivozbmijamrmxgqkltijpvhnmxezaguhmorwubwiljskxrikyqzojrwbmsgqnpcfugenazylfkqazbtniylywvdpbedtqrfaojuxwfjbaath\",
-    \"provider\": \"distinctio\",
-    \"provider_id\": \"deserunt\"
+    \"firstname\": \"rvrhewjtfhysjshbyjnrmolstudibpxmzabvavrdzxjufppptypvhrrzulqymnquixtggeckxkgfurbcpqihrolyohm\",
+    \"lastname\": \"putbjlinsyqwtoonrjaippbxokzpcxdhnbyxneuqjyeqohrsglsktzkfhlubozlbyfiowcjjfzobpnibmxxdydqkzidggbyfzombvzguhblmvskbhnwwwfomhmugetbsmshorfgfgrgshvdbcnmmpqwspnyozogzosshofdnhghfoqrecnwevjlfmdlfqbykmnumprnnysyxkkdyvvedtodluhnycurqn\",
+    \"email\": \"tokqsguidhsyomamnrdngmnaukmbhqrlihlrnnbgbzbfwkldzbbtrxmncoiczsukokrknlnkbhndwtfmubagnmzwdpmbtgwk\",
+    \"provider\": \"totam\",
+    \"provider_id\": \"corporis\"
 }"
 </code></pre></div>
 
@@ -362,11 +362,11 @@ const headers = {
 };
 
 let body = {
-    "firstname": "iokhqgjocikszihbfituzzlbhoeggpwpxfxjyetrqibusbibgdtqjurjioitinklwugtvdvhxpuhbkuwhjhphjoprymznbzypvomwpqyrqksuohpnscrejprcnbbvectaxxivcbepivvhjguabyzlybcezajplwghammlhvyvnyutksfmojgaenikih",
-    "lastname": "xvxiwytryyklalkxcjispxaaouvhqexwxdejsoilmennbdkirwygugfkvmpeihhvorpembtkykcdfctnioobnoatqcuittmiwjohpourrwgoghgzzqcpbikilbnwoatmlvyvdkmyhmpypwzrfrwebooumueaugcvwfmmmkouguwlbyf",
-    "email": "urvotqfsxsjheenxghkgbjudmuxfcsiwrhewdsahualxvempbxbtwddvhxiwjyumwoukwkpzdoulkllyodgoiduqibcpttfivozbmijamrmxgqkltijpvhnmxezaguhmorwubwiljskxrikyqzojrwbmsgqnpcfugenazylfkqazbtniylywvdpbedtqrfaojuxwfjbaath",
-    "provider": "distinctio",
-    "provider_id": "deserunt"
+    "firstname": "rvrhewjtfhysjshbyjnrmolstudibpxmzabvavrdzxjufppptypvhrrzulqymnquixtggeckxkgfurbcpqihrolyohm",
+    "lastname": "putbjlinsyqwtoonrjaippbxokzpcxdhnbyxneuqjyeqohrsglsktzkfhlubozlbyfiowcjjfzobpnibmxxdydqkzidggbyfzombvzguhblmvskbhnwwwfomhmugetbsmshorfgfgrgshvdbcnmmpqwspnyozogzosshofdnhghfoqrecnwevjlfmdlfqbykmnumprnnysyxkkdyvvedtodluhnycurqn",
+    "email": "tokqsguidhsyomamnrdngmnaukmbhqrlihlrnnbgbzbfwkldzbbtrxmncoiczsukokrknlnkbhndwtfmubagnmzwdpmbtgwk",
+    "provider": "totam",
+    "provider_id": "corporis"
 };
 
 fetch(url, {
@@ -424,7 +424,7 @@ fetch(url, {
                 <input type="text"
                name="firstname"
                data-endpoint="POSTapi-auth-social"
-               value="iokhqgjocikszihbfituzzlbhoeggpwpxfxjyetrqibusbibgdtqjurjioitinklwugtvdvhxpuhbkuwhjhphjoprymznbzypvomwpqyrqksuohpnscrejprcnbbvectaxxivcbepivvhjguabyzlybcezajplwghammlhvyvnyutksfmojgaenikih"
+               value="rvrhewjtfhysjshbyjnrmolstudibpxmzabvavrdzxjufppptypvhrrzulqymnquixtggeckxkgfurbcpqihrolyohm"
                data-component="body" hidden>
     <br>
 <p>Must not be greater than 255 characters.</p>
@@ -434,7 +434,7 @@ fetch(url, {
                 <input type="text"
                name="lastname"
                data-endpoint="POSTapi-auth-social"
-               value="xvxiwytryyklalkxcjispxaaouvhqexwxdejsoilmennbdkirwygugfkvmpeihhvorpembtkykcdfctnioobnoatqcuittmiwjohpourrwgoghgzzqcpbikilbnwoatmlvyvdkmyhmpypwzrfrwebooumueaugcvwfmmmkouguwlbyf"
+               value="putbjlinsyqwtoonrjaippbxokzpcxdhnbyxneuqjyeqohrsglsktzkfhlubozlbyfiowcjjfzobpnibmxxdydqkzidggbyfzombvzguhblmvskbhnwwwfomhmugetbsmshorfgfgrgshvdbcnmmpqwspnyozogzosshofdnhghfoqrecnwevjlfmdlfqbykmnumprnnysyxkkdyvvedtodluhnycurqn"
                data-component="body" hidden>
     <br>
 <p>Must not be greater than 255 characters.</p>
@@ -444,7 +444,7 @@ fetch(url, {
                 <input type="text"
                name="email"
                data-endpoint="POSTapi-auth-social"
-               value="urvotqfsxsjheenxghkgbjudmuxfcsiwrhewdsahualxvempbxbtwddvhxiwjyumwoukwkpzdoulkllyodgoiduqibcpttfivozbmijamrmxgqkltijpvhnmxezaguhmorwubwiljskxrikyqzojrwbmsgqnpcfugenazylfkqazbtniylywvdpbedtqrfaojuxwfjbaath"
+               value="tokqsguidhsyomamnrdngmnaukmbhqrlihlrnnbgbzbfwkldzbbtrxmncoiczsukokrknlnkbhndwtfmubagnmzwdpmbtgwk"
                data-component="body" hidden>
     <br>
 <p>Must be a valid email address. Must not be greater than 255 characters.</p>
@@ -454,7 +454,7 @@ fetch(url, {
                 <input type="text"
                name="provider"
                data-endpoint="POSTapi-auth-social"
-               value="distinctio"
+               value="totam"
                data-component="body" hidden>
     <br>
 
@@ -464,7 +464,7 @@ fetch(url, {
                 <input type="text"
                name="provider_id"
                data-endpoint="POSTapi-auth-social"
-               value="deserunt"
+               value="corporis"
                data-component="body" hidden>
     <br>
 
@@ -566,7 +566,7 @@ fetch(url, {
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"email\": \"howe.casimir@example.com\"
+    \"email\": \"aurelie.funk@example.net\"
 }"
 </code></pre></div>
 
@@ -582,7 +582,7 @@ const headers = {
 };
 
 let body = {
-    "email": "howe.casimir@example.com"
+    "email": "aurelie.funk@example.net"
 };
 
 fetch(url, {
@@ -640,7 +640,7 @@ fetch(url, {
                 <input type="text"
                name="email"
                data-endpoint="POSTapi-password-email"
-               value="howe.casimir@example.com"
+               value="aurelie.funk@example.net"
                data-component="body" hidden>
     <br>
 <p>Must be a valid email address.</p>
@@ -760,9 +760,9 @@ access-control-allow-origin: *
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"old_password\": \"quia\",
-    \"new_password\": \"quo\",
-    \"confirm_password\": \"nobis\"
+    \"old_password\": \"esse\",
+    \"new_password\": \"officiis\",
+    \"confirm_password\": \"corrupti\"
 }"
 </code></pre></div>
 
@@ -778,9 +778,9 @@ const headers = {
 };
 
 let body = {
-    "old_password": "quia",
-    "new_password": "quo",
-    "confirm_password": "nobis"
+    "old_password": "esse",
+    "new_password": "officiis",
+    "confirm_password": "corrupti"
 };
 
 fetch(url, {
@@ -838,7 +838,7 @@ fetch(url, {
                 <input type="text"
                name="old_password"
                data-endpoint="POSTapi-change_password"
-               value="quia"
+               value="esse"
                data-component="body" hidden>
     <br>
 
@@ -848,7 +848,7 @@ fetch(url, {
                 <input type="text"
                name="new_password"
                data-endpoint="POSTapi-change_password"
-               value="quo"
+               value="officiis"
                data-component="body" hidden>
     <br>
 
@@ -858,7 +858,7 @@ fetch(url, {
                 <input type="text"
                name="confirm_password"
                data-endpoint="POSTapi-change_password"
-               value="nobis"
+               value="corrupti"
                data-component="body" hidden>
     <br>
 <p>The value and <code>new_password</code> must match.</p>
@@ -923,241 +923,241 @@ access-control-allow-origin: *
         &quot;main_banner_image&quot;: &quot;http://127.0.0.1:8000/frontend/images/banners/categories/cashback.png&quot;,
         &quot;stores&quot;: [
             {
-                &quot;id&quot;: 487,
+                &quot;id&quot;: 3684,
+                &quot;title&quot;: &quot;100% PURE&quot;,
+                &quot;url_key&quot;: &quot;100-pure&quot;,
+                &quot;banner_image&quot;: null,
+                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/W6cIx4OrVGysCzEd_PURE160-logo.png&quot;,
+                &quot;description&quot;: &quot;100% PURE is a commitment to producing the purest, healthiest products and educating everyone on why being 100% PURE is so important. We strive to live with compassion, kindness and empathy; to be environmentally sustainable and to improve the lives of 6 billion people and animals.&quot;,
+                &quot;cashback&quot;: &quot;2.70% Cashback&quot;,
+                &quot;is_fav&quot;: false,
+                &quot;lat&quot;: null,
+                &quot;long&quot;: null
+            },
+            {
+                &quot;id&quot;: 4024,
                 &quot;title&quot;: &quot;11 Degrees&quot;,
                 &quot;url_key&quot;: &quot;11-degrees&quot;,
                 &quot;banner_image&quot;: null,
                 &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/thnmsjwMM1LYVa07_11-degree-160x140-logo-logo.png&quot;,
                 &quot;description&quot;: &quot;11 Degrees. Started in 2014, the range consists of urban-ready T-shirts, hoodies, tracksuits, and jackets. Here at 11 Degrees, we use higher quality materials and production techniques because we're all about comfort. For us, comfort is not about being lazy...far from it.&quot;,
-                &quot;cashback&quot;: null,
+                &quot;cashback&quot;: &quot;1.35% Cashback&quot;,
                 &quot;is_fav&quot;: false,
                 &quot;lat&quot;: null,
                 &quot;long&quot;: null
             },
             {
-                &quot;id&quot;: 1872,
+                &quot;id&quot;: 3586,
+                &quot;title&quot;: &quot;12 Storeez&quot;,
+                &quot;url_key&quot;: &quot;12-storeez&quot;,
+                &quot;banner_image&quot;: null,
+                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/vtXz8XjztKmH3m75_12st-logo.png&quot;,
+                &quot;description&quot;: &quot;We celebrate versatile designs, feminine chic and premium-quality materials. We want to save you time and effort, and provide you with a wardrobe you will wear for years, and even decades, to come. We believe in designs that can be easily matched with the rest of your wardrobe.&quot;,
+                &quot;cashback&quot;: &quot;2.70% Cashback&quot;,
+                &quot;is_fav&quot;: false,
+                &quot;lat&quot;: null,
+                &quot;long&quot;: null
+            },
+            {
+                &quot;id&quot;: 2100,
                 &quot;title&quot;: &quot;121Doc.co.uk&quot;,
                 &quot;url_key&quot;: &quot;121doccouk&quot;,
                 &quot;banner_image&quot;: null,
                 &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/NrEBF1KYzyqf4rI1_121-logo.gif&quot;,
                 &quot;description&quot;: &quot;Since 2004, 121Doc have been providing private patients with access to qualified doctors and pharmacies for medical conditions such as male impotence, obesity, premature ejaculation, influenza, Genital Herpes, Emergency Contraception, Female Sexual Dysfunction, smoking and male hair loss. 121Doc are an established online clinic based in London, England and provide services to UK and EU patients.&quot;,
-                &quot;cashback&quot;: null,
+                &quot;cashback&quot;: &quot;1.35% Cashback&quot;,
                 &quot;is_fav&quot;: false,
                 &quot;lat&quot;: null,
                 &quot;long&quot;: null
             },
             {
-                &quot;id&quot;: 2424,
+                &quot;id&quot;: 3789,
+                &quot;title&quot;: &quot;123 Casinos&quot;,
+                &quot;url_key&quot;: &quot;123-casinos&quot;,
+                &quot;banner_image&quot;: null,
+                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/1jagDFvDzE30FNZ2_123-casino-160x140-logo-logo.png&quot;,
+                &quot;description&quot;: &quot;Welcome to 123 Casinos, after extensive research our team of experts have scoured the web to bring to you the best free spins offers available to the public. We ensure to have the best free spins offers, updating our databases daily to find the best brands to claim your free spins!&quot;,
+                &quot;cashback&quot;: &quot;&pound;0.45 Cashback&quot;,
+                &quot;is_fav&quot;: false,
+                &quot;lat&quot;: null,
+                &quot;long&quot;: null
+            },
+            {
+                &quot;id&quot;: 1401,
+                &quot;title&quot;: &quot;123 Flowers&quot;,
+                &quot;url_key&quot;: &quot;123-flowers&quot;,
+                &quot;banner_image&quot;: null,
+                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/x8wSAtDUrW7QW17R_123-flow-160-logo.png&quot;,
+                &quot;description&quot;: &quot;We are a leading online retailer that delivers flowers and gifts across the UK with an enviable reputation for excellent service and incredible conversion rate.&quot;,
+                &quot;cashback&quot;: &quot;2.25% Cashback&quot;,
+                &quot;is_fav&quot;: false,
+                &quot;lat&quot;: null,
+                &quot;long&quot;: null
+            },
+            {
+                &quot;id&quot;: 2860,
                 &quot;title&quot;: &quot;123 Ink Cartridges&quot;,
                 &quot;url_key&quot;: &quot;123-ink-cartridges&quot;,
                 &quot;banner_image&quot;: null,
                 &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/VHtP8GsZkGA5ylLT_160-logo.png&quot;,
                 &quot;description&quot;: &quot;123 Ink Cartridges specialists in Epson, Canon and Brother printer inks with 5 star satisfaction, reliability speaking for itself. Our product range includes ink cartridges for every major brand of printer and an extensive range of laser toners, photo papers and original cartridges all 100% guaranteed.&quot;,
-                &quot;cashback&quot;: &quot;4.80% Cashback&quot;,
+                &quot;cashback&quot;: &quot;5.40% Cashback&quot;,
                 &quot;is_fav&quot;: false,
                 &quot;lat&quot;: null,
                 &quot;long&quot;: null
             },
             {
-                &quot;id&quot;: 355,
+                &quot;id&quot;: 3790,
                 &quot;title&quot;: &quot;123Bookies&quot;,
                 &quot;url_key&quot;: &quot;123bookies&quot;,
                 &quot;banner_image&quot;: null,
                 &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/lvaUVvvl2YyuZMcw_123-bookies160x140-logo-logo.png&quot;,
                 &quot;description&quot;: &quot;To feature on 123Bookies, we review each online betting site as thoroughly as possible, making sure we only include the very best bookies. They need to demonstrate to us that they are one of the very best betting sites for UK players. In order to achieve a top rating.&quot;,
-                &quot;cashback&quot;: null,
+                &quot;cashback&quot;: &quot;&pound;0.20 Cashback&quot;,
                 &quot;is_fav&quot;: false,
                 &quot;lat&quot;: null,
                 &quot;long&quot;: null
             },
             {
-                &quot;id&quot;: 1351,
+                &quot;id&quot;: 1287,
                 &quot;title&quot;: &quot;1CBD&quot;,
                 &quot;url_key&quot;: &quot;1cbd&quot;,
                 &quot;banner_image&quot;: null,
                 &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/3dhIHmLm1kuU7rGp_cbd-160-logo.png&quot;,
                 &quot;description&quot;: &quot;Our products provide many legitimate health benefits to people and are now one of the most exciting and high growth products in the UK health sector. We are the next big thing in Health.&quot;,
-                &quot;cashback&quot;: null,
+                &quot;cashback&quot;: &quot;6.75% Cashback&quot;,
                 &quot;is_fav&quot;: false,
                 &quot;lat&quot;: null,
                 &quot;long&quot;: null
             },
             {
-                &quot;id&quot;: 531,
+                &quot;id&quot;: 4105,
                 &quot;title&quot;: &quot;1ClickPrint&quot;,
                 &quot;url_key&quot;: &quot;1clickprint&quot;,
                 &quot;banner_image&quot;: null,
                 &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/KJPCyeFOrHnFp3Bi_1ClickPrint-logo.png&quot;,
                 &quot;description&quot;: &quot;Your memories deserve the very best. We believe that only by taking the time to create your finished print by hand can we make sure that your print arrives as you intended. No corner cutting, no excuses, just craftsmanship.&quot;,
-                &quot;cashback&quot;: null,
+                &quot;cashback&quot;: &quot;9.00% Cashback&quot;,
                 &quot;is_fav&quot;: false,
                 &quot;lat&quot;: null,
                 &quot;long&quot;: null
             },
             {
-                &quot;id&quot;: 1233,
+                &quot;id&quot;: 1685,
+                &quot;title&quot;: &quot;1link Disposal Network&quot;,
+                &quot;url_key&quot;: &quot;1link-disposal-network&quot;,
+                &quot;banner_image&quot;: null,
+                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/kUHQWtgsVibVWQSs_1-logo.png&quot;,
+                &quot;description&quot;: &quot;1link Disposal Network is the most comprehensive online car auction platform in the UK, giving you exclusive access to an extensive range of ex-fleet, leasing and manufacturer vehicles.&quot;,
+                &quot;cashback&quot;: &quot;&pound;1.35 Cashback&quot;,
+                &quot;is_fav&quot;: false,
+                &quot;lat&quot;: null,
+                &quot;long&quot;: null
+            },
+            {
+                &quot;id&quot;: 1090,
                 &quot;title&quot;: &quot;1p Mobile&quot;,
                 &quot;url_key&quot;: &quot;1p-mobile&quot;,
                 &quot;banner_image&quot;: null,
                 &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/H5l5cHcppQynicjS_1PMOBILE160-logo.png&quot;,
                 &quot;description&quot;: &quot;We were formed with the purpose of providing a straightforward mobile tariff that offers great value for money to low and medium phone users. It's our mission to provide low cost calls, texts and data without asking people to commit to lengthy contracts or buy restrictive bundles which can lead to additional charges. With no contract to sign, no credit checks and the option of keeping your number, we are on a quest to save you money by offering the UK's cheapest PAYG mobile tariff.&quot;,
-                &quot;cashback&quot;: null,
+                &quot;cashback&quot;: &quot;31.50% Cashback&quot;,
                 &quot;is_fav&quot;: false,
                 &quot;lat&quot;: null,
                 &quot;long&quot;: null
             },
             {
-                &quot;id&quot;: 641,
+                &quot;id&quot;: 3167,
                 &quot;title&quot;: &quot;1pBroadband&quot;,
                 &quot;url_key&quot;: &quot;1pbroadband&quot;,
                 &quot;banner_image&quot;: null,
                 &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/aplfxS6nim74gvZR_1pBroadband-logo.png&quot;,
                 &quot;description&quot;: &quot;We are a UK company, based in Alton in Hampshire, with over 20 years of experience providing landline, broadband, and mobile services to thousands of satisfied customers. With highly competitive rates which include your landline rental charge and calls from as little as 1p per minute, we offer great value.&quot;,
-                &quot;cashback&quot;: null,
+                &quot;cashback&quot;: &quot;&pound;15.75 Cashback&quot;,
                 &quot;is_fav&quot;: false,
                 &quot;lat&quot;: null,
                 &quot;long&quot;: null
             },
             {
-                &quot;id&quot;: 1870,
+                &quot;id&quot;: 130,
+                &quot;title&quot;: &quot;1st Birthday Gifts&quot;,
+                &quot;url_key&quot;: &quot;1st-birthday-gifts&quot;,
+                &quot;banner_image&quot;: null,
+                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/MlkMyOgiK7X9Zm3A_2nd-logo.png&quot;,
+                &quot;description&quot;: &quot;1st Birthday Gifts is a Personalized Gift Online webstore with over 500 items for sale. We offer embroidered, printed and engraved items for any occasion, whether it's newborn baby or 1st Birthday, wedding or anniversary, baby Shower or Christening.&quot;,
+                &quot;cashback&quot;: &quot;4.50% Cashback&quot;,
+                &quot;is_fav&quot;: false,
+                &quot;lat&quot;: null,
+                &quot;long&quot;: null
+            },
+            {
+                &quot;id&quot;: 2098,
                 &quot;title&quot;: &quot;20Cogs&quot;,
                 &quot;url_key&quot;: &quot;20cogs&quot;,
                 &quot;banner_image&quot;: null,
                 &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/2evXbIeydlIhx7vl_Cog-logo.gif&quot;,
                 &quot;description&quot;: &quot;Make money by completing online tasks &amp; offers. 20Cogs is a great way to earn a little extra cash from the comfort of your own home, on the train to work, in the park walking the dog... or wherever you like!&quot;,
-                &quot;cashback&quot;: null,
+                &quot;cashback&quot;: &quot;&pound;0.50 Cashback&quot;,
                 &quot;is_fav&quot;: false,
                 &quot;lat&quot;: null,
                 &quot;long&quot;: null
             },
             {
-                &quot;id&quot;: 834,
+                &quot;id&quot;: 241,
                 &quot;title&quot;: &quot;20i&quot;,
                 &quot;url_key&quot;: &quot;20i&quot;,
                 &quot;banner_image&quot;: null,
                 &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/nFasNUA4VK0aEqRm_20ii-logo.png&quot;,
                 &quot;description&quot;: &quot;We are 20i, the UK's top rated web hosting company. We deliver premium hosting experiences you can build your reputation on. We&rsquo;re a proudly-independent UK hosting company with a world-beating support team (number one on Trustpilot!).&quot;,
-                &quot;cashback&quot;: null,
+                &quot;cashback&quot;: &quot;&pound;4.50 Cashback&quot;,
                 &quot;is_fav&quot;: false,
                 &quot;lat&quot;: null,
                 &quot;long&quot;: null
             },
             {
-                &quot;id&quot;: 2261,
+                &quot;id&quot;: 3694,
+                &quot;title&quot;: &quot;247 Bargains &quot;,
+                &quot;url_key&quot;: &quot;247-bargains&quot;,
+                &quot;banner_image&quot;: null,
+                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/nQpB6U6OV0RdGzzk_Untitled-160-x-140-247-logo.gif&quot;,
+                &quot;description&quot;: &quot;At 247 Bargains we utilize our bulk buying power across our group to allow us to offer unbeatable deals on awesome toys and collectables. 247 Bargains, the home of amazing savings and incredible bargains. Specializing in homeware, toys and games and collectables.&quot;,
+                &quot;cashback&quot;: &quot;3.60% Cashback&quot;,
+                &quot;is_fav&quot;: false,
+                &quot;lat&quot;: null,
+                &quot;long&quot;: null
+            },
+            {
+                &quot;id&quot;: 2626,
                 &quot;title&quot;: &quot;247 Blinds&quot;,
                 &quot;url_key&quot;: &quot;247-blinds&quot;,
                 &quot;banner_image&quot;: null,
                 &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/fhQIq3ppit1ZiGwk_247-Blinds-logo.png&quot;,
                 &quot;description&quot;: &quot;Style, quality, choice and bargain prices are not often mentioned in the same sentence, but at 247 Blinds we have put together the largest range of top quality, made to measure blinds on the internet and still managed to keep our prices amongst the most competitive around.&quot;,
-                &quot;cashback&quot;: null,
+                &quot;cashback&quot;: &quot;2.25% Cashback&quot;,
                 &quot;is_fav&quot;: false,
                 &quot;lat&quot;: null,
                 &quot;long&quot;: null
             },
             {
-                &quot;id&quot;: 116,
-                &quot;title&quot;: &quot;33Fuel Natural Sports Nutrition&quot;,
-                &quot;url_key&quot;: &quot;33fuel-natural-sports-nutrition&quot;,
+                &quot;id&quot;: 4490,
+                &quot;title&quot;: &quot;280 Degrees African Restaurant&quot;,
+                &quot;url_key&quot;: &quot;280-degrees-african-restaurant&quot;,
                 &quot;banner_image&quot;: null,
-                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/rZ7lH4qdzR38l4xO_fuel-160-x140-logo.png&quot;,
-                &quot;description&quot;: &quot;33Fuel&reg; have award-winning. We believe Sports Nutrition should be natural, delicious and amazing for you. Over the past decade, we have developed a range of multi-award-winning, plant-based sports nutrition products.&quot;,
-                &quot;cashback&quot;: null,
+                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/upload/images/163651803413990050781664227744.jpeg&quot;,
+                &quot;description&quot;: &quot;&lt;p&gt;Nigerian restaurant serving homestyle dishes.&lt;/p&gt;\r\n&quot;,
+                &quot;cashback&quot;: &quot;0.25% Cashback&quot;,
                 &quot;is_fav&quot;: false,
-                &quot;lat&quot;: null,
-                &quot;long&quot;: null
+                &quot;lat&quot;: &quot;51.54356700&quot;,
+                &quot;long&quot;: &quot;-0.19958800&quot;
             },
             {
-                &quot;id&quot;: 1063,
-                &quot;title&quot;: &quot;365 Games&quot;,
-                &quot;url_key&quot;: &quot;365-games&quot;,
+                &quot;id&quot;: 3122,
+                &quot;title&quot;: &quot;304 Clothing&quot;,
+                &quot;url_key&quot;: &quot;304-clothing&quot;,
                 &quot;banner_image&quot;: null,
-                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/GxMu8SvWNfvwB0uN_365-logo.png&quot;,
-                &quot;description&quot;: &quot;Here at 365 Games, we&rsquo;ve been building this tight community of loyal customers for over 15 years. We have low prices on a selection of great video games, board and card games and collectables. We also have fast, reliable delivery, meaning you'll want to come back to us again and again!&quot;,
-                &quot;cashback&quot;: null,
-                &quot;is_fav&quot;: false,
-                &quot;lat&quot;: null,
-                &quot;long&quot;: null
-            },
-            {
-                &quot;id&quot;: 1598,
-                &quot;title&quot;: &quot;3retro&quot;,
-                &quot;url_key&quot;: &quot;3retro&quot;,
-                &quot;banner_image&quot;: null,
-                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/FItwR1XzhCziYRPv_1-logo.png&quot;,
-                &quot;description&quot;: &quot;3 Retro is the leading online store for officially licensed retro football shirts, track jackets as well as branded retro sportswear from brands such as Umbro and Admiral. &quot;,
-                &quot;cashback&quot;: null,
-                &quot;is_fav&quot;: false,
-                &quot;lat&quot;: null,
-                &quot;long&quot;: null
-            },
-            {
-                &quot;id&quot;: 961,
-                &quot;title&quot;: &quot;4G Internet&quot;,
-                &quot;url_key&quot;: &quot;4g-internet&quot;,
-                &quot;banner_image&quot;: null,
-                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/KOGH8mex2ZoHN2eN_4g-logo.png&quot;,
-                &quot;description&quot;: &quot;At 4G Internet we specialise in the delivery of high quality broadband using 4G technology to home and business properties across the entire UK, where fibre-based broadband either hasn't reached or where it simply does not perform adequately. Already well over 95% of all UK properties are covered by the 4G broadband services we offer.&quot;,
-                &quot;cashback&quot;: null,
-                &quot;is_fav&quot;: false,
-                &quot;lat&quot;: null,
-                &quot;long&quot;: null
-            },
-            {
-                &quot;id&quot;: 2405,
-                &quot;title&quot;: &quot;4Gadgets&quot;,
-                &quot;url_key&quot;: &quot;4gadgets&quot;,
-                &quot;banner_image&quot;: null,
-                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/lu8Tw9Z0uc10OVtA_160-logo.png&quot;,
-                &quot;description&quot;: &quot;4 Gadgets has quickly become the leading online store to purchase New and Pre owned mobile phones and tablets at discount prices. 4Gadgets has received nothing but positive reviews resulting in the recognition as &lsquo;Best in Category&rsquo; by Trust Pilot (a platform for customer&rsquo;s to review companies). &quot;,
-                &quot;cashback&quot;: &quot;&pound;0.80 Cashback&quot;,
-                &quot;is_fav&quot;: false,
-                &quot;lat&quot;: null,
-                &quot;long&quot;: null
-            },
-            {
-                &quot;id&quot;: 1709,
-                &quot;title&quot;: &quot;50five&quot;,
-                &quot;url_key&quot;: &quot;50five&quot;,
-                &quot;banner_image&quot;: null,
-                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/Vr2J5crYHOHML9pG_1-logo.png&quot;,
-                &quot;description&quot;: &quot;50five believes in inspiration. We want to inspire people how to make their home more comfortable. An important aspect of this is home automation. Home automation allows you to easily make your home more comfortable and also save money on your energy bill. We have a wide range of products, services and solutions, which we continually work to improve. Examples are the smart thermostat and smart lighting.\n&quot;,
-                &quot;cashback&quot;: null,
-                &quot;is_fav&quot;: false,
-                &quot;lat&quot;: null,
-                &quot;long&quot;: null
-            },
-            {
-                &quot;id&quot;: 2402,
-                &quot;title&quot;: &quot;7 dayshop&quot;,
-                &quot;url_key&quot;: &quot;7-dayshop&quot;,
-                &quot;banner_image&quot;: null,
-                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/B5XqXLaub7aXcL9y_7DAYSHOP160-logo.png&quot;,
-                &quot;description&quot;: &quot;7 dayshop is an online retailer, offering affordable products from the world&rsquo;s leading brands. Shop online for FREE UK delivery.&quot;,
-                &quot;cashback&quot;: &quot;0.80% Cashback&quot;,
-                &quot;is_fav&quot;: false,
-                &quot;lat&quot;: null,
-                &quot;long&quot;: null
-            },
-            {
-                &quot;id&quot;: 2421,
-                &quot;title&quot;: &quot;7digital&quot;,
-                &quot;url_key&quot;: &quot;7digital&quot;,
-                &quot;banner_image&quot;: null,
-                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/rLCSYvEhhF3a0S1O_7D160-logo.png&quot;,
-                &quot;description&quot;: &quot;7digital offers a secure, legal and simple-to-use music download service and a catalogue of over 25 million high-quality tracks in MP3, AAC and FLAC, fully licensed by the music industry. We believe in paying artists fairly for their work and giving you access to music on your own terms.&quot;,
-                &quot;cashback&quot;: &quot;1.60% Cashback&quot;,
-                &quot;is_fav&quot;: false,
-                &quot;lat&quot;: null,
-                &quot;long&quot;: null
-            },
-            {
-                &quot;id&quot;: 558,
-                &quot;title&quot;: &quot;883 Police&quot;,
-                &quot;url_key&quot;: &quot;883-police&quot;,
-                &quot;banner_image&quot;: null,
-                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/SzseduAd6TObi3qg_883-Police-logo.png&quot;,
-                &quot;description&quot;: &quot;883 Police has over 200 years of combined experience and expertise in denim evolution. This has enabled the brand to be at the forefront of denim innovation and therefore we have been responsible for many of the washing techniques, finishes, and textures.&quot;,
-                &quot;cashback&quot;: null,
+                &quot;big_icon&quot;: &quot;https://www.revglue.com/resources/common/store/7m4wLvHowwXHI8X7_304-clothing1630-logo.png&quot;,
+                &quot;description&quot;: &quot;304 is bold, timeless streetwear for men, women, and juniors. What began as friends looking for adventure and freedom by printing t-shirts in apartment 304, has now become so much more reaching people all over the world with one-of-a-kind designs.&quot;,
+                &quot;cashback&quot;: &quot;3.15% Cashback&quot;,
                 &quot;is_fav&quot;: false,
                 &quot;lat&quot;: null,
                 &quot;long&quot;: null
@@ -1167,9 +1167,9 @@ access-control-allow-origin: *
             &quot;next&quot;: &quot;http://127.0.0.1:8000/api/stores?page=2&quot;,
             &quot;previous&quot;: null,
             &quot;per_page&quot;: 20,
-            &quot;total&quot;: 2552,
+            &quot;total&quot;: 3609,
             &quot;current_page&quot;: 1,
-            &quot;total_pages&quot;: 128,
+            &quot;total_pages&quot;: 181,
             &quot;first&quot;: 1,
             &quot;last&quot;: 20
         }
@@ -1474,8 +1474,8 @@ access-control-allow-origin: *
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"email\": \"hammes.lew@example.net\",
-    \"otp\": \"fukg\"
+    \"email\": \"nolan.noemie@example.net\",
+    \"otp\": \"njv\"
 }"
 </code></pre></div>
 
@@ -1491,8 +1491,8 @@ const headers = {
 };
 
 let body = {
-    "email": "hammes.lew@example.net",
-    "otp": "fukg"
+    "email": "nolan.noemie@example.net",
+    "otp": "njv"
 };
 
 fetch(url, {
@@ -1550,7 +1550,7 @@ fetch(url, {
                 <input type="text"
                name="email"
                data-endpoint="POSTapi-verify_otp"
-               value="hammes.lew@example.net"
+               value="nolan.noemie@example.net"
                data-component="body" hidden>
     <br>
 <p>Must be a valid email address.</p>
@@ -1560,7 +1560,7 @@ fetch(url, {
                 <input type="text"
                name="otp"
                data-endpoint="POSTapi-verify_otp"
-               value="fukg"
+               value="njv"
                data-component="body" hidden>
     <br>
 <p>Must not be greater than 6 characters.</p>
@@ -1584,7 +1584,7 @@ fetch(url, {
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"email\": \"jdach@example.org\"
+    \"email\": \"isaac70@example.net\"
 }"
 </code></pre></div>
 
@@ -1600,7 +1600,7 @@ const headers = {
 };
 
 let body = {
-    "email": "jdach@example.org"
+    "email": "isaac70@example.net"
 };
 
 fetch(url, {
@@ -1658,7 +1658,7 @@ fetch(url, {
                 <input type="text"
                name="email"
                data-endpoint="POSTapi-resend_otp"
-               value="jdach@example.org"
+               value="isaac70@example.net"
                data-component="body" hidden>
     <br>
 <p>Must be a valid email address.</p>
@@ -1856,8 +1856,8 @@ access-control-allow-origin: *
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"firstname\": \"fvhsvjpgivjuansschfksyvmaiwwqjvhgfylzaaffcoluhhwrwttfnvbvertjpgcwekpaxsdmyskbrgwfcyqgpqscynr\",
-    \"lastname\": \"qoovdjtruygzxsdldomttfdfkqsqiyrhftjfbudlhgwgicvcjsfwympehm\"
+    \"firstname\": \"qjymxpdxcmyljmanzgsspjkgspqhmrhcosrxhclkmgfpkqkofyfgwvmmpzmepgkypglaoplosbjuckbvnvhbpzjqygbhozl\",
+    \"lastname\": \"ykpcbkmspnanesynugakoikduxnophzergrwnydsmyrremfvgofpamuaidfzhvtnbkyapntiauoalgxlsmlhzvdogcrmcd\"
 }"
 </code></pre></div>
 
@@ -1873,8 +1873,8 @@ const headers = {
 };
 
 let body = {
-    "firstname": "fvhsvjpgivjuansschfksyvmaiwwqjvhgfylzaaffcoluhhwrwttfnvbvertjpgcwekpaxsdmyskbrgwfcyqgpqscynr",
-    "lastname": "qoovdjtruygzxsdldomttfdfkqsqiyrhftjfbudlhgwgicvcjsfwympehm"
+    "firstname": "qjymxpdxcmyljmanzgsspjkgspqhmrhcosrxhclkmgfpkqkofyfgwvmmpzmepgkypglaoplosbjuckbvnvhbpzjqygbhozl",
+    "lastname": "ykpcbkmspnanesynugakoikduxnophzergrwnydsmyrremfvgofpamuaidfzhvtnbkyapntiauoalgxlsmlhzvdogcrmcd"
 };
 
 fetch(url, {
@@ -1932,7 +1932,7 @@ fetch(url, {
                 <input type="text"
                name="firstname"
                data-endpoint="POSTapi-update_profile"
-               value="fvhsvjpgivjuansschfksyvmaiwwqjvhgfylzaaffcoluhhwrwttfnvbvertjpgcwekpaxsdmyskbrgwfcyqgpqscynr"
+               value="qjymxpdxcmyljmanzgsspjkgspqhmrhcosrxhclkmgfpkqkofyfgwvmmpzmepgkypglaoplosbjuckbvnvhbpzjqygbhozl"
                data-component="body" hidden>
     <br>
 <p>Must not be greater than 255 characters.</p>
@@ -1942,7 +1942,7 @@ fetch(url, {
                 <input type="text"
                name="lastname"
                data-endpoint="POSTapi-update_profile"
-               value="qoovdjtruygzxsdldomttfdfkqsqiyrhftjfbudlhgwgicvcjsfwympehm"
+               value="ykpcbkmspnanesynugakoikduxnophzergrwnydsmyrremfvgofpamuaidfzhvtnbkyapntiauoalgxlsmlhzvdogcrmcd"
                data-component="body" hidden>
     <br>
 <p>Must not be greater than 255 characters.</p>
@@ -2626,7 +2626,7 @@ access-control-allow-origin: *
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"referral_email\": \"hleuschke@example.net\"
+    \"referral_email\": \"olesch@example.net\"
 }"
 </code></pre></div>
 
@@ -2642,7 +2642,7 @@ const headers = {
 };
 
 let body = {
-    "referral_email": "hleuschke@example.net"
+    "referral_email": "olesch@example.net"
 };
 
 fetch(url, {
@@ -2700,7 +2700,7 @@ fetch(url, {
                 <input type="text"
                name="referral_email"
                data-endpoint="POSTapi-send_refer_email"
-               value="hleuschke@example.net"
+               value="olesch@example.net"
                data-component="body" hidden>
     <br>
 <p>Must be a valid email address.</p>
@@ -3774,7 +3774,7 @@ access-control-allow-origin: *
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"fcmtoken\": \"zoqsdrphcanmdxrxvkekvmqhtxznxtpocynbvysltrgdaiypxaescwgsqlxdjcpuvwqqooqzpxhvjmdvmjjgwrkgzxigozwjamadmdqrsbhfxdsujidotnxtnykpiloatfjg\"
+    \"fcmtoken\": \"zfxvwapvlhnhgugdosxmsgtzlqrfqfjhpdhhqqskwjqpgnbkbgrkhiop\"
 }"
 </code></pre></div>
 
@@ -3790,7 +3790,7 @@ const headers = {
 };
 
 let body = {
-    "fcmtoken": "zoqsdrphcanmdxrxvkekvmqhtxznxtpocynbvysltrgdaiypxaescwgsqlxdjcpuvwqqooqzpxhvjmdvmjjgwrkgzxigozwjamadmdqrsbhfxdsujidotnxtnykpiloatfjg"
+    "fcmtoken": "zfxvwapvlhnhgugdosxmsgtzlqrfqfjhpdhhqqskwjqpgnbkbgrkhiop"
 };
 
 fetch(url, {
@@ -3848,7 +3848,7 @@ fetch(url, {
                 <input type="text"
                name="fcmtoken"
                data-endpoint="POSTapi-enable_notifications"
-               value="zoqsdrphcanmdxrxvkekvmqhtxznxtpocynbvysltrgdaiypxaescwgsqlxdjcpuvwqqooqzpxhvjmdvmjjgwrkgzxigozwjamadmdqrsbhfxdsujidotnxtnykpiloatfjg"
+               value="zfxvwapvlhnhgugdosxmsgtzlqrfqfjhpdhhqqskwjqpgnbkbgrkhiop"
                data-component="body" hidden>
     <br>
 <p>Must not be greater than 255 characters.</p>
@@ -4120,14 +4120,14 @@ fetch(url, {
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://127.0.0.1:8000/api/store-detail/voluptas" \
+    --get "http://127.0.0.1:8000/api/store-detail/ea" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/store-detail/voluptas"
+    "http://127.0.0.1:8000/api/store-detail/ea"
 );
 
 const headers = {
@@ -4161,8 +4161,8 @@ access-control-allow-origin: *
 <code class="language-json">{
     &quot;data&quot;: [],
     &quot;links&quot;: {
-        &quot;first&quot;: &quot;http://127.0.0.1:8000/api/store-detail/voluptas?per_page=10&amp;page=1&quot;,
-        &quot;last&quot;: &quot;http://127.0.0.1:8000/api/store-detail/voluptas?per_page=10&amp;page=1&quot;,
+        &quot;first&quot;: &quot;http://127.0.0.1:8000/api/store-detail/ea?per_page=10&amp;page=1&quot;,
+        &quot;last&quot;: &quot;http://127.0.0.1:8000/api/store-detail/ea?per_page=10&amp;page=1&quot;,
         &quot;prev&quot;: null,
         &quot;next&quot;: null
     },
@@ -4177,7 +4177,7 @@ access-control-allow-origin: *
                 &quot;active&quot;: false
             },
             {
-                &quot;url&quot;: &quot;http://127.0.0.1:8000/api/store-detail/voluptas?per_page=10&amp;page=1&quot;,
+                &quot;url&quot;: &quot;http://127.0.0.1:8000/api/store-detail/ea?per_page=10&amp;page=1&quot;,
                 &quot;label&quot;: &quot;1&quot;,
                 &quot;active&quot;: true
             },
@@ -4187,7 +4187,7 @@ access-control-allow-origin: *
                 &quot;active&quot;: false
             }
         ],
-        &quot;path&quot;: &quot;http://127.0.0.1:8000/api/store-detail/voluptas&quot;,
+        &quot;path&quot;: &quot;http://127.0.0.1:8000/api/store-detail/ea&quot;,
         &quot;per_page&quot;: 10,
         &quot;to&quot;: null,
         &quot;total&quot;: 0
@@ -4240,7 +4240,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="id"
                data-endpoint="GETapi-store-detail--id-"
-               value="voluptas"
+               value="ea"
                data-component="url" hidden>
     <br>
 <p>The ID of the store detail.</p>
@@ -4311,8 +4311,8 @@ access-control-allow-origin: *
                 &quot;banner_image&quot;: &quot;http://127.0.0.1:8000/frontend/images/slides/default1.png&quot;,
                 &quot;description&quot;: &quot;Get everything at a huge discount&quot;,
                 &quot;link&quot;: null,
-                &quot;url_key&quot;: &quot;the-kit-company&quot;,
-                &quot;title&quot;: &quot;The Kit Company&quot;
+                &quot;url_key&quot;: &quot;sleep-and-snooze&quot;,
+                &quot;title&quot;: &quot;Sleep and Snooze&quot;
             },
             {
                 &quot;order&quot;: &quot;2&quot;,
@@ -4321,8 +4321,8 @@ access-control-allow-origin: *
                 &quot;banner_image&quot;: &quot;http://127.0.0.1:8000/frontend/images/slides/default2.png&quot;,
                 &quot;description&quot;: &quot;Get everything at a huge discount&quot;,
                 &quot;link&quot;: null,
-                &quot;url_key&quot;: &quot;buddha-beauty-skincare&quot;,
-                &quot;title&quot;: &quot;Buddha Beauty Skincare&quot;
+                &quot;url_key&quot;: &quot;silver-sovereign&quot;,
+                &quot;title&quot;: &quot;Silver Sovereign&quot;
             },
             {
                 &quot;order&quot;: &quot;3&quot;,
@@ -4331,18 +4331,13 @@ access-control-allow-origin: *
                 &quot;banner_image&quot;: &quot;http://127.0.0.1:8000/frontend/images/slides/default3.png&quot;,
                 &quot;description&quot;: &quot;Get everything at a huge discount&quot;,
                 &quot;link&quot;: null,
-                &quot;url_key&quot;: &quot;voltsco&quot;,
-                &quot;title&quot;: &quot;Voltsco&quot;
+                &quot;url_key&quot;: &quot;al-fresco-holidays&quot;,
+                &quot;title&quot;: &quot;Al Fresco Holidays&quot;
             }
         ],
         &quot;featured_stores&quot;: [],
         &quot;featured_categories&quot;: [],
-        &quot;top_offers&quot;: [
-            {
-                &quot;category&quot;: &quot;Clothing &amp; Fashion&quot;,
-                &quot;stores&quot;: []
-            }
-        ]
+        &quot;top_offers&quot;: []
     }
 }</code>
  </pre>
@@ -4401,14 +4396,14 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://127.0.0.1:8000/api/categories/minima" \
+    --get "http://127.0.0.1:8000/api/categories/quos" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/categories/minima"
+    "http://127.0.0.1:8000/api/categories/quos"
 );
 
 const headers = {
@@ -4446,212 +4441,122 @@ access-control-allow-origin: *
         &quot;main_banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/banners/categories/cashback.png&quot;,
         &quot;categories&quot;: [
             {
-                &quot;title&quot;: &quot;Clothing &amp; Fashion&quot;,
-                &quot;url_key&quot;: &quot;clothing-fashion&quot;,
-                &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/Ou7hGgJSCke67CAT_fashion-banner.png&quot;,
-                &quot;description&quot;: &quot;&lt;p&gt;Clothing &amp;amp; Fashion&lt;/p&gt;&quot;,
-                &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/KuSBBJT8mRJG5klh_clothing-banner.jpg&quot;,
-                &quot;cat_stores_count&quot;: 593,
-                &quot;subcats&quot;: [
-                    {
-                        &quot;id&quot;: 268,
-                        &quot;parent_id&quot;: 267,
-                        &quot;title&quot;: &quot;Footwear&quot;,
-                        &quot;url_key&quot;: &quot;footwear&quot;,
-                        &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/kKiYPkKdubd81zds_footwear-banner.png&quot;,
-                        &quot;description&quot;: &quot;Footwear&quot;,
-                        &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/e1SpMNM01IEPJYRs_footwear-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 240
-                    },
-                    {
-                        &quot;id&quot;: 269,
-                        &quot;parent_id&quot;: 267,
-                        &quot;title&quot;: &quot;Women Clothing&quot;,
-                        &quot;url_key&quot;: &quot;women-clothing&quot;,
-                        &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/7R1GhLXT096KCTWe_women-clothing-banner.png&quot;,
-                        &quot;description&quot;: &quot;Women Clothing&quot;,
-                        &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/wZBNnNPR4MEPLoKo_women-clothing-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 301
-                    },
-                    {
-                        &quot;id&quot;: 270,
-                        &quot;parent_id&quot;: 267,
-                        &quot;title&quot;: &quot;Men Clothing&quot;,
-                        &quot;url_key&quot;: &quot;men-clothing&quot;,
-                        &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/qvlAbPhWX4tJFhIz_men-clothing-banner.png&quot;,
-                        &quot;description&quot;: &quot;Men Clothing&quot;,
-                        &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/5Aph21G8gU83MD6E_men-clothing-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 253
-                    },
-                    {
-                        &quot;id&quot;: 271,
-                        &quot;parent_id&quot;: 267,
-                        &quot;title&quot;: &quot;Kids Clothing&quot;,
-                        &quot;url_key&quot;: &quot;kids-clothing&quot;,
-                        &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/9SVBmLOiXizvNg8R_kids-clothing-banner.png&quot;,
-                        &quot;description&quot;: &quot;Kids Clothing&quot;,
-                        &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/akvUCnBuQdhG4ph0_kids-clothing-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 154
-                    },
-                    {
-                        &quot;id&quot;: 272,
-                        &quot;parent_id&quot;: 267,
-                        &quot;title&quot;: &quot;Sportswear&quot;,
-                        &quot;url_key&quot;: &quot;sportswear&quot;,
-                        &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/eF0YR0K1vCPYq3JR_sportswear-banner.png&quot;,
-                        &quot;description&quot;: &quot;Sportswear&quot;,
-                        &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/6uhDEFHBayhogyOI_sportswear-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 153
-                    },
-                    {
-                        &quot;id&quot;: 273,
-                        &quot;parent_id&quot;: 267,
-                        &quot;title&quot;: &quot;Bags &amp; Accessories&quot;,
-                        &quot;url_key&quot;: &quot;bags-accessories&quot;,
-                        &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/sYC6NXknQYmA8BJI_accessories-banner.png&quot;,
-                        &quot;description&quot;: &quot;Bags &amp; Accessories&quot;,
-                        &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/kP56gO1SfKnuUNOk_accessories-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 291
-                    },
-                    {
-                        &quot;id&quot;: 274,
-                        &quot;parent_id&quot;: 267,
-                        &quot;title&quot;: &quot;Jewellery &amp; Watches &quot;,
-                        &quot;url_key&quot;: &quot;jewellery-watches&quot;,
-                        &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/JIg8MK69bvSrK85T_jewellery-watches-banner.png&quot;,
-                        &quot;description&quot;: &quot;Jewellery &amp; Watches &quot;,
-                        &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/H9UsAqSdAQx6nDi9_jewellery-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 164
-                    },
-                    {
-                        &quot;id&quot;: 275,
-                        &quot;parent_id&quot;: 267,
-                        &quot;title&quot;: &quot;Nightwear &amp; Underwear&quot;,
-                        &quot;url_key&quot;: &quot;nightwear-underwear&quot;,
-                        &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/tOSz5GUHeMDP8mYD_nightwear-banner.png&quot;,
-                        &quot;description&quot;: &quot;Nightwear &amp; Underwear&quot;,
-                        &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/jv0L82qedArTjlhI_nightwear-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 99
-                    },
-                    {
-                        &quot;id&quot;: 276,
-                        &quot;parent_id&quot;: 267,
-                        &quot;title&quot;: &quot;Wedding &amp; Occasions&quot;,
-                        &quot;url_key&quot;: &quot;wedding-occasions&quot;,
-                        &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/m9Ii1VqLeZi0Wd0L_wedding2-banner.png&quot;,
-                        &quot;description&quot;: &quot;Wedding &amp; Occasions&quot;,
-                        &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/Fb7kmeA6Ewf8ffB2_wedding2-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 43
-                    },
-                    {
-                        &quot;id&quot;: 277,
-                        &quot;parent_id&quot;: 267,
-                        &quot;title&quot;: &quot;Swimmwear &amp; Beachwear&quot;,
-                        &quot;url_key&quot;: &quot;swimmwear-beachwear&quot;,
-                        &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/djkjAVPFLCmN6Xrp_swimwear-banner.png&quot;,
-                        &quot;description&quot;: &quot;Swimmwear &amp; Beachwear&quot;,
-                        &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/2XKVWpG7WqTWUQPO_swimwear-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 89
-                    }
-                ]
-            },
-            {
                 &quot;title&quot;: &quot;More&quot;,
                 &quot;url_key&quot;: &quot;more&quot;,
                 &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/zDNgrbh8ryYr9Lt4_more-banner.png&quot;,
                 &quot;description&quot;: &quot;More&quot;,
                 &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/JcfTa3Il1cHYROPH_more-banner.jpg&quot;,
-                &quot;cat_stores_count&quot;: 394,
+                &quot;cat_stores_count&quot;: 694,
                 &quot;subcats&quot;: [
                     {
-                        &quot;id&quot;: 254,
-                        &quot;parent_id&quot;: 248,
+                        &quot;id&quot;: 98,
+                        &quot;parent_id&quot;: 93,
                         &quot;title&quot;: &quot;Adult&quot;,
                         &quot;url_key&quot;: &quot;adult&quot;,
                         &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/3NjJF7hHgm231B0r_adult-banner.png&quot;,
                         &quot;description&quot;: &quot;Adult&quot;,
                         &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/f8KTiIC4sC8Sv3Cx_adult-dating-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 21
+                        &quot;subcat_stores_count&quot;: 36
                     },
                     {
-                        &quot;id&quot;: 256,
-                        &quot;parent_id&quot;: 248,
+                        &quot;id&quot;: 100,
+                        &quot;parent_id&quot;: 93,
                         &quot;title&quot;: &quot;Automotive&quot;,
                         &quot;url_key&quot;: &quot;automotive&quot;,
                         &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/J7VxZWVcrb5enPQt_automotive-banner.png&quot;,
                         &quot;description&quot;: &quot;Automotive&quot;,
                         &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/ODPp9sW7zn0lEUgK_automotive-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 73
+                        &quot;subcat_stores_count&quot;: 105
                     },
                     {
-                        &quot;id&quot;: 282,
-                        &quot;parent_id&quot;: 248,
+                        &quot;id&quot;: 138,
+                        &quot;parent_id&quot;: 93,
                         &quot;title&quot;: &quot;CBD &amp; E-juice&quot;,
                         &quot;url_key&quot;: &quot;cbd-e-juice&quot;,
                         &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/ola83Sfn0QWBpD94_cbd-ejuice-banner.png&quot;,
                         &quot;description&quot;: &quot;CBD &amp; E-juice&quot;,
                         &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/CiEVHjS463b1DtAs_cbd-ejuice-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 39
+                        &quot;subcat_stores_count&quot;: 72
                     },
                     {
-                        &quot;id&quot;: 255,
-                        &quot;parent_id&quot;: 248,
+                        &quot;id&quot;: 99,
+                        &quot;parent_id&quot;: 93,
                         &quot;title&quot;: &quot;Education &amp; Learning&quot;,
                         &quot;url_key&quot;: &quot;education-learning&quot;,
                         &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/A1xKz6PjGyouhGDf_education-banner.png&quot;,
                         &quot;description&quot;: &quot;Education &amp; Learning&quot;,
                         &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/u9hi0Oq6Xev9jnro_education-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 31
+                        &quot;subcat_stores_count&quot;: 65
                     },
                     {
-                        &quot;id&quot;: 253,
-                        &quot;parent_id&quot;: 248,
+                        &quot;id&quot;: 151,
+                        &quot;parent_id&quot;: 93,
+                        &quot;title&quot;: &quot;Law&quot;,
+                        &quot;url_key&quot;: &quot;law&quot;,
+                        &quot;icon&quot;: &quot;http://127.0.0.1:8000/frontend/images/banners/categories/cashback.png&quot;,
+                        &quot;description&quot;: null,
+                        &quot;main_banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/banners/categories/cashback.png&quot;,
+                        &quot;subcat_stores_count&quot;: 2
+                    },
+                    {
+                        &quot;id&quot;: 97,
+                        &quot;parent_id&quot;: 93,
                         &quot;title&quot;: &quot;Luxury&quot;,
                         &quot;url_key&quot;: &quot;luxury&quot;,
                         &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/OZuuCqVv65EWazDf_luxury-banner.png&quot;,
                         &quot;description&quot;: &quot;Luxury&quot;,
                         &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/XctsbYGLU4DvRWza_luxury-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 47
+                        &quot;subcat_stores_count&quot;: 81
                     },
                     {
-                        &quot;id&quot;: 251,
-                        &quot;parent_id&quot;: 248,
+                        &quot;id&quot;: 95,
+                        &quot;parent_id&quot;: 93,
                         &quot;title&quot;: &quot;Parents &amp; Kids&quot;,
                         &quot;url_key&quot;: &quot;parents-kids&quot;,
                         &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/kacKhhmRDnHkEiFQ_parents-kids-banner.png&quot;,
                         &quot;description&quot;: &quot;Parents &amp; Kids&quot;,
                         &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/GM3PlvZPMyzDrbCl_parents-kids-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 56
+                        &quot;subcat_stores_count&quot;: 100
                     },
                     {
-                        &quot;id&quot;: 250,
-                        &quot;parent_id&quot;: 248,
+                        &quot;id&quot;: 94,
+                        &quot;parent_id&quot;: 93,
                         &quot;title&quot;: &quot;Pets&quot;,
                         &quot;url_key&quot;: &quot;pets&quot;,
                         &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/6GGZbk2uQJdmqcQZ_pets-banner.png&quot;,
                         &quot;description&quot;: &quot;Pets&quot;,
                         &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/hS0NdOGx2eOF1mVJ_pets-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 70
+                        &quot;subcat_stores_count&quot;: 118
                     },
                     {
-                        &quot;id&quot;: 257,
-                        &quot;parent_id&quot;: 248,
+                        &quot;id&quot;: 152,
+                        &quot;parent_id&quot;: 93,
+                        &quot;title&quot;: &quot;Professional Services&quot;,
+                        &quot;url_key&quot;: &quot;professional-services&quot;,
+                        &quot;icon&quot;: &quot;http://127.0.0.1:8000/frontend/images/banners/categories/cashback.png&quot;,
+                        &quot;description&quot;: null,
+                        &quot;main_banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/banners/categories/cashback.png&quot;,
+                        &quot;subcat_stores_count&quot;: 6
+                    },
+                    {
+                        &quot;id&quot;: 101,
+                        &quot;parent_id&quot;: 93,
                         &quot;title&quot;: &quot;Subscription Boxes &quot;,
                         &quot;url_key&quot;: &quot;subscription-boxes&quot;,
                         &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/ye8e6hp0dnN6YS1y_subscription-box-banner.png&quot;,
                         &quot;description&quot;: &quot;Subscription Boxes &quot;,
                         &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/sYqCFMN3ZTaAupHy_subscription-boxes-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 53
+                        &quot;subcat_stores_count&quot;: 106
                     },
                     {
-                        &quot;id&quot;: 258,
-                        &quot;parent_id&quot;: 248,
+                        &quot;id&quot;: 102,
+                        &quot;parent_id&quot;: 93,
                         &quot;title&quot;: &quot;Wedding&quot;,
                         &quot;url_key&quot;: &quot;wedding&quot;,
                         &quot;icon&quot;: &quot;https://www.revglue.com/resources/common/banner/EBjNwJ1Vz0K97qL0_wedding-banner.png&quot;,
-                        &quot;description&quot;: &quot;Wedding&quot;,
-                        &quot;main_banner&quot;: &quot;https://www.revglue.com/resources/common/banner/W704JL8XyRfyRhiU_wedding-banner.jpg&quot;,
-                        &quot;subcat_stores_count&quot;: 19
+                        &quot;description&quot;: &quot;Shop and earn cashback from Black-owned retailers for clothing, gifts or anything else you might need whether it's yours or a loved ones special day.&quot;,
+                        &quot;main_banner&quot;: &quot;http://127.0.0.1:8000/frontend/images/banners/categories/cashback.png&quot;,
+                        &quot;subcat_stores_count&quot;: 27
                     }
                 ]
             }
@@ -4660,11 +4565,11 @@ access-control-allow-origin: *
             &quot;next&quot;: null,
             &quot;previous&quot;: null,
             &quot;per_page&quot;: 20,
-            &quot;total&quot;: 1,
+            &quot;total&quot;: 0,
             &quot;current_page&quot;: 1,
             &quot;total_pages&quot;: 1,
             &quot;first&quot;: 1,
-            &quot;last&quot;: 2
+            &quot;last&quot;: 1
         }
     }
 }</code>
@@ -4715,7 +4620,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="letter"
                data-endpoint="GETapi-categories--letter--"
-               value="minima"
+               value="quos"
                data-component="url" hidden>
     <br>
 
@@ -4735,14 +4640,14 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://127.0.0.1:8000/api/child-categories/hic/eum" \
+    --get "http://127.0.0.1:8000/api/child-categories/repellat/voluptatem" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/child-categories/hic/eum"
+    "http://127.0.0.1:8000/api/child-categories/repellat/voluptatem"
 );
 
 const headers = {
@@ -4825,7 +4730,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="slug"
                data-endpoint="GETapi-child-categories--slug---letter--"
-               value="hic"
+               value="repellat"
                data-component="url" hidden>
     <br>
 <p>The slug of the child category.</p>
@@ -4835,7 +4740,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="letter"
                data-endpoint="GETapi-child-categories--slug---letter--"
-               value="eum"
+               value="voluptatem"
                data-component="url" hidden>
     <br>
 
@@ -4855,14 +4760,14 @@ access-control-allow-origin: *
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://127.0.0.1:8000/api/get-category-stores/et" \
+    --get "http://127.0.0.1:8000/api/get-category-stores/est" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
 
 <div class="javascript-example">
     <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/get-category-stores/et"
+    "http://127.0.0.1:8000/api/get-category-stores/est"
 );
 
 const headers = {
@@ -4945,7 +4850,7 @@ access-control-allow-origin: *
                 <input type="text"
                name="slug"
                data-endpoint="GETapi-get-category-stores--slug-"
-               value="et"
+               value="est"
                data-component="url" hidden>
     <br>
 <p>The slug of the get category store.</p>
