@@ -104,10 +104,9 @@ class PaymentController extends Controller
     public function cashout(Request $request)
     {
         $user = Auth::user();
-        $errorMessage = 0;
         if (!($user->first_name && $user->last_name && $user->email && $user->phone && $user->address && $user->date_of_birth && $user->street && $user->country_id && $user->postal_code)) {
-            $errorMessage = 1;
             flash()->error('Please first complete your profile to withdraw');
+            return redirect()->back();
         }
         $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
         if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0) {
@@ -133,9 +132,7 @@ class PaymentController extends Controller
             flash()->error("You have insufficient balance for withdrawl. You need to have at least $min in your balance for withdrawal.");
             return redirect()->back();
         }
-        if ($errorMessage == 1) {
-            return redirect()->back();
-        }
+
         $cashout = Cashout::create([
             'user_id' => $user->id,
             'amount' => $balance,
@@ -191,17 +188,16 @@ class PaymentController extends Controller
         $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
 
         $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
-        flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $balance . " to reach your " . $request->payment_method . " account.");
+        flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $balance . "£ to reach your " . $request->payment_method . " account.");
         return redirect()->back();
     }
 
     public function CharityCashout(Request $request, Cashout $cashout)
     {
         $user = Auth::user();
-        $errorMessage = 0;
         if (!($user->first_name && $user->last_name && $user->email && $user->phone && $user->address && $user->date_of_birth && $user->street && $user->country_id && $user->postal_code)) {
-            $errorMessage = 1;
             flash()->error('Please first complete your profile to withdraw');
+            return redirect()->back();
         }
         $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
         if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0) {
@@ -225,10 +221,6 @@ class PaymentController extends Controller
 
         if ($cashout_status == 'pending') {
             flash()->error('You have already pending withdraw request.');
-            return redirect()->back();
-        }
-        
-        if ($errorMessage == 1) {
             return redirect()->back();
         }
         
