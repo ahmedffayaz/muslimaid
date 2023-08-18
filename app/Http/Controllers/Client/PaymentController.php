@@ -13,6 +13,7 @@ use App\Jobs\SendEmailToAdmin;
 use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -47,30 +48,53 @@ class PaymentController extends Controller
     public function paymentSave(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'account_name' => 'required|string',
-            'account_number_hidden' => 'required|regex:/^[0-9]+$/|size:8',
-            'bank_sort_code_hidden' => 'required|regex:/^[0-9]+$/|size:6' 
+            'payment_method' => 'required|string',
+            'account_name' => [
+                Rule::requiredIf(function () use ($request){
+                    return $request->payment_method === "bank";
+                }),
+                'nullable', 'string'
+            ],
+            'account_number_hidden' =>  [ 
+                Rule::requiredIf(function () use ($request){
+                    return $request->payment_method === "bank";
+                }),
+                'nullable', 'regex:/^[0-9]+$/', 'size:8'
+            ],
+            'bank_sort_code_hidden' => [
+                Rule::requiredIf(function () use ($request){
+                    return $request->payment_method === "bank";
+                }),
+                'nullable', 'regex:/^[0-9]+$/', 'size:6'
+            ],
+            'paypal_email' => [
+                Rule::requiredIf(function () use ($request){
+                    return $request->payment_method === "paypal";
+                }),
+                'nullable', 'email'
+            ]
         ]);
-        $validator->setAttributeNames([
-            'account_number_hidden' => 'Account Number',
-            'bank_sort_code_hidden' => 'Sort Code'
-        ]);
+        if($request->payment_method === "bank"){
+            $validator->setAttributeNames([
+                'account_number_hidden' => 'Account Number',
+                'bank_sort_code_hidden' => 'Sort Code'
+            ]);
+        }
         if($validator->fails()){
             flash()->error($validator->errors()->first());
             return redirect()->back();
         }
 
-        $accountNumber = $request->input('account_number_hidden');
-        $bankSortCode = $request->input('bank_sort_code_hidden');
         $payment = PaymentInfo::updateOrCreate([
             'user_id'   => Auth::user()->id,
             'payment_method'   => $request->payment_method,
         ], [
             'account_name' => $request->input('account_name'),
             'bank_title' => $request->input('bank_title'),
-            'account_number' => $accountNumber,
-            'bank_sort_code' => $bankSortCode,
+            'account_number' => $request->input('account_number_hidden'),
+            'bank_sort_code' => $request->input('bank_sort_code_hidden'),
             'bic' => $request->input('bic'),
+            'paypal_email' => $request->input('paypal_email')
         ]);
 
         flash()->success('Payment method updated successfully');
@@ -80,10 +104,9 @@ class PaymentController extends Controller
     public function cashout(Request $request)
     {
         $user = Auth::user();
-        $errorMessage = 0;
         if (!($user->first_name && $user->last_name && $user->email && $user->phone && $user->address && $user->date_of_birth && $user->street && $user->country_id && $user->postal_code)) {
-            $errorMessage = 1;
             flash()->error('Please first complete your profile to withdraw');
+            return redirect()->back();
         }
         $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
         if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0) {
@@ -109,9 +132,7 @@ class PaymentController extends Controller
             flash()->error("You have insufficient balance for withdrawl. You need to have at least $min in your balance for withdrawal.");
             return redirect()->back();
         }
-        if ($errorMessage == 1) {
-            return redirect()->back();
-        }
+
         $cashout = Cashout::create([
             'user_id' => $user->id,
             'amount' => $balance,
@@ -167,13 +188,17 @@ class PaymentController extends Controller
         $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
 
         $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
-        flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $balance . " to reach your " . $request->payment_method . " account.");
+        flash()->success("We're processing your withdrawal. Please allow 4 working days for £" . $balance . " to reach your " . $request->payment_method . " account.");
         return redirect()->back();
     }
 
     public function CharityCashout(Request $request, Cashout $cashout)
     {
         $user = Auth::user();
+        if (!($user->first_name && $user->last_name && $user->email && $user->phone && $user->address && $user->date_of_birth && $user->street && $user->country_id && $user->postal_code)) {
+            flash()->error('Please first complete your profile to withdraw');
+            return redirect()->back();
+        }
         $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
         if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0) {
             $min = SiteSetting()['min_cashout_amount'];
@@ -195,10 +220,10 @@ class PaymentController extends Controller
         }
 
         if ($cashout_status == 'pending') {
-            flash()->error('You have already  withdraw request.');
+            flash()->error('You have already pending withdraw request.');
             return redirect()->back();
         }
-
+        
         $validator = Validator::make($request->all(), [
             'charity_types_id' => 'required',
             'id' => 'required',
@@ -265,7 +290,7 @@ class PaymentController extends Controller
         $url = url('account/withdraw');
 
         $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
-        flash()->success("We're processing your withdrawal. Please allow 4 working days for " . $request->amount . " to reach your " . $request->payment_method . " account.");
+        flash()->success("We're processing your withdrawal. Please allow 4 working days for £" . $request->amount . " to reach your " . $request->payment_method . " account.");
         return redirect()->back();
     }
 }
