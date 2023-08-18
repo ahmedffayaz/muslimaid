@@ -18,7 +18,7 @@ class CategoryResource extends JsonResource
         return [
             'title' => $this->name,
             'url_key' => $this->slug,
-            'icon' => ($this->logo_type != 'link') ? (isFileExist($this->logo_upload) ? asset($this->logo_upload) : asset('frontend/images/banners/categories/cashback.png')) : $this->logo_link,
+            'icon' => ($this->logo_type != 'link') ? getLogoImageUrl($this->logo_upload, 'upload', $this) : $this->logo_link,
             'description' => $this->description,
             'main_banner' => ($this->banner_type != 'link') ? getBannerImageUrl($this->banner_upload, 'upload', $this) : $this->banner_link,
             'cat_stores_count' => $this->stores_count,

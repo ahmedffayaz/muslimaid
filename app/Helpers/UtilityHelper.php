@@ -885,6 +885,20 @@ function getBannerImageUrl($url, $type = NULL, $row = null)
     return asset(parse_url($url)['path']);
 }
 
+/**
+ * Get Logo image if not exist show default
+ */ 
+function getLogoImageUrl($url, $type = NULL, $row = null)
+{
+    $defaultLogo = asset('frontend/images/banners/categories/cashback.png');
+
+    if (empty($url) || (!empty($url) && !isFileExist($url)) || ($row && $type && $row->logo_type != $type)) {
+        return $defaultLogo;
+    }
+
+    return asset(parse_url($url)['path']);
+}
+
 function emailTemplate($key, $details, $filteredMessage = [], $requestFilteredMessage = [])
 {
     $emailTemplate = EmailTemplate::where('key', $key)->first();

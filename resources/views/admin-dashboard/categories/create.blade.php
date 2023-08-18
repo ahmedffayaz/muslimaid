@@ -162,7 +162,7 @@
                 <div class="form-group">
                     <div class="preview-wrapper">
                         @if ($isEdit && $category->banner_link)
-                            <img id="banner_link-preview" src="{{ asset($category->logo_link) }}" style="max-height: 60px;max-width:60px" alt="">
+                            <img id="banner_link-preview" src="{{ asset($category->banner_link) }}" style="max-height: 60px;max-width:60px" alt="">
                         @else
                             <img id="banner_link-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
                         @endif
