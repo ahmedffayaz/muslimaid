@@ -90,6 +90,19 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
+                                                            <label class="form-label" for="title">Title</label>
+                                                            <div class="form-control-wrap">
+                                                                <select class="form-control form-select select-2" name="title">
+                                                                    <option value="Mr" {{ $user->title == 'Mr'? 'selected' : '' }}>Mr</option>
+                                                                    <option value="Mrs" {{ $user->title == 'Mrs'? 'selected' : '' }}>Mrs</option>
+                                                                    <option value="Miss" {{ $user->title == 'Miss'? 'selected' : '' }}>Miss</option>
+                                                                    <option value="Mx" {{ $user->title == 'Mx'? 'selected' : '' }}>Mx</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>                                                        
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
                                                             <label class="form-label" for="firstname">First Name <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="firstname" value="{{ $user->first_name }}" name="firstname"
@@ -117,15 +130,6 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="phone-no-1">Phone</label>
-                                                            <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="phone-no-1" value="{{ $user->phone }}" name="phone">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
                                                             <label class="form-label" for="date_of_birth">Date of Birth </label>
                                                             <div class="form-control-wrap">
                                                                 <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
@@ -133,6 +137,15 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="phone-no-1">Phone</label>
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="phone-no-1" value="{{ $user->phone }}" name="phone">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
                                                             <label class="form-label" for="address">Address</label>
@@ -144,13 +157,28 @@
 
                                                     <div class="col-lg-12">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="address_line_2">Address line 2</label>
+                                                            <label class="form-label" for="address_line_2">Address Line 2</label>
                                                             <div class="form-control-wrap">
-                                                                <textarea type="text" class="form-control" id="address_line_2" value="{{ $user->address_line_2 ?? '' }}" name="address_line_2">{{ $user->address_line_2 }}</textarea>
+                                                                <textarea type="text" class="form-control" id="address_line_2" value="{{ $user->address_2 ?? '' }}" name="address_line_2">{{ $user->address_2 }}</textarea>
                                                             </div>
                                                         </div>
                                                     </div>
-
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="country">Country</label>
+                                                            <div class="form-control-wrap">
+                                                                <div>
+                                                                    <select class="form-control form-select select-2" id="country" name="country_id" required>
+                                                                        @foreach ($countries as $country)
+                                                                            <option value="{{ $country->id }}" {{ $country->id == $user->country_id ? 'selected' : '' }}>
+                                                                                {{ $country->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
                                                             <label class="form-label" for="street">Street</label>
@@ -162,24 +190,7 @@
 
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="country">Country</label>
-                                                            <div class="form-control-wrap">
-                                                                <div class="form-control-select">
-                                                                    <select class="form-control" id="country" name="country" required>
-                                                                        @foreach ($countries as $country)
-                                                                            <option value="{{ $country->id }}" {{ $country->id == $user->country_id ? 'selected' : '' }}>
-                                                                                {{ $country->name }}
-                                                                            </option>
-                                                                        @endforeach
-                                                                    </select>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-lg-6">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="postal_code">postal Code</label>
+                                                            <label class="form-label" for="postal_code">Postal Code</label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="postal_code" value="{{ $user->postal_code }}"
                                                                     name="postal_code">
@@ -191,8 +202,8 @@
                                                         <div class="form-group">
                                                             <label class="form-label" for="status">Status</label>
                                                             <div class="form-control-wrap ">
-                                                                <div class="form-control-select">
-                                                                    <select class="form-control" id="status" name="status" required>
+                                                                <div>
+                                                                    <select class="form-control form-select select-2" id="status" name="status" required>
                                                                         <option {{ $user->status == 'pending' ? 'selected' : '' }} value="pending">Pending</option>
                                                                         <option {{ $user->status == 'active' ? 'selected' : '' }} value="active">Active</option>
                                                                         <option {{ $user->status == 'in_active' ? 'selected' : '' }} value="in_active">In-active</option>
@@ -383,6 +394,9 @@
 
     <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
     <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
+
+    <script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
+    <script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
@@ -667,7 +681,12 @@
         }, "Only alphabetic name is allow");
 
         jQuery.validator.addMethod("validPhone", function(value, element) {
-            var regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+            var regex = /^\+\d{1,4}\d{5,}$/;
+            if(regex.test(value) == false){
+                $('.iti__flag-container').css('padding-bottom', '39px');
+            } else {
+                $('.iti__flag-container').css('padding-bottom', '');
+            }
             return regex.test(value);
         }, "Enter a valid phone number");
 
@@ -711,6 +730,17 @@
         }
         $(document).ready(function() {
             $(".toggle-password").click(togglePasswordVisibility);
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var input = document.querySelector("#phone-no-1");
+            window.intlTelInput(input,({
+                autoInsertDialCode:true,
+                nationalMode:false,
+                preferredCountries: [],
+            }));
+            $('.iti').css('width', '100%');
         });
     </script>
 @endpush
