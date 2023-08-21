@@ -859,14 +859,7 @@
                                                 </form>
                                             </div>
                                         </div>
-                                        {{-- <div class="tab-pane" id="tabItem8">
-                                        <div class="nk-block">
-                                            <div class="nk-block-head">
-                                                <h5 class="title">APIs Integration</h5>
-                                            </div><!-- .nk-block-head -->
 
-                                        </div>
-                                    </div> --}}
                                         <div class="tab-pane" id="tabItem9">
                                             <div class="nk-block">
                                                 <div class="nk-block-head">
@@ -912,8 +905,9 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                     </div>
+
+                                                    @if (getImporterYMLSettings(config('app.payment_method_yaml_path')))
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
@@ -940,6 +934,8 @@
                                                             @endif
                                                         </div>
                                                     </div>
+                                                    @endif
+
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">

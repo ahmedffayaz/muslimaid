@@ -7,22 +7,10 @@ d-xl-none
         <div class="nk-sidebar-brand">
             <a href="{{ route(getAdminPrefix() . '.home.index') }}" class="logo-link nk-sidebar-logo">
                 <img class="logo-light logo-img"
-                    src="{{ !isset($settings['website_logo'])
-                        ? asset('admin-dashboard/images/logo.png')
-                        : ($settings['website_logo'] == 'default.png'
-                            ? asset('admin-dashboard/images/logo.png')
-                            : ($settings['website_logo'] == 'cashblack-default.png'
-                                ? asset('storage/__asset/img/logo.png')
-                                : asset('storage/dashboard/images/logo/' . $settings['website_logo']))) }}"
+                    src="@if (isset($settings['dashboard_logo']) && $settings['dashboard_logo'] != 'default.png') {{ asset('storage/dashboard/images/logo/' . $settings['dashboard_logo']) }}@else{{ asset('admin-dashboard/images/logo.png') }} @endif"
                     alt="logo">
                 <img class="logo-dark logo-img"
-                    src="{{ !isset($settings['website_logo'])
-                        ? asset('admin-dashboard/images/logo.png')
-                        : ($settings['website_logo'] == 'default.png'
-                            ? asset('admin-dashboard/images/logo-dark.png')
-                            : ($settings['website_logo'] == 'cashblack-default.png'
-                                ? asset('storage/__asset/img/logo.png')
-                                : asset('storage/dashboard/images/logo/' . $settings['website_logo']))) }}"
+                    src="@if (isset($settings['dashboard_logo']) && $settings['dashboard_logo'] != 'default.png') {{ asset('storage/dashboard/images/logo/' . $settings['dashboard_logo']) }}@else{{ asset('admin-dashboard/images/logo-dark.png') }} @endif"
                     alt="logo-dark">
             </a>
         </div>
@@ -80,14 +68,16 @@ d-xl-none
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan
-                            @can('view charities')
-                            <li class="nk-menu-item">
-                                <a href="{{ route(getAdminPrefix() . '.charities.index') }}" class="nk-menu-link">
-                                    <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
-                                    <span class="nk-menu-text">Charities</span>
-                                </a>
-                            </li><!-- .nk-menu-item -->
-                            @endcan
+                            @if (getImporterYMLSettings(config('app.charity_yaml_path')))
+                                @can('view charities')
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route(getAdminPrefix() . '.charities.index') }}" class="nk-menu-link">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
+                                            <span class="nk-menu-text">Charities</span>
+                                        </a>
+                                    </li><!-- .nk-menu-item -->
+                                @endcan
+                            @endif
                             @can('view countries')
                             <li class="nk-menu-item">
                                 <a href="{{ route(getAdminPrefix() . '.countries.index') }}" class="nk-menu-link">
@@ -114,14 +104,16 @@ d-xl-none
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan
-                            @can('view cashbouts')
-                            <li class="nk-menu-item">
-                                <a href="{{ route(getAdminPrefix() . '.cashouts.index') }}" class="nk-menu-link">
-                                    <span class="nk-menu-icon {{ getNewIndicatorClassForAdmin('sales') }}"> <em class="icon ni ni-cc-alt2-fill"></em></span>
-                                    <span class="nk-menu-text">Cashouts</span>
-                                </a>
-                            </li><!-- .nk-menu-item -->
-                            @endcan
+                            @if (getImporterYMLSettings(config('app.cashout_yaml_path')))
+                                @can('view cashbouts')
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route(getAdminPrefix() . '.cashouts.index') }}" class="nk-menu-link">
+                                            <span class="nk-menu-icon {{ getNewIndicatorClassForAdmin('sales') }}"> <em class="icon ni ni-cc-alt2-fill"></em></span>
+                                            <span class="nk-menu-text">Cashouts</span>
+                                        </a>
+                                    </li><!-- .nk-menu-item -->
+                                @endcan
+                            @endif
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
                     @endcanany

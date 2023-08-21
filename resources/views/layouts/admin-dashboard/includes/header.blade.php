@@ -96,14 +96,17 @@
                                                 </a>
                                             </li><!-- .nk-menu-item -->
                                         @endcan
-                                        @can('view cashouts')
-                                            <li class="">
-                                                <a href="{{ route(getAdminPrefix() . '.cashouts.index') }}" class="{{ getNewIndicatorClassForAdmin('sales') }}">
-                                                    <span class="nk-menu-icon"><em class="icon ni ni-cc-alt2-fill"></em></span>
-                                                    <span class="nk-menu-text">Cashouts</span>
-                                                </a>
-                                            </li><!-- .nk-menu-item -->
-                                        @endcan
+
+                                        @if (getImporterYMLSettings(config('app.cashout_yaml_path')))
+                                            @can('view cashouts')
+                                                <li class="">
+                                                    <a href="{{ route(getAdminPrefix() . '.cashouts.index') }}" class="{{ getNewIndicatorClassForAdmin('sales') }}">
+                                                        <span class="nk-menu-icon"><em class="icon ni ni-cc-alt2-fill"></em></span>
+                                                        <span class="nk-menu-text">Cashouts</span>
+                                                    </a>
+                                                </li><!-- .nk-menu-item -->
+                                            @endcan
+                                        @endif
                                     </ul>
                                 </div>
                             </div>
