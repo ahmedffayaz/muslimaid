@@ -81,5 +81,7 @@ class Kernel extends HttpKernel
         'is_verify_email' => \App\Http\Middleware\IsVerifyEmail::class,
         'module-access' => \App\Http\Middleware\ModulesMiddleware::class,
         'is_charity_module_access' => \App\Http\Middleware\CharitiesMiddleware::class,
+        'is_cashout_module_access' => \App\Http\Middleware\CashoutsMiddleware::class,
+        'is_payment_method_module_access' => \App\Http\Middleware\PaymentMethodMiddleware::class,
     ];
 }

@@ -60,6 +60,10 @@ return [
 
     'charity_yaml_path' => 'Modules_Charities_List',
 
+    'cashout_yaml_path' => 'Modules_Charities_Cashout',
+
+    'payment_method_yaml_path' => 'Modules_PaymentMethod',
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

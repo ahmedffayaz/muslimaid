@@ -77,7 +77,7 @@
                     <div class="form-group">
                         <label class="form-label" for="exit_click_id">Exit Click <span class="text-danger">*</span></label>
                         <div class="form-control-wrap ">
-                            <input type="number" class="form-control" id="exit_click_id" value="" min="0.01" name="exit_click_id[]" placeholder="Exit Click ID"
+                            <input type="number" class="form-control" id="exit_click_id" value="" min="1" step="1" name="exit_click_id[]" placeholder="Exit Click ID"
                                 required>
                         </div>
                     </div>
@@ -133,7 +133,7 @@
                     <div class="form-group">
                         <label class="form-label" for="exit_click_id">Exit Click <span class="text-danger">*</span></label>
                         <div class="form-control-wrap ">
-                            <input type="number" class="form-control" id="exit_click_id" value="" min="0.01" name="exit_click_id[]"
+                            <input type="number" class="form-control" id="exit_click_id" value="" min="1" step="1" name="exit_click_id[]"
                                 placeholder="Exit Click ID" required>
                         </div>
                     </div>
@@ -189,7 +189,7 @@
                     <div class="form-group">
                         <label class="form-label" for="exit_click_id">Exit Click <span class="text-danger">*</span></label>
                         <div class="form-control-wrap ">
-                            <input type="number" class="form-control" id="exit_click_id" value="" min="0.01" name="exit_click_id[]"
+                            <input type="number" class="form-control" id="exit_click_id" value="" min="1" step="1" name="exit_click_id[]"
                                 placeholder="Exit Click ID" required>
                         </div>
                     </div>
@@ -245,7 +245,7 @@
                     <div class="form-group">
                         <label class="form-label" for="exit_click_id">Exit Click <span class="text-danger">*</span></label>
                         <div class="form-control-wrap ">
-                            <input type="number" class="form-control" id="exit_click_id" value="" min="0.01" name="exit_click_id[]"
+                            <input type="number" class="form-control" id="exit_click_id" value="" min="1" step="1" name="exit_click_id[]"
                                 placeholder="Exit Click ID" required>
                         </div>
                     </div>
@@ -301,7 +301,7 @@
                     <div class="form-group">
                         <label class="form-label" for="exit_click_id">Exit Click <span class="text-danger">*</span></label>
                         <div class="form-control-wrap ">
-                            <input type="number" class="form-control" id="exit_click_id" value="" min="0.01" name="exit_click_id[]"
+                            <input type="number" class="form-control" id="exit_click_id" value="" min="1" step="1" name="exit_click_id[]"
                                 placeholder="Exit Click ID" required>
                         </div>
                     </div>

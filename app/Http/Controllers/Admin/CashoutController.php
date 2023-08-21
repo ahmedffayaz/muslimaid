@@ -10,6 +10,11 @@ use App\Models\CashbackStatus;
 
 class CashoutController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('is_cashout_module_access', ['only' => ['index', 'show', 'update']]);
+    }
+
     /**
      * Display a listing of the resource.
      *

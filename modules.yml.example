@@ -3,8 +3,9 @@ Modules:
     Sendgrid: on
     mailchimp: off
   Charities:
-    List: on
-    Cashout: on
+    List: off
+    Cashout: off
+  PaymentMethod: off
   Categories:
     List: on
 Networks:
