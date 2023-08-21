@@ -22,6 +22,7 @@ class PaymentController extends Controller
     function __construct()
     {
         $this->middleware('is_charity_module_access', ['only' => ['CharityCashout']]);
+        $this->middleware('is_cashout_module_access', ['only' => ['index', 'paymentDetails', 'paymentSave', 'cashout']]);
     }
     /**
      * Display a listing of the resource.
@@ -55,7 +56,7 @@ class PaymentController extends Controller
                 }),
                 'nullable', 'string'
             ],
-            'account_number_hidden' =>  [ 
+            'account_number_hidden' =>  [
                 Rule::requiredIf(function () use ($request){
                     return $request->payment_method === "bank";
                 }),
@@ -223,7 +224,7 @@ class PaymentController extends Controller
             flash()->error('You have already pending withdraw request.');
             return redirect()->back();
         }
-        
+
         $validator = Validator::make($request->all(), [
             'charity_types_id' => 'required',
             'id' => 'required',
@@ -294,4 +295,3 @@ class PaymentController extends Controller
         return redirect()->back();
     }
 }
-                      
