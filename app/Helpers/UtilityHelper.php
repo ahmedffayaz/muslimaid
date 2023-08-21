@@ -876,10 +876,24 @@ function convertDateFormat($date)
  */
 function getBannerImageUrl($url, $type = NULL, $row = null)
 {
-    $defaultBanner = asset('frontend/images/banners/categories/cashback.png');
+    $defaultBanner = asset('storage/__asset/img/brands/cashback.png');
 
     if (empty($url) || (!empty($url) && !isFileExist($url)) || ($row && $type && $row->banner_type != $type)) {
         return $defaultBanner;
+    }
+
+    return asset(parse_url($url)['path']);
+}
+
+/**
+ * Get Logo image if not exist show default
+ */ 
+function getLogoImageUrl($url, $type = NULL, $row = null)
+{
+    $defaultLogo = asset('storage/__asset/img/brands/cashback.png');
+
+    if (empty($url) || (!empty($url) && !isFileExist($url)) || ($row && $type && $row->logo_type != $type)) {
+        return $defaultLogo;
     }
 
     return asset(parse_url($url)['path']);
