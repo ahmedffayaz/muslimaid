@@ -907,7 +907,6 @@
                                                         </div>
                                                     </div>
 
-                                                    @if (getImporterYMLSettings(config('app.payment_method_yaml_path')))
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
@@ -915,26 +914,38 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
-                                                            <div class="custom-control custom-switch d-block">
-                                                                <input type="checkbox" class="custom-control-input" id="payment_method_paypal" name="payment_method_paypal"
-                                                                    @if ($settings['payment_method_paypal']) checked @endif value="1">
-                                                                <label class="custom-control-label" for="payment_method_paypal">Paypal</label>
-                                                            </div>
-                                                            <div class="custom-control custom-switch d-block mt-2">
-                                                                <input type="checkbox" class="custom-control-input" id="payment_method_bank" name="payment_method_bank"
-                                                                    @if ($settings['payment_method_bank']) checked @endif value="1">
-                                                                <label class="custom-control-label" for="payment_method_bank">Bank Transfer</label>
-                                                            </div>
-                                                            @if(getImporterYMLSettings(config('app.charity_yaml_path')))
+                                                            @if (getImporterYMLSettings(config('app.payment_method_yaml_path')))
+                                                                <div class="custom-control custom-switch d-block">
+                                                                    <input type="checkbox" class="custom-control-input" id="payment_method_paypal" name="payment_method_paypal"
+                                                                        @if ($settings['payment_method_paypal']) checked @endif value="1">
+                                                                    <label class="custom-control-label" for="payment_method_paypal">Paypal</label>
+                                                                </div>
+                                                                <div class="custom-control custom-switch d-block mt-2">
+                                                                    <input type="checkbox" class="custom-control-input" id="payment_method_bank" name="payment_method_bank"
+                                                                        @if ($settings['payment_method_bank']) checked @endif value="1">
+                                                                    <label class="custom-control-label" for="payment_method_bank">Bank Transfer</label>
+                                                                </div>
+                                                            @endif
+                                                            @if (getImporterYMLSettings(config('app.charity_yaml_path')))
                                                                 <div class="custom-control custom-switch d-block mt-2">
                                                                     <input type="checkbox" class="custom-control-input" id="payment_method_charity" name="payment_method_charity"
                                                                         @if ($settings['payment_method_charity']) checked @endif value="1">
                                                                     <label class="custom-control-label" for="payment_method_charity">Charity</label>
                                                                 </div>
                                                             @endif
+                                                            @if (!getImporterYMLSettings(config('app.payment_method_yaml_path')) && env('PAYMENT_METHOD') && isset($settings[env('PAYMENT_METHOD')]))
+                                                                @php
+                                                                    $removeExtraWords = str_replace('payment_method_', '', env('PAYMENT_METHOD'));
+                                                                    $paymentMethod = str_replace('_', ' ', $removeExtraWords);
+                                                                @endphp
+                                                                <div class="custom-control custom-switch d-block">
+                                                                    <input type="checkbox" class="custom-control-input" id="{{ env('PAYMENT_METHOD') }}" name="{{ env('PAYMENT_METHOD') }}"
+                                                                        @if ($settings[env('PAYMENT_METHOD')]) checked @endif value="1">
+                                                                    <label class="custom-control-label" for="{{ env('PAYMENT_METHOD') }}">{{ ucfirst($paymentMethod) }}</label>
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                     </div>
-                                                    @endif
 
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">

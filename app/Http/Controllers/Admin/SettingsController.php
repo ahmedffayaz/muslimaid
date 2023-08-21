@@ -13,6 +13,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Permission;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class SettingsController extends Controller
 {
@@ -146,7 +147,6 @@ class SettingsController extends Controller
 
     public function saveSettings(Request $request)
     {
-
         try {
             $request->offsetUnset('_method');
             $request->offsetUnset('_token');
@@ -193,21 +193,23 @@ class SettingsController extends Controller
             }
 
             if ($request->has('cashback_percentage')) {
-                SiteSetting::updateOrCreate([
-                    'type'   => 'payment_method_paypal',
-                    'title'  => 'Payment Method Paypal',
+                if (getImporterYMLSettings(config('app.cashout_yaml_path'))) {
+                    SiteSetting::updateOrCreate([
+                        'type'   => 'payment_method_paypal',
+                        'title'  => 'Payment Method Paypal',
 
-                ], [
-                    'value'     =>  $request->has('payment_method_paypal') ? 1 : 0
-                ]);
+                    ], [
+                        'value'     =>  $request->has('payment_method_paypal') ? 1 : 0
+                    ]);
 
-                SiteSetting::updateOrCreate([
-                    'type'   => 'payment_method_bank',
-                    'title'  => 'Payment Method Bank',
+                    SiteSetting::updateOrCreate([
+                        'type'   => 'payment_method_bank',
+                        'title'  => 'Payment Method Bank',
 
-                ], [
-                    'value'     =>  $request->has('payment_method_bank') ? 1 : 0
-                ]);
+                    ], [
+                        'value'     =>  $request->has('payment_method_bank') ? 1 : 0
+                    ]);
+                }
 
                 if (getImporterYMLSettings(config('app.charity_yaml_path'))) {
                     SiteSetting::updateOrCreate([
@@ -215,6 +217,17 @@ class SettingsController extends Controller
                         'title'  => 'Payment Method Charity',
                     ], [
                         'value'     =>  $request->has('payment_method_charity') ? 1 : 0
+                    ]);
+                }
+
+                if (env('PAYMENT_METHOD')) {
+                    $paymentMethod = str_replace('_', ' ', env('PAYMENT_METHOD'));
+
+                    SiteSetting::updateOrCreate([
+                        'type' => env('PAYMENT_METHOD'),
+                        'title' => Str::title($paymentMethod),
+                    ], [
+                        'value' => $request->has(env('PAYMENT_METHOD')) ? 1 : 0
                     ]);
                 }
             }
