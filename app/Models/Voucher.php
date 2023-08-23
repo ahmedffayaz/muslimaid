@@ -27,4 +27,8 @@ class Voucher extends Model
     {
         return $this->belongsTo(Store::class);
     }
+    public function exitClicks()
+    {
+        return $this->hasMany(ExitClick::class);
+    }
 }
