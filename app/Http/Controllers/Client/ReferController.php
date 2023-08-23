@@ -47,6 +47,16 @@ class ReferController extends Controller
             return redirect()->back();
         }
 
+        if(auth()->user()->email == $request->referral_email){
+            if($request->ajax()){
+                return response()->json([
+                    'status' => JsonResponse::HTTP_FORBIDDEN,
+                    'message' => 'You cannot refer yourself'
+                ], JsonResponse::HTTP_FORBIDDEN);
+            }
+            flash()->error('You cannot refer yourself');
+            return redirect()->back();    
+        }
         try {
             $emailTemplate = EmailTemplate::where('key', 'referral_link')->first();
             $link = url('') . '/register-form?referby=' . encrypt(auth()->user()->id);
