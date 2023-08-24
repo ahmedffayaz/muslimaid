@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class RolesPermissionsSeeder extends Seeder
 {
@@ -28,6 +30,7 @@ class RolesPermissionsSeeder extends Seeder
             'network_permissions'       => ['view networks', 'run importer', 'view network categories', 'map categories'],
             'languages_permissions'     => ['view languages', 'add languages', 'delete languages', 'edit languages'],
             'translations_permissions'  => ['view translations', 'add translations', 'delete translations', 'edit translations'],
+            'appeals_permissions'       => ['view appeals', 'edit appeals', 'delete appeals', 'add appeals'],
         ];
 
         foreach ($permissions as $items) {

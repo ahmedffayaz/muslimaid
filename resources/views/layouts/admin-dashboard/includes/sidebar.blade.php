@@ -78,6 +78,16 @@ d-xl-none
                                     </li><!-- .nk-menu-item -->
                                 @endcan
                             @endif
+                            @if (getImporterYMLSettings(config('app.appeal_yaml_path')))
+                                @can('view appeals')
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route(getAdminPrefix() . '.appeals.index') }}" class="nk-menu-link">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
+                                            <span class="nk-menu-text">Appeals</span>
+                                        </a>
+                                    </li><!-- .nk-menu-item -->
+                                @endcan
+                            @endif
                             @can('view countries')
                             <li class="nk-menu-item">
                                 <a href="{{ route(getAdminPrefix() . '.countries.index') }}" class="nk-menu-link">

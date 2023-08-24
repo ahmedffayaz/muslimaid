@@ -64,6 +64,8 @@ return [
 
     'payment_method_yaml_path' => 'Modules_PaymentMethod',
 
+    'appeals_yaml_path' => 'Modules_Appeals_List',
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

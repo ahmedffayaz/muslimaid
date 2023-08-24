@@ -62,16 +62,26 @@
                                         @if (getImporterYMLSettings(config('app.charity_yaml_path')))
                                             @can('view charities')
                                             <li class="">
-                                                <a href="{{ '/' . getAdminPrefix() . '/charities' }}"  class="">
+                                                <a href="{{ route(getAdminPrefix() . '.charities.index') }}"  class="">
                                                     <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
                                                     <span class="nk-menu-text">Charities</span>
                                                 </a>
                                             </li><!-- .nk-menu-item -->
                                             @endcan
                                         @endif
+                                        @if (getImporterYMLSettings(config('app.appeal_yaml_path')))
+                                            @can('view appeals')
+                                            <li class="">
+                                                <a href="{{ route(getAdminPrefix() . '.appeals.index') }}"  class="">
+                                                    <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
+                                                    <span class="nk-menu-text">Appeals</span>
+                                                </a>
+                                            </li><!-- .nk-menu-item -->
+                                            @endcan
+                                        @endif
                                         @can('view countries')
                                         <li class="">
-                                            <a  href="{{ '/' . getAdminPrefix() . '/countries' }}"  class="">
+                                            <a  href="{{ route(getAdminPrefix() . '.countries.index') }}"  class="">
                                                 <span class="nk-menu-icon"><em class="icon ni ni-flag"></em></span>
                                                 <span class="nk-menu-text">Countries</span>
                                             </a>
