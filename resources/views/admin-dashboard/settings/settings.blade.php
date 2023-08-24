@@ -938,7 +938,7 @@
                                                                     $removeExtraWords = str_replace('payment_method_', '', env('PAYMENT_METHOD'));
                                                                     $paymentMethod = str_replace('_', ' ', $removeExtraWords);
                                                                 @endphp
-                                                                <div class="custom-control custom-switch d-block">
+                                                                <div class="custom-control custom-switch d-block mt-2">
                                                                     <input type="checkbox" class="custom-control-input" id="{{ env('PAYMENT_METHOD') }}" name="{{ env('PAYMENT_METHOD') }}"
                                                                         @if ($settings[env('PAYMENT_METHOD')]) checked @endif value="1">
                                                                     <label class="custom-control-label" for="{{ env('PAYMENT_METHOD') }}">{{ ucfirst($paymentMethod) }}</label>
