@@ -5,9 +5,12 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use App\Models\Appeal;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\File;
 use Throwable;
 
 class AppealController extends Controller
@@ -51,7 +54,18 @@ class AppealController extends Controller
         $validator = Validator::make($request->all(), [
             'title' => 'required|max:255',
             'image_type' => 'required',
-            'image_upload' =>  $request->input('image_type') === 'upload' ? 'required|image:jpeg,png,jpg,gif' : '',
+            'image_upload' => [
+                Rule::requiredIf(function() use ($request){
+                    return $request->image_type == "upload";
+                }),
+                'nullable', 'mimes:jpeg,png,jpg,svg'
+            ],
+            'image_link' => [
+                Rule::requiredIf(function() use ($request){
+                    return $request->image_type == "link";
+                }),
+                'nullable', 'sometimes', 'url'
+            ],
         ]);
 
         if ($validator->fails()) {
@@ -109,9 +123,9 @@ class AppealController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Appeal $appeal)
     {
-        //
+        return view('admin-dashboard.appeals.edit', compact('appeal'));
     }
 
     /**
@@ -121,9 +135,68 @@ class AppealController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Appeal $appeal)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|max:255',
+            'image_type' => 'required',
+            'image_link' => [
+                Rule::requiredIf(function () use ($request){
+                    return $request->image_type == "link";
+                }),
+                'url','sometimes','nullable'
+            ],
+            'image_upload' => 'sometimes|mimes:jpeg,png,jpg,gif'
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        try {
+            DB::beginTransaction();
+            $inputData = [
+                'title' => $request->input('title'),
+                'country' => $request->input('country'),
+                'image_type' => $request->input('image_type'),
+                'image_link' => $request->input('image_link'),
+                'description' => $request->input('description'),
+                'status' => $request->input('status'),
+            ];
+
+            if ($request->input('image_type') == 'upload' && $request->has('image_upload')) {
+                $imageName = Str::slug($request->input('name')) . '_image_' . time() . '.' . $request->image_upload->extension();
+                $request->image_upload->storeAs('public/appeals/images', $imageName);
+                $inputData['image_upload'] = $this->imagePath . $imageName;
+                $inputData['image_link'] = null;
+                if (File::exists(public_path($appeal->image_upload))) {
+                    File::delete(public_path($appeal->image_upload));
+                }
+            } else if ($request->input('image_type') == 'link') {
+                $inputData['image_upload'] = null;
+                if (File::exists(public_path($appeal->image_upload))) {
+                    File::delete(public_path($appeal->image_upload));
+                }
+            }
+
+            $appeal->update($inputData);
+
+            DB::commit();
+
+            if (!$request->ajax()) {
+                flash()->success('Appeal updated');
+                return redirect()->route(getAdminPrefix() . '.appeals.index');
+            } else {
+                return 1;
+            }
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            flash()->error('Something went wrong, try again');
+            return redirect()->back();
+        }
     }
 
     /**
@@ -132,8 +205,18 @@ class AppealController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Appeal $appeal)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $appeal->delete();
+            DB::commit();
+            flash()->success('Appeal deleted');
+            return redirect()->route(getAdminPrefix() . '.appeals.index');
+        } catch (Throwable $th) {
+            DB::rollBack();
+            flash()->error('Something went wrong, try again');
+            return redirect()->back();
+        }
     }
 }
