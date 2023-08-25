@@ -222,18 +222,14 @@ d-xl-none
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan
-                            <li class="nk-menu-item">
-                                <a href="{{ route(getAdminPrefix() . '.sliders.index') }}" class="nk-menu-link">
-                                    <span class="nk-menu-icon"><em class="icon ni ni-layers"></em></span>
-                                    <span class="nk-menu-text">Sliders</span>
-                                </a>
-                            </li><!-- .nk-menu-item -->
-                            <li class="nk-menu-item">
-                                <a href="{{ '/' . getAdminPrefix() . '/menu' }}" class="nk-menu-link">
-                                    <span class="nk-menu-icon"><em class="icon ni ni-menu"></em></span>
-                                    <span class="nk-menu-text">Menu</span>
-                                </a>
-                            </li><!-- .nk-menu-item -->
+                            @if(Auth::user()->hasRole('admin'))
+                                <li class="nk-menu-item">
+                                    <a href="{{url('docs')}}" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-file-doc"></em></span>
+                                        <span class="nk-menu-text">API Docs</span>
+                                    </a>
+                                </li><!-- .nk-menu-item -->
+                            @endif
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
                     @endcanany
@@ -275,16 +271,21 @@ d-xl-none
                                     <span class="nk-menu-text">Seo Rules</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="{{ route(getAdminPrefix() . '.sliders.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-layers"></em></span>
+                                    <span class="nk-menu-text">Sliders</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
+                            <li class="nk-menu-item">
+                                <a href="{{ '/' . getAdminPrefix() . '/menu' }}" class="nk-menu-link">
+                                    <span class="nk-menu-icon"><em class="icon ni ni-menu"></em></span>
+                                    <span class="nk-menu-text">Menu</span>
+                                </a>
+                            </li><!-- .nk-menu-item -->
                         </ul>
                     </li>
-                    @if(Auth::user()->hasRole('admin'))
-                    <li class="nk-menu-item">
-                        <a href="{{url('docs')}}" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-file-doc"></em></span>
-                            <span class="nk-menu-text">API Docs</span>
-                        </a>
-                    </li><!-- .nk-menu-item -->
-                    @endif
+
                 </ul><!-- .nk-menu -->
             </div><!-- .nk-sidebar-menu -->
         </div><!-- .nk-sidebar-content -->

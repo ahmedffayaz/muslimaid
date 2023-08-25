@@ -210,18 +210,14 @@
                                                 </a>
                                             </li><!-- .nk-menu-item -->
                                         @endcan
-                                        <li class="">
-                                            <a href="{{ route(getAdminPrefix() . '.sliders.index') }}" class="">
-                                                <span class="nk-menu-icon"><em class="icon ni ni-layers"></em></span>
-                                                <span class="nk-menu-text">Sliders</span>
-                                            </a>
-                                        </li><!-- .nk-menu-item -->
-                                        <li class="">
-                                            <a href="{{ '/' . getAdminPrefix() . '/menu' }}" class="">
-                                                <span class="nk-menu-icon"><em class="icon ni ni-menu"></em></span>
-                                                <span class="nk-menu-text">Menu</span>
-                                            </a>
-                                        </li><!-- .nk-menu-item -->
+                                        @if(Auth::user()->hasRole('admin'))
+                                            <li>
+                                                <a href="{{ route(getAdminPrefix() . '.api-docs') }}" target="_blank">
+                                                    <span class="nk-menu-icon"><em class="icon ni ni-file-doc"></em></span>
+                                                    <span class="nk-menu-text">API Docs</span>
+                                                </a>
+                                            </li><!-- .nk-menu-item -->
+                                        @endif
                                     </ul>
                                 </div>
                             </div>
@@ -265,10 +261,16 @@
                                                 <span class="nk-menu-text">SEO Rules</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
-                                        <li>
-                                            <a href="{{ route(getAdminPrefix() . '.api-docs') }}" target="_blank">
-                                                <span class="nk-menu-icon"><em class="icon ni ni-file-doc"></em></span>
-                                                <span class="nk-menu-text">API Docs</span>
+                                        <li class="">
+                                            <a href="{{ route(getAdminPrefix() . '.sliders.index') }}" class="">
+                                                <span class="nk-menu-icon"><em class="icon ni ni-layers"></em></span>
+                                                <span class="nk-menu-text">Sliders</span>
+                                            </a>
+                                        </li><!-- .nk-menu-item -->
+                                        <li class="">
+                                            <a href="{{ '/' . getAdminPrefix() . '/menu' }}" class="">
+                                                <span class="nk-menu-icon"><em class="icon ni ni-menu"></em></span>
+                                                <span class="nk-menu-text">Menu</span>
                                             </a>
                                         </li><!-- .nk-menu-item -->
                                     </ul>
