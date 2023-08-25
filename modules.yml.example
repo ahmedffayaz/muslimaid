@@ -6,6 +6,8 @@ Modules:
     List: on
     Cashout: on
   PaymentMethod: on
+  Appeals:
+    List: on
   Categories:
     List: on
 Networks:
