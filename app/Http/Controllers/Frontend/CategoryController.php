@@ -180,7 +180,7 @@ class CategoryController extends Controller
         })->whereSlug("cashblack-to-your-door")->whereStatus('1')->first();
 
         if(! $request->has('cuisines')){
-            $allStores = $category->stores()->where('status', 'active')->distinct()->latest()->get();
+            $allStores = $category->stores()->where('status', 'active')->distinct()->get();
             $allStores = sortByDistance($data, $allStores, true);
             $allStores = $allStores->skip($offset)->take($perPage);
             $html = view('frontend.categories.load-button-stores', ['allStores' => $allStores])->render();
