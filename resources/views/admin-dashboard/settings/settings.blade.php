@@ -1142,6 +1142,8 @@
     </style>
 @endsection
 @push('scripts')
+<script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
+<script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
     <!-- Update Store-->
     <script>
         jQuery.validator.addMethod("minValue", function(value, element, param) {
@@ -1295,4 +1297,15 @@
             });
         });
     </script>
+    <script>
+        $(document).ready(function () {
+            var input = document.querySelector("#phone_number");
+            window.intlTelInput(input,({
+                autoInsertDialCode:true,
+                nationalMode:false,
+                preferredCountries: [],
+            }));
+            $('.iti').css('width', '100%');
+        });
+</script>
 @endpush

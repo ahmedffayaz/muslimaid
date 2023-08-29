@@ -270,6 +270,8 @@
 
 @endsection
 @push('scripts')
+<script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
+<script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
     <!-- Update Store-->
     <script>
         $(document).ready(function() {
@@ -327,7 +329,12 @@
         }, "Only alphabetic name is allow");
 
         jQuery.validator.addMethod("validPhone", function(value, element) {
-            var regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+            var regex = /^\+\d{12}$/;
+            if(regex.test(value) == false){
+                $('.iti__flag-container').css('padding-bottom', '39px');
+            } else {
+                $('.iti__flag-container').css('padding-bottom', '15px');
+            }
             return regex.test(value);
         }, "Enter a valid phone number");
 
@@ -350,5 +357,16 @@
                 },
             }
         });
+        </script>
+        <script>
+            $(document).ready(function () {
+                var input = document.querySelector("#phone");
+                window.intlTelInput(input,({
+                    autoInsertDialCode:true,
+                    nationalMode:false,
+                    preferredCountries: [],
+                }));
+                $('.iti').css('width', '100%');
+            });
     </script>
 @endpush
