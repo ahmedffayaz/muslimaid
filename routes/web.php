@@ -295,6 +295,11 @@ Route::get('offers', [App\Http\Controllers\Frontend\OfferController::class, 'ind
 Route::get('trending', [App\Http\Controllers\Frontend\TrendingController::class, 'index'])->name('trending.index');
 
 Route::get('pages/{slug}', [App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('pages.show');
+
+Route::get('appeals', [App\Http\Controllers\Frontend\AppealController::class, 'index'])->name('appeals.index');
+Route::get('appeals/{slug}', [App\Http\Controllers\Frontend\AppealController::class, 'show'])->name('appeals.show');
+Route::get('appeal/search', [App\Http\Controllers\Frontend\AppealController::class, 'appealsView'])->name('appeals.view');
+
  // fcm token
 Route::post('/fcmregistration', [App\Http\Controllers\FirebaseController::class, 'store'])->name('fcmregistration');
 
