@@ -64,8 +64,11 @@ class CategoryController extends Controller
             if ($request->cuisines) {
                 $viewType = 'grid-view';
                 $allStores = $stores['stores'];
+                $storesCount = $stores['storesCount'];
                 return response()->json([
-                    'stores' => view('frontend.categories.view', compact('allStores', 'slug', 'viewType'))->render(),
+                    'view' => view('frontend.categories.view', compact('allStores', 'slug', 'viewType'))->render(),
+                    'stores' => $allStores,
+                    'storesCount' => $storesCount
                 ]);
             }
 
@@ -88,6 +91,7 @@ class CategoryController extends Controller
 
     public function categoriesView(Request $request, $slug)
     {
+        $storesCount = NULL;
         $ip =  request()->ip(); //Dynamic IP address get
         $data = Location::get($ip);
         $category = Category::where(function ($query) {
@@ -147,6 +151,7 @@ class CategoryController extends Controller
             }
         } else if ($request->input('cuisines')) {
             $allStores = $allStores->get();
+            $storesCount = $allStores->count();
             $allStores = sortByDistance($data, $allStores, true);
             $allStores = !empty($request->input('perPage')) ? $allStores->paginate($request->input('perPage')) : $allStores->paginate(25);
         } else {
@@ -157,7 +162,8 @@ class CategoryController extends Controller
         $viewType = isset($request->viewType) ? $request->viewType : 'grid-view';
         return [
             'view' => view('frontend.categories.view', compact('allStores', 'slug', 'viewType'))->render(),
-            'stores' => $allStores
+            'stores' => $allStores,
+            'storesCount' => $storesCount
         ];
     }
 
@@ -173,13 +179,34 @@ class CategoryController extends Controller
                 ->orWhereNull('visibility');
         })->whereSlug("cashblack-to-your-door")->whereStatus('1')->first();
 
-        $allStores = $category->stores()->where('status', 'active')->distinct()->get();
-        $allStores = sortByDistance($data, $allStores, true);
-        $allStores = $allStores->skip($offset)->take($perPage);
-        $html = view('frontend.categories.load-button-stores', ['allStores' => $allStores])->render();
-        return response()->json([
-            'html' => $html,
-            'nextOffset' => $offset + $perPage,
-        ]);
+        if(! $request->has('cuisines')){
+            $allStores = $category->stores()->where('status', 'active')->distinct()->get();
+            $allStores = sortByDistance($data, $allStores, true);
+            $allStores = $allStores->skip($offset)->take($perPage);
+            $html = view('frontend.categories.load-button-stores', ['allStores' => $allStores])->render();
+            return response()->json([
+                'html' => $html,
+                'nextOffset' => $offset + $perPage,
+                'stores' => $allStores
+            ]);
+        } else {
+            $allStores = $category->stores()->where('status', 'active');
+            if($request->cuisines[0] != "all"){
+                $allStores = $allStores->whereHas('categories', function ($query) use ($request) {
+                    $query->whereIn('name', $request->input('cuisines'));
+                });
+            }
+            $allStores = $allStores->get();
+            $storesCount = $allStores->count();
+            $allStores = sortByDistance($data, $allStores, true);
+            $allStores = $allStores->skip($offset)->take($perPage);
+            $html = view('frontend.categories.load-button-stores', ['allStores' => $allStores])->render();
+            return response()->json([
+                'html' => $html,
+                'nextOffset' => $offset + $perPage,
+                'stores' => $allStores,
+                'totalCount' => $storesCount
+            ]);
+        }
     }
 }
