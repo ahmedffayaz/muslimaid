@@ -190,7 +190,7 @@ class CategoryController extends Controller
                 'stores' => $allStores
             ]);
         } else {
-            $allStores = $category->stores();
+            $allStores = $category->stores()->where('status', 'active');
             if($request->cuisines[0] != "all"){
                 $allStores = $allStores->whereHas('categories', function ($query) use ($request) {
                     $query->whereIn('name', $request->input('cuisines'));
