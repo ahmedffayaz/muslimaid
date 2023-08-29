@@ -105,6 +105,9 @@
     <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
     <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
 
+    <script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
+    <script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
+
     <script>
         var quill = new Quill('#editor-container', {
             modules: {
@@ -147,7 +150,12 @@
         }, "Only alphabetic name is allow");
 
         jQuery.validator.addMethod("validPhone", function(value, element) {
-            var regex = /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/;
+            var regex = /^\+\d{12}$/;
+            if(regex.test(value) == false){
+                $('.iti__flag-container').css('padding-bottom', '39px');
+            } else {
+                $('.iti__flag-container').css('padding-bottom', '15px');
+            }
             return regex.test(value);
         }, "Enter a valid phone number");
 
@@ -169,6 +177,18 @@
                     validPhone: true
                 },
             }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var input = document.querySelector("#phone-no-1");
+            window.intlTelInput(input,({
+                autoInsertDialCode:true,
+                nationalMode:false,
+                initialCountry:"",
+                preferredCountries: [],
+            }));
+            $('.iti').css('width', '100%');
         });
     </script>
 @endpush

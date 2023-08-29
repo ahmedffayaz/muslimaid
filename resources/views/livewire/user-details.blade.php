@@ -681,11 +681,11 @@
         }, "Only alphabetic name is allow");
 
         jQuery.validator.addMethod("validPhone", function(value, element) {
-            var regex = /^\+\d{1,4}\d{5,}$/;
+            var regex = /^\+\d{12}$/;
             if(regex.test(value) == false){
                 $('.iti__flag-container').css('padding-bottom', '39px');
             } else {
-                $('.iti__flag-container').css('padding-bottom', '');
+                $('.iti__flag-container').css('padding-bottom', '15px');
             }
             return regex.test(value);
         }, "Enter a valid phone number");
