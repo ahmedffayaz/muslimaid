@@ -46,6 +46,7 @@ class AuthController extends Controller
                 'password' => Hash::make($request->input('password')),
                 'otp' => $otp,
                 'status' => 'pending',
+                'avatar' => 'default.png',
                 'registration_type' => 'sign up',
             ]);
 
