@@ -27,6 +27,15 @@ class UserResource extends JsonResource
         } else{
            $is_profile_complete = 0;
         }
+
+        if ($this->avatar == 'default.png' || $this->avatar == NULL || $this->avatar == '') {
+            $avatar = asset('storage/__asset/img/default-avatar.png');
+        } else {
+            $avatar = !Storage::exists('public/users/images/avatar/' . $this->avatar)
+                ? asset('storage/__asset/img/default-avatar.png')
+                : asset('storage/users/images/avatar/' . $this->avatar);
+        }
+
         $user = [
             "id" => $this->id,
             "title" => empty($this->title) ? '' : $this->title,
@@ -43,7 +52,7 @@ class UserResource extends JsonResource
             "street" => empty($this->street) ? '' : $this->street,
             'country_id' => empty($this->country_id) ? '' : $this->country_id,
             'postal_code' => empty($this->postal_code) ? '' : $this->postal_code,
-            "avatar" => url('/') . '/' .  ($this->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . $this->avatar) ? 'admin-dashboard/images/avatar.png' : 'storage/users/images/avatar/' . $this->avatar),
+            "avatar" => $avatar,
             "avatar_type" => "upload",
             "is_verify" => $this->is_email_verified ? 'Yes' : 'No',
             "date_updated" => date('d-M-Y', strtotime($this->updated_at)),
