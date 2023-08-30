@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class CopyFrontendAsset extends Command
 {
@@ -44,13 +45,22 @@ class CopyFrontendAsset extends Command
      */
     public function handle()
     {
-        $this->deleteDirectory(
-            convertPathForOS($this->storagePath)
-        );
+        try {
+            $this->deleteDirectory(
+                convertPathForOS($this->storagePath)
+            );
 
-        $this->copyDirectory(
-            $this->resourcePath . '/*'
-        );
+            $this->copyDirectory(
+                $this->resourcePath . '/*'
+            );
+
+            $this->info('Frontend asset copied successfully.');
+            $this->info(' ');
+        } catch (\Throwable $th) {
+            $this->error("\e[41;97m Something went wrong. \e[0m");
+            $this->error('<fg=white;> </>');
+            Log::error($th->getMessage());
+        }
     }
 
     /**

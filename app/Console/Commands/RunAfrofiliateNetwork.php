@@ -43,8 +43,12 @@ class RunAfrofiliateNetwork extends Command
             if(getImporterYMLSettings('Networks_Afrofiliate_Importer_Cashbacks' )){
                 $importer = new AfrofiliateImporter();
                 dispatch($importer);
+                $this->info('Afrofiliate network\'s cashbacks created successfully.');
+                $this->info(' ');
             }
         } catch (\Exception $e) {
+            $this->error("\e[41;97m Something went wrong. \e[0m");
+            $this->error('<fg=white;> </>');
             return $this->error($e->getMessage());
         }
     }
