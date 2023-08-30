@@ -120,6 +120,15 @@
 
                                             <div class="col-lg-6">
                                                 <div class="form-group">
+                                                    <label class="form-label" for="donation-link">Donation Link</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" id="donation-link" name="donation_link" value="{{ old('donation_link') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
                                                     <label class="form-label" for="status">Status <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
                                                         <div class="form-control-select">
@@ -136,6 +145,34 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="meta-description">Meta Description</label>
+                                                    <div class="form-control-wrap">
+                                                        <textarea class="form-control" id="meta-description" name="meta_description"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="meta-keyword">Meta Keyword</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" id="meta-keyword" name="meta_keyword" value="{{ old('meta_keyword') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="meta-keyword">Meta title</label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="text" class="form-control" id="meta-title" name="meta_title" value="{{ old('meta_title') }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <button type="submit" class="btn btn-lg btn-primary">Save</button>

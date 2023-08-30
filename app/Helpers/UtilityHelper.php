@@ -725,8 +725,9 @@ function checkSeoPageRule($url)
         $route_names = [
             'page' => '\App\Models\Page',
             'post' => '\App\Models\Blog',
+            'appeal' => '\App\Models\Appeal',
             'store.location'  => '\App\Models\Category',
-            'stores.show' => '\App\Models\Store'
+            'stores.show' => '\App\Models\Store',
         ];
 
         foreach ($route_names as $model) {
@@ -887,7 +888,7 @@ function getBannerImageUrl($url, $type = NULL, $row = null)
 
 /**
  * Get Logo image if not exist show default
- */ 
+ */
 function getLogoImageUrl($url, $type = NULL, $row = null)
 {
     $defaultLogo = asset('storage/__asset/img/brands/cashback.png');
