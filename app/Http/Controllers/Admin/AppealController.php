@@ -82,7 +82,11 @@ class AppealController extends Controller
                 'description' => $request->input('description'),
                 'image_type' => $request->input('image_type'),
                 'image_link' => $request->input('image_link'),
+                'link' => $request->input('donation_link'),
                 'status' => $request->input('status'),
+                'meta_description' => $request->input('meta_description'),
+                'meta_keyword' => $request->input('meta_keyword'),
+                'meta_title' => $request->input('meta_title')
             ]);
             if ($request->input('image_type') == 'upload') {
                 if ($request->has('image_upload')) {
@@ -163,7 +167,11 @@ class AppealController extends Controller
                 'image_type' => $request->input('image_type'),
                 'image_link' => $request->input('image_link'),
                 'description' => $request->input('description'),
+                'link' => $request->input('donation_link'),
                 'status' => $request->input('status'),
+                'meta_description' => $request->input('meta_description'),
+                'meta_keyword' => $request->input('meta_keyword'),
+                'meta_title' => $request->input('meta_title')
             ];
 
             if ($request->input('image_type') == 'upload' && $request->has('image_upload')) {

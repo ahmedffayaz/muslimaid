@@ -16,8 +16,10 @@ class Appeal extends Model
         'image_type',
         'image_upload',
         'image_link',
+        'link',
         'status',
         'meta_description',
-        'meta_keyword'
+        'meta_keyword',
+        'meta_title'
     ];
 }
