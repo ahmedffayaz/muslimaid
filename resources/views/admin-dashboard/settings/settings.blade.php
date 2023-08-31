@@ -428,7 +428,7 @@
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
                                                                 <label class="form-label">Encryption <em class="icon ni ni-question form-label" data-toggle="tooltip"
-                                                                        data-placement="top" title=" Enter password of mail service."></em></label>
+                                                                        data-placement="top" title=" Enter encryption of mail service."></em></label>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -475,15 +475,13 @@
 
                                                     <div class="nk-block-head mt-5">
                                                         <h5 class="title">Mailchimp <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
-                                                                title=" Mailchimp is used for newsletters leave blank if you want to disable Newsletter."></em></h5>
-                                                        {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                                                title=" Mailchimp is used for newsletters. Leave blank if you want to disable Newsletter."></em></h5>
                                                     </div><!-- .nk-block-head -->
 
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="mailchimp_api_key">API Key</label>
-                                                                {{-- <span class="form-note">Specify the mailchimp api key.</span> --}}
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -500,7 +498,6 @@
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="mailchimp_list_id">List ID</label>
-                                                                {{-- <span class="form-note">Specify the mailchimp list id.</span> --}}
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -515,7 +512,7 @@
 
                                                     <div class="nk-block-head mt-5">
                                                         <h5 class="title">SendGrid <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
-                                                            title=" SendGrid is used for newsletters and registered users listing leave blank if you want to disable Newsletter."></em></h5>
+                                                            title=" SendGrid is used for newsletters. Leave blank if you want to disable Newsletter."></em></h5>
                                                     </div>
 
                                                     <div class="row g-3 align-center">
@@ -703,14 +700,12 @@
 
                                                     <div class="nk-block-head mt-5">
                                                         <h5 class="title">Facebook Login <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
-                                                                title=" Provide credencials for facebook login OR leave blank, to disable facebook login."></em></h5>
-                                                        {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                                                title=" Provide credencials for facebook login OR leave blank to disable."></em></h5>
                                                     </div><!-- .nk-block-head -->
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
-                                                                <label class="form-label" for="facebook_client_id">Client ID</label>
-                                                                {{-- <span class="form-note">Specify the facebook client id.</span> --}}
+                                                                <label class="form-label" for="facebook_client_id">Client ID</label>\
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -727,7 +722,6 @@
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="facebook_client_secret">Client Secret</label>
-                                                                {{-- <span class="form-note">Specify the facebook client secret.</span> --}}
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -744,7 +738,6 @@
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="facebook_url">Callback URL</label>
-                                                                {{-- <span class="form-note">Specify the facebook url.</span> --}}
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -759,14 +752,12 @@
 
                                                     <div class="nk-block-head mt-5">
                                                         <h5 class="title">Google Login <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
-                                                                title=" Provide credencials for google login OR leave blank, to disable google login."></em></h5>
-                                                        {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                                                title=" Provide credencials for google login OR leave blank to disable."></em></h5>
                                                     </div><!-- .nk-block-head -->
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="google_client_id">Client ID</label>
-                                                                {{-- <span class="form-note">Specify the google client id.</span> --}}
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -784,7 +775,6 @@
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="google_client_secret">Client Secret</label>
-                                                                {{-- <span class="form-note">Specify the google client secret.</span> --}}
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -801,7 +791,6 @@
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="google_url">Callback URL</label>
-                                                                {{-- <span class="form-note">Specify the google url.</span> --}}
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
