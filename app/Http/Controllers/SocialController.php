@@ -57,7 +57,9 @@ class SocialController extends Controller
                 'provider'          => $provider,
                 'referred_by'       => Session::has('refCode') ? base64_decode(Session::get('refCode')) : null,
                 'referred_at'       => Session::has('refCode') ? $today : '',
-                'is_email_verified' => 1
+                'is_email_verified' => 1,
+                'avatar' => 'default.png',
+                'status' => 'active'
             ]);
 
             $user->assignRole('user');
