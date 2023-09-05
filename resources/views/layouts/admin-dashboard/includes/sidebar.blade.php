@@ -78,7 +78,7 @@ d-xl-none
                                     </li><!-- .nk-menu-item -->
                                 @endcan
                             @endif
-                            @if (getImporterYMLSettings(config('app.appeal_yaml_path')))
+                            @if (getImporterYMLSettings(config('app.appeals_yaml_path')))
                                 @can('view appeals')
                                     <li class="nk-menu-item">
                                         <a href="{{ route(getAdminPrefix() . '.appeals.index') }}" class="nk-menu-link">

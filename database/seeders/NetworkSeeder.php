@@ -40,7 +40,7 @@ class NetworkSeeder extends Seeder
 					'id' => $network['id'],
 					'name' => $network['name'],
 					'description' => $network['description'],
-					'click_ref' => arrayValueExists($network, 'logo') ? $network['click_ref'] : '',
+					'click_ref' => arrayValueExists($network, 'click_ref') ? $network['click_ref'] : '',
 					'deeplink_identifier' => $network['deeplink_identifier'],
 					'logo' => arrayValueExists($network, 'logo') ? $network['logo']: '',
 					'created_at' => arrayValueExists($network, 'created_at') ? dbDate($network['created_at']) : $now,
