@@ -78,45 +78,54 @@ class TicketController extends Controller
                     'input' => $request->all()
                 ]);
         }
-        $ticket->update([
-            'claim_amount' => $request->input('amount'),
-            'message' => $request->input('product'),
 
-        ]);
-        sendEmailNotification($ticket);
-        
-        $title = 'Ticket Created';
-        $message = 'A new ticket has been created';
-        $url = url('account/tickets');
-        $deviceToken = optional(User::first()->devices()->whereType('web')->first())->fcm_token;
-        $user = User::first();
-        
-        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
+        try {
+            $ticket->update([
+                'claim_amount' => $request->input('amount'),
+                'message' => $request->input('product'),
 
-        flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
-        return redirect()->route('account.tickets.index');
+            ]);
+            sendEmailNotification($ticket);
+
+            $title = 'Ticket Created';
+            $message = 'A new ticket has been created';
+            $url = url('account/tickets');
+            $deviceToken = optional(User::first()->devices()->whereType('web')->first())->fcm_token;
+            $user = User::first();
+
+            $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
+
+            flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
+            return redirect()->route('account.tickets.index');
+        } catch (Exception $e) {
+            flash()->error("Something went wrong, try again later.");
+            return redirect()->route('account.tickets.index');
+        }
     }
     public function step2(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'store_id' => 'required',
         ], [
             'store_id.required' => 'Store name is required.',
         ]);
+
         if ($validator->fails()) {
             return redirect()->back()
                 ->withErrors($validator)
                 ->withInput()
                 ->with('error', $validator->errors()->first());
         }
+
         $store_id = $request->input('store_id');
         $claim = $request->input('claim_type');
         $user = Auth::user();
         $clicks = $user->clicks->where('store_id', $store_id);
+
         if ($claim  == 'missing cashback') {
             return view('frontend.client-dashboard.tickets.ticket_step2', compact('store_id', 'claim', 'clicks'));
         }
+
         if ($claim == 'declined cashback') {
             $cashback =  UserCashback::where([
                 'store_id' => 5,
@@ -130,6 +139,7 @@ class TicketController extends Controller
                 return redirect()->back();
             }
         }
+
         if ($claim == 'incorrect amount') {
             $cashback =  UserCashback::where([
                 'store_id' => $store_id,
@@ -167,9 +177,11 @@ class TicketController extends Controller
                 }
                 $click_id = $request->input('click_id');
             }
+
             $click = ExitClick::where('id', $click_id)->first();
             $claim_type = $request->input('claim_type');
             $message = 'l';
+
             if ($routeMethod != 'GET') {
                 $claim = new Ticket;
                 $claim->store_id = $click->store_id;
@@ -197,6 +209,7 @@ class TicketController extends Controller
                     'click_id' => $click->id,
                 ])->first();
             }
+
             if ($claim_type == 'incorrect amount' || $claim_type == 'declined cashback') {
                 flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
                 return redirect()->route('account.tickets.index');
