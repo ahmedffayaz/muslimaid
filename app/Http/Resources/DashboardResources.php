@@ -15,6 +15,14 @@ class DashboardResources extends JsonResource
      */
     public function toArray($request)
     {
+        if ($this->avatar == 'default.png' || $this->avatar == NULL || $this->avatar == '') {
+            $avatar = asset('storage/__asset/img/default-avatar.png');
+        } else {
+            $avatar = !Storage::exists('public/users/images/avatar/' . $this->avatar)
+                ? asset('storage/__asset/img/default-avatar.png')
+                : asset('storage/users/images/avatar/' . $this->avatar);
+        }
+
         $user = [
             "id" => $this->id,
             "name" => $this->first_name . ' ' . $this->last_name,
@@ -22,7 +30,7 @@ class DashboardResources extends JsonResource
             "is_verify" => $this->is_email_verified ? 'Yes' : 'No',
             "address" => empty($this->address) ? '' : $this->address,
             "phone" => $this->phone,
-            "avatar" => url('/') . '/' .  ($this->avatar == 'default.png' || !Storage::exists('public/users/images/avatar/' . $this->avatar) ? 'admin-dashboard/images/avatar.png' : 'storage/users/images/avatar/' . $this->avatar),
+            "avatar" => $avatar,
             "status" => $this->status,
             "paypal_email" =>  empty($this->paypalInfo) ? '' : $this->paypalInfo->paypal_email,
             "date_created" => date('d-M-Y', strtotime($this->created_at)),
