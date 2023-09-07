@@ -56,13 +56,13 @@ class PaymentController extends Controller
                 }),
                 'nullable', 'string'
             ],
-            'account_number_hidden' =>  [
+            'account_number' =>  [
                 Rule::requiredIf(function () use ($request){
                     return $request->payment_method === "bank";
                 }),
                 'nullable', 'regex:/^[0-9]+$/', 'size:8'
             ],
-            'bank_sort_code_hidden' => [
+            'bank_sort_code' => [
                 Rule::requiredIf(function () use ($request){
                     return $request->payment_method === "bank";
                 }),
@@ -77,8 +77,8 @@ class PaymentController extends Controller
         ]);
         if($request->payment_method === "bank"){
             $validator->setAttributeNames([
-                'account_number_hidden' => 'Account Number',
-                'bank_sort_code_hidden' => 'Sort Code'
+                'account_number' => 'Account Number',
+                'bank_sort_code' => 'Sort Code'
             ]);
         }
         if($validator->fails()){
@@ -92,8 +92,8 @@ class PaymentController extends Controller
         ], [
             'account_name' => $request->input('account_name'),
             'bank_title' => $request->input('bank_title'),
-            'account_number' => $request->input('account_number_hidden'),
-            'bank_sort_code' => $request->input('bank_sort_code_hidden'),
+            'account_number' => $request->input('account_number'),
+            'bank_sort_code' => $request->input('bank_sort_code'),
             'bic' => $request->input('bic'),
             'paypal_email' => $request->input('paypal_email')
         ]);
