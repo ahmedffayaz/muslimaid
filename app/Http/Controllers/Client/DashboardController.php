@@ -62,11 +62,11 @@ class DashboardController extends Controller
         $request->validate([
             'firstname' => 'required|regex:/^[A-Za-z ]+$/',
             'lastname' => 'required|regex:/^[A-Za-z ]+$/',
-            'phone' => 'nullable|regex:/^\+44\d{10}$/',
+            'phoneNumber' => 'nullable|regex:/^\+44\d{10}$/',
         ], [
             'firstname.required' => 'First name is required.',
             'lastname.required' => 'Last name is required.',
-            'phone.regex' => 'The phone number must be valid UK phone number'
+            'phoneNumber.regex' => 'The phone number must be valid UK phone number'
         ]);
 
         $user = auth()->user();
@@ -79,7 +79,7 @@ class DashboardController extends Controller
             'first_name' => $request->firstname,
             'last_name' => $request->lastname,
             'date_of_birth' => $request->date_of_birth != null ? formatDateForUk($request->date_of_birth) : $request->date_of_birth,
-            'phone' => $request->phone,
+            'phone' => $request->phoneNumber,
             'address' => $request->address,
             'address_2' => $request->address_2,
             'street' => $request->street,
