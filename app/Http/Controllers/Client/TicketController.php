@@ -89,8 +89,8 @@ class TicketController extends Controller
 
             $title = 'Ticket Created';
             $message = 'A new ticket has been created';
-            $url = url('account/tickets');
-            $deviceToken = optional(User::first()->devices()->whereType('web')->first())->fcm_token;
+            $url = url('account/tickets') . '/' . $ticket->ticket_id;
+            $deviceToken = optional(User::first()->devices()->whereType('web')->latest()->first())->fcm_token;
             $user = User::first();
 
             $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
@@ -211,9 +211,17 @@ class TicketController extends Controller
             }
 
             if ($claim_type == 'incorrect amount' || $claim_type == 'declined cashback') {
+                sendEmailNotification($claim);
+
+                $title = 'Ticket Created';
+                $message = 'A new ticket has been created';
+                $url = url('account/tickets') . '/' . $claim->ticket_id;
+                $deviceToken = optional(User::first()->devices()->whereType('web')->latest()->first())->fcm_token;
+                $user = User::first();
+
+                $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
                 flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
                 return redirect()->route('account.tickets.index');
-                $this->sendEmailNotification($claim);
             }
 
             return view('frontend.client-dashboard.tickets.ticket_step3', compact('claim', 'click_id'));
