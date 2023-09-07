@@ -180,7 +180,7 @@ class StoreController extends Controller
         try {
             if ($request->links) {
                 $links = $request->links;
-                $store = Store::where('status', 'active')->where(function ($query) use ($links){
+                $stores = Store::where('status', 'active')->where(function ($query) use ($links){
                     foreach($links as $link){
                         $query->orWhereRaw("competitors REGEXP '[[:<:]]" . preg_quote($link) . "[[:>:]]'");
                     }
@@ -189,7 +189,7 @@ class StoreController extends Controller
                     'status' => 200,
                     'message' => 'Success',
                     'data' => [
-                        'stores' => StoreResource::collection($store)
+                        'stores' => StoreResource::collection($stores)
                     ]
                 ];
                 return response()->json($data, 200);
