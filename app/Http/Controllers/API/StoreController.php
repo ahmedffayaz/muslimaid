@@ -180,12 +180,11 @@ class StoreController extends Controller
         try {
             if ($request->links) {
                 $links = $request->links;
-                $query = Store::orderBy('id');
-                foreach ($links as $link) {
-                    $query->orWhereRaw("competitors REGEXP '[[:<:]]" . preg_quote($link) . "[[:>:]]'");
-                }
-                $stores = $query->where('status', 'active')->paginate(12);
-
+                $stores = Store::where('status', 'active')->where(function ($query) use ($links){
+                    foreach($links as $link){
+                        $query->orWhereRaw("competitors REGEXP '[[:<:]]" . preg_quote($link) . "[[:>:]]'");
+                    }
+                })->orderBy('id')->paginate(12);
                 $data = [
                     'status' => 200,
                     'message' => 'Success',
