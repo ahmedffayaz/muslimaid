@@ -48,7 +48,7 @@ class RepliesController extends Controller
 
             $title = 'Admin Replied';
             $message = 'Your ticket has been replied by Admin';
-            $url = url('account/tickets');
+            $url = url('account/tickets') . '/' . $ticket->ticket_id;
             $user = $ticket->user()->get();
             $deviceToken = optional($ticket->user->devices()->whereType('web')->first())->fcm_token;
             $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';

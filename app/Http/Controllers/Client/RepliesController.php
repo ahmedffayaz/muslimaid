@@ -49,9 +49,9 @@ class RepliesController extends Controller
 
             $title = 'Ticket Replied';
             $message = 'User replied to the ticket';
-            $url = url('account/tickets');
+            $url = url('account/tickets') . '/' . $ticket->ticket_id;
             $user = User::first();
-            $deviceToken = optional($user->devices()->whereType('web')->first())->fcm_token;
+            $deviceToken = optional($user->devices()->whereType('web')->latest()->first())->fcm_token;
 
             $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
 

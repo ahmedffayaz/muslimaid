@@ -23,6 +23,9 @@
                     <span>
                         {{ $cashback->getCashback() }}
                     </span>
+                    @if ($cashback->network)
+                        <p class="fw-bold"> &#x2022; {{ optional($cashback->network)->name }}</p>
+                    @endif
                 </div>
 
                 <div class="nk-tb-col text-capitalize">

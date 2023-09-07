@@ -61,7 +61,7 @@ class TicketsController extends Controller
         ]);
         $title = 'Ticket Closed';
         $message = 'Your ticket has been closed.';
-        $url = url('account/tickets');
+        $url = url('account/tickets') . '/' . $ticket->ticket_id;
         $deviceToken = optional($ticket->user->devices()->whereType('web')->first())->fcm_token;
         $user = $ticket->user()->get();
 
