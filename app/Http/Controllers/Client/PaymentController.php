@@ -183,8 +183,8 @@ class PaymentController extends Controller
         SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
         SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
 
-        $title = 'Cashout Request Completion';
-        $message = 'Your cashout request has been completed against ' . $request->payment_method;
+        $title = 'Cashout Request Received';
+        $message = 'Your cashout request has been received with ' . $request->payment_method;
         $url = url('account/withdraw');
         $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
 
