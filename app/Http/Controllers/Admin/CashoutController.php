@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Cashout;
 use App\Models\User;
 use App\Models\CashbackStatus;
+use Carbon\Carbon;
 
 class CashoutController extends Controller
 {
@@ -65,6 +66,18 @@ class CashoutController extends Controller
                 foreach($cashout->cashbacks as $cashback){
                     $cashback->update(['status'=>4]);
                 }
+
+                // Send email to user
+                $userEmailTemplateKey = 'user_withdrawal_confirmation';
+                $filterMessageVariables = ['{{AMOUNT}}', '{{DATE}}', '{{METHOD}}'];
+                $requestFilteredMessage = [$cashout->amount, convertTime($cashout->created_at), $cashout->payment_method];
+                $this->sendEmail($cashout, $userEmailTemplateKey, $filterMessageVariables, $requestFilteredMessage);
+
+                // Send Push Norification
+                $deviceToken = optional($cashout->user->devices()->whereType('web')->first())->fcm_token;
+                $title = 'Successful Withdrawal Confirmation';
+                $message = 'Your Transaction is Completed through ' . $cashout->payment_method;
+                $deviceToken != null ? $this->sendNotification($title, $message, $cashout, $deviceToken) : '';
             }
             elseif($request->input('status') == 'donated'){
                 $cashout->update(['status'=>'donated']);
@@ -73,11 +86,16 @@ class CashoutController extends Controller
                 }
 
                 // Send email to user
-                $this->sendEmail($cashout);
+                $userEmailTemplateKey = 'cashout_donation';
+                $filterMessageVariables = [];
+                $requestFilteredMessage = [];
+                $this->sendEmail($cashout, $userEmailTemplateKey, $filterMessageVariables, $requestFilteredMessage);
 
                 // Send Push Norification
                 $deviceToken = optional($cashout->user->devices()->whereType('web')->first())->fcm_token;
-                $deviceToken != null ? $this->sendNotification($cashout, $deviceToken) : '';
+                $title = 'Cashback donated';
+                $message = 'Your cashback is donated with charity';
+                $deviceToken != null ? $this->sendNotification($title, $message, $cashout, $deviceToken) : '';
             }
             flash()->success('Cashout Updated Successfully.');
             return redirect()->back();
@@ -87,12 +105,8 @@ class CashoutController extends Controller
         }
     }
 
-    function sendEmail($cashout)
+    function sendEmail($cashout, $userEmailTemplateKey, $filterMessageVariables, $requestFilteredMessage)
     {
-        $userEmailTemplateKey = 'cashout_donation';
-        $filterMessageVariables = [];
-        $requestFilteredMessage = [];
-
         $data = [
             'name' => $cashout->user->first_name . ' ' . $cashout->user->last_name,
             'email' => $cashout->user->email,
@@ -103,10 +117,8 @@ class CashoutController extends Controller
         SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
     }
 
-    function sendNotification($cashout, $deviceToken)
+    function sendNotification($title, $message, $cashout, $deviceToken)
     {
-        $title = 'Cashback donated';
-        $message = 'Your cashback is donated with charity';
         $url = route('account.cashouts');
         $user = $cashout->user()->get();
 

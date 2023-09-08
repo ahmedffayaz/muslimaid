@@ -172,7 +172,7 @@ class PaymentController extends Controller
         $this->sendEmail($cashout);
 
         // Send push notification
-        $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
+        $deviceToken = optional(auth()->user()->devices()->whereType('web')->latest()->first())->fcm_token;
         $deviceToken != null ? $this->sendNotification($cashout, $deviceToken, $user) :'';
 
         flash()->success("We're processing your withdrawal. Please allow 4 working days for £" . $balance . " to reach your " . $request->payment_method . " account.");
