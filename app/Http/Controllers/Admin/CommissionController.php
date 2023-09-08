@@ -3,17 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
-use App\Jobs\SendEmail;
 use App\Models\Network;
 use App\Models\ExitClick;
 use App\Models\SiteSetting;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
-use App\Models\EmailTemplate;
 use App\Jobs\SendNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailToUser;
 use App\Models\CashbackStatusChange;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -106,33 +105,14 @@ class CommissionController extends Controller
             ]);
 
             if ($click->user_id != 0) {
-                $emailTemplate = EmailTemplate::where('key', 'user_new_cashback_tracked')->first();
+                // Send Email
+                $this->sendEmail($commission);
 
-                $filteredMessage = str_replace(
-                    ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{STORE}}', '{{AMOUNT}}'],
-                    [
-                        SiteSetting()['website_title'], url('/'),
-                        $commission->user->first_name . ' ' . $commission->user->last_name,
-                        $commission->user->email, $commission->store->name, $commission->amount
-                    ],
-                    $emailTemplate->message
-                );
-
-                $data = array(
-                    'subject' => $emailTemplate->subject,
-                    'email_message' => $filteredMessage,
-                    'email' => $commission->user->email
-                );
-
-                SendEmail::dispatch($data);
+                // Send Push Norification
+                $deviceToken = optional($commission->user->devices()->whereType('web')->first())->fcm_token;
+                $deviceToken != null ? $this->sendNotification($commission, $deviceToken) : '';
             }
-            $title = 'Cashback request completion';
-            $message = 'Your cashback is created with ' . $click->store->name . ' Store';
-            $url = url('account/cashback');
-            $deviceToken = optional($click->user->devices()->whereType('web')->first())->fcm_token;
-            $user = $click->user()->get();
 
-            $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
             if ($request->ajax()) {
                 return response()->json([
                     'status' => JsonResponse::HTTP_OK,
@@ -335,25 +315,12 @@ class CommissionController extends Controller
                 ]);
 
                 if ($commission->user_id != 0) {
-                    $emailTemplate = EmailTemplate::where('key', 'user_new_cashback_tracked')->first();
+                    // Send Email
+                    $this->sendEmail($commission);
 
-                    $filteredMessage = str_replace(
-                        ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{STORE}}', '{{AMOUNT}}'],
-                        [
-                            SiteSetting()['website_title'], url('/'),
-                            $commission->user->first_name . ' ' . $commission->user->last_name,
-                            $commission->user->email, $commission->store->name, $commission->amount
-                        ],
-                        $emailTemplate->message
-                    );
-
-                    $data = array(
-                        'subject' => $emailTemplate->subject,
-                        'email_message' => $filteredMessage,
-                        'email' => $commission->user->email
-                    );
-
-                    SendEmail::dispatch($data);
+                    // Send Push Norification
+                    $deviceToken = optional($commission->user->devices()->whereType('web')->first())->fcm_token;
+                    $deviceToken != null ? $this->sendNotification($commission, $deviceToken) : '';
                 }
             }
 
@@ -460,5 +427,31 @@ class CommissionController extends Controller
             flash()->error('File does not exist.');
             return redirect()->route(getAdminPrefix() . '.commissions.create_multiple');
         }
+    }
+
+    function sendEmail($click)
+    {
+        $userEmailTemplateKey = 'user_new_cashback_tracked';
+        $filterMessageVariables = ['{{STORE}}', '{{AMOUNT}}'];
+        $requestFilteredMessage = [$click->store->name, $click->amount];
+
+        $data = [
+            'name' => $click->user->first_name . ' ' . $click->user->last_name,
+            'email' => $click->user->email,
+            'subject' => null,
+            'message' => null
+        ];
+
+        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+    }
+
+    function sendNotification($click, $deviceToken)
+    {
+        $title = 'Cashback added';
+        $message = 'Your cashback is created with ' . $click->store->name;
+        $url = url('account/cashback');
+        $user = $click->user()->get();
+
+        dispatch(new SendNotification($title, $message, $deviceToken, $url, $user));
     }
 }
