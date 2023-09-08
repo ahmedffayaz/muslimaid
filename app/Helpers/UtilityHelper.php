@@ -998,7 +998,19 @@ function isWithdrawalAllowed()
 {
     $cashoutStatuses = auth()->user()->cashouts()->pluck('status')->all();
 
-    return auth()->user()->availableBalance(3) >= getMinimumCashoutAmount() && !in_array('pending', $cashoutStatuses) && !in_array('processing donation', $cashoutStatuses);
+    if(auth()->user()->availableBalance(3) < getMinimumCashoutAmount()){
+        return "You have in sufficent balance in your account";
+    } else {
+        if(!in_array('pending', $cashoutStatuses)){
+            if(!in_array('processing donation', $cashoutStatuses)){
+                return 2;
+            } else {
+                return "You donation request is in process, you cannot withdraw";
+            }
+        } else {
+            return "Your cashout request is already pending, you cannot withdraw";
+        }
+    }
 }
 
 function getSiteLogo()

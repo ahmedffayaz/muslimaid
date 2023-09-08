@@ -26,7 +26,7 @@ class TicketsController extends Controller
     public function index()
     {
         $route='index';
-        $tickets = Ticket::orderBy('new_ticket','DESC')->latest()->paginate(30);
+        $tickets = Ticket::orderBy('new_ticket','DESC')->orderBy('updated_at', 'DESC')->paginate(30);
         $categories = TicketCategory::latest()->get();
         $users = User::role('user')->latest()->get();
         return view('admin-dashboard.tickets.index', compact('users','categories','tickets','route'));
@@ -40,7 +40,7 @@ class TicketsController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        $ticket->update(['new_ticket'=>0]);
+        $ticket->update(['new_ticket'=> 0]);
         $newReply = $ticket->newReply;
 
         if(count($newReply)){
