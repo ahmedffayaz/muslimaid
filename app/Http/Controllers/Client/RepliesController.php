@@ -43,7 +43,10 @@ class RepliesController extends Controller
 
             $ticket = Ticket::findOrFail($request->ticket_id);
 
-            $reply->ticket->update(['status' => 'pending']);
+            $reply->ticket->update([
+                'status' => 'pending',
+                'new_ticket' => 1
+            ]);
 
             sendEmailNotification($ticket);
 
