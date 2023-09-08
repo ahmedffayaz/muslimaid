@@ -1124,3 +1124,19 @@ function sendEmailNotification(Ticket $ticket)
     SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
     SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
 }
+
+function uniqueRefLinkGenerator(){
+    $user = auth()->user();
+    $refId = Str::random(10);
+    $check = User::where('short_ref_id', $refId)->get();
+    if($check->isEmpty()){
+        $user->short_ref_id = $refId;
+        $user->save();
+    } else {
+        while (User::where('short_ref_id', $refId)->exists()) {
+            $refId = Str::random(10);
+        }
+        $user->short_ref_id = $refId;
+        $user->save();
+    }
+}
