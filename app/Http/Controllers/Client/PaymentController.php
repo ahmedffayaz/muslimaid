@@ -168,27 +168,13 @@ class PaymentController extends Controller
             ]);
         }
 
-        $userEmailTemplateKey = 'user_new_cashout_request';
-        $adminEmailTemplateKey = 'admin_new_cashout_request';
-        $filterMessageVariables = ['{{AMOUNT}}', '{{METHOD}}'];
-        $requestFilteredMessage = [$cashout->amount, $cashout->payment_method];
+        // Send email to user and admin
+        $this->sendEmail($cashout);
 
-        $data = [
-            'name' => $cashout->user->first_name . ' ' . $cashout->user->last_name,
-            'email' => $cashout->user->email,
-            'subject' => null,
-            'message' => null
-        ];
+        // Send push notification
+        $deviceToken = optional(auth()->user()->devices()->whereType('web')->latest()->first())->fcm_token;
+        $deviceToken != null ? $this->sendNotification($cashout, $deviceToken, $user) :'';
 
-        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
-        SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
-
-        $title = 'Cashout Request Completion';
-        $message = 'Your cashout request has been completed against ' . $request->payment_method;
-        $url = url('account/withdraw');
-        $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
-
-        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
         flash()->success("We're processing your withdrawal. Please allow 4 working days for £" . $balance . " to reach your " . $request->payment_method . " account.");
         return redirect()->back();
     }
@@ -216,7 +202,7 @@ class PaymentController extends Controller
         $balance = ($balance_old - $request->amount);
 
         if ($balance_old < $min) {
-            flash()->error("You have insufficient balance for withdrawl. You need to have at least $min in your balance for withdrawal.");
+            flash()->error("You have insufficient balance for withdrawal. You need to have at least $min in your balance for withdrawal.");
             return redirect()->back();
         }
 
@@ -271,6 +257,19 @@ class PaymentController extends Controller
             ]);
         }
 
+        // Send email to user and admin
+        $this->sendEmail($cashout);
+
+        // Send push notification
+        $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
+        $deviceToken != null ? $this->sendNotification($request, $deviceToken, $user) : '';
+
+        flash()->success("We're processing your withdrawal. Please allow 4 working days for £" . $request->amount . " to reach your " . $request->payment_method . " account.");
+        return redirect()->back();
+    }
+
+    function sendEmail($cashout)
+    {
         $userEmailTemplateKey = 'user_new_cashout_request';
         $adminEmailTemplateKey = 'admin_new_cashout_request';
         $filterMessageVariables = ['{{AMOUNT}}', '{{METHOD}}'];
@@ -285,13 +284,14 @@ class PaymentController extends Controller
 
         SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
         SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
-        $title = 'Cashout Request Completion';
-        $message = 'Your cashout request has been completed against ' . $request->payment_method;
-        $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
+    }
+
+    function sendNotification($request, $deviceToken, $user)
+    {
+        $title = ' Cashout Requested';
+        $message = 'Your Cashout Request has been submitted through ' . $request->payment_method;
         $url = url('account/withdraw');
 
-        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
-        flash()->success("We're processing your withdrawal. Please allow 4 working days for £" . $request->amount . " to reach your " . $request->payment_method . " account.");
-        return redirect()->back();
+        dispatch(new SendNotification($title, $message, $deviceToken, $url, $user));
     }
 }
