@@ -46,12 +46,14 @@ class RepliesController extends Controller
 
             sendEmailNotification($ticket);
 
-            $title = 'Admin Replied';
-            $message = 'Your ticket has been replied by Admin';
-            $url = url('account/tickets') . '/' . $ticket->ticket_id;
-            $user = $ticket->user()->get();
             $deviceToken = optional($ticket->user->devices()->whereType('web')->first())->fcm_token;
-            $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
+            if ($deviceToken != null) {
+                $title = 'Ticket Replied';
+                $message = 'Your ticket has a reply';
+                $url = url('account/tickets') . '/' . $ticket->ticket_id;
+                $user = $ticket->user()->get();
+                dispatch(new SendNotification($title, $message, $deviceToken, $url, $user));
+            }
 
             if (!$request->ajax()) {
                 flash()->success('Ticket has been replied successfully');

@@ -288,8 +288,8 @@ class PaymentController extends Controller
 
     function sendNotification($request, $deviceToken, $user)
     {
-        $title = 'Cashout Request Received';
-        $message = 'Your cashout request has been received with ' . $request->payment_method;
+        $title = ' Cashout Requested';
+        $message = 'Your Cashout Request has been submitted through ' . $request->payment_method;
         $url = url('account/withdraw');
 
         dispatch(new SendNotification($title, $message, $deviceToken, $url, $user));

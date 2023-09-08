@@ -447,8 +447,8 @@ class CommissionController extends Controller
 
     function sendNotification($click, $deviceToken)
     {
-        $title = 'Cashback added';
-        $message = 'Your cashback is created with ' . $click->store->name;
+        $title = 'Cashback Received';
+        $message = 'You\'ve received cashback from ' . $click->store->name;
         $url = url('account/cashback');
         $user = $click->user()->get();
 
