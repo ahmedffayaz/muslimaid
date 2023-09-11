@@ -146,21 +146,21 @@ function getRelatedBlogs($keywords, $id)
 function statusBadges($status)
 {
     if ($status == 'confirmed') {
-        return '<span class="badge badge-primary">' . $status . '</span>';
+        return '<span class="badge badge-primary">' . ucfirst($status) . '</span>';
     } elseif ($status == 'paid') {
-        return '<span class="badge badge-success">' . $status . '</span>';
+        return '<span class="badge badge-success">' . ucfirst($status) . '</span>';
     } elseif ($status == 'failed') {
-        return '<span class="badge badge-danger">' . $status . '</span>';
+        return '<span class="badge badge-danger">' . ucfirst($status) . '</span>';
     } elseif ($status == 'pending') {
-        return '<span class="badge badge-info">' . $status . '</span>';
+        return '<span class="badge badge-info">' . ucfirst($status) . '</span>';
     } elseif ($status == 'donated') {
-        return '<span class="badge badge-secondary">' . $status . '</span>';
+        return '<span class="badge badge-secondary">' . ucfirst($status) . '</span>';
     } elseif ($status == 'processing donation') {
-        return '<span class="badge badge-light">' . $status . '</span>';
+        return '<span class="badge badge-light">' . ucfirst($status) . '</span>';
     } elseif ($status == 'processing') {
-        return '<span class="badge badge-warning">' . $status . '</span>';
+        return '<span class="badge badge-warning">' . ucfirst($status) . '</span>';
     }
-    return '<span class="badge badge-primary">' . $status . '</span>';
+    return '<span class="badge badge-primary">' . ucfirst($status) . '</span>';
 }
 
 function convertCashbackStatusToDbFormat($status)
