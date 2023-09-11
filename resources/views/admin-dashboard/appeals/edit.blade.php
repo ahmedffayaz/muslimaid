@@ -133,7 +133,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="donation-link">Donation Link</label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="donation-link" name="donation_link" value="{{ $appeal->donation_link }}">
+                                                        <input type="text" class="form-control" id="donation-link" name="donation_link" value="{{ $appeal->link }}">
                                                     </div>
                                                 </div>
                                             </div>
