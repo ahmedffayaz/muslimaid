@@ -402,7 +402,7 @@ class UserController extends Controller
                 'status' => 200,
                 'message' => 'Successful',
                 'data' => [
-                    "ref_link" => url('/register-form?referby=' . encrypt(auth()->user()->id)),
+                    "ref_link" => url('/register-form?referby=' . auth()->user()->short_ref_id),
                     "main_banner_image" => url('/cashblack/img/favicon.png'),
                     "email_placeholder" => "Enter single or multiple emails (separate with comma)"
                 ],
@@ -453,7 +453,7 @@ class UserController extends Controller
         } else {
             try {
                 $emailTemplate = EmailTemplate::where('key', 'referral_link')->first();
-                $link = url('') . '/register-form?referby=' . encrypt(auth()->user()->id);
+                $link = url('') . '/register-form?referby=' . auth()->user()->short_ref_id;
                 $filteredMessage  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{LINK}}'], [SiteSetting()['website_title'], url('/'), $link], $emailTemplate->message);
 
                 $emailData = array(

@@ -30,7 +30,7 @@ use Laravel\Sanctum\PersonalAccessToken;
 use Stevebauman\Location\Facades\Location;
 use Intervention\Image\ImageManagerStatic as Image;
 
-function getImporterYMLSettings($path )
+function getImporterYMLSettings($path)
 {
     $moduleSettings  = Yaml::parseFile(base_path('modules.yml'));
 
@@ -44,7 +44,7 @@ function getImporterYMLSettings($path )
         }
     }
 
-    if (in_array($moduleConfig,['on','On','ON',1])) {
+    if (in_array($moduleConfig, ['on', 'On', 'ON', 1])) {
         return 1;
     }
 
@@ -95,7 +95,8 @@ function getCuisineTags($store)
     return $tags;
 }
 
-function getCuisineChilds(){
+function getCuisineChilds()
+{
     $cuisineCategory = Category::where('slug', 'cuisine')->first();
     $childCuisines = $cuisineCategory->childs->pluck('name')->all();
     return $childCuisines;
@@ -999,7 +1000,7 @@ function isWithdrawalAllowed()
     $cashoutStatuses = auth()->user()->cashouts()->pluck('status')->all();
 
     if (in_array('pending', $cashoutStatuses) || in_array('processing donation', $cashoutStatuses)) return "You cashout request is in process, you cannot withdraw";
-    if(auth()->user()->availableBalance(3) < getMinimumCashoutAmount()) return "You have in sufficent balance in your account";
+    if (auth()->user()->availableBalance(3) < getMinimumCashoutAmount()) return "You have in sufficent balance in your account";
     return 2;
 }
 
@@ -1103,9 +1104,9 @@ function getFaqsContent()
 
 function retrieveNotification($offset)
 {
-	$take = $offset + 10;
-	$notifications = auth()->user()->notifications()->whereNull('read_at')->latest()->take($take)->get();
-	return $notifications;
+    $take = $offset + 10;
+    $notifications = auth()->user()->notifications()->whereNull('read_at')->latest()->take($take)->get();
+    return $notifications;
 }
 
 function sendEmailNotification(Ticket $ticket)
@@ -1125,4 +1126,18 @@ function sendEmailNotification(Ticket $ticket)
 
     SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
     SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+}
+
+function uniqueRefLinkGenerator()
+{
+    while (true) {
+        $refId = Str::random(10);
+        $existingUser = User::where('short_ref_id', $refId)->first();
+        if (empty($existingUser)) break;
+    }
+
+    if (!auth()->check()) return $refId;
+
+    //This will add short_ref_id for all the users registered with the system when they login.
+    auth()->user()->update(['short_ref_id' => $refId]);
 }

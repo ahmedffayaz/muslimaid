@@ -28,6 +28,9 @@ class SocialController extends Controller
         $users      =   User::where(['email' => $userSocial->getEmail()])->first();
         if ($users) {
             Auth::login($users);
+            if($users->short_ref_id == null){
+                uniqueRefLinkGenerator();
+            }
             if (Session::has('prvUrl')) {
                 return redirect(session('prvUrl'));
             } else {
@@ -59,7 +62,8 @@ class SocialController extends Controller
                 'referred_at'       => Session::has('refCode') ? $today : '',
                 'is_email_verified' => 1,
                 'avatar' => 'default.png',
-                'status' => 'active'
+                'status' => 'active',
+                'short_ref_id' => uniqueRefLinkGenerator()
             ]);
 
             $user->assignRole('user');
