@@ -48,6 +48,7 @@ class AuthController extends Controller
                 'status' => 'pending',
                 'avatar' => 'default.png',
                 'registration_type' => 'sign up',
+                'short_ref_id' => uniqueRefLinkGenerator()
             ]);
 
             $user->assignRole('user');
@@ -161,6 +162,9 @@ class AuthController extends Controller
             }
 
             $user = new UserResource(User::where('email', $request->email)->first());
+            if(auth()->user()->short_ref_id == null){
+                uniqueRefLinkGenerator();
+            } 
             $response = [
                 'status' => 200,
                 'message' => "Successful login.",

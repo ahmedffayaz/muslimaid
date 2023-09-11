@@ -59,7 +59,7 @@ class ReferController extends Controller
         }
         try {
             $emailTemplate = EmailTemplate::where('key', 'referral_link')->first();
-            $link = url('') . '/register-form?referby=' . encrypt(auth()->user()->id);
+            $link = url('') . '/register-form?referby=' . auth()->user()->short_ref_id;
             $filteredMessage  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{LINK}}'], [SiteSetting()['website_title'], url('/'), $link], $emailTemplate->message);
 
             $emailData = array(
