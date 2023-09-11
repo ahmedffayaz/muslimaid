@@ -37,10 +37,12 @@ class ClickController extends Controller
                 ];
                 return response()->json($data, 406);
             }
+            DB::beginTransaction();
             $deeplinkUrl = '';
             $storeId = $request->input('store_id');
             $user_id = $request->input('user_id');
             $store = Store::findOrFail($storeId);
+
             // Override network's store cashback
             if ($store->override_network && $request->cashback_type == 'bonus_cashback' && !empty($request->input('cashback_id'))) {
                 $cashback = $store->cashback->findOrFail($request->input('cashback_id'));
@@ -84,10 +86,13 @@ class ClickController extends Controller
                 'exit_url' => '#',
                 'current_cashback_percentage' => $cashbackPercent
             ]);
+
             $click->exit_url = $trackingUrl . $clickIdentifier . $click->id . $deeplinkIdentifier . $deeplinkUrl;
             $click->update();
 
             $url = encrypt($click->exit_url);
+
+            DB::commit();
 
             if ($request->input('voucher_id')) {
                 $redeemed = RedeemedVoucher::create([
@@ -105,6 +110,7 @@ class ClickController extends Controller
             ];
             return response()->json($data, 200);
         } catch (ModelNotFoundException $ex) { // Store not found
+            DB::rollBack();
             $data = [
                 'status' => 404,
                 'message' => 'Store not found',
@@ -113,6 +119,7 @@ class ClickController extends Controller
             return response()->json($data, 404);
             dd($ex);
         } catch (Exception $ex) { // Anything that went wrong
+            DB::rollBack();
             $data = [
                 'status' => 500,
                 'message' => 'Something went wrong, try again.',
