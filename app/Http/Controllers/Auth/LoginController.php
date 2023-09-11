@@ -115,6 +115,7 @@ class LoginController extends Controller
             if ($request->hasSession()) {
                 $request->session()->put('auth.password_confirmed_at', time());
             }
+            // This if condition has been put to add unique reference link for already registered users
             if(auth()->user()->short_ref_id == null){
                 uniqueRefLinkGenerator();
             }       
