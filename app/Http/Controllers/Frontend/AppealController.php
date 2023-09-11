@@ -35,7 +35,8 @@ class AppealController extends Controller
     public function show($slug)
     {
         $appeal = Appeal::whereSlug($slug)->whereStatus(1)->first();
-        return view('frontend.appeals.show', compact('appeal'));
+        $appeals = Appeal::whereStatus(1)->inRandomOrder()->limit(3)->get();
+        return view('frontend.appeals.show', compact('appeal', 'appeals'));
     }
 
     public function appealsView (Request $request)
