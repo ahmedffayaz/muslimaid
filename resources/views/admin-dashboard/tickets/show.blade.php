@@ -100,8 +100,7 @@
                                                         {{ $ticket->user->last_name }}</div>
                                                 </div>
                                                 <div class="date-time">
-                                                    {{ Carbon\Carbon::parse($ticket->created_at)->isoFormat('Do MMMM
-                                                    YYYY') }}
+                                                    {{ formatDateTimezone($ticket->created_at, 'Do MMMM YYYY') }}
                                                 </div>
                                             </div>
                                             <div class="nk-reply-body">
@@ -113,12 +112,10 @@
                                                         - {{ $ticket->store->name }}</a><br>
                                                     Purchase Amount: {{ currency($ticket->claim_amount) }}<br>
                                                     Claim date:
-                                                    {{ Carbon\Carbon::parse($ticket->created_at)->isoFormat('Do MMMM
-                                                    YYYY') }}<br>
+                                                    {{ formatDateTimezone($ticket->created_at, 'Do MMMM YYYY') }}<br>
                                                     Click ID: {{ $ticket->click_id }}<br>
                                                     Click date:
-                                                    {{ Carbon\Carbon::parse($ticket->click->created_at)->isoFormat('Do
-                                                    MMMM YYYY') }}<br>
+                                                    {{ formatDateTimezone($ticket->click->created_at, 'Do MMMM YYYY') }}<br>
                                                     Description:  {{ $ticket->message }}
                                                     @endif
 
@@ -142,8 +139,7 @@
                                                         {{ $reply->user->last_name }}</span></div>
                                                 </div>
                                                 <div class="date-time">
-                                                    {{ Carbon\Carbon::parse($reply->created_at)->isoFormat('Do MMMM
-                                                    YYYY') }}
+                                                    {{ formatDateTimezone($reply->created_at, 'Do MMMM YYYY') }}
                                                 </div>
                                             </div>
                                             <div class="nk-reply-body">

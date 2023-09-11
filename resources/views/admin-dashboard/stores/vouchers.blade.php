@@ -33,7 +33,7 @@
 
         </div>
         <div class="nk-tb-col ">
-            <span>{{Carbon\Carbon::parse($voucher->promotion_end_date)->isoFormat('Do MMMM YYYY') ?? ''}}
+            <span>{{formatDateTimezone($voucher->promotion_end_date, 'Do MMMM YYYY') ?? ''}}
                 </span>
         </div>
     

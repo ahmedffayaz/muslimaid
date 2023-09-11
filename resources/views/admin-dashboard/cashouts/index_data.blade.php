@@ -47,7 +47,7 @@
         <span>{{ $cashout->payment_method }}</span>
     </div>
     <div class="nk-tb-col ">
-        <span>{{$cashout->created_at}}</span>
+        <span>{{ formatDateTimezone($cashout->created_at, 'YYYY-MM-DD HH:mm:ss') }}</span>
     </div>
 
     <div class="nk-tb-col ">

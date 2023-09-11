@@ -40,7 +40,7 @@
             </div>
 
             <div class="nk-tb-col tb-col-lg">
-                <span>{{ $user->created_at }}</span>
+                <span>{{ formatDateTimezone($user->created_at, 'YYYY-MM-DD HH:mm:ss') }}</span>
             </div>
 
             <div class="nk-tb-col tb-col-lg text-center">

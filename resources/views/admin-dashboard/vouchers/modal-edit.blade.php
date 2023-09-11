@@ -74,7 +74,7 @@
                 <div class="form-group">
                     <label class="form-label" for="promotion_start_date">Promotion Start Date <span class="text-danger">*</span></label>
                     <div class="form-control-wrap">
-                        <input type="text" class="form-control date-picker promotion_start_date" id="promotion_start_date" value="{{ \Carbon\Carbon::parse($voucher->promotion_start_date)->format('m/d/Y')  }}" name="promotion_start_date" 
+                        <input type="text" class="form-control date-picker promotion_start_date" id="promotion_start_date" value="{{ \Carbon\Carbon::parse($voucher->promotion_start_date)->timezone(env('TIMEZONE'))->format('m/d/Y')  }}" name="promotion_start_date" 
                             required>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                 <div class="form-group">
                     <label class="form-label" for="promotion_end_date">Promotion End Date <span class="text-danger">*</span></label>
                     <div class="form-control-wrap">
-                        <input type="text" class="form-control date-picker promotion_end_date" id="promotion_end_date" value="{{  \Carbon\Carbon::parse($voucher->promotion_end_date)->format('m/d/Y') }}" name="promotion_end_date"
+                        <input type="text" class="form-control date-picker promotion_end_date" id="promotion_end_date" value="{{  \Carbon\Carbon::parse($voucher->promotion_end_date)->timezone(env('TIMEZONE'))->format('m/d/Y') }}" name="promotion_end_date"
                             required>
                     </div>
                 </div>
