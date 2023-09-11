@@ -1128,6 +1128,10 @@ function sendEmailNotification(Ticket $ticket)
     SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
 }
 
+function formatDateTimezone($date, $format){
+    return Carbon::parse($date)->timezone(env('TIMEZONE', 'UTC'))->isoFormat($format);
+}
+
 function uniqueRefLinkGenerator()
 {
     while (true) {

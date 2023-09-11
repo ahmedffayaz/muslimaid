@@ -78,7 +78,7 @@
                                         <div class="profile-ud-item">
                                             <div class="profile-ud wider">
                                                 <span class="profile-ud-label">Request Date</span>
-                                                <span class="profile-ud-value">{{Carbon\Carbon::parse($cashout->created_at)->isoFormat('Do MMMM YYYY')}}</span>
+                                                <span class="profile-ud-value">{{formatDateTimezone($cashout->created_at, 'Do MMMM YYYY')}}</span>
                                             </div>
                                         </div>
                                         <div class="profile-ud-item">

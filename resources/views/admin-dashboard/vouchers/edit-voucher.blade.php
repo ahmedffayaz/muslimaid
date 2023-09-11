@@ -99,7 +99,7 @@
                     <label class="form-label" for="promotion_start_date_edit">Promotion Start Date <span class="text-danger">*</span></label>
                     <div class="form-control-wrap">
                         <input type="text" class="form-control date-picker promotion_start_date" id="promotion_start_date_edit"
-                            value="{{ $isEdit ? \Carbon\Carbon::parse($voucher->promotion_start_date)->format('m/d/Y') : '' }}" name="promotion_start_date" autocomplete="off"
+                            value="{{ $isEdit ? \Carbon\Carbon::parse($voucher->promotion_start_date)->timezone(env('TIMEZONE'))->format('m/d/Y') : '' }}" name="promotion_start_date" autocomplete="off"
                             required>
                     </div>
                 </div>
@@ -109,7 +109,7 @@
                     <label class="form-label" for="promotion_end_date_edit">Promotion End Date <span class="text-danger">*</span></label>
                     <div class="form-control-wrap">
                         <input type="text" class="form-control date-picker promotion_end_date" id="promotion_end_date_edit"
-                            value="{{ $isEdit ? \Carbon\Carbon::parse($voucher->promotion_end_date)->format('m/d/Y') : '' }}" name="promotion_end_date" autocomplete="off"
+                            value="{{ $isEdit ? \Carbon\Carbon::parse($voucher->promotion_end_date)->timezone(env('TIMEZONE'))->format('m/d/Y') : '' }}" name="promotion_end_date" autocomplete="off"
                             required>
                     </div>
                 </div>

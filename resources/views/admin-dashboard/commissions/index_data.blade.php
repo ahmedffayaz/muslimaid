@@ -64,7 +64,7 @@
                 @if ($commission->store_id)
                     <span>{{ $commission->event_date }}</span>
                 @else
-                    <span>{{ $commission->created_at }}</span>
+                    <span>{{ formatDateTimezone($commission->created_at, 'YYYY-MM-DD HH:mm:ss') }}</span>
                 @endif
             </div>
 
