@@ -146,6 +146,19 @@
                                                 </div>
                                             </div>
 
+                                            <div class="col-md-12">
+                                                <label class="form-label" for="default-06">Tags</label>
+                                                <div class="form-control-wrap ">
+                                                    <div class="">
+                                                        <select class="form-control form-select select-2" name="tags[]" id="tags" multiple>
+                                                            @foreach ($tags as $tag)
+                                                                <option value="{{ $tag->id }}">{{ $tag->title }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="col-lg-12">
                                                 <div class="form-group">
                                                     <label class="form-label" for="meta-description">Meta Description</label>

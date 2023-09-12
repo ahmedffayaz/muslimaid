@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Str;
 use App\Models\Appeal;
+use App\Models\Tag;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -40,7 +41,8 @@ class AppealController extends Controller
      */
     public function create()
     {
-        return view('admin-dashboard.appeals.create');
+        $tags = Tag::where('type', 'appeals')->get();
+        return view('admin-dashboard.appeals.create', compact('tags'));
     }
 
     /**
@@ -100,6 +102,11 @@ class AppealController extends Controller
                 }
             }
 
+            if ($request->has('tags')) {
+                $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
+                if ($tags->count() > 0) $appeal->tags()->sync($tags);
+            }
+
             DB::commit();
             flash()->success('New Appeal added');
             return redirect()->route(getAdminPrefix() . '.appeals.index');
@@ -129,7 +136,8 @@ class AppealController extends Controller
      */
     public function edit(Appeal $appeal)
     {
-        return view('admin-dashboard.appeals.edit', compact('appeal'));
+        $tags = Tag::where('type', 'appeals')->get();
+        return view('admin-dashboard.appeals.edit', compact('appeal', 'tags'));
     }
 
     /**
@@ -190,6 +198,13 @@ class AppealController extends Controller
             }
 
             $appeal->update($inputData);
+
+            if ($request->has('tags')) {
+                $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
+                if ($tags->count() > 0) $appeal->tags()->sync($tags);
+            } else {
+                $appeal->tags()->detach();
+            }
 
             DB::commit();
 
