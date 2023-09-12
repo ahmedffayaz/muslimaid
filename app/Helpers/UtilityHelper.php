@@ -20,6 +20,7 @@ use App\Models\StoreSeoData;
 use App\Jobs\SendEmailToUser;
 use App\Models\EmailTemplate;
 use App\Jobs\SendEmailToAdmin;
+use App\Models\Appeal;
 use Symfony\Component\Yaml\Yaml;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
@@ -226,6 +227,14 @@ function getFeaturesCategories($featureTag)
             ->orWhereNull('visibility');
     })->whereStatus('1')->latest()->get();
     return $categories;
+}
+
+function getFeaturesAppeals($featureTag)
+{
+    $appeals = Appeal::whereHas('tags', function ($query) use ($featureTag) {
+        $query->where('title', $featureTag);
+    })->latest()->get();
+    return $appeals;
 }
 
 function separatePageKeywords($content)
