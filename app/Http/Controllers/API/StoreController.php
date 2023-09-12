@@ -182,7 +182,7 @@ class StoreController extends Controller
                 $links = $request->links;
                 $stores = Store::where('status', 'active')->where(function ($query) use ($links){
                     foreach($links as $link){
-                        $query->orWhereRaw("competitors REGEXP '[[:<:]]" . preg_quote($link) . "[[:>:]]'");
+                        $query->orWhere('competitors', 'LIKE', '%'.$link.'%');
                     }
                 })->orderBy('id')->paginate(12);
                 $data = [
