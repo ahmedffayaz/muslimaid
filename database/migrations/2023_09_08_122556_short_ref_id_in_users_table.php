@@ -14,7 +14,7 @@ class ShortRefIdInUsersTable extends Migration
     public function up()
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('short_ref_id', 10)->nullable();
+            $table->string('short_ref_id', 10)->nullable()->after('registration_type');
         });
     }
 
