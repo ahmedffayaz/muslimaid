@@ -55,10 +55,8 @@ class CopyFrontendAsset extends Command
             );
 
             $this->info('Frontend asset copied successfully.');
-            $this->info(' ');
         } catch (\Throwable $th) {
             $this->error("\e[41;97m Something went wrong. \e[0m");
-            $this->error('<fg=white;> </>');
             Log::error($th->getMessage());
         }
     }
