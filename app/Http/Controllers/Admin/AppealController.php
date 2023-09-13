@@ -78,6 +78,9 @@ class AppealController extends Controller
 
         try {
             DB::beginTransaction();
+            $slug = Str::slug($request->input('title'));
+            $lastId = Appeal::orderBy('id', 'desc')->pluck('id')->first();
+            $appealSlug = Appeal::where('slug', $slug)->first();
             $appeal = Appeal::create([
                 'title' => $request->input('title'),
                 'slug' => Str::slug($request->title),
@@ -90,6 +93,12 @@ class AppealController extends Controller
                 'meta_keyword' => $request->input('meta_keyword'),
                 'meta_title' => $request->input('meta_title')
             ]);
+            if ($appealSlug) {
+                $appeal->update([
+                    'slug' =>   isset($appealSlug) ? $slug . '-' . $appeal->id : $slug,
+                ]);
+            }
+
             if ($request->input('image_type') == 'upload') {
                 if ($request->has('image_upload')) {
                     $imageName = Str::slug($request->input('image_type')) . '_image_' . time() . '.' . $request->image_upload->extension();
