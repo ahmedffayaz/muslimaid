@@ -153,8 +153,10 @@
                                                         <div class="col-lg-8">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" id="phone" name="phone" value="{{ $profile->phone }}"
+                                                                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="{{ $profile->phone }}"
                                                                         placeholder="Phone Number">
+                                                                    {{-- This hidden field will be populated through our telephone plugin --}}
+                                                                    <input type="hidden" class="form-control" id="phone" name="phone">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -329,7 +331,7 @@
         }, "Only alphabetic name is allow");
 
         jQuery.validator.addMethod("validPhone", function(value, element) {
-            var regex = /^\+\d{12}$/;
+            var regex = /^\d{11}$/;
             if(regex.test(value) == false){
                 $('.iti__flag-container').css('padding-bottom', '39px');
             } else {
@@ -360,13 +362,25 @@
         </script>
         <script>
             $(document).ready(function () {
-                var input = document.querySelector("#phone");
-                window.intlTelInput(input,({
-                    autoInsertDialCode:true,
-                    nationalMode:false,
+                var input = document.querySelector("#phoneNumber");
+                const iti = window.intlTelInput(input,({
+                    nationalMode:true,
                     preferredCountries: [],
+                    utilsScript: "{{ asset('storage/__asset/telephone-dropdown/js/utils.js') }}",
+                    separateDialCode:true,
                 }));
                 $('.iti').css('width', '100%');
+                const handleChange = () => {
+                let phoneNumber;
+                if(input.value) {
+                    if(iti.isValidNumber()){
+                        phoneNumber = iti.getNumber();
+                        $("#phone").val(phoneNumber);
+                    }
+                }
+            }
+            input.addEventListener('change', handleChange);
+            input.addEventListener('keyup', handleChange);
             });
     </script>
 @endpush
