@@ -80,8 +80,9 @@
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" id="phone_number" name="phone_number"
+                                                                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
                                                                         value="{{ $settings['phone_number'] ?? '' }}" placeholder="Sender Name">
+                                                                    <input type="hidden" id="phone_number" name="phone_number">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1288,13 +1289,25 @@
     </script>
     <script>
         $(document).ready(function () {
-            var input = document.querySelector("#phone_number");
-            window.intlTelInput(input,({
-                autoInsertDialCode:true,
-                nationalMode:false,
+            var input = document.querySelector("#phoneNumber");
+            const iti = window.intlTelInput(input,({
+                nationalMode:true,
                 preferredCountries: [],
+                utilsScript: "{{ asset('storage/__asset/telephone-dropdown/js/utils.js') }}",
+                separateDialCode:true,
             }));
             $('.iti').css('width', '100%');
+            const handleChange = () => {
+                let phoneNumber;
+                if(input.value) {
+                    if(iti.isValidNumber()){
+                        phoneNumber = iti.getNumber();
+                        $("#phone_number").val(phoneNumber);
+                    }
+                }
+            }
+            input.addEventListener('change', handleChange);
+            input.addEventListener('keyup', handleChange);
         });
 </script>
 @endpush

@@ -141,7 +141,8 @@
                                                         <div class="form-group">
                                                             <label class="form-label" for="phone-no-1">Phone</label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="phone-no-1" value="{{ $user->phone }}" name="phone">
+                                                                <input type="text" class="form-control" id="phoneNumber" value="{{ $user->phone }}" name="phoneNumber">
+                                                                <input type="hidden" id="phone-no-1" name="phone">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -734,13 +735,25 @@
     </script>
     <script>
         $(document).ready(function () {
-            var input = document.querySelector("#phone-no-1");
-            window.intlTelInput(input,({
-                autoInsertDialCode:true,
-                nationalMode:false,
+            var input = document.querySelector("#phoneNumber");
+            const iti = window.intlTelInput(input,({
+                nationalMode:true,
                 preferredCountries: [],
+                utilsScript: "{{ asset('storage/__asset/telephone-dropdown/js/utils.js') }}",
+                separateDialCode:true,
             }));
             $('.iti').css('width', '100%');
+            const handleChange = () => {
+                let phoneNumber;
+                if(input.value) {
+                    if(iti.isValidNumber()){
+                        phoneNumber = iti.getNumber();
+                        $("#phone-no-1").val(phoneNumber);
+                    }
+                }
+            }
+            input.addEventListener('change', handleChange);
+            input.addEventListener('keyup', handleChange);
         });
     </script>
 @endpush
