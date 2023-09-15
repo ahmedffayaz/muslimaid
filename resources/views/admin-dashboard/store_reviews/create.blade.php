@@ -83,36 +83,25 @@
     </div>
 @endsection
 @push('scripts')
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
     <script>
-        var quill = new Quill('#editor-container', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic'],
-                    ['link', 'blockquote', 'code-block', 'image'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }]
-                ]
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow',
-
+        tinymce.init({
+            selector: 'div#editor-container', // Replace this CSS selector to match the placeholder element for TinyMCE
+            plugins: 'code table lists link image textcolor',
+            toolbar: 'blocks | bold italic underline | alignleft aligncenter alignright alignjustify | link unlink | image | bullist numlist | code | table | forecolor backcolor',
+            cleanup: true
         });
         $(".review_form").submit(function(e) {
+            var editor = tinymce.get('editor-container');
             var desc = document.querySelector('input[name=review]');
-            desc.value = quill.root.innerHTML;
+            desc.value = editor.getContent();
 
 
         });
     </script>
     <script>
-        $.validator.addMethod("quillContent", function(value, element) {
-            var content = quill.root.innerHTML.trim();
+        $.validator.addMethod("editorContent", function(value, element) {
+            var editor = tinymce.get('editor-container');
+            var content = editor.getContent().trim();
             return content !== "" && content !== "<p><br></p>";
         }, "Please enter a valid review.");
 
@@ -122,15 +111,16 @@
                 review: {
                     required: true,
                     maxlength: 255,
-                    quillContent: true
+                    editorContent: true
                 }
             },
             errorPlacement: function(error, element) {
                 error.insertAfter("#editor-container");
             },
             submitHandler: function(form) {
+                var editor = tinymce.get('editor-container');
                 var desc = document.querySelector('input[name=review]');
-                desc.value = quill.root.innerHTML.trim();
+                desc.value = editor.getContent();
                 form.submit();
                 $(document).trigger('myEvent');
             }
