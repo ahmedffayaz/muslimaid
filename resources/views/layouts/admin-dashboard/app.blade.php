@@ -25,7 +25,7 @@
     <script src="{{ asset('admin-dashboard/js/common.js') }}" defer></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('storage/__asset/telephone-dropdown/css/intlTelInput.css') }}">
-    <script src="{{ asset('js/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
+    <script src="{{ asset('vendor/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
     @livewireStyles
     @stack('styles')
     <style>
