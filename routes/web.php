@@ -263,10 +263,9 @@ Route::get('stores/{letter?}', [App\Http\Controllers\Frontend\StoreController::c
 Route::get('cashback/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('stores.show');
 Route::post('stores', [App\Http\Controllers\Frontend\StoreController::class, 'storesView'])->name('stores.view');
 
-Route::post('exit-click', [App\Http\Controllers\Frontend\ClickController::class, 'store'])->name('click.store');
+Route::get('exit-click/{storeId}/{userId?}', [App\Http\Controllers\Frontend\ClickController::class, 'store'])->name('click.store');
 Route::post('exit/{store}/{voucher}', [App\Http\Controllers\Frontend\ClickController::class, 'redeemVoucher'])->name('redeem.voucher');
 Route::get('/get-voucher/{voucher}', [App\Http\Controllers\Frontend\ClickController::class, 'decryptVoucher'])->name('decrypt.voucher');
-Route::get('exit-click/{hash}/{url}', [App\Http\Controllers\Frontend\ClickController::class, 'redirect'])->name('click.redirect');
 
 Route::post('stores-reviews', [App\Http\Controllers\Frontend\StoreReviewController::class, 'store'])->name('stores-reviews.store');
 Route::get('stores-reviews/{id}', [App\Http\Controllers\Frontend\StoreReviewController::class, 'show'])->name('stores-reviews.show');

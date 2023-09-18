@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Models\Page;
 use App\Models\Store;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class StoreController extends Controller
@@ -22,8 +23,10 @@ class StoreController extends Controller
         $store = Store::where('slug', $slug)->first();
         if (empty($store)) abort(404);
 
+        $userRefId = !empty(auth()->user()) ? auth()->user() : User::whereId(1)->first();
+
         $count = $store->cashbacks ? count($store->cashbacks) : 0;
-        return view('frontend.stores.show', compact('store', 'count'));
+        return view('frontend.stores.show', compact('store', 'count', 'userRefId'));
     }
     public function storesView(Request $request)
     {
@@ -54,7 +57,7 @@ class StoreController extends Controller
                 })->get()->filter(function ($store) {
                     $cashback = $store->getCashback();
                     $percentage = (int) filter_var($cashback, FILTER_SANITIZE_NUMBER_INT);
-                    $store->cashbackPercentage = $percentage; 
+                    $store->cashbackPercentage = $percentage;
                     return $percentage;
                 })->sortByDesc(function ($store) {
                     return $store->cashbackPercentage;
