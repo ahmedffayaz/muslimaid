@@ -391,13 +391,13 @@ function saveDocument($file, $directory)
 /**
  * return image path;
  */
-function getImage($image, $isAvatar = false)
+function getAvatar($imagePath)
 {
-    $errorImage = $isAvatar ? url('/images/no_avatar.jpg') : url('/images/no_image.png');
-
-    return !empty($image) && Storage::disk('public')->exists($image)
-        ? Storage::url($image)
-        : $errorImage;
+    if($imagePath != 'default.png' && Storage::exists('public/users/images/avatar/' . $imagePath) && $imagePath != NULL){
+        return asset('storage/users/images/avatar/' . $imagePath);
+    } else {
+        return asset('storage/__asset/img/default-avatar.png');
+    }
 }
 
 
