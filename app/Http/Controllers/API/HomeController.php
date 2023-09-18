@@ -8,7 +8,6 @@ use App\Models\Slide;
 use App\Models\Store;
 use App\Models\Category;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\StoreResource;
 use App\Http\Resources\Home\SlideResource;
 use App\Http\Resources\StoreDetailResource;
 use App\Http\Resources\Home\FeaturedCategoryResource;
