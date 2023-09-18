@@ -38,9 +38,9 @@ function readBannerURL(input) {
     }
 }
 
-function initializeTinyMCEEditor(container){
+function initializeTinyMCEEditor(containerId){
     tinymce.init({
-        selector: 'div#'+container, // Replace this CSS selector to match the placeholder element for TinyMCE
+        selector: 'div#'+containerId, // Replace this CSS selector to match the placeholder element for TinyMCE
         plugins: 'code table lists link image textcolor',
         toolbar: 'blocks | bold italic underline | alignleft aligncenter alignright alignjustify | link unlink | image | bullist numlist | code | table | forecolor backcolor',
         cleanup: true
