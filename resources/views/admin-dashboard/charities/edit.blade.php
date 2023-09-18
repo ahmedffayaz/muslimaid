@@ -305,11 +305,8 @@
 @endsection
 @push('scripts')
     <script>
-        tinymce.init({
-            selector: 'div#editor-container', // Replace this CSS selector to match the placeholder element for TinyMCE
-            plugins: 'code table lists link image textcolor',
-            toolbar: 'blocks | bold italic underline | alignleft aligncenter alignright alignjustify | link unlink | image | bullist numlist | code | table | forecolor backcolor',
-            cleanup: true
+        $(document).ready(function (){
+            initializeTinyMCEEditor('editor-container');
         });
         var form = document.querySelector('form');
         $(".charity-form").submit(function(e) {

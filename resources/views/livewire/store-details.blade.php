@@ -712,18 +712,8 @@
                 fetchAddress();
                 fetchSeoRules();
                 initializeSelect2();
-                tinymce.init({
-                    selector: 'div#editor-container', // Replace this CSS selector to match the placeholder element for TinyMCE
-                    plugins: 'code table lists link image textcolor',
-                    toolbar: 'blocks | bold italic underline | alignleft aligncenter alignright alignjustify | link unlink | image | bullist numlist | code | table | forecolor backcolor',
-                    cleanup: true
-                });
-                tinymce.init({
-                    selector: 'div#teditor-container',
-                    plugins: 'code table lists link image textcolor',
-                    toolbar: 'blocks | bold italic underline | alignleft aligncenter alignright alignjustify | link unlink | image | bullist numlist | code | table | forecolor backcolor',
-                    cleanup: true
-                });
+                initializeTinyMCEEditor('editor-container');
+                initializeTinyMCEEditor('teditor-container');
             });
         });
     </script>
@@ -735,25 +725,10 @@
         });
     </script>
     <script>
-        tinymce.init({
-            selector: 'div#editor-container', // Replace this CSS selector to match the placeholder element for TinyMCE
-            plugins: 'code table lists link image textcolor',
-            toolbar: 'blocks | bold italic underline | alignleft aligncenter alignright alignjustify | link unlink | image | bullist numlist | code | table | forecolor backcolor',
-            cleanup: true
-        });
-
-        tinymce.init({
-            selector: 'div#reditor-container', // Replace this CSS selector to match the placeholder element for TinyMCE
-            plugins: 'code table lists link image textcolor',
-            toolbar: 'blocks | bold italic underline | alignleft aligncenter alignright alignjustify | link unlink | image | bullist numlist | code | table | forecolor backcolor',
-            cleanup: true
-        });
-
-        tinymce.init({
-            selector: 'div#teditor-container',
-            plugins: 'code table lists link image textcolor',
-            toolbar: 'blocks | bold italic underline | alignleft aligncenter alignright alignjustify | link | image | bullist numlist | code | table | forecolor backcolor',
-            cleanup: true
+        $(document).ready(function (){
+            initializeTinyMCEEditor('editor-container');
+            initializeTinyMCEEditor('reditor-container');
+            initializeTinyMCEEditor('teditor-container');
         });
         $("#store_form").submit(function(e) {
             // Populate hidden form field of description by taking text from editor on submit
@@ -1253,12 +1228,7 @@
                     success: function(data) {
                         $('#review-modal').modal('show');
                         $('#review').html(data);
-                        tinymce.init({
-                            selector: 'div#reditor-container', // Replace this CSS selector to match the placeholder element for TinyMCE
-                            plugins: 'code table lists link image textcolor',
-                            toolbar: 'blocks | bold italic underline | alignleft aligncenter alignright alignjustify | link | image | bullist numlist | code | table | forecolor backcolor',
-                            cleanup: true
-                        });
+                        initializeTinyMCEEditor('reditor-container');
                     }
                 });
             });

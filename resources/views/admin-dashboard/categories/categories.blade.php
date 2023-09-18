@@ -171,19 +171,9 @@
                 var editor = tinymce.get('editor-container');
                 if(editor){
                     editor.destroy();
-                    tinymce.init({
-                        selector: 'div#editor-container', // Replace this CSS selector to match the placeholder element for TinyMCE
-                        plugins: 'code table lists link image textcolor',
-                        toolbar: 'blocks | bold italic underline | alignleft aligncenter alignright alignjustify | link unlink | image | bullist numlist | code | table | forecolor backcolor',
-                        cleanup: true
-                    });
+                    initializeTinyMCEEditor('editor-container');
                 } else {
-                    tinymce.init({
-                        selector: 'div#editor-container', // Replace this CSS selector to match the placeholder element for TinyMCE
-                        plugins: 'code table lists link image textcolor',
-                        toolbar: 'blocks | bold italic underline | alignleft aligncenter alignright alignjustify | link unlink | image | bullist numlist | code | table | forecolor backcolor',
-                        cleanup: true
-                    });
+                    initializeTinyMCEEditor('editor-container');
                 }
             }
 
