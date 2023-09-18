@@ -48,7 +48,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="charity_types_id">Charity Type <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
-                                                        <div class="form-control-select">
+                                                        <div>
                                                             <select class="form-control form-select" id="charity_types_id" name="charity_types_id"
                                                                 value="{{ old('charity_types_id') }}" required>
                                                                 @foreach ($charitiestypes as $types)
@@ -77,7 +77,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="logo_type">Logo <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
-                                                        <div class="form-control-select">
+                                                        <div>
                                                             <select class="form-control form-select" name="logo_type" id='logo_type' value="{{ old('logo_type') }}" required>
                                                                 <option value="upload">Upload</option>
                                                                 <option value="link">Link</option>
@@ -141,7 +141,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="banner_type">Banner <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
-                                                        <div class="form-control-select">
+                                                        <div>
                                                             <select class="form-control form-select" name="banner_type" id='banner_type' value="{{ old('banner_type') }}"
                                                                 required>
                                                                 <option value="upload">Upload</option>
@@ -205,7 +205,7 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-label" for="country">Country <span class="text-danger">*</span></label>
-                                                    <div class="form-control-select">
+                                                    <div>
                                                         <select class="form-control form-select" id="country" data-search="on" name="country" value="{{ old('country') }}" required>
                                                             @foreach($countries as $country)
                                                                 <option value="{{ $country->id }}">{{ $country->name }}</option>
@@ -241,7 +241,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="status">Status <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
-                                                        <div class="form-control-select">
+                                                        <div>
                                                             <select class="form-control form-select" id="status" name="status" value="{{ old('status') }}" required>
                                                                 <option value="1">Active</option>
                                                                 <option value="0">In-active</option>

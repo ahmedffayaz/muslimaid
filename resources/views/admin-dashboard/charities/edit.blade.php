@@ -50,7 +50,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="charity_types_id">Charity Type <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
-                                                        <div class="form-control-select">
+                                                        <div>
                                                             <select class="form-control form-select" id="charity_types_id" name="charity_types_id" required>
                                                                 <option value="0">None</option>
                                                                 @foreach ($CharityType as $types)
@@ -229,7 +229,7 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-label" for="country">Country <span class="text-danger">*</span></label>
-                                                    <div class="form-control-select">
+                                                    <div>
                                                         <select class="form-control form-select" id="country" name="country" value="{{ old('country') }}" required>
                                                           
                                                             @foreach($countries as $country)
@@ -273,7 +273,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="status">Status <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
-                                                        <div class="form-control-select">
+                                                        <div>
                                                             <select class="form-control form-select" id="status" name="status" required>
                                                                 <option @if ($charity->status == 1) selected @endif value="1">Active</option>
                                                                 <option @if ($charity->status == 0) selected @endif value="0">In-active</option>
