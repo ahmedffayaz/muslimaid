@@ -264,7 +264,7 @@ Route::get('cashback/{slug}', [App\Http\Controllers\Frontend\StoreController::cl
 Route::post('stores', [App\Http\Controllers\Frontend\StoreController::class, 'storesView'])->name('stores.view');
 
 Route::get('exit-click/{storeId}/{userId?}', [App\Http\Controllers\Frontend\ClickController::class, 'store'])->name('click.store');
-Route::post('exit/{store}/{voucher}', [App\Http\Controllers\Frontend\ClickController::class, 'redeemVoucher'])->name('redeem.voucher');
+Route::get('exit/{storeId}/{userId}/{voucher}', [App\Http\Controllers\Frontend\ClickController::class, 'redeemVoucher'])->name('redeem.voucher');
 Route::get('/get-voucher/{voucher}', [App\Http\Controllers\Frontend\ClickController::class, 'decryptVoucher'])->name('decrypt.voucher');
 Route::get('click/{storeId}/{userId}/{hashUrl}', [App\Http\Controllers\Frontend\ClickController::class, 'redirect'])->name('click.redirect');
 
