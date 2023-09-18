@@ -103,6 +103,7 @@ class RegisterController extends Controller
                 'registration_type' => 'sign up',
                 'referred_by' => empty($data['referral_code']) ? '' : User::where('short_ref_id', $data['referral_code'])->first()->id,
                 'referred_at' => empty($data['referral_code']) ? '' : $today,
+                'avatar' => 'default.png',
                 'short_ref_id' => uniqueRefLinkGenerator()
             ]);
 
