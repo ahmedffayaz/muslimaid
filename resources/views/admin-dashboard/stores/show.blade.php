@@ -1,4 +1,10 @@
 @extends('layouts.admin-dashboard.app')
+
+@section('content')
+    @livewire('store-details')
+@endsection
+
+@push('styles')
 <style>
     .nk-tb-list{
         table-layout: fixed;
@@ -37,7 +43,4 @@ ul.categories li {
     -ms-transform: translate(-50%, -50%);
 }
 </style>
-
-@section('content')
-    @livewire('store-details')
-@endsection
+@endpush

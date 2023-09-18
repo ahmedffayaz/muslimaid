@@ -712,36 +712,8 @@
                 fetchAddress();
                 fetchSeoRules();
                 initializeSelect2();
-                var quill = new Quill('#editor-container', {
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic'],
-                            ['link', 'blockquote', 'code-block', 'image'],
-                            [{
-                                list: 'ordered'
-                            }, {
-                                list: 'bullet'
-                            }]
-                        ]
-                    },
-                    placeholder: 'Compose an epic...',
-                    theme: 'snow'
-                });
-                var quill = new Quill('#teditor-container', {
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic'],
-                            ['link', 'blockquote', 'code-block', 'image'],
-                            [{
-                                list: 'ordered'
-                            }, {
-                                list: 'bullet'
-                            }]
-                        ]
-                    },
-                    placeholder: 'Compose an epic...',
-                    theme: 'snow'
-                });
+                initializeTinyMCEEditor('editor-container');
+                initializeTinyMCEEditor('teditor-container');
             });
         });
     </script>
@@ -752,63 +724,17 @@
             });
         });
     </script>
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
-
     <script>
-        // Quill Editor
-        var quill = new Quill('#editor-container', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic'],
-                    ['link', 'blockquote', 'code-block', 'image'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }]
-                ]
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow'
-        });
-        // Quill Editor
-        var rquill = new Quill('#reditor-container', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic'],
-                    ['link', 'blockquote', 'code-block', 'image'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }]
-                ]
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow'
-        });
-        // Quill Editor
-        var quill = new Quill('#teditor-container', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic'],
-                    ['link', 'blockquote', 'code-block', 'image'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }]
-                ]
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow'
+        $(document).ready(function (){
+            initializeTinyMCEEditor('editor-container');
+            initializeTinyMCEEditor('reditor-container');
+            initializeTinyMCEEditor('teditor-container');
         });
         $("#store_form").submit(function(e) {
-            // Populate hidden form on submit
+            // Populate hidden form field of description by taking text from editor on submit
+            var editor = tinymce.get('editor-container');
             var desc = document.querySelector('input[name=description]');
-            desc.value = quill.root.innerHTML;
+            desc.value = editor.getContent();
         });
 
         function readURL(input) {
@@ -1302,21 +1228,7 @@
                     success: function(data) {
                         $('#review-modal').modal('show');
                         $('#review').html(data);
-                        var rquill = new Quill('#reditor-container', {
-                            modules: {
-                                toolbar: [
-                                    ['bold', 'italic'],
-                                    ['link', 'blockquote', 'code-block', 'image'],
-                                    [{
-                                        list: 'ordered'
-                                    }, {
-                                        list: 'bullet'
-                                    }]
-                                ]
-                            },
-                            placeholder: 'Compose an epic...',
-                            theme: 'snow'
-                        });
+                        initializeTinyMCEEditor('reditor-container');
                     }
                 });
             });
@@ -1326,9 +1238,9 @@
         $(document).ready(function() {
             $(document).on('submit', '.review_form', function(event) {
                 event.preventDefault();
-                var editor = document.querySelector('#reditor-container')
+                var editor = tinymce.get('reditor-container')
                 var desc = document.querySelector('input[name=review]');
-                desc.value = editor.children[0].innerHTML
+                desc.value = editor.getContent();
                 $.ajax({
                     url: $(this).attr('action'),
                     type: "POST",
@@ -1377,9 +1289,9 @@
         $(document).ready(function() {
             $(document).on('submit', '.review_form_add', function(event) {
                 event.preventDefault();
-                var editor = document.querySelector('#reditor-container')
+                var editor = tinymce.get('reditor-container')
                 var desc = document.querySelector('input[name=review]');
-                desc.value = editor.children[0].innerHTML
+                desc.value = editor.getContent();
                 $.ajax({
                     url: $(this).attr('action'),
                     type: "POST",
@@ -1541,12 +1453,12 @@
         $(document).ready(function() {
             $(document).on('submit', '#store_form', function(event) {
                 event.preventDefault();
-                var editor = document.querySelector('#editor-container');
+                var editor = tinymce.get('editor-container');
                 var desc = document.querySelector('input[name=description]');
-                desc.value = editor.children[0].innerHTML;
-                var editor = document.querySelector('#teditor-container');
+                desc.value = editor.getContent();
+                var editor = tinymce.get('teditor-container');
                 var desc = document.querySelector('input[name=terms_conditions]');
-                desc.value = editor.children[0].innerHTML;
+                desc.value = editor.getContent();
                 $.ajax({
                     type: 'PUT',
                     url: $(this).attr('action'),

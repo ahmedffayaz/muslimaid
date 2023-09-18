@@ -304,32 +304,17 @@
     </div>
 @endsection
 @push('scripts')
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
     <script>
-        var quill = new Quill('#editor-container', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic'],
-                    ['link', 'blockquote', 'code-block', 'image'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }]
-                ]
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow'
+        $(document).ready(function (){
+            initializeTinyMCEEditor('editor-container');
         });
-
         var form = document.querySelector('form');
         $(".charity-form").submit(function(e) {
 
             // Populate hidden form on submit
+            var editor = tinymce.get('editor-container');
             var desc = document.querySelector('input[name=description]');
-            desc.value = quill.root.innerHTML;
+            desc.value = editor.getContent();
         });
     </script>
     <script>
