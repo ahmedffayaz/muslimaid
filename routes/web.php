@@ -266,6 +266,7 @@ Route::post('stores', [App\Http\Controllers\Frontend\StoreController::class, 'st
 Route::get('exit-click/{storeId}/{userId?}', [App\Http\Controllers\Frontend\ClickController::class, 'store'])->name('click.store');
 Route::post('exit/{store}/{voucher}', [App\Http\Controllers\Frontend\ClickController::class, 'redeemVoucher'])->name('redeem.voucher');
 Route::get('/get-voucher/{voucher}', [App\Http\Controllers\Frontend\ClickController::class, 'decryptVoucher'])->name('decrypt.voucher');
+Route::get('click/{storeId}/{userId}/{hashUrl}', [App\Http\Controllers\Frontend\ClickController::class, 'redirect'])->name('click.redirect');
 
 Route::post('stores-reviews', [App\Http\Controllers\Frontend\StoreReviewController::class, 'store'])->name('stores-reviews.store');
 Route::get('stores-reviews/{id}', [App\Http\Controllers\Frontend\StoreReviewController::class, 'show'])->name('stores-reviews.show');

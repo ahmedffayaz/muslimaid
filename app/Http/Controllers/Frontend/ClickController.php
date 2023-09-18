@@ -11,9 +11,11 @@ use App\Models\RedeemedVoucher;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Models\Voucher;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Throwable;
 
 class ClickController extends Controller
 {
@@ -62,9 +64,13 @@ class ClickController extends Controller
 
             if (!$cashbackPercent) $cashbackPercent = 0;
 
+            $adminUser = User::whereHas('roles', function ($query) {
+                $query->where('name', 'admin');
+            })->first();
+
             $click = ExitClick::create([
                 'store_id' => $store->id,
-                'user_id' => auth()->user()->id ?? 1,
+                'user_id' => auth()->user()->id ?? $adminUser->id,
                 'network_id' => $networkId,
                 'exit_url' => '#',
                 'current_cashback_percentage' => $cashbackPercent
@@ -74,7 +80,6 @@ class ClickController extends Controller
             $click->update();
 
             $url = $click->exit_url;
-
             $clickId = $click->id;
 
             if ($request->input('voucher_id')) {
@@ -91,6 +96,28 @@ class ClickController extends Controller
             flash()->error('Something went wrong. Try again');
             return redirect()->back();
         } catch (Exception $e) {
+            flash()->error('Something went wrong. Try again');
+            return redirect()->back();
+        }
+    }
+
+    public function redirect($storeId, $userId, $hashUrl, Request $request)
+    {
+        try {
+            $store = Store::find($storeId);
+
+            $url = decrypt($hashUrl);
+            $cashbackId = $request->cashback_id;
+            $clickId = $request->click_id;
+
+            return view('frontend.stores.exit-click', compact('store', 'url', 'cashbackId', 'clickId'));
+        } catch (Throwable $th) {
+            if (request()->ajax()) {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                    'error' => $th->getMessage()
+                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            }
             flash()->error('Something went wrong. Try again');
             return redirect()->back();
         }

@@ -10,25 +10,24 @@ use Illuminate\Http\Request;
 use App\Models\RedeemedVoucher;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\StoreResource;
+use App\Models\User;
 use Illuminate\Support\Facades\Validator;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-
-
-
+use Laravel\Sanctum\Sanctum;
 
 class ClickController extends Controller
 {
     use ApiResponser;
+
     public function getCashbackStore(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
                 'store_id' => 'required',
-                'cashback_type' => 'required',
-                'cashback_id' => 'required'
+                'cashback_type' => 'required'
             ]);
+
             if ($validator->fails()) {
                 $data = [
                     'status' => 406,
@@ -37,15 +36,16 @@ class ClickController extends Controller
                 ];
                 return response()->json($data, 406);
             }
+
             DB::beginTransaction();
             $deeplinkUrl = '';
-            $storeId = $request->input('store_id');
-            $user_id = $request->input('user_id');
-            $store = Store::findOrFail($storeId);
+            $store = Store::findOrFail($request->store_id);
+            $cashbackId = $request->input('cashback_id');
+            $cashbackType = $request->input('cashback_type');
 
             // Override network's store cashback
-            if ($store->override_network && $request->cashback_type == 'bonus_cashback' && !empty($request->input('cashback_id'))) {
-                $cashback = $store->cashback->findOrFail($request->input('cashback_id'));
+            if ($store->override_network && $cashbackType == 'bonus_cashback' && !empty($cashbackId)) {
+                $cashback = $store->cashback->findOrFail($cashbackId);
                 if (!$cashback->tracking_url) {
                     $networkId = $store->network->id;
                     $trackingUrl = $store->tracking_url;
@@ -75,13 +75,16 @@ class ClickController extends Controller
 
             $cashbackPercent = $customCashbackPercentage ? $customCashbackPercentage : SiteSetting::where('type', 'cashback_percentage')->first()->value;
 
-            if (!$cashbackPercent) {
-                $cashbackPercent = 0;
-            }
+            if (!$cashbackPercent) $cashbackPercent = 0;
+            $adminUser = User::whereHas('roles', function ($query) {
+                $query->where('name', 'admin');
+            })->first();
+
+            $user = $request->hasHeader('Authorization') ? $request->user('sanctum') : $adminUser;
 
             $click = ExitClick::create([
-                'store_id' => $storeId,
-                'user_id' => $user_id ?? 1,
+                'store_id' => $store->id,
+                'user_id' => $user->id,
                 'network_id' => $networkId,
                 'exit_url' => '#',
                 'current_cashback_percentage' => $cashbackPercent
@@ -90,7 +93,9 @@ class ClickController extends Controller
             $click->exit_url = $trackingUrl . $clickIdentifier . $click->id . $deeplinkIdentifier . $deeplinkUrl;
             $click->update();
 
-            $url = encrypt($click->exit_url);
+            $hashUrl = encrypt($click->exit_url);
+            $clickId = $click->id;
+            $userRefId = $user->short_ref_id;
 
             DB::commit();
 
@@ -100,14 +105,20 @@ class ClickController extends Controller
                     'voucher_id' => $request->input('voucher_id'),
                 ]);
             }
-            $hashStoreId = encrypt($store->id);
+
+            $url = !empty($request->cashback_id)
+                ? route('click.redirect', [$store->id, $userRefId, $hashUrl]) . '?click_id=' . $clickId . '&cashback_id=' . $request->cashback_id
+                : $url = route('click.redirect', [$store->id, $userRefId, $hashUrl]) . '?click_id=' . $clickId;
+
+
             $data = [
                 'status' => 200,
                 'message' => 'Success',
                 'data' => [
-                    'url' => route('click.redirect', [$hashStoreId, $url]) . '?cashbackId=' . encrypt($request->cashback_id)
+                    'url' => $url
                 ]
             ];
+
             return response()->json($data, 200);
         } catch (ModelNotFoundException $ex) { // Store not found
             DB::rollBack();
@@ -117,7 +128,6 @@ class ClickController extends Controller
                 'data' => []
             ];
             return response()->json($data, 404);
-            dd($ex);
         } catch (Exception $ex) { // Anything that went wrong
             DB::rollBack();
             $data = [
