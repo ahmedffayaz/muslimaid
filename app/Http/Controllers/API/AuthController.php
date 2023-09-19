@@ -16,6 +16,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\Home\UserResource;
+use App\Jobs\SendEmailJob;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
@@ -134,9 +135,10 @@ class AuthController extends Controller
                 }
 
                 if ($userData->status == 'pending') {
+                    dispatch(new SendEmailJob($userData));
                     $response = [
                         'status' => 401,
-                        'message' => 'Please verify your account before login',
+                        'message' => 'Your account is not verified. We have sent you the verification email. Please verify your account before login',
                         'data' => []
                     ];
                     return response()->json($response, 401);

@@ -36,13 +36,16 @@ class SendEmailJob implements ShouldQueue
     {
         $user = $this->details;
         $verification_email_temp = EmailTemplate::where('key', 'email_verification')->first();
-        $token = Str::random(64);
-
-        UserVerify::create([
-            'user_id' => $user->id,
-            'token' => $token
-        ]);
-
+        if(UserVerify::where('user_id', $user->id)->first() === null){
+            $token = Str::random(64);
+            UserVerify::create([
+                'user_id' => $user->id,
+                'token' => $token
+            ]);
+        } else {
+            $token = UserVerify::where('user_id', $user->id)->first()->token;
+        }
+        
         $appUrl = env('APP_URL');
         $link = $appUrl . '/account/verify/' . $token;
         $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{LINK}}', '{{OTP}}'], [SiteSetting()['website_title'], url('/'), $link, $user->otp], $verification_email_temp->message);
