@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailJob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -94,7 +95,8 @@ class LoginController extends Controller
         }
 
         if ($emailCheck->status == 'pending') {
-            return redirect()->back()->with(['message' => 'Please verify your account before login']);
+            dispatch(new SendEmailJob($emailCheck));
+            return redirect()->back()->with(['message' => 'Your account is not verified. We have sent you the verification email. Please verify your account before login']);
         }
 
         $this->validateLogin($request);
