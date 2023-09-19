@@ -11,6 +11,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Validator;
 
 class StoreReviewController extends Controller
 {
@@ -40,11 +41,17 @@ class StoreReviewController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validator = Validator::make($request->all(), [
             'store_id' => 'required|integer',
             'rating' => 'required|integer',
-            'review' => 'nullable|max:256'
+            'review' => 'required|max:256'
         ]);
+        if($validator->fails()){
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $validator->errors()->first(),
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         try {
             DB::beginTransaction();
