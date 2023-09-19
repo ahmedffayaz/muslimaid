@@ -151,6 +151,7 @@ class UserController extends Controller
                 'country_id' => $request->input('country_id'),
                 'postal_code' => $request->input('postal_code'),
                 'status' => $request->input('status'),
+                'is_email_verified' => $request->input('status') === 'pending' || $request->input('status') === 'in_active' ? 0 : 1,
                 'avatar' => $avatarImage,
                 'date_of_birth' => $request->input('date_of_birth'),
             ]);
