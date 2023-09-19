@@ -57,7 +57,7 @@ class ClickController extends Controller
                 fputcsv($handle, array(
                     $row->user->first_name . ' ' . $row->user->last_name,
                     $row->user->email,
-                    $row->store->name,
+                    optional($row->store)->name,
                     $row->exit_url,
                     $row->created_at,
                     $row->status ? 'active' : 'in-active'
@@ -69,7 +69,7 @@ class ClickController extends Controller
 
             return Response::download($filename, 'clicks.csv', $headers);
         } catch (Throwable $th) {
-            flash()->error('Error while exporting exit clics');
+            flash()->error('Error while exporting exit clicks');
 
             return redirect()->route(getAdminPrefix() . '.clicks.index');
         }

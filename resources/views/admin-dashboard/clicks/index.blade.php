@@ -1,5 +1,5 @@
 @extends('layouts.admin-dashboard.app')
-@section('content')
+@push('styles')
     <style>
         .nk-tb-list {
             display: block !important;
@@ -17,7 +17,8 @@
             width: 100% !important;
         }
     </style>
-
+@endpush
+@section('content')
     <div class="nk-content ">
         <div class="container-fluid">
             <div class="nk-content-inner">
