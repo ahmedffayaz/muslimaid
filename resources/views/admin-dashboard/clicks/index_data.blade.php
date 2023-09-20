@@ -1,11 +1,11 @@
 @if (count($clicks))
     <div class="nk-tb-item nk-tb-head">
-        <div class="nk-tb-col " style="width: 10%"><span class="sub-text">Click ID</span></div>
-        <div class="nk-tb-col "><span class="sub-text">User</span></div>
-        <div class="nk-tb-col text-center"><span class="sub-text">Network</span></div>
-        <div class="nk-tb-col text-center"><span class="sub-text">Store</span></div>
-        <div class="nk-tb-col text-right"><span class="sub-text">Exit Url</span></div>
-        <div class="nk-tb-col  text-right"><span class="sub-text">Time</span></div>
+        <div class="nk-tb-col "><span class="sub-text">Click ID</span></div>
+        <div class="nk-tb-col " style="width: 360px;"><span class="sub-text">User</span></div>
+        <div class="nk-tb-col"><span class="sub-text">Network</span></div>
+        <div class="nk-tb-col"><span class="sub-text">Store</span></div>
+        <div class="nk-tb-col"><span class="sub-text">Exit Url</span></div>
+        <div class="nk-tb-col"><span class="sub-text">Time</span></div>
         <div class="nk-tb-col  text-right"><span class="sub-text">Conversion</span></div>
     </div><!-- .nk-tb-item -->
     @foreach ($clicks as $click)
@@ -28,17 +28,17 @@
                     </div>
                 </div>
             </div>
-            <div class="nk-tb-col text-center">
+            <div class="nk-tb-col">
                 <span class="tb-status badge badge-primary"><b>{{ isset($click->network) ? $click->network->name : '' }}</b></span>
             </div>
-            <div class="nk-tb-col text-center">
+            <div class="nk-tb-col">
                 <span><b>{{ $click->store->id }} - {{ $click->store->name ?? '' }}</b></span>
             </div>
-            <div class="nk-tb-col text-right">
+            <div class="nk-tb-col">
                 <h5><a href='{{ $click->exit_url ?? '#' }}' target="_blank" class="a_link"><em class="icon ni ni-link-alt"></em></a></h5>
                 <span></span>
             </div>
-            <div class="nk-tb-col text-right">
+            <div class="nk-tb-col">
                 <span>{{ formatDateTimezone($click->created_at, 'YYYY-MM-DD HH:mm:ss') }}</span>
             </div>
             <div class="nk-tb-col text-right">

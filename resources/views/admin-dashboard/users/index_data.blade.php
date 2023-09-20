@@ -4,7 +4,7 @@
         <div class="nk-tb-col tb-col-lg"><span class="sub-text">Balance</span></div>
         <div class="nk-tb-col tb-col-lg"><span class="sub-text">Reg Type</span></div>
         <div class="nk-tb-col tb-col-lg"><span class="sub-text">Reg date</span></div>
-        <div class="nk-tb-col tb-col-lg text-center"><span class="sub-text">Status</span></div>
+        <div class="nk-tb-col tb-col-lg"><span class="sub-text">Status</span></div>
         <div class="nk-tb-col nk-tb-col-tools text-right">
             <span class="sub-text">Action</span>
         </div>
@@ -43,7 +43,7 @@
                 <span>{{ formatDateTimezone($user->created_at, 'YYYY-MM-DD HH:mm:ss') }}</span>
             </div>
 
-            <div class="nk-tb-col tb-col-lg text-center">
+            <div class="nk-tb-col tb-col-lg">
                 @if ($user->status == 'pending')
                     <span class="tb-status badge badge-warning">Pending</span>
                 @elseif ($user->status == 'active')

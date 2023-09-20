@@ -7,15 +7,15 @@
             min-width: 100%;
         }
 
-        .nk-tb-col {
+        /* .nk-tb-col {
             padding-left: 1.5rem !important;
             width: 15% !important;
-        }
+        } */
 
-        .nk-tb-item {
+        /* .nk-tb-item {
             display: table !important;
             width: 100% !important;
-        }
+        } */
     </style>
 @endpush
 @section('content')
@@ -95,7 +95,7 @@
                     <div class="nk-block">
                         <div class="card card-stretch">
                             <div class="card-inner-group">
-                                <div class="card-inner px-0 table-responsive">
+                                <div class="card-inner table-responsive">
                                     <div class="nk-tb-list nk-tb-ulist" id="table-data">
 
                                         @include('admin-dashboard.clicks.index_data')

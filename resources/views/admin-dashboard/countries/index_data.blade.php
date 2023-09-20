@@ -2,9 +2,9 @@
     <div class="nk-tb-item nk-tb-head">
 
         <div class="nk-tb-col"><span class="sub-text">Name</span></div>
-        <div class="nk-tb-col text-center"><span class="sub-text">ISO Code</span></div>
-        <div class="nk-tb-col text-center"><span class="sub-text">Region</span></div>
-        <div class="nk-tb-col text-center"><span class="sub-text">Status</span></div>
+        <div class="nk-tb-col"><span class="sub-text">ISO Code</span></div>
+        <div class="nk-tb-col"><span class="sub-text">Region</span></div>
+        <div class="nk-tb-col"><span class="sub-text">Status</span></div>
         <div class="nk-tb-col nk-tb-col-tools text-right">
             <span class="sub-text">Action</span>
 
@@ -20,13 +20,13 @@
                     </div>
                 </div>
             </div>
-            <div class="nk-tb-col  text-center">
+            <div class="nk-tb-col">
                 <span>{{ $country->iso_code }}</span>
             </div>
-            <div class="nk-tb-col  text-center">
+            <div class="nk-tb-col">
                 <span>{{ $country->region->name }}</span>
             </div>
-            <div class="nk-tb-col text-center">
+            <div class="nk-tb-col">
                 @if ($country->status != 0)
                     <span class="tb-status badge badge-success">Active</span>
                 @else

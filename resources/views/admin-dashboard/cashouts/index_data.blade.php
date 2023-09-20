@@ -1,10 +1,10 @@
 <div class="nk-tb-item nk-tb-head">
 
     <div class="nk-tb-col"><span class="sub-text">User</span></div>
-    <div class="nk-tb-col tb-col-mb"><span class="sub-text">Amount</span></div>
-    <div class="nk-tb-col tb-col-mb"><span class="sub-text">Payment Method</span></div>
-    <div class="nk-tb-col tb-col-lg"><span class="sub-text">Time</span></div>
-    <div class="nk-tb-col "><span class="sub-text">Status</span></div>
+    <div class="nk-tb-col"><span class="sub-text">Amount</span></div>
+    <div class="nk-tb-col"><span class="sub-text">Payment Method</span></div>
+    <div class="nk-tb-col"><span class="sub-text">Time</span></div>
+    <div class="nk-tb-col"><span class="sub-text">Status</span></div>
     <div class="nk-tb-col nk-tb-col-tools text-right">
         <span class="sub-text">Action</span>
 
@@ -40,17 +40,17 @@
             </div>
 
     </div>
-    <div class="nk-tb-col tb-col-mb">
+    <div class="nk-tb-col">
         <span class="tb-amount"><span class="currency">{{ currency($cashout->amount)}}</span></span>
     </div>
-    <div class="nk-tb-col tb-col-mb">
+    <div class="nk-tb-col">
         <span>{{ $cashout->payment_method }}</span>
     </div>
-    <div class="nk-tb-col ">
+    <div class="nk-tb-col">
         <span>{{ formatDateTimezone($cashout->created_at, 'YYYY-MM-DD HH:mm:ss') }}</span>
     </div>
 
-    <div class="nk-tb-col ">
+    <div class="nk-tb-col">
         <span>
                 @if($cashout->status =='paid')
                 <span class="tb-status badge badge-success">paid</span>
