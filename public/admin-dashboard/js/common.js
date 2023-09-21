@@ -43,6 +43,9 @@ function initializeTinyMCEEditor(containerId){
         selector: 'div#'+containerId, // Replace this CSS selector to match the placeholder element for TinyMCE
         plugins: 'code table lists link image textcolor',
         toolbar: 'blocks | bold italic underline | alignleft aligncenter alignright alignjustify | link unlink | image | bullist numlist | code | table | forecolor backcolor',
-        cleanup: true
+        cleanup: true,
+        promotion: false,
+        branding: false,
+        menubar: 'edit view insert format tools table'
     });
 }
