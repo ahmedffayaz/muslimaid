@@ -152,7 +152,7 @@
     @endif       
 </div>
   
-<div class="nk-block-between-md g-3 card-inner px-0 ">
+<div class="nk-block-between-md g-3 card-inner px-0 align-right">
     <div class="pagination g" route="{{$route}}">
         {!! $stores->links()!!}                             
                          

@@ -87,12 +87,8 @@
                     @include('flash::message')
                     <div class="nk-block">
                         <div class="card card-stretch">
-                            <div class="card-inner-group">
-                                <div class="card-inner px-0 table-responsive">
-                                    <div class="nk-tb-list nk-tb-ulist" id="table-data">
-                                        @include('admin-dashboard.store_reviews.index_data')
-                                    </div><!-- .nk-tb-list -->
-                                </div><!-- .card-inner -->
+                            <div class="card-inner-group" id="table-data">
+                                @include('admin-dashboard.store_reviews.index_data')
                             </div><!-- .card-inner-group -->
                         </div><!-- .card -->
                     </div><!-- .nk-block -->
@@ -119,9 +115,6 @@
     </div><!-- .modal -->
 @endsection
 @push('scripts')
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
     <script>
         $(document).ready(function() {
             $(document).on('click', '.pagination a', function(event) {
