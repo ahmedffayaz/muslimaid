@@ -1016,7 +1016,7 @@
                                         <div class="tab-pane" id="tabItem10">
                                             <div class="nk-block">
                                                 <div class="nk-block-head">
-                                                    <h5 class="title">Google Recaptcha Settings</h5>
+                                                    <h5 class="title">Google Recaptcha Settings (v2)</h5>
                                                 </div><!-- .nk-block-head -->
                                                 <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
                                                     @csrf

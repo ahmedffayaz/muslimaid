@@ -279,7 +279,7 @@ Route::get('blogs', [App\Http\Controllers\Frontend\BlogController::class, 'index
 Route::get('blogs/{slug}', [App\Http\Controllers\Frontend\BlogController::class, 'show'])->name('blogs.show');
 
 Route::get('charities', [App\Http\Controllers\Frontend\CharityController::class, 'index'])->name('charities.index');
-Route::post('charities/{id}', [App\Http\Controllers\Frontend\CharityController::class, 'show'])->name('charities.show');
+Route::post('charities/{slug}', [App\Http\Controllers\Frontend\CharityController::class, 'show'])->name('charities.show');
 Route::any('charity/search', [App\Http\Controllers\Frontend\CharityController::class, 'search'])->name('charities.search');
 
 

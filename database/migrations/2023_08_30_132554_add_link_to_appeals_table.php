@@ -27,7 +27,8 @@ class AddLinkToAppealsTable extends Migration
     public function down()
     {
         Schema::table('appeals', function (Blueprint $table) {
-            //
+            $table->dropColumn('link');
+            $table->dropColumn('meta_title');
         });
     }
 }

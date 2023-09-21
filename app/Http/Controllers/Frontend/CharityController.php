@@ -26,9 +26,9 @@ class CharityController extends Controller
         return view('frontend.pages.single-page', compact('page', 'charities', 'countries', 'charityTypes'));
     }
 
-    public function show($id)
+    public function show($slug)
     {
-        $charity = Charity::whereId($id)->with('charity_type')->first();
+        $charity = Charity::whereSlug($slug)->with('charity_type')->first();
         if (empty($charity)) return null;
 
         return view('frontend.charities.show', compact('charity'));
