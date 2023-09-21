@@ -151,12 +151,8 @@
                     </div>
                     <div class="nk-block">
                         <div class="card card-stretch">
-                            <div class="card-inner-group">
-                                <div class="card-inner px-0 table-responsive">
-                                    <div class="nk-tb-list nk-tb-ulist" id="report_data">
-                                        @include('admin-dashboard.reports.earnings_data')
-                                    </div><!-- .nk-tb-list -->
-                                </div><!-- .card-inner -->
+                            <div class="card-inner-group" id="report_data">
+                                @include('admin-dashboard.reports.earnings_data')
                             </div><!-- .card-inner-group -->
                         </div><!-- .card -->
                     </div><!-- .nk-block -->

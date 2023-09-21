@@ -98,14 +98,8 @@
 
                     <div class="nk-block">
                         <div class="card card-stretch">
-                            <div class="card-inner-group">
-                                <div class="card-inner px-0 table-responsive">
-                                    <div class="nk-tb-list nk-tb-ulist" id="table-data">
-
-                                        @include('admin-dashboard.vouchers.index_data')
-
-                                    </div>
-                                </div>
+                            <div class="card-inner-group" id="table-data">
+                                @include('admin-dashboard.vouchers.index_data')
                             </div>
                         </div>
                     </div>
