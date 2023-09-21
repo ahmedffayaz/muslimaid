@@ -70,6 +70,8 @@ class ClickController extends Controller
                 $deeplinkUrl = $store->deeplink_url;
             }
 
+            if (empty($deeplinkIdentifier) && !empty($deeplinkUrl)) $deeplinkIdentifier = '&url=';
+
             // Cashback percentage
             $customCashbackPercentage = $store->custom_cashback_percentage;
 
@@ -153,9 +155,11 @@ class ClickController extends Controller
             $voucher = Voucher::findOrFail($request->input('voucher_id'));
 
             $trackingUrl = $voucher->tracking_url ? $voucher->tracking_url : $voucher->store->tracking_url;
-            $clickIdentifier = $voucher->store->network->click_ref;
+            $clickIdentifier = $voucher->store->network->click_ref ? $voucher->store->network->click_ref : '';
             $deeplinkUrl = $voucher->deeplink_url ? $voucher->deeplink_url : $voucher->store->deeplink_url;
-            $deeplinkIdentifier = $voucher->store->network->deeplink_identifier;
+            $deeplinkIdentifier = $voucher->store->network->deeplink_identifier ? $voucher->store->network->deeplink_identifier : '';
+
+            if (empty($deeplinkIdentifier) && !empty($deeplinkUrl)) $deeplinkIdentifier = '&url=';
 
             $customCashbackPercentage = $store->custom_cashback_percentage;
             $cashbackPercent = $customCashbackPercentage ? $customCashbackPercentage : SiteSetting::where('type', 'cashback_percentage')->first()->value;

@@ -29,10 +29,10 @@
                                                         <span class="text-soft">Stores: </span> <span>{{ count($network->stores) }}</span>
                                                     </span>
                                                     <span class="release">
-                                                        <span class="text-soft">Click Parameter: </span> <span>{{ $network->click_ref }}</span>
+                                                        <span class="text-soft">Click Parameter: </span> <span>{{ $network->click_ref ?? 'Null' }}</span>
                                                     </span>
                                                     <span class="release">
-                                                        <span class="text-soft">Deeplink Parameter: </span> <span>{{ $network->deeplink_identifier }}</span>
+                                                        <span class="text-soft">Deeplink Parameter: </span> <span>{{ $network->deeplink_identifier ?? 'Null' }}</span>
                                                     </span>
                                                     <span class="release">
                                                         @if ($network->importerSetting)

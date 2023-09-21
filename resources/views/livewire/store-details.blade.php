@@ -148,8 +148,8 @@
                                                             <label class="form-label" for="tracking_url">Tracking URL <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="tracking_url" value="{{ $store->tracking_url }}"
-                                                                    name="tracking_url" placeholder="https://example.com/item/abc-id-1345" required style="width: 79%">
-                                                                <span style="position: absolute; right:0; top:5px; width:20%" data-toggle="tooltip" data-placement="left"
+                                                                    name="tracking_url" placeholder="https://example.com/item/abc-id-1345" required style="width: 78%">
+                                                                <span style="position: absolute; right:0; top:5px; width:21%" data-toggle="tooltip" data-placement="left"
                                                                     title="This parameter containing ID of the click will be concatenated with tracking URL of the store ({{ $store->tracking_url }})">{{ $store->network->click_ref }}XXX</span>
                                                             </div>
                                                         </div>
@@ -159,11 +159,11 @@
                                                         <div class="form-group">
                                                             <label class="form-label" for="tracking_url">Deeplink URL</label>
                                                             <div class="form-control-wrap">
-                                                                <span style="position:absolute; left:0; top:5px; width:7%" data-toggle="tooltip" data-placement="right"
-                                                                    title="This parameter containing URL of the click will be concatenated with deeplink URL of the store ({{ $store->deeplink_url }})">{{ $store->network->deeplink_identifier }}</span>
+                                                                <span style="position:absolute; left:0; top:5px; width:8%" data-toggle="tooltip" data-placement="right"
+                                                                    title="This parameter containing URL of the click will be concatenated with deeplink URL of the store ({{ $store->deeplink_url }})">{{ optional($store->network)->deeplink_identifier ? $store->network->deeplink_identifier : '&url=' }}</span>
                                                                 <input type="text" class="form-control" id="deeplink_url" value="{{ $store->deeplink_url }}"
                                                                     name="deeplink_url" placeholder="https://example.com/item/abc-id-1345"
-                                                                    style="position: relative; left:30px; width: 93%">
+                                                                    style="position: relative; left:36px; width: 92%">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -347,7 +347,7 @@
 <div class="modal fade" tabindex="-1" role="dialog" id="file-upload-modal">
     <div class="modal-dialog modal-md" role="document">
         <div class="modal-content add-image-modal-content">
-            
+
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
@@ -1807,7 +1807,7 @@
                 event.preventDefault();
             });
         });
-        
+
         function checkVoucherType() {
             if ($('#promotion_type').val() == 'Coupon') {
                 $('.coupon-div').show();
@@ -1817,7 +1817,7 @@
                 $('#coupon_code').removeAttr('required').val('');
             }
         }
-        
+
         function initializeSelect2() {
             $('.select-2').select2({
                 placeholder: function() {
