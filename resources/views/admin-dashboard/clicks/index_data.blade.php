@@ -50,7 +50,7 @@
             @endforeach
     </div>
 </div>
-    <div class="nk-block-between-md g-3 card-inner align-right">
+    <div class="nk-block-between-md g-3 card-inner float-right">
         <div class="pagination g" route="{{ $route }}">
             {!! $clicks->links() !!}
         </div>

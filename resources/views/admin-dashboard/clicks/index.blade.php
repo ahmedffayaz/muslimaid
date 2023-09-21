@@ -6,16 +6,6 @@
             width: fit-content !important;
             min-width: 100%;
         }
-
-        /* .nk-tb-col {
-            padding-left: 1.5rem !important;
-            width: 15% !important;
-        } */
-
-        /* .nk-tb-item {
-            display: table !important;
-            width: 100% !important;
-        } */
     </style>
 @endpush
 @section('content')

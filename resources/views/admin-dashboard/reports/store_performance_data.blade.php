@@ -48,7 +48,7 @@
                 </div><!-- .card -->
             </div><!-- .col -->
     </div><!-- .row -->
-    <div class="nk-block-between-md g-3 card-inner adddd align-right">
+    <div class="nk-block-between-md g-3 card-inner float-right">
         <div class="pagination g" route="{{$route}}">
             {!! $clicks->links()!!}                                          
         </div> 

@@ -5,7 +5,6 @@
             <div class="nk-tb-col"><span class="sub-text">Slug</span></div>
             <div class="nk-tb-col"><span class="sub-text">View</span></div>
 
-            {{-- <div class="nk-tb-col"><span class="sub-text">Status</span></div> --}}
             <div class="nk-tb-col nk-tb-col-tools text-right">
                 <span class="sub-text">Action</span>
             
@@ -23,12 +22,6 @@
             <div class="nk-tb-col">
                 <span><a href="{{route('blogs.show',$blog->slug)}}" target="_blank" class="a_link"><em class="icon ni ni-link-alt"></em></a></span>
             </div>
-        
-            
-            {{-- <div class="nk-tb-col text-center">
-                <span>        {!! $review->status =='active'  ? '<span class="tb-status badge badge-success">active</span>' : '<span class="tb-status badge badge-warning">pending</span>'!!}
-            </span>
-            </div> --}}
             <div class="nk-tb-col nk-tb-col-tools">
                 <ul class="nk-tb-actions gx-1">
                 
@@ -56,7 +49,7 @@
         @endforeach   
     </div>
 </div>
-<div class="nk-block-between-md g-3 card-inner align-right">
+<div class="nk-block-between-md g-3 card-inner float-right">
     <div class="pagination g" route="{{$route}}">
         {!! $blogs->links()!!}                                       
     </div> 

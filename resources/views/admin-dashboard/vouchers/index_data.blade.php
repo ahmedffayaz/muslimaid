@@ -7,7 +7,6 @@
                 <div class="nk-tb-col tb-col-mb"><span class="sub-text">Name</span></div>
                 <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Coupon</span></div>
                 <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Deeplink URL</span></div>
-                <!-- <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Commission</span></div> -->
                 <div class="nk-tb-col nk-tb-col-tools text-right"><span class="sub-text">Action</span></div>
             </div>
 
@@ -41,11 +40,6 @@
                             </a>
                         </h5>
                     </div>
-
-                    <!-- <div class="nk-tb-col  text-center">
-                        <span>{{ $voucher->sale_commission ?? '' }}</span>
-                    </div> -->
-
                     <div class="nk-tb-col nk-tb-col-tools">
                         <ul class="nk-tb-actions gx-1">
                             <li>
@@ -80,7 +74,7 @@
     </div>
 </div>
 
-    <div class="nk-block-between-md g-3 card-inner align-right">
+    <div class="nk-block-between-md g-3 card-inner float-right">
         <div class="pagination g" route="{{ $route }}">
             {!! $vouchers->links() !!}
         </div>
