@@ -13,6 +13,7 @@ class Charity extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'country',
         'logo_type',
         'logo_upload',
