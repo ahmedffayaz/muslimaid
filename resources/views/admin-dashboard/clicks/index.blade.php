@@ -6,16 +6,6 @@
             width: fit-content !important;
             min-width: 100%;
         }
-
-        .nk-tb-col {
-            padding-left: 1.5rem !important;
-            width: 15% !important;
-        }
-
-        .nk-tb-item {
-            display: table !important;
-            width: 100% !important;
-        }
     </style>
 @endpush
 @section('content')
@@ -94,15 +84,8 @@
                     @include('flash::message')
                     <div class="nk-block">
                         <div class="card card-stretch">
-                            <div class="card-inner-group">
-                                <div class="card-inner px-0 table-responsive">
-                                    <div class="nk-tb-list nk-tb-ulist" id="table-data">
-
-                                        @include('admin-dashboard.clicks.index_data')
-
-                                    </div><!-- .nk-tb-list -->
-                                </div><!-- .card-inner -->
-
+                            <div class="card-inner-group" id="table-data">
+                                @include('admin-dashboard.clicks.index_data')
                             </div><!-- .card-inner-group -->
                         </div><!-- .card -->
                     </div><!-- .nk-block -->
