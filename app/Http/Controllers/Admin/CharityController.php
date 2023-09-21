@@ -101,8 +101,13 @@ class CharityController extends Controller
         }
         try {
             DB::beginTransaction();
+            $slug = Str::slug($request->input('title'));
+            $lastId = Charity::orderBy('id', 'desc')->pluck('id')->first();
+            $charitySlug = Charity::where('slug', $slug)->first();
+
             $charity = Charity::create([
                 'title' => $request->input('title'),
+                'slug' => Str::slug($request->input('title')),
                 'charity_types_id' => $request->input('charity_types_id'),
                 'description' => $request->input('description'),
                 'logo_type' => $request->input('logo_type'),
@@ -112,6 +117,13 @@ class CharityController extends Controller
                 'country' => $request->input('country'),
                 'status' => $request->input('status'),
             ]);
+
+            if ($charitySlug) {
+                $charity->update([
+                    'slug' =>   isset($charitySlug) ? $slug . '-' . $charity->id : $slug,
+                ]);
+            }
+
             if ($request->input('logo_type') == 'upload') {
                 if ($request->has('logo_upload')) {
                     $imageName = Str::slug($request->input('logo_type')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
