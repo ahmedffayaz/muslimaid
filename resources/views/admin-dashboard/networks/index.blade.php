@@ -322,8 +322,6 @@
                     success: function(data) {
                         $('#modalAlert').modal('show');
                         $('#setting_form').html(data);
-                        // $(".run-importer").removeClass("disabled");
-                        // $(".save_importer").removeClass("disabled");
                         $("a.run-importer").attr("href", "{{ route(getAdminPrefix() . '.importer.import') }}");
                     }
                 });
