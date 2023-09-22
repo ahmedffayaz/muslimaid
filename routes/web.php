@@ -213,6 +213,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::resource('sliders', SliderController::class)->only(['index', 'store', 'edit']);
         Route::resource('slides', SlidesController::class)->except(['index', 'show']);
         Route::resource('pages', PagesController::class);
+        Route::post('pages/fetch',[App\Http\Controllers\Admin\PagesController::class, 'fetch'])->name('pages.fetch');
 
         Route::post('pages/view-short-codes', [App\Http\Controllers\Admin\PagesController::class, 'getAvailableShortCodes'])->name('pages.view-short-codes');
 
