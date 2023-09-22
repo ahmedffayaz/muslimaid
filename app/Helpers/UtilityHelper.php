@@ -719,20 +719,20 @@ function checkSeoPageRule($url)
         preg_match('/[^\/]+$/', $path, $matches);
         $slug = isset($matches[0]) ? $matches[0] : '/';
     }
-    $seo_rules = SeoRule::where('is_enabled', 1)->with('ruleData')->where('url', $url)->first();
-    if ($seo_rules != null) {
-        $meta_description = [];
-        $meta_keyword = [];
-        $meta_title = [];
+    $seoRules = SeoRule::where('is_enabled', 1)->with('ruleData')->where('url', $url)->first();
+    if ($seoRules != null) {
+        $metaDescription = [];
+        $metaKeyword = [];
+        $metaTitle = [];
         $title = Str::title(str_replace('-', ' ', $slug));
-        foreach ($seo_rules->ruleData as $rule) {
-            $rule['key'] == 'meta_description' ?  $meta_description[] = $rule['value'] : '';
-            $rule['key'] == 'meta_keyword' ?  $meta_keyword[] = $rule['value'] : '';
-            $rule['key'] == 'meta_title' ?  $meta_title[] = $rule['value'] : '';
+        foreach ($seoRules->ruleData as $rule) {
+            $rule['key'] == 'meta_description' ?  $metaDescription[] = $rule['value'] : '';
+            $rule['key'] == 'meta_keyword' ?  $metaKeyword[] = $rule['value'] : '';
+            $rule['key'] == 'meta_title' ?  $metaTitle[] = $rule['value'] : '';
         }
-        return  ['title' => $title, 'meta_title' => implode(',', $meta_title), 'meta_description' => implode(',', $meta_description), 'meta_keyword' => implode(',', $meta_keyword)];
+        return  ['title' => $title, 'meta_title' => implode(',', $metaTitle), 'meta_description' => implode(',', $metaDescription), 'meta_keyword' => implode(',', $metaKeyword)];
     } elseif ($slug) {
-        $route_names = [
+        $routeNames = [
             'page' => '\App\Models\Page',
             'post' => '\App\Models\Blog',
             'appeal' => '\App\Models\Appeal',
@@ -740,7 +740,7 @@ function checkSeoPageRule($url)
             'stores.show' => '\App\Models\Store',
         ];
 
-        foreach ($route_names as $model) {
+        foreach ($routeNames as $model) {
             $record = $model::where('slug', $slug);
             if ($slug == '/' && $model == '\App\Models\Page') {
                 $record = $model;
