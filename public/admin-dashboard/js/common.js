@@ -50,14 +50,14 @@ function initializeTinyMCEEditor(containerId){
     });
 }
 
-function loader(isTrue){
-    let spinner;
-    if(isTrue == true){
-        spinner = `<div class="text-center">
-        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
-        </div>
-        </div>`;
+function spinner(isTrue = false){
+    let loader;
+    if(isTrue){
+    loader = `<div class="text-center">
+    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    </div>`;
     }
-    return spinner;
+    return loader;
 }

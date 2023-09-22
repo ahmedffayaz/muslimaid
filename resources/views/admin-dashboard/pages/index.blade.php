@@ -97,7 +97,7 @@
 @push('scripts')
     <script>
         $(document).ready(function (){
-            $('#table-data').html(loader(true));
+            $('#table-data').html(spinner(true));
             var token = "{{ csrf_token() }}"
             $.ajax({
                 url: "{{ route(getAdminPrefix(). '.pages.fetch') }}",
