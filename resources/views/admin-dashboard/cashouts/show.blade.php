@@ -219,8 +219,6 @@
                                     <div class="tab-pane active" id="tabItem5">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
-
-                                                {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
                                             </div><!-- .nk-block-head -->
 
                                             <form action="{{route(getAdminPrefix() . '.cashouts.update',$cashout)}}" class="gy-3 form-validate is-alter"  id="form_withdraw" method="POST">
@@ -233,9 +231,12 @@
                                                             <div class="form-control-wrap ">
                                                                 <div class="form-control-select">
                                                                     <select class="form-control" id="default-06" name="status" required>
+                                                                        <option @if($cashout->status != 'paid' && $cashout->status != 'donated' && $cashout->status != 'pending') selected @endif>Select status</option>
+                                                                        @if ($cashout->status != 'paid' && $cashout->status != 'donated')
                                                                             <option @if($cashout->status == 'pending') selected @endif value="pending">Pending</option>
-                                                                            <option @if($cashout->status == 'paid') selected @endif value="paid">Paid</option>
-                                                                            <option @if($cashout->status == 'donated') selected @endif value="donated">Donated</option>
+                                                                        @endif
+                                                                        <option @if($cashout->status == 'paid') selected @endif value="paid">Paid</option>
+                                                                        <option @if($cashout->status == 'donated') selected @endif value="donated">Donated</option>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -249,23 +250,16 @@
                                                 </div>
                                             </form>
                                         </div>
-
                                     </div>
                                 </div>
                             </div>
                         </div><!-- .card-preview -->
-
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-
-
 @endsection
 @push('scripts')
 <script>
