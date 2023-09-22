@@ -122,7 +122,7 @@
                 var page = $(this).attr('href').split('page=')[1];
                 if (route == 'index') {
 
-                    $('#table-data').html(loader(true));
+                    $('#table-data').html(spinner(true));
 
                     pageurl = "{{ route(getAdminPrefix() . '.pages.fetch') }}?page="
                     var _token = "{{ csrf_token() }}"
@@ -142,7 +142,7 @@
                     });
                 }
                 if (route == 'search') {
-                    $('#table-data').html(loader(true));
+                    $('#table-data').html(spinner(true));
 
                     var _token = "{{ csrf_token() }}";
                     var page_title = $("input[name=page_title]").val();
@@ -169,7 +169,7 @@
             $(document).on('submit', '.search_form', function(event) {
                 event.preventDefault();
 
-                $('#table-data').html(loader(true));
+                $('#table-data').html(spinner(true));
 
                 var _token = $("input[name=_token]").val();
                 var page_title = $("input[name=page_title]").val();
