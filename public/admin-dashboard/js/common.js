@@ -49,3 +49,15 @@ function initializeTinyMCEEditor(containerId){
         menubar: 'edit view insert format tools table'
     });
 }
+
+function loader(isTrue){
+    let spinner;
+    if(isTrue == true){
+        spinner = `<div class="text-center">
+        <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+        </div>`;
+    }
+    return spinner;
+}
