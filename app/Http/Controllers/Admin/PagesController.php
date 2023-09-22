@@ -23,8 +23,23 @@ class PagesController extends Controller
     public function index()
     {
         $route = 'index';
-        $pages = Page::latest()->paginate(20);
-        return view('admin-dashboard.pages.index', compact('pages', 'route'));
+        $count = Page::count();
+        return view('admin-dashboard.pages.index', compact('count', 'route'));
+    }
+
+    public function fetch(Request $request){
+        $route = 'index';
+        $pages = Page::when($request->page_title != null, function ($query) use ($request){
+            return $query->where('title', 'LIKE', '%'.$request->page_title.'%');
+        })
+        ->when($request->page_type != null && $request->page_type != '0', function ($query) use ($request){
+            return $query->where('type', $request->page_type);
+        })
+        ->when($request->status != null && $request->status != '-1', function ($query) use ($request){
+            return $query->where('status', $request->status);
+        })->latest()->paginate(20);
+
+        return view('admin-dashboard.pages.index_data', compact('pages', 'route'))->render();
     }
 
     /**
