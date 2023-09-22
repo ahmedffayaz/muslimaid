@@ -7,6 +7,7 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 
 class CharitySeeder extends Seeder
 {
@@ -36,6 +37,7 @@ class CharitySeeder extends Seeder
             $charities[] = [
                 'id' => $charity['id'],
                 'title' => $charity['title'],
+                'slug' => Str::slug($charity['title']),
                 'country' => $charity['country'],
                 'logo_type' => arrayValueExists($charity, 'logo_type') ? $charity['logo_type'] : null,
                 'logo_upload' => arrayValueExists($charity, 'logo_upload') ? $charity['logo_upload'] : null,
