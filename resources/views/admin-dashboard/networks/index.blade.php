@@ -108,11 +108,7 @@
                     <div class="nk-modal">
                         <em class="nk-modal-icon icon icon-circle icon-circle-xxl ni ni-download bg-success"></em>
                         <h4 class="nk-modal-title">Run Importer</h4>
-                        <div class="nk-modal-text" id="setting_form"></div>
-                        <div class="nk-modal-action">
-                            <a href="{{ route(getAdminPrefix() . '.importer.import') }}" class="btn btn-sm btn-mw btn-primary run-importer">Run Importer</a>
-                            <a href="" class="btn btn-sm btn-mw btn-primary save_importer">Save for later</a>
-                        </div>
+                        <div id="setting_form"></div>
                         <div class="nk-modal-action">
                             <p class="setting-message"></p>
                         </div>
@@ -326,8 +322,6 @@
                     success: function(data) {
                         $('#modalAlert').modal('show');
                         $('#setting_form').html(data);
-                        $(".run-importer").removeClass("disabled");
-                        $(".save_importer").removeClass("disabled");
                         $("a.run-importer").attr("href", "{{ route(getAdminPrefix() . '.importer.import') }}");
                     }
                 });

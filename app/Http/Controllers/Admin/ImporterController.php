@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Exception;
 use Carbon\Carbon;
 use App\Models\Store;
-use App\Jobs\Importer;
+use App\Jobs\CjImporter;
 use App\Models\Network;
 use App\Models\Voucher;
 use App\Models\ExitClick;
@@ -61,7 +61,7 @@ class ImporterController extends Controller
             'cashback' => isset($request->cashback) ? 1 : 0
         ];
         if ($request->network_name == "CJ") {
-            $importer = new Importer();
+            $importer = new CjImporter();
         } else if ($request->network_name == "Webgains") {
             $importer = new WebgainsImporter();
         } else if ($request->network_name == "Awin") {
@@ -557,7 +557,7 @@ class ImporterController extends Controller
      */
     public function show($id)
     {
-        $importer = new Importer();
+        $importer = new CjImporter();
         dispatch($importer);
     }
 
