@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\Cashout;
 use App\Models\User;
 use App\Models\CashbackStatus;
+use App\Models\CashbackStatusChange;
 use Carbon\Carbon;
 
 class CashoutController extends Controller
@@ -65,6 +66,10 @@ class CashoutController extends Controller
                 $cashout->update(['status'=>'paid']);
                 foreach($cashout->cashbacks as $cashback){
                     $cashback->update(['status'=>4]);
+                    CashbackStatusChange::create([
+                        'user_cashback_id' => $cashback->id,
+                        'cashback_status_id' => $cashback->status
+                    ]);
                 }
 
                 // Send email to user
@@ -83,6 +88,10 @@ class CashoutController extends Controller
                 $cashout->update(['status'=>'donated']);
                 foreach($cashout->cashbacks as $cashback){
                     $cashback->update(['status'=>7]);
+                    CashbackStatusChange::create([
+                        'user_cashback_id' => $cashback->id,
+                        'cashback_status_id' => $cashback->status
+                    ]);
                 }
 
                 // Send email to user
