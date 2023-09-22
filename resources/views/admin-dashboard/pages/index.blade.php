@@ -39,17 +39,17 @@
                                 <div class="row g-4">
                                     <div class="col-lg-6 col-md-12">
                                         <div class="form-group">
-                                            <label class="form-label" for="page_title">Page Title</label>
+                                            <label class="form-label" for="page-title">Page Title</label>
                                             <div class="form-control-wrap">
-                                                <input type="text" class="form-control" id="page_title" value="" name="page_title">
+                                                <input type="text" class="form-control" id="page-title" value="" name="page_title">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-lg-2 col-md-6">
                                         <div class="form-group">
-                                            <label class="form-label" for="page_type">Page Type</label>
+                                            <label class="form-label" for="page-type">Page Type</label>
                                             <div class="form-control-wrap ">
-                                                <select class="form-select form-control" data-search="on" id="page_type" name="page_type">
+                                                <select class="form-select form-control" data-search="on" id="page-type" name="page_type">
                                                     <option value="0">All</option>
                                                     <option value="system">System</option>
                                                     <option value="special">Special</option>
