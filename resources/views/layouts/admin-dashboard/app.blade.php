@@ -24,7 +24,6 @@
     <script src="{{ asset('vendor/laraberg/js/laraberg.js') }}"></script>
     <script src="{{ asset('admin-dashboard/js/common.js') }}" defer></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-colorpicker/2.5.3/css/bootstrap-colorpicker.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('storage/__asset/telephone-dropdown/css/intlTelInput.css') }}">
     <script src="{{ asset('vendor/tinymce/tinymce.min.js') }}" referrerpolicy="origin"></script>
     @livewireStyles
     @stack('styles')
@@ -32,7 +31,7 @@
         .logo:hover .edit {
             display: block;
         }
-    
+
         .edit {
             padding-top: 7px;
             padding-right: 7px;
@@ -41,26 +40,26 @@
             top: 0;
             display: none;
         }
-    
+
         .edit a {
             color: #000;
         }
-    
+
         .nk-files-view-grid .nk-file-icon-type {
             width: 150px;
             padding: 2rem 0 .5rem 0;
         }
-    
+
         @media (min-width: 1200px) {
             .nk-files-view-grid .nk-file {
                 width: calc(20% - 16px);
             }
         }
-    
+
         .nk-sidebar .nk-menu>li .nk-menu-sub .nk-menu-link {
             padding-left: 40px;
         }
-    
+
         /* Dropdown Button */
         .dropbtn {
             color: #526484;
@@ -68,13 +67,13 @@
             border: none;
             font-size: 14px;
         }
-    
+
         /* The container <div> - needed to position the dropdown content */
         .dropdown {
             position: relative;
             display: inline-block;
         }
-    
+
         /* Dropdown Content (Hidden by Default) */
         .dropdown-content {
             display: none;
@@ -85,48 +84,48 @@
             margin-top: 10px;
             left: 0;
         }
-    
+
         /* Links inside the dropdown */
         .dropdown-content a {
             color: #526484;
             /* padding: 12px 16px; */
             text-decoration: none;
         }
-    
+
         /* Change color of dropdown links on hover */
         /* .dropdown-content a:hover {background-color: #ddd;} */
         /* Show the dropdown menu on hover */
         .dropdown:hover .dropdown-content {
             display: block;
         }
-    
+
         @media (min-width: 576px) {
             .nk-header-search {
                 justify-content: center;
                 display: none;
             }
         }
-    
+
         @media only screen and (max-width: 1199px) {
             .is-compact:not(:hover) .nk-menu-text {
                 opacity: 1;
             }
-    
+
             .is-compact:not(:hover) .nk-menu-badge,
             .is-compact:not(:hover) .nk-menu-toggle:after {
                 opacity: 1;
             }
         }
-    
+
         @media (min-width: 1200px) {
             .nk-sidebar.is-compact.d-xl-none+.nk-wrap {
                 padding-left: 0;
             }
-    
+
             .nk-sidebar.is-compact.d-xl-none+.nk-wrap>.nk-header-fixed {
                 left: 0;
             }
-    
+
             .nk-header-search {
                 justify-content: center;
                 display: flex;
@@ -134,7 +133,7 @@
                 flex-grow: 1;
             }
         }
-    
+
         .dropbtn.icon-status-before::before {
             position: absolute;
             border-radius: 50%;
@@ -146,21 +145,21 @@
             content: '';
             background: red;
         }
-    
+
         .icon-status:after {
             background: red;
         }
-    
+
         .modal-corsi {
             height: 335px;
             overflow-y: auto;
         }
-    
+
         .nk-header-search .nk-menu-icon,
         .nk-header-search .nk-menu-text {
             line-height: 1rem !important;
         }
-    
+
         .nk-header-search .nk-menu-icon {
             width: 27px;
         }

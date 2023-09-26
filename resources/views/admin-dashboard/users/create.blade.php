@@ -106,8 +106,8 @@
     <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
     <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
 
-    <script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
-    <script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
+    <script src="{{ asset('admin-dashboard/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
+    <script src="{{ asset('admin-dashboard/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
 
     <script>
         var quill = new Quill('#editor-container', {
@@ -186,7 +186,7 @@
             const iti = window.intlTelInput(input,({
                 nationalMode:true,
                 preferredCountries: [],
-                utilsScript: "{{ asset('storage/__asset/telephone-dropdown/js/utils.js') }}",
+                utilsScript: "{{ asset('admin-dashboard/telephone-dropdown/js/utils.js') }}",
                 separateDialCode:true,
             }));
             $('.iti').css('width', '100%');

@@ -1,5 +1,9 @@
 @extends('layouts.admin-dashboard.app')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('admin-dashboard/telephone-dropdown/css/intlTelInput.css') }}">
+@endpush
+
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -1132,8 +1136,8 @@
     </style>
 @endsection
 @push('scripts')
-<script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
-<script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
+<script src="{{ asset('admin-dashboard/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
+<script src="{{ asset('admin-dashboard/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
     <!-- Update Store-->
     <script>
         jQuery.validator.addMethod("minValue", function(value, element, param) {
@@ -1293,7 +1297,7 @@
             const iti = window.intlTelInput(input,({
                 nationalMode:true,
                 preferredCountries: [],
-                utilsScript: "{{ asset('storage/__asset/telephone-dropdown/js/utils.js') }}",
+                utilsScript: "{{ asset('admin-dashboard/telephone-dropdown/js/utils.js') }}",
                 separateDialCode:true,
             }));
             $('.iti').css('width', '100%');
