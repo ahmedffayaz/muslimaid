@@ -1,14 +1,14 @@
-<div class="card-inner table-responsive">
-    <div class="nk-tb-list nk-tb-ulist" id="table-data">
+<div class="card-inner px-0 table-responsive">
+    <div class="nk-tb-list nk-tb-ulist">
         @if (count($clicks))
             <div class="nk-tb-item nk-tb-head">
-                <div class="nk-tb-col "><span class="sub-text">Click ID</span></div>
-                <div class="nk-tb-col " style="width: 360px;"><span class="sub-text">User</span></div>
+                <div class="nk-tb-col"><span class="sub-text">Click ID</span></div>
+                <div class="nk-tb-col"><span class="sub-text">User</span></div>
                 <div class="nk-tb-col"><span class="sub-text">Network</span></div>
                 <div class="nk-tb-col"><span class="sub-text">Store</span></div>
                 <div class="nk-tb-col"><span class="sub-text">Exit Url</span></div>
                 <div class="nk-tb-col"><span class="sub-text">Time</span></div>
-                <div class="nk-tb-col  text-right"><span class="sub-text">Conversion</span></div>
+                <div class="nk-tb-col"><span class="sub-text">Conversion</span></div>
             </div><!-- .nk-tb-item -->
             @foreach ($clicks as $click)
                 <div class="nk-tb-item">
@@ -43,7 +43,7 @@
                     <div class="nk-tb-col">
                         <span>{{ formatDateTimezone($click->created_at, 'YYYY-MM-DD HH:mm:ss') }}</span>
                     </div>
-                    <div class="nk-tb-col text-right">
+                    <div class="nk-tb-col">
                         {!! $click->cashback ? '<span class="tb-status badge badge-success">converted</span>' : '<span class="tb-status badge badge-danger">Not converted</span>' !!}
                     </div>
                 </div><!-- .nk-tb-item -->
