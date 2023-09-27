@@ -61,3 +61,44 @@ function spinner(isTrue = false){
     }
     return loader;
 }
+
+function maintenanceConfirmationDialog(title, text, confirmButtonText, maintenance, token, url){
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: confirmButtonText
+    }).then(function(result) {
+        if (result.value) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    _token: token,
+                    maintenance: maintenance
+                },
+                success: function(data) {
+
+                    (function(NioApp, $) {
+                        'use strict';
+                        toastr.clear();
+                        NioApp.Toast(data.message, data.response);
+                    })(NioApp, jQuery);
+
+
+                },
+                error: function(data) {
+
+                    (function(NioApp, $) {
+                        'use strict';
+                        toastr.clear();
+                        NioApp.Toast(data.message, data.response);
+                    })(NioApp, jQuery);
+
+                }
+            });
+
+        }
+    });
+}

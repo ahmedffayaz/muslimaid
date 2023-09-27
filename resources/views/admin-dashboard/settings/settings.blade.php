@@ -1260,34 +1260,12 @@
                     var maintenance = 0;
                 }
                 var _token = $("input[name=_token]").val();
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ route(getAdminPrefix() . '.settings.maintenance') }}",
-                    data: {
-                        _token: _token,
-                        maintenance: maintenance
-                    },
-                    success: function(data) {
-
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(data.message, data.response);
-                        })(NioApp, jQuery);
-
-
-                    },
-                    error: function(data) {
-
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(data.message, data.response);
-                        })(NioApp, jQuery);
-
-                    }
-                });
-
+                var url = "{{ route(getAdminPrefix() . '.settings.maintenance') }}";
+                if(maintenance == 1){
+                    maintenanceConfirmationDialog("Are you sure?", "You are going to enable maintenance mode!", "Yes, enable it!", maintenance, _token, url);
+                } else {
+                    maintenanceConfirmationDialog("Are you sure?", "You are going to disable maintenance mode!", "Yes, disable it!", maintenance, _token, url);
+                }
             });
         });
     </script>
