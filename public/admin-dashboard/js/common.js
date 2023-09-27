@@ -79,14 +79,11 @@ function maintenanceConfirmationDialog(title, text, confirmButtonText, maintenan
                     maintenance: maintenance
                 },
                 success: function(data) {
-
                     (function(NioApp, $) {
                         'use strict';
                         toastr.clear();
                         NioApp.Toast(data.message, data.response);
                     })(NioApp, jQuery);
-
-
                 },
                 error: function(data) {
 
@@ -98,7 +95,6 @@ function maintenanceConfirmationDialog(title, text, confirmButtonText, maintenan
 
                 }
             });
-
         }
     });
 }
