@@ -34,11 +34,14 @@
                 </div>
                 <div class="nk-tb-col">
                     @if ($page->type == 'system')
-                        <span class="tb-status badge badge-warning">System</span>
+                        <span class="tb-status badge badge-warning" data-toggle="tooltip" data-placement="top"
+                        title="Website modules for SEO and functionality.">System</span>
                     @elseif ($page->type == 'special')
-                        <span class="tb-status badge badge-info">Special</span>
+                        <span class="tb-status badge badge-info" data-toggle="tooltip" data-placement="top"
+                        title="Special pages & cannot be deleted.">Special</span>
                     @else
-                        <span class="tb-status badge badge-success">General</span>
+                        <span class="tb-status badge badge-success" data-toggle="tooltip" data-placement="top"
+                        title="User created pages">General</span>
                     @endif
                 </div>
                 <div class="nk-tb-col">
