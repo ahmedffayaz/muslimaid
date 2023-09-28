@@ -139,7 +139,7 @@ class PaymentController extends Controller
             DB::rollBack();
             $data = [
                 'status' => 500,
-                'message' => "Error",
+                'message' => "Something went wrong, try again later",
                 'data' => []
             ];
             return response()->json($data, 500);
