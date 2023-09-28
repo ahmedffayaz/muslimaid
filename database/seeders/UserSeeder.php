@@ -66,11 +66,51 @@ class UserSeeder extends Seeder
                 'provider' => isset($row['provider']) ? $row['provider'] : 'email',
                 'provider_id' => isset($row['provider_id']) ? $row['provider_id'] : null,
                 'is_email_verified' => arrayValueExists($row, 'is_email_verified') ? $row['is_email_verified'] :  1,
+                'meta_data' => [
+                    'referral_code' => isset($row['ref_code']) ? $row['ref_code'] : null,
+                ]
             ];
         }
 
         foreach (array_chunk($users, 500) as $usersChunk) {
-            User::insert($usersChunk);
+            if (empty($usersChunk)) return;
+            foreach ($usersChunk as $userData) {
+                if (empty($userData)) return;
+                $user = User::create([
+                    'first_name' => $userData['first_name'],
+                    'last_name' => $userData['last_name'],
+                    'email' => $userData['email'],
+                    'email_verified_at' => $userData['email_verified_at'],
+                    'password' => $userData['password'],
+                    'registration_type' => $userData['registration_type'],
+                    'date_of_birth' => $userData['date_of_birth'],
+                    'intro' => $userData['intro'],
+                    'address' => $userData['address'],
+                    'phone' => $userData['phone'],
+                    'avatar' => $userData['avatar'],
+                    'status' => $userData['status'],
+                    'referred_by' => $userData['referred_by'],
+                    'referred_at' => $userData['referred_at'],
+                    'remember_token' => $userData['remember_token'],
+                    'created_at' => $userData['created_at'],
+                    'updated_at' => $userData['updated_at'],
+                    'deleted_at' => $userData['deleted_at'],
+                    'provider' => $userData['provider'],
+                    'provider_id' => $userData['provider_id'],
+                    'is_email_verified' => $userData['is_email_verified'],
+                ]);
+
+                // Insert user metadata if it exists
+                if (isset($userData['meta_data']) && is_array($userData['meta_data'])) {
+                    foreach ($userData['meta_data'] as $key => $metaData) {
+                        $user->metaData()->create([
+                            'user_id' => $user->id,
+                            'type' => $key,
+                            'value' => $metaData,
+                        ]);
+                    }
+                }
+            }
         }
 
         foreach ($roles as $roleName => $roleIds) {

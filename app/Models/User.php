@@ -165,12 +165,19 @@ class User extends Authenticatable implements MustVerifyEmail
 
         return $address;
     }
+
     public function country()
     {
         return $this->hasOne(Country::class, 'id', 'country_id');
     }
+
     public function devices()
     {
         return $this->hasMany(UserDevice::class);
+    }
+
+    public function metaData()
+    {
+        return $this->hasMany(UserMeta::class);
     }
 }

@@ -16,6 +16,7 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -94,6 +95,7 @@ class RegisterController extends Controller
     protected function create(array $data)
     {
         try {
+            DB::beginTransaction();
             $today = Carbon::today()->toDateString();
             $user =  User::create([
                 'first_name' => $data['firstname'],
@@ -105,6 +107,12 @@ class RegisterController extends Controller
                 'referred_at' => empty($data['referral_code']) ? '' : $today,
                 'avatar' => 'default.png',
                 'short_ref_id' => uniqueRefLinkGenerator()
+            ]);
+
+            $user->metaData()->create([
+                'user_id' => $user->id,
+                'type' => 'referral_code',
+                'value' => !empty($data['ref_code']) ? $data['ref_code'] : null
             ]);
 
             $user->assignRole('user');
@@ -137,8 +145,11 @@ class RegisterController extends Controller
                     return redirect()->route('login')->with(['error' => 'Something went wrong!']);
                 }
             }
+
+            DB::commit();
             return redirect()->route('login')->with(['success' => 'User Successfully registered, verify your account'],);
         } catch (Exception $ex) {
+            DB::rollBack();
             return redirect()->route('login')->with(['error' => 'Something went wrong!']);
         }
     }
