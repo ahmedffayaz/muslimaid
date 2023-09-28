@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\CharityTypeResource;
 use App\Http\Resources\UserCashbackResource;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
@@ -69,15 +70,17 @@ class PaymentController extends Controller
                     'message' => 'Payment method not found, please add your payment method information',
                     'data' => []
                 ];
+                return response()->json($data, 500);
             }
             $balance = $user->availableBalance(3);
             $cashbacks = $user->balance;
             if ($balance < $min) {
                 $data = [
                     'status' => 406,
-                    'message' => "You have insufficient balance for withdrawl. You need to have at least $min in your balance for withdrawal.",
+                    'message' => "You have insufficient balance for withdrawl. You need to have at least £".$min." in your balance for withdrawal.",
                     'data' => []
                 ];
+                return response()->json($data, 500);
             }
             $cashoutStatuses = $user->cashouts()->pluck('status')->all();
             $availableBalance = $user->availableBalance(3);
@@ -85,11 +88,12 @@ class PaymentController extends Controller
             if ($availableBalance < $minimumCashoutAmount || (in_array('pending', $cashoutStatuses) || in_array('processing donation', $cashoutStatuses))) {
                 $data = [
                     'status' => 406,
-                    'message' => 'You are not eligible to withdraw at the moment.',
+                    'message' => 'You are not eligible to withdraw, your cashout request is already pending',
                     'data' => []
                 ];
                 return response()->json($data, 406);
             }
+            DB::beginTransaction();
             $cashout = Cashout::create([
                 'user_id' => $user->id,
                 'amount' => $balance,
@@ -124,17 +128,18 @@ class PaymentController extends Controller
             }
             $this->sendEmail($cashout);
             $this->sendNotification($request->payment_method);
-            
+            DB::commit();
             $data = [
                 'status' => 200,
-                'message' => "We're processing your withdrawal. Please allow 4 working days for " . $balance . " to reach your " . $request->payment_method . " account.",
+                'message' => "We're processing your withdrawal. Please allow 4 working days for £".$balance." to reach your " . $request->payment_method . " account.",
                 'data' => '',
             ];
             return response()->json($data, 200);
         } catch (\Exception $e) {
+            DB::rollBack();
             $data = [
                 'status' => 500,
-                'message' => $e->getMessage(),
+                'message' => "Something went wrong, try again later",
                 'data' => []
             ];
             return response()->json($data, 500);
@@ -162,9 +167,10 @@ class PaymentController extends Controller
             if ($balanceOld < $min) {
                 $data = [
                     'status' => 406,
-                    'message' => "You have insufficient balance for withdrawl. You need to have at least $min in your balance for withdrawal.",
+                    'message' => "You have insufficient balance for withdrawl. You need to have at least £" .$min. "in your balance for withdrawal.",
                     'data' => []
                 ];
+                return response()->json($data, 500);
             }
             $validator = Validator::make($request->all(), [
                 'charity_types_id' => 'required',
@@ -185,12 +191,12 @@ class PaymentController extends Controller
             if ($balanceOld < $minimumCashoutAmount || (in_array('pending', $cashoutStatus) || in_array('processing donation', $cashoutStatus))) {
                 $data = [
                     'status' => 406,
-                    'message' => 'You are not eligible to withdraw at the moment.',
+                    'message' => 'You are not eligible to withdraw, your cashout request is already pending',
                     'data' => []
                 ];
                 return response()->json($data, 406);
             }
-
+            DB::beginTransaction();
             $cashout = Cashout::create([
                 'user_id' => $user->id,
                 'charity_types_id' => $request->charity_types_id,
@@ -220,14 +226,15 @@ class PaymentController extends Controller
 
             $this->sendEmail($cashout);
             $this->sendNotification($request->payment_method);
-
+            DB::commit();
             $data = [
                 'status' => 200,
-                'message' => "We're processing your withdrawal. Please allow 4 working days for " . $request->amount  . " to reach your " . $request->payment_method . " account.",
+                'message' => "We're processing your withdrawal. Please allow 4 working days for £" . $request->amount  . " to reach your " . $request->payment_method . " account.",
                 'data' => '',
             ];
             return response()->json($data, 200);
         } catch (\Exception $e) {
+            DB::rollBack();
             $data = [
                 'status' => 500,
                 'message' => $e->getMessage(),
