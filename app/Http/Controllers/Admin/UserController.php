@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Jobs\SendEmailJob;
 use App\Models\Favorite;
 use App\Models\Store;
+use App\Models\UserMeta;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
@@ -287,7 +288,7 @@ class UserController extends Controller
         $rules = [
             'password' => ['required', 'confirmed']
         ];
-        
+
         $passwordRules = env('PASSWORD_VALIDATION', '');
         if(!empty($passwordRules)){
             $additionalRules = explode('|', $passwordRules);
@@ -364,6 +365,14 @@ class UserController extends Controller
 
         $clicks = ExitClick::where('user_id', $request->user)->latest()->paginate(20);
         return view('admin-dashboard.users.clicks', compact('clicks'))->render();
+    }
+
+    function fetchMetaData(Request $request)
+    {
+        if (!$request->ajax()) return;
+
+        $metaDatas = UserMeta::where('user_id', $request->user)->latest()->paginate(20);
+        return view('admin-dashboard.users.meta-data', compact('metaDatas'))->render();
     }
 
     public function showUser()

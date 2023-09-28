@@ -108,6 +108,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('users/fetch', [App\Http\Controllers\Admin\UserController::class, 'fetch'])->name('users.fetch');
         Route::post('users/search_users',  [App\Http\Controllers\Admin\UserController::class, 'searchUsers'])->name('users.search_users');
         Route::get('users/show', [App\Http\Controllers\Admin\UserController::class, 'showUser'])->name('users.show_user');
+        Route::post('users/meta-data', [App\Http\Controllers\Admin\UserController::class, 'fetchMetaData'])->name('users.metadata');
         Route::resource('users', UserController::class);
 
         // Importers
