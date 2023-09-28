@@ -110,6 +110,7 @@
                     $('html, body').animate({
                         scrollTop: 0
                     }, 'slow');
+                    NioApp.BS.tooltip('[data-toggle="tooltip"]');
                 }
             })
         });
@@ -138,6 +139,7 @@
                             $('html, body').animate({
                                 scrollTop: 0
                             }, 'slow');
+                            NioApp.BS.tooltip('[data-toggle="tooltip"]');
                         }
                     });
                 }
@@ -162,6 +164,7 @@
                             $('html, body').animate({
                                 scrollTop: 0
                             }, 'slow');
+                            NioApp.BS.tooltip('[data-toggle="tooltip"]');
                         }
                     });
                 }
@@ -189,6 +192,7 @@
                         $('html, body').animate({
                             scrollTop: 0
                         }, 'slow');
+                        NioApp.BS.tooltip('[data-toggle="tooltip"]');
                     }
                 });
             });
