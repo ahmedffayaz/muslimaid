@@ -14,7 +14,7 @@ class BlogController extends Controller
         $page = Page::whereSlug('blogs')->whereType('system')->first();
         if (empty($page)) abort(404);
         
-        $blogs = Blog::latest()->get();
+        $blogs = Blog::latest()->paginate(20);
         $latestBlogs = Blog::latest()->limit(5)->get();
 
         return view('frontend.pages.single-page', compact('page', 'blogs', 'latestBlogs'));
