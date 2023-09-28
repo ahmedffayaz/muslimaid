@@ -62,6 +62,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem9"><em class="icon ni ni-lock-alt-fill"></em><span>Change Password</span></a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem10"><em class="icon ni ni-menu-circled"></em><span>Meta Data</span></a>
+                                    </li>
                                 </ul>
 
                                 <div class="tab-content">
@@ -99,7 +102,7 @@
                                                                     <option value="Mx" {{ $user->title == 'Mx'? 'selected' : '' }}>Mx</option>
                                                                 </select>
                                                             </div>
-                                                        </div>                                                        
+                                                        </div>
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
@@ -340,6 +343,7 @@
                                             </div>
                                         </form>
                                     </div>
+
                                     <div class="tab-pane" id="tabItem9">
                                         <h5 class="title mb-4">Change Password</h5>
                                         <form action="{{ route(getAdminPrefix() . '.users.save_password', $user) }}" class="gy-3 form-validate is-alter" id='password_form'
@@ -379,6 +383,11 @@
                                             </div>
                                         </form>
                                     </div>
+
+                                    <div class="tab-pane" id="tabItem10">
+                                        <h5 class="title mb-4 d-inline">Meta Data</h5>
+                                        <span id="meta-data"></span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -406,6 +415,7 @@
                 fetchCashbacks(1);
                 fetchClicks(1);
                 initializeSelect2();
+                fetchMetaData(1);
 
                 var quill = new Quill('#editor-container', {
                     modules: {
@@ -446,6 +456,25 @@
             placeholder: 'Compose an epic...',
             theme: 'snow'
         });
+
+        function fetchMetaData(page) {
+            pageurl = "{{ route(getAdminPrefix() . '.users.metadata') }}?page=" + page;
+
+            var _token = $("input[name=_token]").val();
+            var user = $('.user_id_checker').text();
+
+            $.ajax({
+                url: pageurl,
+                method: "POST",
+                data: {
+                    _token: _token,
+                    user: user
+                },
+                success: function(data) {
+                    $('#meta-data').html(data);
+                }
+            });
+        }
 
         function fetchCashbacks(page) {
             pageurl = "{{ route(getAdminPrefix() . '.users.cashbacks') }}?page=" + page
@@ -501,6 +530,7 @@
 
         fetchCashbacks(1);
         fetchClicks(1);
+        fetchMetaData(1);
 
         $(document).ready(function() {
             $(document).on('click', '#click-paginate .pagination a', function(event) {
@@ -515,6 +545,22 @@
 
                 var page = $(this).attr('href').split('page=')[1];
                 fetchCashbacks(page);
+            });
+        });
+
+        $(document).ready(function() {
+            $(document).on('click', '#meta-data-paginate .pagination a', function(event) {
+                event.preventDefault();
+
+                var page = $(this).attr('href').split('page=')[1];
+                fetchMetaData(page);
+            });
+
+            $(document).on('click', '#meta-data-paginate .pagination a', function(event) {
+                event.preventDefault();
+
+                var page = $(this).attr('href').split('page=')[1];
+                fetchMetaData(page);
             });
         });
 
