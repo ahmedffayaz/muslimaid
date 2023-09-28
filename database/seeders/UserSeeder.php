@@ -103,11 +103,13 @@ class UserSeeder extends Seeder
                 // Insert user metadata if it exists
                 if (isset($userData['meta_data']) && is_array($userData['meta_data'])) {
                     foreach ($userData['meta_data'] as $key => $metaData) {
-                        $user->metaData()->create([
-                            'user_id' => $user->id,
-                            'type' => $key,
-                            'value' => $metaData,
-                        ]);
+                        if (!empty($metaData)) {
+                            $user->metaData()->create([
+                                'user_id' => $user->id,
+                                'type' => $key,
+                                'value' => $metaData,
+                            ]);
+                        }
                     }
                 }
             }

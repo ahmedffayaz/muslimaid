@@ -109,11 +109,13 @@ class RegisterController extends Controller
                 'short_ref_id' => uniqueRefLinkGenerator()
             ]);
 
-            $user->metaData()->create([
-                'user_id' => $user->id,
-                'type' => 'referral_code',
-                'value' => !empty($data['ref_code']) ? $data['ref_code'] : null
-            ]);
+            if (!empty($data['ref_code'])) {
+                $user->metaData()->create([
+                    'user_id' => $user->id,
+                    'type' => 'referral_code',
+                    'value' => !empty($data['ref_code']) ? $data['ref_code'] : null
+                ]);
+            }
 
             $user->assignRole('user');
 

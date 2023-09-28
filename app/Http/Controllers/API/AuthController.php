@@ -52,6 +52,14 @@ class AuthController extends Controller
                 'short_ref_id' => uniqueRefLinkGenerator()
             ]);
 
+            if (!empty($request->ref_code)) {
+                $user->metaData()->create([
+                    'user_id' => $user->id,
+                    'type' => 'referral_code',
+                    'value' => !empty($request->ref_code) ? $request->input('ref_code') : null
+                ]);
+            }
+
             $user->assignRole('user');
             $bonusStatus = 3;
             $nameArray = explode(' ', $request->input('name'));
@@ -166,7 +174,7 @@ class AuthController extends Controller
             $user = new UserResource(User::where('email', $request->email)->first());
             if(auth()->user()->short_ref_id == null){
                 uniqueRefLinkGenerator();
-            } 
+            }
             $response = [
                 'status' => 200,
                 'message' => "Successful login.",
@@ -223,7 +231,7 @@ class AuthController extends Controller
             $rules['confirm_password'][] = 'string';
         }
         $validator = Validator::make($request->all(), $rules);
-        
+
         if ($validator->fails()) {
             $response = [
                 'status' => 406,
