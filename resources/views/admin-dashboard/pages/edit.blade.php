@@ -8,8 +8,9 @@
                         <div class="nk-block nk-block-lg">
                             <div class="nk-block-head">
                                 <div class="nk-block-head-content">
-                                    <div class="nk-block-des">
-                                    </div>
+                                    <h3 class="nk-block-title fw-normal"><a href="{{ getPageRoute($page->type, $page->slug) }}" target="_blank" class="a_link">{{ $page->title }}</a>
+                                        <span class="badge badge-dim badge-pill badge-outline-primary">{{ ucfirst($page->type) }}</span>
+                                    </h3>
                                 </div>
                             </div>
                             <div class="card">
