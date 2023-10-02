@@ -27,6 +27,8 @@ class AuthController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
+                'first_name' => ['required', 'string', 'max:255'],
+                'last_name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
                 'password' => ['required', 'string', 'min:8', 'confirmed'],
             ]);
@@ -41,8 +43,8 @@ class AuthController extends Controller
 
             $otp = strval(random_int(100000, 999999));
             $user = User::create([
-                'first_name' => 'unnamed',
-                'last_name' => 'unnamed',
+                'first_name' => $request->input('first_name'),
+                'last_name' => $request->input('last_name'),
                 'email' => $request->input('email'),
                 'password' => Hash::make($request->input('password')),
                 'otp' => $otp,
