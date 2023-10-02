@@ -1154,3 +1154,15 @@ function uniqueRefLinkGenerator()
     //This will add short_ref_id for all the users registered with the system when they login.
     auth()->user()->update(['short_ref_id' => $refId]);
 }
+
+function getPageRoute($type, $slug){
+    if($type == "system"){
+        if($slug == "/home-page-before-login" || $slug == "/home-page-after-login"){
+            return url('/');
+        } else{
+            return url($slug);
+        }
+    } else if($type == "general" || $type == "special"){
+        return route('pages.show', $slug);
+    }
+}
