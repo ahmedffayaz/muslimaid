@@ -33,6 +33,7 @@ class CategoryController extends Controller
             ->where('name', '!=', 'more') // Exclude the category with the name 'more'
             ->where('visibility', 'visible')
             ->where('status', '1')
+            ->orderBy('sort', 'desc')
             ->orderBy('name', 'asc')
             ->paginate(20)
             ->appends(request()->input());
