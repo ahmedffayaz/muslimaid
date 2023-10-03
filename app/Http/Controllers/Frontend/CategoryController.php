@@ -20,7 +20,9 @@ class CategoryController extends Controller
         $categories = Category::where(function ($query) {
             $query->where('visibility', '!=', 'hidden')
                 ->orWhereNull('visibility');
-        })->with('childs')->where('parent_id', '0')->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();
+        })->with(['childs' => function ($query) {
+            $query->where('status', '1')->orderBy('sort', 'asc');
+        }])->where('parent_id', '0')->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();
         $subCategories = Category::where(function ($query) {
             $query->where('visibility', '!=', 'hidden')
                 ->orWhereNull('visibility');
