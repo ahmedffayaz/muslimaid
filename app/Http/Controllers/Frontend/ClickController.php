@@ -95,11 +95,9 @@ class ClickController extends Controller
 
             return view('frontend.stores.exit-click', compact('store', 'cashbackId', 'cashbackType', 'url', 'clickId'));
         } catch (ModelNotFoundException $e) {
-            flash()->error('Something went wrong. Try again');
-            return redirect()->back();
+            return redirect()->back()->with(['error' => 'Something went wrong!']);
         } catch (Exception $e) {
-            flash()->error('Something went wrong. Try again');
-            return redirect()->back();
+            return redirect()->back()->with(['error' => 'Something went wrong!']);
         }
     }
 

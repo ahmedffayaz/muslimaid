@@ -13,21 +13,10 @@ class Cashout extends Model
 
     protected $fillable = [
         'user_id',
+        'charity_types_id',
         'amount',
-        'cashout_type',
-        'paypal_email',
-        'address',
-        'city',
-        'postcode',
-        'country',
-        'account_name',
-        'bank_title',
-        'account_number',
-        'bank_sort_code',
-        'bic',
         'payment_method',
         'new_cashout',
-        'charity_types_id',
         'status',
     ];
 
@@ -48,7 +37,11 @@ class Cashout extends Model
 
     public function charity_type()
     {
-
         return $this->hasOne(CharityType::class, 'id', 'charity_types_id');
+    }
+
+    public function metaData()
+    {
+        return $this->hasMany(CashoutMeta::class);
     }
 }
