@@ -13,8 +13,11 @@ use App\Jobs\SendEmailToAdmin;
 use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
+use App\Models\CashoutMeta;
+use Exception;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class PaymentController extends Controller
@@ -104,168 +107,236 @@ class PaymentController extends Controller
 
     public function cashout(Request $request)
     {
-        $user = Auth::user();
-        if (!($user->first_name && $user->last_name && $user->email && $user->phone && $user->address && $user->date_of_birth && $user->street && $user->country_id && $user->postal_code)) {
-            flash()->error('Please first complete your profile to withdraw');
-            return redirect()->back();
-        }
-        $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
-        if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0) {
-            $min = SiteSetting()['min_cashout_amount'];
-        } else if (isset(SiteSetting()['next_cashout_amount']) && $previousCashouts > 0) {
-            $min = SiteSetting()['next_cashout_amount'];
-        } else if ($previousCashouts == 0) {
-            $min = 1;
-        } else {
-            $min = 2;
-        }
-        $method = $user->paymentInfo()->where('payment_method', $request->payment_method)->first();
+        try {
+            $user = Auth::user();
+            if (!($user->first_name && $user->last_name && $user->email && $user->phone && $user->address && $user->date_of_birth && $user->street && $user->country_id && $user->postal_code)) {
+                flash()->error('Please first complete your profile to withdraw');
+                return redirect()->back();
+            }
 
-        if (!$method && $request->payment_method != 'charity') {
-            flash()->error('Payment method not found, please add your payment method information', $lifetime = 600);
-            return redirect()->back();
-        }
+            $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
 
-        $balance = $user->availableBalance(3);
-        $cashbacks = $user->balance;
+            if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0)
+                $min = SiteSetting()['min_cashout_amount'];
+            else if (isset(SiteSetting()['next_cashout_amount']) && $previousCashouts > 0)
+                $min = SiteSetting()['next_cashout_amount'];
+            else if ($previousCashouts == 0) $min = 1;
+            else $min = 2;
 
-        if ($balance < $min) {
-            flash()->error("You have insufficient balance for withdrawl. You need to have at least $min in your balance for withdrawal.");
-            return redirect()->back();
-        }
+            $method = $user->paymentInfo()->where('payment_method', $request->payment_method)->first();
 
-        $cashout = Cashout::create([
-            'user_id' => $user->id,
-            'amount' => $balance,
-            'cashout_type' => $method->payment_method,
-            'paypal_email' => $method->paypal_email,
-            'address' => $method->address,
-            'city' => $method->city,
-            'postcode' => $method->postcode,
-            'country' => $method->country,
-            'account_name' => $method->account_name,
-            'bank_title' => $method->bank_title,
-            'account_number' => $method->account_number,
-            'bank_sort_code' => $method->bank_sort_code,
-            'new_cashout' => '1',
-            'bic' => $method->bic,
-            'payment_method' => $method->payment_method,
-            'status' => 'pending'
-        ]);
+            if (!$method && $request->payment_method != 'charity') {
+                flash()->error('Payment method not found, please add your payment method information', $lifetime = 600);
+                return redirect()->back();
+            }
 
-        foreach ($cashbacks as $cashback) {
-            $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
-            $change_status = CashbackStatusChange::create([
-                'user_cashback_id' => $cashback->id,
-                'cashback_status_id' => $cashback->status
+            $balance = $user->availableBalance(3);
+            $cashbacks = $user->balance;
+
+            if ($balance < $min) {
+                flash()->error("You have insufficient balance for withdrawal. You need to have at least $min in your balance for withdrawal.");
+                return redirect()->back();
+            }
+
+            DB::beginTransaction();
+            $cashout = Cashout::create([
+                'user_id' => $user->id,
+                'amount' => $balance,
+                'new_cashout' => '1',
+                'status' => 'pending',
+                'payment_method' => $method->payment_method,
             ]);
+
+            if ($cashout->payment_method === 'bank') {
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'bank_title',
+                    'value' => $method->bank_title
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'account_name',
+                    'value' => $method->account_name
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'account_number',
+                    'value' => $method->account_number
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'bank_sort_code',
+                    'value' => $method->bank_sort_code
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'bic',
+                    'value' => $method->bic
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'address',
+                    'value' => $method->address
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'city',
+                    'value' => $method->city
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'postcode',
+                    'value' => $method->postcode
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'country',
+                    'value' => $method->country
+                ]);
+            }
+
+            if ($cashout->payment_method === 'paypal') {
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'paypal_email',
+                    'value' => $method->paypal_email
+                ]);
+            }
+
+            foreach ($cashbacks as $cashback) {
+                $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
+                $change_status = CashbackStatusChange::create([
+                    'user_cashback_id' => $cashback->id,
+                    'cashback_status_id' => $cashback->status
+                ]);
+            }
+
+            if ($user->bonus && $user->bonus->status == 'unpaid') {
+                $user->bonus->update([
+                    'status' => 'paid',
+                    'cashout_id' => $cashout->id
+                ]);
+            }
+
+            DB::commit();
+
+            // Send email to user and admin
+            $this->sendEmail($cashout);
+
+            // Send push notification
+            $deviceToken = optional(auth()->user()->devices()->whereType('web')->latest()->first())->fcm_token;
+            $deviceToken != null ? $this->sendNotification($cashout, $deviceToken, $user) :'';
+
+            flash()->success("We're processing your withdrawal. Please allow 4 working days for £" . $balance . " to reach your " . $request->payment_method . " account.");
+            return redirect()->back();
+        } catch (Exception $e) {
+            flash()->error("Something went wrong, try again later.");
+            return redirect()->back();
         }
-
-        if ($user->bonus && $user->bonus->status == 'unpaid') {
-            $user->bonus->update([
-                'status' => 'paid',
-                'cashout_id' => $cashout->id
-            ]);
-        }
-
-        // Send email to user and admin
-        $this->sendEmail($cashout);
-
-        // Send push notification
-        $deviceToken = optional(auth()->user()->devices()->whereType('web')->latest()->first())->fcm_token;
-        $deviceToken != null ? $this->sendNotification($cashout, $deviceToken, $user) :'';
-
-        flash()->success("We're processing your withdrawal. Please allow 4 working days for £" . $balance . " to reach your " . $request->payment_method . " account.");
-        return redirect()->back();
     }
 
     public function CharityCashout(Request $request, Cashout $cashout)
     {
-        $user = Auth::user();
-        if (!($user->first_name && $user->last_name && $user->email && $user->phone && $user->address && $user->date_of_birth && $user->street && $user->country_id && $user->postal_code)) {
-            flash()->error('Please first complete your profile to withdraw');
-            return redirect()->back();
-        }
-        $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
-        if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0) {
-            $min = SiteSetting()['min_cashout_amount'];
-        } else if (isset(SiteSetting()['next_cashout_amount']) && $previousCashouts > 0) {
-            $min = SiteSetting()['next_cashout_amount'];
-        } else if ($previousCashouts == 0) {
-            $min = 1;
-        } else {
-            $min = 2;
-        }
+        try {
+            $user = Auth::user();
+            if (!($user->first_name && $user->last_name && $user->email && $user->phone && $user->address && $user->date_of_birth && $user->street && $user->country_id && $user->postal_code)) {
+                flash()->error('Please first complete your profile to withdraw');
+                return redirect()->back();
+            }
+            $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
 
-        $cashout_status = $user->cashouts()->where('status', '=', 'pending')->first();
-        $balance_old = $user->availableBalance(3);
-        $balance = ($balance_old - $request->amount);
+            if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0)
+                $min = SiteSetting()['min_cashout_amount'];
+            else if (isset(SiteSetting()['next_cashout_amount']) && $previousCashouts > 0)
+                $min = SiteSetting()['next_cashout_amount'];
+            else if ($previousCashouts == 0) $min = 1;
+            else $min = 2;
 
-        if ($balance_old < $min) {
-            flash()->error("You have insufficient balance for withdrawal. You need to have at least $min in your balance for withdrawal.");
-            return redirect()->back();
-        }
+            $cashout_status = $user->cashouts()->where('status', '=', 'pending')->first();
+            $balance_old = $user->availableBalance(3);
+            $balance = ($balance_old - $request->amount);
 
-        if ($cashout_status == 'pending') {
-            flash()->error('You have already pending withdraw request.');
-            return redirect()->back();
-        }
+            if ($balance_old < $min) {
+                flash()->error("You have insufficient balance for withdrawal. You need to have at least $min in your balance for withdrawal.");
+                return redirect()->back();
+            }
 
-        $validator = Validator::make($request->all(), [
-            'charity_types_id' => 'required',
-            'id' => 'required',
+            if ($cashout_status == 'pending') {
+                flash()->error('You have already pending withdraw request.');
+                return redirect()->back();
+            }
 
-        ]);
+            $validator = Validator::make($request->all(), [
+                'charity_types_id' => 'required',
+                'id' => 'required',
 
-        if ($validator->fails()) {
-            return redirect()->back()
-                ->withErrors($validator)
-                ->withInput();
-        }
-
-        $amount = 0;
-        //To decrypt and fetch the cashback amounts
-        foreach($request->id as $encryptedId){
-            $decryptedId = decrypt($encryptedId);
-            $amount = $amount + UserCashback::where('id', $decryptedId)->first()->amount;
-        }
-
-        $cashout = Cashout::create([
-            'user_id' => $user->id,
-            'charity_types_id' => $request->charity_types_id,
-            'cashout_type' => $request->payment_method,
-            'amount' => $amount,
-            'new_cashout' => '1',
-            'payment_method' => $request->payment_method,
-            'status' => 'processing donation'
-        ]);
-
-        foreach($request->id as $encryptedId){
-            $decryptedId = decrypt($encryptedId);
-            $cashback = $user->cashbacks()->where('id', $decryptedId)->first();
-            $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
-            $cashback->statusHistory()->create([
-                'cashback_status_id' => $cashback->status,
-                'user_cashback_id' => $cashback->id
             ]);
-        }
 
-        if ($user->bonus && $user->bonus->status == 'unpaid') {
-            $user->bonus->update([
-                'status' => 'paid',
-                'cashout_id' => $cashout->id
+            if ($validator->fails()) {
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+
+            $amount = 0;
+            //To decrypt and fetch the cashback amounts
+            foreach($request->id as $encryptedId){
+                $decryptedId = decrypt($encryptedId);
+                $amount = $amount + UserCashback::where('id', $decryptedId)->first()->amount;
+            }
+
+            DB::beginTransaction();
+
+            $cashout = Cashout::create([
+                'user_id' => $user->id,
+                'charity_types_id' => $request->charity_types_id,
+                'amount' => $amount,
+                'new_cashout' => '1',
+                'payment_method' => $request->payment_method,
+                'status' => 'processing donation'
             ]);
+
+            foreach($request->id as $encryptedId){
+                $decryptedId = decrypt($encryptedId);
+                $cashback = $user->cashbacks()->where('id', $decryptedId)->first();
+                $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
+                $cashback->statusHistory()->create([
+                    'cashback_status_id' => $cashback->status,
+                    'user_cashback_id' => $cashback->id
+                ]);
+            }
+
+            if ($user->bonus && $user->bonus->status == 'unpaid') {
+                $user->bonus->update([
+                    'status' => 'paid',
+                    'cashout_id' => $cashout->id
+                ]);
+            }
+
+            DB::commit();
+
+            // Send email to user and admin
+            $this->sendEmail($cashout);
+
+            // Send push notification
+            $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
+            $deviceToken != null ? $this->sendNotification($request, $deviceToken, $user) : '';
+
+            flash()->success("We're processing your withdrawal. Please allow 4 working days for £" . $request->amount . " to reach your " . $request->payment_method . " account.");
+            return redirect()->back();
+        } catch (Exception $e) {
+            DB::rollBack();
+            flash()->error('Something went wrong, try again later.');
+            return redirect()->back();
         }
-
-        // Send email to user and admin
-        $this->sendEmail($cashout);
-
-        // Send push notification
-        $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
-        $deviceToken != null ? $this->sendNotification($request, $deviceToken, $user) : '';
-
-        flash()->success("We're processing your withdrawal. Please allow 4 working days for £" . $request->amount . " to reach your " . $request->payment_method . " account.");
-        return redirect()->back();
     }
 
     function sendEmail($cashout)

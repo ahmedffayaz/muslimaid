@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\CharityTypeResource;
 use App\Http\Resources\UserCashbackResource;
+use App\Models\CashoutMeta;
 use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
@@ -63,7 +64,9 @@ class PaymentController extends Controller
             } else {
                 $min = 2;
             }
+
             $method = $user->paymentInfo()->where('payment_method', $request->payment_method)->first();
+
             if (!$method && $request->payment_method != 'charity') {
                 $data = [
                     'status' => 406,
@@ -72,8 +75,10 @@ class PaymentController extends Controller
                 ];
                 return response()->json($data, 500);
             }
+
             $balance = $user->availableBalance(3);
             $cashbacks = $user->balance;
+
             if ($balance < $min) {
                 $data = [
                     'status' => 406,
@@ -82,9 +87,11 @@ class PaymentController extends Controller
                 ];
                 return response()->json($data, 500);
             }
+
             $cashoutStatuses = $user->cashouts()->pluck('status')->all();
             $availableBalance = $user->availableBalance(3);
             $minimumCashoutAmount = getMinimumCashoutAmount();
+
             if ($availableBalance < $minimumCashoutAmount || (in_array('pending', $cashoutStatuses) || in_array('processing donation', $cashoutStatuses))) {
                 $data = [
                     'status' => 406,
@@ -93,25 +100,81 @@ class PaymentController extends Controller
                 ];
                 return response()->json($data, 406);
             }
+
             DB::beginTransaction();
+
             $cashout = Cashout::create([
                 'user_id' => $user->id,
                 'amount' => $balance,
-                'cashout_type' => $method->payment_method,
-                'paypal_email' => $method->paypal_email,
-                'address' => $method->address,
-                'city' => $method->city,
-                'postcode' => $method->postcode,
-                'country' => $method->country,
-                'account_name' => $method->account_name,
-                'bank_title' => $method->bank_title,
-                'account_number' => $method->account_number,
-                'bank_sort_code' => $method->bank_sort_code,
                 'new_cashout' => '1',
-                'bic' => $method->bic,
                 'payment_method' => $method->payment_method,
                 'status' => 'pending'
             ]);
+
+            if ($cashout->payment_method === 'bank') {
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'bank_title',
+                    'value' => $method->bank_title
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'account_name',
+                    'value' => $method->account_name
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'account_number',
+                    'value' => $method->account_number
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'bank_sort_code',
+                    'value' => $method->bank_sort_code
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'bic',
+                    'value' => $method->bic
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'address',
+                    'value' => $method->address
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'city',
+                    'value' => $method->city
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'postcode',
+                    'value' => $method->postcode
+                ]);
+
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'country',
+                    'value' => $method->country
+                ]);
+            }
+
+            if ($cashout->payment_method === 'paypal') {
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'paypal_email',
+                    'value' => $method->paypal_email
+                ]);
+            }
+
             foreach ($cashbacks as $cashback) {
                 $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
                 $change_status = CashbackStatusChange::create([

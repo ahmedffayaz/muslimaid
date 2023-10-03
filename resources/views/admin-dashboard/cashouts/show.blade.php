@@ -89,12 +89,13 @@
                                             <div class="profile-ud-item">
                                                 <div class="profile-ud wider">
                                                     <span class="profile-ud-label">Status</span>
-                                                    <span class="profile-ud-value">{{ $cashout->status }}</span>
+                                                    <span class="profile-ud-value">{{ ucfirst($cashout->status) }}</span>
                                                 </div>
                                             </div>
 
                                         </div><!-- .profile-ud-list -->
                                     </div><!-- .nk-block -->
+
                                     <div class="nk-block">
                                         <div class="nk-block-head nk-block-head-line">
                                             <h6 class="title overline-title text-base">Payment Details</h6>
@@ -103,49 +104,26 @@
                                             <div class="profile-ud-item">
                                                 <div class="profile-ud wider">
                                                     <span class="profile-ud-label">Payment Method</span>
-                                                    <span class="profile-ud-value">{{ $cashout->payment_method }}</span>
+                                                    <span class="profile-ud-value">{{ ucfirst($cashout->payment_method) }}</span>
                                                 </div>
                                             </div>
-                                            @if ($cashout->payment_method == 'paypal')
+                                        </div><!-- .profile-ud-list -->
+                                    </div><!-- .nk-block -->
+
+                                    <div class="nk-divider divider"></div>
+                                    <div class="nk-block">
+                                        <div class="nk-block-head nk-block-head-line">
+                                            <h6 class="title overline-title text-base">Meta Data</h6>
+                                        </div><!-- .nk-block-head -->
+                                        <div class="profile-ud-list">
+                                            @foreach($cashout->metaData as $data)
                                                 <div class="profile-ud-item">
                                                     <div class="profile-ud wider">
-                                                        <span class="profile-ud-label">Paypal Email</span>
-                                                        <span class="profile-ud-value">{{ $cashout->paypal_email }}</span>
+                                                        <span class="profile-ud-label">{{ ucfirst(str_replace('_', ' ', $data->type)) }}</span>
+                                                        <span class="profile-ud-value">{{ $data->value }}</span>
                                                     </div>
                                                 </div>
-                                            @endif
-                                            @if ($cashout->payment_method == 'bank')
-                                                <div class="profile-ud-item">
-                                                    <div class="profile-ud wider">
-                                                        <span class="profile-ud-label">Bank Title</span>
-                                                        <span class="profile-ud-value">{{ $cashout->bank_title }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="profile-ud-item">
-                                                    <div class="profile-ud wider">
-                                                        <span class="profile-ud-label">Account Title</span>
-                                                        <span class="profile-ud-value">{{ $cashout->account_name }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="profile-ud-item">
-                                                    <div class="profile-ud wider">
-                                                        <span class="profile-ud-label">Account Number</span>
-                                                        <span class="profile-ud-value">{{ $cashout->account_number }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="profile-ud-item">
-                                                    <div class="profile-ud wider">
-                                                        <span class="profile-ud-label">Sort Code</span>
-                                                        <span class="profile-ud-value">{{ $cashout->bank_sort_code }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="profile-ud-item">
-                                                    <div class="profile-ud wider">
-                                                        <span class="profile-ud-label">BIC</span>
-                                                        <span class="profile-ud-value">{{ $cashout->bic }}</span>
-                                                    </div>
-                                                </div>
-                                            @endif
+                                            @endforeach
                                         </div><!-- .profile-ud-list -->
                                     </div><!-- .nk-block -->
                                     @if (count($cashout->cashbacks))
