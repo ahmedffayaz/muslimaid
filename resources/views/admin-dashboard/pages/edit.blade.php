@@ -9,7 +9,16 @@
                             <div class="nk-block-head">
                                 <div class="nk-block-head-content">
                                     <h3 class="nk-block-title fw-normal"><a href="{{ getPageRoute($page->type, $page->slug) }}" target="_blank" class="a_link">{{ $page->title }}</a>
-                                        <span class="badge badge-dim badge-pill badge-outline-primary">{{ ucfirst($page->type) }}</span>
+                                        @if($page->type == 'system')
+                                            <span class="badge badge-dim badge-pill badge-outline-primary" data-toggle="tooltip" data-placement="top"
+                                            title="Website modules for SEO and functionality."> {{ ucfirst($page->type) }}</span>
+                                        @elseif($page->type == 'special')
+                                            <span class="badge badge-dim badge-pill badge-outline-primary" data-toggle="tooltip" data-placement="top"
+                                            title="Special pages & cannot be deleted.">{{ ucfirst($page->type) }}</span>
+                                        @else
+                                            <span class="badge badge-dim badge-pill badge-outline-primary" data-toggle="tooltip" data-placement="top"
+                                            title="User created pages">{{ ucfirst($page->type) }}</span>
+                                        @endif
                                     </h3>
                                 </div>
                             </div>
@@ -56,6 +65,15 @@
                                                         <em class="icon ni ni-eye"></em>
                                                         <span>View Available Short Codes</span>
                                                     </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="reviewer">Page URL</label>
+                                                    <div class="form-control-wrap">
+                                                        <input id="page_url" type="text" class="form-control " name="page_url" value="{{ getPageRoute($page->type, $page->slug) }}" readonly
+                                                            required>
+                                                    </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
