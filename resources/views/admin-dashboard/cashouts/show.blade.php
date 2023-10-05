@@ -116,14 +116,30 @@
                                             <h6 class="title overline-title text-base">Meta Data</h6>
                                         </div><!-- .nk-block-head -->
                                         <div class="profile-ud-list">
-                                            @foreach($cashout->metaData as $data)
+                                            @if (count($cashout->metaData) != 0 && isset($cashout->appeal))
                                                 <div class="profile-ud-item">
                                                     <div class="profile-ud wider">
-                                                        <span class="profile-ud-label">{{ ucfirst(str_replace('_', ' ', $data->type)) }}</span>
-                                                        <span class="profile-ud-value">{{ $data->value }}</span>
+                                                        <span class="profile-ud-label">{{ ucfirst(str_replace('_', ' ', $cashout->appeal->type)) }}</span>
+                                                        <span class="profile-ud-value">{{ $cashout->appeal->title }}</span>
                                                     </div>
                                                 </div>
-                                            @endforeach
+                                            @elseif (count($cashout->metaData) != 0 && isset($cashout->charity))
+                                                <div class="profile-ud-item">
+                                                    <div class="profile-ud wider">
+                                                        <span class="profile-ud-label">{{ ucfirst(str_replace('_', ' ', $cashout->charity->type)) }}</span>
+                                                        <span class="profile-ud-value">{{ $cashout->charity->title }}</span>
+                                                    </div>
+                                                </div>
+                                            @else
+                                                @foreach($cashout->metaData as $data)
+                                                    <div class="profile-ud-item">
+                                                        <div class="profile-ud wider">
+                                                            <span class="profile-ud-label">{{ ucfirst(str_replace('_', ' ', $data->type)) }}</span>
+                                                            <span class="profile-ud-value">{{ $data->value }}</span>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            @endif
                                         </div><!-- .profile-ud-list -->
                                     </div><!-- .nk-block -->
                                     @if (count($cashout->cashbacks))
