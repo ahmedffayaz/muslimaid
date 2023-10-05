@@ -15,6 +15,7 @@ use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
 use App\Models\CashoutMeta;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -364,5 +365,127 @@ class PaymentController extends Controller
         $url = url('account/withdraw');
 
         dispatch(new SendNotification($title, $message, $deviceToken, $url, $user));
+    }
+
+    public function donateAppeal(Request $request)
+    {
+        $request->validate([
+            'appeal_id' => 'nullable|integer'
+        ], [
+            'appeal_id.integer' => 'Appeal must be integer'
+        ]);
+
+        try {
+            $user = Auth::user();
+            if (!($user->first_name && $user->last_name && $user->email && $user->phone && $user->address && $user->date_of_birth && $user->street && $user->country_id && $user->postal_code)) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                        'error' => 'Please first complete your profile to donate'
+                    ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+                }
+
+                flash()->error('Please first complete your profile to donate');
+                return redirect()->back();
+            }
+            $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
+
+            if (isset(SiteSetting()['min_cashout_amount']) && $previousCashouts == 0)
+                $min = SiteSetting()['min_cashout_amount'];
+            else if (isset(SiteSetting()['next_cashout_amount']) && $previousCashouts > 0)
+                $min = SiteSetting()['next_cashout_amount'];
+            else if ($previousCashouts == 0) $min = 1;
+            else $min = 2;
+
+            $userCashout = $user->cashouts()->where('status', '=', 'pending')
+                                ->orWhere('status', '=', 'processing')
+                                ->orWhere('status', '=', 'processing donation')
+                                ->first();
+
+            $oldBalance = $user->availableBalance(3);
+            $balance = ($oldBalance - $request->amount);
+
+            if ($oldBalance < $min) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                        'error' => "You have insufficient balance for donation. You need to have at least $min in your balance for donate."
+                    ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+                }
+
+                flash()->error("You have insufficient balance for donation. You need to have at least $min in your balance for donate.");
+                return redirect()->back();
+            }
+
+            if (isset($userCashout) && ($userCashout->status == 'pending' || $userCashout->status == 'processing' || $userCashout->status == 'processing donation')) {
+                if ($request->ajax()) {
+                    return response()->json([
+                        'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                        'error' => 'You have already pending request.'
+                    ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+                }
+
+                flash()->error('You have already pending request.');
+                return redirect()->back();
+            }
+
+            //To decrypt and fetch the cashback amounts
+            $decryptedId = decrypt($request->cashback_id);
+            $amount = UserCashback::where('id', $decryptedId)->first()->amount;
+
+            DB::beginTransaction();
+
+            $cashout = Cashout::create([
+                'user_id' => $user->id,
+                'amount' => $amount,
+                'new_cashout' => '1',
+                'payment_method' => 'appeal',
+                'status' => 'processing donation'
+            ]);
+
+            if (!empty($request->appeal_id)) {
+                CashoutMeta::create([
+                    'cashout_id' => $cashout->id,
+                    'type' => 'appeal_id',
+                    'value' => $request->appeal_id
+                ]);
+            }
+
+            $cashback = $user->cashbacks()->where('id', $decryptedId)->first();
+            $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
+            $cashback->statusHistory()->create([
+                'cashback_status_id' => $cashback->status,
+                'user_cashback_id' => $cashback->id
+            ]);
+
+            if ($user->bonus && $user->bonus->status == 'unpaid') {
+                $user->bonus->update([
+                    'status' => 'paid',
+                    'cashout_id' => $cashout->id
+                ]);
+            }
+
+            DB::commit();
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_OK,
+                    'success' => "We're processing your donation. Please allow 4 working days for £" . $amount
+                ], JsonResponse::HTTP_OK);
+            }
+
+            flash()->success("We're processing your donation. Please allow 4 working days for £" . $amount);
+            return redirect()->back();
+
+        } catch (Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $e->getMessage() . ' Something went wrong.'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+
+            flash()->error('Something went wrong.');
+            return redirect()->back();
+        }
     }
 }

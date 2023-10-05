@@ -16,6 +16,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use App\Models\Appeal;
+use Exception;
+use Illuminate\Http\JsonResponse;
 
 class DashboardController extends Controller
 {
@@ -259,5 +262,23 @@ class DashboardController extends Controller
         return response()->json(
             ['message' => 'Store removed from favorite list.', 'type' => 'info']
         );
+    }
+
+    public function appeals(Request $request)
+    {
+        try {
+            $appeals = Appeal::whereStatus(1)->get();
+            $requestData = $request->all();
+
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'appeals' => view('frontend.client-dashboard.appeal-form', compact('appeals', 'requestData'))->render()
+            ], JsonResponse::HTTP_OK);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $e->getMessage() . ' Something went wrong'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 }
