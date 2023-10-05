@@ -342,6 +342,8 @@ Route::namespace('App\Http\Controllers\Client')
         Route::get('my-referrals', [App\Http\Controllers\Client\ReferController::class, 'myReferrals'])->name('referral.my-referral');
         Route::post('search-referrals', [App\Http\Controllers\Client\ReferController::class, 'searchReferrals'])->name('search_referrals');
         Route::get('CharityWithdraw', [App\Http\Controllers\Client\PaymentController::class, 'CharityWithdraw'])->name('CharityWithdraw');
+        Route::get('appeals', [App\Http\Controllers\Client\DashboardController::class, 'appeals'])->name('appeals');
+        Route::post('donate-appeal', [App\Http\Controllers\Client\PaymentController::class, 'donateAppeal'])->name('donate-appeal');
     });
 
 Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], function () {

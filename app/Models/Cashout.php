@@ -44,4 +44,20 @@ class Cashout extends Model
     {
         return $this->hasMany(CashoutMeta::class);
     }
+
+    public function appeal()
+    {
+        return $this->hasOne(CashoutMeta::class, 'cashout_id')
+                    ->where('type', 'appeal_id')
+                    ->where('value', '!=', null)
+                    ->join('appeals', 'appeals.id', '=', 'cashout_metas.value');
+    }
+
+    public function charity()
+    {
+        return $this->hasOne(CashoutMeta::class, 'cashout_id')
+                    ->where('type', 'charity_type_id')
+                    ->where('value', '!=', null)
+                    ->join('charities', 'charities.id', '=', 'cashout_metas.value');
+    }
 }
