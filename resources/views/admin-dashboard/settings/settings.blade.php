@@ -317,7 +317,9 @@
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
-                                                                <label class="form-label" for="analytics-traking-code">Analytics Code</label>
+                                                                <label class="form-label" for="analytics-traking-code">Analytics Code <em class="icon ni ni-question form-label"
+                                                                    data-toggle="tooltip" data-placement="top"
+                                                                    title="Will appear on every page in head tag"></em></label>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
