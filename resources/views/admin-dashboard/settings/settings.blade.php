@@ -317,14 +317,15 @@
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
-                                                                <label class="form-label" for="ga_tracking_id">Google Analytics Tracking ID</label>
+                                                                <label class="form-label" for="analytics-traking-code">Analytics Code</label>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="ga_tracking_id" id="ga_tracking_id"
-                                                                        value="{{ $settings['ga_tracking_id'] ?? '' }}" placeholder="UA-1XXXXXXXX-X">
+                                                                    <textarea class="form-control" name="analytics_code" id="analytics-traking-code">{{ $settings['analytics_code'] ?? '' }}</textarea>
+                                                                    {{-- <input type="text" class="form-control" name="ga_tracking_id" id="ga_tracking_id"
+                                                                        value="{{ $settings['ga_tracking_id'] ?? '' }}" placeholder="UA-1XXXXXXXX-X"> --}}
                                                                 </div>
                                                             </div>
                                                         </div>
