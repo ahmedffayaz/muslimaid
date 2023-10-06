@@ -26,12 +26,20 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
+            $rules = [
                 'first_name' => ['required', 'string', 'max:255'],
                 'last_name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-                'password' => ['required', 'string', 'min:8', 'confirmed'],
-            ]);
+                'password' => ['required', 'confirmed'],
+            ];
+            $passwordRules = env('PASSWORD_VALIDATION', '');
+            if(!empty($passwordRules)){
+                $additionalRules = explode('|', $passwordRules);
+                $rules['password'] = array_merge($rules['password'], $additionalRules);
+            }else {
+                $rules['password'][] = 'string';
+            }
+            $validator = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 $response = [
                     'status' => 406,
