@@ -21,15 +21,9 @@
                 </div>
                 <div class="nk-tb-col">
                     <span>
-                        @if ($page->type == 'system')
-                        <a href="{{ url($page->slug) }}" target="_blank" class="a_link">
+                        <a href="{{ getPageRoute($page->type, $page->slug) }}" target="_blank" class="a_link">
                             <em class="icon ni ni-link-alt"></em>
                         </a>
-                        @else
-                        <a href="{{ route('pages.show', $page->slug) }}" target="_blank" class="a_link">
-                            <em class="icon ni ni-link-alt"></em>
-                        </a>
-                        @endif
                     </span>
                 </div>
                 <div class="nk-tb-col">
