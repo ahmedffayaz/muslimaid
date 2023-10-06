@@ -224,7 +224,7 @@ class UserController extends Controller
                     $clicks->whereDoesntHave('cashback');
                 }
             }
-            $clicks = $clicks->paginate(20)->appends(request()->input());
+            $clicks = $clicks->latest()->paginate(20)->appends(request()->input());
             $clickData = ClickResource::collection($clicks);
             $metaData = [
                 "next" => $clicks->nextPageUrl(),
