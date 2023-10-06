@@ -324,8 +324,6 @@
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
                                                                     <textarea class="form-control" name="analytics_code" id="analytics-traking-code">{{ $settings['analytics_code'] ?? '' }}</textarea>
-                                                                    {{-- <input type="text" class="form-control" name="ga_tracking_id" id="ga_tracking_id"
-                                                                        value="{{ $settings['ga_tracking_id'] ?? '' }}" placeholder="UA-1XXXXXXXX-X"> --}}
                                                                 </div>
                                                             </div>
                                                         </div>
