@@ -17,8 +17,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use App\Models\Appeal;
+use App\Models\UserMeta;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -66,34 +68,70 @@ class DashboardController extends Controller
             'firstname' => 'required|regex:/^[A-Za-z ]+$/',
             'lastname' => 'required|regex:/^[A-Za-z ]+$/',
             'phoneNumber' => 'nullable|regex:/^\+44\d{10}$/',
+            'appeal_id' => 'nullable|integer'
         ], [
             'firstname.required' => 'First name is required.',
             'lastname.required' => 'Last name is required.',
             'phoneNumber.regex' => 'The phone number must be valid UK phone number'
         ]);
 
-        $user = auth()->user();
+        try {
+            $user = auth()->user();
 
-        $avatarImage = $user->avatar;
-        if ($request->hasFile('avatar')) {
-            $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
+            $avatarImage = $user->avatar;
+            if ($request->hasFile('avatar')) {
+                $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
+            }
+
+            DB::beginTransaction();
+
+            $user->update([
+                'first_name' => $request->firstname,
+                'last_name' => $request->lastname,
+                'date_of_birth' => $request->date_of_birth != null ? formatDateForUk($request->date_of_birth) : $request->date_of_birth,
+                'phone' => $request->phoneNumber,
+                'address' => $request->address,
+                'address_2' => $request->address_2,
+                'street' => $request->street,
+                'country_id' => $request->country_id,
+                'postal_code' => $request->postal_code,
+                'avatar' => $avatarImage,
+                'title' => $request->title,
+            ]);
+
+            if ($request->has('appeal_id') && !empty($request->appeal_id)) {
+                UserMeta::updateOrCreate([
+                    'user_id' => $user->id,
+                    'type' => 'appeal_id'
+                ], [
+                    'value' => $request->appeal_id
+                ]);
+            }
+
+            DB::commit();
+
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_OK,
+                    'success' => "User updated successfully"
+                ], JsonResponse::HTTP_OK);
+            }
+
+            flash()->success('User updated successfully');
+            return redirect()->back();
+        } catch (Exception $e) {
+            DB::rollBack();
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                    'error' => $e->getMessage() . ' Something went wrong'
+                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            flash()->error('Something went wrong');
+            return redirect()->back();
         }
-        $user->update([
-            'first_name' => $request->firstname,
-            'last_name' => $request->lastname,
-            'date_of_birth' => $request->date_of_birth != null ? formatDateForUk($request->date_of_birth) : $request->date_of_birth,
-            'phone' => $request->phoneNumber,
-            'address' => $request->address,
-            'address_2' => $request->address_2,
-            'street' => $request->street,
-            'country_id' => $request->country_id,
-            'postal_code' => $request->postal_code,
-            'avatar' => $avatarImage,
-            'title' => $request->title,
-        ]);
 
-        flash()->success('User updated successfully');
-        return redirect()->back();
     }
 
     public function cashback()
