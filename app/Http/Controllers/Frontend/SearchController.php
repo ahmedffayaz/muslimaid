@@ -19,9 +19,10 @@ class SearchController extends Controller
 
         if ($search) {
             $stores->where('name', 'like', '%' . str_replace(' ', '%', $request->input('search')) . '%')
-                ->orWhereHas('storeRuleData', function ($query) use ($search) {
-                    $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $search . '%');
-                });
+            ->where('status', 'active')
+            ->orWhereHas('storeRuleData', function ($query) use ($search) {
+                $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $search . '%');
+            });
             $term = $request->input('search');
         }
 

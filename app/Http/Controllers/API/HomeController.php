@@ -102,10 +102,10 @@ class HomeController extends Controller
             } else {
                 $search = $request->search_text;
                 $page = Page::whereSlug('stores')->whereType('system')->whereStatus('active')->pluck('banner_image')->firstOrFail();
-                $stores =  Store::where('name', 'like', '%' . $search . '%')
+                $stores =  Store::where('name', 'like', '%' . $search . '%')->whereStatus('active')
                     ->orWhereHas('storeRuleData', function ($query) use ($search) {
                         $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $search . '%');
-                    })->whereStatus('active')->paginate(20)->appends(request()->input());
+                    })->paginate(20)->appends(request()->input());
 
                 if ($stores->count() == 0) {
                     $data = [
