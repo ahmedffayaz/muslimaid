@@ -180,4 +180,12 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(UserMeta::class);
     }
+
+    public function appeal()
+    {
+        return $this->hasOne(UserMeta::class, 'user_id')
+                    ->where('type', 'appeal_id')
+                    ->where('value', '!=', null)
+                    ->join('appeals', 'appeals.id', '=', 'user_metas.value');
+    }
 }

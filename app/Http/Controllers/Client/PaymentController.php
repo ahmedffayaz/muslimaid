@@ -377,15 +377,15 @@ class PaymentController extends Controller
 
         try {
             $user = Auth::user();
-            if (!($user->first_name && $user->last_name && $user->email && $user->phone && $user->address && $user->date_of_birth && $user->street && $user->country_id && $user->postal_code)) {
+            if (!($user->is_email_verified)) {
                 if ($request->ajax()) {
                     return response()->json([
                         'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                        'error' => 'Please first complete your profile to donate'
+                        'error' => 'Please first verify your email address'
                     ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
                 }
 
-                flash()->error('Please first complete your profile to donate');
+                flash()->error('Please first verify your email address');
                 return redirect()->back();
             }
             $previousCashouts = $user->cashouts()->where('status', 'paid')->count();
@@ -443,11 +443,13 @@ class PaymentController extends Controller
                 'status' => 'processing donation'
             ]);
 
-            if (!empty($request->appeal_id)) {
+            $appealId = auth()->user()->appeal ? auth()->user()->appeal->id : $request->appeal_id;
+
+            if ($appealId) {
                 CashoutMeta::create([
                     'cashout_id' => $cashout->id,
                     'type' => 'appeal_id',
-                    'value' => $request->appeal_id
+                    'value' => $appealId
                 ]);
             }
 
