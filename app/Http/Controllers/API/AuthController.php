@@ -26,12 +26,20 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
+            $rules = [
                 'first_name' => ['required', 'string', 'max:255'],
                 'last_name' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-                'password' => ['required', 'string', 'min:8', 'confirmed'],
-            ]);
+                'password' => ['required', 'confirmed'],
+            ];
+            $passwordRules = env('PASSWORD_VALIDATION', '');
+            if(!empty($passwordRules)){
+                $additionalRules = explode('|', $passwordRules);
+                $rules['password'] = array_merge($rules['password'], $additionalRules);
+            }else {
+                $rules['password'][] = 'string';
+            }
+            $validator = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 $response = [
                     'status' => 406,
@@ -481,24 +489,23 @@ class AuthController extends Controller
             'provider_id' => $request->input('provider_id'),
             'provider' => $request->input('provider'),
             'registration_type' => 'social',
+            'is_email_verified' => 1,
+            'status' => 'active',
+            'short_ref_id' => uniqueRefLinkGenerator(),
+            'avatar' => 'default.png'
         ]);
 
         $user->assignRole('user');
 
-        $bonus = array_key_exists('welcome_bonus', SiteSetting()->toArray()) ? SiteSetting()['welcome_bonus'] : 0;
-
-        Bonus::create([
-            'user_id' => $user->id,
-            'amount' => $bonus,
-        ]);
-
-        // Send welcome email to user
+        // Send welcome email to user and adding the bonus for user
         $data = array(
             'name' => $user->first_name,
             'email' => $user->email
         );
         $merge_subject = ['subject' => null, 'message' => null];
         $data = array_merge($data, $merge_subject);
+        $bonusStatus = 3;
+        $this->welcomBonus($user, $bonusStatus);
         $this->welcomeEmail($data);
 
         return $this->success([

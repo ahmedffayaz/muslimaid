@@ -2,7 +2,7 @@
     <div class="nk-tb-list nk-tb-ulist">
         @if(count($clicks))
         <div class="row g-gs">    
-            <div class="col-xxl-6">
+            <div class="col-xxl-12">
                 <div class="card h-100">
                     <div class="card-inner mb-n2 border-0">
                         <div class="card-title-group">
