@@ -40,7 +40,9 @@ class TicketsController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        $ticket->update(['new_ticket'=> 0]);
+        if($ticket->status !== 'pending' ){
+            $ticket->update(['new_ticket'=> 0]);
+        }
         $newReply = $ticket->newReply;
 
         if(count($newReply)){
