@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\CharityTypeResource;
 use App\Http\Resources\UserCashbackResource;
 use App\Models\CashoutMeta;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
@@ -271,7 +272,7 @@ class PaymentController extends Controller
             ]);
 
             foreach ($request->id as $requestId) {
-                $cashback = $user->cashbacks()->where('id', $requestId)->first();
+                $cashback = $user->cashbacks()->where('id', $requestId)->firstOrFail();
                 $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
 
                 $cashback->statusHistory()->create([
@@ -296,7 +297,16 @@ class PaymentController extends Controller
                 'data' => '',
             ];
             return response()->json($data, 200);
-        } catch (\Exception $e) {
+        } catch(ModelNotFoundException $e){
+            DB::rollBack();
+            $data = [
+                'status' => 500,
+                'message' => "Something went wrong ! Please try again",
+                'data' => []
+            ];
+            return response()->json($data, 500);
+        }
+         catch (\Exception $e) {
             DB::rollBack();
             $data = [
                 'status' => 500,
