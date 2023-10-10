@@ -170,7 +170,7 @@ class ClickController extends Controller
                 $query->where('name', 'admin');
             })->first();
 
-            $user = $request->hasHeader('Authorization') ? $request->user('sanctum') : $adminUser; dd($user);
+            $user = $request->hasHeader('Authorization') ? $request->user('sanctum') : $adminUser;
 
             DB::beginTransaction();
 
