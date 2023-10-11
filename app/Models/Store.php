@@ -75,6 +75,21 @@ class Store extends Model
         return $this->images()->where('title', 'logo');
     }
 
+    public function largeLogo()
+    {
+        return $this->images()->where('title', 'large logo');
+    }
+
+    public function smallBanner()
+    {
+        return $this->images()->where('title', 'Cover');
+    }
+
+    public function largeBanner()
+    {
+        return $this->images()->where('title', 'large cover');
+    }
+
     public function vouchers()
     {
         return $this->hasMany(Voucher::class);

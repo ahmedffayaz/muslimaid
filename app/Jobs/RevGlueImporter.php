@@ -122,7 +122,7 @@ class RevGlueImporter implements ShouldQueue
 
                     $newStoresLogosLarge[] = [
                         'store_id' => $nextPk + $key,
-                        'title' => 'logo',
+                        'title' => 'large logo',
                         'image' => empty($store['store_icon_large']) ? (mt_rand(1, 20) . '.png') : $store['store_icon_large'],
                         'image_type' => 'store_logo_large',
                         'is_uploaded' => '',
@@ -140,7 +140,7 @@ class RevGlueImporter implements ShouldQueue
 
                     $newStoresBannersLarge[] = [
                         'store_id' => $nextPk + $key,
-                        'title' => 'Cover',
+                        'title' => 'large cover',
                         'image' => empty($store['store_banner_large']) ? (mt_rand(1, 20) . '.png') : $store['store_banner_large'],
                         'image_type' => 'store_banner_large',
                         'is_uploaded' => '',
