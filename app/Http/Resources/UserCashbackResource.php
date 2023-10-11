@@ -16,7 +16,7 @@ class UserCashbackResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'title' => $this->store->name,
+            'title' => optional($this->store)->name,
             'order_value' => currency($this->order_value),
             'cashback' => currency($this->amount),
             'date' => \Carbon\Carbon::parse($this->event_date)->isoFormat('Do MMMM YYYY'),
