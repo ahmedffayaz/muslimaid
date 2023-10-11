@@ -79,14 +79,14 @@ class StoreController extends Controller
             $cashbacks = UserCashback::doesntHave('store')->get();
             foreach ($cashbacks as $cashback) {
                 $deleted = $cashback->forceDelete();
-            }        
+            }
             $cashbacks = UserCashback::doesntHave('store')->get();
             foreach ($cashbacks as $cashback) {
                 $cashback->forceDelete();
                 UserCashback::where('id', $cashback->id)->delete();
 
             }
-            
+
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
@@ -358,11 +358,16 @@ class StoreController extends Controller
             $imageName = Str::slug($store->name) . '_' . $request->title . '_' . time() . '.' . $request->image->extension();
             $request->image->storeAs('public/stores/images', $imageName);
 
+            if ($request->title === 'logo') $imageType = 'store_logo_small';
+            elseif ($request->title === 'large logo') $imageType = 'store_logo_large';
+            elseif ($request->title === 'Cover') $imageType = 'store_banner_small';
+            elseif ($request->title === 'large cover') $imageType = 'store_banner_large';
+
             $logo = StoreImage::create([
                 'store_id' => $store->id,
                 'title' => $request->title,
                 'image' => $this->imagePath . $imageName,
-                'image_type' => 'store_logo',
+                'image_type' => $imageType,
                 'is_uploaded' => 1,
 
             ]);

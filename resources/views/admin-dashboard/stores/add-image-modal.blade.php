@@ -28,7 +28,9 @@
                         <div class="form-control-select">
                             <select class="form-control" id="title" name="title" required>
                                 <option value="logo">Logo</option>
+                                <option value="large logo">Large Logo</option>
                                 <option value="Cover">Cover</option>
+                                <option value="large cover">Large Cover</option>
                             </select>
                         </div>
                     </div>

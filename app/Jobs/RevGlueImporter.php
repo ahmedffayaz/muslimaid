@@ -15,6 +15,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class RevGlueImporter implements ShouldQueue
@@ -88,14 +89,15 @@ class RevGlueImporter implements ShouldQueue
         $nextPk = $storesInfo[0]->Auto_increment;
 
         $newStores = [];
-        $newStoresLogos = [];
-        $newStoresBanners = [];
+        $newStoresLogosSmall = [];
+        $newStoresLogosLarge = [];
+        $newStoresBannersSmall = [];
+        $newStoresBannersLarge = [];
         $newStoreCategories = [];
 
         foreach ($stores['response']['stores'] as $key => $store) {
             try {
                 if (!in_array($store['rg_store_id'], $dbStores)) {
-
                     $newStores[] = [
                         'network_id' => $this->network->id,
                         'advertiser_id' => $store['rg_store_id'],
@@ -109,20 +111,38 @@ class RevGlueImporter implements ShouldQueue
                         'network_status' => null,
                     ];
 
-                    $newStoresLogos[] = [
+                    $newStoresLogosSmall[] = [
                         'store_id' => $nextPk + $key,
                         'title' => 'logo',
-                        'image' => empty($store['store_icon_large']) ? (mt_rand(1, 20) . '.png') : $store['store_icon_large'],
-                        'image_type' => 'store_logo',
+                        'image' => empty($store['image_url']) ? (mt_rand(1, 20) . '.png') : $store['image_url'],
+                        'image_type' => 'store_logo_small',
                         'is_uploaded' => '',
                         'is_fake' => empty($store['image_url']) ? 1 : 0
                     ];
 
-                    $newStoresBanners[] = [
+                    $newStoresLogosLarge[] = [
+                        'store_id' => $nextPk + $key,
+                        'title' => 'large logo',
+                        'image' => empty($store['store_icon_large']) ? (mt_rand(1, 20) . '.png') : $store['store_icon_large'],
+                        'image_type' => 'store_logo_large',
+                        'is_uploaded' => '',
+                        'is_fake' => empty($store['store_icon_large']) ? 1 : 0
+                    ];
+
+                    $newStoresBannersSmall[] = [
                         'store_id' => $nextPk + $key,
                         'title' => 'Cover',
+                        'image' => empty($store['store_banner_small']) ? (mt_rand(1, 20) . '.png') : $store['store_banner_small'],
+                        'image_type' => 'store_banner_small',
+                        'is_uploaded' => '',
+                        'is_fake' => empty($store['store_banner_small']) ? 1 : 0
+                    ];
+
+                    $newStoresBannersLarge[] = [
+                        'store_id' => $nextPk + $key,
+                        'title' => 'large cover',
                         'image' => empty($store['store_banner_large']) ? (mt_rand(1, 20) . '.png') : $store['store_banner_large'],
-                        'image_type' => 'store_logo',
+                        'image_type' => 'store_banner_large',
                         'is_uploaded' => '',
                         'is_fake' => empty($store['store_banner_large']) ? 1 : 0
                     ];
@@ -143,8 +163,7 @@ class RevGlueImporter implements ShouldQueue
                     }
                 }
             } catch (Exception $e) {
-                flash()->error('Error while running importer');
-                return redirect()->route(getAdminPrefix() . '.stores.index');
+                Log::error($e->getMessage());
             }
         }
 
@@ -155,8 +174,10 @@ class RevGlueImporter implements ShouldQueue
             Store::create($newStore);
         }
 
-        StoreImage::insert($newStoresLogos);
-        StoreImage::insert($newStoresBanners);
+        StoreImage::insert($newStoresLogosSmall);
+        StoreImage::insert($newStoresLogosLarge);
+        StoreImage::insert($newStoresBannersSmall);
+        StoreImage::insert($newStoresBannersLarge);
         DB::table('category_store')->insert($newStoreCategories);
 
         $this->importStoreCashback();

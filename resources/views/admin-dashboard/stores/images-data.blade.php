@@ -1,9 +1,9 @@
-@if(count($store->images) < 2)<a href="#" class="btn btn-primary float-right add-image" data-toggle="modal"><em class="icon ni ni-upload-cloud"></em> <span>Upload</span></a>
+@if(count($store->images) < 4)<a href="#" class="btn btn-primary float-right add-image" data-toggle="modal"><em class="icon ni ni-upload-cloud"></em> <span>Upload</span></a>
 @endif
 @if(count($store->images))
 <div class="nk-block">
 <div class="nk-files nk-files-view-grid">
-    
+
     <div class="nk-files-list">
     @foreach ($store->images as $item)
         <div class="nk-file-item nk-file align-items-center d-flex justify-content-center card">
@@ -16,7 +16,7 @@
                                    href="{{asset($item->image)}}"
                                @endif target="_blank">
                             <span class="nk-file-icon-type">
-                               <img  
+                               <img
                                @if($item->is_fake)
                                    src="{{asset('frontend/images/logos/'.$item->image)}}"
                                @else
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                 </div>
-               
+
             </div>
             <div class="nk-file-actions">
                 <div class="dropdown">
@@ -50,16 +50,16 @@
                     </div>
                 </div>
             </div>
-           
+
         </div><!-- .nk-file -->
-        
+
     @endforeach
-        
+
     </div>
-    
+
 </div>
 
 </div><!-- .nk-block -->
-@else 
+@else
 <p>No images found</p>
 @endif
