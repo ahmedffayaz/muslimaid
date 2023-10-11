@@ -40,6 +40,7 @@ class HomeController extends Controller
             $featuredCategories->map(function ($category) {
                 $category->stores = $category->stores()
                     ->where('status', 'active')
+                    ->inRandomOrder()
                     ->limit(10)
                     ->get();
                 return $category;
