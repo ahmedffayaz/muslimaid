@@ -14,9 +14,18 @@ class UserCashbackResource extends JsonResource
      */
     public function toArray($request)
     {
+        $title="";
+        if($this->type == 'welcome_bonus'){
+            $title = "Welcome bonus";
+        } else if($this->type == 'referral_bonus'){
+            $title = "Referral Bonus";
+        } else {
+            $title = optional($this->store)->name;
+        }
+        
         return [
             'id' => $this->id,
-            'title' => optional($this->store)->name,
+            'title' => $title,
             'order_value' => currency($this->order_value),
             'cashback' => currency($this->amount),
             'date' => \Carbon\Carbon::parse($this->event_date)->isoFormat('Do MMMM YYYY'),
