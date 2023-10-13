@@ -139,6 +139,12 @@ class PaymentController extends Controller
                 return redirect()->back();
             }
 
+            $cashoutStatuses = auth()->user()->cashouts()->pluck('status')->all();
+            if (in_array('pending', $cashoutStatuses) || in_array('processing donation', $cashoutStatuses)){
+                flash()->error("You cannot withdraw, your cashout request is already pending");
+                return redirect()->back();
+            }
+
             DB::beginTransaction();
             $cashout = Cashout::create([
                 'user_id' => $user->id,
@@ -261,7 +267,6 @@ class PaymentController extends Controller
             else if ($previousCashouts == 0) $min = 1;
             else $min = 2;
 
-            $cashout_status = $user->cashouts()->where('status', '=', 'pending')->first();
             $balance_old = $user->availableBalance(3);
             $balance = ($balance_old - $request->amount);
 
@@ -270,8 +275,9 @@ class PaymentController extends Controller
                 return redirect()->back();
             }
 
-            if ($cashout_status == 'pending') {
-                flash()->error('You have already pending withdraw request.');
+            $cashoutStatuses = auth()->user()->cashouts()->pluck('status')->all();
+            if (in_array('pending', $cashoutStatuses) || in_array('processing donation', $cashoutStatuses)){
+                flash()->error("You cannot withdraw, your cashout request is already pending");
                 return redirect()->back();
             }
 
