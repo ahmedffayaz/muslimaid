@@ -231,7 +231,7 @@ class PaymentController extends Controller
             if ($balanceOld < $min) {
                 $data = [
                     'status' => 406,
-                    'message' => "You have insufficient balance for withdrawl. You need to have at least £" .$min. " in your balance for withdrawal.",
+                    'message' => "You have insufficient balance for withdrawal. You need to have at least £" .$min. " in your balance for withdrawal.",
                     'data' => []
                 ];
                 return response()->json($data, 500);
