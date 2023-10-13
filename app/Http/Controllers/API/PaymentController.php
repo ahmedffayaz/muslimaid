@@ -231,7 +231,7 @@ class PaymentController extends Controller
             if ($balanceOld < $min) {
                 $data = [
                     'status' => 406,
-                    'message' => "You have insufficient balance for withdrawl. You need to have at least £" .$min. "in your balance for withdrawal.",
+                    'message' => "You have insufficient balance for withdrawl. You need to have at least £" .$min. " in your balance for withdrawal.",
                     'data' => []
                 ];
                 return response()->json($data, 500);
@@ -272,7 +272,7 @@ class PaymentController extends Controller
             ]);
 
             foreach ($request->id as $requestId) {
-                $cashback = $user->cashbacks()->where('id', $requestId)->firstOrFail();
+                $cashback = $user->cashbacks()->where('id', $requestId[0])->firstOrFail();
                 $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
 
                 $cashback->statusHistory()->create([
