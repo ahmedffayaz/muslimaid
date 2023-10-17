@@ -276,21 +276,17 @@ class PaymentController extends Controller
             if (is_array($cashbackIds)) {
                 // Now, $array contains your array
                 // You can access its elements like $array[0], $array[1], etc.
+                foreach ($cashbackIds as $cashbackId) {
+                    $cashback = $user->cashbacks()->where('id', $cashbackId)->firstOrFail();
+                    $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
 
-                // For example:
-                echo $cashbackIds[0]; // Output: 125
-                echo $cashbackIds[1]; // Output: 127
+                    $cashback->statusHistory()->create([
+                        'cashback_status_id' => $cashback->status,
+                        'user_cashback_id' => $cashback->id
+                    ]);
+                }
             }
 
-            foreach ($cashbackIds as $cashbackId) {
-                $cashback = $user->cashbacks()->where('id', $cashbackId)->firstOrFail();
-                $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
-
-                $cashback->statusHistory()->create([
-                    'cashback_status_id' => $cashback->status,
-                    'user_cashback_id' => $cashback->id
-                ]);
-            }
 
             if ($user->bonus && $user->bonus->status == 'unpaid') {
                 $user->bonus->update([
