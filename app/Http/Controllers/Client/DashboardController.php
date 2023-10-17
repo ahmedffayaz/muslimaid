@@ -99,13 +99,30 @@ class DashboardController extends Controller
                 'title' => $request->title,
             ]);
 
-            if ($request->has('appeal_id') && !empty($request->appeal_id)) {
-                UserMeta::updateOrCreate([
-                    'user_id' => $user->id,
-                    'type' => 'appeal_id'
-                ], [
-                    'value' => $request->appeal_id
-                ]);
+            foreach ($request->input() as $key => $value) {
+                // Define key mappings
+                $keyMappings = [
+                    'date_of_birth' => 'dob',
+                    'phoneNumber' => 'phone',
+                ];
+                // Exclude email and country_id from being saved in UserMeta
+                if ($key !== 'email' && $key !== 'country_id' && $key !== '_token' && $key !== '_method'
+                    && $key !== 'profile-user-id' && $key !== 'sessionReceived' && $key !== 'profile-email'
+                    && $key !== 'user_email' && !empty($key)) {
+
+                    // Determine the target type (mapping or original key)
+                    $type = array_key_exists($key, $keyMappings) ? $keyMappings[$key] : $key;
+
+                    // Check if $value is not empty or null
+                    if (!empty($value) || !is_null($value)) {
+                        UserMeta::updateOrCreate([
+                            'user_id' => auth()->user()->id,
+                            'type' => $type
+                        ], [
+                            'value' => $value
+                        ]);
+                    }
+                }
             }
 
             DB::commit();
