@@ -22,7 +22,7 @@ use App\Http\Resources\Home\UserResource;
 use App\Http\Resources\PaymentInfoResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserCashbackResource;
-use Illuminate\Support\Facades\Log;
+use App\Models\UserMeta;
 
 class UserController extends Controller
 {
@@ -66,6 +66,7 @@ class UserController extends Controller
             if ($request->hasFile('avatar')) {
                 $avatarImage = storeUserAvatar($request->file('avatar'), $avatarImage);
             }
+
             Auth::user()->update([
                 'title' => $request->title,
                 'first_name' => $request->firstname,
@@ -79,6 +80,18 @@ class UserController extends Controller
                 'postal_code' => $request->postal_code,
                 'avatar' => $avatarImage,
             ]);
+
+            foreach ($request->input() as $key => $value) {
+                // Exclude email and country_id from being saved in UserMeta
+                if ($key !== 'email' && $key !== 'country_id') {
+                    UserMeta::updateOrCreate([
+                        'user_id' => auth()->user()->id,
+                        'type' => $key
+                    ], [
+                        'value' => $value
+                    ]);
+                }
+            }
 
             $user = new UserResource(auth()->user());
             $response = [

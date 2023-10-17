@@ -70,6 +70,7 @@ class UserResource extends JsonResource
             "email_preference" => $this->email_preference ? 'Yes' : 'No',
             "token" => $token,
             "balance" => currency($this->availableBalance(3)),
+            "state" => $this->metaData->where('type', 'state')->pluck('value')->first(),
             "is_profile_complete"=>  $is_profile_complete
         ];
 
