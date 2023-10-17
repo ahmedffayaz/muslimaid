@@ -271,8 +271,19 @@ class PaymentController extends Controller
                 'status' => 'processing donation'
             ]);
 
-            foreach ($request->id as $requestId) {
-                $cashback = $user->cashbacks()->where('id', $requestId[0])->firstOrFail();
+            $cashbackIds = json_decode($request->id, true); // Pass the second parameter as `true` to get an associative array
+
+            if (is_array($cashbackIds)) {
+                // Now, $array contains your array
+                // You can access its elements like $array[0], $array[1], etc.
+
+                // For example:
+                echo $cashbackIds[0]; // Output: 125
+                echo $cashbackIds[1]; // Output: 127
+            }
+
+            foreach ($cashbackIds as $cashbackId) {
+                $cashback = $user->cashbacks()->where('id', $cashbackId)->firstOrFail();
                 $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
 
                 $cashback->statusHistory()->create([
