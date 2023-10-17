@@ -155,6 +155,10 @@ class User extends Authenticatable implements MustVerifyEmail
             $address .= ' ' . $this->street;
         }
 
+        if (!empty($this->metaData->where('type', 'state')->pluck('value')->first())) {
+            $address .= ' ' . optional($this->metaData)->where('type', 'state')->pluck('value')->first();
+        }
+
         if (!empty($this->country_id)) {
             $address .= ' ' . optional($this->country)->name;
         }
