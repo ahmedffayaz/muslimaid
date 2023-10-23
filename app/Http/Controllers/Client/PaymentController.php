@@ -446,7 +446,7 @@ class PaymentController extends Controller
                 'amount' => $amount,
                 'new_cashout' => '1',
                 'payment_method' => 'appeal',
-                'status' => 'processing donation'
+                'status' => 'donated'
             ]);
 
             foreach ($request->except('_token', '_method') as $key => $value) {
@@ -457,6 +457,11 @@ class PaymentController extends Controller
                     CashoutMeta::create(['cashout_id' => $cashout->id, 'type' => $key, 'value' => $value]);
                 }
             }
+
+            CashbackStatusChange::create([
+                'user_cashback_id' => $cashout->id,
+                'cashback_status_id' => 7
+            ]);
 
             $cashback = $user->cashbacks()->where('id', $decryptedId)->first();
             $cashback->update(['status' => 7, 'cashout_id' => $cashout->id]);
