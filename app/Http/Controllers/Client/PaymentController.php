@@ -449,18 +449,17 @@ class PaymentController extends Controller
                 'status' => 'processing donation'
             ]);
 
-            $appealId = auth()->user()->appeal ? auth()->user()->appeal->id : $request->appeal_id;
+            foreach ($request->except('_token', '_method') as $key => $value) {
+                if (!is_null($value)) {
+                    // Override the 'value' when the key is 'cashback_id'
+                    if ($key === 'cashback_id') $value = $decryptedId;
 
-            if ($appealId) {
-                CashoutMeta::create([
-                    'cashout_id' => $cashout->id,
-                    'type' => 'appeal_id',
-                    'value' => $appealId
-                ]);
+                    CashoutMeta::create(['cashout_id' => $cashout->id, 'type' => $key, 'value' => $value]);
+                }
             }
 
             $cashback = $user->cashbacks()->where('id', $decryptedId)->first();
-            $cashback->update(['status' => 5, 'cashout_id' => $cashout->id]);
+            $cashback->update(['status' => 7, 'cashout_id' => $cashout->id]);
             $cashback->statusHistory()->create([
                 'cashback_status_id' => $cashback->status,
                 'user_cashback_id' => $cashback->id
