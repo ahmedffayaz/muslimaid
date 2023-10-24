@@ -363,7 +363,15 @@ class PaymentController extends Controller
         $userEmailTemplateKey = 'user_new_cashout_request';
         $adminEmailTemplateKey = 'admin_new_cashout_request';
         $filterMessageVariables = ['{{AMOUNT}}', '{{METHOD}}'];
-        $requestFilteredMessage = [$cashout->amount, $cashout->payment_method];
+        $method = '';
+        if($cashout->payment_method == "charity"){
+            $method = "Giveback";
+        } else if ($cashout->payment_method == "bank"){
+            $method = "Bank";
+        } else if ($cashout->payment_method == "paypal") {
+            $method = "PayPal";
+        }   
+        $requestFilteredMessage = [number_format($cashout->amount, 2), $method];
         $data = [
             'name' => $cashout->user->first_name . ' ' . $cashout->user->last_name,
             'email' => $cashout->user->email,
