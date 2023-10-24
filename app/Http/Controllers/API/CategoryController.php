@@ -39,18 +39,16 @@ class CategoryController extends Controller
             ->appends(request()->input());
             
             // Get the 'more' category separately
-            $moreCategory = Category::where('name', 'more')
-                ->with(['childs' => function ($query) {
-                    $query->orderBy('name', 'asc')->withCount('stores');
-                }])
-                ->withCount('stores')
-                ->where('parent_id', 0)
-                ->first();
+            $moreCategories = Category::where('name', 'more')
+            ->orWhere('name', '!=', 'more')
+            ->where('visibility', 'more')
+            ->where('parent_id', 0)
+            ->with(['childs' => function ($query) {
+                $query->orderBy('name', 'asc')->withCount('stores');
+            }])
+            ->withCount('stores')
+            ->get();
             
-            // Append the 'more' category at the end of the categories collection
-            if ($moreCategory) {
-                $categories->push($moreCategory);
-            }
             if ($categories->count() == 0) {
                 $data = [
                     'status' => 200,
@@ -66,6 +64,7 @@ class CategoryController extends Controller
                 'data' => [
                     'main_banner' => getBannerImageUrl($page),
                     'categories' => CategoryResource::collection($categories),
+                    'more_categories' => CategoryResource::collection($moreCategories),
                     'meta_data' => [
                         "next" => $categories->nextPageUrl(),
                         "previous" => $categories->previousPageUrl(),
