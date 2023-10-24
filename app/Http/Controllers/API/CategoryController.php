@@ -47,6 +47,8 @@ class CategoryController extends Controller
                 $query->orderBy('name', 'asc')->withCount('stores');
             }])
             ->withCount('stores')
+            ->orderBy('sort', 'desc')
+            ->orderBy('name', 'asc')
             ->get();
             
             if ($categories->count() == 0) {
