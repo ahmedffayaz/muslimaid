@@ -217,7 +217,7 @@ class ClickController extends Controller
             DB::rollBack();
             $data = [
                 'status' => 500,
-                'message' => $ex->getMessage() . ' Something went wrong, try again.',
+                'message' => 'Something went wrong, try again.',
                 'data' => []
             ];
             return response()->json($data, 500);
