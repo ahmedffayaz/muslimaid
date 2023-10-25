@@ -80,7 +80,7 @@ class SocialController extends Controller
 
             Auth::login($user);
             Session::forget('refCode');
-            Session::flash('welcome', 'welcome message');
+            Session::flash('social-login-welcome');
             if (Session::has('prvUrl')) {
                 return redirect(session('prvUrl'));
             } else {
