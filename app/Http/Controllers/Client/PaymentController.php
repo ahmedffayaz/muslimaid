@@ -358,7 +358,9 @@ class PaymentController extends Controller
             $method = "Bank";
         } else if ($cashout->payment_method == "paypal") {
             $method = "PayPal";
-        }   
+        } else {
+            $method = $cashout->payment_method;
+        }    
         $requestFilteredMessage = [number_format($cashout->amount, 2), $method];
         $data = [
             'name' => $cashout->user->first_name . ' ' . $cashout->user->last_name,

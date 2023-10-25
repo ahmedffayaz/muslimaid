@@ -82,6 +82,8 @@ class CashoutController extends Controller
                     $method = "Bank";
                 } else if ($cashout->payment_method == "paypal") {
                     $method = "PayPal";
+                } else {
+                    $method = $cashout->payment_method;
                 }   
                 $requestFilteredMessage = [number_format($cashout->amount, 2), convertTime($cashout->created_at), $method];
                 $this->sendEmail($cashout, $userEmailTemplateKey, $filterMessageVariables, $requestFilteredMessage);
