@@ -75,7 +75,17 @@ class CashoutController extends Controller
                 // Send email to user
                 $userEmailTemplateKey = 'user_withdrawal_confirmation';
                 $filterMessageVariables = ['{{AMOUNT}}', '{{DATE}}', '{{METHOD}}'];
-                $requestFilteredMessage = [$cashout->amount, convertTime($cashout->created_at), $cashout->payment_method];
+                $method = '';
+                if($cashout->payment_method == "charity"){
+                    $method = "Giveback";
+                } else if ($cashout->payment_method == "bank"){
+                    $method = "Bank";
+                } else if ($cashout->payment_method == "paypal") {
+                    $method = "PayPal";
+                } else {
+                    $method = $cashout->payment_method;
+                }   
+                $requestFilteredMessage = [number_format($cashout->amount, 2), convertTime($cashout->created_at), $method];
                 $this->sendEmail($cashout, $userEmailTemplateKey, $filterMessageVariables, $requestFilteredMessage);
 
                 // Send Push Norification

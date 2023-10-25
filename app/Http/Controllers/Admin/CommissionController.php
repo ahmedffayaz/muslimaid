@@ -433,7 +433,7 @@ class CommissionController extends Controller
     {
         $userEmailTemplateKey = 'user_new_cashback_tracked';
         $filterMessageVariables = ['{{STORE}}', '{{AMOUNT}}'];
-        $requestFilteredMessage = [$click->store->name, $click->amount];
+        $requestFilteredMessage = [$click->store->name, number_format($click->amount, 2)];
 
         $data = [
             'name' => $click->user->first_name . ' ' . $click->user->last_name,
