@@ -47,6 +47,7 @@ class CategoryController extends Controller
                 $query->where('status', '1')->orderBy('sort', 'asc')->withCount('stores');
             }])
             ->withCount('stores')
+            ->where('status', '1')
             ->orderBy('sort', 'desc')
             ->orderBy('name', 'asc')
             ->get();
