@@ -44,9 +44,10 @@ class CategoryController extends Controller
             ->where('visibility', 'more')
             ->where('parent_id', 0)
             ->with(['childs' => function ($query) {
-                $query->orderBy('name', 'asc')->withCount('stores');
+                $query->where('status', '1')->orderBy('sort', 'asc')->withCount('stores');
             }])
             ->withCount('stores')
+            ->where('status', '1')
             ->orderBy('sort', 'desc')
             ->orderBy('name', 'asc')
             ->get();
