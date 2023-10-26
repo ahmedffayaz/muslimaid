@@ -767,6 +767,99 @@ function checkSeoPageRule($url)
     return null;
 }
 
+function getSocialSeo($seoRule, $url){
+    $slug = request()->route('slug');
+    if (!isset($slug)) {
+        $path = parse_url($url, PHP_URL_PATH);
+        preg_match('/[^\/]+$/', $path, $matches);
+        $slug = isset($matches[0]) ? $matches[0] : '/';
+    }
+    $routeNames = [
+        'page' => '\App\Models\Page',
+        'post' => '\App\Models\Blog',
+        'appeal' => '\App\Models\Appeal',
+        'store.location'  => '\App\Models\Category',
+        'stores.show' => '\App\Models\Store',
+    ];
+    foreach ($routeNames as $model) {
+        $record = $model::where('slug', $slug);
+        if ($slug == '/' && $model == '\App\Models\Page') {
+            $record = $model;
+            if (empty(auth()->user())) {
+                $record = $record::where('title', 'Home Page Before Login');
+            } else {
+                $record = $record::where('title', 'Home Page After Login');
+            }
+        }
+        $record = $record->first();
+        if($record != null){
+            break;
+        }
+    }
+    if($model == "\App\Models\Page"){
+        $image = getImageUrl($record->banner_image);
+        $pathInfo = $image != null ? pathinfo($image) : null;
+        $extension = $pathInfo != null ? $pathInfo['extension'] : null;
+        $description = $record->description; 
+    } else if ($model == "\App\Models\Blog"){
+        $image = getImageUrl($record->featured_image);
+        $pathInfo = $image != null ? pathinfo($image) : null;
+        $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
+        $description = $record->title;
+    } else if ($model == "\App\Models\Appeal"){
+        $image = $record->image_type == "upload" ? getImageUrl($record->image_upload) : getImageUrl($record->image_link); 
+        $pathInfo = $image != null ? pathinfo($image) : null;
+        $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
+        $description = $record->title;
+    } else if ($model == "\App\Models\Category"){
+        $image = $record->logo_type = "link" ? getImageUrl($record->logo_link) : getImageUrl($record->logo_upload);
+        $pathInfo = $image != null ? pathinfo($image) : null;
+        $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
+        $description = $record->description;
+    } else if ($model == "\App\Models\Store"){
+        $image = $record->logo()->first()->image;
+        $pathInfo = $image != null ? pathinfo($image) : null;
+        $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
+        $description = $record->description;
+    }
+
+    if ($seoRule) {
+        $socialSEORule['description'] = $seoRule['meta_description'];
+        $socialSEORule['title'] = $seoRule['meta_title'];
+        $socialSEORule['type'] = $slug == "/" ? "website" : "article";
+        $socialSEORule['url'] = $url;
+        $socialSEORule['published_time'] = $record->created_at->format('Y-m-d H:i:s') ;
+        $socialSEORule['modified_time'] = $record->updated_at->format('Y-m-d H:i:s') ;
+        $socialSEORule['image'] = $image;
+        $socialSEORule['width'] = "100%";
+        $socialSEORule["height"] = "auto";
+        $socialSEORule["image_type"] = "image/".$extension;
+        $socialSEORule["twitter_card"] = "summary_large_image";
+        $socialSEORule["twitter_label_1"] = "Written by";
+        $socialSEORule["twitter_data_1"] = SiteSetting()['website_title'];
+        $socialSEORule["twitter_label_2"] = "Est. reading time";
+        $socialSEORule["twitter_data_2"] = "3 minutes";
+    } else {
+        $socialSEORule['description'] = $description;
+        $socialSEORule['title'] = "";
+        $socialSEORule['type'] = "";
+        $socialSEORule['url'] = $url;
+        $socialSEORule['published_time'] = "";
+        $socialSEORule['modified_time'] = "";
+        $socialSEORule['image'] = "";
+        $socialSEORule['width'] = "";
+        $socialSEORule["height"] = "";
+        $socialSEORule["image_type"] = "";
+        $socialSEORule["author"] = "";
+        $socialSEORule["twitter_card"] = "";
+        $socialSEORule["twitter_label_1"] = "";
+        $socialSEORule["twitter_data_1"] = "";
+        $socialSEORule["twitter_label_2"] = "";
+        $socialSEORule["twitter_data_2"] = "";
+    }
+    return $socialSEORule;
+}
+
 function sendVerificationEmail($user)
 {
     $verification_email_temp = EmailTemplate::where('key', 'email_verification')->first();
