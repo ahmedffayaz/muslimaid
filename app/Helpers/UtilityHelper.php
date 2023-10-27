@@ -799,7 +799,7 @@ function getSocialSeo($seoRule, $url){
 
     if (!is_null($seoRule)) {
         $titleSeo = isset($seoRule['name']) ? $seoRule['name'] : $seoRule['title'];
-        $SeoMetaTitle = $seoRule['meta_title'];
+        $seoMetaTitle = $seoRule['meta_title'];
     }
 
     if (!is_null($record)) {
@@ -838,7 +838,7 @@ function getSocialSeo($seoRule, $url){
 
     if ($seoRule) {
         $socialSeoRule['description'] = $seoRule['meta_description'] != null ? $seoRule['meta_description'] : $description;
-        $socialSeoRule['title'] = $titleSeo ?? $SeoMetaTitle ?? $title;
+        $socialSeoRule['title'] = $titleSeo ?? $seoMetaTitle ?? $title;
         $socialSeoRule['type'] = $slug == "/" ? "website" : "article";
         $socialSeoRule['url'] = $url;
         $socialSeoRule['published_time'] = $record->created_at->format('Y-m-d H:i:s') ;
