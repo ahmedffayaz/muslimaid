@@ -768,12 +768,12 @@ function checkSeoPageRule($url)
 }
 
 function getSocialSeo($seoRule, $url){
-    $slug = request()->route('slug');
-    if (!isset($slug)) {
-        $path = parse_url($url, PHP_URL_PATH);
-        preg_match('/[^\/]+$/', $path, $matches);
-        $slug = isset($matches[0]) ? $matches[0] : '/';
-    }
+    $description = '';
+    $title = '';
+    $image = '';
+    $extension = '';
+
+    $slug = getSlug($url);
     $routeNames = [
         'page' => '\App\Models\Page',
         'post' => '\App\Models\Blog',
@@ -796,68 +796,72 @@ function getSocialSeo($seoRule, $url){
             break;
         }
     }
-    if($model == "\App\Models\Page"){
-        $image = getImageUrl($record->banner_image);
-        $pathInfo = $image != null ? pathinfo($image) : null;
-        $extension = $pathInfo != null ? $pathInfo['extension'] : null;
-        $description = $record->description; 
-    } else if ($model == "\App\Models\Blog"){
-        $image = getImageUrl($record->featured_image);
-        $pathInfo = $image != null ? pathinfo($image) : null;
-        $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
-        $description = $record->title;
-    } else if ($model == "\App\Models\Appeal"){
-        $image = $record->image_type == "upload" ? getImageUrl($record->image_upload) : getImageUrl($record->image_link); 
-        $pathInfo = $image != null ? pathinfo($image) : null;
-        $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
-        $description = $record->title;
-    } else if ($model == "\App\Models\Category"){
-        $image = $record->logo_type = "link" ? getImageUrl($record->logo_link) : getImageUrl($record->logo_upload);
-        $pathInfo = $image != null ? pathinfo($image) : null;
-        $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
-        $description = $record->description;
-    } else if ($model == "\App\Models\Store"){
-        $image = $record->logo()->first()->image;
-        $pathInfo = $image != null ? pathinfo($image) : null;
-        $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
-        $description = $record->description;
+
+    if (!is_null($seoRule)) {
+        $titleSeo = isset($seoRule['name']) ? $seoRule['name'] : $seoRule['title'];
+        $SeoMetaTitle = $seoRule['meta_title'];
+    }
+
+    if (!is_null($record)) {
+        if($model == "\App\Models\Page"){
+            $image = getImageUrl($record->banner_image);
+            $pathInfo = $image != null ? pathinfo($image) : null;
+            $extension = $pathInfo != null ? $pathInfo['extension'] : null;
+            $description = $record->excerpt != null ? $record->excerpt : $record->description;
+            $title = $record->title; 
+        } else if ($model == "\App\Models\Blog"){
+            $image = getImageUrl($record->featured_image);
+            $pathInfo = $image != null ? pathinfo($image) : null;
+            $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
+            $description = $record->excerpt != null ? $record->excerpt : $record->title;
+            $title = $record->title;
+        } else if ($model == "\App\Models\Appeal"){
+            $image = $record->image_type == "upload" ? getImageUrl($record->image_upload) : getImageUrl($record->image_link); 
+            $pathInfo = $image != null ? pathinfo($image) : null;
+            $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
+            $description = $record->excerpt != null ? $record->excerpt : $record->title;
+            $title = $record->title;
+        } else if ($model == "\App\Models\Category"){
+            $image = $record->logo_type = "link" ? getImageUrl($record->logo_link) : getImageUrl($record->logo_upload);
+            $pathInfo = $image != null ? pathinfo($image) : null;
+            $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
+            $description = $record->description != null?  $record->description : $record->name;
+            $title = $record->title; 
+        } else if ($model == "\App\Models\Store"){
+            $image = $record->logo()->first()->image;
+            $pathInfo = $image != null ? pathinfo($image) : null;
+            $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
+            $description = $record->description != null ? $record->description : $record->name;
+            $title = $record->name;
+        }
     }
 
     if ($seoRule) {
-        $socialSEORule['description'] = $seoRule['meta_description'];
-        $socialSEORule['title'] = $seoRule['meta_title'];
-        $socialSEORule['type'] = $slug == "/" ? "website" : "article";
-        $socialSEORule['url'] = $url;
-        $socialSEORule['published_time'] = $record->created_at->format('Y-m-d H:i:s') ;
-        $socialSEORule['modified_time'] = $record->updated_at->format('Y-m-d H:i:s') ;
-        $socialSEORule['image'] = $image;
-        $socialSEORule['width'] = "100%";
-        $socialSEORule["height"] = "auto";
-        $socialSEORule["image_type"] = "image/".$extension;
-        $socialSEORule["twitter_card"] = "summary_large_image";
-        $socialSEORule["twitter_label_1"] = "Written by";
-        $socialSEORule["twitter_data_1"] = SiteSetting()['website_title'];
-        $socialSEORule["twitter_label_2"] = "Est. reading time";
-        $socialSEORule["twitter_data_2"] = "3 minutes";
-    } else {
-        $socialSEORule['description'] = $description;
-        $socialSEORule['title'] = "";
-        $socialSEORule['type'] = "";
-        $socialSEORule['url'] = $url;
-        $socialSEORule['published_time'] = "";
-        $socialSEORule['modified_time'] = "";
-        $socialSEORule['image'] = "";
-        $socialSEORule['width'] = "";
-        $socialSEORule["height"] = "";
-        $socialSEORule["image_type"] = "";
-        $socialSEORule["author"] = "";
-        $socialSEORule["twitter_card"] = "";
-        $socialSEORule["twitter_label_1"] = "";
-        $socialSEORule["twitter_data_1"] = "";
-        $socialSEORule["twitter_label_2"] = "";
-        $socialSEORule["twitter_data_2"] = "";
+        $socialSeoRule['description'] = $seoRule['meta_description'] != null ? $seoRule['meta_description'] : $description;
+        $socialSeoRule['title'] = $titleSeo ?? $SeoMetaTitle ?? $title;
+        $socialSeoRule['type'] = $slug == "/" ? "website" : "article";
+        $socialSeoRule['url'] = $url;
+        $socialSeoRule['published_time'] = $record->created_at->format('Y-m-d H:i:s') ;
+        $socialSeoRule['modified_time'] = $record->updated_at->format('Y-m-d H:i:s') ;
+        $socialSeoRule['image'] = $image;
+        $socialSeoRule['width'] = "100%";
+        $socialSeoRule["height"] = "auto";
+        $socialSeoRule["image_type"] = "image/".$extension;
+        return $socialSeoRule;
     }
-    return $socialSEORule;
+
+    $socialSeoRule['description'] = $description;
+    $socialSeoRule['title'] = $title;
+    $socialSeoRule['type'] = $slug == "/" ? "website" : "article";
+    $socialSeoRule['url'] = $url;
+    $socialSeoRule['published_time'] = $record != null ? $record->created_at->format('Y-m-d H:i:s') : '' ;
+    $socialSeoRule['modified_time'] = $record != null ? $record->updated_at->format('Y-m-d H:i:s') : '' ;
+    $socialSeoRule['image'] = $image;
+    $socialSeoRule['width'] = "100%";
+    $socialSeoRule["height"] = "auto";
+    $socialSeoRule["image_type"] = "image/".$extension;
+
+    return $socialSeoRule;
 }
 
 function sendVerificationEmail($user)
@@ -1258,4 +1262,14 @@ function getPageRoute($type, $slug){
     } else if($type == "general" || $type == "special"){
         return route('pages.show', $slug);
     }
+}
+
+function getSlug($url){
+    $slug = request()->route('slug');
+    if (!isset($slug)) {
+        $path = parse_url($url, PHP_URL_PATH);
+        preg_match('/[^\/]+$/', $path, $matches);
+        $slug = isset($matches[0]) ? $matches[0] : '/';
+    }
+    return $slug;
 }
