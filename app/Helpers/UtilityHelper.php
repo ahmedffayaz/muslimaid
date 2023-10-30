@@ -745,9 +745,9 @@ function checkSeoPageRule($url)
             if ($slug == '/' && $model == '\App\Models\Page') {
                 $record = $model;
                 if (empty(auth()->user())) {
-                    $record = $record::where('title', 'Home Page Before Login');
+                    $record = $record::where('slug', '/home-page-before-login');
                 } else {
-                    $record = $record::where('title', 'Home Page After Login');
+                    $record = $record::where('slug', '/home-page-after-login');
                 }
             }
             $record = $record->first();
@@ -786,9 +786,9 @@ function getSocialSeo($seoRule, $url){
         if ($slug == '/' && $model == '\App\Models\Page') {
             $record = $model;
             if (empty(auth()->user())) {
-                $record = $record::where('title', 'Home Page Before Login');
+                $record = $record::where('slug', '/home-page-before-login');
             } else {
-                $record = $record::where('title', 'Home Page After Login');
+                $record = $record::where('slug', '/home-page-after-login');
             }
         }
         $record = $record->first();
@@ -798,7 +798,6 @@ function getSocialSeo($seoRule, $url){
     }
 
     if (!is_null($seoRule)) {
-        $titleSeo = isset($seoRule['name']) ? $seoRule['name'] : $seoRule['title'];
         $seoMetaTitle = $seoRule['meta_title'];
     }
 
@@ -807,42 +806,42 @@ function getSocialSeo($seoRule, $url){
             $image = getImageUrl($record->banner_image);
             $pathInfo = $image != null ? pathinfo($image) : null;
             $extension = $pathInfo != null ? $pathInfo['extension'] : null;
-            $description = $record->excerpt != null ? $record->excerpt : $record->description;
+            $description = $record->excerpt != null ? strip_tags($record->excerpt) : strip_tags($record->description);
             $title = $record->title; 
         } else if ($model == "\App\Models\Blog"){
             $image = getImageUrl($record->featured_image);
             $pathInfo = $image != null ? pathinfo($image) : null;
             $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
-            $description = $record->excerpt != null ? $record->excerpt : $record->title;
+            $description = $record->excerpt != null ? strip_tags($record->excerpt) : strip_tags($record->title);
             $title = $record->title;
         } else if ($model == "\App\Models\Appeal"){
             $image = $record->image_type == "upload" ? getImageUrl($record->image_upload) : getImageUrl($record->image_link); 
             $pathInfo = $image != null ? pathinfo($image) : null;
             $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
-            $description = $record->excerpt != null ? $record->excerpt : $record->title;
+            $description = $record->excerpt != null ? strip_tags($record->excerpt) : strip_tags($record->title);
             $title = $record->title;
         } else if ($model == "\App\Models\Category"){
-            $image = $record->logo_type = "link" ? getImageUrl($record->logo_link) : getImageUrl($record->logo_upload);
+            $image = $record->logo_type == "link" ? getImageUrl($record->logo_link) : getImageUrl($record->logo_upload);
             $pathInfo = $image != null ? pathinfo($image) : null;
             $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
-            $description = $record->description != null?  $record->description : $record->name;
+            $description = $record->description != null?  strip_tags($record->description) : strip_tags($record->name);
             $title = $record->title; 
         } else if ($model == "\App\Models\Store"){
-            $image = $record->logo()->first()->image;
+            $image = getImageUrl($record->logo()->first()->image);
             $pathInfo = $image != null ? pathinfo($image) : null;
             $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
-            $description = $record->description != null ? $record->description : $record->name;
+            $description = $record->description != null ? strip_tags($record->description) : strip_tags($record->name);
             $title = $record->name;
         }
     }
 
     if ($seoRule) {
         $socialSeoRule['description'] = $seoRule['meta_description'] != null ? $seoRule['meta_description'] : $description;
-        $socialSeoRule['title'] = $titleSeo ?? $seoMetaTitle ?? $title;
+        $socialSeoRule['title'] = $seoMetaTitle ?? $title;
         $socialSeoRule['type'] = $slug == "/" ? "website" : "article";
         $socialSeoRule['url'] = $url;
-        $socialSeoRule['published_time'] = $record->created_at->format('Y-m-d H:i:s') ;
-        $socialSeoRule['modified_time'] = $record->updated_at->format('Y-m-d H:i:s') ;
+        $socialSeoRule['published_time'] = $record->created_at->format('Y-m-d H:i:s');
+        $socialSeoRule['modified_time'] = $record->updated_at->format('Y-m-d H:i:s');
         $socialSeoRule['image'] = $image;
         $socialSeoRule['width'] = "100%";
         $socialSeoRule["height"] = "auto";
@@ -854,8 +853,8 @@ function getSocialSeo($seoRule, $url){
     $socialSeoRule['title'] = $title;
     $socialSeoRule['type'] = $slug == "/" ? "website" : "article";
     $socialSeoRule['url'] = $url;
-    $socialSeoRule['published_time'] = $record != null ? $record->created_at->format('Y-m-d H:i:s') : '' ;
-    $socialSeoRule['modified_time'] = $record != null ? $record->updated_at->format('Y-m-d H:i:s') : '' ;
+    $socialSeoRule['published_time'] = $record != null ? $record->created_at->format('Y-m-d H:i:s') : '';
+    $socialSeoRule['modified_time'] = $record != null ? $record->updated_at->format('Y-m-d H:i:s') : '';
     $socialSeoRule['image'] = $image;
     $socialSeoRule['width'] = "100%";
     $socialSeoRule["height"] = "auto";
