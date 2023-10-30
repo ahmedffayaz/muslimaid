@@ -1,6 +1,6 @@
 <?php
 
-ini_set('memory_limit', '128M');
+ini_set('memory_limit', '150M');
 
 use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Http\Request;
