@@ -2,26 +2,27 @@
 
 namespace App\Jobs;
 
+use Exception;
+use Carbon\Carbon;
+use App\Models\Store;
+use App\Models\Network;
+use App\Models\ExitClick;
+use App\Models\StoreImage;
+use App\Models\SiteSetting;
+use Illuminate\Support\Str;
+use App\Models\UserCashback;
+use Illuminate\Bus\Queueable;
 use App\Models\CashbackStatus;
 use App\Models\ImporterSetting;
-use App\Models\Network;
-use App\Models\SiteSetting;
-use App\Models\Store;
-use App\Models\StoreImage;
-use Exception;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Models\CashbackStatusChange;
 use Illuminate\Support\Facades\Http;
-use App\Models\ExitClick;
-use App\Models\UserCashback;
-use Carbon\Carbon;
-use Illuminate\Support\Str;
+use Illuminate\Queue\SerializesModels;
+use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Foundation\Bus\Dispatchable;
+use Illuminate\Contracts\Queue\ShouldBeUnique;
 
 class RevGlueImporter implements ShouldQueue
 {
@@ -208,47 +209,123 @@ class RevGlueImporter implements ShouldQueue
      * For importing user cashbacks
     */
     private function importUserCashbacks(){
-            $url = "https://www.revglue.com/partner/get_revembed_commission/MTA3Mw==/UE4Wr8O9Nl7BURIBGIVY8HSJhwNi7RXYiMPc06puPVkoh9Y6xC";
-            $response = Http::get($url);
-            if($response->successful()){
-                $cashbacks = json_decode($response, true);
+        $url = "https://www.revglue.com/partner/get_revembed_commission/MTA3Mw==/UE4Wr8O9Nl7BURIBGIVY8HSJhwNi7RXYiMPc06puPVkoh9Y6xC";
+        $response = Http::get($url);
+        if($response->successful()){
+            $cashbacks = json_decode($response, true);
 
-                
-                foreach($cashbacks['response']['commissions'] as $cashback){
-                    $exitClick = ExitClick::where('id', $cashback['site_exit_click_id'])->first();
-                    $store = $exitClick->store;
-                    $user = $exitClick->user;
-                    $network = $exitClick->network;
-                    $userCashback = UserCashback::where('exit_click_id', $exitClick->id)->where('user_id', $user->id)->first();
-                    
-                    if(empty($userCashback)){
-                        $cashbackAmount = ($cashback['commission'] / 100) * $exitClick->current_cashback_percentage;
-                        if($cashback['status'] == "Pending"){
-                            $status = CashbackStatus::where('status', 'pending')->first()->id;
-                        } else if ($cashback['status'] == "Confirmed") {
-                            $status = CashbackStatus::where('status', 'confirmed')->first()->id;
-                        } else if ($cashback['status'] == "Payable") {
-                            $status = CashbackStatus::where('status', 'processing')->first()->id;
-                        } else if ($cashback['status'] == "Donated") {
-                            $status = CashbackStatus::where('status', 'donated')->first()->id;
+            foreach($cashbacks['response']['commissions'] as $cashback){
+                $exitClick = ExitClick::where('id', $cashback['site_exit_click_id'])->first();
+                $store = $exitClick->store;
+                $user = $exitClick->user;
+                $network = $exitClick->network;
+                $userCashback = UserCashback::where('exit_click_id', $exitClick->id)->where('user_id', $user->id)->first();
+
+                if($cashback['status'] == "Pending"){
+                    $status = CashbackStatus::where('status', 'pending')->first()->id;
+                } else if ($cashback['status'] == "Confirmed") {
+                    $status = CashbackStatus::where('status', 'confirmed')->first()->id;
+                } else if ($cashback['status'] == "Failed") {
+                    $status = CashbackStatus::where('status', 'failed')->first()->id;
+                } else if ($cashback['status'] == "Payable") {
+                    $status = CashbackStatus::where('status', 'failed')->first()->id;
+                }
+
+                if(empty($userCashback)){
+                    $cashbackAmount = ($cashback['commission'] / 100) * $exitClick->current_cashback_percentage;
+                    $newCashback = UserCashback::create([
+                        'store_id' => $store->id,
+                        'user_id' => $user->id,
+                        'exit_click_id' => $exitClick->id,
+                        'click_date' => Carbon::parse($cashback['sales_date'])->toDateTimeString(),
+                        'event_date' => Carbon::parse($cashback['date_created'])->toDateTimeString(),
+                        'network_commission' => $cashback['commission'],
+                        'order_value' => round($cashback['order_value'], 2),
+                        'amount' => round($cashbackAmount, 2),
+                        'status' => $status,
+                        'type' => 'cashback',
+                        'is_api' => 'no'
+                    ]);
+                    CashbackStatusChange::create([
+                        'user_cashback_id' => $newCashback->id,
+                        'cashback_status_id' => $status
+                    ]);
+                    if($cashback['status'] == "Pending" || $cashback['status'] == "Confirmed") {
+                        //Push Notification & Email in case of confirmed or pending status of cashback
+                        $userEmailTemplateKey = 'user_new_cashback_tracked';
+                        $filterMessageVariables = ['{{STORE}}', '{{AMOUNT}}'];
+                        $requestFilteredMessage = [$newCashback->store->name, number_format($newCashback->amount, 2)];
+
+                        $data = [
+                            'name' => $newCashback->user->first_name . ' ' . $newCashback->user->last_name,
+                            'email' => $newCashback->user->email,
+                            'subject' => null,
+                            'message' => null
+                        ];
+                        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+                        $deviceToken = optional($newCashback->user->devices()->whereType('web')->first())->fcm_token;
+                        if($deviceToken != null){
+                            $title = 'Cashback Tracked';
+                            $message = 'We have tracked your cashback from ' . $newCashback->store->name;
+                            $url = url('account/cashback');
+                            $user = $newCashback->user()->get();
+
+                            dispatch(new SendNotification($title, $message, $deviceToken, $url, $user));
                         }
+                    } else {
+                        //Push Notification and email in case of failed status
+                        $userEmailTemplateKey = 'user_new_cashback_tracked';
+                        $filterMessageVariables = ['{{STORE}}', '{{AMOUNT}}'];
+                        $requestFilteredMessage = [$newCashback->store->name, number_format($newCashback->amount, 2)];
 
-                        UserCashback::create([
-                            'store_id' => $store->id,
-                            'user_id' => $user->id,
-                            'exit_click_id' => $exitClick->id,
-                            'click_date' => Carbon::parse($cashback['sales_data'])->toDateTimeString(),
-                            'event_date' => Carbon::parse($cashback['date_created'])->toDateTimeString(),
-                            'network_commission' => $cashback['commission'],
-                            'order_value' => round($cashback['order_value'], 2),
-                            'amount' => round($cashbackAmount, 2),
-                            'status' => $status,
-                            'type' => 'cashback',
-                            'is_api' => 'no'
-                        ]);
+                        $data = [
+                            'name' => $newCashback->user->first_name . ' ' . $newCashback->user->last_name,
+                            'email' => $newCashback->user->email,
+                            'subject' => null,
+                            'message' => null
+                        ];
+                        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+                        $deviceToken = optional($newCashback->user->devices()->whereType('web')->first())->fcm_token;
+                        if($deviceToken != null){
+                            $title = 'Cashback Tracked';
+                            $message = 'We have tracked your cashback from ' . $newCashback->store->name;
+                            $url = url('account/cashback');
+                            $user = $newCashback->user()->get();
+
+                            dispatch(new SendNotification($title, $message, $deviceToken, $url, $user));
+                        }
                     }
+                } else {
+                    $cashbackStatus = UserCashback::where('exit_click_id', $exitClick->id)->first()->status;
+                    if ($cashbackStatus != $status) {
+                        UserCashback::where('exit_click_id', $exitClick->id)->where('user_id', $user->id)->update(['status' => $status]);
+                        CashbackStatusChange::create([
+                            'user_cashback_id' => UserCashback::where('exit_click_id', $exitClick->id)->where('user_id', $user->id)->first()->id,
+                            'cashback_status_id' => $status
+                        ]);
+                        $userEmailTemplateKey = 'user_new_cashback_tracked';
+                        $filterMessageVariables = ['{{STORE}}', '{{AMOUNT}}'];
+                        $requestFilteredMessage = [$userCashback->store->name, number_format($userCashback->amount, 2)];
 
+                        $data = [
+                            'name' => $userCashback->user->first_name . ' ' . $userCashback->user->last_name,
+                            'email' => $userCashback->user->email,
+                            'subject' => null,
+                            'message' => null
+                        ];
+                        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+                        $deviceToken = optional($userCashback->user->devices()->whereType('web')->first())->fcm_token;
+                        if($deviceToken != null){
+                            $title = 'Cashback Tracked';
+                            $message = 'We have tracked your cashback from ' . $userCashback->store->name;
+                            $url = url('account/cashback');
+                            $user = $userCashback->user()->get();
+
+                            dispatch(new SendNotification($title, $message, $deviceToken, $url, $user));
+                        }
+                    }
                 }
             }
+        }
     }
 }
