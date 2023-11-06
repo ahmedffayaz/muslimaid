@@ -465,11 +465,10 @@
                                             <li><a href="{{ route(getAdminPrefix() . '.reviews.edit', $review) }}" class="review-edit"
                                                     review-id={{ $review->id }}><em
                                                         class="icon ni ni-edit"></em><span>Edit Review</span></a></li>
-                                            <li><a onclick="$('#delete-review-{{ $review->id }}').submit();"
-                                                    style="cursor: pointer"> <em
-                                                        class="icon ni ni-trash-fill"></em><span>Delete
-                                                        Review</span></a>
-
+                                            <li><a form_id="delete-review-{{ $review->id }}" class="delete-review" style="cursor: pointer"> <em
+                                                class="icon ni ni-trash-fill"></em><span>Delete
+                                                Review</span></a>
+                                                
                                                 <form action="{{ route(getAdminPrefix() . '.reviews.destroy', $review) }}"
                                                     id="delete-review-{{ $review->id }}" method="POST" class="m-0">
                                                     @method('DELETE')
