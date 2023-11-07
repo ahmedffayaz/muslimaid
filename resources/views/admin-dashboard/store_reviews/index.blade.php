@@ -214,18 +214,7 @@
                 var id = $(this).attr('review-id');
                 pageurl = $(this).attr('href');
                 var _token = $("input[name=_token]").val();
-                $.ajax({
-                    url: pageurl,
-                    method: "GET",
-                    data: {
-                        _token: _token
-                    },
-                    success: function(data) {
-                        $('#review-modal').modal('show');
-                        $('#review').html(data);
-                        updateReview()
-                    }
-                });
+                openEditReviewModal(id, pageurl, _token, "reviewMenu");
 
             });
         });
@@ -233,49 +222,9 @@
         $(document).ready(function() {
             $(document).on('click', '.delete-review', function(event) {
                 var form_id = $(this).attr('form_id');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!'
-                }).then(function(result) {
-                    if (result.value) {
-                        $('#' + form_id).submit();
-                    }
-                });
+                deleteReviewConfirmationDialog(form_id);
                 event.preventDefault();
             });
         });
-
-        function updateReview() {
-            $('#store-reviews-form').on('submit', function(event) {
-                event.preventDefault();
-                $.ajax({
-                    url: $(this).attr('action'),
-                    type: 'PUT',
-                    data: $(this).serialize(),
-                    success: function(data) {
-                        $('#review-modal').modal('hide');
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(data.message, 'success');
-
-                        })(NioApp, jQuery);
-                        $('#table-data').load(window.location.href + ' #table-data')
-                    },
-                    error: function(data) {
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast('Something went wrong! unable to update the review',
-                                'error');
-
-                        })(NioApp, jQuery);
-                    }
-                })
-            });
-        }
     </script>
 @endpush

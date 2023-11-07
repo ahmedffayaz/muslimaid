@@ -4,6 +4,7 @@
     <div class="nk-content ">
         <div class="container-fluid">
             <div class="nk-content-inner">
+                @include('flash::message')
                 <div class="nk-content-body">
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
@@ -101,18 +102,13 @@
                 var id = $(this).attr('review-id');
                 pageurl = $(this).attr('href');
                 var _token = $("input[name=_token]").val();
-                $.ajax({
-                    url: pageurl,
-                    method: "GET",
-                    data: {
-                        _token: _token
-                    },
-                    success: function(data) {
-                        $('#review-modal').modal('show');
-                        $('#review').html(data);
-                    }
-                });
+                openEditReviewModal(id, pageurl, _token, "dashboard");
 
+            });
+            $(document).on('click', '.delete-review', function(event) {
+                var form_id = $(this).attr('form_id');
+                deleteReviewConfirmationDialog(form_id);
+                event.preventDefault();
             });
         });
     </script>
