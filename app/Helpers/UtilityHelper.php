@@ -66,7 +66,11 @@ function getAdminPrefix()
 
 function getMoreCategories()
 {
-    $categories = Category::where('visibility', 'more')->where('parent_id', 0)->whereStatus('1')->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();
+    $categories = Category::where(function ($query){
+        $query->where('visibility', 'more');
+    })->with(['childs' => function ($query) {
+        $query->where('status', '1')->orderBy('sort', 'asc');
+    }])->where('parent_id', 0)->where('status', '1')->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();
     return $categories;
 }
 
