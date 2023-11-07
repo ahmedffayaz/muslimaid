@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\Home\SlideResource;
 use App\Http\Resources\StoreDetailResource;
 use App\Http\Resources\Home\FeaturedCategoryResource;
+use App\Http\Resources\HomeStoreResource;
 use App\Http\Resources\SearchResources;
 use App\Models\Page;
 use Illuminate\Http\Request;
@@ -27,52 +28,32 @@ class HomeController extends Controller
                 $query->select('id', 'name', 'slug');
             }])->orderBy('order', 'ASC')->limit(10)->get();
 
-            $featuredTag = Tag::where('title', 'app_featured1_homepage')->pluck('id')->first();
-
             $featuredStores = Store::select('id', 'name', 'slug', 'status')
-                ->whereHas('tags', function ($query) use ($featuredTag) {
-                    $query->where('title', 'app_featured1_homepage');
-                })->latest()->take(10)->whereStatus('active')->get();
-
-            $featuredCategories = Category::whereHas('tags', function ($query) use ($featuredTag) {
+            ->whereHas('tags', function ($query) {
                 $query->where('title', 'app_featured1_homepage');
-            })->whereStatus(1)->get();
+            })->latest()->take(10)->whereStatus('active')->get();
+
+            $featuredCategories = Category::whereHas('tags', function ($query) {
+                $query->where('title', 'app_featured1_homepage');
+            })->where(function ($query) {
+                $query->where('status', 1)->where('visibility', '!=', 'hidden')->orWhere('visibility', NULL);
+            })->with('stores', function ($query) {
+                $query->whereStatus('active')->select('stores.id', 'name', 'slug', 'status')->inRandomOrder();
+            })->get();
+
             $featuredCategories->map(function ($category) {
-                $category->stores = $category->stores()
-                    ->where('status', 'active')
-                    ->inRandomOrder()
-                    ->limit(10)
-                    ->get();
+                $category->stores = $category->stores->take(10)->values();
                 return $category;
             });
 
-            $topCategories = Category::whereHas('tags', function ($query) {
-                $query->where('title', 'top_categories');
-            })->whereStatus(1)->limit(10)->get();
-            $stores = Store::whereHas('tags', function ($query) {
-                $query->where('title', 'top_stores');
-            })->get();
-
-            $topOffers = [];
-            foreach ($topCategories as $category) {
-
-                $topStores = $stores->filter(function ($store) use ($category) {
-                    return $store->categories()->where('slug', $category->slug)->exists();
-                });
-                $topOffers[] = [
-                    'category' => $category->name,
-                    'stores' => StoreDetailResource::collection($topStores),
-                ];
-            }
             $data = [
                 'status' => 200,
                 'message' => 'Success',
                 'data' => [
                     'base_url' => url('/'),
                     'main_banner_images' => SlideResource::collection($slides),
-                    'featured_stores' => StoreDetailResource::collection($featuredStores),
+                    'featured_stores' => HomeStoreResource::collection($featuredStores),
                     'featured_categories' => FeaturedCategoryResource::collection($featuredCategories),
-                    'top_offers' => $topOffers,
                 ]
             ];
             return response()->json($data, 200);
