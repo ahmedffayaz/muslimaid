@@ -98,3 +98,70 @@ function maintenanceConfirmationDialog(title, text, confirmButtonText, maintenan
         }
     });
 }
+
+function deleteReviewConfirmationDialog(form_id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!'
+    }).then(function(result) {
+        if (result.value) {
+            $('#' + form_id).submit();
+        }
+    });
+}
+
+function openEditReviewModal(reviewId, url, token, call){
+    $.ajax({
+        url: url,
+        method: "GET",
+        data: {
+            _token: token
+        },
+        success: function(data) {
+            $('#review-modal').modal('show');
+            $('#review').html(data);
+            if(call == "dashboard"){
+                updateReview(1);
+            }
+            else if (call == "reviewMenu"){
+                updateReview(2);
+            }
+        }
+    });
+}
+
+function updateReview(key){
+    $('#store-reviews-form').on('submit', function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'PUT',
+            data: $(this).serialize(),
+            success: function(data) {
+                $('#review-modal').modal('hide');
+                (function(NioApp, $) {
+                    'use strict';
+                    toastr.clear();
+                    NioApp.Toast(data.message, 'success');
+
+                })(NioApp, jQuery);
+                if(key == 1){
+                    fetchData(0);
+                } 
+                else if (key == 2){
+                    $('#table-data').load(window.location.href + ' #table-data');
+                }
+            },
+            error: function(data) {
+                (function(NioApp, $) {
+                    'use strict';
+                    toastr.clear();
+                    NioApp.Toast('Something went wrong! unable to update the review', 'error');
+                })(NioApp, jQuery);
+            }
+        })
+    });
+}
