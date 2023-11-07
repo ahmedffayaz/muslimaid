@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Home;
 
+use App\Http\Resources\HomeStoreResource;
 use App\Http\Resources\StoreResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -15,17 +16,13 @@ class FeaturedCategoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        if ($this->banner_type != 'link') {
-            $banner = getBannerImageUrl($this->banner_upload, 'upload', $this);
-        } else {
-            $banner = $this->banner_link;
-        }
+        $banner = $this->banner_type != 'link' ? getBannerImageUrl($this->banner_upload, 'upload', $this) : $this->banner_link;
 
         return [
             'title' => $this->name,
             'url_key' => $this->slug,
             'main_banner' => $banner,
-            'stores' => StoreResource::collection($this->stores)
+            'stores' => HomeStoreResource::collection($this->stores)
         ];
     }
 }
