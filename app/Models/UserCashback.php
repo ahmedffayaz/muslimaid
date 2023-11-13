@@ -55,4 +55,8 @@ class UserCashback extends Model
     {
         return $this->hasMany(CashbackStatusChange::class);
     }
+    public function cashout()
+    {
+        return $this->belongsTo(Cashout::class);
+    }
 }
