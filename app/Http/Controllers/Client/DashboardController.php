@@ -258,7 +258,8 @@ class DashboardController extends Controller
     public function cashouts()
     {
         $user = Auth::user();
-        return view('frontend.client-dashboard.cashouts', compact('user'));
+        $appeals = Appeal::all();
+        return view('frontend.client-dashboard.cashouts', compact('user', 'appeals'));
     }
     public function searchCashouts(Request $request)
     {
@@ -269,6 +270,11 @@ class DashboardController extends Controller
         }
         if (isset($request->payment_method)) {
             $cashouts->where('payment_method', $request->payment_method);
+        }
+        if(isset($request->appeal)){
+            $cashouts->whereHas('metaData', function ($query) use ($request) {
+                $query->where('type', 'appeal_id')->where('value', $request->appeal);
+            });
         }
         if (isset($request->date_from) && isset($request->date_to)) {
             $cashouts->whereBetween('created_at', [$request->date_from, $request->date_to]);
