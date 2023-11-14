@@ -24,6 +24,8 @@ class CopyFrontendAsset extends Command
 
     private $storagePath = null;
     private $resourcePath = null;
+    private $basePath = null;
+    private $vendorPath = null;
 
     /**
      * Create a new command instance.
@@ -36,6 +38,8 @@ class CopyFrontendAsset extends Command
 
         $this->storagePath = storage_path('app/public/__asset');
         $this->resourcePath = resource_path('views/frontend/asset');
+        $this->basePath = base_path('/');
+        $this->vendorPath = resource_path('views/frontend/vendor');
     }
 
     /**
@@ -47,11 +51,13 @@ class CopyFrontendAsset extends Command
     {
         try {
             $this->deleteDirectory(
-                convertPathForOS($this->storagePath)
+                convertPathForOS($this->storagePath),
+                convertPathForOS($this->vendorPath . '/*')
             );
 
             $this->copyDirectory(
-                $this->resourcePath . '/*'
+                $this->resourcePath . '/*',
+                $this->vendorPath . '/*'
             );
 
             $this->info('Frontend asset copied successfully.');
@@ -64,7 +70,7 @@ class CopyFrontendAsset extends Command
     /**
      * Delete previously copied files from storage
      */
-    function deleteDirectory($directoryPath)
+    function deleteDirectory($directoryPath, $vendorPath = null)
     {
         if (File::isDirectory($directoryPath)) {
             $files = File::allFiles($directoryPath);
@@ -79,12 +85,25 @@ class CopyFrontendAsset extends Command
 
             File::deleteDirectory($directoryPath);
         }
+        if (isset($vendorPath)) {
+            $scanVendorResult = glob(
+                convertPathForOS($vendorPath)
+            );
+            foreach($scanVendorResult as $vendorResult){
+                $filePath = convertPathForOS(
+                    $this->basePath . '/' . explode('frontend/vendor/', $vendorResult)[1],
+                );
+                if(File::exists($filePath)){
+                    File::delete($filePath);
+                }
+            }
+        }
     }
 
     /**
      * Actually copy the asset
      */
-    private function copyDirectory($source)
+    private function copyDirectory($source, $vendorPath = null)
     {
         if (!is_dir($this->storagePath)) mkdir($this->storagePath);
 
@@ -110,6 +129,23 @@ class CopyFrontendAsset extends Command
                     $sourceDirOrFile,
                     $destinationDirOrFile
                 );
+            }
+        }
+        if (isset($vendorPath)) {
+            $scanVendorResult = glob(
+                convertPathForOS($vendorPath)
+            );
+
+            foreach($scanVendorResult as $vendorResult){
+                $destination = convertPathForOS(
+                    $this->basePath . '/' . explode('frontend/vendor/', $vendorResult)[1],
+                );
+                if (!file_exists($destination)) {
+                    copy(
+                        $vendorResult,
+                        $destination
+                    );
+                }
             }
         }
     }
