@@ -39,7 +39,7 @@ class CopyFrontendAsset extends Command
         $this->storagePath = storage_path('app/public/__asset');
         $this->resourcePath = resource_path('views/frontend/asset');
         $this->basePath = base_path('/');
-        $this->vendorPath = resource_path('views/frontend/vendor');
+        $this->vendorPath = resource_path('views/frontend/vendors');
     }
 
     /**
@@ -91,7 +91,7 @@ class CopyFrontendAsset extends Command
             );
             foreach($scanVendorResult as $vendorResult){
                 $filePath = convertPathForOS(
-                    $this->basePath . '/' . explode('frontend/vendor/', $vendorResult)[1],
+                    $this->basePath . '/' . explode('frontend/vendors/', $vendorResult)[1],
                 );
                 if(File::exists($filePath)){
                     File::delete($filePath);
@@ -138,7 +138,7 @@ class CopyFrontendAsset extends Command
 
             foreach($scanVendorResult as $vendorResult){
                 $destination = convertPathForOS(
-                    $this->basePath . '/' . explode('frontend/vendor/', $vendorResult)[1],
+                    $this->basePath . '/' . explode('frontend/vendors/', $vendorResult)[1],
                 );
                 if (!file_exists($destination)) {
                     copy(
