@@ -81,7 +81,7 @@
                                         <a class="nav-link active active-stores-tab" data-toggle="tab" href="#tabItem1">Active Stores</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link archive-stores-tab" data-toggle="tab" href="#tabItem2">Deleted Stores</a>
+                                        <a class="nav-link deleted-stores-tab" data-toggle="tab" href="#tabItem2">Deleted Stores</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
@@ -124,7 +124,7 @@
                     }, 'slow');
                 }
             });
-            $(document).on('click', '.archive-stores-tab', function(event) {
+            $(document).on('click', '.deleted-stores-tab', function(event) {
                 $('#table-data').html('');
                 $('#archived-table-data').
                 html(`<div class="text-center">
