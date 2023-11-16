@@ -115,7 +115,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('importer/import', [App\Http\Controllers\Admin\ImporterController::class, 'import'])->name('importer.import');
         Route::post('importer/save_settings', [App\Http\Controllers\Admin\ImporterController::class, 'saveSettings'])->name('importer.save_settings');
         Route::get('importer/importer_setting_form/{id}', [App\Http\Controllers\Admin\ImporterController::class, 'importerSettingForm'])->name('importer.importer_setting_form');
-        Route::resource('importer', ImporterController::class)->only(['index', 'create', 'show']);
+        Route::resource('importer', ImporterController::class)->only(['index', 'show']);
 
         // Clicks
         Route::get('clicks/export', [App\Http\Controllers\Admin\ClickController::class, 'exportCsv'])->name('clicks.export');
