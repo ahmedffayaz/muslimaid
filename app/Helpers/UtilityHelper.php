@@ -801,7 +801,7 @@ function getSocialSeo($seoRule, $url){
         }
     }
 
-    if (!is_null($seoRule)) {
+    if (!is_null($seoRule['meta_title'])) {
         $seoMetaTitle = $seoRule['meta_title'];
     }
 
@@ -829,7 +829,7 @@ function getSocialSeo($seoRule, $url){
             $pathInfo = $image != null ? pathinfo($image) : null;
             $extension = $pathInfo != null ? $pathInfo['extension'] : null; 
             $description = $record->description != null?  strip_tags($record->description) : strip_tags($record->name);
-            $title = $record->title; 
+            $title = $record->name; 
         } else if ($model == "\App\Models\Store"){
             $image = getImageUrl($record->logo()->first()->image);
             $pathInfo = $image != null ? pathinfo($image) : null;
