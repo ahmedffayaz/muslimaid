@@ -113,8 +113,6 @@ Route::namespace('App\Http\Controllers\Admin')
 
         // Importers
         Route::post('importer/import', [App\Http\Controllers\Admin\ImporterController::class, 'import'])->name('importer.import');
-        Route::get('importer/commissions', [App\Http\Controllers\Admin\ImporterController::class, 'import_commissions'])->name('importer.commissions');
-        Route::get('importer/vouchers', [App\Http\Controllers\Admin\ImporterController::class, 'import_coupons'])->name('importer.vouchers');
         Route::post('importer/save_settings', [App\Http\Controllers\Admin\ImporterController::class, 'saveSettings'])->name('importer.save_settings');
         Route::get('importer/importer_setting_form/{id}', [App\Http\Controllers\Admin\ImporterController::class, 'importerSettingForm'])->name('importer.importer_setting_form');
         Route::resource('importer', ImporterController::class)->only(['index', 'create', 'show']);
