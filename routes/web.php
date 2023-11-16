@@ -121,8 +121,8 @@ Route::namespace('App\Http\Controllers\Admin')
 
         // Clicks
         Route::get('clicks/export', [App\Http\Controllers\Admin\ClickController::class, 'exportCsv'])->name('clicks.export');
-        Route::post('clicks/fetch', [App\Http\Controllers\Admin\ClickController::class, 'fetch'])->name('clicks.fetch');
-        Route::post('clicks/search_clicks',  [App\Http\Controllers\Admin\ClickController::class, 'searchClicks'])->name('clicks.search_clicks');
+        Route::post('clicks/fetch', [App\Http\Controllers\Admin\ClickController::class, 'fetchClicks'])->name('clicks.fetch');
+        Route::post('archive/clicks', [App\Http\Controllers\Admin\ClickController::class, 'archiveClicks'])->name('archives.click');
         Route::resource('clicks', ClickController::class)->only('index');
 
         // Cashbacks

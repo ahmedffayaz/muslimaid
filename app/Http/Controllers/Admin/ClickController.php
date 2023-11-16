@@ -26,22 +26,33 @@ class ClickController extends Controller
      */
     public function index()
     {
-        $route = 'index';
-        $stores = Store::latest()->get();
+        $clickCount = ExitClick::count();
         $networks = Network::latest()->get();
-        $users = User::role('user')->latest()->get();
-        $clicks = ExitClick::latest()->paginate(20);
-        return view('admin-dashboard.clicks.index', compact('clicks', 'stores', 'networks', 'users', 'route'));
+        return view('admin-dashboard.clicks.index', compact('clickCount', 'networks'));
     }
 
-    function fetch(Request $request)
+    function fetchClicks(Request $request)
     {
-        if ($request->ajax()) {
-            $route = 'index';
-            $clicks = ExitClick::latest()->paginate(20);
+        $clicks = ExitClick::whereHas('store', function($query){
+            $query->whereNull('deleted_at');
+        })
+        ->when($request->click_id, function ($query) use ($request){
+            $query->where('id', $request->click_id)->orWhere('user_id', $request->click_id)
+            ->orWhere('store_id', $request->store_id);
+        })
+        ->when($request->user, function ($query) use ($request) {
+            $query->whereHas('user', function ($query) use ($request){
+                $query->where(DB::raw("CONCAT(first_name,' ',last_name)"), 'like', "%{$request->user}%");
+            })->orwhereHas('store', function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request->user}%");
+            });
+        })
+        ->when($request->network_id, function ($query) use ($request){
+            $query->where('network_id', $request->network_id);
+        })->latest()->paginate(20);
+        $route = 'fetchClicks';
+        return view('admin-dashboard.clicks.index_data', compact('clicks', 'route'))->render();
 
-            return view('admin-dashboard.clicks.index_data', compact('clicks', 'route'))->render();
-        }
     }
 
     public function exportCsv(Request $request)
@@ -75,34 +86,23 @@ class ClickController extends Controller
         }
     }
 
-    public function searchClicks(Request $request, ExitClick $clicks)
-    {
-        $clicks = $clicks->newQuery();
-
-        // Search by click id.
-        if ($request->input('click_id')) {
-            $clicks->where('id', $request->click_id)
-                ->orWhere('user_id', $request->click_id)
-                ->orWhere('store_id', $request->click_id);
-        }
-
-        // Search by user.
-        if ($request->input('user')) {
-            $clicks->whereHas('user', function ($query) use ($request) {
+    public function archiveClicks(Request $request){
+        $exitClicks = ExitClick::whereHas('store', function ($query) {
+            $query->onlyTrashed();
+        })->when($request->click_id, function ($query) use ($request){
+            $query->where('id', $request->click_id)->orWhere('user_id', $request->click_id)
+            ->orWhere('store_id', $request->store_id);
+        })->when($request->user, function ($query) use ($request) {
+            $query->whereHas('user', function ($query) use ($request){
                 $query->where(DB::raw("CONCAT(first_name,' ',last_name)"), 'like', "%{$request->user}%");
             })->orwhereHas('store', function ($query) use ($request) {
                 $query->where('name', 'like', "%{$request->user}%");
             });
-        }
+        })->when($request->network_id, function ($query) use ($request){
+            $query->where('network_id', $request->network_id);
+        })->latest()->paginate(20);
+        $route = "archieveClicks";
 
-        // Search by network.
-        if ($request->input('network_id')) {
-            $clicks->where('network_id', $request->input('network_id'));
-        }
-
-        $clicks = $clicks->latest()->paginate(20);
-        $route = 'search';
-
-        return view('admin-dashboard.clicks.index_data', compact('clicks', 'route'))->render();
+        return view('admin-dashboard.clicks.archive_data', compact('exitClicks', 'route'))->render();
     }
 }

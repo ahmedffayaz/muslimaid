@@ -9,7 +9,7 @@
                             <div class="nk-block-head-content">
                                 <h3 class="nk-block-title page-title">Exit Clicks</h3>
                                 <div class="nk-block-des text-soft">
-                                    <p>Total {{ $clicks->total() }} exit clicks.</p>
+                                    <p>Total {{ $clickCount }} exit clicks.</p>
                                 </div>
                             </div><!-- .nk-block-head-content -->
                             <div class="nk-block-head-content">
@@ -75,9 +75,26 @@
                     @include('flash::message')
                     <div class="nk-block">
                         <div class="card card-stretch">
-                            <div class="card-inner-group" id="table-data">
-                                @include('admin-dashboard.clicks.index_data')
-                            </div><!-- .card-inner-group -->
+                            <div class="container-fluid">
+                                <ul class="nav nav-tabs">
+                                    <li class="nav-item">
+                                        <a class="nav-link active active-tab" data-toggle="tab" href="#tabItem1">Active</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link archive-tab" data-toggle="tab" href="#tabItem2">Archived</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tabItem1">
+                                        <div class="card-inner-group" id="table-data">
+                                        </div><!-- .card-inner-group -->
+                                    </div>
+                                    <div class="tab-pane" id="tabItem2">
+                                        <div class="card-inner-group" id="archived-table-data">
+                                        <div>
+                                    </div>
+                                </div>
+                            </div>
                         </div><!-- .card -->
                     </div><!-- .nk-block -->
                 </div>
@@ -88,29 +105,98 @@
 @push('scripts')
     <script>
         $(document).ready(function() {
+            $('#table-data')
+            .html(`<div class="text-center">
+            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+                </div>
+            </div>`);
+            $.ajax({
+                url: "{{ route(getAdminPrefix(). '.clicks.fetch') }}",
+                method: "POST",
+                data: {
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    $('#table-data').html(data);
+                    $('html, body').animate({
+                        scrollTop: 0
+                    }, 'slow');
+                }
+            });
+            $(document).on('click', '.archive-tab', function(event) {
+                $('#table-data').html('');
+                $('#archived-table-data').
+                html(`<div class="text-center">
+                            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>`);
+                $.ajax({
+                    url: '{{ route(getAdminPrefix(). '.archives.click') }}',
+                    method: "POST",
+                    data: {
+                        _token: '{{ csrf_token() }}'
+                    },
+                    success: function(data) {
+                        $('#archived-table-data').html(data);
+                        $('html, body').animate({
+                            scrollTop: 0
+                        }, 'slow');
+                    }
+                });
+            });
+            $(document).on('click', '.active-tab', function(event) {
+                $('#archived-table-data').html('');
+                $('#table-data').
+                html(`<div class="text-center">
+                            <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                        </div>`);
+                $.ajax({
+                    url: "{{ route(getAdminPrefix() . '.clicks.fetch') }}",
+                    method: "POST",
+                    data: {
+                        _token: "{{ csrf_token() }}"
+                    },
+                    success: function(data){
+                        $('#table-data').html(data);
+                        $('html, body').animate({
+                            scrollTop: 0
+                        }, 'slow');
+                    }
+                })
+            });
             $(document).on('click', '.pagination a', function(event) {
                 event.preventDefault();
                 var route = $('.pagination').attr('route');
                 var page = $(this).attr('href').split('page=')[1];
+                var network_id = $("select[name=network_id]").val();
+                var store = $("input[name=store]").val();
+                var user = $("input[name=user]").val();
+                var click_id = $("input[name=click_id]").val();
 
-                if (route == 'index') {
+                if (route == 'archieveClicks') {
 
-                    $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
-            </div></div>`);
+                    $('#archived-table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                        <span class="sr-only">Loading...</span>
+                        </div></div>`);
 
-                    pageurl = "{{ route(getAdminPrefix() . '.clicks.fetch') }}?page="
-                    var _token = $("input[name=_token]").val();
+                    pageurl = "{{ route(getAdminPrefix() . '.archives.click') }}?page="
                     $.ajax({
-
                         url: pageurl + page,
                         method: "POST",
                         data: {
-                            _token: _token,
-                            page: page
+                            _token: "{{ csrf_token() }}",
+                            page: page,
+                            network_id: network_id,
+                            store: store,
+                            user: user,
+                            click_id: click_id
                         },
                         success: function(data) {
-                            $('#table-data').html(data);
+                            $('#archived-table-data').html(data);
                             $('html, body').animate({
                                 scrollTop: 0
                             }, 'slow');
@@ -118,22 +204,19 @@
                     });
                 }
 
-                if (route == 'search') {
-
+                if (route == 'fetchClicks') {
                     $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
-            </div></div>`);
-
-                    var _token = $("input[name=_token]").val();
+                    <span class="sr-only">Loading...</span>
+                    </div></div>`);
                     var network_id = $("select[name=network_id]").val();
                     var store = $("input[name=store]").val();
                     var user = $("input[name=user]").val();
                     var click_id = $("input[name=click_id]").val();
                     $.ajax({
-                        url: '{{ route(getAdminPrefix() . '.clicks.search_clicks') }}?page=' + page,
+                        url: "{{ route(getAdminPrefix() . '.clicks.fetch') }}?page=" + page,
                         method: "POST",
                         data: {
-                            _token: _token,
+                            _token: "{{ csrf_token() }}",
                             network_id: network_id,
                             store: store,
                             user: user,
@@ -148,40 +231,52 @@
                     });
                 }
             });
-        });
-    </script>
-    <script>
-        $(document).ready(function() {
-
             $(document).on('submit', '.search_form', function(event) {
                 event.preventDefault();
-                $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-            <span class="sr-only">Loading...</span>
-            </div></div>`);
-
-                var _token = $("input[name=_token]").val();
                 var network_id = $("select[name=network_id]").val();
                 var user = $("input[name=user]").val();
                 var click_id = $("input[name=click_id]").val();
-                $.ajax({
-                    url: '{{ route(getAdminPrefix() . '.clicks.search_clicks') }}',
-                    method: "POST",
-                    data: {
-                        _token: _token,
-                        network_id: network_id,
-                        user: user,
-                        click_id: click_id
-                    },
-                    success: function(data) {
-                        $('#table-data').html(data);
-                        $('html, body').animate({
-                            scrollTop: 0
-                        }, 'slow');
-                    }
-                });
-
+                var route = $('.pagination').attr('route');
+                $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+                </div></div>`);
+                if(route == "fetchClicks"){
+                    $.ajax({
+                        url: "{{ route(getAdminPrefix(). '.clicks.fetch') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            network_id: network_id,
+                            user: user,
+                            click_id: click_id
+                        },
+                        success: function(data) {
+                            $('#table-data').html(data);
+                            $('html, body').animate({
+                                scrollTop: 0
+                            }, 'slow');
+                        }
+                    });
+                }
+                if (route == 'archieveClicks') {
+                    $.ajax({
+                        url: "{{ route(getAdminPrefix(). '.archives.click') }}",
+                        method: "POST",
+                        data: {
+                            _token: "{{ csrf_token() }}",
+                            network_id: network_id,
+                            user: user,
+                            click_id: click_id
+                        },
+                        success: function(data) {
+                            $('#archived-table-data').html(data);
+                            $('html, body').animate({
+                                scrollTop: 0
+                            }, 'slow');
+                        }
+                    });
+                }
             });
-
         });
     </script>
 @endpush
