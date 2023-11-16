@@ -78,10 +78,10 @@
                             <div class="container-fluid">
                                 <ul class="nav nav-tabs">
                                     <li class="nav-item">
-                                        <a class="nav-link active active-tab" data-toggle="tab" href="#tabItem1">Active</a>
+                                        <a class="nav-link active active-stores-tab" data-toggle="tab" href="#tabItem1">Active Stores</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link archive-tab" data-toggle="tab" href="#tabItem2">Archived</a>
+                                        <a class="nav-link archive-stores-tab" data-toggle="tab" href="#tabItem2">Deleted Stores</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
@@ -112,7 +112,7 @@
                 </div>
             </div>`);
             $.ajax({
-                url: "{{ route(getAdminPrefix(). '.clicks.fetch') }}",
+                url: "{{ route(getAdminPrefix(). '.active-stores.clicks') }}",
                 method: "POST",
                 data: {
                     _token: '{{ csrf_token() }}'
@@ -124,7 +124,7 @@
                     }, 'slow');
                 }
             });
-            $(document).on('click', '.archive-tab', function(event) {
+            $(document).on('click', '.archive-stores-tab', function(event) {
                 $('#table-data').html('');
                 $('#archived-table-data').
                 html(`<div class="text-center">
@@ -133,7 +133,7 @@
                             </div>
                         </div>`);
                 $.ajax({
-                    url: '{{ route(getAdminPrefix(). '.archives.click') }}',
+                    url: "{{ route(getAdminPrefix(). '.deleted-stores.clicks') }}",
                     method: "POST",
                     data: {
                         _token: '{{ csrf_token() }}'
@@ -146,7 +146,7 @@
                     }
                 });
             });
-            $(document).on('click', '.active-tab', function(event) {
+            $(document).on('click', '.active-stores-tab', function(event) {
                 $('#archived-table-data').html('');
                 $('#table-data').
                 html(`<div class="text-center">
@@ -155,7 +155,7 @@
                             </div>
                         </div>`);
                 $.ajax({
-                    url: "{{ route(getAdminPrefix() . '.clicks.fetch') }}",
+                    url: "{{ route(getAdminPrefix() . '.active-stores.clicks') }}",
                     method: "POST",
                     data: {
                         _token: "{{ csrf_token() }}"
@@ -177,13 +177,13 @@
                 var user = $("input[name=user]").val();
                 var click_id = $("input[name=click_id]").val();
 
-                if (route == 'archieveClicks') {
+                if (route == "deletedStoresClicks") {
 
                     $('#archived-table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
                         <span class="sr-only">Loading...</span>
                         </div></div>`);
 
-                    pageurl = "{{ route(getAdminPrefix() . '.archives.click') }}?page="
+                    pageurl = "{{ route(getAdminPrefix() . '.deleted-stores.clicks') }}?page="
                     $.ajax({
                         url: pageurl + page,
                         method: "POST",
@@ -204,7 +204,7 @@
                     });
                 }
 
-                if (route == 'fetchClicks') {
+                if (route == "fetchActiveStoresClicks") {
                     $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
                     <span class="sr-only">Loading...</span>
                     </div></div>`);
@@ -213,7 +213,7 @@
                     var user = $("input[name=user]").val();
                     var click_id = $("input[name=click_id]").val();
                     $.ajax({
-                        url: "{{ route(getAdminPrefix() . '.clicks.fetch') }}?page=" + page,
+                        url: "{{ route(getAdminPrefix() . '.active-stores.clicks') }}?page=" + page,
                         method: "POST",
                         data: {
                             _token: "{{ csrf_token() }}",
@@ -240,9 +240,9 @@
                 $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">Loading...</span>
                 </div></div>`);
-                if(route == "fetchClicks"){
+                if(route == "fetchActiveStoresClicks"){
                     $.ajax({
-                        url: "{{ route(getAdminPrefix(). '.clicks.fetch') }}",
+                        url: "{{ route(getAdminPrefix(). '.active-stores.clicks') }}",
                         method: "POST",
                         data: {
                             _token: "{{ csrf_token() }}",
@@ -258,9 +258,9 @@
                         }
                     });
                 }
-                if (route == 'archieveClicks') {
+                if (route == "deletedStoresClicks") {
                     $.ajax({
-                        url: "{{ route(getAdminPrefix(). '.archives.click') }}",
+                        url: "{{ route(getAdminPrefix(). '.deleted-stores.clicks') }}",
                         method: "POST",
                         data: {
                             _token: "{{ csrf_token() }}",

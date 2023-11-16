@@ -31,7 +31,7 @@ class ClickController extends Controller
         return view('admin-dashboard.clicks.index', compact('clickCount', 'networks'));
     }
 
-    function fetchClicks(Request $request)
+    function fetchActiveStoresClicks(Request $request)
     {
         $clicks = ExitClick::whereHas('store', function($query){
             $query->whereNull('deleted_at');
@@ -50,7 +50,7 @@ class ClickController extends Controller
         ->when($request->network_id, function ($query) use ($request){
             $query->where('network_id', $request->network_id);
         })->latest()->paginate(20);
-        $route = 'fetchClicks';
+        $route = 'fetchActiveStoresClicks';
         return view('admin-dashboard.clicks.index_data', compact('clicks', 'route'))->render();
 
     }
@@ -86,7 +86,7 @@ class ClickController extends Controller
         }
     }
 
-    public function archiveClicks(Request $request){
+    public function deletedStoresClicks(Request $request){
         $exitClicks = ExitClick::whereHas('store', function ($query) {
             $query->onlyTrashed();
         })->when($request->click_id, function ($query) use ($request){
@@ -101,7 +101,7 @@ class ClickController extends Controller
         })->when($request->network_id, function ($query) use ($request){
             $query->where('network_id', $request->network_id);
         })->latest()->paginate(20);
-        $route = "archieveClicks";
+        $route = "deletedStoresClicks";
 
         return view('admin-dashboard.clicks.archive_data', compact('exitClicks', 'route'))->render();
     }
