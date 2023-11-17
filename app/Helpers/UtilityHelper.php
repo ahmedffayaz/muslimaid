@@ -805,6 +805,10 @@ function getSocialSeo($seoRule, $url){
         $seoMetaTitle = $seoRule['meta_title'];
     }
 
+    if (!isset($seoRule['meta_title']) && $slug == 'login') $title = 'Login';
+    if (!isset($seoRule['meta_title']) && $slug == 'register') $title = 'Register';
+    if (!isset($seoRule['meta_title']) && $slug == 'reset') $title = 'Forgot Password';
+
     if (!is_null($record)) {
         if($model == "\App\Models\Page"){
             $image = getImageUrl($record->banner_image);
@@ -844,9 +848,9 @@ function getSocialSeo($seoRule, $url){
         $socialSeoRule['title'] = $seoMetaTitle ?? $title;
         $socialSeoRule['type'] = $slug == "/" ? "website" : "article";
         $socialSeoRule['url'] = $url;
-        $socialSeoRule['published_time'] = $record->created_at->format('Y-m-d H:i:s');
-        $socialSeoRule['modified_time'] = $record->updated_at->format('Y-m-d H:i:s');
-        $socialSeoRule['image'] = $image;
+        $socialSeoRule['published_time'] = isset($record) && !is_null($record) ? $record->created_at->format('Y-m-d H:i:s') : '';
+        $socialSeoRule['modified_time'] = isset($record) && !is_null($record) ? $record->updated_at->format('Y-m-d H:i:s') : '';
+        $socialSeoRule['image'] = !empty($image) ? $image : getSiteLogo();
         $socialSeoRule['width'] = "100%";
         $socialSeoRule["height"] = "auto";
         $socialSeoRule["image_type"] = "image/".$extension;
@@ -857,9 +861,9 @@ function getSocialSeo($seoRule, $url){
     $socialSeoRule['title'] = $title;
     $socialSeoRule['type'] = $slug == "/" ? "website" : "article";
     $socialSeoRule['url'] = $url;
-    $socialSeoRule['published_time'] = $record != null ? $record->created_at->format('Y-m-d H:i:s') : '';
-    $socialSeoRule['modified_time'] = $record != null ? $record->updated_at->format('Y-m-d H:i:s') : '';
-    $socialSeoRule['image'] = $image;
+    $socialSeoRule['published_time'] = isset($record) && !is_null($record) ? $record->created_at->format('Y-m-d H:i:s') : '';
+    $socialSeoRule['modified_time'] = isset($record) && !is_null($record) ? $record->updated_at->format('Y-m-d H:i:s') : '';
+    $socialSeoRule['image'] = !empty($image) ? $image : getSiteLogo();
     $socialSeoRule['width'] = "100%";
     $socialSeoRule["height"] = "auto";
     $socialSeoRule["image_type"] = "image/".$extension;
