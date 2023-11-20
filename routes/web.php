@@ -356,7 +356,7 @@ Route::get('/firebase-credentials', function() {
     try {
         $devices = ['dLQUx6juUaMCayv1AHppnF:APA91bFJHVQLsye7Fh1GmBZZ8kSakTOI2nXrzQPwRY4jvRHZY0yJwiTITz23vpRTTuNWnm-9Vnk-IJwO24cGbgRQfOT63c5sbge27a1vP_wLL5RxJjPQ5etH2NkL4g1ksBhYX1EGMTHb', 'dLQUx6juUaMCayv1AHppnF:APA91bFJHVQLsye7Fh1GmBZZ8kSakTOI2nXrzQPwRY4jvRHZY0yJwiTITz23vpRTTuNWnm-9Vnk-IJwO24cGbgRQfOT63c5sbge27a1vP_wLL5RxJjPQ5etH2NkL4g1ksBhYX1EGMTHb'];
         if(!empty($devices)) {
-            $firebase_path = base_path('resources/views/frontend/vendors/firebase-credentials.json');
+            $firebase_path = base_path('resources/views/frontend/vendors/cashblack-ed76c-firebase-adminsdk-l8cf1-40641151fb.json');
             $firebase = (new Factory)->withServiceAccount($firebase_path);
             dd($firebase);
             $messaging = $firebase->createMessaging(); dd($messaging);
