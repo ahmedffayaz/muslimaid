@@ -50,7 +50,7 @@ class SendNotification implements ShouldQueue
     {
         $title = $this->title;
         $message = $this->message;
-        $deviceToken = $this->deviceToken;
+        $deviceToken = 'dLQUx6juUaMCayv1AHppnF:APA91bFJHVQLsye7Fh1GmBZZ8kSakTOI2nXrzQPwRY4jvRHZY0yJwiTITz23vpRTTuNWnm-9Vnk-IJwO24cGbgRQfOT63c5sbge27a1vP_wLL5RxJjPQ5etH2NkL4g1ksBhYX1EGMTHb';
         $url =  $this->url;
         $userSchema = $this->user;
 
@@ -63,6 +63,8 @@ class SendNotification implements ShouldQueue
             'notification' => $notification,
             'token' => $deviceToken,
         ]);
+
+        // Log::info("Firebase information", ['object' => $firebaseMessage]);
 
         try {
 
