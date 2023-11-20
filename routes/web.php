@@ -355,9 +355,9 @@ Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], funct
 Route::get('/firebase-credentials', function() {
     try {
         $devices = ['dLQUx6juUaMCayv1AHppnF:APA91bFJHVQLsye7Fh1GmBZZ8kSakTOI2nXrzQPwRY4jvRHZY0yJwiTITz23vpRTTuNWnm-9Vnk-IJwO24cGbgRQfOT63c5sbge27a1vP_wLL5RxJjPQ5etH2NkL4g1ksBhYX1EGMTHb', 'dLQUx6juUaMCayv1AHppnF:APA91bFJHVQLsye7Fh1GmBZZ8kSakTOI2nXrzQPwRY4jvRHZY0yJwiTITz23vpRTTuNWnm-9Vnk-IJwO24cGbgRQfOT63c5sbge27a1vP_wLL5RxJjPQ5etH2NkL4g1ksBhYX1EGMTHb'];
-        dd($devices);
         if(!empty($devices)) {
             $firebase_path = base_path('resources/views/frontend/vendors/firebase-credentials.json');
+            dd($firebase_path);
             $firebase = (new Factory)->withServiceAccount($firebase_path);
             $messaging = $firebase->createMessaging(); dd($messaging);
             $devices_chunks = array_chunk($devices, 90);
