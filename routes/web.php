@@ -382,6 +382,7 @@ Route::get('/firebase-credentials', function() {
                     ]
                 ]);
                 $result = $messaging->sendMulticast($message, $devices);
+                echo 'Successful sends: '.$result->successes()->count().PHP_EOL;
 
                 if ($result->hasFailures()) {
                     foreach ($result->failures()->getItems() as $failure) { dd($failure->error()->getMessage().PHP_EOL);
