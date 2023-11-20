@@ -354,7 +354,7 @@ Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], funct
 
 Route::get('/firebase-credentials', function() {
     // try {
-        $devices = ['dLQUx6juUaMCayv1AHppnF:APA91bFJHVQLsye7Fh1GmBZZ8kSakTOI2nXrzQPwRY4jvRHZY0yJwiTITz23vpRTTuNWnm-9Vnk-IJwO24cGbgRQfOT63c5sbge27a1vP_wLL5RxJjPQ5etH2NkL4g1ksBhYX1EGMTHb', 'dLQUx6juUaMCayv1AHppnF:APA91bFJHVQLsye7Fh1GmBZZ8kSakTOI2nXrzQPwRY4jvRHZY0yJwiTITz23vpRTTuNWnm-9Vnk-IJwO24cGbgRQfOT63c5sbge27a1vP_wLL5RxJjPQ5etH2NkL4g1ksBhYX1EGMTHb'];
+        $devices =  ['dLQUx6juUaMCayv1AHppnF:APA91bFJHVQLsye7Fh1GmBZZ8kSakTOI2nXrzQPwRY4jvRHZY0yJwiTITz23vpRTTuNWnm-9Vnk-IJwO24cGbgRQfOT63c5sbge27a1vP_wLL5RxJjPQ5etH2NkL4g1ksBhYX1EGMTHb', 'dLQUx6juUaMCayv1AHppnF:APA91bFJHVQLsye7Fh1GmBZZ8kSakTOI2nXrzQPwRY4jvRHZY0yJwiTITz23vpRTTuNWnm-9Vnk-IJwO24cGbgRQfOT63c5sbge27a1vP_wLL5RxJjPQ5etH2NkL4g1ksBhYX1EGMTHb'];
         if(!empty($devices)) {
             $firebase_path = base_path('cashblack-70f58-firebase-adminsdk-8sv1s-5fd2eace73.json');
             $firebase = (new Factory)->withServiceAccount($firebase_path);
