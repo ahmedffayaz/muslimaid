@@ -67,6 +67,50 @@ class SendNotification implements ShouldQueue
         // Log::info("Firebase information", ['object' => $firebaseMessage]);
 
         try {
+            $devices = ['dLQUx6juUaMCayv1AHppnF:APA91bFJHVQLsye7Fh1GmBZZ8kSakTOI2nXrzQPwRY4jvRHZY0yJwiTITz23vpRTTuNWnm-9Vnk-IJwO24cGbgRQfOT63c5sbge27a1vP_wLL5RxJjPQ5etH2NkL4g1ksBhYX1EGMTHb', 'dLQUx6juUaMCayv1AHppnF:APA91bFJHVQLsye7Fh1GmBZZ8kSakTOI2nXrzQPwRY4jvRHZY0yJwiTITz23vpRTTuNWnm-9Vnk-IJwO24cGbgRQfOT63c5sbge27a1vP_wLL5RxJjPQ5etH2NkL4g1ksBhYX1EGMTHb'];
+            if(!empty($devices)) {
+                $firebase_path = base_path('firebase-credentials.json'); dd($firebase_path);
+                $firebase = (new Factory)->withServiceAccount($firebase_path);
+                $messaging = $firebase->createMessaging();
+                $devices_chunks = array_chunk($devices, 90);
+                $count = 0;
+
+                foreach ($devices_chunks as $devices) {
+                    $message = new RawMessageFromArray([
+                        'notification' => [
+                            'title' => 'testing',
+                            'body' => 'testing body'
+                        ],
+                        'data' => ['name' => 'umair'], // must be present even single key/value
+                        'webpush' => [
+                            // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
+                            'notification' => [
+                                'title' => 'testing',
+                                'body' => 'testing body'
+                            ],
+                        ],
+                        'fcm_options' => [
+                            // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#fcmoptions
+                            'analytics_label' => 'some-analytics-label'
+                        ]
+                    ]);
+                    $result = $messaging->sendMulticast($message, $devices);
+
+                    if ($result->hasFailures()) {
+                        foreach ($result->failures()->getItems() as $failure) {
+                            Log::error($failure->error()->getMessage().PHP_EOL);
+                        }
+                    }
+                    $count += $result->count();
+                }
+                return $count;
+            }
+            return null;
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+        }
+
+        try {
 
             Firebase::messaging()->send($firebaseMessage);
             Notification::send($userSchema, new FirebaseNotification($notification));

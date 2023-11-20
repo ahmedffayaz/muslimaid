@@ -1,9 +1,13 @@
 <?php
 
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
+use Kreait\Firebase\Messaging\RawMessageFromArray;
+use Kreait\Firebase\Factory;
 
 /*
 |--------------------------------------------------------------------------
@@ -333,7 +337,7 @@ Route::namespace('App\Http\Controllers\Client')
         Route::post('cashout', [App\Http\Controllers\Client\PaymentController::class, 'cashout'])->name('cashout');
         Route::post('CharityCashout', [App\Http\Controllers\Client\PaymentController::class, 'CharityCashout'])->name('CharityCashout');
         Route::post('ticket/step2', [App\Http\Controllers\Client\TicketController::class, 'step2'])->name('tickets.step2');
-        Route::match(['get','post'], 'ticket/step3', [App\Http\Controllers\Client\TicketController::class, 'step3'])->name('tickets.step3');
+        Route::match(['get','post'], 'ticket/step3', [App\Http\Controllers\Client\TicketControlfunler::class, 'step3'])->name('tickets.step3');
         Route::resource('tickets', TicketController::class)->only(['index', 'create', 'show', 'update']);
         Route::resource('referral', ReferController::class)->only('index');
         Route::post('send-referral-link', [App\Http\Controllers\Client\ReferController::class, 'sendReferralLink'])->name('send-referral-link');
@@ -348,5 +352,49 @@ Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], funct
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
 
+Route::get('/firebase-credentials', function() {
+    try {
+        $devices = ['dLQUx6juUaMCayv1AHppnF:APA91bFJHVQLsye7Fh1GmBZZ8kSakTOI2nXrzQPwRY4jvRHZY0yJwiTITz23vpRTTuNWnm-9Vnk-IJwO24cGbgRQfOT63c5sbge27a1vP_wLL5RxJjPQ5etH2NkL4g1ksBhYX1EGMTHb', 'dLQUx6juUaMCayv1AHppnF:APA91bFJHVQLsye7Fh1GmBZZ8kSakTOI2nXrzQPwRY4jvRHZY0yJwiTITz23vpRTTuNWnm-9Vnk-IJwO24cGbgRQfOT63c5sbge27a1vP_wLL5RxJjPQ5etH2NkL4g1ksBhYX1EGMTHb'];
+        if(!empty($devices)) {
+            $firebase_path = base_path('resources/views/frontend/vendors/firebase-credentials.json');
+            $firebase = (new Factory)->withServiceAccount($firebase_path);
+            $messaging = $firebase->createMessaging();
+            $devices_chunks = array_chunk($devices, 90);
+            $count = 0;
 
+            foreach ($devices_chunks as $devices) {
+                $message = new RawMessageFromArray([
+                    'notification' => [
+                        'title' => 'testing',
+                        'body' => 'testing body'
+                    ],
+                    'data' => ['name' => 'umair'], // must be present even single key/value
+                    'webpush' => [
+                        // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
+                        'notification' => [
+                            'title' => 'testing',
+                            'body' => 'testing body'
+                        ],
+                    ],
+                    'fcm_options' => [
+                        // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#fcmoptions
+                        'analytics_label' => 'some-analytics-label'
+                    ]
+                ]);
+                $result = $messaging->sendMulticast($message, $devices);
+
+                if ($result->hasFailures()) {
+                    foreach ($result->failures()->getItems() as $failure) {
+                        Log::error($failure->error()->getMessage().PHP_EOL);
+                    }
+                }
+                $count += $result->count();
+            }
+            return $count;
+        }
+        return null;
+    } catch (\Exception $e) {
+        Log::error($e->getMessage());
+    }
+});
 
