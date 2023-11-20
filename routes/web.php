@@ -358,8 +358,7 @@ Route::get('/firebase-credentials', function() {
         if(!empty($devices)) {
             $firebase_path = base_path('resources/views/frontend/vendors/cashblack-ed76c-firebase-adminsdk-l8cf1-40641151fb.json');
             $firebase = (new Factory)->withServiceAccount($firebase_path);
-            dd($firebase);
-            $messaging = $firebase->createMessaging(); dd($messaging);
+            $messaging = $firebase->createMessaging();
             $devices_chunks = array_chunk($devices, 90);
             $count = 0;
 
