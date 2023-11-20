@@ -384,7 +384,7 @@ Route::get('/firebase-credentials', function() {
                 $result = $messaging->sendMulticast($message, $devices);
 
                 if ($result->hasFailures()) {
-                    foreach ($result->failures()->getItems() as $failure) {
+                    foreach ($result->failures()->getItems() as $failure) { dd($failure->error()->getMessage().PHP_EOL);
                         Log::error($failure->error()->getMessage().PHP_EOL);
                     }
                 }
