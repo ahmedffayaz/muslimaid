@@ -358,7 +358,7 @@ Route::get('/firebase-credentials', function() {
         if(!empty($devices)) {
             $firebase_path = base_path('resources/views/frontend/vendors/firebase-credentials.json');
             $firebase = (new Factory)->withServiceAccount($firebase_path);
-            $messaging = $firebase->createMessaging();
+            $messaging = $firebase->createMessaging(); dd($messaging);
             $devices_chunks = array_chunk($devices, 90);
             $count = 0;
 
