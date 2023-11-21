@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Notifications\FirebaseNotification;
 use Exception;
 use Illuminate\Bus\Queueable;
 use Illuminate\Support\Facades\Log;
@@ -10,6 +11,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\Notification;
 use Kreait\Firebase\Factory;
 use Kreait\Firebase\Messaging\RawMessageFromArray;
 
@@ -52,7 +54,8 @@ class SendNotification implements ShouldQueue
 
         $notification = [
             'title' => $title,
-            'body' => $message
+            'body' => $message,
+            'url' => $url
         ];
 
         try {
@@ -66,7 +69,7 @@ class SendNotification implements ShouldQueue
                 foreach ($devices_chunks as $devices) {
                     $message = new RawMessageFromArray([
                         'notification' => $notification,
-                        'data' => ['url' => $url], // must be present even single key/value
+                        // 'data' => ['url' => $url], // must be present even single key/value
                         'webpush' => [
                             // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
                             'notification' => $notification
@@ -78,6 +81,9 @@ class SendNotification implements ShouldQueue
                     ]);
 
                     $result = $messaging->sendMulticast($message, $devices);
+                    if ($result->successes()->count()) {
+                        Notification::send($userSchema, new FirebaseNotification($notification));
+                    }
 
                     if ($result->hasFailures()) {
                         foreach ($result->failures()->getItems() as $failure) {
