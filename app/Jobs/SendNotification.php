@@ -69,7 +69,6 @@ class SendNotification implements ShouldQueue
                 foreach ($devices_chunks as $devices) {
                     $message = new RawMessageFromArray([
                         'notification' => $notification,
-                        // 'data' => ['url' => $url], // must be present even single key/value
                         'webpush' => [
                             // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
                             'notification' => $notification
