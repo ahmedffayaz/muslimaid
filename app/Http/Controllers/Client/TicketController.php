@@ -7,8 +7,6 @@ use App\Models\ExitClick;
 use Illuminate\Support\Str;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
-use App\Jobs\SendEmailToUser;
-use App\Jobs\SendEmailToAdmin;
 use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Models\User;
