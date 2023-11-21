@@ -14,7 +14,9 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Notification;
 use Kreait\Firebase\Factory;
+use Kreait\Firebase\Messaging\CloudMessage;
 use Kreait\Firebase\Messaging\RawMessageFromArray;
+use Kreait\Laravel\Firebase\Facades\Firebase;
 
 class SendNotification implements ShouldQueue
 {
@@ -47,56 +49,26 @@ class SendNotification implements ShouldQueue
      */
     public function handle()
     {
-        Artisan::call('optimize:clear');
-
         $title = $this->title;
         $message = $this->message;
-        $devices = [$this->deviceToken];
+        $deviceToken = $this->deviceToken;
         $url =  $this->url;
         $userSchema = $this->user;
 
         $notification = [
             'title' => $title,
             'body' => $message,
-            'url' => $url
+            'url' => $url,
         ];
+        $firebaseMessage = CloudMessage::fromArray([
+            'notification' => $notification,
+            'token' => $deviceToken,
+        ]);
 
         try {
-            if(!empty($devices)) {
-                $firebase_path = base_path('firebase-credentials.json');
-                $firebase = (new Factory)->withServiceAccount($firebase_path);
-                $messaging = $firebase->createMessaging();
-                $devices_chunks = array_chunk($devices, 90);
-                $count = 0;
 
-                foreach ($devices_chunks as $devices) {
-                    $message = new RawMessageFromArray([
-                        'notification' => $notification,
-                        'webpush' => [
-                            // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
-                            'notification' => $notification
-                        ],
-                        'fcm_options' => [
-                            // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#fcmoptions
-                            'analytics_label' => 'some-analytics-label'
-                        ]
-                    ]);
-
-                    $result = $messaging->sendMulticast($message, $devices);
-                    if ($result->successes()->count()) {
-                        Notification::send($userSchema, new FirebaseNotification($notification));
-                    }
-
-                    if ($result->hasFailures()) {
-                        foreach ($result->failures()->getItems() as $failure) {
-                            Log::error($failure->error()->getMessage().PHP_EOL);
-                        }
-                    }
-                    $count += $result->count();
-                }
-                return $count;
-            }
-            return null;
+            Firebase::messaging()->send($firebaseMessage);
+            Notification::send($userSchema, new FirebaseNotification($notification));
         } catch (Exception $e) {
             Log::error('Exception occurred while sending notification: ' . $e->getMessage());
         }
