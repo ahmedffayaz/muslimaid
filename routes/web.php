@@ -4,10 +4,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
-use Kreait\Firebase\Messaging\RawMessageFromArray;
-use Kreait\Firebase\Factory;
 
 /*
 |--------------------------------------------------------------------------
@@ -337,7 +334,7 @@ Route::namespace('App\Http\Controllers\Client')
         Route::post('cashout', [App\Http\Controllers\Client\PaymentController::class, 'cashout'])->name('cashout');
         Route::post('CharityCashout', [App\Http\Controllers\Client\PaymentController::class, 'CharityCashout'])->name('CharityCashout');
         Route::post('ticket/step2', [App\Http\Controllers\Client\TicketController::class, 'step2'])->name('tickets.step2');
-        Route::match(['get','post'], 'ticket/step3', [App\Http\Controllers\Client\TicketControlfunler::class, 'step3'])->name('tickets.step3');
+        Route::match(['get','post'], 'ticket/step3', [App\Http\Controllers\Client\TicketController::class, 'step3'])->name('tickets.step3');
         Route::resource('tickets', TicketController::class)->only(['index', 'create', 'show', 'update']);
         Route::resource('referral', ReferController::class)->only('index');
         Route::post('send-referral-link', [App\Http\Controllers\Client\ReferController::class, 'sendReferralLink'])->name('send-referral-link');
@@ -351,51 +348,3 @@ Route::namespace('App\Http\Controllers\Client')
 Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
 });
-
-Route::get('/firebase-credentials', function() {
-    // try {
-        $devices =  ['dnleEoWL3rvJYICjcsBrU3:APA91bGVLWRaIrAtS7BYvDAvrRMznfIp8hNkEoMWSmcVWte_RF51nIPTV6Rk1J7-4m2nZD3ZCYSLwJLOA5g2WQ8CoCLbiDtCdDG42vviHwIzsLkuDUF41eD-TLz9MALO9478TXOwxZ2P', 'dnleEoWL3rvJYICjcsBrU3:APA91bGVLWRaIrAtS7BYvDAvrRMznfIp8hNkEoMWSmcVWte_RF51nIPTV6Rk1J7-4m2nZD3ZCYSLwJLOA5g2WQ8CoCLbiDtCdDG42vviHwIzsLkuDUF41eD-TLz9MALO9478TXOwxZ2P'];
-        if(!empty($devices)) {
-            $firebase_path = base_path('cashblack-70f58-firebase-adminsdk-8sv1s-5fd2eace73.json');
-            $firebase = (new Factory)->withServiceAccount($firebase_path);
-            $messaging = $firebase->createMessaging();
-            $devices_chunks = array_chunk($devices, 90);
-            $count = 0;
-
-            foreach ($devices_chunks as $devices) {
-                $message = new RawMessageFromArray([
-                    'notification' => [
-                        'title' => 'testing',
-                        'body' => 'testing body'
-                    ],
-                    'data' => ['name' => 'umair'], // must be present even single key/value
-                    'webpush' => [
-                        // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#webpushconfig
-                        'notification' => [
-                            'title' => 'testing',
-                            'body' => 'testing body'
-                        ],
-                    ],
-                    'fcm_options' => [
-                        // https://firebase.google.com/docs/reference/fcm/rest/v1/projects.messages#fcmoptions
-                        'analytics_label' => 'some-analytics-label'
-                    ]
-                ]);
-                $result = $messaging->sendMulticast($message, $devices);
-                echo 'Successful sends: '.$result->successes()->count().PHP_EOL;
-
-                if ($result->hasFailures()) {
-                    foreach ($result->failures()->getItems() as $failure) { dd($failure->error()->getMessage().PHP_EOL);
-                        Log::error($failure->error()->getMessage().PHP_EOL);
-                    }
-                }
-                $count += $result->count();
-            }
-            return $count;
-        }
-        return null;
-    // } catch (\Exception $e) {
-    //     Log::error($e->getMessage());
-    // }
-});
-
