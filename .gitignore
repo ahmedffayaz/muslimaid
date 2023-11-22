@@ -17,4 +17,4 @@ modules.yml
 /.scribe
 /public/vendor/scribe
 /resources/views/scribe
-firebase-credentials.json
+/public/.well-known
