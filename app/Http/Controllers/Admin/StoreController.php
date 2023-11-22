@@ -529,7 +529,6 @@ class StoreController extends Controller
 
     public function deleteCashback(Request $request, StoreCashback $cashback)
     {
-        // dd($cashback);
         $request->validate([
             'storeCashbackId' => 'required'
         ]);
@@ -541,6 +540,13 @@ class StoreController extends Controller
                 File::delete(public_path('storage/' . $storeCashback->image));
             }
             $storeCashback->delete();
+            if($storeCashback->default == 1){
+                StoreCashback::where('store_id', $cashback->store_id)->where('default', 1)->withTrashed()->update(['default' => 0]);
+                $highestCashback = StoreCashback::where('store_id',$cashback->store_id)->where('deleted_at', null)->orderBy('sale_commission', 'desc')->first(); 
+                if(!empty($highestCashback)){
+                    $highestCashback->update(['default' => 1]);
+                }
+            }
 
             DB::commit();
             if ($request->ajax()) {
@@ -616,6 +622,9 @@ class StoreController extends Controller
             $existing_cashbacks = StoreCashback::where('store_id', $request->store_id)->get();
             if (count($existing_cashbacks) == 1) {
                 $cashback->update(['default' => '1']);
+            } else {
+                StoreCashback::where('store_id', $request->store_id)->update(['default' => 0]);
+                StoreCashback::where('store_id', $request->store_id)->orderBy('sale_commission', 'desc')->first()->update(['default' => 1]);
             }
             DB::commit();
             if (!$request->ajax()) {
