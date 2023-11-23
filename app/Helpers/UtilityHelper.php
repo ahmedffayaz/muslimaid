@@ -835,7 +835,7 @@ function getSocialSeo($seoRule, $url){
             $description = $record->description != null?  strip_tags($record->description) : strip_tags($record->name);
             $title = $record->name;
         } else if ($model == "\App\Models\Store"){
-            $image = getImageUrl($record->logo()->first()->image);
+            $image = getImageUrl(getImageUrl($record->images()->where('title', 'logo')->orWhere('title', 'large logo')->first()));
             $pathInfo = $image != null ? pathinfo($image) : null;
             $extension = $pathInfo != null ? $pathInfo['extension'] : null;
             $description = $record->description != null ? strip_tags($record->description) : strip_tags($record->name);
