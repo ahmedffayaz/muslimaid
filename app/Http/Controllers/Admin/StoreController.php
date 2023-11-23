@@ -476,7 +476,26 @@ class StoreController extends Controller
 
         try {
             DB::beginTransaction();
-            $cashback->update($request->all());
+
+            // Retrieve all input data from the request
+            $requestData = $request->all();
+
+            // make default 0 if other cashback is default
+            if (isset($request->default)) {
+                StoreCashback::where('store_id', $cashback->store_id)->where('default', 1)->withTrashed()->update(['default' => 0]);
+                $requestData['default'] = 1;
+            }
+
+            if (!isset($request->default) && $cashback->default == 1) {
+                $highestCashback = StoreCashback::where('store_id',$cashback->store_id)->where('deleted_at', null)->orderBy('sale_commission', 'desc')->first();
+                if(!empty($highestCashback)){
+                    $highestCashback->update(['default' => 1]);
+                }
+
+                $requestData['default'] = 0;
+            }
+
+            $cashback->update($requestData);
 
             if ($request->hasFile('cashback_icon')) {
                 if (!empty($cashback->image) && Storage::exists('public/' . $cashback->image)) {
@@ -542,7 +561,7 @@ class StoreController extends Controller
             $storeCashback->delete();
             if($storeCashback->default == 1){
                 StoreCashback::where('store_id', $cashback->store_id)->where('default', 1)->withTrashed()->update(['default' => 0]);
-                $highestCashback = StoreCashback::where('store_id',$cashback->store_id)->where('deleted_at', null)->orderBy('sale_commission', 'desc')->first(); 
+                $highestCashback = StoreCashback::where('store_id',$cashback->store_id)->where('deleted_at', null)->orderBy('sale_commission', 'desc')->first();
                 if(!empty($highestCashback)){
                     $highestCashback->update(['default' => 1]);
                 }
