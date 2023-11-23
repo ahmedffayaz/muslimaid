@@ -30,6 +30,17 @@
                 </div>
             </div>
         </div>
+        <div class="col-lg-12">
+            <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="default-cashback" name="default"
+                        value="1" @if ($isEdit && $cashback->default == 1) checked @endif>
+                    <label class="custom-control-label" for="default-cashback">Default Cashback <em
+                            class="icon ni ni-question" data-toggle="tooltip" data-placement="top"
+                            title="If checked default cashback, highest cashback will not be default"></em></label>
+                </div>
+            </div>
+        </div>
         @if (($isEdit && $cashback->store->override_network) || ($isEditStore && $store->override_network))
             <div class="col-lg-12 network_url">
                 <div class="form-group">
