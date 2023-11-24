@@ -39,7 +39,7 @@ class ClickController extends Controller
 
             DB::beginTransaction();
             $deeplinkUrl = '';
-            $store = Store::findOrFail($request->store_id);
+            $store = Store::whereStatus('active')->findOrFail($request->store_id);
             $cashbackId = $request->input('cashback_id');
             $cashbackType = $request->input('cashback_type');
 
@@ -151,7 +151,7 @@ class ClickController extends Controller
                 return response()->json($data, 406);
             }
 
-            $store = Store::findOrFail($request->input('store_id'));
+            $store = Store::whereStatus('active')->findOrFail($request->input('store_id'));
             $voucher = Voucher::findOrFail($request->input('voucher_id'));
 
             $trackingUrl = $voucher->tracking_url ? $voucher->tracking_url : $voucher->store->tracking_url;

@@ -25,7 +25,7 @@ class ClickController extends Controller
             DB::beginTransaction();
             $deeplinkUrl = '';
 
-            $store = Store::findOrFail($storeId);
+            $store = Store::whereStatus('active')->findOrFail($storeId);
             $cashbackId = $request->cashback_id;
             $cashbackType = $request->cashback_type;
 

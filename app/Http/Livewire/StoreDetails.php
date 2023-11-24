@@ -29,8 +29,10 @@ class StoreDetails extends Component
         $this->store = Store::where('slug',$this->slug)->first();
         $this->stores = Store::latest()->get();
         $this->networks = Network::all();
-        $this->categories = Category::where('parent_id',0)->get();
-        $this->tags = Tag::where('type', 'stores')->get(); 
+        $this->categories = Category::where('parent_id',0)->whereStatus(1)->with('childs', function ($query) {
+            $query->whereStatus(1);
+        })->get();
+        $this->tags = Tag::where('type', 'stores')->get();
 
 
     }

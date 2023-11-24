@@ -75,7 +75,7 @@ class CategoryController extends Controller
                 Rule::requiredIf(function () use ($request){
                     return $request->banner_type == "upload";
                 }),
-                'nullable', 'mimes:jpeg,png,jpg' 
+                'nullable', 'mimes:jpeg,png,jpg'
             ],
             'logo_link' => [
                 Rule::requiredIf(function() use ($request){
@@ -400,7 +400,7 @@ class CategoryController extends Controller
     public function picks(Category $category)
     {
         $categories = Category::latest()->where('parent_id', 0)->get();
-        $stores = Store::latest()->get();
+        $stores = Store::whereStatus('active')->latest()->get();
         return view('admin-dashboard.categories.picks-form', compact('category', 'categories', 'stores'))->render();
     }
     public function sortCategory(Request $request)

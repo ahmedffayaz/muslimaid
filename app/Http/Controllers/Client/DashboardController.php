@@ -288,8 +288,8 @@ class DashboardController extends Controller
         $title = "favorite_stores";
         $cashblackStoreIds = Store::whereHas('categories', function ($query) {
             $query->where('slug', 'cashblack-to-your-door');
-        })->pluck('id');
-        $favoriteStores = auth()->user()->favoriteStores()
+        })->whereStatus('active')->pluck('id');
+        $favoriteStores = auth()->user()->favoriteStores()->where('status', 'active')
             ->whereNotIn('stores.id', $cashblackStoreIds)
             ->paginate(20);
         return view('frontend.client-dashboard.favorite-stores', compact('favoriteStores', 'title'));
@@ -298,7 +298,7 @@ class DashboardController extends Controller
     public function favoriteCashbackStores()
     {
         $title = "favorite_cashblack_to_door";
-        $favoriteStores = auth()->user()->favoriteStores()->whereHas('categories', function ($query) {
+        $favoriteStores = auth()->user()->favoriteStores()->where('status', 'active')->whereHas('categories', function ($query) {
             $query->where('slug', 'cashblack-to-your-door');
         })->paginate(20);
         return view('frontend.client-dashboard.favorite-stores', compact('favoriteStores', 'title'));
@@ -307,7 +307,7 @@ class DashboardController extends Controller
     {
         $model = Store::find($request->storeId);
         if ($model) {
-            Auth::user()->favoriteStores()->syncWithoutDetaching([$model->id]);
+            Auth::user()->favoriteStores()->where('status', 'active')->syncWithoutDetaching([$model->id]);
         }
         return response()->json(
             ['message' => 'Store added to favorite list.', 'type' => 'success']
@@ -316,9 +316,9 @@ class DashboardController extends Controller
 
     public function removeFavorite(Request $request)
     {
-        $model = Store::find($request->storeId);
+        $model = Store::whereStatus('active')->find($request->storeId);
         if ($model) {
-            Auth::user()->favoriteStores()->detach($model->id);
+            Auth::user()->favoriteStores()->where('status', 'active')->detach($model->id);
         }
         return response()->json(
             ['message' => 'Store removed from favorite list.', 'type' => 'info']

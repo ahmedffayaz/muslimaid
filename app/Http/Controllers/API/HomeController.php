@@ -25,7 +25,7 @@ class HomeController extends Controller
             $slides = Slide::whereHas('slider', function ($query) {
                 $query->whereName('Mobile Home');
             })->with(['store' => function ($query) {
-                $query->select('id', 'name', 'slug');
+                $query->select('id', 'name', 'slug', 'status')->whereStatus('active');
             }])->orderBy('order', 'ASC')->limit(10)->get();
 
             $featuredStores = Store::select('id', 'name', 'slug', 'status')

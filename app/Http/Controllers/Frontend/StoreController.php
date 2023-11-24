@@ -20,7 +20,7 @@ class StoreController extends Controller
 
     public function show($slug)
     {
-        $store = Store::where('slug', $slug)->first();
+        $store = Store::where('slug', $slug)->whereStatus('active')->first();
         if (empty($store)) abort(404);
 
         $userRefId = !empty(auth()->user()) ? auth()->user() : User::whereId(1)->first();
