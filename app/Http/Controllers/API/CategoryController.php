@@ -37,7 +37,7 @@ class CategoryController extends Controller
             ->orderBy('name', 'asc')
             ->paginate(20)
             ->appends(request()->input());
-            
+
             // Get the 'more' category separately
             $moreCategories = Category::where('name', 'more')
             ->orWhere('name', '!=', 'more')
@@ -51,7 +51,7 @@ class CategoryController extends Controller
             ->orderBy('sort', 'desc')
             ->orderBy('name', 'asc')
             ->get();
-            
+
             if ($categories->count() == 0) {
                 $data = [
                     'status' => 200,
@@ -149,7 +149,7 @@ class CategoryController extends Controller
     {
         try {
             $slug = isset($request->child) ? $request->child : $slug;
-            $category = Category::where('slug', $slug)->first();
+            $category = Category::where('slug', $slug)->whereStatus(1)->first();
             if (!$category) {
                 $data = [
                     'status' => 200,
@@ -192,8 +192,8 @@ class CategoryController extends Controller
 
 
             $cuisine = Category::where('id', '158')->with(['childs' => function ($query) {
-                $query->orderBy('name', 'asc')->withCount('stores');
-            }])->withCount('stores')->where('parent_id', 0)->orderBy('name', 'asc')->get();
+                $query->orderBy('name', 'asc')->where('status', 1)->withCount('stores');
+            }])->withCount('stores')->where('parent_id', 0)->where('stauts', 1)->orderBy('name', 'asc')->get();
             $data = [
                 'status' => 200,
                 'message' => 'Category details retrieved successfully',
@@ -226,5 +226,5 @@ class CategoryController extends Controller
             return response()->json($data, 500);
         }
     }
-   
+
 }

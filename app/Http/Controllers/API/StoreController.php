@@ -221,10 +221,10 @@ class StoreController extends Controller
     public function favoriteStores()
     {
         try {
-            $cashblackStoreIds = Store::whereHas('categories', function ($query) {
+            $cashblackStoreIds = Store::whereStatus('active')->whereHas('categories', function ($query) {
                 $query->where('slug', 'cashblack-to-your-door');
             })->pluck('id');
-            $favoriteStores = auth()->user()->favoriteStores()
+            $favoriteStores = auth()->user()->favoriteStores()->where('status', 'active')
                 ->whereNotIn('stores.id', $cashblackStoreIds)
                 ->paginate(20)->appends(request()->input());
 
@@ -311,9 +311,9 @@ class StoreController extends Controller
                 ];
                 return response()->json($data, 406);
             }
-            $store = Store::find($request->storeId);
+            $store = Store::whereStatus('active')->findOrFail($request->storeId);
             if ($store) {
-                auth()->user()->favoriteStores()->syncWithoutDetaching([$store->id]);
+                auth()->user()->favoriteStores()->where('status', 'active')->syncWithoutDetaching([$store->id]);
             }
             $data = [
                 'status' => 200,
@@ -346,9 +346,9 @@ class StoreController extends Controller
                 ];
                 return response()->json($data, 406);
             }
-            $store = Store::find($request->storeId);
+            $store = Store::whereStatus('active')->findOrFail($request->storeId);
             if ($store) {
-                auth()->user()->favoriteStores()->detach($store->id);
+                auth()->user()->favoriteStores()->where('status', 'active')->detach($store->id);
             }
             $data = [
                 'status' => 200,
@@ -396,7 +396,7 @@ class StoreController extends Controller
 
     public function vouchers(Request $request)
     {
-        $stores = Store::has('vouchers')->select('stores.*');
+        $stores = Store::whereStatus('active')->has('vouchers')->select('stores.*');
         if ($request->get('search')) {
             $stores = $stores->where('name', 'like', '%' . $request->get('search') . '%');
         }
