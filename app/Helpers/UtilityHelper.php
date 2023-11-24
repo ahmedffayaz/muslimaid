@@ -536,7 +536,9 @@ function getCategories($limit = null, $offset = 0)
     $categories = Category::where(function ($query) {
         $query->where('visibility', '!=', 'hidden')
             ->orWhereNull('visibility');
-    })->where('parent_id', 0)->whereStatus('1')->orderBy('sort', 'desc')->orderBy('name', 'asc')
+    })->where('parent_id', 0)->whereStatus('1')->with('childs', function ($query) {
+        $query->whereStatus(1);
+    })->orderBy('sort', 'desc')->orderBy('name', 'asc')
         ->when(!empty($limit), function ($q) use ($limit) {
             $q->limit($limit);
         })
@@ -633,7 +635,7 @@ function similarStores($store)
         $allStores = sortByDistance($data, $allStores);
         $similarStores = $allStores->sortBy('distance')->values()->take(10);
     } else {
-        $similarStores = Store::whereHas('categories', function ($query) use ($categorySlugs) {
+        $similarStores = Store::whereStatus('active')->whereHas('categories', function ($query) use ($categorySlugs) {
             return $query->whereIn('categories.slug', $categorySlugs);
         })->where('id', '!=', $store->id)
             ->limit(10)

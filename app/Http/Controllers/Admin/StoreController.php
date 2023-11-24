@@ -542,7 +542,7 @@ class StoreController extends Controller
             $storeCashback->delete();
             if($storeCashback->default == 1){
                 StoreCashback::where('store_id', $cashback->store_id)->where('default', 1)->withTrashed()->update(['default' => 0]);
-                $highestCashback = StoreCashback::where('store_id',$cashback->store_id)->where('deleted_at', null)->orderBy('sale_commission', 'desc')->first(); 
+                $highestCashback = StoreCashback::where('store_id',$cashback->store_id)->where('deleted_at', null)->orderBy('sale_commission', 'desc')->first();
                 if(!empty($highestCashback)){
                     $highestCashback->update(['default' => 1]);
                 }

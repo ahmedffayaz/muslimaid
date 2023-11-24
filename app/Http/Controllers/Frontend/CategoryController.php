@@ -38,7 +38,9 @@ class CategoryController extends Controller
         $category = Category::where(function ($query) {
             $query->where('visibility', '!=', 'hidden')
                 ->orWhereNull('visibility');
-        })->whereSlug($slug)->with('childs')->whereStatus('1')->first();
+        })->whereSlug($slug)->with('childs', function ($query) {
+            $query->whereStatus(1);
+        })->whereStatus('1')->first();
 
         if (empty($category)) abort(404);
 
@@ -100,7 +102,7 @@ class CategoryController extends Controller
             $query->where('visibility', '!=', 'hidden')
                 ->orWhereNull('visibility');
         })->whereSlug($slug)->with('stores')->whereStatus('1')->first();
-        $allStores = $category->stores();
+        $allStores = $category->stores()->whereStatus('active');
         $categoryCuisine = $request->input('cuisine');
         if (!empty($categoryCuisine)) {
             $allStores =  $allStores->whereHas('categories', function ($query) use ($categoryCuisine) {
