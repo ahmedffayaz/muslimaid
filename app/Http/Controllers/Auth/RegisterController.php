@@ -164,8 +164,19 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        $this->validator($request->all())->validate();
-
+        $validator = $this->validator($request->all());
+        if($validator->fails()){
+            if($request->ajax()){
+                return response()->json([
+                    'status' => 406,
+                    'message' => $validator->errors()->first(),
+                    'data' => []
+                ]);
+            } else {
+                Session::flash('error', $validator->errors()->first());
+                return redirect()->back();
+            }
+        }
         event(new Registered($user = $this->create($request->all())));
 
         if ($response = $this->registered($request, $user)) {
