@@ -11,7 +11,7 @@
                                 style="display: contents;">
                                 <div class="media-body">
                                     <h6 class="title">Revenue</h6>
-                                    <h3 class="mb-0 mt-2"> {{ currency($total_revenue) }}</h3>
+                                    <h3 class="mb-0 mt-2"> {{ currency($totalRevenue) }}</h3>
 
                                 </div>
                                 <div class="align-self-center text-center analytics-icon">
@@ -32,7 +32,7 @@
                                 style="display: contents;">
                                 <div class="media-body">
                                     <h6 class="title">Pending Revenue</h6>
-                                    <h3 class="mb-0 mt-2">{{ currency($pending_total_revenue) }}</h3>
+                                    <h3 class="mb-0 mt-2">{{ currency($pendingTotalRevenue) }}</h3>
                                 </div>
                                 <div class="align-self-center text-center analytics-icon">
                                     <em class="icon ni ni-coins text-info"></em>
@@ -111,7 +111,7 @@
                         class=" @if (count($new_tickets)) icon-status icon-status-info @endif">
                         <div class="user-avatar text-uppercase
                                 <?php
-                                
+
                                 $color = rand(1, 5);
                                 if ($color == 1) {
                                     echo 'bg-info-dim';
@@ -178,7 +178,7 @@
                         <a href="{{ route(getAdminPrefix() . '.stores.index') }}">
                             <div class="info">
                                 <div class="title">Total Stores</div>
-                                <div class="count">{{ count($stores) }}</div>
+                                <div class="count">{{ $totalStores }}</div>
                             </div>
 
                         </a><a href="{{ route(getAdminPrefix() . '.stores.index') }}">
@@ -188,7 +188,7 @@
                         <a href="{{ route(getAdminPrefix() . '.users.index') }}">
                             <div class="info">
                                 <div class="title">Total Users</div>
-                                <div class="count">{{ count($total_users) }}</div>
+                                <div class="count">{{ $totalUsers }}</div>
                             </div>
                         </a><a href="{{ route(getAdminPrefix() . '.users.index') }}">
                             <em class="icon bg-info-dim ni ni-users"></em></a>
@@ -197,7 +197,7 @@
                         <a href="{{ route(getAdminPrefix() . '.commissions.index') }}">
                             <div class="info">
                                 <div class="title">Total Cashbacks</div>
-                                <div class="count">{{ count($total_coms) }}</div>
+                                <div class="count">{{ $totalComs }}</div>
                             </div>
                         </a><a href="{{ route(getAdminPrefix() . '.commissions.index') }}">
                             <em class="icon bg-pink-dim ni ni-box"></em></a>
@@ -206,7 +206,7 @@
                         <a href="{{ route(getAdminPrefix() . '.clicks.index') }}">
                             <div class="info">
                                 <div class="title">Total Clicks</div>
-                                <div class="count">{{ count($total_clicks) }}</div>
+                                <div class="count">{{ count($totalClicks) }}</div>
                             </div>
                         </a><a href="{{ route(getAdminPrefix() . '.clicks.index') }}">
                             <em class="icon bg-success-dim ni ni-arrow-up-right"></em></a>
@@ -222,8 +222,8 @@
                 <div class="card-inner flex-grow-1">
                     <div class="card-title-group mb-4">
                         <div class="card-title">
-                            <h6 class="title">Clicks Conversion rate @if (count($clicks))
-                                {{ round((count($coms) * 100) / count($clicks), 0) }}%
+                            <h6 class="title">Clicks Conversion rate @if ($clicksAgainstTimePeriod)
+                                {{ round((count($coms) * 100) / $clicksAgainstTimePeriod, 0) }}%
                                 @else
                                 0%
                                 @endif
@@ -250,13 +250,13 @@
                                     <span class="dot dot-lg sq" data-bg="#ff63a5"></span>
                                     <span>Not converted</span>
                                 </div>
-                                <div class="amount amount-xs">{{ $notconverted }}</div>
+                                <div class="amount amount-xs">{{ $notConverted }}</div>
                             </li>
 
                         </ul>
                     </div>
                 </div><!-- .card-inner -->
-               
+
             </div>
         </div><!-- .card -->
     </div><!-- .col -->
@@ -280,7 +280,7 @@
                     <div class="user-card">
                         <div class="user-avatar
                                 <?php
-                                
+
                                 $color = rand(1, 5);
                                 if ($color == 1) {
                                     echo 'bg-info-dim';
@@ -353,7 +353,7 @@
                     <div class="user-card">
                         <div class="user-avatar
                                 <?php
-                                
+
                                 $color = rand(1, 5);
                                 if ($color == 1) {
                                     echo 'bg-info-dim';
@@ -468,7 +468,7 @@
                                             <li><a form_id="delete-review-{{ $review->id }}" class="delete-review" style="cursor: pointer"> <em
                                                 class="icon ni ni-trash-fill"></em><span>Delete
                                                 Review</span></a>
-                                                
+
                                                 <form action="{{ route(getAdminPrefix() . '.reviews.destroy', $review) }}"
                                                     id="delete-review-{{ $review->id }}" method="POST" class="m-0">
                                                     @method('DELETE')
@@ -498,7 +498,7 @@
         ! function(NioApp, $) {
             "use strict";
             var converted = '{{ $converted }}';
-            var notconverted = '{{ $notconverted }}';
+            var notConverted = '{{ $notConverted }}';
 
             var trafficSources = {
                 labels: ["Converted", "Not Converted", ],
@@ -507,7 +507,7 @@
                 datasets: [{
                     borderColor: "#fff",
                     background: ["#9769ff", "#ff63a5"],
-                    data: [converted, notconverted]
+                    data: [converted, notConverted]
                 }]
             };
 
