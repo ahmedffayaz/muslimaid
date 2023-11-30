@@ -97,7 +97,7 @@ function checkFavorite($storeId, $header_token = null)
 
 function getCuisineTags($store)
 {
-    $tags = $store->categories->where('parent_id', 158)->pluck('name')->toArray();
+    $tags = $store->categories->where('parent_id', Category::where('slug', 'cuisine')->first()->id)->pluck('name')->toArray();
     return $tags;
 }
 
