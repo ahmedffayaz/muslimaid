@@ -20,7 +20,7 @@ class StoreController extends Controller
 
     public function show($slug)
     {
-        $store = Store::where('slug', $slug)->whereStatus('active')->first();
+        $store = Store::where('slug', $slug)->whereStatus('active')->withCount('cashbacks')->first();
         if (empty($store)) abort(404);
 
         $userRefId = !empty(auth()->user()) ? auth()->user() : User::whereId(1)->first();
@@ -30,7 +30,7 @@ class StoreController extends Controller
     }
     public function storesView(Request $request)
     {
-        $allStores = Store::where('status', 'active');
+        $allStores = Store::where('status', 'active')->with('cashback')->withCount('cashbacks');
         if (!empty($request->storesType)) {
             $allStores = $allStores->has('vouchers');
         }
@@ -39,29 +39,15 @@ class StoreController extends Controller
             if ($request->orderBy == 'popularity') {
                 $allStores = $allStores->withCount('clicks')->orderByDesc('clicks_count')->paginate($request->input('perPage'));
             } else if ($request->orderBy == 'cashback-amount') {
-                $cashbackAmountStores = $allStores->whereHas('cashbacks', function ($query) {
+                $cashbackAmountStores = $allStores->whereHas('cashback', function ($query) {
                     $query->where('type', 'fixed')->whereHas('currencyData', function ($query) {
                         $query->where('symbol', '£');
                     });
-                })->get()->filter(function ($store) {
-                    $cashback = $store->getCashback();
-                    return (strpos($cashback, '£') !== false);
-                })->sortByDesc(function ($store) {
-                    return $store->getCashback();
-                });
-                $cashbackPercentageStores = Store::where('status', 'active')->get();
-                $allStores = $cashbackAmountStores->concat($cashbackPercentageStores)->paginate($request->input('perPage'));
+                })->ordeBy('cashback_integer', 'desc')->paginate($request->input('perPage'));
             } else if ($request->orderBy == 'cashback-percentage') {
-                $allStores = $allStores->whereHas('cashbacks', function ($query) {
+                $allStores = $allStores->whereHas('cashback', function ($query) {
                     $query->where('type', 'percentage');
-                })->get()->filter(function ($store) {
-                    $cashback = $store->getCashback();
-                    $percentage = (int) filter_var($cashback, FILTER_SANITIZE_NUMBER_INT);
-                    $store->cashbackPercentage = $percentage;
-                    return $percentage;
-                })->sortByDesc(function ($store) {
-                    return $store->cashbackPercentage;
-                })->paginate($request->input('perPage'));
+                })->orderBy('cashback_integer', 'desc')->paginate($request->input('perPage'));
             } else {
                 $orderByArr = explode('-', $request->orderBy);
                 $allStores = $allStores->orderBy($orderByArr[0], $orderByArr[1])->paginate($request->input('perPage'));

@@ -42,6 +42,8 @@ class Store extends Model
         'competitors',
     ];
 
+    protected $appends = ['cashback_integer', 'default_cashback'];
+
     public function network()
     {
         return $this->belongsTo(Network::class);
@@ -57,10 +59,6 @@ class Store extends Model
         return $this->hasOne(StoreCashback::class)->where('default', 1);
     }
 
-    // public function cashbacks()
-    // {
-    //     return $this->hasMany(StoreCashback::class);
-    // }
     public function cashbacks()
     {
         return $this->hasMany(StoreCashback::class, 'store_id');
@@ -140,21 +138,33 @@ class Store extends Model
         return $this->hasMany(StoreAddress::class, 'store_id', 'id');
     }
 
-    public function getCashback($setting=null)
+    public function getCashbackIntegerAttribute()
     {
-        $currency = ($this->type == 'fixed' && isset($this->cashback->currencyData)) ? $this->cashback->currencyData->symbol : '';
-        if ($this->custom_cashback_percentage  && !empty($this->cashback->sale_commission)) {
-            if (!is_numeric($this->custom_cashback_percentage)) {
+        if ($this->custom_cashback_percentage && !empty($this->cashback->sale_commission)) {
+            if (!is_numeric($this->custom_cashback_percentage))
                 $this->custom_cashback_percentage = substr($this->custom_cashback_percentage, 0, -1);
-            }
-            return $this->cashback->type == 'fixed'
-                ? currencyOrPercentage(($this->custom_cashback_percentage / 100) * $this->cashback->sale_commission, 'fixed', $currency) . ' Cashback'
-                : currencyOrPercentage(($this->custom_cashback_percentage / 100) * $this->cashback->sale_commission, 'percentage') . ' Cashback';
+
+            return ($this->custom_cashback_percentage / 100) * $this->cashback->sale_commission;
         } elseif (!empty($this->cashback->sale_commission)) {
-            $setting = $setting ? $setting : SiteSetting();
-            return $this->cashback->type == 'fixed'
-                ? currencyOrPercentage(($setting['cashback_percentage'] / 100) * $this->cashback->sale_commission, 'fixed', $currency) . ' Cashback'
-                : currencyOrPercentage(($setting['cashback_percentage'] / 100) * $this->cashback->sale_commission, 'percentage') . ' Cashback';
+            return (SiteSetting()['cashback_percentage'] / 100) * $this->cashback->sale_commission;
+        }
+        return null;
+    }
+
+    public function getDefaultCashbackAttribute()
+    {
+        if (isset($this->cashback)) {
+            if ($this->cashback->type === 'fixed') {
+                if ($this->cashbacks_count > 1)
+                    return 'Up to £' . number_format((float) $this->cashback_integer, 2, '.', '') . ' Cashback';
+                return '£' . number_format((float) $this->cashback_integer, 2, '.', '') . ' Cashback';
+            }
+
+            if ($this->cashback->type === 'percentage') {
+                if ($this->cashbacks_count > 1)
+                    return 'Up to ' . number_format((float) $this->cashback_integer, 2, '.', '') . '% Cashback';
+                return number_format((float) $this->cashback_integer, 2, '.', '') . '% Cashback';
+            }
         }
         return null;
     }
