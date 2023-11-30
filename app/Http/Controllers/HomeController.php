@@ -68,40 +68,40 @@ class HomeController extends Controller
             Cookie::queue(Cookie::make('period', 30, 120));
         }
 
-        $paidTotalCommission = UserCashback::where('status', '4')->where('event_date', '>=', $timePeriod)->sum('network_commission');
-        $paidTotalCashback = UserCashback::where('status', '4')->where('event_date', '>=', $timePeriod)->sum('amount');
-        $total_revenue  = $paidTotalCommission - $paidTotalCashback;
-        $penidng_total_commission = UserCashback::where('status', '!=', '4')->where('event_date', '>=', $timePeriod)->sum('network_commission');
-        $penidng_total_cashback = UserCashback::where('status', '!=', '4')->where('event_date', '>=', $timePeriod)->sum('amount');
+        $paidTotalCommission = UserCashback::select('id', 'status', 'event_date', 'network_commission')->where('status', '4')->where('event_date', '>=', $timePeriod)->sum('network_commission');
+        $paidTotalCashback = UserCashback::select('id', 'status', 'event_date', 'amount')->where('status', '4')->where('event_date', '>=', $timePeriod)->sum('amount');
+        $totalRevenue  = $paidTotalCommission - $paidTotalCashback;
+        $penidngTotalCommission = UserCashback::select('id', 'status', 'event_date', 'network_commission')->where('status', '!=', '4')->where('event_date', '>=', $timePeriod)->sum('network_commission');
+        $penidngTotalCashback = UserCashback::where('status', '!=', '4')->where('event_date', '>=', $timePeriod)->sum('amount');
 
-        $pending_total_revenue = $penidng_total_commission - $penidng_total_cashback;
+        $pendingTotalRevenue = $penidngTotalCommission - $penidngTotalCashback;
         $coms = UserCashback::where('event_date', '>=', $timePeriod)->latest()->get();
-        $total_coms = UserCashback::latest()->get();
-        $stores = Store::latest()->get();
-        $clicks = ExitClick::latest()->where('created_at', '>=', $timePeriod)->get();
-        $total_clicks = ExitClick::latest()->get();
+        $totalComs = UserCashback::count();
+        $totalStores = Store::count();
+        $totalClicks = ExitClick::all();
+        $clicksAgainstTimePeriod = $totalClicks->where('created_at', '>=', $timePeriod)->count();
         $tickets = Ticket::where('new_ticket', 1)->latest()->get();
         $users = User::role('user')->where('created_at', '>=', $timePeriod)->latest()->get();
-        $total_users = User::role('user')->latest()->get();
+        $totalUsers = User::role('user')->count();
         $reviews = StoreReview::where('status', 'pending')->latest()->get();
 
-        $notconverted = count($clicks) - count($coms);
+        $notConverted = $clicksAgainstTimePeriod - count($coms);
         $converted = count($coms);
 
         return view('admin-dashboard.home_data', compact(
             'coms',
-            'total_coms',
-            'stores',
-            'total_revenue',
-            'pending_total_revenue',
-            'clicks',
-            'total_clicks',
+            'totalComs',
+            'totalStores',
+            'totalRevenue',
+            'pendingTotalRevenue',
+            'clicksAgainstTimePeriod',
+            'totalClicks',
             'tickets',
             'users',
-            'total_users',
+            'totalUsers',
             'reviews',
             'converted',
-            'notconverted',
+            'notConverted',
             'period'
         ))->render();
     }
