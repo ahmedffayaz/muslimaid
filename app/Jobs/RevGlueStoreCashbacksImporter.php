@@ -88,9 +88,9 @@ class RevGlueStoreCashbacksImporter implements ShouldQueue
                     'sale_commission' => $cashback['cashback_value'],
                     'currency' => null,
                     'detail' => $cashback['description'],
-                    'network_detail' => null,
-                    'default' => 1
+                    'network_detail' => null
                 ]);
+                setStoreDefaultCashback($store->id, false);
             }
         }
     }

@@ -20,7 +20,7 @@ class StoreController extends Controller
 
     public function show($slug)
     {
-        $store = Store::where('slug', $slug)->whereStatus('active')->first();
+        $store = Store::where('slug', $slug)->whereStatus('active')->withCount('cashbacks')->first();
         if (empty($store)) abort(404);
 
         $userRefId = !empty(auth()->user()) ? auth()->user() : User::whereId(1)->first();
@@ -30,52 +30,56 @@ class StoreController extends Controller
     }
     public function storesView(Request $request)
     {
-        $allStores = Store::where('status', 'active');
+        $allStores = Store::select('id', 'name', 'slug', 'status', 'latitude', 'longitude', 'created_at', 'deleted_at')->where('status', 'active')->with('cashback')->withCount('cashbacks');
         if (!empty($request->storesType)) {
             $allStores = $allStores->has('vouchers');
         }
         $letter = $request->input('letter');
         if (isset($request->orderBy)) {
             if ($request->orderBy == 'popularity') {
-                $allStores = $allStores->withCount('clicks')->orderByDesc('clicks_count')->paginate($request->input('perPage'));
-            } else if ($request->orderBy == 'cashback-amount') {
-                $cashbackAmountStores = $allStores->whereHas('cashbacks', function ($query) {
-                    $query->where('type', 'fixed')->whereHas('currencyData', function ($query) {
-                        $query->where('symbol', '£');
-                    });
-                })->get()->filter(function ($store) {
-                    $cashback = $store->getCashback();
-                    return (strpos($cashback, '£') !== false);
-                })->sortByDesc(function ($store) {
-                    return $store->getCashback();
-                });
-                $cashbackPercentageStores = Store::where('status', 'active')->get();
-                $allStores = $cashbackAmountStores->concat($cashbackPercentageStores)->paginate($request->input('perPage'));
-            } else if ($request->orderBy == 'cashback-percentage') {
-                $allStores = $allStores->whereHas('cashbacks', function ($query) {
-                    $query->where('type', 'percentage');
-                })->get()->filter(function ($store) {
-                    $cashback = $store->getCashback();
-                    $percentage = (int) filter_var($cashback, FILTER_SANITIZE_NUMBER_INT);
-                    $store->cashbackPercentage = $percentage;
-                    return $percentage;
-                })->sortByDesc(function ($store) {
-                    return $store->cashbackPercentage;
-                })->paginate($request->input('perPage'));
+                $allStores = $allStores->withCount('clicks')->orderBy('clicks_count', 'desc');
+            } else if ($request->orderBy == 'cashback-amount-asc') {
+                $cashbackAmountStoreAsc = $allStores->whereHas('cashback', function ($cashback) {
+                    $cashback->where('type', 'fixed');
+                })->get();
+                $allStores = $cashbackAmountStoreAsc->sortBy('cashback_integer');
+            } else if ($request->orderBy == 'cashback-amount-desc') {
+                $cashbackAmountStoreDesc = $allStores->whereHas('cashback', function ($cashback) {
+                    $cashback->where('type', 'fixed');
+                })->get();
+                $allStores = $cashbackAmountStoreDesc->sortByDesc('cashback_integer');
+            } else if ($request->orderBy == 'cashback-percentage-asc') {
+                $cashbackPercentageStoreAsc = $allStores->whereHas('cashback', function ($cashback) {
+                    $cashback->where('type', 'percentage');
+                })->get();
+                $allStores = $cashbackPercentageStoreAsc->sortBy('cashback_integer');
+            } else if ($request->orderBy == 'cashback-percentage-desc') {
+                $cashbackPercentageStoreDesc = $allStores->whereHas('cashback', function ($cashback) {
+                    $cashback->where('type', 'percentage');
+                })->get();
+                $allStores = $cashbackPercentageStoreDesc->sortByDesc('cashback_integer');
+            } else if ($request->orderBy == 'name-asc') {
+                $allStores = $allStores->orderBy('name', 'asc');
+            } else if ($request->orderBy == 'name-desc') {
+                $allStores = $allStores->orderBy('name', 'desc');
+            } else if ($request->orderBy == 'id-desc') {
+                $allStores = $allStores->orderBy('id', 'desc');
             } else {
                 $orderByArr = explode('-', $request->orderBy);
-                $allStores = $allStores->orderBy($orderByArr[0], $orderByArr[1])->paginate($request->input('perPage'));
+                $allStores = $allStores->orderBy($orderByArr[0], $orderByArr[1]);
             }
         } elseif (isset($letter)) {
             if($letter != '0-9') {
-                $allStores = $allStores->where('name', 'like', $letter . '%')->orderBy('name', 'asc')->paginate($request->input('perPage'));
+                $allStores = $allStores->where('name', 'like', $letter . '%')->orderBy('name', 'asc');
             } else {
                 $paramLetter = '0-9';
-                $allStores = $allStores->where('name', 'REGEXP', "^[{$paramLetter}]")->orderBy('name', 'asc')->paginate($request->input('perPage'));;
+                $allStores = $allStores->where('name', 'REGEXP', "^[{$paramLetter}]")->orderBy('name', 'asc');;
             }
         } else {
-            $allStores = $allStores->orderBy('name', 'asc')->paginate($request->input('perPage'));
+            $allStores = $allStores->orderBy('name', 'asc');
         }
+
+        $allStores = $allStores->paginate($request->input('perPage'));
         $viewType = isset($request->viewType) ? $request->viewType : 'grid-view';
         return view('frontend.stores.stores-view', compact('allStores', 'letter', 'viewType'));
     }

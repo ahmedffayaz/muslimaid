@@ -50,7 +50,7 @@ class StoreController extends Controller
     {
         $route = 'index';
         $networks = Network::all();
-        $stores = Store::orderBy('id', 'DESC')->paginate(48);
+        $stores = Store::orderBy('id', 'desc')->withCount('cashbacks')->paginate(48);
         $slider = Slider::where('name', 'Home')->first();
         return view('admin-dashboard.stores.index', compact('stores', 'route', 'networks', 'slider'));
     }
@@ -477,34 +477,20 @@ class StoreController extends Controller
         try {
             DB::beginTransaction();
 
-            // Retrieve all input data from the request
-            $requestData = $request->all();
-
-            // make default 0 if other cashback is default
-            if (isset($request->default)) {
-                StoreCashback::where('store_id', $cashback->store_id)->where('default', 1)->withTrashed()->update(['default' => 0]);
-                $requestData['default'] = 1;
-            }
-
-            if (!isset($request->default) && $cashback->default == 1) {
-                $highestCashback = StoreCashback::where('store_id',$cashback->store_id)->where('deleted_at', null)->orderBy('sale_commission', 'desc')->first();
-                if(!empty($highestCashback)){
-                    $highestCashback->update(['default' => 1]);
-                }
-
-                $requestData['default'] = 0;
-            }
-
-            $cashback->update($requestData);
+            $isDefault = isset($request->default) ? true : false;
+            $data = $request->all();
 
             if ($request->hasFile('cashback_icon')) {
-                if (!empty($cashback->image) && Storage::exists('public/' . $cashback->image)) {
+                if (!empty($cashback->image) && Storage::exists('public/' . $cashback->image))
                     File::delete(public_path('storage/' . $cashback->image));
-                }
-                $cashbackIcon = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
-                $cashback->image = $cashbackIcon;
-                $cashback->update();
+
+                $data['image'] = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
             }
+
+            $data['default'] = $isDefault;
+
+            setStoreDefaultCashback($request->store_id, $isDefault);
+            $cashback->update($data);
 
             DB::commit();
             if ($request->ajax()) {
@@ -554,46 +540,27 @@ class StoreController extends Controller
 
         try {
             DB::beginTransaction();
-            $storeCashback = $cashback->where('id', $request->storeCashbackId)->first();
-            if (!empty($storeCashback->image) && Storage::exists('public/' . $storeCashback->image)) {
-                File::delete(public_path('storage/' . $storeCashback->image));
-            }
-            $storeCashback->delete();
-            if($storeCashback->default == 1){
-                StoreCashback::where('store_id', $cashback->store_id)->where('default', 1)->withTrashed()->update(['default' => 0]);
-                $highestCashback = StoreCashback::where('store_id',$cashback->store_id)->where('deleted_at', null)->orderBy('sale_commission', 'desc')->first();
-                if(!empty($highestCashback)){
-                    $highestCashback->update(['default' => 1]);
-                }
-            }
+
+            if (!empty($cashback->image) && Storage::exists('public/' . $cashback->image))
+                File::delete(public_path('storage/' . $cashback->image));
+
+            $cashback->delete();
+
+            $isDefault = $cashback->default ? true : false;
+
+            setStoreDefaultCashback($cashback->store_id, $isDefault, true);
 
             DB::commit();
-            if ($request->ajax()) {
-                return array(
-                    'message' => 'Cashback Deleted Successfully.',
-                    'deleted' => 'success'
-                );
-            }
-            flash()->success('Cashback Deleted successfully');
+
             if (!$request->ajax()) {
                 flash()->success('Cashback Deleted successfully.');
                 return redirect()->back();
-            } else {
-                return response()->json([
-                    'status' => JsonResponse::HTTP_OK,
-                    'message' => 'Cashback Deleted successfully.'
-                ], JsonResponse::HTTP_OK);
             }
-        } catch (ModelNotFoundException $e) {
-            DB::rollBack();
-            if (!$request->ajax()) {
-                flash()->error('Error while updating cashback.');
-                return redirect()->back();
-            }
+
             return response()->json([
-                'status' => JsonResponse::HTTP_NOT_FOUND,
-                'error' => 'Error while updating cashback.'
-            ], JsonResponse::HTTP_NOT_FOUND);
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Cashback Deleted successfully.'
+            ], JsonResponse::HTTP_OK);
         } catch (Exception $e) {
             DB::rollBack();
             if (!$request->ajax()) {
@@ -629,22 +596,30 @@ class StoreController extends Controller
 
         try {
             DB::beginTransaction();
-            $request->merge(['is_api' => 'no']);
-            $cashback = StoreCashback::create($request->all());
+            $isDefault = isset($request->default) ? true : false;
+            $data = $request->all();
+            $data['is_api'] = 'no';
 
-            if ($request->hasFile('cashback_icon')) {
-                $cashbackIcon = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
-                $cashback->image = $cashbackIcon;
-                $cashback->update();
+            if ($request->hasFile('cashback_icon'))
+                $data['image'] = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
+
+            if (isset($request->default))
+                $data['default'] = isset($request->default);
+            else
+                $data['default'] = false;
+
+            $cashbacksCount = StoreCashback::whereStoreId($request->store_id)->count();
+
+            if ($cashbacksCount == 0) {
+                $data['default'] = true;
+                StoreCashback::create($data);
             }
 
-            $existing_cashbacks = StoreCashback::where('store_id', $request->store_id)->get();
-            if (count($existing_cashbacks) == 1) {
-                $cashback->update(['default' => '1']);
-            } else {
-                StoreCashback::where('store_id', $request->store_id)->update(['default' => 0]);
-                StoreCashback::where('store_id', $request->store_id)->orderBy('sale_commission', 'desc')->first()->update(['default' => 1]);
+            if ($cashbacksCount != 0) {
+                setStoreDefaultCashback($request->store_id, $isDefault);
+                StoreCashback::create($data);
             }
+
             DB::commit();
             if (!$request->ajax()) {
                 flash()->success('Cashback created successfully.');

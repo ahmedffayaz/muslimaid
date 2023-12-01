@@ -21,6 +21,7 @@ use App\Jobs\SendEmailToUser;
 use App\Models\EmailTemplate;
 use App\Jobs\SendEmailToAdmin;
 use App\Models\Appeal;
+use App\Models\StoreCashback;
 use Symfony\Component\Yaml\Yaml;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
@@ -195,7 +196,7 @@ function getFeaturesStores($featureTag, $categorySlug = null)
 {
     $stores = Store::whereHas('tags', function ($query) use ($featureTag) {
         $query->where('title', $featureTag);
-    });
+    })->where('status', 'active')->withCount('cashbacks');
     if ($categorySlug != null) {
         $stores = $stores->whereHas('categories', function ($query) use ($categorySlug) {
             return $query->where('categories.slug', $categorySlug);
@@ -1281,4 +1282,43 @@ function getSlug($url){
         $slug = isset($matches[0]) ? $matches[0] : '/';
     }
     return $slug;
+}
+
+function setStoreDefaultCashback($storeId, $isDefault = true, $isDeleted = false)
+{
+    $cashbacks = StoreCashback::where('store_id', $storeId);
+    $clone = $cashbacks->clone();
+
+    if ($isDefault) {
+        foreach($cashbacks->withTrashed()->get() as $cashback)
+            $cashback->update(['default' => false]);
+
+        if ($isDeleted == true && $clone->count() > 0)
+            $clone->orderByDesc('sale_commission')->first()->update(['default' => true]);
+    } else {
+        if (
+            ($clone->withTrashed()->whereDefault(0)->count() > 0 || $clone->withTrashed()->whereDefault(1)->count() > 0) &&
+            $clone->count() != 0 && $clone->whereDefault(1)->count() == 0 && StoreCashback::where('store_id', $storeId)->whereDefault(1)->count() != 1
+            )
+        {
+            foreach($cashbacks->withTrashed()->get() as $cashback)
+                $cashback->update(['default' => false]);
+
+            // Make highest cashback default
+            $highestCashback = $cashbacks->orderByDesc('sale_commission')->first();
+            $highestCashback->update(['default' => true]);
+        } else if ($cashbacks->count() == 1) {
+            $cashbacks->first()->update(['default' => true]);
+        }
+    }
+}
+
+function singleFeaturedStore($category)
+{
+    $editorPickStore = $category->picks()->orderBy('id', 'desc')->first();
+
+    if ($editorPickStore)
+        return $editorPickStore->store()->where('status', 'active')->withCount('cashbacks')->first();
+
+    return null;
 }

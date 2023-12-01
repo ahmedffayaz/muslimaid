@@ -1,5 +1,9 @@
 @extends('layouts.admin-dashboard.app')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('admin-dashboard/telephone-dropdown/css/intlTelInput.css') }}">
+@endpush
+
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -61,8 +65,8 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="phone-no-1">Phone </label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="{{ old('phone') ?? null }}">
-                                                        <input type="hidden" id="phone-no-1" name="phone">
+                                                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="{{ old('phone') ?? null }}" placeholder="Phone number">
+                                                        <input type="hidden" id="phone_number" name="phone_number">
                                                     </div>
                                                 </div>
                                             </div>
@@ -101,11 +105,6 @@
     </div>
 @endsection
 @push('scripts')
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
-
     <script src="{{ asset('admin-dashboard/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
     <script src="{{ asset('admin-dashboard/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
 
@@ -195,7 +194,7 @@
                 if(input.value) {
                     if(iti.isValidNumber()){
                         phoneNumber = iti.getNumber();
-                        $("#phone-no-1").val(phoneNumber);
+                        $("#phone_number").val(phoneNumber);
                     }
                 }
             }

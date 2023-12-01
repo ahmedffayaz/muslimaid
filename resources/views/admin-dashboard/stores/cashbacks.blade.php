@@ -18,13 +18,18 @@
                     <span>
                         {{ $cashback->getNetworkCommission() }}
                     </span>
+                    @if ($cashback->default)
+                        <span class="badge badge-dim badge-pill badge-primary text-capitalize fw-bold">Default</span>
+                    @endif
                 </div>
                 <div class="nk-tb-col  pl-1">
                     <span>
                         {{ $cashback->getCashback() }}
                     </span>
                     @if ($cashback->network)
-                        <p class="fw-bold"> &#x2022; {{ optional($cashback->network)->name }}</p>
+                        <p>
+                            <span class="badge badge-dim badge-pill badge-primary text-capitalize">{{ optional($cashback->network)->name }}</span>
+                        </p>
                     @endif
                 </div>
 

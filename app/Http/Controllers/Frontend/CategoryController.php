@@ -91,8 +91,6 @@ class CategoryController extends Controller
         return view('frontend.categories.show', compact('category', 'stores', 'slug', 'cuisine','totalCount'));
     }
 
-
-
     public function categoriesView(Request $request, $slug)
     {
         $storesCount = NULL;
@@ -102,7 +100,7 @@ class CategoryController extends Controller
             $query->where('visibility', '!=', 'hidden')
                 ->orWhereNull('visibility');
         })->whereSlug($slug)->with('stores')->whereStatus('1')->first();
-        $allStores = $category->stores()->whereStatus('active');
+        $allStores = $category->stores()->whereStatus('active')->withCount('cashbacks');
         $categoryCuisine = $request->input('cuisine');
         if (!empty($categoryCuisine)) {
             $allStores =  $allStores->whereHas('categories', function ($query) use ($categoryCuisine) {
@@ -123,8 +121,8 @@ class CategoryController extends Controller
                 $allStores = $allStores->with('clicks')->paginate($request->input('perPage'));
                 $allStores = sortByDistance($data, $allStores);
             } else if ($request->orderBy == 'cashback-amount') {
-                $cashbackAmountStores = $allStores->whereHas('cashbacks', function ($query) {
-                    $query->where('type', 'fixed')->whereHas('currencyData', function ($query) {
+                $cashbackAmountStores = $allStores->whereHas('cashback', function ($cashback) {
+                    $cashback->where('type', 'fixed')->whereHas('currencyData', function ($query) {
                         $query->where('symbol', '£');
                     });
                 })->get()->filter(function ($store) {
@@ -148,6 +146,32 @@ class CategoryController extends Controller
                     return $store->cashbackPercentage;
                 })->paginate($request->input('perPage'));
                 $allStores = sortByDistance($data, $allStores);
+            } else if ($request->orderBy == 'cashback-amount-asc') {
+                $cashbackAmountStoresAsc = $allStores->whereHas('cashback', function ($cashback) {
+                    $cashback->where('type', 'fixed');
+                })->get();
+                $allStores = $cashbackAmountStoresAsc->sortBy('cashback_integer')->paginate($request->input('perPage'));
+            } else if ($request->orderBy == 'cashback-amount-desc') {
+                $cashbackAmountStoresDesc = $allStores->whereHas('cashback', function ($cashback) {
+                    $cashback->where('type', 'fixed');
+                })->get();
+                $allStores = $cashbackAmountStoresDesc->sortByDesc('cashback_integer')->paginate($request->input('perPage'));
+            } else if ($request->orderBy == 'cashback-percentage-asc') {
+                $cashbackPercentageStoresAsc = $allStores->whereHas('cashback', function ($cashback) {
+                    $cashback->where('type', 'percentage');
+                })->get();
+                $allStores = $cashbackPercentageStoresAsc->sortBy('cashback_integer')->paginate($request->input('perPage'));
+            } else if ($request->orderBy == 'cashback-percentage-desc') {
+                $cashbackPercentageStoresDesc = $allStores->whereHas('cashback', function ($cashback) {
+                    $cashback->where('type', 'percentage');
+                })->get();
+                $allStores = $cashbackPercentageStoresDesc->sortByDesc('cashback_integer')->paginate($request->input('perPage'));
+            } else if ($request->orderBy == 'name-asc') {
+                $allStores = $allStores->orderBy('name', 'asc')->paginate($request->input('perPage'));
+            } else if ($request->orderBy == 'name-desc') {
+                $allStores = $allStores->orderBy('name', 'desc')->paginate($request->input('perPage'));
+            } else if ($request->orderBy == 'id-desc') {
+                $allStores = $allStores->orderBy('id', 'desc')->paginate($request->input('perPage'));
             } else {
                 $orderByArr = explode("-", $request->orderBy);
                 $allStores = $allStores->orderBy($orderByArr[0], $orderByArr[1])->paginate($request->input('perPage'));

@@ -1080,7 +1080,6 @@
                         checkCashbackType();
                         calcCashback();
                         NioApp.BS.tooltip('[data-toggle="tooltip"]');
-
                     }
                 });
             });
@@ -1100,7 +1099,7 @@
                     text: 'Once deleted, this cashback cannot be recovered!',
                     icon: 'warning',
                     buttons: {
-                        cancel: true,
+                        cancel: true, // Set cancel to true to display the cancel button
                         confirm: {
                             text: 'Delete',
                             className: 'swal-button--danger',
@@ -1108,7 +1107,7 @@
                     },
                     dangerMode: true,
                 }).then((willDelete) => {
-                    if (willDelete) {
+                    if (willDelete.isConfirmed) {
                         $.ajax({
                             url: url,
                             type: 'POST',
@@ -1191,9 +1190,9 @@
                         storeId: storeId
                     },
                     success: function(data) {
-                        $('#cashback-modal').modal('show');
-                        $('.title').text('Add Cashback');
-                        $('#cashback').html(data);
+                        $('.cashback-modal').modal('show');
+                        $('.title').text('Edit Cashback');
+                        $('#edit-cashback').html(data);
                         $('.select-2').each(function() {
                             initializeSelect2($(this));
                         });
