@@ -113,7 +113,7 @@ class RevGlueImporter implements ShouldQueue
                         'slug' => Str::slug($store['store_title']),
                         'tracking_url' => rtrim($store['deeplink'], '/'),
                         'store_url' => $store['website_url'],
-                        'status' => $store['status'],
+                        'status' => 'pending review',
                         'status_description' => null,
                         'network_status' => null,
                     ];
@@ -166,6 +166,14 @@ class RevGlueImporter implements ShouldQueue
                                     'category_id' => $newStoreCategoryId,
                                 ];
                             }
+                        }
+                    }
+                } else {
+                    foreach ($dbStores as $dbStore) {
+                        if ($store['status'] != 'active') {
+                            $dbStore->where('advertiser_id', $store['rg_store_id'])
+                            ->where('network_id', $this->network->id)
+                            ->update(['status' => 'closed']);
                         }
                     }
                 }

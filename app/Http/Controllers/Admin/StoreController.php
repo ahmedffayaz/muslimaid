@@ -50,7 +50,7 @@ class StoreController extends Controller
     {
         $route = 'index';
         $networks = Network::all();
-        $stores = Store::orderBy('id', 'DESC')->paginate(48);
+        $stores = Store::orderBy('id', 'desc')->withCount('cashbacks')->paginate(48);
         $slider = Slider::where('name', 'Home')->first();
         return view('admin-dashboard.stores.index', compact('stores', 'route', 'networks', 'slider'));
     }

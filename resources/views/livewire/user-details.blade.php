@@ -145,7 +145,7 @@
                                                             <label class="form-label" for="phone-no-1">Phone</label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="phoneNumber" value="{{ $user->phone }}" name="phoneNumber">
-                                                                <input type="hidden" id="phone-no-1" name="phone">
+                                                                <input type="hidden" id="phone_number" name="phone_number">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -400,11 +400,6 @@
 </div>
 
 @push('scripts')
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
-
     <script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
     <script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
 
@@ -723,10 +718,6 @@
             });
         }
 
-        jQuery.validator.addMethod("regex", function(value, element) {
-            return this.optional(element) || /^[A-Za-z ]+$/i.test(value);
-        }, "Only alphabetic name is allow");
-
         jQuery.validator.addMethod("validPhone", function(value, element) {
             var regex = /^\+\d{12}$/;
             if(regex.test(value) == false){
@@ -794,7 +785,7 @@
                 if(input.value) {
                     if(iti.isValidNumber()){
                         phoneNumber = iti.getNumber();
-                        $("#phone-no-1").val(phoneNumber);
+                        $("#phone_number").val(phoneNumber);
                     }
                 }
             }

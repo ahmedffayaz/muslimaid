@@ -54,7 +54,7 @@ class HomeController extends Controller
                 ->orWhereHas('storeRuleData', function ($query) use ($request) {
                     $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $request->input('search') . '%');
                 });
-        })->where('status', 'active')->limit(20)->get();
+        })->withCount('cashbacks')->where('status', 'active')->limit(20)->get();
 
         return view('frontend.layouts.includes.search-suggestions', compact('stores'));
     }
