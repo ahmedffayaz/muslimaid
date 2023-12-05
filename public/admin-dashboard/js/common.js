@@ -41,7 +41,7 @@ function readBannerURL(input) {
 function initializeTinyMCEEditor(containerId){
     tinymce.init({
         selector: 'div#'+containerId, // Replace this CSS selector to match the placeholder element for TinyMCE
-        plugins: 'code table lists link image textcolor',
+        plugins: 'code table lists link image',
         toolbar: 'blocks | bold italic underline | alignleft aligncenter alignright alignjustify | link unlink | image | bullist numlist | code | table | forecolor backcolor',
         cleanup: true,
         promotion: false,
@@ -150,7 +150,7 @@ function updateReview(key){
                 })(NioApp, jQuery);
                 if(key == 1){
                     fetchData(0);
-                } 
+                }
                 else if (key == 2){
                     $('#table-data').load(window.location.href + ' #table-data');
                 }

@@ -23,13 +23,7 @@
                                 <div class="form-group stores">
                                     <label class="form-label" for="default-06"></label>
                                     <div class="form-control-wrap ">
-                                        <div class="">
-                                            <select class="form-control form-select  select-2" data-search="on" name="open_store" id="store_select" required>
-                                                @foreach ($stores as $st)
-                                                    <option @if ($st->id == $store->id) selected @endif value="{{ $st->slug }}">{{ $st->id }} -
-                                                        {{ $st->name }}</option>
-                                                @endforeach
-                                            </select>
+                                        <div class="all-stores">
                                         </div>
                                     </div>
                                 </div>
@@ -598,7 +592,34 @@
 </script>
 
 @push('scripts')
+
     <script>
+        // Function to initialize Select2
+        function fetchAllStores() {
+            $.ajax({
+                url: '{{ route(getAdminPrefix() . ".ajax.stores") }}',
+                type: 'get',
+                success: function (data) {
+                    var select2Stores = '';
+                    var select2Store = '';
+                    var targetStore = "{{ $store->slug }}";
+                    data.stores.forEach(store => {
+                        // Check if the current store's slug matches the target slug
+                        var isSelected = (store.slug === targetStore) ? 'selected' : '';
+                        if (store.slug === targetStore) {console.log(store.slug)} else { console.log('store '); console.log(store.slug); }
+                        select2Store += `<option value="`+store.slug+`" ${isSelected}>`+store.id+ ' - ' +store.name+`</option>`;
+                    });
+
+                    select2Stores = `<select class="form-control form-select select-2" data-search="on" name="open_store" id="store_select" required>`+select2Store+`</select>`;
+
+                    $('.all-stores').append(select2Stores);
+                    $('.select-2').each(function() {
+                        initializeSelect2($(this));
+                    });
+                }
+            });
+        }
+
         function fetchVouchers() {
             pageurl = "{{ route(getAdminPrefix() . '.stores.vouchers') }}"
             var _token = $("input[name=_token]").val();
@@ -705,6 +726,7 @@
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
             window.livewire.on('storeChange', () => {
+                fetchAllStores();
                 fetchVouchers();
                 fetchCashbacks();
                 fetchReviews();
@@ -719,8 +741,10 @@
     </script>
     <script>
         $(document).ready(function() {
-            $('#store_select').on('change', function(e) {
-                livewire.emit('changeEvent', e.target.value)
+            fetchAllStores();
+            // Use event delegation for dynamically created elements
+            $(document).on('change', '#store_select', function(e) {
+                livewire.emit('changeEvent', e.target.value);
             });
         });
     </script>

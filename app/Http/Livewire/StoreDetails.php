@@ -11,7 +11,6 @@ use App\Models\Tag;
 class StoreDetails extends Component
 {
     public $store;
-    public $stores;
     public $networks;
     public $categories;
     public $tags;
@@ -26,7 +25,6 @@ class StoreDetails extends Component
     public function mount()
     {
         $this->store = Store::where('slug',$this->slug)->first();
-        $this->stores = Store::select('id', 'name', 'slug', 'created_at')->latest()->get();
         $this->networks = Network::all();
         $this->categories = Category::where('parent_id',0)->whereStatus(1)->with('childs', function ($query) {
             $query->whereStatus(1);

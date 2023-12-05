@@ -1071,4 +1071,10 @@ class StoreController extends Controller
         $store = Store::findOrFail($request->store_id);
         return view('admin-dashboard.stores.add-seo-rule-modal', compact('store'))->render();
     }
+
+    public function ajaxStores()
+    {
+        $stores = Store::select('id', 'name', 'slug', 'created_at')->latest()->get();
+        return response()->json(['stores' => $stores]);
+    }
 }
