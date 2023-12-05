@@ -41,10 +41,14 @@ class SliderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Slider $slider)
+    public function edit($id)
     {
-        $stores = Store::latest()->get();
-        return view('admin-dashboard.sliders.edit',compact('slider','stores'));
+        $slider = Slider::with(['slides' => function ($slide) {
+            $slide->with(['store' => function ($store) {
+                $store->select('id', 'name', 'slug', 'created_at')->withCount('cashbacks')->get();
+            }]);
+        }])->findOrFail($id);
+        return view('admin-dashboard.sliders.edit',compact('slider'));
     }
 
     public function sortSlides(Request $request)

@@ -76,6 +76,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('stores/add_voucher_form', [App\Http\Controllers\Admin\StoreController::class, 'addVoucherModal'])->name('stores.add.voucher.form');
         Route::post('/stores/add_address_form', [App\Http\Controllers\Admin\StoreController::class, 'addAddressModal'])->name('stores.add.address.form');
         Route::post('/stores/add_seo_rule_form', [App\Http\Controllers\Admin\StoreController::class, 'addSEORuleModal'])->name('stores.add.seo.rule.form');
+        Route::get('/ajax/get-stores', [App\Http\Controllers\Admin\StoreController::class, 'ajaxStores'])->name('ajax.stores');
         Route::resource('stores', StoreController::class);
         Route::resource('storecashbacks', StoreCashbackController::class)->only('index');
 

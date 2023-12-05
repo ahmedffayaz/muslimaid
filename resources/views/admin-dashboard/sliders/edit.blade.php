@@ -62,14 +62,7 @@
                                                     <p>{{ $slide->description }}</p>
                                                     @if ($slide->store)
                                                         @if ($slide->store->cashback)
-                                                            <p>
-                                                                @if ($slide->store->cashback->type == 'fixed')
-                                                                    {{ $slide->store->cashback->currency }}
-                                                                @endif
-                                                                {{ $slide->store->cashback->sale_commission }}@if ($slide->store->cashback->type == 'percentage')
-                                                                    %
-                                                                @endif Cashback
-                                                            </p>
+                                                            <p>{{ $slide->store->default_cashback }}</p>
                                                         @endif
                                                     @endif
                                                 </div>
