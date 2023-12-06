@@ -39,7 +39,7 @@ class StoreDetailResource extends JsonResource
             'longitude' => $this->storeAddress()->pluck('longitude')->first(),
             "date_updated" => date('d-M-Y', strtotime($this->updated_at)),
             "date_created" => date('d-M-Y', strtotime($this->created_at)),
-            'cashback' => $this->getCashback(),
+            'cashback' => $this->default_cashback,
             'cashbacks' => $this->cashback ? $this->when($this->cashbacks, CashbackResource::collection($this->cashbacks)) : [],
             'vouchers' => $this->vouchers ? $this->when($this->vouchers, VoucherResource::collection($this->vouchers)) : [],
             'is_fav' => checkFavorite($this->id, $headerToken) ? true : false,

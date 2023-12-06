@@ -24,7 +24,7 @@ class HomeStoreResource extends JsonResource
             'big_icon' => getImageUrl($this->logo->first()),
             'icon_large' => getImageUrl($this->images->where('title', 'large logo')->first()),
             'status' => $this->status,
-            'cashback' => $this->getCashback(),
+            'cashback' => $this->default_cashback,
             'is_fav' => checkFavorite($this->id, $headerToken) ? true : false,
         ];
     }

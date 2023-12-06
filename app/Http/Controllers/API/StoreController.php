@@ -24,7 +24,7 @@ class StoreController extends Controller
         try {
             $page = Page::whereSlug('stores')->whereType('system')->whereStatus('active')->pluck('banner_image')->firstOrFail();
 
-            $stores = Store::with(['images', 'logo', 'storeAddress'])
+            $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->with(['images', 'logo', 'storeAddress'])->withCount('cashbacks')
                 ->when($request->has('letter'), function ($query) use ($request) {
                     if($request->letter != '0-9'){
                     $query->where('name', 'like', $request->input('letter') . '%');
@@ -36,40 +36,37 @@ class StoreController extends Controller
                     $query->latest();
                 })->when($request->orderBy == 'popularity', function ($query) {
                     $query->withCount('clicks')->orderByDesc('clicks_count');
-                })->when($request->orderBy == 'cashback-amount' || $request->orderBy == 'cashback-percentage', function ($query) use ($request) {
+                })->when($request->orderBy == 'cashback-amount' || $request->orderBy == 'cashback-percentage' || $request->orderBy == 'cashback-amount-asc' || $request->orderBy == 'cashback-amount-desc' || $request->orderBy == 'cashback-percentage-asc' || $request->orderBy == 'cashback-percentage-desc', function ($query) use ($request) {
                     $query->whereHas('cashback', function ($query) use ($request) {
                         $query->whereNotNull('sale_commission');
-                        $query->when($request->orderBy == 'cashback-amount', function ($query) {
+                        $query->when($request->orderBy == 'cashback-amount' || $request->orderBy == 'cashback-amount-asc' || $request->orderBy == 'cashback-amount-desc', function ($query) {
                             $query->whereType('fixed');
-                        })->when($request->orderBy == 'cashback-percentage', function ($query) {
+                        })->when($request->orderBy == 'cashback-percentage' || $request->orderBy == 'cashback-percentage-asc' || $request->orderBy == 'cashback-percentage-desc', function ($query) {
                             $query->whereType('percentage');
                         });
                     })->with(['cashback' => function ($query) use ($request) {
                         $query->whereNotNull('sale_commission')->select(['id', 'store_id', 'sale_commission', 'type']);
-                        $query->when($request->orderBy == 'cashback-amount', function ($query) {
+                        $query->when($request->orderBy == 'cashback-amount' || $request->orderBy == 'cashback-amount-asc' || $request->orderBy == 'cashback-amount-desc', function ($query) {
                             $query->whereType('fixed');
-                        })->when($request->orderBy == 'cashback-percentage', function ($query) {
+                        })->when($request->orderBy == 'cashback-percentage' || $request->orderBy == 'cashback-percentage-asc' || $request->orderBy == 'cashback-percentage-desc', function ($query) {
                             $query->whereType('percentage');
                         });
                     }]);
-                })
-                ->when($request->tag, function ($query) use ($request) {
+                })->when($request->tag, function ($query) use ($request) {
                     $query->whereHas('tags', function ($query) use ($request) {
                         $query->where('title', $request->input('tag'));
                     });
                 })->where('status', 'active');
 
-            if ($request->orderBy == 'cashback-amount' || $request->orderBy == 'cashback-percentage') {
-                $setting = SiteSetting();
-                $stores = $stores->get()
-                    ->map(function ($store) use ($setting) {
-                        $percentage = $store->custom_cashback_percentage;
-                        if (!$percentage) {
-                            $percentage = $setting['cashback_percentage'];
-                        }
-                        $store['get_cashback'] = ($percentage / 100) * $store->cashback->sale_commission;
-                        return $store;
-                    })->sortByDesc('get_cashback')->values();
+            if ($request->orderBy == 'cashback-amount' || $request->orderBy == 'cashback-amount-desc' || $request->orderBy == 'cashback-percentage' || $request->orderBy == 'cashback-percentage-desc' || $request->orderBy == 'cashback-amount-asc' || $request->orderBy == 'cashback-percentage-asc') {
+                $stores = $stores->get();
+                if ($request->orderBy == 'cashback-amount' || $request->orderBy == 'cashback-amount-desc' || $request->orderBy == 'cashback-percentage' || $request->orderBy == 'cashback-percentage-desc') {
+                    $stores = $stores->sortByDesc('cashback_integer')->values();
+                }
+
+                if ($request->orderBy == 'cashback-amount-asc' || $request->orderBy == 'cashback-percentage-asc') {
+                    $stores = $stores->sortBy('cashback_integer')->values();
+                }
             } else {
                 $stores = $stores->orderBy('name', 'asc');
             }
@@ -115,10 +112,9 @@ class StoreController extends Controller
             ];
             return response()->json($data, 404);
         } catch (Exception $e) {
-
             $data = [
                 'status' => 500,
-                'message' => $e->getMessage() . ' Something went wrong, try again.',
+                'message' => 'Something went wrong, try again.',
                 'data' => []
             ];
             return response()->json($data, 500);
@@ -132,7 +128,7 @@ class StoreController extends Controller
             $keywords = $request->keywords;
             if (!empty($keywords[0])) {
                 $keywordArray = explode(', ', $keywords);
-                $stores = Store::when($request->keywords, function ($query) use ($keywordArray) {
+                $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->when($request->keywords, function ($query) use ($keywordArray) {
                     $query->whereHas('storeRuleData', function ($query) use ($keywordArray) {
                         $query->where('key', 'meta:keywords')->where(function ($query) use ($keywordArray) {
                             foreach ($keywordArray as $keyword) {
@@ -140,7 +136,7 @@ class StoreController extends Controller
                             }
                         });
                     });
-                })->where('status', 'active')->paginate(20)->appends(request()->input());
+                })->where('status', 'active')->withCount('cashbacks')->paginate(20)->appends(request()->input());
                 $data = [
                     'status' => 200,
                     'message' => 'Success',
@@ -180,7 +176,7 @@ class StoreController extends Controller
         try {
             if ($request->links) {
                 $links = $request->links;
-                $stores = Store::where('status', 'active')->where(function ($query) use ($links){
+                $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->where('status', 'active')->withCount('cashbacks')->where(function ($query) use ($links){
                     foreach($links as $link){
                         $query->orWhere('competitors', 'LIKE', '%'.$link.'%');
                     }
@@ -221,10 +217,13 @@ class StoreController extends Controller
     public function favoriteStores()
     {
         try {
-            $cashblackStoreIds = Store::whereStatus('active')->whereHas('categories', function ($query) {
+            $cashblackStoreIds = Store::select('id', 'name', 'slug', 'status', 'created_at')
+            ->whereStatus('active')
+            ->whereHas('categories', function ($query) {
                 $query->where('slug', 'cashblack-to-your-door');
             })->pluck('id');
             $favoriteStores = auth()->user()->favoriteStores()->where('status', 'active')
+                ->withCount('cashbacks')
                 ->whereNotIn('stores.id', $cashblackStoreIds)
                 ->paginate(20)->appends(request()->input());
 
