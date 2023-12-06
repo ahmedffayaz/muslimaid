@@ -38,7 +38,7 @@ class HomeController extends Controller
             })->where(function ($query) {
                 $query->where('status', 1)->where('visibility', '!=', 'hidden')->orWhere('visibility', NULL);
             })->with('stores', function ($query) {
-                $query->whereStatus('active')->select('stores.id', 'name', 'slug', 'status')->inRandomOrder();
+                $query->whereStatus('active')->select('stores.id', 'name', 'slug', 'status')->withCount('cashbacks')->inRandomOrder();
             })->get();
 
             $featuredCategories->map(function ($category) {

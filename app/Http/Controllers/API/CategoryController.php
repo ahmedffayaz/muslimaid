@@ -95,7 +95,8 @@ class CategoryController extends Controller
     public function show(Request $request, $slug)
     {
         try {
-            $stores = Store::when($request->has('letter'), function ($query) use ($request) {
+            $stores = Store::select('id', 'name', 'slug', 'status', 'latitude', 'longitude', 'created_at')->withCount('cashbacks')
+            ->when($request->has('letter'), function ($query) use ($request) {
                 $query->where('name', 'like', $request->input('letter') . '%');
             })->whereHas('categories', function ($query) use ($slug) {
                 $query->whereSlug($slug)->where('parent_id', '!=', 0)->whereStatus(1);
@@ -149,7 +150,12 @@ class CategoryController extends Controller
     {
         try {
             $slug = isset($request->child) ? $request->child : $slug;
-            $category = Category::where('slug', $slug)->whereStatus(1)->first();
+            $category = Category::where('slug', $slug)
+                ->with(['stores' => function ($query) {
+                    $query->select('stores.id', 'stores.name', 'stores.slug', 'stores.latitude', 'stores.longitude', 'stores.status', 'stores.created_at')
+                        ->where('status', 'active')->withCount('cashbacks');
+                }])->whereStatus(1)->first();
+
             if (!$category) {
                 $data = [
                     'status' => 200,
@@ -158,6 +164,7 @@ class CategoryController extends Controller
                 ];
                 return response()->json($data, 200);
             }
+
             $categoryCuisine = $request->input('cuisine');
             $categoryStores = $category->stores()->when($request->has('letter'), function ($query) use ($request) {
                     $query->where('name', 'like', $request->input('letter') . '%');
@@ -165,19 +172,15 @@ class CategoryController extends Controller
                     $query->latest();
                 })->when($request->orderBy == 'popularity', function ($query) use ($request) {
                     $query->withCount('clicks')->orderByDesc('clicks_count');
-                })->when($request->orderBy == 'cashback-amount', function ($query) use ($request) {
-                    $query->whereHas('cashbacks', function ($query) {
-                        $query->whereType('fixed');
-                    })->get()->filter(function ($query) {
-                        $cashback = $query->getCashback();
-                        return (strpos($cashback, '£') !== false);
-                    });
-                })->when($request->orderBy == 'cashback-percentage', function ($query) {
-                    $query->whereHas('cashbacks', function ($query) {
-                        $query->where('type', 'percentage');
-                    })->get()->filter(function ($query) {
-                        $cashback = $query->getCashback();
-                        return (strpos($cashback, '%') !== false);
+                })->when($request->orderBy == 'cashback-amount' || $request->orderBy == 'cashback-amount-asc' || $request->orderBy == 'cashback-amount-desc' || $request->orderBy == 'cashback-percentage' || $request->orderBy == 'cashback-percentage-asc' || $request->orderBy == 'cashback-percentage-desc', function ($query) use ($request) {
+                    $query->whereHas('cashback', function ($query) use ($request) {
+                        if ($request->orderBy == 'cashback-percentage' || $request->orderBy == 'cashback-percentage-asc' || $request->orderBy == 'cashback-percentage-desc') {
+                            $query->where('type', 'percentage');
+                        }
+
+                        if ($request->orderBy == 'cashback-amount' || $request->orderBy == 'cashback-amount-asc' || $request->orderBy == 'cashback-amount-desc') {
+                            $query->where('type', 'fixed');
+                        }
                     });
                 })
                 ->whereHas('categories', function ($query) use ($slug) {
@@ -188,12 +191,12 @@ class CategoryController extends Controller
                     $query->whereHas('categories', function ($query) use ($categoryCuisine) {
                         $query->whereIn('name', $categoryCuisine);
                     });
-                })->orderBy('name', 'asc')->paginate(20)->appends(request()->input());
-
+                })->where('status', 'active')->orderBy('name', 'asc')->paginate(20)->appends(request()->input());
 
             $cuisine = Category::where('id', '158')->with(['childs' => function ($query) {
                 $query->orderBy('name', 'asc')->where('status', 1)->withCount('stores');
-            }])->withCount('stores')->where('parent_id', 0)->where('stauts', 1)->orderBy('name', 'asc')->get();
+            }])->withCount('stores')->where('parent_id', 0)->where('status', 1)->orderBy('name', 'asc')->get();
+
             $data = [
                 'status' => 200,
                 'message' => 'Category details retrieved successfully',
@@ -220,11 +223,10 @@ class CategoryController extends Controller
         } catch (Exception $e) {
             $data = [
                 'status' => 500,
-                'message' =>  'Something went wrong, try again',
+                'message' => 'Something went wrong, try again',
                 'data' => []
             ];
             return response()->json($data, 500);
         }
     }
-
 }
