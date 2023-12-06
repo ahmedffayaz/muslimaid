@@ -1286,29 +1286,26 @@ function getSlug($url){
 
 function setStoreDefaultCashback($storeId, $isDefault = true, $isDeleted = false)
 {
-    $cashbacks = StoreCashback::where('store_id', $storeId);
-    $clone = $cashbacks->clone();
-
     if ($isDefault) {
-        foreach($cashbacks->withTrashed()->get() as $cashback)
-            $cashback->update(['default' => false]);
+        foreach(StoreCashback::where('store_id', $storeId)->withTrashed()->get() as $cashback)
+            StoreCashback::where('store_id', $storeId)->update(['default' => false]);
 
-        if ($isDeleted == true && $clone->count() > 0)
-            $clone->orderByDesc('sale_commission')->first()->update(['default' => true]);
+        if ($isDeleted == true && StoreCashback::where('store_id', $storeId)->count() > 0)
+            StoreCashback::where('store_id', $storeId)->orderByDesc('sale_commission')->first()->update(['default' => true]);
     } else {
         if (
-            ($clone->withTrashed()->whereDefault(0)->count() > 0 || $clone->withTrashed()->whereDefault(1)->count() > 0) &&
-            $clone->count() != 0 && $clone->whereDefault(1)->count() == 0 && StoreCashback::where('store_id', $storeId)->whereDefault(1)->count() != 1
+            (StoreCashback::where('store_id', $storeId)->withTrashed()->whereDefault(0)->count() > 0 || StoreCashback::where('store_id', $storeId)->withTrashed()->whereDefault(1)->count() > 0) &&
+            StoreCashback::where('store_id', $storeId)->count() > 0 && StoreCashback::where('store_id', $storeId)->whereDefault(1)->count() == 0
             )
         {
-            foreach($cashbacks->withTrashed()->get() as $cashback)
-                $cashback->update(['default' => false]);
+            foreach(StoreCashback::where('store_id', $storeId)->withTrashed()->get() as $cashback)
+                StoreCashback::where('store_id', $storeId)->update(['default' => false]);
 
             // Make highest cashback default
-            $highestCashback = $cashbacks->orderByDesc('sale_commission')->first();
+            $highestCashback = StoreCashback::where('store_id', $storeId)->orderByDesc('sale_commission')->first();
             $highestCashback->update(['default' => true]);
-        } else if ($cashbacks->count() == 1) {
-            $cashbacks->first()->update(['default' => true]);
+        } else if (StoreCashback::where('store_id', $storeId)->count() == 1) {
+            StoreCashback::where('store_id', $storeId)->first()->update(['default' => true]);
         }
     }
 }

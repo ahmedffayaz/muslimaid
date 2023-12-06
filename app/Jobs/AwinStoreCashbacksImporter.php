@@ -113,6 +113,7 @@ class AwinStoreCashbacksImporter implements ShouldQueue
                         'detail' => $commissionGroup['groupName'] . ' default',
                         'network_detail' => $commissionGroup['groupName'] . ' default',
                     ]);
+                    setStoreDefaultCashback($storeCashback->store_id, false);
                 }
             }
         }

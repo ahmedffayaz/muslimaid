@@ -489,8 +489,13 @@ class StoreController extends Controller
 
             $data['default'] = $isDefault;
 
-            setStoreDefaultCashback($request->store_id, $isDefault);
+            if ($isDefault)
+                setStoreDefaultCashback($request->store_id, $isDefault);
+
             $cashback->update($data);
+
+            if (!$isDefault)
+                setStoreDefaultCashback($request->store_id, $isDefault);
 
             DB::commit();
             if ($request->ajax()) {
@@ -608,16 +613,14 @@ class StoreController extends Controller
             else
                 $data['default'] = false;
 
-            $cashbacksCount = StoreCashback::whereStoreId($request->store_id)->count();
-
-            if ($cashbacksCount == 0) {
-                $data['default'] = true;
+            if ($isDefault) {
+                setStoreDefaultCashback($request->store_id, $isDefault);
                 StoreCashback::create($data);
             }
 
-            if ($cashbacksCount != 0) {
-                setStoreDefaultCashback($request->store_id, $isDefault);
+            if (!$isDefault) {
                 StoreCashback::create($data);
+                setStoreDefaultCashback($request->store_id, $isDefault);
             }
 
             DB::commit();
