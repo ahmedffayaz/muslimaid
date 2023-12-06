@@ -138,25 +138,6 @@ class Store extends Model
         return $this->hasMany(StoreAddress::class, 'store_id', 'id');
     }
 
-    public function getCashback($setting=null)
-    {
-        $currency = ($this->type == 'fixed' && isset($this->cashback->currencyData)) ? $this->cashback->currencyData->symbol : '';
-        if ($this->custom_cashback_percentage  && !empty($this->cashback->sale_commission)) {
-            if (!is_numeric($this->custom_cashback_percentage)) {
-                $this->custom_cashback_percentage = substr($this->custom_cashback_percentage, 0, -1);
-            }
-            return $this->cashback->type == 'fixed'
-                ? currencyOrPercentage(($this->custom_cashback_percentage / 100) * $this->cashback->sale_commission, 'fixed', $currency) . ' Cashback'
-                : currencyOrPercentage(($this->custom_cashback_percentage / 100) * $this->cashback->sale_commission, 'percentage') . ' Cashback';
-        } elseif (!empty($this->cashback->sale_commission)) {
-            $setting = $setting ? $setting : SiteSetting();
-            return $this->cashback->type == 'fixed'
-                ? currencyOrPercentage(($setting['cashback_percentage'] / 100) * $this->cashback->sale_commission, 'fixed', $currency) . ' Cashback'
-                : currencyOrPercentage(($setting['cashback_percentage'] / 100) * $this->cashback->sale_commission, 'percentage') . ' Cashback';
-        }
-        return null;
-    }
-
     public function getCashbackIntegerAttribute()
     {
         if ($this->custom_cashback_percentage && !empty($this->cashback->sale_commission)) {

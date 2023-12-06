@@ -17,24 +17,25 @@ class StoreController extends Controller
         return view('frontend.pages.single-page', compact('page', 'letter'));
     }
 
-
     public function show($slug)
     {
-        $store = Store::where('slug', $slug)->whereStatus('active')->withCount('cashbacks')->first();
-        if (empty($store)) abort(404);
+        $store = Store::where('slug', $slug)->whereStatus('active')->with(['cashbacks'])->withCount('cashbacks')->firstOrFail();
 
         $userRefId = !empty(auth()->user()) ? auth()->user() : User::whereId(1)->first();
 
-        $count = $store->cashbacks ? count($store->cashbacks) : 0;
+        $count = $store->cashbacks_count;
         return view('frontend.stores.show', compact('store', 'count', 'userRefId'));
     }
+
     public function storesView(Request $request)
     {
         $allStores = Store::select('id', 'name', 'slug', 'status', 'latitude', 'longitude', 'created_at', 'deleted_at')->where('status', 'active')->with('cashback')->withCount('cashbacks');
         if (!empty($request->storesType)) {
             $allStores = $allStores->has('vouchers');
         }
+
         $letter = $request->input('letter');
+
         if (isset($request->orderBy)) {
             if ($request->orderBy == 'popularity') {
                 $allStores = $allStores->withCount('clicks')->orderBy('clicks_count', 'desc');

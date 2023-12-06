@@ -23,10 +23,6 @@ class CategoryController extends Controller
         })->with(['childs' => function ($query) {
             $query->where('status', '1')->orderBy('sort', 'asc');
         }])->where('status', '1')->where('parent_id', '0')->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();
-        $subCategories = Category::where(function ($query) {
-            $query->where('visibility', '!=', 'hidden')
-                ->orWhereNull('visibility');
-        })->with('stores')->where('parent_id', '0')->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();
 
         return view('frontend.pages.single-page', compact('page', 'categories'));
     }
@@ -45,7 +41,7 @@ class CategoryController extends Controller
         if (empty($category)) abort(404);
 
         if ($request->ajax()) {
-            $stores = Store::when($request->has('id'), function ($query) use ($request) {
+            $stores = Store::select('id', 'name', 'slug', 'status', 'latitude', 'longitude', 'created_at')->when($request->has('id'), function ($query) use ($request) {
                 $query->whereHas('categories', function ($query) use ($request) {
                     $query->whereIn('category_id', $request->id);
                 });
@@ -99,7 +95,9 @@ class CategoryController extends Controller
         $category = Category::where(function ($query) {
             $query->where('visibility', '!=', 'hidden')
                 ->orWhereNull('visibility');
-        })->whereSlug($slug)->with('stores')->whereStatus('1')->first();
+        })->whereSlug($slug)->with(['stores' => function ($store) {
+            $store->select('stores.id', 'stores.name', 'stores.slug', 'stores.latitude', 'stores.longitude', 'stores.status', 'stores.created_at');
+        }])->whereStatus('1')->first();
         $allStores = $category->stores()->whereStatus('active')->withCount('cashbacks');
         $categoryCuisine = $request->input('cuisine');
         if (!empty($categoryCuisine)) {
