@@ -118,6 +118,7 @@ class WebgainsImporter implements ShouldQueue
                                                 'detail' => $cb->detail . ', ' . $event['name'] . ' default',
                                                 'network_detail' => $cb->network_detail . ', ' . $event['name'] . ' default',
                                             ]);
+                                            setStoreDefaultCashback($cb->store_id, false);
                                         } else {
                                             $cashback = StoreCashback::create([
                                                 'type' => $c_type,
@@ -201,6 +202,7 @@ class WebgainsImporter implements ShouldQueue
                                                     'detail' => $cb->detail . ', ' . $event['name'] . ' default',
                                                     'network_detail' => $cb->network_detail . ', ' . $event['name'] . ' default',
                                                 ]);
+                                                setStoreDefaultCashback($cb->store_id, false);
                                             } else {
                                                 $cashback = StoreCashback::create([
                                                     'type' => $c_type,

@@ -163,6 +163,7 @@ class CjImporter implements ShouldQueue
                                             'detail' => $cb->detail . ', ' . $action->name . ' default',
                                             'network_detail' => $cb->network_detail . ', ' . $action->name . ' default',
                                         ]);
+                                        setStoreDefaultCashback($cb->store_id, false);
                                     } else {
                                         $cashback = StoreCashback::create([
                                             'type' => $c_type,
@@ -199,8 +200,8 @@ class CjImporter implements ShouldQueue
                                                 'detail' => $cb->detail . ', ' . $action->name . ' ' . $item->attributes()->name,
                                                 'network_detail' => $cb->network_detail . ', ' . $action->name . ' ' . $item->attributes()->name,
                                             ]);
+                                            setStoreDefaultCashback($cb->store_id, false);
                                         } else {
-
                                             $cashback = StoreCashback::create([
                                                 'type' => $c_type,
                                                 'image'           => '#',
@@ -331,6 +332,7 @@ class CjImporter implements ShouldQueue
                                                 'detail' => $cb->detail . ', ' . $action->name . ' default',
                                                 'network_detail' => $cb->network_detail . ', ' . $action->name . ' default',
                                             ]);
+                                            setStoreDefaultCashback($cb->store_id, false);
                                         } else {
 
                                             $cashback = StoreCashback::create([
@@ -363,13 +365,11 @@ class CjImporter implements ShouldQueue
                                             $cb = StoreCashback::where('store_id', $store->id)->where('type', $c_type)->where('sale_commission', $sale_commission)->first();
                                             if ($cb) {
                                                 $cb->update([
-
                                                     'detail' => $cb->detail . ', ' . $action->name . ' ' . $item->attributes()->name,
                                                     'network_detail' => $cb->network_detail . ', ' . $action->name . ' ' . $item->attributes()->name,
                                                 ]);
+                                                setStoreDefaultCashback($cb->store_id, false);
                                             } else {
-
-
                                                 $cashback = StoreCashback::create([
                                                     'type' => $c_type,
                                                     'image'           => '#',
