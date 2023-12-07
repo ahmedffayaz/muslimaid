@@ -384,7 +384,7 @@ class RevGlueImporter implements ShouldQueue
                                         'logo_type' => 'link',
                                         'logo_link' => $category['small_icon'],
                                         'banner_type' => 'link',
-                                        'banner_link' => $category['large_icon'],
+                                        'banner_link' => $category['banner'],
                                         'status' => $category['status'] == 'active' ? 1 : 0
                                     ]);
                             } else {
@@ -399,7 +399,7 @@ class RevGlueImporter implements ShouldQueue
                                     'logo_type' => 'link',
                                     'logo_link' => $category['small_icon'],
                                     'banner_type' => 'link',
-                                    'banner_link' => $category['large_icon'],
+                                    'banner_link' => $category['banner'],
                                     'status' => $category['status'] == 'active' ? 1 : 0,
                                     'visibility' => 'visible',
                                     'is_map_enable' => 0
