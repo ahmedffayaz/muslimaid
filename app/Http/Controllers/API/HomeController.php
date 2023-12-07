@@ -60,7 +60,7 @@ class HomeController extends Controller
         } catch (Exception $e) {
             $data = [
                 'status' => 500,
-                'message' =>  $e->getMessage(),
+                'message' =>  'Something went wrong, try again.',
                 'data' => []
             ];
             return response()->json($data, 500);
@@ -84,10 +84,17 @@ class HomeController extends Controller
             } else {
                 $search = $request->search_text;
                 $page = Page::whereSlug('stores')->whereType('system')->whereStatus('active')->pluck('banner_image')->firstOrFail();
-                $stores =  Store::where('name', 'like', '%' . $search . '%')->whereStatus('active')
-                    ->orWhereHas('storeRuleData', function ($query) use ($search) {
-                        $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $search . '%');
-                    })->paginate(20)->appends(request()->input());
+                $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')
+                ->where(function ($query) use ($search) {
+                    $query->where('name', 'like', '%' . $search . '%')
+                        ->where('status', 'active')
+                        ->withCount('cashbacks')
+                        ->orWhereHas('storeRuleData', function ($query) use ($search) {
+                            $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $search . '%');
+                        });
+                })
+                ->paginate(20)
+                ->appends(request()->input());
 
                 if ($stores->count() == 0) {
                     $data = [
@@ -121,7 +128,7 @@ class HomeController extends Controller
         } catch (Exception $e) {
             $data = [
                 'status' => 500,
-                'message' => 'Something went wrong, try again.',
+                'message' => ' Something went wrong, try again.',
                 'data' => []
             ];
             return response()->json($data, 500);
