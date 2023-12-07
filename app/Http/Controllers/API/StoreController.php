@@ -200,14 +200,14 @@ class StoreController extends Controller
         } catch (ModelNotFoundException $e) {
             $data = [
                 'status' => 404,
-                'message' => $e->getMessage(),
+                'message' => 'Something went wrong, try again',
                 'data' => []
             ];
             return response()->json($data, 404);
         } catch (Exception $e) {
             $data = [
                 'status' => 500,
-                'message' => $e->getMessage(),
+                'message' => 'Something went wrong, try again.',
                 'data' => []
             ];
             return response()->json($data, 500);
@@ -222,9 +222,10 @@ class StoreController extends Controller
             ->whereHas('categories', function ($query) {
                 $query->where('slug', 'cashblack-to-your-door');
             })->pluck('id');
-            $favoriteStores = auth()->user()->favoriteStores()->where('status', 'active')
+            $favoriteStores = auth()->user()->favoriteStores()->where('stores.status', 'active')
                 ->withCount('cashbacks')
                 ->whereNotIn('stores.id', $cashblackStoreIds)
+                ->orderBy('favorites.id', 'desc') // Order by the favorites table's created_at column
                 ->paginate(20)->appends(request()->input());
 
             $response = [
@@ -369,7 +370,7 @@ class StoreController extends Controller
     public function show($slug)
     {
         try {
-            $store = Store::where('slug', $slug)->whereStatus('active')->firstOrFail();
+            $store = Store::where('slug', $slug)->whereStatus('active')->withCount('cashbacks')->firstOrFail();
             $data = [
                 'status' => 200,
                 'message' => 'Success',

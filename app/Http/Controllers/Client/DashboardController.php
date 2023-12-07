@@ -289,8 +289,12 @@ class DashboardController extends Controller
         $cashblackStoreIds = Store::whereHas('categories', function ($query) {
             $query->where('slug', 'cashblack-to-your-door');
         })->whereStatus('active')->pluck('id');
-        $favoriteStores = auth()->user()->favoriteStores()->where('status', 'active')
+
+        $favoriteStores = auth()->user()->favoriteStores()
+            ->select('stores.id', 'name', 'slug', 'status', 'stores.created_at')->where('status', 'active')
             ->whereNotIn('stores.id', $cashblackStoreIds)
+            ->withCount('cashbacks')
+            ->orderBy('favorites.id', 'desc')
             ->paginate(20);
         return view('frontend.client-dashboard.favorite-stores', compact('favoriteStores', 'title'));
     }
