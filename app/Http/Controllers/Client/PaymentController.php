@@ -235,8 +235,11 @@ class PaymentController extends Controller
 
             DB::commit();
 
+            $userEmailTemplateKey = 'user_new_cashout_request';
+            $adminEmailTemplateKey = 'admin_new_cashout_request';
+
             // Send email to user and admin
-            $this->sendEmail($cashout);
+            $this->sendEmail($cashout, $userEmailTemplateKey, $adminEmailTemplateKey);
 
             // Send push notification
             $deviceToken = optional(auth()->user()->devices()->whereType('web')->latest()->first())->fcm_token;
@@ -330,8 +333,11 @@ class PaymentController extends Controller
 
             DB::commit();
 
+            $userEmailTemplateKey = 'user_new_cashout_request';
+            $adminEmailTemplateKey = 'admin_new_cashout_request';
+
             // Send email to user and admin
-            $this->sendEmail($cashout);
+            $this->sendEmail($cashout, $userEmailTemplateKey, $adminEmailTemplateKey);
 
             // Send push notification
             $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
@@ -346,10 +352,8 @@ class PaymentController extends Controller
         }
     }
 
-    function sendEmail($cashout)
+    function sendEmail($cashout, $userEmailTemplateKey, $adminEmailTemplateKey)
     {
-        $userEmailTemplateKey = 'user_new_cashout_request';
-        $adminEmailTemplateKey = 'admin_new_cashout_request';
         $filterMessageVariables = ['{{AMOUNT}}', '{{METHOD}}'];
         $method = '';
         if($cashout->payment_method == "charity"){
@@ -358,9 +362,11 @@ class PaymentController extends Controller
             $method = "Bank";
         } else if ($cashout->payment_method == "paypal") {
             $method = "PayPal";
+        } else if ($cashout->payment_method == 'appeal') {
+            $method = 'Appeal';
         } else {
             $method = $cashout->payment_method;
-        }    
+        }
         $requestFilteredMessage = [number_format($cashout->amount, 2), $method];
         $data = [
             'name' => $cashout->user->first_name . ' ' . $cashout->user->last_name,
@@ -485,6 +491,16 @@ class PaymentController extends Controller
                     'cashout_id' => $cashout->id
                 ]);
             }
+
+            $userEmailTemplateKey = 'user_cashout_donation';
+            $adminEmailTemplateKey = 'admin_cashout_donation';
+
+            // Send email to user and admin
+            $this->sendEmail($cashout, $userEmailTemplateKey, $adminEmailTemplateKey);
+
+            // Send push notification
+            $deviceToken = optional(auth()->user()->devices()->whereType('web')->latest()->first())->fcm_token;
+            $deviceToken != null ? $this->sendNotification($cashout, $deviceToken, $user) :'';
 
             DB::commit();
 

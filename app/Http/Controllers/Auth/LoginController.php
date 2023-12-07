@@ -82,7 +82,7 @@ class LoginController extends Controller
 
 
         if (is_null($emailCheck)) {
-            return redirect()->back()->with(['message' => 'Email address not found']);
+            return redirect()->back()->with(['message' => 'These credentials do not match our records.']);
         }
 
         if ($emailCheck->provider != 'email') {
@@ -120,7 +120,7 @@ class LoginController extends Controller
             // This if condition has been put to add unique reference link for already registered users
             if(auth()->user()->short_ref_id == null){
                 uniqueRefLinkGenerator();
-            }       
+            }
             Session::flash('login-welcome');
             return $this->sendLoginResponse($request);
         }

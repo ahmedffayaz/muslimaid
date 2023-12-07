@@ -197,7 +197,7 @@ class RevGlueImporter implements ShouldQueue
     private function importStoreCashback()
     {
         // We have API call limit for '20' calls per minute (for safe side make it '15'), so we divide and conquer
-        $storesChunks = Store::where('network_id', $this->network->id)->orderBy('id', 'DESC')->get()->chunk(2000);
+        $storesChunks = Store::where('network_id', $this->network->id)->orderBy('id', 'DESC')->get()->chunk(15);
 
         foreach ($storesChunks as $key => $storesChunk) {
             RevGlueStoreCashbacksImporter::dispatch($storesChunk);
