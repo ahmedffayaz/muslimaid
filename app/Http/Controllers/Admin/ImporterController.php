@@ -99,6 +99,7 @@ class ImporterController extends Controller
                 'import_stores'    => $request->has('stores') ? 1 : 0,
                 'import_vouchers'  => $request->has('vouchers') ? 1 : 0,
                 'import_cashbacks' => $request->has('cashback') ? 1 : 0,
+                'import_categories' => $request->has('category') ? 1 : 0
             ]);
 
             return response()->json([

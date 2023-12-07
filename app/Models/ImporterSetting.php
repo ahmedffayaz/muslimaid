@@ -14,6 +14,7 @@ class ImporterSetting extends Model
         'import_stores',
         'import_vouchers',
         'import_cashbacks',
+        'import_categories',
         'last_import_at',
         'status',
     ];

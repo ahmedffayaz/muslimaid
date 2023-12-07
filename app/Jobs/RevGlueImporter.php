@@ -17,6 +17,7 @@ use App\Models\ImporterSetting;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Models\CashbackStatusChange;
+use App\Models\Category;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -53,6 +54,7 @@ class RevGlueImporter implements ShouldQueue
     {
         if ($this->importerSetting->import_stores == 1) $this->importStores();
         if ($this->importerSetting->import_cashbacks == 1) $this->importUserCashbacks();
+        if ($this->importerSetting->import_categories == 1) $this->importCategories();
     }
 
     /**
@@ -62,140 +64,129 @@ class RevGlueImporter implements ShouldQueue
      */
     private function importStores()
     {
-        $curl = curl_init();
+        try {
+            $url = "https://www.revglue.com/partner/cashback_stores/" . $this->siteSettings['revglue_api_key'] . "/json";
 
-        curl_setopt(
-            $curl,
-            CURLOPT_URL,
-            "https://www.revglue.com/partner/cashback_stores/" . $this->siteSettings['revglue_api_key'] . "/json"
-        );
+            $response = Http::get($url);
 
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+            if ($response->successful()) {
+                $stores = json_decode($response, true);
 
-        $curlResponse = curl_exec($curl);
+                $dbStores = Store::whereNetworkId($this->network->id)
+                    ->whereIn('advertiser_id', array_column($stores['response']['stores'], 'rg_store_id'))
+                    ->pluck('advertiser_id')
+                    ->toArray();
 
-        if (curl_errno($curl)) {
-            flash()->error('Error: ' . curl_error($curl));
-            curl_close($curl);
+                $storesInfo = DB::select("SHOW TABLE STATUS LIKE 'stores'");
+                $nextPk = $storesInfo[0]->Auto_increment;
 
-            return redirect()->route(getAdminPrefix() . '.stores.index');
-        }
+                $newStores = [];
+                $newStoresLogosSmall = [];
+                $newStoresLogosLarge = [];
+                $newStoresBannersSmall = [];
+                $newStoresBannersLarge = [];
+                $newStoreCategories = [];
 
-        curl_close($curl);
+                foreach ($stores['response']['stores'] as $key => $store) {
+                    try {
+                        if (!in_array($store['rg_store_id'], $dbStores)) {
+                            $newStores[] = [
+                                'network_id' => $this->network->id,
+                                'advertiser_id' => $store['rg_store_id'],
+                                'name' => $store['store_title'],
+                                'description' => $store['store_description'],
+                                'slug' => Str::slug($store['store_title']),
+                                'tracking_url' => rtrim($store['deeplink'], '/'),
+                                'store_url' => $store['website_url'],
+                                'status' => 'pending review',
+                                'status_description' => null,
+                                'network_status' => null,
+                            ];
 
-        $stores = json_decode($curlResponse, true);
+                            $newStoresLogosSmall[] = [
+                                'store_id' => $nextPk + $key,
+                                'title' => 'logo',
+                                'image' => empty($store['image_url']) ? (mt_rand(1, 20) . '.png') : $store['image_url'],
+                                'image_type' => 'store_logo_small',
+                                'is_uploaded' => '',
+                                'is_fake' => empty($store['image_url']) ? 1 : 0
+                            ];
 
-        $dbStores = Store::whereNetworkId($this->network->id)
-            ->whereIn('advertiser_id', array_column($stores['response']['stores'], 'rg_store_id'))
-            ->pluck('advertiser_id')
-            ->toArray();
+                            $newStoresLogosLarge[] = [
+                                'store_id' => $nextPk + $key,
+                                'title' => 'large logo',
+                                'image' => empty($store['store_icon_large']) ? (mt_rand(1, 20) . '.png') : $store['store_icon_large'],
+                                'image_type' => 'store_logo_large',
+                                'is_uploaded' => '',
+                                'is_fake' => empty($store['store_icon_large']) ? 1 : 0
+                            ];
 
-        $storesInfo = DB::select("SHOW TABLE STATUS LIKE 'stores'");
-        $nextPk = $storesInfo[0]->Auto_increment;
+                            $newStoresBannersSmall[] = [
+                                'store_id' => $nextPk + $key,
+                                'title' => 'Cover',
+                                'image' => empty($store['store_banner_small']) ? (mt_rand(1, 20) . '.png') : $store['store_banner_small'],
+                                'image_type' => 'store_banner_small',
+                                'is_uploaded' => '',
+                                'is_fake' => empty($store['store_banner_small']) ? 1 : 0
+                            ];
 
-        $newStores = [];
-        $newStoresLogosSmall = [];
-        $newStoresLogosLarge = [];
-        $newStoresBannersSmall = [];
-        $newStoresBannersLarge = [];
-        $newStoreCategories = [];
+                            $newStoresBannersLarge[] = [
+                                'store_id' => $nextPk + $key,
+                                'title' => 'large cover',
+                                'image' => empty($store['store_banner_large']) ? (mt_rand(1, 20) . '.png') : $store['store_banner_large'],
+                                'image_type' => 'store_banner_large',
+                                'is_uploaded' => '',
+                                'is_fake' => empty($store['store_banner_large']) ? 1 : 0
+                            ];
 
-        foreach ($stores['response']['stores'] as $key => $store) {
-            try {
-                if (!in_array($store['rg_store_id'], $dbStores)) {
-                    $newStores[] = [
-                        'network_id' => $this->network->id,
-                        'advertiser_id' => $store['rg_store_id'],
-                        'name' => $store['store_title'],
-                        'description' => $store['store_description'],
-                        'slug' => Str::slug($store['store_title']),
-                        'tracking_url' => rtrim($store['deeplink'], '/'),
-                        'store_url' => $store['website_url'],
-                        'status' => 'pending review',
-                        'status_description' => null,
-                        'network_status' => null,
-                    ];
+                            if (!empty($store['cashback_category_ids'])) {
+                                $storeCategories = $store['cashback_category_ids'];
 
-                    $newStoresLogosSmall[] = [
-                        'store_id' => $nextPk + $key,
-                        'title' => 'logo',
-                        'image' => empty($store['image_url']) ? (mt_rand(1, 20) . '.png') : $store['image_url'],
-                        'image_type' => 'store_logo_small',
-                        'is_uploaded' => '',
-                        'is_fake' => empty($store['image_url']) ? 1 : 0
-                    ];
+                                $newStoreCategoriesId = explode(',', $storeCategories);
 
-                    $newStoresLogosLarge[] = [
-                        'store_id' => $nextPk + $key,
-                        'title' => 'large logo',
-                        'image' => empty($store['store_icon_large']) ? (mt_rand(1, 20) . '.png') : $store['store_icon_large'],
-                        'image_type' => 'store_logo_large',
-                        'is_uploaded' => '',
-                        'is_fake' => empty($store['store_icon_large']) ? 1 : 0
-                    ];
-
-                    $newStoresBannersSmall[] = [
-                        'store_id' => $nextPk + $key,
-                        'title' => 'Cover',
-                        'image' => empty($store['store_banner_small']) ? (mt_rand(1, 20) . '.png') : $store['store_banner_small'],
-                        'image_type' => 'store_banner_small',
-                        'is_uploaded' => '',
-                        'is_fake' => empty($store['store_banner_small']) ? 1 : 0
-                    ];
-
-                    $newStoresBannersLarge[] = [
-                        'store_id' => $nextPk + $key,
-                        'title' => 'large cover',
-                        'image' => empty($store['store_banner_large']) ? (mt_rand(1, 20) . '.png') : $store['store_banner_large'],
-                        'image_type' => 'store_banner_large',
-                        'is_uploaded' => '',
-                        'is_fake' => empty($store['store_banner_large']) ? 1 : 0
-                    ];
-
-                    if (!empty($store['cashback_category_ids'])) {
-                        $storeCategories = $store['cashback_category_ids'];
-
-                        $newStoreCategoriesId = explode(',', $storeCategories);
-
-                        if ($newStoreCategoriesId) {
-                            foreach ($newStoreCategoriesId as $newStoreCategoryId) {
-                                $newStoreCategories[] = [
-                                    'store_id' => $nextPk + $key,
-                                    'category_id' => $newStoreCategoryId,
-                                ];
+                                if ($newStoreCategoriesId) {
+                                    foreach ($newStoreCategoriesId as $newStoreCategoryId) {
+                                        $newStoreCategories[] = [
+                                            'store_id' => $nextPk + $key,
+                                            'category_id' => $newStoreCategoryId,
+                                        ];
+                                    }
+                                }
+                            }
+                        } else {
+                            foreach ($dbStores as $dbStore) {
+                                if ($store['status'] != 'active') {
+                                    $dbStore->where('advertiser_id', $store['rg_store_id'])
+                                        ->where('network_id', $this->network->id)
+                                        ->update(['status' => 'closed']);
+                                }
                             }
                         }
-                    }
-                } else {
-                    foreach ($dbStores as $dbStore) {
-                        if ($store['status'] != 'active') {
-                            $dbStore->where('advertiser_id', $store['rg_store_id'])
-                            ->where('network_id', $this->network->id)
-                            ->update(['status' => 'closed']);
-                        }
+                    } catch (Exception $e) {
+                        Log::error($e->getMessage());
                     }
                 }
-            } catch (Exception $e) {
-                Log::error($e->getMessage());
+
+                foreach ($newStores as $newStore) {
+                    $slug = Str::slug($newStore['slug']);
+                    $lastId = Store::orderBy('id', 'desc')->where('slug', $slug)->pluck('id')->first();
+                    $newStore['slug'] = isset($lastId) ? $newStore['slug'] . '-' . ($lastId + 1) : $newStore['slug'];
+                    Store::create($newStore);
+                }
+
+                StoreImage::insert($newStoresLogosSmall);
+                StoreImage::insert($newStoresLogosLarge);
+                StoreImage::insert($newStoresBannersSmall);
+                StoreImage::insert($newStoresBannersLarge);
+                DB::table('category_store')->insert($newStoreCategories);
+
+                $this->importStoreCashback();
+            } else {
+                Log::error('Get error while import stores from RevGlue');
             }
+        } catch (Exception $e) {
+            Log::error('Get error while import stores from RevGlue: ' . $e->getMessage());
         }
-
-        foreach ($newStores as $newStore) {
-            $slug = Str::slug($newStore['slug']);
-            $lastId = Store::orderBy('id', 'desc')->where('slug', $slug)->pluck('id')->first();
-            $newStore['slug'] = isset($lastId) ? $newStore['slug'] . '-' . ($lastId + 1) : $newStore['slug'];
-            Store::create($newStore);
-        }
-
-        StoreImage::insert($newStoresLogosSmall);
-        StoreImage::insert($newStoresLogosLarge);
-        StoreImage::insert($newStoresBannersSmall);
-        StoreImage::insert($newStoresBannersLarge);
-        DB::table('category_store')->insert($newStoreCategories);
-
-        $this->importStoreCashback();
     }
 
     /**
@@ -206,7 +197,7 @@ class RevGlueImporter implements ShouldQueue
     private function importStoreCashback()
     {
         // We have API call limit for '20' calls per minute (for safe side make it '15'), so we divide and conquer
-        $storesChunks = Store::where('network_id', $this->network->id)->orderBy('id', 'DESC')->get()->chunk(15);
+        $storesChunks = Store::where('network_id', $this->network->id)->orderBy('id', 'DESC')->get()->chunk(2000);
 
         foreach ($storesChunks as $key => $storesChunk) {
             RevGlueStoreCashbacksImporter::dispatch($storesChunk);
@@ -215,17 +206,18 @@ class RevGlueImporter implements ShouldQueue
 
     /**
      * For importing user cashbacks
-    */
-    private function importUserCashbacks(){
+     */
+    private function importUserCashbacks()
+    {
         try {
-            $url = "https://www.revglue.com/partner/get_revembed_commission/". $this->siteSettings['revglue_api_key'] ."/UE4Wr8O9Nl7BURIBGIVY8HSJhwNi7RXYiMPc06puPVkoh9Y6xC";
+            $url = "https://www.revglue.com/partner/get_revembed_commission/" . $this->siteSettings['revglue_api_key'] . "/UE4Wr8O9Nl7BURIBGIVY8HSJhwNi7RXYiMPc06puPVkoh9Y6xC";
             $response = Http::get($url);
-            if($response->successful()){
+            if ($response->successful()) {
                 $cashbacks = json_decode($response, true);
 
-                foreach($cashbacks['response']['commissions'] as $cashback){
+                foreach ($cashbacks['response']['commissions'] as $cashback) {
                     $exitClick = ExitClick::where('id', $cashback['site_exit_click_id'])->first();
-                    if(empty($exitClick)){
+                    if (empty($exitClick)) {
                         continue;
                     }
                     $store = $exitClick->store;
@@ -233,7 +225,7 @@ class RevGlueImporter implements ShouldQueue
                     $network = $exitClick->network;
                     $userCashback = UserCashback::where('exit_click_id', $exitClick->id)->where('user_id', $user->id)->first();
 
-                    if($cashback['status'] == "Pending"){
+                    if ($cashback['status'] == "Pending") {
                         $status = CashbackStatus::where('status', 'pending')->first()->id;
                     } else if ($cashback['status'] == "Confirmed") {
                         $status = CashbackStatus::where('status', 'confirmed')->first()->id;
@@ -243,7 +235,7 @@ class RevGlueImporter implements ShouldQueue
                         $status = CashbackStatus::where('status', 'failed')->first()->id;
                     }
 
-                    if(empty($userCashback)){
+                    if (empty($userCashback)) {
                         $cashbackAmount = ($cashback['commission'] / 100) * $exitClick->current_cashback_percentage;
                         $newCashback = UserCashback::create([
                             'store_id' => $store->id,
@@ -262,7 +254,8 @@ class RevGlueImporter implements ShouldQueue
                             'user_cashback_id' => $newCashback->id,
                             'cashback_status_id' => $status
                         ]);
-                        if($cashback['status'] == "Pending" || $cashback['status'] == "Confirmed") {
+
+                        if ($cashback['status'] == "Pending" || $cashback['status'] == "Confirmed") {
                             //Push Notification & Email in case of confirmed or pending status of cashback
                             $userEmailTemplateKey = 'user_new_cashback_tracked';
                             $filterMessageVariables = ['{{STORE}}', '{{AMOUNT}}'];
@@ -276,7 +269,7 @@ class RevGlueImporter implements ShouldQueue
                             ];
                             SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
                             $deviceToken = optional($newCashback->user->devices()->whereType('web')->first())->fcm_token;
-                            if($deviceToken != null){
+                            if ($deviceToken != null) {
                                 $title = 'Cashback Tracked';
                                 $message = 'We have tracked your cashback from ' . $newCashback->store->name;
                                 $url = url('account/cashback');
@@ -298,7 +291,7 @@ class RevGlueImporter implements ShouldQueue
                             ];
                             SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
                             $deviceToken = optional($newCashback->user->devices()->whereType('web')->first())->fcm_token;
-                            if($deviceToken != null){
+                            if ($deviceToken != null) {
                                 $title = 'Cashback Tracked';
                                 $message = 'We have tracked your cashback from ' . $newCashback->store->name;
                                 $url = url('account/cashback');
@@ -327,7 +320,7 @@ class RevGlueImporter implements ShouldQueue
                             ];
                             SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
                             $deviceToken = optional($userCashback->user->devices()->whereType('web')->first())->fcm_token;
-                            if($deviceToken != null){
+                            if ($deviceToken != null) {
                                 $title = 'Cashback Tracked';
                                 $message = 'We have tracked your cashback from ' . $userCashback->store->name;
                                 $url = url('account/cashback');
@@ -339,8 +332,87 @@ class RevGlueImporter implements ShouldQueue
                     }
                 }
             }
-        } catch (Exception $e){
+        } catch (Exception $e) {
             Log::error($e->getMessage());
+        }
+    }
+
+    /**
+     * For importing categories
+     */
+    private function importCategories()
+    {
+        try {
+            $url = "https://www.revglue.com/partner/cashback_categories/" . $this->siteSettings['revglue_api_key'] . "/json";
+            $response = Http::get($url);
+
+            if ($response->successful()) {
+                $categories = $response['response']['categories'];
+
+                if (!empty($categories)) {
+                    $cashbackCategoryIds = [];
+
+                    foreach ($categories as $category) {
+                        if (isset($category['cashback_category_id'])) {
+                            $cashbackCategoryIds[] = $category['cashback_category_id'];
+                        }
+                    }
+
+                    if (!empty($cashbackCategoryIds)) {
+                        $dbCategories = Category::where('network_id', $this->network->id)
+                            ->whereIn('advertiser_id', $cashbackCategoryIds)
+                            ->pluck('advertiser_id')
+                            ->toArray();
+
+                        foreach ($categories as $category) {
+                            $rgCategoryId = $category['cashback_category_id'];
+                            // Find the parent_id based on advertiser_id
+                            $parentCategoryId = Category::where('network_id', $this->network->id)
+                                ->where('advertiser_id', $category['parent_category_id'])
+                                ->value('id');
+
+                            // If parent ID is not found, set it to 0
+                            $parentCategoryId = $parentCategoryId ?? 0;
+
+                            if (!empty($dbCategories) && in_array($rgCategoryId, $dbCategories)) {
+                                Category::where('network_id', $this->network->id)
+                                    ->where('advertiser_id', $category['cashback_category_id'])
+                                    ->update([
+                                        'parent_id' => $parentCategoryId, // Use the retrieved parent_id
+                                        'name' => $category['cashback_category_title'],
+                                        'description' => $category['description'],
+                                        'logo_type' => 'link',
+                                        'logo_link' => $category['small_icon'],
+                                        'banner_type' => 'link',
+                                        'banner_upload' => $category['large_icon'],
+                                        'status' => $category['status'] == 'active' ? 1 : 0
+                                    ]);
+                            } else {
+                                Category::create([
+                                    'network_id' => $this->network->id,
+                                    'advertiser_id' => $category['cashback_category_id'],
+                                    'parent_id' => $parentCategoryId, // Use the retrieved parent_id
+                                    'name' => $category['cashback_category_title'],
+                                    'slug' => \Illuminate\Support\Str::slug($category['cashback_category_title']),
+                                    'description' => $category['description'],
+                                    'sort' => 1,
+                                    'logo_type' => 'link',
+                                    'logo_link' => $category['small_icon'],
+                                    'banner_type' => 'link',
+                                    'banner_upload' => $category['large_icon'],
+                                    'status' => $category['status'] == 'active' ? 1 : 0,
+                                    'visibility' => 'visible',
+                                    'is_map_enable' => 0
+                                ]);
+                            }
+                        }
+                    }
+                }
+            } else {
+                Log::error('Get Error while import categories from RevGlue');
+            }
+        } catch (Exception $e) {
+            Log::error('Get Error while import categories from RevGlue: ' . $e->getMessage());
         }
     }
 }

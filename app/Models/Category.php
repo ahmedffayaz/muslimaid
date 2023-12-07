@@ -30,9 +30,10 @@ class Category extends Model
         'parent_id',
         'mapped_to',
         'network_id',
+        'advertiser_id',
         'meta_description',
         'meta_keyword',
-        'meta_title', 
+        'meta_title',
     ];
 
     public function stores()
@@ -71,5 +72,10 @@ class Category extends Model
         if ($this->is_map_enable == 1)
             $html = '<span class="badge badge-dim badge-pill badge-info text-capitalize"><em class="icon ni ni-done"></em>Map Enabled</span>';
         return $html;
+    }
+
+    public function network()
+    {
+        return $this->belongsTo(Network::class);
     }
 }
