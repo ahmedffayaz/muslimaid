@@ -43,6 +43,7 @@ Networks:
       Stores: off
       Vouchers: off
       Cashbacks: off
+      Categories: off
   Local Stores Ecommerce:
     Settings:
       Client_id:
