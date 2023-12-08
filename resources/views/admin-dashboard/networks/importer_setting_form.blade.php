@@ -21,7 +21,7 @@
                 <label class="custom-control-label" for="cashback">Cashbacks</label>
             </div>
         @endif
-        @if (getImporterYMLSettings('Networks_' . $network->name . '_Imprter_Categories'))
+        @if (getImporterYMLSettings('Networks_' . $network->name . '_Importer_Categories'))
             <div class="custom-control custom-control-sm custom-checkbox mr-2">
                 <input @if (@$network->importerSetting->import_categories) checked @endif type="checkbox" class="custom-control-input importer-setting" id="category" name="category">
                 <label class="custom-control-label" for="category">Categories</label>
