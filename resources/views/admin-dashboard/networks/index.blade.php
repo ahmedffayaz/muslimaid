@@ -20,13 +20,13 @@
                                     <div class="nk-download">
                                         <div class="data">
                                             <div class="thumb mb-1"><img
-                                                    src="{{ isset($network->logo) && $network->logo != '' ? asset('admin-dashboard/images/' . $network->logo) : ($network->name == 'Awin' ? asset('admin-dashboard/images/awin-logo.svg') : asset('frontend/images/products/product-16.jpg')) }}"
+                                                    src="{{ isset($network->logo) && $network->logo != '' ? asset('admin-dashboard/images/' . $network->logo) : ($network->name == 'Awin' ? asset('admin-dashboard/images/awin-logo.svg') : ($network->name == 'Impact' ? asset('admin-dashboard/images/impact-logo.png') : ($network->name == 'Afrofiliate' ? asset('admin-dashboard/images/afrofiliate-logo.jpeg') : ($network->name == 'Partnerize' ? asset('admin-dashboard/images/partnerize-logo.png') : ($network->name == 'Tradedoubler' ? asset('admin-dashboard/images/tradedoubler.jpeg') : asset('frontend/images/products/product-16.jpg')))))) }}"
                                                     alt=""></div>
                                             <div class="info">
                                                 <h6 class="title"><span class="name">{{ $network->name }}</span></h6>
                                                 <div class="meta">
                                                     <span class="version">
-                                                        <span class="text-soft">Stores: </span> <span>{{ count($network->stores) }}</span>
+                                                        <span class="text-soft">Stores: </span> <span>{{ $network->stores_count }}</span>
                                                     </span>
                                                     <span class="release">
                                                         <span class="text-soft">Click Parameter: </span> <span>{{ $network->click_ref ?? 'Null' }}</span>

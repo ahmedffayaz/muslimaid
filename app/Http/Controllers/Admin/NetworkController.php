@@ -27,7 +27,7 @@ class NetworkController extends Controller
     public function index()
     {
         $queue = DB::table('jobs')->get();
-        $networks = Network::all();
+        $networks = Network::withCount('stores')->get();
         $settings = SiteSetting::latest()->get()->pluck('value', 'type');
         return view('admin-dashboard.networks.index', compact('networks', 'queue', 'settings'));
     }
