@@ -14,7 +14,7 @@ class AddNetworkIdToCategoriesTable extends Migration
     public function up()
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->unsignedBigInteger('network_id')->after('parent_id');
+            $table->unsignedBigInteger('network_id')->after('parent_id')->nullable();
             $table->foreign('network_id')->references('id')->on('categories')->onDelete('cascade');
 
             $table->unsignedBigInteger('advertiser_id')->after('network_id')->nullable();
