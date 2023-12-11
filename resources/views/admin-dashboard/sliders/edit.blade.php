@@ -170,7 +170,15 @@
         $(function() {
             $("#sortable").sortable({
                 update: function(event, ui) {
+                    // Use the @csrf directive to include the CSRF token in the form
+                    var csrfToken = '{{ csrf_token() }}';
+
+                    // Serialize the sortable data
                     var data = $(this).sortable('serialize');
+
+                    // Include the CSRF token in the request data
+                    data += '&_token=' + csrfToken;
+
                     $.ajax({
                         data: data,
                         type: 'POST',
