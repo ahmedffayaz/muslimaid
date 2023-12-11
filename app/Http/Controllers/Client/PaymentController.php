@@ -507,18 +507,18 @@ class PaymentController extends Controller
             if ($request->ajax()) {
                 return response()->json([
                     'status' => JsonResponse::HTTP_OK,
-                    'success' => "We're processing your donation. Please allow 4 working days for £" . $amount
+                    'success' => "You have successfully donate your cashback."
                 ], JsonResponse::HTTP_OK);
             }
 
-            flash()->success("We're processing your donation. Please allow 4 working days for £" . $amount);
+            flash()->success("You have successfully donate your cashback.");
             return redirect()->back();
 
         } catch (Exception $e) {
             DB::rollBack();
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'error' => $e->getMessage() . ' Something went wrong.'
+                'error' => 'Something went wrong.'
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
 
             flash()->error('Something went wrong.');
