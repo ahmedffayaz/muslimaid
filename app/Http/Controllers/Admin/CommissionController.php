@@ -65,8 +65,8 @@ class CommissionController extends Controller
     {
         $request->validate([
             'exit_click_id' => 'required|integer|min:1',
-            'order_value' => 'nullable|numeric|min:0.01',
-            'network_commission' => 'required|numeric|min:0.01',
+            'order_value' => 'nullable|numeric|min:0.01|max:999999.99',
+            'network_commission' => 'required|numeric|min:0.01|max:999999.99',
             'amount' => 'nullable|numeric',
             'status' => 'required|integer'
         ], [
@@ -153,8 +153,8 @@ class CommissionController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'exit_click_id' => 'required|integer |min:1',
-            'order_value' => 'nullable|numeric|min:0.01',
-            'network_commission' => 'required|numeric|min:0.01',
+            'order_value' => 'nullable|numeric|min:0.01|max:999999.99',
+            'network_commission' => 'required|numeric|min:0.01|max:999999.99',
             'amount' => 'nullable|numeric',
             'status' => 'required|integer'
         ]);
