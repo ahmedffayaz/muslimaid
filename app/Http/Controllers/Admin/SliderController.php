@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Slider;
 use App\Models\Slide;
 use App\Models\Store;
+use Exception;
+use Illuminate\Http\JsonResponse;
 
 class SliderController extends Controller
 {
@@ -59,11 +61,15 @@ class SliderController extends Controller
                 $slidex = Slide::where('id',$slide)->first();
                 $slidex->update(['order'=>$order]);
             }
-            return array('message'=>'Slides order updated',
-                'updated'=>'success');
-        } catch (\Throwable $th) {
-            return array('message'=>'Something went wrong!',
-                        'updated'=>'error');
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Slides order updated.'
+            ], JsonResponse::HTTP_OK);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Something went wrong!'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }
