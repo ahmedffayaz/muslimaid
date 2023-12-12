@@ -277,6 +277,16 @@ d-xl-none
                                     <span class="nk-menu-text">Sliders</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
+                            @if (getImporterYMLSettings(config('app.banners_yaml_path')))
+                                @can('view banners')
+                                    <li class="nk-menu-item">
+                                        <a href="{{ route(getAdminPrefix() . '.banners.index') }}" class="nk-menu-link">
+                                            <span class="nk-menu-icon"><em class="icon ni ni-layers"></em></span>
+                                            <span class="nk-menu-text">Banners</span>
+                                        </a>
+                                    </li><!-- .nk-menu-item -->
+                                @endcan
+                            @endif
                             <li class="nk-menu-item">
                                 <a href="{{ '/' . getAdminPrefix() . '/menu' }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-menu"></em></span>
