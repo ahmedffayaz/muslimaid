@@ -3,11 +3,11 @@ Modules:
     Sendgrid: on
     mailchimp: off
   Charities:
-    List: on
-    Cashout: on
-  PaymentMethod: on
+    List: off
+    Cashout: off
+  PaymentMethod: off
   Appeals:
-    List: on
+    List: off
   Categories:
     List: on
   Banners:
@@ -90,9 +90,9 @@ Networks:
       Client_id:
       Client_secret:
     Importer:
-      Stores: on
-      Vouchers: on
-      Cashbacks: on
+      Stores: off
+      Vouchers: off
+      Cashbacks: off
       Categories: off
   Afrofiliate:
     Settings:
@@ -101,5 +101,5 @@ Networks:
     Importer:
       Stores: off
       Vouchers: off
-      Cashbacks: on
+      Cashbacks: off
       Categories: off
