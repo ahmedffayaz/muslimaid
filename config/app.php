@@ -66,6 +66,8 @@ return [
 
     'appeals_yaml_path' => 'Modules_Appeals_List',
 
+    'banners_yaml_path' => 'Modules_Banners_List',
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

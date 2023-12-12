@@ -165,3 +165,16 @@ function updateReview(key){
         })
     });
 }
+
+function addSpinnerBtn(btnId)
+{
+    let btn = $(btnId)
+    btn.attr('disabled', 'disabled')
+        .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
+}
+
+function removeSpinnerBtn(btnId)
+{
+    btnId.removeAttr('disabled', 'disabled').button('refresh');
+    btnId.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
+}

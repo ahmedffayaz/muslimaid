@@ -12,6 +12,7 @@ use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\BannerResource;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Resources\ClickResource;
 use App\Http\Resources\TicketResource;
@@ -22,6 +23,7 @@ use App\Http\Resources\Home\UserResource;
 use App\Http\Resources\PaymentInfoResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserCashbackResource;
+use App\Models\Banner;
 use App\Models\UserMeta;
 
 class UserController extends Controller
@@ -411,13 +413,15 @@ class UserController extends Controller
     public function referralLink()
     {
         try {
+            $banners = Banner::whereType('referral_banner')->whereStatus('active')->get();
             $response = [
                 'status' => 200,
                 'message' => 'Successful',
                 'data' => [
                     "ref_link" => url('/register-form?referby=' . auth()->user()->short_ref_id),
                     "main_banner_image" => url('/cashblack/img/favicon.png'),
-                    "email_placeholder" => "Enter single or multiple emails (separate with comma)"
+                    "email_placeholder" => "Enter invitation email",
+                    'ref_banners' => BannerResource::collection($banners)
                 ],
             ];
             return response()->json($response, 200);
@@ -529,16 +533,4 @@ class UserController extends Controller
             return response()->json($data, 500);
         }
     }
-    // public function accountWithdraw(Request $request){
-    //     try {
-
-    //     } catch (\Exception $e) {
-    //         $data = [
-    //             'status' => 500,
-    //             'message' => 'Something went wrong, try again.',
-    //             'data' => []
-    //         ];
-    //         return response()->json($data, 500);
-    //     }
-    // }
 }

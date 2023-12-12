@@ -8,6 +8,7 @@ use App\Models\EmailTemplate;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
 use App\Jobs\SendEmail;
+use App\Models\Banner;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -23,8 +24,9 @@ class ReferController extends Controller
     public function index()
     {
         $referralBonus = array_key_exists('referral_bonus', SiteSetting()->toArray()) ? SiteSetting()['referral_bonus'] : 0;
+        $referralBanners = Banner::whereType('referral_banner')->whereStatus('active')->get();
 
-        return view('frontend.referral.refer_a_friend', compact('referralBonus'));
+        return view('frontend.referral.refer_a_friend', compact('referralBonus', 'referralBanners'));
     }
 
     public function sendReferralLink(Request $request)
@@ -55,7 +57,7 @@ class ReferController extends Controller
                 ], JsonResponse::HTTP_FORBIDDEN);
             }
             flash()->error('You cannot refer yourself');
-            return redirect()->back();    
+            return redirect()->back();
         }
         try {
             $emailTemplate = EmailTemplate::where('key', 'referral_link')->first();
