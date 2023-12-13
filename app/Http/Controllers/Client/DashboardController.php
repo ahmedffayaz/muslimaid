@@ -141,7 +141,7 @@ class DashboardController extends Controller
             if ($request->ajax()) {
                 return response()->json([
                     'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                    'error' => $e->getMessage() . ' Something went wrong'
+                    'error' => 'Something went wrong'
                 ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
             }
 

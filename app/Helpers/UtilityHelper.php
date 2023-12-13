@@ -977,7 +977,8 @@ function dbDate($date)
 function formatDateForUk($date)
 {
     $parsedDate = DateTime::createFromFormat('d/m/Y', $date);
-    return $parsedDate->format('Y-m-d H:i:s');
+    if ($parsedDate)
+        return $parsedDate->format('Y-m-d H:i:s');
 }
 
 /**
