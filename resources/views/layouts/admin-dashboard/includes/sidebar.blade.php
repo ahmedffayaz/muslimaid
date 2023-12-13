@@ -281,7 +281,7 @@ d-xl-none
                                 @can('view banners')
                                     <li class="nk-menu-item">
                                         <a href="{{ route(getAdminPrefix() . '.banners.index') }}" class="nk-menu-link">
-                                            <span class="nk-menu-icon"><em class="icon ni ni-layers"></em></span>
+                                            <span class="nk-menu-icon"><em class="icon ni ni-grid"></em></span>
                                             <span class="nk-menu-text">Banners</span>
                                         </a>
                                     </li><!-- .nk-menu-item -->

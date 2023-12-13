@@ -271,7 +271,7 @@
                                             @can('view banners')
                                                 <li class="">
                                                     <a href="{{ route(getAdminPrefix() . '.banners.index') }}" class="">
-                                                    <span class="nk-menu-icon"><em class="icon ni ni-menu"></em></span>
+                                                    <span class="nk-menu-icon"><em class="icon ni ni-grid"></em></span>
                                                     <span class="nk-menu-text">Banners</span>
                                                     </a>
                                                 </li>
