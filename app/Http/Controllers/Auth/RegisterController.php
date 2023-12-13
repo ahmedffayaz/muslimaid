@@ -58,7 +58,9 @@ class RegisterController extends Controller
      */
     protected function validator(array $data)
     {
-        $rules = [
+        $recaptchaEnabled = !empty(getSpecificSetting('google_recaptcha_site_key')) && !empty(getSpecificSetting('google_recaptcha_secret_key'));
+
+        $commonRules = [
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
@@ -66,18 +68,20 @@ class RegisterController extends Controller
         ];
 
         $passwordRules = env('PASSWORD_VALIDATION', '');
-        if(!empty($passwordRules)){
+
+        if (!empty($passwordRules)) {
             $additionalRules = explode('|', $passwordRules);
-            $rules['password'] = array_merge($rules['password'], $additionalRules);
-        }else {
-            $rules['password'][] = 'string';
-        }
-        // Check if reCAPTCHA key is set
-        if (!empty(getSpecificSetting('google_recaptcha_site_key')) && !empty(getSpecificSetting('google_recaptcha_secret_key'))) {
-            $rules['g-recaptcha-response'] = 'required|captcha';
+            $commonRules['password'] = array_merge($commonRules['password'], $additionalRules);
+        } else {
+            $commonRules['password'][] = 'string';
         }
 
+        $rules = $recaptchaEnabled
+            ? array_merge(['g-recaptcha-response' => 'required|captcha'], $commonRules)
+            : $commonRules;
+
         return Validator::make($data, $rules);
+
     }
 
     public function showRegistrationForm(Request $request)
@@ -86,6 +90,7 @@ class RegisterController extends Controller
         Session::put('refCode', $refCode);
         return view('frontend.auth.register', compact('refCode'));
     }
+
     /**
      * Create a new user instance after a valid registration.
      *
@@ -187,7 +192,6 @@ class RegisterController extends Controller
             ? new JsonResponse([], 201)
             : redirect($this->redirectPath());
     }
-
 
     protected function redirectTo()
     {

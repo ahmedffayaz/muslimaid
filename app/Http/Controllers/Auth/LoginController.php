@@ -11,6 +11,7 @@ use App\Jobs\SendEmailJob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -78,11 +79,18 @@ class LoginController extends Controller
     public function login(Request $request)
     {
 
+        // Check if reCAPTCHA key is set
+        if (!empty(getSpecificSetting('google_recaptcha_site_key')) && !empty(getSpecificSetting('google_recaptcha_secret_key'))) {
+            $validator =  Validator::make($request->all(), ['g-recaptcha-response' => 'required|captcha']);
+            if ($validator->fails()) {
+                return redirect()->back()->with(['message' => 'Please verify that you are not a robot.']);
+            }
+        }
+
         $emailCheck = User::where('email', $request->email)->first();
 
-
         if (is_null($emailCheck)) {
-            return redirect()->back()->with(['message' => 'These credentials do not match our records.']);
+            return redirect()->back()->with(['message' => 'The provided credentials do not match our records.']);
         }
 
         if ($emailCheck->provider != 'email') {
@@ -147,13 +155,10 @@ class LoginController extends Controller
             $this->username() => 'required|string',
             'password' => 'required|string',
         ];
-        // Check if reCAPTCHA key is set
-        if (!empty(getSpecificSetting('google_recaptcha_site_key')) && !empty(getSpecificSetting('google_recaptcha_secret_key'))) {
-            $rules['g-recaptcha-response'] = 'required|captcha';
-        }
 
         $request->validate($rules);
     }
+
     protected function redirectTo()
     {
         if (Session::has('prvUrl')) {
