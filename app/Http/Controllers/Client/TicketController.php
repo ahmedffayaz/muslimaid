@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\UserDevice;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -87,11 +88,11 @@ class TicketController extends Controller
 
             $title = 'Ticket Created';
             $message = 'A new ticket has been created';
-            $url = url('account/tickets') . '/' . $ticket->ticket_id;
-            $deviceToken = optional(User::first()->devices()->whereType('web')->latest()->first())->fcm_token;
-            $user = User::first();
+            $url = url(getAdminPrefix() . '/tickets') . '/' . $ticket->id;
+            $admin = User::first();
+            $deviceToken = $admin->devices()->where('type', 'web')->latest()->first();
 
-            $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
+            $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken->fcm_token, $url, $admin)) : '';
 
             flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
             return redirect()->route('account.tickets.index');
@@ -100,6 +101,7 @@ class TicketController extends Controller
             return redirect()->route('account.tickets.index');
         }
     }
+
     public function step2(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -213,11 +215,11 @@ class TicketController extends Controller
 
                 $title = 'Ticket Created';
                 $message = 'A new ticket has been created';
-                $url = url('account/tickets') . '/' . $claim->ticket_id;
-                $deviceToken = optional(User::first()->devices()->whereType('web')->latest()->first())->fcm_token;
-                $user = User::first();
+                $url = url(getAdminPrefix() . '/tickets') . '/' . $claim->id;
+                $admin = User::first();
+                $deviceToken = $admin->devices()->where('type', 'web')->latest()->first();
 
-                $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
+                $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken->fcm_token, $url, $admin)) : '';
                 flash()->success("We've received your claim.<br> Please allow up to six months to get a decision from the retailer.");
                 return redirect()->route('account.tickets.index');
             }

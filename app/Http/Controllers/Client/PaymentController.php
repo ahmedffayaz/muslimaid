@@ -14,6 +14,7 @@ use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
 use App\Models\CashoutMeta;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\Rule;
@@ -498,9 +499,10 @@ class PaymentController extends Controller
             // Send email to user and admin
             $this->sendEmail($cashout, $userEmailTemplateKey, $adminEmailTemplateKey);
 
-            // Send push notification
-            $deviceToken = optional(auth()->user()->devices()->whereType('web')->latest()->first())->fcm_token;
-            $deviceToken != null ? $this->sendNotification($cashout, $deviceToken, $user) :'';
+            // Send push notification to admin
+            $admin = User::first();
+            $deviceToken = $admin->devices()->where('type', 'web')->latest()->first();
+            !is_null($deviceToken) ? $this->sendNotification($cashout, $deviceToken->fcm_token, $admin) : '';
 
             DB::commit();
 

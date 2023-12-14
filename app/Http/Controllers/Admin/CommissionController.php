@@ -109,7 +109,7 @@ class CommissionController extends Controller
                 $this->sendEmail($commission);
 
                 // Send Push Norification
-                $deviceToken = optional($commission->user->devices()->whereType('web')->first())->fcm_token;
+                $deviceToken = optional($commission->user->devices()->whereType('web')->latest()->first())->fcm_token;
                 $deviceToken != null ? $this->sendNotification($commission, $deviceToken) : '';
             }
 
@@ -319,7 +319,7 @@ class CommissionController extends Controller
                     $this->sendEmail($commission);
 
                     // Send Push Norification
-                    $deviceToken = optional($commission->user->devices()->whereType('web')->first())->fcm_token;
+                    $deviceToken = optional($commission->user->devices()->whereType('web')->latest()->first())->fcm_token;
                     $deviceToken != null ? $this->sendNotification($commission, $deviceToken) : '';
                 }
             }
