@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use Carbon\Carbon;
 use Exception;
 use App\Models\Store;
 use App\Models\Network;
@@ -21,6 +22,7 @@ use App\Models\CashoutMeta;
 use App\Models\Category;
 use App\Models\User;
 use App\Models\UserDevice;
+use App\Models\Voucher;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -58,6 +60,7 @@ class RevGlueImporter implements ShouldQueue
         if ($this->importerSetting->import_stores == 1) $this->importStores();
         if ($this->importerSetting->import_cashbacks == 1) $this->importUserCashbacks();
         if ($this->importerSetting->import_categories == 1) $this->importCategories();
+        if ($this->importerSetting->import_vouchers == 1) $this->importVouchers();
     }
 
     /**
@@ -537,6 +540,20 @@ class RevGlueImporter implements ShouldQueue
             Log::error('Get Error while import categories from RevGlue: ' . $e->getMessage());
         }
     }
+
+    /**
+     * For importing vouchers
+     */
+    private function importVouchers()
+    {
+        // We have API call limit for '20' calls per minute (for safe side make it '15'), so we divide and conquer
+        $storesChunks = Store::where('network_id', $this->network->id)->orderBy('id', 'DESC')->get()->chunk(15);
+
+        foreach ($storesChunks as $key => $storesChunk) {
+            RevGlueStoreVoucherImporter::dispatch($storesChunk);
+        }
+    }
+
 
     function sendEmail($cashout, $userEmailTemplateKey, $adminEmailTemplateKey)
     {

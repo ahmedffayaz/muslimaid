@@ -29,7 +29,7 @@ class RevGlueStoreCashbacksImporter implements ShouldQueue
     {
         $this->stores = $stores;
         $this->siteSettings = SiteSetting::latest()->get()->pluck('value', 'type');
-        $this->network = $this->network = Network::whereName('RevGlue')->first();
+        $this->network = Network::whereName('RevGlue')->first();
     }
 
     /**

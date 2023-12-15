@@ -12,6 +12,8 @@ class Voucher extends Model
 
     protected $fillable = [
         'store_id',
+        'network_id',
+        'advertiser_id',
         'name',
         'tracking_url',
         'deeplink_url',
