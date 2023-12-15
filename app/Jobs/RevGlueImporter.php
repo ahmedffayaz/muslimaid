@@ -546,65 +546,11 @@ class RevGlueImporter implements ShouldQueue
      */
     private function importVouchers()
     {
-        try {
-            $url = "https://www.revglue.com/partner/coupons/" . $this->siteSettings['revglue_api_key'] . "/json";
-            $response = Http::get($url);
+        // We have API call limit for '20' calls per minute (for safe side make it '15'), so we divide and conquer
+        $storesChunks = Store::where('network_id', $this->network->id)->orderBy('id', 'DESC')->get()->chunk(15);
 
-            if ($response->successful()) {
-                $rgCoupons = $response['response']['coupons'];
-
-                if (!empty($rgCoupons)) {
-                    $rgCouponIds = [];
-
-                    foreach ($rgCoupons as $rgCoupon) {
-                        if (isset($rgCoupon['coupons_id']))
-                            $rgCouponIds[] = $rgCoupon['coupons_id'];
-                    }
-
-                    if (!empty($rgCouponIds)) {
-                        $dbCoupons = Voucher::where('network_id', $this->network->id)
-                            ->whereIn('advertiser_id', $rgCouponIds)
-                            ->pluck('advertiser_id')
-                            ->toArray();
-
-                        foreach ($rgCoupons as $rgCoupon) {
-                            $rgCouponId = $rgCoupon['coupons_id'];
-                            if (!empty($dbCoupons) && in_array($rgCouponId, $dbCoupons)) {
-                                Voucher::where('network_id', $this->network->id)->where('advertiser_id', $rgCoupon['coupons_id'])
-                                    ->update([
-                                        'store_id' => $rgCoupon['rg_store_id'],
-                                        'name' => $rgCoupon['coupons_title'],
-                                        'description' => $rgCoupon['coupons_description'],
-                                        'tracking_url' => isset($rgCoupon['tracking_url']) ? $rgCoupon['tracking_url'] : null,
-                                        'deeplink_url' => $rgCoupon['deeplink'],
-                                        'promotion_type' => $rgCoupon['coupon_type'] == 'code' ? 'Coupon' : 'Sale/Discount',
-                                        'coupon_code' => $rgCoupon['coupon_type'] == 'code'? $rgCoupon['coupon_code'] : null,
-                                        'image' => null,
-                                        'promotion_start_date' => Carbon::parse($rgCoupon['issue_date'])->format('Y-m-d H:i:s'),
-                                        'promotion_end_date' => Carbon::parse($rgCoupon['expiry_date'])->format('Y-m-d H:i:s')
-                                    ]);
-                            } else {
-                                Voucher::create([
-                                    'store_id' => $rgCoupon['rg_store_id'],
-                                    'network_id' => $this->network->id,
-                                    'advertiser_id' => $rgCoupon['coupons_id'],
-                                    'name' => $rgCoupon['coupons_title'],
-                                    'description' => $rgCoupon['coupons_description'],
-                                    'tracking_url' => isset($rgCoupon['tracking_url']) ? $rgCoupon['tracking_url'] : null,
-                                    'deeplink_url' => $rgCoupon['deeplink'],
-                                    'promotion_type' => $rgCoupon['coupon_type'] == 'code' ? 'Coupon' : 'Sale/Discount',
-                                    'coupon_code' => $rgCoupon['coupon_type'] == 'code'? $rgCoupon['coupon_code'] : null,
-                                    'image' => null,
-                                    'promotion_start_date' => Carbon::parse($rgCoupon['issue_date'])->format('Y-m-d H:i:s'),
-                                    'promotion_end_date' => Carbon::parse($rgCoupon['expiry_date'])->format('Y-m-d H:i:s')
-                                ]);
-                            }
-                        }
-                    }
-                }
-            }
-        } catch (Exception $e) {
-            Log::error('Get error while importing vouchers from RevGlue: ' . $e->getMessage());
+        foreach ($storesChunks as $key => $storesChunk) {
+            RevGlueStoreVoucherImporter::dispatch($storesChunk);
         }
     }
 
