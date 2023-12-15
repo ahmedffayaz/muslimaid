@@ -16,7 +16,7 @@ class CreateVocuhersTable extends Migration
         Schema::create('vouchers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('store_id');
-            $table->string('name')->nullable();
+            $table->string('name', 256)->nullable();
             $table->longText('description')->nullable();
             $table->text('tracking_url')->nullable();
             $table->text('deeplink_url')->nullable();
