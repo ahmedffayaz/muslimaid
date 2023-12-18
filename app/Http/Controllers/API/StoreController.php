@@ -370,7 +370,13 @@ class StoreController extends Controller
     public function show($slug)
     {
         try {
-            $store = Store::where('slug', $slug)->whereStatus('active')->withCount('cashbacks')->firstOrFail();
+            $store = Store::where('slug', $slug)
+            ->whereStatus('active')
+            ->with(['cashbacks' => function ($cashback) {
+                $cashback->orderBy('sale_commission', 'desc');
+            }])
+            ->withCount('cashbacks')
+            ->firstOrFail();
             $data = [
                 'status' => 200,
                 'message' => 'Success',
