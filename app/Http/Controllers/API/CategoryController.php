@@ -26,9 +26,13 @@ class CategoryController extends Controller
                 $query->where('id', $request->input('parent_id'));
             })
             ->with(['childs' => function ($query) {
-                $query->where('status', '1')->orderBy('sort', 'asc')->withCount('stores');
+                $query->where('status', '1')->orderBy('sort', 'asc')->withCount(['stores' => function ($query) {
+                    $query->where('status', 'active');
+                }]);
             }])
-            ->withCount('stores')
+            ->withCount(['stores' => function ($query) {
+                $query->where('status', 'active');
+            }])
             ->where('parent_id', 0)
             ->where('name', '!=', 'more') // Exclude the category with the name 'more'
             ->where('visibility', 'visible')
@@ -44,9 +48,14 @@ class CategoryController extends Controller
             ->where('visibility', 'more')
             ->where('parent_id', 0)
             ->with(['childs' => function ($query) {
-                $query->where('status', '1')->orderBy('sort', 'asc')->withCount('stores');
+                $query->where('status', '1')->orderBy('sort', 'asc')
+                ->withCount(['stores' => function ($query) {
+                    $query->where('status', 'active');
+                }]);
             }])
-            ->withCount('stores')
+            ->withCount(['stores' => function ($query) {
+                $query->where('status', 'active');
+            }])
             ->where('status', '1')
             ->orderBy('sort', 'desc')
             ->orderBy('name', 'asc')
@@ -194,8 +203,13 @@ class CategoryController extends Controller
                 })->where('status', 'active')->orderBy('name', 'asc')->paginate(20)->appends(request()->input());
 
             $cuisine = Category::where('id', '158')->with(['childs' => function ($query) {
-                $query->orderBy('name', 'asc')->where('status', 1)->withCount('stores');
-            }])->withCount('stores')->where('parent_id', 0)->where('status', 1)->orderBy('name', 'asc')->get();
+                $query->orderBy('name', 'asc')->where('status', 1)
+                ->withCount(['stores' => function ($query) {
+                    $query->where('status', 'active');
+                }]);
+            }])->withCount(['stores' => function ($query) {
+                $query->where('status', 'active');
+            }])->where('parent_id', 0)->where('status', 1)->orderBy('name', 'asc')->get();
 
             $data = [
                 'status' => 200,
