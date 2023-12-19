@@ -392,8 +392,9 @@ class PaymentController extends Controller
     public function donateAppeal(Request $request)
     {
         $request->validate([
-            'appeal_id' => 'nullable|integer'
+            'appeal_id' => 'required|integer'
         ], [
+            'appeal_id.required' => 'Appeal is required',
             'appeal_id.integer' => 'Appeal must be integer'
         ]);
 
