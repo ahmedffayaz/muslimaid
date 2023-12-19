@@ -244,7 +244,7 @@ class RevGlueImporter implements ShouldQueue
             if ($response->successful()) {
                 $rgCashbacks = json_decode($response, true);
 
-                foreach($rgCashbacks['response']['commissions'] as $rgCashback) {
+                foreach ($rgCashbacks['response']['commissions'] as $rgCashback) {
                     $exitClick = ExitClick::where('id', $rgCashback['site_exit_click_id'])->first();
                     if (!empty($exitClick)) {
                         $userCashback = UserCashback::where('exit_click_id', $exitClick->id)->where('user_id', $exitClick->user_id)->first();
