@@ -20,9 +20,8 @@ use App\Models\CashbackStatusChange;
 use App\Models\Cashout;
 use App\Models\CashoutMeta;
 use App\Models\Category;
+use App\Models\ImportedCategory;
 use App\Models\User;
-use App\Models\UserDevice;
-use App\Models\Voucher;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
@@ -57,9 +56,9 @@ class RevGlueImporter implements ShouldQueue
      */
     public function handle()
     {
+        if ($this->importerSetting->import_categories == 1) $this->importCategories();
         if ($this->importerSetting->import_stores == 1) $this->importStores();
         if ($this->importerSetting->import_cashbacks == 1) $this->importUserCashbacks();
-        if ($this->importerSetting->import_categories == 1) $this->importCategories();
         if ($this->importerSetting->import_vouchers == 1) $this->importVouchers();
     }
 
@@ -70,125 +69,149 @@ class RevGlueImporter implements ShouldQueue
      */
     private function importStores()
     {
+        $network = $this->network;
+        $siteSettings = $this->siteSettings;
         try {
-            $url = "https://www.revglue.com/partner/cashback_stores/" . $this->siteSettings['revglue_api_key'] . "/json";
+            $rgStoreUrl = 'https://www.revglue.com/partner/cashback_stores/' . $siteSettings['revglue_api_key'] . '/json';
+            $rgStoreResponse = Http::get($rgStoreUrl);
 
-            $response = Http::get($url);
+            $rgCategoryUrl = 'https://www.revglue.com/partner/cashback_categories/' . $siteSettings['revglue_api_key'] . '/json';
+            $rgCategoryResponse = Http::get($rgCategoryUrl);
 
-            if ($response->successful()) {
-                $stores = json_decode($response, true);
+            if ($rgStoreResponse->successful()) {
+                $jsonDecodedStoreResponse = json_decode($rgStoreResponse, true);
+                $rgStores = $jsonDecodedStoreResponse['response']['stores'];
 
-                $dbStores = Store::whereNetworkId($this->network->id)
-                    ->whereIn('advertiser_id', array_column($stores['response']['stores'], 'rg_store_id'))
-                    ->pluck('advertiser_id')
-                    ->toArray();
+                // Use chunk to process stores in smaller batches
+                collect($rgStores)->chunk(15)->each(function ($chunk) use ($network, $siteSettings, $rgCategoryResponse) {
+                    foreach ($chunk as $rgStore) {
+                        $slug = Str::slug($rgStore['store_title']);
 
-                $storesInfo = DB::select("SHOW TABLE STATUS LIKE 'stores'");
-                $nextPk = $storesInfo[0]->Auto_increment;
+                        // Check if the slug already exists
+                        $count = Store::where('slug', $slug)->count();
 
-                $newStores = [];
-                $newStoresLogosSmall = [];
-                $newStoresLogosLarge = [];
-                $newStoresBannersSmall = [];
-                $newStoresBannersLarge = [];
-                $newStoreCategories = [];
+                        // If the slug already exists, append a unique identifier
+                        if ($count > 0) $slug = $slug . '-' . uniqid();
 
-                foreach ($stores['response']['stores'] as $key => $store) {
-                    try {
-                        if (!in_array($store['rg_store_id'], $dbStores)) {
-                            $newStores[] = [
-                                'network_id' => $this->network->id,
-                                'advertiser_id' => $store['rg_store_id'],
-                                'name' => $store['store_title'],
-                                'description' => $store['store_description'],
-                                'slug' => Str::slug($store['store_title']),
-                                'tracking_url' => rtrim($store['deeplink'], '/'),
-                                'store_url' => $store['website_url'],
+                        $dbStore = Store::where('network_id', $network->id)->where('advertiser_id', $rgStore['rg_store_id'])->first();
+                        if (!$dbStore) {
+                            $newStore = Store::create([
+                                'network_id' => $network->id,
+                                'advertiser_id' => $rgStore['rg_store_id'],
+                                'name' => $rgStore['store_title'],
+                                'description' => $rgStore['store_description'],
+                                'slug' => $slug,
+                                'tracking_url' => rtrim($rgStore['deeplink'], '/'),
+                                'store_url' => rtrim($rgStore['website_url'], '/'),
                                 'status' => 'pending review',
                                 'status_description' => null,
-                                'network_status' => null,
-                            ];
+                                'network_status' => $rgStore['status']
+                            ]);
 
-                            $newStoresLogosSmall[] = [
-                                'store_id' => $nextPk + $key,
+                            // Save store images
+                            $storeLogosSmall = [
+                                'store_id' => $newStore->id,
                                 'title' => 'logo',
-                                'image' => empty($store['image_url']) ? (mt_rand(1, 20) . '.png') : $store['image_url'],
+                                'image' => empty($rgStore['image_url']) ? (mt_rand(1, 20) . '.png') : $rgStore['image_url'],
                                 'image_type' => 'store_logo_small',
                                 'is_uploaded' => '',
-                                'is_fake' => empty($store['image_url']) ? 1 : 0
+                                'is_fake' => empty($rgStore['image_url']) ? 1 : 0,
+                                'created_at' => Carbon::now(),
+                                'updated_at' => Carbon::now()
                             ];
 
-                            $newStoresLogosLarge[] = [
-                                'store_id' => $nextPk + $key,
+                            $storeLogosLarge = [
+                                'store_id' => $newStore->id,
                                 'title' => 'large logo',
-                                'image' => empty($store['store_icon_large']) ? (mt_rand(1, 20) . '.png') : $store['store_icon_large'],
+                                'image' => empty($rgStore['store_icon_large']) ? (mt_rand(1, 20) . '.png') : $rgStore['store_icon_large'],
                                 'image_type' => 'store_logo_large',
                                 'is_uploaded' => '',
-                                'is_fake' => empty($store['store_icon_large']) ? 1 : 0
+                                'is_fake' => empty($rgStore['store_icon_large']) ? 1 : 0,
+                                'created_at' => Carbon::now(),
+                                'updated_at' => Carbon::now()
                             ];
 
-                            $newStoresBannersSmall[] = [
-                                'store_id' => $nextPk + $key,
+                            $storeBannersSmall = [
+                                'store_id' => $newStore->id,
                                 'title' => 'Cover',
-                                'image' => empty($store['store_banner_small']) ? (mt_rand(1, 20) . '.png') : $store['store_banner_small'],
+                                'image' => empty($rgStore['store_banner_small']) ? (mt_rand(1, 20) . '.png') : $rgStore['store_banner_small'],
                                 'image_type' => 'store_banner_small',
                                 'is_uploaded' => '',
-                                'is_fake' => empty($store['store_banner_small']) ? 1 : 0
+                                'is_fake' => empty($rgStore['store_banner_small']) ? 1 : 0,
+                                'created_at' => Carbon::now(),
+                                'updated_at' => Carbon::now()
                             ];
 
-                            $newStoresBannersLarge[] = [
-                                'store_id' => $nextPk + $key,
+                            $storeBannersLarge = [
+                                'store_id' => $newStore->id,
                                 'title' => 'large cover',
-                                'image' => empty($store['store_banner_large']) ? (mt_rand(1, 20) . '.png') : $store['store_banner_large'],
+                                'image' => empty($rgStore['store_banner_large']) ? (mt_rand(1, 20) . '.png') : $rgStore['store_banner_large'],
                                 'image_type' => 'store_banner_large',
                                 'is_uploaded' => '',
-                                'is_fake' => empty($store['store_banner_large']) ? 1 : 0
+                                'is_fake' => empty($rgStore['store_banner_large']) ? 1 : 0,
+                                'created_at' => Carbon::now(),
+                                'updated_at' => Carbon::now()
                             ];
 
-                            if (!empty($store['cashback_category_ids'])) {
-                                $storeCategories = $store['cashback_category_ids'];
+                            StoreImage::insert($storeLogosSmall);
+                            StoreImage::insert($storeLogosLarge);
+                            StoreImage::insert($storeBannersSmall);
+                            StoreImage::insert($storeBannersLarge);
 
-                                $newStoreCategoriesId = explode(',', $storeCategories);
+                            // Save network categories
+                            $this->rgStoreCategories($rgCategoryResponse, $rgStore, $network, $siteSettings, $newStore->id);
+                        } else {
+                            if ($rgStore['status'] == 'active') {
+                                // Update store
+                                $dbStore->update([
+                                    'name' => $rgStore['store_title'],
+                                    'description' => $rgStore['store_description'],
+                                    'tracking_url' => rtrim($rgStore['deeplink'], '/'),
+                                    'store_url' => rtrim($rgStore['website_url'], '/'),
+                                    'status_description' => '',
+                                    'network_status' => $rgStore['status']
+                                ]);
 
-                                if ($newStoreCategoriesId) {
-                                    foreach ($newStoreCategoriesId as $newStoreCategoryId) {
-                                        $newStoreCategories[] = [
-                                            'store_id' => $nextPk + $key,
-                                            'category_id' => $newStoreCategoryId,
-                                        ];
-                                    }
+                                // Update store images
+                                $dbStore->images()->where('image_type', 'store_logo_small')->update([
+                                    'image' => empty($networkStore['image_url']) ? (mt_rand(1, 20) . '.png') : $networkStore['image_url']
+                                ]);
+
+                                $dbStore->images()->where('image_type', 'store_logo_large')->update([
+                                    'image' => empty($networkStore['store_icon_large']) ? (mt_rand(1, 20) . '.png') : $networkStore['store_icon_large']
+                                ]);
+
+                                $dbStore->images()->where('image_type', 'store_banner_small')->update([
+                                    'image' => empty($networkStore['store_banner_small']) ? (mt_rand(1, 20) . '.png') : $networkStore['store_banner_small']
+                                ]);
+
+                                $dbStore->images()->where('image_type', 'store_banner_large')->update([
+                                    'image' => empty($networkStore['store_banner_large']) ? (mt_rand(1, 20) . '.png') : $networkStore['store_banner_large']
+                                ]);
+
+                                // Update network categories
+                                if (!$dbStore->override_categories) {
+                                    DB::table('category_store')->where('store_id', $dbStore->id)->delete();
+
+                                    // update network categories
+                                    $this->rgStoreCategories($rgCategoryResponse, $rgStore, $network, $siteSettings, $dbStore->id);
                                 }
                             }
-                        } else {
-                            foreach ($dbStores as $dbStore) {
-                                if ($store['status'] != 'active') {
-                                    $dbStore->where('advertiser_id', $store['rg_store_id'])
-                                        ->where('network_id', $this->network->id)
-                                        ->update(['status' => 'closed']);
-                                }
+
+                            if ($rgStore['status'] != 'active' || $rgStore['status'] != 'pending' || $rgStore['status'] != 'pending review') {
+                                $dbStore->update(['status' => 'closed']);
                             }
                         }
-                    } catch (Exception $e) {
-                        Log::error($e->getMessage());
                     }
-                }
+                });
 
-                foreach ($newStores as $newStore) {
-                    $slug = Str::slug($newStore['slug']);
-                    $lastId = Store::orderBy('id', 'desc')->where('slug', $slug)->pluck('id')->first();
-                    $newStore['slug'] = isset($lastId) ? $newStore['slug'] . '-' . ($lastId + 1) : $newStore['slug'];
-                    Store::create($newStore);
-                }
-
-                StoreImage::insert($newStoresLogosSmall);
-                StoreImage::insert($newStoresLogosLarge);
-                StoreImage::insert($newStoresBannersSmall);
-                StoreImage::insert($newStoresBannersLarge);
-                DB::table('category_store')->insert($newStoreCategories);
-
+                // Import store cahbacks
                 $this->importStoreCashback();
             } else {
-                Log::error('Get error while import stores from RevGlue');
+                // Handle non-successful response
+                $statusCode = $rgStoreResponse->status();
+                // Log or handle the error as needed
+                Log::error('Get error while import stores from RevGlue: ' . $statusCode);
             }
         } catch (Exception $e) {
             Log::error('Get error while import stores from RevGlue: ' . $e->getMessage());
@@ -221,7 +244,7 @@ class RevGlueImporter implements ShouldQueue
             if ($response->successful()) {
                 $rgCashbacks = json_decode($response, true);
 
-                foreach($rgCashbacks['response']['commissions'] as $rgCashback) {
+                foreach ($rgCashbacks['response']['commissions'] as $rgCashback) {
                     $exitClick = ExitClick::where('id', $rgCashback['site_exit_click_id'])->first();
                     if (!empty($exitClick)) {
                         $userCashback = UserCashback::where('exit_click_id', $exitClick->id)->where('user_id', $exitClick->user_id)->first();
@@ -554,7 +577,6 @@ class RevGlueImporter implements ShouldQueue
         }
     }
 
-
     function sendEmail($cashout, $userEmailTemplateKey, $adminEmailTemplateKey)
     {
         $filterMessageVariables = ['{{AMOUNT}}', '{{METHOD}}'];
@@ -574,5 +596,41 @@ class RevGlueImporter implements ShouldQueue
 
         SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
         SendEmailToAdmin::dispatch($adminEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+    }
+
+    function rgStoreCategories($rgCategoryResponse, $rgStore, $network, $siteSettings, $storeId)
+    {
+        if (!empty($rgStore['cashback_category_ids'])) {
+            $rgStoreCategoriesId = $rgStore['cashback_category_ids'];
+            $explodeCategoryIds = explode(',', $rgStoreCategoriesId);
+            if ($explodeCategoryIds) {
+                if ($rgCategoryResponse->successful()) {
+                    $jsonDecodedCategoryResponse = json_decode($rgCategoryResponse, true);
+                    $rgCategories = $jsonDecodedCategoryResponse['response']['categories'];
+                    foreach ($rgCategories as $rgCategory) {
+                        foreach ($explodeCategoryIds as $explodeCategoryId) {
+                            if ($rgCategory['cashback_category_id'] == $explodeCategoryId) {
+                                $importedCategory = ImportedCategory::where('name', $rgCategory['cashback_category_title'])->first();
+                                if (!$importedCategory) {
+                                    $importedCategory = new ImportedCategory();
+                                    $importedCategory->name = $rgCategory['cashback_category_title'];
+                                    $importedCategory->network_id = $network->id;
+                                    $importedCategory->save();
+
+                                    $dbCategory = Category::select('id', 'name', 'network_id')->where('name', $importedCategory->name)->where('network_id', $network->id)->first();
+                                    $importedCategory->mapped_to = $dbCategory->id;
+                                    $importedCategory->save();
+                                }
+                                DB::table('category_store')->insert([
+                                    'store_id' => $storeId,
+                                    'category_id' => $importedCategory->mapped_to ?? 0,
+                                    'network_category_id' => $importedCategory->id,
+                                ]);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }
