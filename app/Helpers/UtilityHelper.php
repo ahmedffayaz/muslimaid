@@ -604,14 +604,14 @@ function sidebarCategories()
     $sidebar_categories = Category::where(function ($query) {
         $query->where('visibility', '!=', 'hidden')
             ->orWhereNull('visibility');
-    })->where('feature_sidebar', 1)->orderBy('name', 'ASC')->whereStatus('1')->get();
+    })->where('featured_sidebar', 1)->orderBy('name', 'ASC')->whereStatus('1')->get();
     return $sidebar_categories;
 }
 
 function sidebarStores()
 {
     $stores = Store::whereHas('tags', function ($query) {
-        $query->where('title', 'feature_sidebar');
+        $query->where('title', 'featured_sidebar');
     })->latest()->get();
     return $stores;
 }
