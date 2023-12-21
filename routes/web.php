@@ -294,6 +294,7 @@ Route::get('contact', [App\Http\Controllers\Frontend\ContactController::class, '
 Route::post('contact', [App\Http\Controllers\Frontend\ContactController::class, 'store'])->name('contact.store');
 
 Route::get('vouchers', [App\Http\Controllers\Frontend\VoucherController::class, 'index'])->name('vouchers.index');
+Route::post('vouchers/view', [App\Http\Controllers\Frontend\VoucherController::class, 'view'])->name('vouchers.view');
 
 Route::get('offers', [App\Http\Controllers\Frontend\OfferController::class, 'index'])->name('offers.index');
 
