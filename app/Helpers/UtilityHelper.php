@@ -5,11 +5,13 @@ use App\Models\Blog;
 use App\Models\Page;
 use App\Models\User;
 use App\Models\Store;
+use App\Models\Appeal;
 use App\Models\Slider;
 use App\Models\Ticket;
 use App\Models\Cashout;
 use App\Models\Charity;
 use App\Models\SeoRule;
+use App\Models\Voucher;
 use App\Models\Category;
 use App\Models\Currency;
 use App\Models\UserVerify;
@@ -19,9 +21,8 @@ use Illuminate\Support\Str;
 use App\Models\StoreSeoData;
 use App\Jobs\SendEmailToUser;
 use App\Models\EmailTemplate;
-use App\Jobs\SendEmailToAdmin;
-use App\Models\Appeal;
 use App\Models\StoreCashback;
+use App\Jobs\SendEmailToAdmin;
 use Symfony\Component\Yaml\Yaml;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
@@ -610,9 +611,10 @@ function sidebarCategories()
 
 function sidebarStores()
 {
-    $stores = Store::whereHas('tags', function ($query) {
+    $stores = Store::select('id', 'slug', 'name', 'status', 'created_at')
+    ->whereHas('tags', function ($query) {
         $query->where('title', 'featured_sidebar');
-    })->latest()->get();
+    })->where('status', 'active')->withCount('cashbacks')->latest()->get();
     return $stores;
 }
 
@@ -1319,4 +1321,21 @@ function singleFeaturedStore($category)
         return $editorPickStore->store()->where('status', 'active')->withCount('cashbacks')->first();
 
     return null;
+}
+
+function topVouchers($limit = 5)
+{
+    $vouchers = Voucher::whereHas('store', function ($query) {
+        $query->select('status')->where('status', 'active')->whereHas('cashback');
+    })->with(['store' => function ($query) {
+        $query->select('id', 'name', 'slug', 'status')->where('status', 'active')->withCount('cashbacks');
+    }])
+    ->withCount('exitClicks')
+    ->having('exit_clicks_count', '!=', 0)
+    ->orderBy('exit_clicks_count', 'desc')
+    ->where('promotion_end_date', '>=', now())
+    ->take($limit)
+    ->get();
+
+    return $vouchers;
 }
