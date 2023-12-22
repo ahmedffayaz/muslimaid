@@ -49,9 +49,9 @@ class VerifyController extends Controller
                         $this->referralBonus($verifyUser->user->referred_by, $bonusStatus);
                     }
 
-                    session()->flash('success', 'Your e-mail is verified. You can now login.');
+                    session()->flash('success', 'Your email is verified. You can now login.');
                 } else {
-                    session()->flash('success', 'Your e-mail is already verified. You can now login.');
+                    session()->flash('success', 'Your email is already verified. You can now login.');
                 }
             } else {
                 session()->flash('message', 'Sorry your email cannot be identified.');

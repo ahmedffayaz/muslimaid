@@ -12,6 +12,7 @@ Modules:
     List: on
   Banners:
     List: off
+  Cashback Earnings Admin: off
 Networks:
   CJ:
     Settings:

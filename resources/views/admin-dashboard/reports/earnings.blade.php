@@ -16,40 +16,77 @@
                         </div><!-- .nk-block-between -->
                     </div><!-- .nk-block-head -->
                     <div class="row mb-4">
-                        <div class="col-md-6 col-xl-3">
-                            <div class="card">
-                                <div class="card-body p-0">
-                                    <div class="media p-3">
-                                        <div class="media-body">
-                                            <span class="text-muted text-uppercase font-size-12 font-weight-bold">Earning</span>
-                                            <h3 class="mb-0 mt-2">{{ currency($total_revenue) }}</h3>
+                        @if (getImporterYMLSettings(config('app.cashback_earnings_admin_yml_path')))
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body p-0">
+                                        <div class="media p-3">
+                                            <div class="media-body">
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Earning</span>
+                                                <h3 class="mb-0 mt-2">{{ currency($total_revenue) }}</h3>
+
+                                            </div>
+                                            <div class="align-self-center text-center analytics-icon" style="    display: contents;">
+                                                <em class="icon ni ni-coins text-info"></em>
+                                            </div>
 
                                         </div>
-                                        <div class="align-self-center text-center analytics-icon" style="    display: contents;">
-                                            <em class="icon ni ni-coins text-info"></em>
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-6 col-xl-3">
-                            <div class="card">
-                                <div class="card-body p-0">
-                                    <div class="media p-3">
-                                        <div class="media-body">
-                                            <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pending Revenue</span>
-                                            <h3 class="mb-0 mt-2">{{ currency($pending_total_revenue) }}</h3>
-                                        </div>
-                                        <div class="align-self-center text-center analytics-icon" style="    display: contents;">
-                                            <em class="icon ni ni-coins text-info"></em>
-                                        </div>
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body p-0">
+                                        <div class="media p-3">
+                                            <div class="media-body">
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pending Revenue</span>
+                                                <h3 class="mb-0 mt-2">{{ currency($pending_total_revenue) }}</h3>
+                                            </div>
+                                            <div class="align-self-center text-center analytics-icon" style="    display: contents;">
+                                                <em class="icon ni ni-coins text-info"></em>
+                                            </div>
 
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body p-0">
+                                        <div class="media p-3">
+                                            <div class="media-body">
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Earning</span>
+                                                <h3 class="mb-0 mt-2">{{ currency($totalDonatedCommission) }}</h3>
+
+                                            </div>
+                                            <div class="align-self-center text-center analytics-icon" style="    display: contents;">
+                                                <em class="icon ni ni-coins text-info"></em>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 col-xl-3">
+                                <div class="card">
+                                    <div class="card-body p-0">
+                                        <div class="media p-3">
+                                            <div class="media-body">
+                                                <span class="text-muted text-uppercase font-size-12 font-weight-bold">Pending Revenue</span>
+                                                <h3 class="mb-0 mt-2">{{ currency($totalPendingRevenue) }}</h3>
+                                            </div>
+                                            <div class="align-self-center text-center analytics-icon" style="    display: contents;">
+                                                <em class="icon ni ni-coins text-info"></em>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
 
                         <div class="col-md-6 col-xl-3">
                             <div class="card">

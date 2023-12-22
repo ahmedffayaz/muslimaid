@@ -85,5 +85,6 @@ class Kernel extends HttpKernel
         'is_payment_method_module_access' => \App\Http\Middleware\PaymentMethodMiddleware::class,
         'is_appeal_module_access' => \App\Http\Middleware\AppealsMiddleware::class,
         'is_banner_module_access' => \App\Http\Middleware\BannersMiddleware::class,
+        'is_cashback_earning_admin_module_access' => \App\Http\Middleware\CashbackEarningsMiddleware::class,
     ];
 }
