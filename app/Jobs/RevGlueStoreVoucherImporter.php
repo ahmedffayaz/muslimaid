@@ -46,41 +46,45 @@ class RevGlueStoreVoucherImporter
     public function handle()
     {
         try {
-            $url = "https://www.revglue.com/partner/coupons/" . $this->siteSettings['revglue_api_key'] . "/json";
-
-            $response = Http::get($url);
-
+            $response = Http::get('https://www.revglue.com/partner/coupons/' . $this->siteSettings['revglue_api_key'] . '/json');
             if ($response->successful()) {
-                $responseJsonDecode = json_decode($response, true);
-                $rgCoupons = $responseJsonDecode['response']['coupons'];
+                $response = $response->object()->response;
+                if ($response->success) {
+                    foreach ($this->stores as $store) {
+                        if (!empty($response->coupons)) {
+                            foreach ($response->coupons as $rgCoupon) {
+                                if ($store->advertiser_id != $rgCoupon->rg_store_id) continue;
 
-
-                foreach ($this->stores as $store) {
-                    // Skip in case of empty coupons
-                    if (!array_key_exists('response', $responseJsonDecode) || empty($rgCoupons)) continue;
-
-                    foreach ($rgCoupons as $rgCoupon) {
-                        if ($store->advertiser_id != $rgCoupon['rg_store_id']) continue;
-
-                        Voucher::updateOrCreate([
-                            'advertiser_id' => $rgCoupon['coupons_id'],
-                            'network_id' => $this->network->id,
-                            'store_id' => $store->id
-                        ], [
-                            'name' => $rgCoupon['coupons_title'],
-                            'description' => $rgCoupon['coupons_description'],
-                            'tracking_url' => isset($rgCoupon['tracking_url']) ? $rgCoupon['tracking_url'] : null,
-                            'deeplink_url' => $rgCoupon['deeplink'],
-                            'promotion_type' => $rgCoupon['coupon_type'] == 'code' ? 'Coupon' : 'Sale/Discount',
-                            'coupon_code' => $rgCoupon['coupon_type'] == 'code'? $rgCoupon['coupon_code'] : null,
-                            'image' => null,
-                            'promotion_start_date' => Carbon::parse($rgCoupon['issue_date'])->format('Y-m-d H:i:s'),
-                            'promotion_end_date' => Carbon::parse($rgCoupon['expiry_date'])->format('Y-m-d H:i:s')
-                        ]);
+                                Voucher::updateOrCreate([
+                                    'advertiser_id' => $rgCoupon->coupons_id,
+                                    'network_id' => $this->network->id,
+                                    'store_id' => $store->id
+                                ], [
+                                    'name' => $rgCoupon->coupons_title,
+                                    'description' => $rgCoupon->coupons_description,
+                                    'tracking_url' => isset($rgCoupon->tracking_url) ? $rgCoupon->tracking_url : null,
+                                    'deeplink_url' => $rgCoupon->deeplink,
+                                    'promotion_type' => $rgCoupon->coupon_type == 'code' ? 'Coupon' : 'Sale/Discount',
+                                    'coupon_code' => $rgCoupon->coupon_type == 'code'? $rgCoupon->coupon_code : null,
+                                    'image' => null,
+                                    'promotion_start_date' => Carbon::parse($rgCoupon->issue_date)->format('Y-m-d H:i:s'),
+                                    'promotion_end_date' => Carbon::parse($rgCoupon->expiry_date)->format('Y-m-d H:i:s')
+                                ]);
+                            }
+                        }
                     }
+                } else {
+                    Log::error('RevGlue coupons status got failed');
                 }
-            } else {
-                Log::error('Get error while import vouchers from RevGlue');
+            } else if ($response->failed()) {
+                // Determine if the status code is >= 400
+                Log::error('Get error while import coupons from RevGlue on response failed: ' . $response->failed());
+            } else if ($response->clientError()) {
+                // Determine if the response has a 400 level status code
+                Log::error('Get client error while import coupons from RevGlue: ' . $response->clientError());
+            } else if ($response->serverError()) {
+                // Determine if the response has a 500 level status code
+                Log::error('Get server error while import coupons from RevGlue: ' . $response->serverError());
             }
         } catch (Exception $e) {
             Log::error('Get error while import vouchers from RevGlue: ' . $e->getMessage());
