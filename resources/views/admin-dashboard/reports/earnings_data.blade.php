@@ -18,8 +18,10 @@
                             <div class="nk-tb-col"><span>Network</span></div>
                             <div class="nk-tb-col"><span>Exit Click ID</span></div>
                             <div class="nk-tb-col"><span>Network Commission</span></div>
-                            <div class="nk-tb-col"><span>User Cashback</span></div>
-                            <div class="nk-tb-col"><span>Earning</span></div>
+                            @if (getImporterYMLSettings(config('app.cashback_earnings_admin_yml_path')))
+                                <div class="nk-tb-col"><span>User Cashback</span></div>
+                                <div class="nk-tb-col"><span>Earning</span></div>
+                            @endif
                             <div class="nk-tb-col"><span>Date</span></div>
                             <div class="nk-tb-col text-right"><span>Status</span></div>
                         </div><!-- .nk-tb-head -->
@@ -55,16 +57,17 @@
                                 <span>{{$com->exit_click_id}}</span>
                             </div>
 
-
                             <div class="nk-tb-col ">
                                 <span><span class="currency">{{ currency($com->network_commission) }}</span></span>
                             </div>
-                            <div class="nk-tb-col ">
-                                <span><span class="currency">{{ currency($com->amount) }}</span></span>
-                            </div>
-                            <div class="nk-tb-col ">
-                                <span><span class="currency">{{ currency($com->network_commission - $com->amount) }}</span></span>
-                            </div>
+                            @if (getImporterYMLSettings(config('app.cashback_earnings_admin_yml_path')))
+                                <div class="nk-tb-col ">
+                                    <span><span class="currency">{{ currency($com->amount) }}</span></span>
+                                </div>
+                                <div class="nk-tb-col ">
+                                    <span><span class="currency">{{ currency($com->network_commission - $com->amount) }}</span></span>
+                                </div>
+                            @endif
                             <div class="nk-tb-col ">
                                 <span>{{$com->event_date}}</span>
                             </div>

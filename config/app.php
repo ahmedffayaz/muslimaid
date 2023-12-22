@@ -68,6 +68,8 @@ return [
 
     'banners_yaml_path' => 'Modules_Banners_List',
 
+    'cashback_earnings_admin_yml_path' => 'Modules_CashbackEarningsAdmin',
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

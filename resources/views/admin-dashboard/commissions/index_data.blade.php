@@ -7,8 +7,10 @@
                 <div class="nk-tb-col"><span class="sub-text">Store</span></div>
                 <div class="nk-tb-col"><span class="sub-text">Network Commission
                         ({{ getCurrencySymbol() }})</span></div>
-                <div class="nk-tb-col"><span class="sub-text">Cashback ({{ getCurrencySymbol() }})</span></div>
-                <div class="nk-tb-col"><span class="sub-text">Exit Click Id</span></div>
+                @if (getImporterYMLSettings(config('app.cashback_earnings_admin_yml_path')))
+                    <div class="nk-tb-col"><span class="sub-text">Cashback ({{ getCurrencySymbol() }})</span></div>
+                    <div class="nk-tb-col"><span class="sub-text">Exit Click Id</span></div>
+                @endif
                 <div class="nk-tb-col"><span class="sub-text">Event Time</span></div>
                 <div class="nk-tb-col"><span class="sub-text">Status</span></div>
                 <div class="nk-tb-col nk-tb-col-tools text-right"><span class="sub-text" style="min-width: 40px">Action</span></div>
@@ -52,17 +54,19 @@
                         <span>
                             <span class="currency">{{ currency($commission->network_commission) }}</span></span>
                     </div>
-                    <div class="nk-tb-col">
-                        <span>
-                            <span class="currency">{{ currency($commission->amount) }}</span></span>
-                    </div>
-                    <div class="nk-tb-col">
-                        @if ($commission->store_id)
-                            <span>{{ $commission->exit_click_id }}</span>
-                        @else
-                            <span>-</span>
-                        @endif
-                    </div>
+                    @if (getImporterYMLSettings(config('app.cashback_earnings_admin_yml_path')))
+                        <div class="nk-tb-col">
+                            <span>
+                                <span class="currency">{{ currency($commission->amount) }}</span></span>
+                        </div>
+                        <div class="nk-tb-col">
+                            @if ($commission->store_id)
+                                <span>{{ $commission->exit_click_id }}</span>
+                            @else
+                                <span>-</span>
+                            @endif
+                        </div>
+                    @endif
                     <div class="nk-tb-col">
                         @if ($commission->store_id)
                             <span>{{ $commission->event_date }}</span>
