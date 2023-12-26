@@ -365,14 +365,26 @@ function saveResizeImage($file, $directory, $width, $type = 'jpg')
     $is_preview = strpos($directory, 'previews') !== false;
     $filename = Str::random() . time() . '.' . $type;
     $path = "$directory/$filename";
-    $img = Image::make($file)->orientate()->encode($type, $is_preview ? 40 : 85)->resize($width, null, function ($constraint) {
-        $constraint->aspectRatio();
-        $constraint->upsize();
-    });
-    if ($width == $is_preview) {
-        $img = $img->blur(60);
+
+    // Load the original image without resizing
+    $img = Image::make($file)->orientate();
+
+    // Check if the specified width is smaller than the original image width
+    if ($img > $width) {
+        // Resize the image only if the specified width is smaller
+        $img = $img->resize($width, null, function ($constraint) {
+            $constraint->aspectRatio();
+            $constraint->upsize();
+        });
     }
+
+    // Encode and apply other modifications
+    $img = $img->encode($type, $is_preview ? 40 : 85);
+
+    if ($width == $is_preview) $img = $img->blur(60);
+
     $resource = $img->stream()->detach();
+
     //add public
     Storage::disk('public')->put($path, $resource, 'public');
     return $path;
