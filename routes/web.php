@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
@@ -20,7 +19,7 @@ use Illuminate\Support\Facades\Redirect;
 // Admin routes
 Route::namespace('App\Http\Controllers\Admin')
     ->middleware(['auth', 'role:admin|data|finance'])
-    ->as(getAdminPrefix().'.')
+    ->as(getAdminPrefix() . '.')
     ->prefix(getAdminPrefix())
     ->group(function () {
         Route::get('home/{period?}', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
@@ -214,7 +213,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::resource('sliders', SliderController::class)->only(['index', 'store', 'edit']);
         Route::resource('slides', SlidesController::class)->except(['index', 'show']);
         Route::resource('pages', PagesController::class);
-        Route::post('pages/fetch',[App\Http\Controllers\Admin\PagesController::class, 'fetch'])->name('pages.fetch');
+        Route::post('pages/fetch', [App\Http\Controllers\Admin\PagesController::class, 'fetch'])->name('pages.fetch');
 
         Route::post('pages/view-short-codes', [App\Http\Controllers\Admin\PagesController::class, 'getAvailableShortCodes'])->name('pages.view-short-codes');
 
@@ -306,7 +305,7 @@ Route::get('appeals', [App\Http\Controllers\Frontend\AppealController::class, 'i
 Route::get('appeals/{slug}', [App\Http\Controllers\Frontend\AppealController::class, 'show'])->name('appeals.show');
 Route::get('appeal/search', [App\Http\Controllers\Frontend\AppealController::class, 'appealsView'])->name('appeals.view');
 
- // fcm token
+// fcm token
 Route::post('/fcmregistration', [App\Http\Controllers\FirebaseController::class, 'store'])->name('fcmregistration');
 
 // CLient Dashboard routes
@@ -339,7 +338,7 @@ Route::namespace('App\Http\Controllers\Client')
         Route::post('cashout', [App\Http\Controllers\Client\PaymentController::class, 'cashout'])->name('cashout');
         Route::post('CharityCashout', [App\Http\Controllers\Client\PaymentController::class, 'CharityCashout'])->name('CharityCashout');
         Route::post('ticket/step2', [App\Http\Controllers\Client\TicketController::class, 'step2'])->name('tickets.step2');
-        Route::match(['get','post'], 'ticket/step3', [App\Http\Controllers\Client\TicketController::class, 'step3'])->name('tickets.step3');
+        Route::match(['get', 'post'], 'ticket/step3', [App\Http\Controllers\Client\TicketController::class, 'step3'])->name('tickets.step3');
         Route::resource('tickets', TicketController::class)->only(['index', 'create', 'show', 'update']);
         Route::resource('referral', ReferController::class)->only('index');
         Route::post('send-referral-link', [App\Http\Controllers\Client\ReferController::class, 'sendReferralLink'])->name('send-referral-link');
