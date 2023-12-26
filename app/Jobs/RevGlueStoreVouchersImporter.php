@@ -2,26 +2,25 @@
 
 namespace App\Jobs;
 
+use Exception;
 use Carbon\Carbon;
 use App\Models\Network;
 use App\Models\Voucher;
 use App\Models\SiteSetting;
-use Exception;
 use Illuminate\Bus\Queueable;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Support\Facades\Log;
 
-// class RevGlueStoreVoucherImporter implements ShouldQueue
-class RevGlueStoreVoucherImporter
+class RevGlueStoreVouchersImporter implements ShouldQueue
 {
-    // use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    use Dispatchable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $timeout = 900;
     private $stores;
     private $siteSettings;
     private $network;
@@ -35,7 +34,7 @@ class RevGlueStoreVoucherImporter
     {
         $this->stores = $stores;
         $this->siteSettings = SiteSetting::latest()->get()->pluck('value', 'type');
-        $this->network = Network::whereName('RevGlue')->first();
+        $this->network = Network::where('name', 'RevGlue')->first();
     }
 
     /**
@@ -45,14 +44,16 @@ class RevGlueStoreVoucherImporter
      */
     public function handle()
     {
-        try {
-            $response = Http::get('https://www.revglue.com/partner/coupons/' . $this->siteSettings['revglue_api_key'] . '/json');
-            if ($response->successful()) {
-                $response = $response->object()->response;
-                if ($response->success) {
-                    foreach ($this->stores as $store) {
-                        if (!empty($response->coupons)) {
-                            foreach ($response->coupons as $rgCoupon) {
+        $response = Http::get('https://www.revglue.com/partner/coupons/' . $this->siteSettings['revglue_api_key'] . '/json');
+        if ($response->successful()) {
+            $response = $response->object()->response;
+
+            if (!$response->success) {
+                $coupons = $response->coupons;
+                if (!empty($coupons)) {
+                    try {
+                        foreach ($this->stores as $store) {
+                            foreach ($coupons as $rgCoupon) {
                                 if ($store->advertiser_id != $rgCoupon->rg_store_id) continue;
 
                                 Voucher::updateOrCreate([
@@ -72,22 +73,20 @@ class RevGlueStoreVoucherImporter
                                 ]);
                             }
                         }
+                    } catch (Exception $e) {
+                        Log::error('Unexpected error while importing vouchers from RevGlue: ' . $e->getMessage());
                     }
-                } else {
-                    Log::error('RevGlue coupons status got failed');
                 }
-            } else if ($response->failed()) {
-                // Determine if the status code is >= 400
-                Log::error('Get error while import coupons from RevGlue on response failed: ' . $response->failed());
-            } else if ($response->clientError()) {
-                // Determine if the response has a 400 level status code
-                Log::error('Get client error while import coupons from RevGlue: ' . $response->clientError());
-            } else if ($response->serverError()) {
-                // Determine if the response has a 500 level status code
-                Log::error('Get server error while import coupons from RevGlue: ' . $response->serverError());
             }
-        } catch (Exception $e) {
-            Log::error('Get error while import vouchers from RevGlue: ' . $e->getMessage());
+        } else if ($response->failed()) {
+            // Handle error for failed responses
+            Log::error('Error while importing vouchers from RevGlue: ' . $response->status());
+        } else if ($response->clientError()) {
+            // Handle error for client responses
+            Log::error('Get client error while import vouchers from RevGlue: ' . $response->clientError());
+        } else if ($response->serverError()) {
+            // Handle error for server responses
+            Log::error('Get server error while import vouchers from RevGlue: ' . $response->serverError());
         }
     }
 }

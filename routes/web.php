@@ -1,20 +1,6 @@
 <?php
 
-use Carbon\Carbon;
-use App\Models\Store;
-use App\Models\Network;
-use App\Models\Category;
-use App\Models\StoreImage;
-use App\Models\SiteSetting;
-use Illuminate\Support\Str;
-use App\Jobs\RevGlueImporter;
-use App\Models\ImportedCategory;
-use App\Jobs\RevGlueStoreImporter;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Redirect;
@@ -365,21 +351,4 @@ Route::namespace('App\Http\Controllers\Client')
 
 Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], function () {
     \UniSharp\LaravelFilemanager\Lfm::routes();
-});
-
-Route::get('revglue-stores', function () {
-    $network = Network::where('name', 'RevGlue')->first();
-    // $response = Http::get('https://www.revglue.com/partner/cashback_stores/' . SiteSetting()['revglue_api_key'] . '/json');
-    // // dd($response->successful());
-
-    // if ($response->successful()) {
-    //     $stores = $response->object()->response->stores;
-
-    //     // Use chunk to process stores in smaller batches
-    //     collect($stores)->chunk(5)->each(function ($chunk, $key) {
-    //         dd($chunk);
-    //     });
-    // }
-    $response = Http::get('https://www.revglue.com/partner/cashback_stores/' . SiteSetting()['revglue_api_key'] . '/json');
-    dd($response->object());
 });
