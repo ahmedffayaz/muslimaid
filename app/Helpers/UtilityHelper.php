@@ -370,7 +370,7 @@ function saveResizeImage($file, $directory, $width, $type = 'jpg')
     $img = Image::make($file)->orientate();
 
     // Check if the specified width is smaller than the original image width
-    if ($img > $width) {
+    if ($img->width() > $width) {
         // Resize the image only if the specified width is smaller
         $img = $img->resize($width, null, function ($constraint) {
             $constraint->aspectRatio();
