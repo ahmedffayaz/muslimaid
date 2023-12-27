@@ -16,9 +16,11 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-class RevGlueStoreVouchersImporter implements ShouldQueue
+// class RevGlueStoreVouchersImporter implements ShouldQueue
+class RevGlueStoreVouchersImporter
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    // use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, SerializesModels;
 
     public $timeout = 900;
     private $stores;
@@ -46,31 +48,31 @@ class RevGlueStoreVouchersImporter implements ShouldQueue
     {
         $response = Http::get('https://www.revglue.com/partner/coupons/' . $this->siteSettings['revglue_api_key'] . '/json');
         if ($response->successful()) {
+            // Convert response from array to object
             $response = $response->object()->response;
-
-            if (!$response->success) {
+            if ($response->success) {
                 $coupons = $response->coupons;
                 if (!empty($coupons)) {
                     try {
                         foreach ($this->stores as $store) {
                             foreach ($coupons as $rgCoupon) {
-                                if ($store->advertiser_id != $rgCoupon->rg_store_id) continue;
-
-                                Voucher::updateOrCreate([
-                                    'advertiser_id' => $rgCoupon->coupons_id,
-                                    'network_id' => $this->network->id,
-                                    'store_id' => $store->id
-                                ], [
-                                    'name' => $rgCoupon->coupons_title,
-                                    'description' => $rgCoupon->coupons_description,
-                                    'tracking_url' => isset($rgCoupon->tracking_url) ? $rgCoupon->tracking_url : null,
-                                    'deeplink_url' => $rgCoupon->deeplink,
-                                    'promotion_type' => $rgCoupon->coupon_type == 'code' ? 'Coupon' : 'Sale/Discount',
-                                    'coupon_code' => $rgCoupon->coupon_type == 'code'? $rgCoupon->coupon_code : null,
-                                    'image' => null,
-                                    'promotion_start_date' => Carbon::parse($rgCoupon->issue_date)->format('Y-m-d H:i:s'),
-                                    'promotion_end_date' => Carbon::parse($rgCoupon->expiry_date)->format('Y-m-d H:i:s')
-                                ]);
+                                if ($store->advertiser_id == $rgCoupon->rg_store_id) {
+                                    Voucher::updateOrCreate([
+                                        'advertiser_id' => $rgCoupon->coupons_id,
+                                        'network_id' => $this->network->id,
+                                        'store_id' => $store->id
+                                    ], [
+                                        'name' => $rgCoupon->coupons_title,
+                                        'description' => $rgCoupon->coupons_description,
+                                        'tracking_url' => isset($rgCoupon->tracking_url) ? $rgCoupon->tracking_url : null,
+                                        'deeplink_url' => $rgCoupon->deeplink,
+                                        'promotion_type' => $rgCoupon->coupon_type == 'code' ? 'Coupon' : 'Sale/Discount',
+                                        'coupon_code' => $rgCoupon->coupon_type == 'code'? $rgCoupon->coupon_code : null,
+                                        'image' => null,
+                                        'promotion_start_date' => Carbon::parse($rgCoupon->issue_date)->format('Y-m-d H:i:s'),
+                                        'promotion_end_date' => Carbon::parse($rgCoupon->expiry_date)->format('Y-m-d H:i:s')
+                                    ]);
+                                }
                             }
                         }
                     } catch (Exception $e) {

@@ -47,7 +47,7 @@ class RevGlueUserCashbacksImporter implements ShouldQueue
     public function handle()
     {
         try {
-            foreach ($$his->chunk as $rgCashback) {
+            foreach ($this->chunk as $rgCashback) {
                 $exitClick = ExitClick::where('id', $rgCashback->site_exit_click_id)->first();
                 if (!empty($exitClick)) {
                     $userCashback = UserCashback::where('exit_click_id', $exitClick->id)->where('user_id', $exitClick->user_id)->first();
