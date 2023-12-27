@@ -16,11 +16,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 
-// class RevGlueStoreVouchersImporter implements ShouldQueue
-class RevGlueStoreVouchersImporter
+class RevGlueStoreVouchersImporter implements ShouldQueue
 {
-    // use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
-    use Dispatchable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $timeout = 900;
     private $stores;
