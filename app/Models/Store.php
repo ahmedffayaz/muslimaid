@@ -138,6 +138,16 @@ class Store extends Model
         return $this->hasMany(StoreAddress::class, 'store_id', 'id');
     }
 
+    public function toArray()
+    {
+        $array = parent::toArray();
+
+        // Hide the appended attributes when converting to an array
+        $this->makeHidden(['cashback_integer', 'default_cashback']);
+
+        return $array;
+    }
+
     public function getCashbackIntegerAttribute()
     {
         if ($this->custom_cashback_percentage && !empty($this->cashback->sale_commission)) {

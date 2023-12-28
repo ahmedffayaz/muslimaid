@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\Response;
 use Throwable;
-use App\Models\User;
-use App\Models\Store;
 use App\Models\Network;
 use App\Models\ExitClick;
 use Illuminate\Http\Request;
@@ -35,7 +33,11 @@ class ClickController extends Controller
     {
         $clicks = ExitClick::whereHas('store', function($query){
             $query->whereNull('deleted_at');
-        })
+        })->with(['store' => function ($query) {
+            $query->select('id', 'name', 'slug', 'status', 'created_at', 'deleted_at')->with('network');
+        }])->with(['user' => function ($query) {
+            $query->select('id', 'first_name', 'last_name', 'email', 'status', 'created_at');
+        }])->with('network')
         ->when($request->click_id, function ($query) use ($request){
             $query->where('id', $request->click_id)->orWhere('user_id', $request->click_id)
             ->orWhere('store_id', $request->store_id);
@@ -89,7 +91,10 @@ class ClickController extends Controller
     public function deletedStoresClicks(Request $request){
         $exitClicks = ExitClick::whereHas('store', function ($query) {
             $query->onlyTrashed();
-        })->when($request->click_id, function ($query) use ($request){
+        })->with(['store' => function ($query) {
+            $query->select('id', 'name', 'slug', 'status', 'created_at', 'deleted_at');
+        }])->with('network')
+        ->when($request->click_id, function ($query) use ($request){
             $query->where('id', $request->click_id)->orWhere('user_id', $request->click_id)
             ->orWhere('store_id', $request->store_id);
         })->when($request->user, function ($query) use ($request) {

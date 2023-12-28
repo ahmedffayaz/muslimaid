@@ -1078,6 +1078,10 @@ class StoreController extends Controller
     public function ajaxStores()
     {
         $stores = Store::select('id', 'name', 'slug', 'created_at')->latest()->get();
+        // Hide the appended attributes temporarily
+        $stores->each(function ($store) {
+            $store->makeHidden(['cashback_integer', 'default_cashback']);
+        });
         return response()->json(['stores' => $stores]);
     }
 }

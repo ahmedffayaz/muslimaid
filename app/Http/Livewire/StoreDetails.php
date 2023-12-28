@@ -41,6 +41,6 @@ class StoreDetails extends Component
     {
         $this->store = Store::where('slug',$value)->first();
         $this->slug = $this->store->slug;
-        $this->emit('storeChange');
+        $this->emit('storeChange', ['store' =>  $this->store]);
     }
 }
