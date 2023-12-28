@@ -27,16 +27,18 @@ class VouchersController extends Controller
     public function index()
     {
         $route = 'index';
-        $stores = Store::latest()->get();
+        $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->latest()->get();
         $networks = Network::latest()->get();
-        $vouchers = Voucher::latest()->paginate(30);
+        $vouchers = Voucher::whereHas('store')->with(['store' => function ($query) {
+            $query->select('id', 'name', 'slug', 'status', 'created_at')->with('network');
+        }])->latest()->paginate(30);
 
         return view('admin-dashboard.vouchers.index', compact('vouchers', 'stores', 'route', 'networks'));
     }
 
     public function create()
     {
-        $stores = Store::latest()->get();
+        $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->where('status', 'active')->latest()->get();
         return view('admin-dashboard.vouchers.edit-voucher', compact('stores'));
     }
 
@@ -49,7 +51,7 @@ class VouchersController extends Controller
             'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'description' => 'nullable|max:255',
             'promotion_type' => 'required|string',
-            'coupon_code' => [ 
+            'coupon_code' => [
                 Rule::requiredIf(function () use ($request){
                     return $request->promotion_type === "Coupon";
             }),
@@ -108,7 +110,7 @@ class VouchersController extends Controller
 
     public function edit(Request $request, Voucher $voucher)
     {
-        $stores = Store::latest()->get();
+        $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->latest()->get();
 
         if ($request->input('store_editor')) {
             return view('admin-dashboard.vouchers.modal-edit', compact('voucher', 'stores'))->render();
@@ -126,7 +128,7 @@ class VouchersController extends Controller
             'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'description' => 'nullable|max:255',
             'promotion_type' => 'required|string',
-            'coupon_code' => [ 
+            'coupon_code' => [
                 Rule::requiredIf(function () use ($request){
                     return $request->promotion_type === "Coupon";
             }),
@@ -207,7 +209,9 @@ class VouchersController extends Controller
     {
         if ($request->ajax()) {
             $route = 'index';
-            $vouchers = Voucher::latest()->paginate(30);
+            $vouchers = Voucher::whereHas('store')->with(['store' => function ($query) {
+                $query->select('id', 'name', 'slug', 'status', 'created_at')->with('network');
+            }])->latest()->paginate(30);
 
             return view('admin-dashboard.vouchers.index_data', compact('vouchers', 'route'))->render();
         }
@@ -267,14 +271,16 @@ class VouchersController extends Controller
 
     public function searchVouchers(Request $request, voucher $vouchers)
     {
-        $vouchers = $vouchers->newQuery();
+        $vouchers = $vouchers->whereHas('store')->with(['store' => function ($query) {
+            $query->select('id', 'name', 'slug', 'status', 'created_at')->with('network');
+        }])->newQuery();
 
         // Search by store.
         if ($request->input('store_id')) {
             $vouchers->where('store_id', $request->input('store_id'));
         }
 
-        $vouchers = $vouchers->latest()->paginate(10);
+        $vouchers = $vouchers->latest()->paginate(30);
         $route = 'search';
 
         return view('admin-dashboard.vouchers.index_data', compact('vouchers', 'route'))->render();
