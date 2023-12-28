@@ -4,7 +4,6 @@ namespace App\Http\Controllers\API;
 
 use Exception;
 use App\Models\User;
-use App\Models\Bonus;
 use App\Traits\UserBonus;
 use App\Jobs\SendOTPEmail;
 use App\Models\UserDevice;
@@ -78,8 +77,9 @@ class AuthController extends Controller
             $this->welcomBonus($user, $bonusStatus);
             dispatch(new SendOTPEmail($user));
 
-            if (!empty($settings['sendgrid_registered_list_id']) && !empty($settings['sendgrid_api_key'])) {
-                $settings = SiteSetting();
+            // Add contact in SendGrid register list
+            $settings = SiteSetting();
+            if (isset($settings['sendgrid_registered_list_id']) && isset($settings['sendgrid_api_key']) && !empty($settings['sendgrid_registered_list_id']) && !empty($settings['sendgrid_api_key'])) {
                 $requestBody = [
                     'list_ids' => [
                         isset($settings['sendgrid_registered_list_id']) ? $settings['sendgrid_registered_list_id'] : "",

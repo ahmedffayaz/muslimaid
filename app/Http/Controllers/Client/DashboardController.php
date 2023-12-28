@@ -2,25 +2,22 @@
 
 namespace App\Http\Controllers\Client;
 
-use Carbon\Carbon;
-use App\Models\User;
+use Exception;
 use App\Models\Store;
+use App\Models\Appeal;
 use App\Models\Cashout;
 use App\Models\Country;
-use App\Models\Category;
+use App\Models\UserMeta;
 use App\Models\ExitClick;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use App\Models\Appeal;
-use App\Models\UserMeta;
-use Exception;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -123,6 +120,14 @@ class DashboardController extends Controller
                         ]);
                     }
                 }
+            }
+
+            if (isset(SiteSetting()['sendgrid_api_key']) && !empty(SiteSetting()['sendgrid_api_key']) &&
+                isset(SiteSetting()['sendgrid_newsletter_list_id']) && !empty(SiteSetting()['sendgrid_newsletter_list_id']) &&
+                $user->email_preference == 1 && session('allowSendgrid') != 0) {
+                Session::put('allowSendgrid', '1');
+            } else {
+                Session::put('allowSendgrid', '0');
             }
 
             DB::commit();

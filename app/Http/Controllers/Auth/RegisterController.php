@@ -11,6 +11,7 @@ use App\Traits\WelcomeEmail;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
+use App\Traits\SendGrid;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Session;
@@ -31,7 +32,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers, UserBonus, WelcomeEmail;
+    use RegistersUsers, UserBonus, WelcomeEmail, SendGrid;
 
     /**
      * Where to redirect users after registration.
@@ -130,28 +131,8 @@ class RegisterController extends Controller
             //send email to user to verify email address
             dispatch(new SendEmailJob($user));
 
-            if (!empty($settings['sendgrid_registered_list_id']) && !empty($settings['sendgrid_api_key'])) {
-                $settings = SiteSetting();
-                $requestBody = [
-                    'list_ids' => [
-                        isset($settings['sendgrid_registered_list_id']) ? $settings['sendgrid_registered_list_id'] : "",
-                    ],
-                    'contacts' => [
-                        [
-                            'email' => $data['email'],
-                            'first_name' => $data['firstname'],
-                            'last_name' => $data['lastname'],
-                        ]
-                    ]
-                ];
-                $apiKey = isset($settings['sendgrid_api_key']) ? $settings['sendgrid_api_key'] : "";
-                $sg = new \SendGrid($apiKey);
-
-                $response = $sg->client->marketing()->contacts()->put($requestBody);
-                if ($response->statusCode() != 201 && $response->statusCode() != 202) {
-                    return redirect()->route('login')->with(['error' => 'Something went wrong!']);
-                }
-            }
+            // Add email in SendGrid's register contact list
+            $this->sendGridRegistrationList($user);
 
             DB::commit();
             return redirect()->route('login')->with(['success' => 'User Successfully registered, verify your account'],);
