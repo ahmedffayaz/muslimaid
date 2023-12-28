@@ -23,8 +23,8 @@
                                 <div class="form-group stores">
                                     <label class="form-label" for="default-06"></label>
                                     <div class="form-control-wrap ">
-                                        <div class="all-stores">
-                                        </div>
+                                        <select class="form-control form-select select-2 all-stores" data-search="on" name="open_store" id="store_select" required>
+                                        </select>
                                     </div>
                                 </div>
                             </div><!-- .nk-block-head-content -->
@@ -595,7 +595,7 @@
 
     <script>
         // Function to initialize Select2
-        function fetchAllStores() {
+        function fetchAllStores(targetStoreSlug = null) {
             $.ajax({
                 url: '{{ route(getAdminPrefix() . ".ajax.stores") }}',
                 type: 'get',
@@ -603,14 +603,14 @@
                     var select2Stores = '';
                     var select2Store = '';
                     var targetStore = "{{ $store->slug }}";
+                    var targetStoreSlugCurrent = targetStoreSlug != null ? targetStoreSlug : targetStore;
                     data.stores.forEach(store => {
                         // Check if the current store's slug matches the target slug
-                        var isSelected = (store.slug === targetStore) ? 'selected' : '';
-                        if (store.slug === targetStore) {console.log(store.slug)} else { console.log('store '); console.log(store.slug); }
+                        var isSelected = (store.slug === targetStoreSlugCurrent) ? 'selected' : '';
                         select2Store += `<option value="`+store.slug+`" ${isSelected}>`+store.id+ ' - ' +store.name+`</option>`;
                     });
 
-                    select2Stores = `<select class="form-control form-select select-2" data-search="on" name="open_store" id="store_select" required>`+select2Store+`</select>`;
+                    select2Stores = select2Store;
 
                     $('.all-stores').append(select2Stores);
                     $('.select-2').each(function() {
@@ -725,8 +725,8 @@
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
-            window.livewire.on('storeChange', () => {
-                fetchAllStores();
+            window.livewire.on('storeChange', (args) => {
+                fetchAllStores(args.store.slug);
                 fetchVouchers();
                 fetchCashbacks();
                 fetchReviews();
@@ -744,7 +744,9 @@
             fetchAllStores();
             // Use event delegation for dynamically created elements
             $(document).on('change', '#store_select', function(e) {
-                livewire.emit('changeEvent', e.target.value);
+                var selectedStoreSlug = $(this).val();
+                fetchAllStores(selectedStoreSlug);
+                livewire.emit('changeEvent', selectedStoreSlug);
             });
         });
     </script>
