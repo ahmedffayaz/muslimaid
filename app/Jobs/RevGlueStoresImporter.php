@@ -143,7 +143,7 @@ class RevGlueStoresImporter implements ShouldQueue
                         // Update store images
                         foreach ($imageTypes as $imageType => $property) {
                             $imageProperty = $rgStore->{$property};
-                            $dbStore->images()->where('image_type', $imageType)->update(['image' => empty($imageProperty) ? (mt_rand(1, 20) . '.png') : $imageProperty]);
+                            $dbStore->images()->where('image_type', $imageType)->updateOrCreate(['image' => empty($imageProperty) ? (mt_rand(1, 20) . '.png') : $imageProperty]);
                         }
 
                         // Update network categories
