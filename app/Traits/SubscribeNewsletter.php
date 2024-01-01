@@ -39,6 +39,7 @@ trait SubscribeNewsletter
                 $response = $sg->client->marketing()->contacts()->put($requestBody);
                 if ($response->statusCode() != 201 && $response->statusCode() != 202) {
                     Log::error('Get error on while user register account on SendGrid registration.');
+                    return;
                 }
             }
 
@@ -46,63 +47,57 @@ trait SubscribeNewsletter
                 //
             }
 
-            return response()->json([
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'error' => 'Something went wrong while subscribing to newsletter.'
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            $this->apiLogErrorMessage();
         } catch (Exception $e) {
             Log::error('Get error while sending request for newsletter on registration: ' . $e->getMessage());
         }
     }
 
-    function subscribeNewsletter($request)
+    function subscribeNewsletter($request, $isApi = false)
     {
         try {
             $settings = SiteSetting();
             if (!empty($settings['sendgrid_api_key']) && !empty($settings['sendgrid_newsletter_list_id']) &&
-                $request->has('type') && $request->input('type') === 'subscribe-newsletter'
+                isset($request->type) && $request->type === 'subscribe-newsletter'
             ) {
-                if ($request->has('email') && $request->has('name')) {
-                    $user = User::where('email', $request->input('email'))->first();
-                    $nameArray = explode(' ', request()->input('name'));
+                if (isset($request->email)) {
+                    $user = User::where('email', $request->email)->first();
+                    $nameArray = isset($request->name) ? explode(' ', $request->name) : '';
                     if (!empty($user)) {
                         $response = $this->sendGrid($settings, $user, $nameArray);
                         if ($response->statusCode() == 201 || ($response->statusCode() == 202)) {
                             $user->update(['email_preference' => true]);
-                            Session::put('allowSendgrid', '1');
+                            if (!$isApi) Session::put('allowSendgrid', '1');
 
-                            return $this->newsletterJoiningMessage($request);
+                            return $this->newsletterJoiningMessage($request, $isApi);
                         }
                     } else {
                         $response = $this->sendGrid($settings, $user, $request->input('email'), $nameArray);
                         if ($response->statusCode() == 201 || ($response->statusCode() == 202)) {
-                            return $this->newsletterJoiningMessage($request);
+                            return $this->newsletterJoiningMessage($request, $isApi);
                         }
                     }
                 }
-                return $this->errorMessage($request);
+                return $this->errorMessage($request, $isApi);
             }
 
             if (!empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
                 //
             }
 
-            return response()->json([
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'error' => 'Something went wrong while subscribing to newsletter.'
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->apiErrorMessage($request, $isApi);
         } catch (Exception $e) {
             Log::error('Get error while sending request for newsletter: ' . $e->getMessage());
             return $this->errorMessage($request);
         }
     }
 
-    function profileSubscribeNewsletter($request)
+    function profileSubscribeNewsletter($request, $isApi = false)
     {
         try {
             $settings = SiteSetting();
             if (!empty($settings['sendgrid_api_key']) && !empty($settings['sendgrid_newsletter_list_id']) &&
-                $request->has('type') && $request->input('type') === 'profile-subscribe-newsletter'
+                isset($request->type) && $request->type === 'profile-subscribe-newsletter'
             ) {
                 $user = auth()->user();
                 $response = $this->sendGrid($settings, $user);
@@ -111,34 +106,31 @@ trait SubscribeNewsletter
                     $user = User::where('id', $user->id)->first();
                     if (!empty($user)) {
                         $user->update(['email_preference' => true]);
-                        Session::put('allowSendgrid', '1');
+                        if (!$isApi) Session::put('allowSendgrid', '1');
 
-                        return $this->newsletterJoiningMessage($request);
+                        return $this->newsletterJoiningMessage($request, $isApi);
                     }
                 }
-                return $this->errorMessage($request);
+                return $this->errorMessage($request, $isApi);
             }
 
             if (!empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
                 //
             }
 
-            return response()->json([
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'error' => 'Something went wrong while subscribing to newsletter.'
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->apiErrorMessage($request, $isApi);
         } catch (Exception $e) {
             Log::error('Get error while sending request for newsletter: ' . $e->getMessage());
-            return $this->errorMessage($request);
+            return $this->errorMessage($request, $isApi);
         }
     }
 
-    function unsubscribeNewsletter($request)
+    function unsubscribeNewsletter($request, $isApi = false)
     {
         try {
             $settings = SiteSetting();
             if (!empty($settings['sendgrid_api_key']) && !empty($settings['sendgrid_newsletter_list_id']) &&
-                $request->has('type') && $request->input('type') === 'profile-unsubscribe-newsletter'
+                isset($request->type) && $request->type === 'profile-unsubscribe-newsletter'
             ) {
                 $user = auth()->user();
                 $sg = new SendGrid($settings['sendgrid_api_key']);
@@ -165,34 +157,32 @@ trait SubscribeNewsletter
                         $user = User::find($user->id);
                         if (!empty($user)) {
                             $user->update(['email_preference' => false]);
-                            Session::put('allowSendgrid', '0');
-                            return $this->unsubscribeNewsletterMessage($request);
+                            if (!$isApi) Session::put('allowSendgrid', '0');
+
+                            return $this->unsubscribeNewsletterMessage($request, $isApi);
                         }
                     }
                 }
-                return $this->errorMessage($request);
+                return $this->errorMessage($request, $isApi);
             }
 
             if (!empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
                 //
             }
 
-            return response()->json([
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'error' => 'Something went wrong while subscribing to newsletter.'
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->apiErrorMessage($request, $isApi);
         } catch (Exception $e) {
             Log::error('Get error while sending request for newsletter: ' . $e->getMessage());
             return $this->errorMessage($request);
         }
     }
 
-    function updateNewsletter($request)
+    function updateNewsletter($request, $isApi = false)
     {
         try {
             $settings = SiteSetting();
             if (!empty($settings['sendgrid_api_key']) && !empty($settings['sendgrid_newsletter_list_id']) &&
-                $request->has('type') && $request->input('type') === 'update-newsletter'
+                isset($request->type) && $request->type === 'update-newsletter'
             ) {
                 $user = auth()->user();
                 $response = $this->sendGrid($settings, $user);
@@ -201,25 +191,21 @@ trait SubscribeNewsletter
                     $user = User::where('id', $user->id)->first();
                     if (!empty($user)) {
                         $user->update(['email_preference' => true]);
-                        Session::put('allowSendgrid', '1');
-
-                        return $this->newsletterJoiningMessage($request);
+                        if (!$isApi) Session::put('allowSendgrid', '1');
+                        return;
                     }
                 }
-                return $this->errorMessage($request);
+                Log::error('Something went wrong while updating user profile to subscribe newsletter.');
+                return;
             }
 
             if (!empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
                 //
             }
 
-            return response()->json([
-                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'error' => 'Something went wrong while subscribing to newsletter.'
-            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            $this->apiLogErrorMessage();
         } catch (Exception $e) {
             Log::error('Get error while sending request for newsletter: ' . $e->getMessage());
-            return $this->errorMessage($request);
         }
     }
 
@@ -278,55 +264,86 @@ trait SubscribeNewsletter
         return $sg->client->marketing()->contacts()->put($requestBody);
     }
 
-    private function newsletterJoiningMessage($request)
+    private function newsletterJoiningMessage($request, $isApi = false)
     {
-        if ($request->ajax()) {
+        $message = 'Thanks for joining our newsletter.';
+        if ($isApi) {
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,
-                'success' => 'Thanks for joining our newsletter.'
+                'message' => $message
+            ], JsonResponse::HTTP_OK);
+        } else if ($request->ajax() && !$isApi) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'success' => $message
             ], JsonResponse::HTTP_OK);
         }
 
-        flash()->success('Thanks for joining our newsletter.');
+        flash()->success($message);
         return redirect()->back();
     }
 
-    private function unsubscribeNewsletterMessage($request)
+    private function unsubscribeNewsletterMessage($request, $isApi = false)
     {
-        if ($request->ajax()) {
+        $message = 'You have successfully unsubscribe newsletter.';
+        if ($isApi) {
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,
-                'success' => 'You have successfully unsubscribe newsletter.'
+                'message' => $message
+            ], JsonResponse::HTTP_OK);
+        } else if ($request->ajax() && !$isApi) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'success' => $message
             ], JsonResponse::HTTP_OK);
         }
 
-        flash()->success('You have successfully unsubscribe newsletter.');
+        flash()->success($message);
         return redirect()->back();
     }
 
-    private function errorMessage($request)
+    private function errorMessage($request, $isApi = false)
     {
-        if ($request->ajax()) {
+        $message = 'Something went wrong, try again later.';
+        if ($isApi) {
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'error' => 'Something went wrong, try again later.'
+                'message' => $message
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        if ($request->ajax() && !$isApi) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $message
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        flash()->error('Something went wrong, try again later.');
+        flash()->error($message);
         return redirect()->back();
     }
 
-    private function apiErrorMessage($request)
+    private function apiErrorMessage($request, $isApi = false)
     {
-        if ($request->ajax()) {
+        $message = 'Internal server error.';
+        Log::error('Newsletter provider not configured.');
+        if ($isApi) {
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'error' => 'Something went wrong while subscribing to newsletter.'
+                'message' => $message
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        } else if ($request->ajax() && !$isApi) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $message
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        flash()->error('Something went wrong while subscribing to newsletter.');
+        flash()->error($message);
         return redirect()->back();
+    }
+
+    private function apiLogErrorMessage()
+    {
+        Log::error('Newsletter provider not configured.');
     }
 }
