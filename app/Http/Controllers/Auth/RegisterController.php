@@ -2,22 +2,22 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Exception;
 use Carbon\Carbon;
 use App\Models\User;
-use Exception;
 use App\Traits\UserBonus;
 use App\Jobs\SendEmailJob;
 use App\Traits\WelcomeEmail;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Traits\SendGrid;
+use App\Traits\SubscribeNewsletter;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
-use Illuminate\Support\Facades\DB;
 
 class RegisterController extends Controller
 {
@@ -32,7 +32,7 @@ class RegisterController extends Controller
     |
     */
 
-    use RegistersUsers, UserBonus, WelcomeEmail, SendGrid;
+    use RegistersUsers, UserBonus, WelcomeEmail, SubscribeNewsletter;
 
     /**
      * Where to redirect users after registration.
@@ -132,7 +132,7 @@ class RegisterController extends Controller
             dispatch(new SendEmailJob($user));
 
             // Add email in SendGrid's register contact list
-            $this->sendGridRegistrationList($user);
+            $this->registerNewsletter(['type' => 'register', 'user' => $user]);
 
             DB::commit();
             return redirect()->route('login')->with(['success' => 'User Successfully registered, verify your account'],);
