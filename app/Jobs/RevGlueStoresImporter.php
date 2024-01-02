@@ -133,17 +133,24 @@ class RevGlueStoresImporter implements ShouldQueue
                             'store_url' => rtrim($rgStore->website_url, '/')
                         ]);
 
-                        $imageTypes = [
-                            'store_logo_small' => 'image_url',
-                            'store_logo_large' => 'store_icon_large',
-                            'store_banner_small' => 'store_banner_small',
-                            'store_banner_large' => 'store_banner_large',
+                        // update or create store images
+                        $storeImageTypes = [
+                            'store_logo_small' => ['title' => 'logo', 'property' => 'image_url'],
+                            'store_logo_large' => ['title' => 'large logo', 'property' => 'store_icon_large'],
+                            'store_banner_small' => ['title' => 'Cover', 'property' => 'store_banner_small'],
+                            'store_banner_large' => ['title' => 'large cover', 'property' => 'store_banner_large'],
                         ];
-
-                        // Update store images
-                        foreach ($imageTypes as $imageType => $property) {
-                            $imageProperty = $rgStore->{$property};
-                            $dbStore->images()->where('image_type', $imageType)->updateOrCreate(['image' => empty($imageProperty) ? (mt_rand(1, 20) . '.png') : $imageProperty]);
+                        $currentTime = Carbon::now();
+                        foreach ($storeImageTypes as $imageType => $imageData) {
+                            StoreImage::updateOrCreate([
+                                'store_id' => $dbStore->id,
+                                'image_type' => $imageType
+                            ], [
+                                'title' => $imageData['title'],
+                                'image' => empty($rgStore->{$imageData['property']}) ? (mt_rand(1, 20) . '.png') : $rgStore->{$imageData['property']},
+                                'is_uploaded' => '',
+                                'is_fake' => empty($rgStore->{$imageData['property']}) ? 1 : 0,
+                            ]);
                         }
 
                         // Update network categories
