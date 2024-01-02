@@ -19,7 +19,13 @@ class StoreController extends Controller
 
     public function show($slug)
     {
-        $store = Store::where('slug', $slug)->whereStatus('active')->with(['cashbacks'])->withCount('cashbacks')->firstOrFail();
+        $store = Store::where('slug', $slug)
+        ->whereStatus('active')
+        ->with(['cashbacks'])
+        ->withCount('cashbacks')
+        ->with(['vouchers' => function ($query) {
+            $query->where('promotion_end_date', '>=', now());
+        }])->firstOrFail();
 
         $userRefId = !empty(auth()->user()) ? auth()->user() : User::whereId(1)->first();
 
