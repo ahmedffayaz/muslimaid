@@ -25,9 +25,11 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserCashbackResource;
 use App\Models\Banner;
 use App\Models\UserMeta;
+use App\Traits\SubscribeNewsletter;
 
 class UserController extends Controller
 {
+    use SubscribeNewsletter;
     public function userData()
     {
         try {
@@ -94,6 +96,9 @@ class UserController extends Controller
                     ]);
                 }
             }
+
+            $type = (object) ['type' => 'update-newsletter'];
+            $this->updateNewsletter($type, true);
 
             $user = new UserResource(auth()->user());
             $response = [

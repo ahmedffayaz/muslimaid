@@ -16,11 +16,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\Home\UserResource;
 use App\Jobs\SendEmailJob;
+use App\Traits\SubscribeNewsletter;
 use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    use ApiResponser, WelcomeEmail, UserBonus;
+    use ApiResponser, WelcomeEmail, UserBonus, SubscribeNewsletter;
 
     public function register(Request $request)
     {
@@ -71,40 +72,13 @@ class AuthController extends Controller
 
             $user->assignRole('user');
             $bonusStatus = 3;
-            $nameArray = explode(' ', $request->input('name'));
 
             // verify email
             $this->welcomBonus($user, $bonusStatus);
             dispatch(new SendOTPEmail($user));
 
-            // Add contact in SendGrid register list
-            $settings = SiteSetting();
-            if (isset($settings['sendgrid_registered_list_id']) && isset($settings['sendgrid_api_key']) && !empty($settings['sendgrid_registered_list_id']) && !empty($settings['sendgrid_api_key'])) {
-                $requestBody = [
-                    'list_ids' => [
-                        isset($settings['sendgrid_registered_list_id']) ? $settings['sendgrid_registered_list_id'] : "",
-                    ],
-                    'contacts' => [
-                        [
-                            'email' =>  $request->input('email'),
-                            'first_name' => isset($nameArray[0]) ? $nameArray[0] : '',
-                            'last_name' => isset($nameArray[1]) ? $nameArray[1] : '',
-                        ]
-                    ]
-                ];
-                $apiKey = isset($settings['sendgrid_api_key']) ? $settings['sendgrid_api_key'] : "";
-                $sg = new \SendGrid($apiKey);
-
-                $response = $sg->client->marketing()->contacts()->put($requestBody);
-                if ($response->statusCode() != 201 && $response->statusCode() != 202) {
-                    $response = [
-                        'status' => 500,
-                        'message' => 'Something went wrong, try again.',
-                        'data' => []
-                    ];
-                    return response()->json($response, 500);
-                }
-            }
+            // Add email in SendGrid's register contact list
+            $this->registerNewsletter(['type' => 'register', 'user' => $user]);
 
             $user = new UserResource($user);
             $response = [

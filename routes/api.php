@@ -59,6 +59,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/enable_notifications', [API\FirebaseController::class, 'enableNotifications']);
     Route::get('/disable_notifications', [API\FirebaseController::class, 'disableNotifications']);
+
+    Route::post('subscribe-newsletter', [API\SubscribeNewsletterController::class, 'index']);
 });
 
 Route::apiResource('stores', API\StoreController::class)->only(['index', 'show']);
@@ -68,7 +70,6 @@ Route::post('competitor-stores', [API\StoreController::class, 'competitorStores'
 Route::get('vouchers', [API\StoreController::class, 'vouchers']);
 Route::get('store-detail/{id}', [API\StoreController::class, 'vouchers']);
 
-
 Route::get('home', [API\HomeController::class, 'index']);
 
 Route::get('categories/{letter?}', [API\CategoryController::class, 'index']);
@@ -76,3 +77,4 @@ Route::get('child-categories/{slug}/{letter?}', [API\CategoryController::class, 
 Route::get('get-category-stores/{slug}', [API\CategoryController::class, 'getCategoryStores']);
 Route::post('exit-click', [API\ClickController::class, 'getCashbackStore']);
 Route::post('exit-click-voucher', [API\ClickController::class, 'getCouponCashbackStore']);
+

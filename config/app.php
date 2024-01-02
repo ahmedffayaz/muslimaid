@@ -58,17 +58,29 @@ return [
 
     'cashback_percent' => '50',
 
+    // Enable/Disable Charity Module
     'charity_yaml_path' => 'Modules_Charities_List',
 
+    // Enable/Disable Cashout Module
     'cashout_yaml_path' => 'Modules_Charities_Cashout',
 
+    // Hide/Show payment method in site settings in admin panel
     'payment_method_yaml_path' => 'Modules_PaymentMethod',
 
+    // Enable/Disable Appeals Module
     'appeals_yaml_path' => 'Modules_Appeals_List',
 
+    // Enable/Disable Banners Modules
     'banners_yaml_path' => 'Modules_Banners_List',
 
+    // Hide/Show cashback earnings column in admin panel
     'cashback_earnings_admin_yml_path' => 'Modules_CashbackEarningsAdmin',
+
+    // Enable/Disable SendGrid Provider Module
+    'sendgrid_yml_path' => 'Modules_SMTP_Sendgrid',
+
+    // Enable/Disable MailChimp Provider Module
+    'mailchimp_yml_path' => 'Modules_SMTP_mailchimp',
 
     /*
     |--------------------------------------------------------------------------

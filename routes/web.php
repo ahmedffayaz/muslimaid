@@ -304,6 +304,7 @@ Route::get('pages/{slug}', [App\Http\Controllers\Frontend\PagesController::class
 Route::get('appeals', [App\Http\Controllers\Frontend\AppealController::class, 'index'])->name('appeals.index');
 Route::get('appeals/{slug}', [App\Http\Controllers\Frontend\AppealController::class, 'show'])->name('appeals.show');
 Route::get('appeal/search', [App\Http\Controllers\Frontend\AppealController::class, 'appealsView'])->name('appeals.view');
+Route::post('subscribe-newsletter', [App\Http\Controllers\Frontend\SubscribeNewsletterController::class, 'index'])->name('subscribe-newsletter');
 
 // fcm token
 Route::post('/fcmregistration', [App\Http\Controllers\FirebaseController::class, 'store'])->name('fcmregistration');
