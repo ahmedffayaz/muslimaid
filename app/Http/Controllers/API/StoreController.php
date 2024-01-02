@@ -5,12 +5,15 @@ namespace App\Http\Controllers\API;
 use Exception;
 use App\Models\Page;
 use App\Models\Store;
+use App\Models\Voucher;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\StoreResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\StoreDetailResource;
+use App\Http\Resources\VoucherResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
+use Illuminate\Http\JsonResponse;
 
 class StoreController extends Controller
 {
@@ -376,6 +379,9 @@ class StoreController extends Controller
                 $cashback->orderBy('sale_commission', 'desc');
             }])
             ->withCount('cashbacks')
+            ->with(['vouchers' => function ($query) {
+                $query->where('promotion_end_date', '>=', now());
+            }])
             ->firstOrFail();
             $data = [
                 'status' => 200,
@@ -402,25 +408,49 @@ class StoreController extends Controller
 
     public function vouchers(Request $request)
     {
-        $stores = Store::whereStatus('active')->has('vouchers')->select('stores.*');
-        if ($request->get('search')) {
-            $stores = $stores->where('name', 'like', '%' . $request->get('search') . '%');
+        try {
+            $vouchers = Voucher::when($request->order_by == 'coupons', function ($query) {
+                $query->where('promotion_type', 'Coupon');
+            })
+            ->when($request->order_by == 'offers', function ($query) {
+                $query->where('promotion_type', 'Sale/Discount');
+            })
+            ->when($request->order_by == 'trending', function ($query) {
+                $query->whereHas('exitClicks')->withCount('exitClicks')->orderBy('exit_clicks_count', 'desc');
+            })
+            ->when($request->order_by == 'latest', function ($query) {
+                $query->latest();
+            })
+            ->when($request->order_by == 'expiring', function ($query) {
+                $query->orderBy('promotion_end_date', 'asc');
+            })->whereHas('store', function ($query) {
+                $query->where('status', 'active');
+            })->with(['store' => function ($query) {
+                $query->select('id', 'name', 'slug', 'status')->where('status', 'active')->withCount('cashbacks');
+            }])
+            ->where('promotion_end_date', '>=', now())->paginate($request->input('perPage'));
+
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'success',
+                'data' => [
+                    'vouchers' => VoucherResource::collection($vouchers)
+                ]
+            ], JsonResponse::HTTP_OK);
+        } catch (ModelNotFoundException $ex) { // Vouchers not found
+            $data = [
+                'status' => 404,
+                'message' => 'Store not found',
+                'data' => []
+            ];
+            return response()->json($data, 404);
+        } catch (Exception $ex) { // Anything that went wrong
+            $data = [
+                'status' => 500,
+                'message' => 'Something went wrong, try again.',
+                'data' => []
+            ];
+            return response()->json($data, 500);
         }
-        if ($request->get('name_sort')) {
-            $order = $request->get('name_sort') == 'descending' ? 'desc' : 'asc';
-            $stores = $stores->orderBy('name', $order);
-        } else {
-            $stores = $stores->orderBy('id', 'DESC');
-        }
-        $limit = $request->has('per_page') ? $request->get('per_page') : 10;
-        $stores = $stores->paginate($limit)->appends(request()->input());
-        $stores->appends(
-            [
-                'search'   => $request->get('search'),
-                'per_page'  => $limit,
-                'name_sort' => $request->get('name_sort')
-            ]
-        );
-        return StoreResource::collection($stores);
     }
 }
