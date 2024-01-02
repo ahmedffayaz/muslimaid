@@ -18,10 +18,12 @@ use Illuminate\Support\Facades\Session;
 
 trait SubscribeNewsletter
 {
+    // Add email in register list in provider
     function registerNewsletter($request) {
         try {
             $settings = SiteSetting();
-            if (!empty($settings['sendgrid_api_key']) && !empty($settings['sendgrid_newsletter_list_id']) &&
+            // Add email in SendGrid register list and check provider is enable/disable
+            if (getImporterYMLSettings(config('app.sendgrid_yml_path')) && !empty($settings['sendgrid_api_key']) && !empty($settings['sendgrid_newsletter_list_id']) &&
                 isset($request['type']) && $request['type'] === 'register' && isset($request['user']))
             {
                 $user = $request['user'];
@@ -36,76 +38,92 @@ trait SubscribeNewsletter
                     ]
                 ];
                 $sg = new SendGrid($settings['sendgrid_api_key']);
+                // Put fields value in register contact list
                 $response = $sg->client->marketing()->contacts()->put($requestBody);
+
+                // Display error in log file if response failed
                 if ($response->statusCode() != 201 && $response->statusCode() != 202) {
                     Log::error('Get error on while user register account on SendGrid registration.');
                     return;
                 }
             }
 
-            if (!empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
+            // Add email in MailChimp register list and check provider is enable/disable
+            if (getImporterYMLSettings(config('app.mailchimp_yml_path')) && !empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
                 //
             }
 
-            $this->apiLogErrorMessage();
+            $this->apiLogErrorMessage(); // Display error in log file if provider not exist
         } catch (Exception $e) {
             Log::error('Get error while sending request for newsletter on registration: ' . $e->getMessage());
         }
     }
 
+    // Add email in newsletter list from footer in provider
     function subscribeNewsletter($request, $isApi = false)
     {
         try {
             $settings = SiteSetting();
-            if (!empty($settings['sendgrid_api_key']) && !empty($settings['sendgrid_newsletter_list_id']) &&
+            // Add email in SendGrid newsletter list and check provider is enable/disable
+            if (getImporterYMLSettings(config('app.sendgrid_yml_path')) && !empty($settings['sendgrid_api_key']) && !empty($settings['sendgrid_newsletter_list_id']) &&
                 isset($request->type) && $request->type === 'subscribe-newsletter'
             ) {
                 if (isset($request->email)) {
                     $user = User::where('email', $request->email)->first();
                     $nameArray = isset($request->name) ? explode(' ', $request->name) : '';
+                    // Check email exist in database
                     if (!empty($user)) {
-                        $response = $this->sendGrid($settings, $user, $nameArray);
+                        // Put fields value in newsletter contact list
+                        $response = $this->sendGrid($settings, $user, null, $nameArray);
+
                         if ($response->statusCode() == 201 || ($response->statusCode() == 202)) {
                             $user->update(['email_preference' => true]);
                             if (!$isApi) Session::put('allowSendgrid', '1');
 
-                            return $this->newsletterJoiningMessage($request, $isApi);
+                            return $this->newsletterJoiningMessage($request, $isApi); // Display success message
                         }
                     } else {
+                        // Put fields value in newsletter contact list
                         $response = $this->sendGrid($settings, $user, $request->input('email'), $nameArray);
                         if ($response->statusCode() == 201 || ($response->statusCode() == 202)) {
-                            return $this->newsletterJoiningMessage($request, $isApi);
+                            return $this->newsletterJoiningMessage($request, $isApi); // Display success message
                         }
                     }
                 }
                 return $this->errorMessage($request, $isApi);
             }
 
-            if (!empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
+            // Add email in MailChimp newsletter list and check provider is enable/disable
+            if (getImporterYMLSettings(config('app.mailchimp_yml_path')) && !empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
                 //
             }
 
-            return $this->apiErrorMessage($request, $isApi);
+            return $this->apiErrorMessage($request, $isApi); // Display error in log file if provider not exist
         } catch (Exception $e) {
             Log::error('Get error while sending request for newsletter: ' . $e->getMessage());
             return $this->errorMessage($request);
         }
     }
 
+    // Add email in newsletter list from profile page in provider
     function profileSubscribeNewsletter($request, $isApi = false)
     {
         try {
             $settings = SiteSetting();
-            if (!empty($settings['sendgrid_api_key']) && !empty($settings['sendgrid_newsletter_list_id']) &&
+            // Add email in SendGrid newsletter list and check provider is enable/disable
+            if (getImporterYMLSettings(config('app.sendgrid_yml_path')) && !empty($settings['sendgrid_api_key']) && !empty($settings['sendgrid_newsletter_list_id']) &&
                 isset($request->type) && $request->type === 'profile-subscribe-newsletter'
             ) {
                 $user = auth()->user();
+                // Put fields value in newsletter contact list
                 $response = $this->sendGrid($settings, $user);
 
                 if ($response->statusCode() == 201 || ($response->statusCode() == 202)) {
                     $user = User::where('id', $user->id)->first();
                     if (!empty($user)) {
+                        // update user email preference column if user exist
                         $user->update(['email_preference' => true]);
+                        // put session to update contact fields if subscribe newsletter
                         if (!$isApi) Session::put('allowSendgrid', '1');
 
                         return $this->newsletterJoiningMessage($request, $isApi);
@@ -114,26 +132,30 @@ trait SubscribeNewsletter
                 return $this->errorMessage($request, $isApi);
             }
 
-            if (!empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
+            // Add email in MailChimp newsletter list and check provider is enable/disable
+            if (getImporterYMLSettings(config('app.mailchimp_yml_path')) && !empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
                 //
             }
 
-            return $this->apiErrorMessage($request, $isApi);
+            return $this->apiErrorMessage($request, $isApi); // Display error in log file if provider not exist
         } catch (Exception $e) {
             Log::error('Get error while sending request for newsletter: ' . $e->getMessage());
             return $this->errorMessage($request, $isApi);
         }
     }
 
+    // Remove email in newsletter list from profile page in provider
     function unsubscribeNewsletter($request, $isApi = false)
     {
         try {
             $settings = SiteSetting();
-            if (!empty($settings['sendgrid_api_key']) && !empty($settings['sendgrid_newsletter_list_id']) &&
+            // Remove email in SendGrid newsletter list and check provider is enable/disable
+            if (getImporterYMLSettings(config('app.sendgrid_yml_path')) && !empty($settings['sendgrid_api_key']) && !empty($settings['sendgrid_newsletter_list_id']) &&
                 isset($request->type) && $request->type === 'profile-unsubscribe-newsletter'
             ) {
                 $user = auth()->user();
                 $sg = new SendGrid($settings['sendgrid_api_key']);
+                // Get contacts from SendGrid provider
                 $response = $sg->client->marketing()->contacts()->get();
 
                 if ($response->statusCode() == 200) {
@@ -141,6 +163,7 @@ trait SubscribeNewsletter
                     $result = json_decode($response->body(), true);
                     $result = $result['result'];
 
+                    // Get current user email from SendGrid contacts
                     $filterResult = array_filter($result, function ($contact) use ($email) {
                         return $contact['email'] == $email;
                     });
@@ -149,13 +172,17 @@ trait SubscribeNewsletter
                         $filterResult = array_values($filterResult);
 
                         $sgRecipientId = $filterResult[0];
+                        /// Contact's id
                         $queryParams = [
                             'contact_ids' => $sgRecipientId['id']
                         ];
+
+                        // Remove email from SendGrid newsletter list
                         $response = $sg->client->marketing()->lists()->_($settings['sendgrid_newsletter_list_id'])->contacts()->delete(null, $queryParams);
 
                         $user = User::find($user->id);
                         if (!empty($user)) {
+                            // put session to update contact fields if unsubscribe newsletter
                             $user->update(['email_preference' => false]);
                             if (!$isApi) Session::put('allowSendgrid', '0');
 
@@ -166,25 +193,28 @@ trait SubscribeNewsletter
                 return $this->errorMessage($request, $isApi);
             }
 
-            if (!empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
+            if (getImporterYMLSettings(config('app.mailchimp_yml_path')) && !empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
                 //
             }
 
-            return $this->apiErrorMessage($request, $isApi);
+            return $this->apiErrorMessage($request, $isApi); // Display error in log file if provider not exist
         } catch (Exception $e) {
             Log::error('Get error while sending request for newsletter: ' . $e->getMessage());
             return $this->errorMessage($request);
         }
     }
 
+    // Update contact's field in newsletter list from profile page in provider
     function updateNewsletter($request, $isApi = false)
     {
         try {
             $settings = SiteSetting();
-            if (!empty($settings['sendgrid_api_key']) && !empty($settings['sendgrid_newsletter_list_id']) &&
+            // Update contact's field in newsletter list from profile page in provider and check provider is enable/disable
+            if (getImporterYMLSettings(config('app.sendgrid_yml_path')) && !empty($settings['sendgrid_api_key']) && !empty($settings['sendgrid_newsletter_list_id']) &&
                 isset($request->type) && $request->type === 'update-newsletter'
             ) {
                 $user = auth()->user();
+                // Update fields value in newsletter contact list
                 $response = $this->sendGrid($settings, $user);
 
                 if ($response->statusCode() == 201 || ($response->statusCode() == 202)) {
@@ -199,11 +229,12 @@ trait SubscribeNewsletter
                 return;
             }
 
-            if (!empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
+            // Add email in MailChimp newsletter list and check provider is enable/disable
+            if (getImporterYMLSettings(config('app.mailchimp_yml_path')) && !empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
                 //
             }
 
-            $this->apiLogErrorMessage();
+            $this->apiLogErrorMessage(); // Display error in log file if provider not exist
         } catch (Exception $e) {
             Log::error('Get error while sending request for newsletter: ' . $e->getMessage());
         }
@@ -257,10 +288,12 @@ trait SubscribeNewsletter
 
         $sg = new SendGrid($settings['sendgrid_api_key']);
 
+        // Insert custom fields in SendGrid contacts
         foreach ($customFields as $customField) {
             $sg->client->marketing()->field_definitions()->post($customField);
         }
 
+        // Put fields value in contacts
         return $sg->client->marketing()->contacts()->put($requestBody);
     }
 
