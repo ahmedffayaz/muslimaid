@@ -400,33 +400,16 @@
 </div>
 
 @push('scripts')
-    <script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
-    <script src="{{ asset('storage/__asset/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
+    <script src="{{ asset('admin-dashboard/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
+    <script src="{{ asset('admin-dashboard/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
             window.livewire.on('userChange', () => {
-
                 fetchCashbacks(1);
                 fetchClicks(1);
                 initializeSelect2();
                 fetchMetaData(1);
-
-                var quill = new Quill('#editor-container', {
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic'],
-                            ['link', 'blockquote', 'code-block', 'image'],
-                            [{
-                                list: 'ordered'
-                            }, {
-                                list: 'bullet'
-                            }]
-                        ]
-                    },
-                    placeholder: 'Compose an epic...',
-                    theme: 'snow'
-                });
             });
         });
 
@@ -434,22 +417,6 @@
             $('#user_select').on('change', function(e) {
                 livewire.emit('changeEvent', e.target.value)
             });
-        });
-
-        var quill = new Quill('#editor-container', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic'],
-                    ['link', 'blockquote', 'code-block', 'image'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }]
-                ]
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow'
         });
 
         function fetchMetaData(page) {
@@ -776,7 +743,7 @@
             const iti = window.intlTelInput(input,({
                 nationalMode:true,
                 preferredCountries: [],
-                utilsScript: "{{ asset('storage/__asset/telephone-dropdown/js/utils.js') }}",
+                utilsScript: "{{ asset('admin-dashboard/telephone-dropdown/js/utils.js') }}",
                 separateDialCode:true,
             }));
             $('.iti').css('width', '100%');
