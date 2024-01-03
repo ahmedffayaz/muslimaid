@@ -6,6 +6,7 @@ use SendGrid;
 use Exception;
 use Carbon\Carbon;
 use App\Models\User;
+use DrewM\MailChimp\MailChimp;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Session;
@@ -50,7 +51,10 @@ trait SubscribeNewsletter
 
             // Add email in MailChimp register list and check provider is enable/disable
             if (getImporterYMLSettings(config('app.mailchimp_yml_path')) && !empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
-                //
+                $user = $request['user'];
+                if (!empty($user)) {
+                    return $this->mailchimp($settings, $request, false, $user, null, null, 'register');
+                }
             }
 
             $this->apiLogErrorMessage(); // Display error in log file if provider not exist
@@ -84,7 +88,7 @@ trait SubscribeNewsletter
                         }
                     } else {
                         // Put fields value in newsletter contact list
-                        $response = $this->sendGrid($settings, $user, $request->input('email'), $nameArray);
+                        $response = $this->sendGrid($settings, $user, $request->email, $nameArray);
                         if ($response->statusCode() == 201 || ($response->statusCode() == 202)) {
                             return $this->newsletterJoiningMessage($request, $isApi); // Display success message
                         }
@@ -95,7 +99,17 @@ trait SubscribeNewsletter
 
             // Add email in MailChimp newsletter list and check provider is enable/disable
             if (getImporterYMLSettings(config('app.mailchimp_yml_path')) && !empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
-                //
+                if (isset($request->email)) {
+                    $user = User::where('email', $request->email)->first();
+                    $nameArray = isset($request->name) ? explode(' ', $request->name) : '';
+                    // Check email exist in database
+                    if (!empty($user)) {
+                        return $this->mailchimp($settings, $request, $isApi, $user, null, $nameArray);
+                    } else {
+                        return $this->mailchimp($settings, $request, $isApi, $user, $request->email, $nameArray);
+                    }
+                }
+                return $this->errorMessage($request, $isApi);
             }
 
             return $this->apiErrorMessage($request, $isApi); // Display error in log file if provider not exist
@@ -134,7 +148,8 @@ trait SubscribeNewsletter
 
             // Add email in MailChimp newsletter list and check provider is enable/disable
             if (getImporterYMLSettings(config('app.mailchimp_yml_path')) && !empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
-                //
+                $user = auth()->user();
+                return $this->mailchimp($settings, $request, $isApi, $user);
             }
 
             return $this->apiErrorMessage($request, $isApi); // Display error in log file if provider not exist
@@ -194,7 +209,22 @@ trait SubscribeNewsletter
             }
 
             if (getImporterYMLSettings(config('app.mailchimp_yml_path')) && !empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
-                //
+                $user = auth()->user();
+                $mailchimp = new MailChimp($settings['mailchimp_api_key']);
+                $subscriberHash = MailChimp::subscriberHash($user->email);
+                $path = 'lists/' . $settings['mailchimp_list_id'] . '/members/' . $subscriberHash;
+                $mailchimp->delete($path);
+                if ($mailchimp->success()) {
+                    $user = User::find($user->id);
+                    if (!empty($user)) {
+                        // put session to update contact fields if unsubscribe newsletter
+                        $user->update(['email_preference' => false]);
+                        if (!$isApi) Session::put('allowSendgrid', '0');
+
+                        return $this->unsubscribeNewsletterMessage($request, $isApi);
+                    }
+                    return $this->unsubscribeNewsletterMessage($request, $isApi);
+                }
             }
 
             return $this->apiErrorMessage($request, $isApi); // Display error in log file if provider not exist
@@ -231,12 +261,49 @@ trait SubscribeNewsletter
 
             // Add email in MailChimp newsletter list and check provider is enable/disable
             if (getImporterYMLSettings(config('app.mailchimp_yml_path')) && !empty($settings['mailchimp_api_key']) && !empty($settings['mailchimp_list_id'])) {
-                //
+                $user = auth()->user();
+                $dob = !empty($user->date_of_birth) ? Carbon::parse($user->date_of_birth)->isoFormat('DD/MM') : '';
+                $phone = !empty($user->phone) ? $user->phone : '';
+
+                $addressArray = [
+                    'addr1' => !empty($user->address) ? $user->address : '',
+                    'addr2' => !empty($user->address_2) ? $user->address_2 : '',
+                    'city' => !empty($user->stat) ? $user->stat : '',
+                    'state' => !empty($user->metaData->where('type', 'state')->pluck('value')->first()) ? optional($user->metaData)->where('type', 'state')->pluck('value')->first() : '',
+                    'zip' => !empty($user->postal_code) ? $user->postal_code : '',
+                    'country' => !empty($user->country_id) && is_int($user->country_id) ? $user->country->name : ''
+                ];
+
+                if (!empty($addressArray['addr1']) && !empty($addressArray['addr2']) && !empty($addressArray['city']) && !empty($addressArray['state']) && !empty($addressArray['zip']) && !empty($addressArray['country'])) {
+                    $address = $addressArray;
+                } else {
+                    $address = '';
+                }
+
+                $mailchimp = new MailChimp($settings['mailchimp_api_key']);
+                $subscriberHash = MailChimp::subscriberHash($user->email);
+                $mailchimp->patch("lists/{$settings['mailchimp_list_id']}/members/{$subscriberHash}?skip_merge_validation=false", [
+                    'email_address' => $user->email,
+                    'status' => 'subscribed',
+                    'merge_fields' => [
+                        'FNAME' => !empty($user->first_name) ? $user->first_name : '',
+                        'LNAME' => !empty($user->last_name) ? $user->last_name : '',
+                        'ADDRESS' => $address,
+                        'BIRTHDAY' => $dob,
+                        'PHONE' => $phone,
+                    ],
+                ]);
+
+                if (!$mailchimp->success()) {
+                    Log::error('Got error while updating user contact data using MailChimp');
+                    return;
+                }
+                return;
             }
 
             $this->apiLogErrorMessage(); // Display error in log file if provider not exist
         } catch (Exception $e) {
-            Log::error('Get error while sending request for newsletter: ' . $e->getMessage());
+            Log::error('Got error while sending request for newsletter: ' . $e->getMessage());
         }
     }
 
@@ -295,6 +362,68 @@ trait SubscribeNewsletter
 
         // Put fields value in contacts
         return $sg->client->marketing()->contacts()->put($requestBody);
+    }
+
+    private function mailchimp($settings, $request, $isApi = false, $user, $email = null, $nameArray = null, $type = null)
+    {
+        $nameArray =  !empty($nameArray) && !is_null($nameArray) ? $nameArray : '';
+        $firstName = !empty($user->first_name) ? $user->first_name : (isset($nameArray[0]) ? $nameArray[0] : '');
+        $lastName = !empty($user->last_name) ? $user->last_name : (isset($nameArray[1]) ? $nameArray[1] : '');
+        $dob = !empty($user->date_of_birth) ? Carbon::parse($user->date_of_birth)->isoFormat('DD/MM') : '';
+        $phone = !empty($user->phone) ? $user->phone : '';
+
+        $addressArray = [
+            'addr1' => isset($user) && !empty($user->address) ? $user->address : '',
+            'addr2' => isset($user) && !empty($user->address_2) ? $user->address_2 : '',
+            'city' => isset($user) && !empty($user->stat) ? $user->stat : '',
+            'state' => isset($user) && !empty($user->metaData->where('type', 'state')->pluck('value')->first()) ? optional($user->metaData)->where('type', 'state')->pluck('value')->first() : '',
+            'zip' => isset($user) && !empty($user->postal_code) ? $user->postal_code : '',
+            'country' => isset($user) && !empty($user->country_id) && is_int($user->country_id) ? $user->country->name : ''
+        ];
+
+        if (!empty($addressArray['addr1']) && !empty($addressArray['addr2']) && !empty($addressArray['city']) && !empty($addressArray['state']) && !empty($addressArray['zip']) && !empty($addressArray['country'])) {
+            $address = $addressArray;
+        } else {
+            $address = '';
+        }
+
+        $mailchimp = new MailChimp($settings['mailchimp_api_key']);
+
+        // Get mailchimp lists
+        $list = $mailchimp->get('lists');
+
+        if (!empty($list)) {
+            $path = 'lists/' . $settings['mailchimp_list_id'] . '/members/?skip_merge_validation=false';
+
+            // Put fields value in newsletter contact list
+            $result = $mailchimp->post($path, [
+                'email_address' => !empty($user->email) ? $user->email : (isset($email) ? $email : ''),
+                'status' => 'subscribed',
+                'merge_fields' => [
+                    'FNAME' => $firstName,
+                    'LNAME' => $lastName,
+                    'ADDRESS' => $address,
+                    'BIRTHDAY' => $dob,
+                    'PHONE' => $phone,
+                ],
+            ]);
+            if ($result['status'] != 400 && $result['status'] == 'subscribed') {
+                if (!empty($user)) {
+                    $user = User::where('id', $user->id)->first();
+                    if (!empty($user)) {
+                        // update user email preference column if user exist
+                        $user->update(['email_preference' => true]);
+                        // put session to update contact fields if subscribe newsletter
+                        if (!$isApi) Session::put('allowSendgrid', '1');
+
+                        if (is_null($type)) return $this->newsletterJoiningMessage($request, $isApi);
+                    }
+                }
+                if (empty($type)) return $this->newsletterJoiningMessage($request, $isApi); // Display success message
+            } else if ($result['status'] == 400 && $result['title'] === 'Member Exists') {
+                if (empty($type)) return $this->emailExistErrorMessage($request, $isApi);
+            }
+        }
     }
 
     private function newsletterJoiningMessage($request, $isApi = false)
@@ -365,6 +494,26 @@ trait SubscribeNewsletter
                 'message' => $message
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         } else if ($request->ajax() && !$isApi) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => $message
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        flash()->error($message);
+        return redirect()->back();
+    }
+
+    private function emailExistErrorMessage($request, $isApi = false)
+    {
+        $message = 'Email has already subscribed.';
+        if ($isApi) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => $message
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+        if ($request->ajax() && !$isApi) {
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
                 'error' => $message
