@@ -77,6 +77,12 @@
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
+                                                    <label class="form-label" for="reviewer">Meta Title</label>
+                                                    <input class="form-control " name="meta_title" placeholder="Meta Title" value="">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
                                                     <label class="form-label" for="reviewer">Meta Description</label>
                                                     <textarea class="form-control " name="meta_description" placeholder="Meta Description" value=""></textarea>
                                                 </div>

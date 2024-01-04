@@ -71,6 +71,14 @@
                                             </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
+                                                    <label class="form-label" for="reviewer">Meta Title</label>
+                                                    <div class="form-control-wrap">
+                                                        <input id="blog-title" type="text" class="form-control " name="meta_title" placeholder="Meta Title" value="{{ $blog->meta_title }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-12">
+                                                <div class="form-group">
                                                     <label class="form-label" for="reviewer">Meta Description</label>
                                                     <textarea class="form-control " name="meta_description" placeholder="Meta Description" value=""> {{ $blog->meta_description }}</textarea>
                                                 </div>
@@ -84,15 +92,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-12">
-                                                <div class="form-group">
-                                                    <label class="form-label" for="reviewer">Meta Title</label>
-                                                    <div class="form-control-wrap">
-                                                        <input id="blog-title" type="text" class="form-control " name="meta_title" placeholder="Meta Title" value="{{ $blog->meta_title }}">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                           
+
                                             <div class="col-12">
                                                 <div class="form-group">
                                                     <button class="btn btn-primary" type="submit">Save</button>
