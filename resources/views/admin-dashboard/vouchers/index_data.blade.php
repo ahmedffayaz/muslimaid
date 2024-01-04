@@ -7,6 +7,7 @@
                 <div class="nk-tb-col tb-col-mb"><span class="sub-text">Name</span></div>
                 <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Coupon</span></div>
                 <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Deeplink URL</span></div>
+                <div class="nk-tb-col tb-col-mb text-center"><span class="sub-text">Status</span></div>
                 <div class="nk-tb-col nk-tb-col-tools text-right"><span class="sub-text">Action</span></div>
             </div>
 
@@ -18,6 +19,19 @@
                             <span><b>{{ $voucher->store->id ?? '' }} - {{ $voucher->store->name ?? '' }}</b></span>
                             <br>
                             <span>{{ $voucher->store->network->name ?? '' }}</span>
+                            <div>
+                            @if ($voucher->store->status === 'active')
+                                <span class="badge badge-dim badge-pill badge-success text-capitalize fw-bold">Active</span>
+                            @elseif ($voucher->store->status === 'disabled')
+                                <span class="badge badge-dim badge-pill badge-danger text-capitalize fw-bold">Disabled</span>
+                            @elseif ($voucher->store->status === 'pending review')
+                                <span class="badge badge-dim badge-pill badge-warning text-capitalize fw-bold">Pending Review</span>
+                            @elseif ($voucher->store->status === 'closed')
+                                <span class="badge badge-dim badge-pill badge-dark text-capitalize fw-bold">Closed</span>
+                            @elseif ($voucher->store->status === 'error')
+                                <span class="badge badge-dim badge-pill badge-red text-capitalize fw-bold">Error</span>
+                            @endif
+                            </div>
                         </a>
                         <br>
                         @if ($voucher->promotion_end_date < \Carbon\Carbon::now())
@@ -27,6 +41,11 @@
 
                     <div class="nk-tb-col ">
                         <span>{{ $voucher->name }}</span>
+                        @if (!empty($voucher->network_id))
+                            <div>
+                                <span class="badge badge-dim badge-pill badge-primary text-capitalize fw-bold">{{ optional($voucher->network)->name }}</span>
+                            </div>
+                        @endif
                     </div>
 
                     <div class="nk-tb-col text-center ">
@@ -39,6 +58,13 @@
                                 <em class="icon ni ni-link-alt"></em>
                             </a>
                         </h5>
+                    </div>
+                    <div class="nk-tb-col text-center">
+                        @if ($voucher->status === 'active')
+                            <span class="badge badge-dim badge-pill badge-success text-capitalize fw-bold">Active</span>
+                        @elseif ($voucher->status === 'disabled')
+                            <span class="badge badge-dim badge-pill badge-danger text-capitalize fw-bold">Disabled</span>
+                        @endif
                     </div>
                     <div class="nk-tb-col nk-tb-col-tools">
                         <ul class="nk-tb-actions gx-1">

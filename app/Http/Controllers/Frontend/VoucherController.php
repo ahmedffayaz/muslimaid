@@ -44,7 +44,8 @@ class VoucherController extends Controller
             })->with(['store' => function ($query) {
                 $query->select('id', 'name', 'slug', 'status')->where('status', 'active')->withCount('cashbacks');
             }])
-            ->where('promotion_end_date', '>=', now())->paginate($request->input('perPage'));
+            ->where('promotion_end_date', '>=', now())
+            ->where('status', 'active')->paginate($request->input('perPage'));
 
         return view('frontend.vouchers.vouchers-view', compact('vouchers'));
     }

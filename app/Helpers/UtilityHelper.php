@@ -1346,6 +1346,7 @@ function topVouchers($limit = 5)
     ->having('exit_clicks_count', '!=', 0)
     ->orderBy('exit_clicks_count', 'desc')
     ->where('promotion_end_date', '>=', now())
+    ->where('status', 'active')
     ->take($limit)
     ->get();
 

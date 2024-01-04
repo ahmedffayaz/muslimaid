@@ -24,7 +24,7 @@ class StoreController extends Controller
         ->with(['cashbacks'])
         ->withCount('cashbacks')
         ->with(['vouchers' => function ($query) {
-            $query->where('promotion_end_date', '>=', now());
+            $query->where('promotion_end_date', '>=', now())->where('status', 'active');
         }])->firstOrFail();
 
         $userRefId = !empty(auth()->user()) ? auth()->user() : User::whereId(1)->first();

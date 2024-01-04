@@ -430,6 +430,12 @@
                     deeplink_url: {
                         url: true
                     },
+                    network_id: {
+                        required: true,
+                    },
+                    store_id: {
+                        required: true,
+                    }
                 },
                 messages: {
                     promotion_end_date: {

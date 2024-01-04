@@ -39,7 +39,8 @@ class VouchersController extends Controller
     public function create()
     {
         $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->where('status', 'active')->latest()->get();
-        return view('admin-dashboard.vouchers.edit-voucher', compact('stores'));
+        $networks = Network::all();
+        return view('admin-dashboard.vouchers.edit-voucher', compact('stores', 'networks'));
     }
 
     public function store(Request $request)
@@ -47,6 +48,7 @@ class VouchersController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'store_id' => 'required|integer',
+            'network_id' => 'required|integer',
             'tracking_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'description' => 'nullable|max:255',
@@ -76,6 +78,7 @@ class VouchersController extends Controller
             Voucher::create([
                 'name' => $request->input('name'),
                 'store_id' => $request->input('store_id'),
+                'network_id' => $request->input('network_id'),
                 'tracking_url' => $request->input('tracking_url'),
                 'deeplink_url' => $request->input('deeplink_url'),
                 'description' => $request->input('description'),
@@ -83,6 +86,7 @@ class VouchersController extends Controller
                 'coupon_code' => $request->input('coupon_code'),
                 'promotion_start_date' => \Carbon\Carbon::parse($request->input('promotion_start_date'))->format('Y-m-d'),
                 'promotion_end_date' => \Carbon\Carbon::parse($request->input('promotion_end_date'))->format('Y-m-d'),
+                'status' => $request->input('status')
             ]);
 
             if ($request->ajax()) {
@@ -111,12 +115,13 @@ class VouchersController extends Controller
     public function edit(Request $request, Voucher $voucher)
     {
         $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->latest()->get();
+        $networks = Network::all();
 
         if ($request->input('store_editor')) {
             return view('admin-dashboard.vouchers.modal-edit', compact('voucher', 'stores'))->render();
         }
 
-        return view('admin-dashboard.vouchers.edit-voucher', compact('voucher', 'stores'))->render();
+        return view('admin-dashboard.vouchers.edit-voucher', compact('voucher', 'stores', 'networks'))->render();
     }
 
     public function update(Request $request, Voucher $voucher)
@@ -124,6 +129,7 @@ class VouchersController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:255',
             'store_id' => 'required|integer',
+            'network_id' => 'required|integer',
             'tracking_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'description' => 'nullable|max:255',
@@ -154,6 +160,7 @@ class VouchersController extends Controller
             $voucher->update([
                 'name' => $request->input('name'),
                 'store_id' => $storeId,
+                'network_id' => $request->input('network_id') ? $request->input('network_id') : $voucher->network_id,
                 'tracking_url' => $request->input('tracking_url'),
                 'deeplink_url' => $request->input('deeplink_url'),
                 'description' => $request->input('description'),
@@ -161,6 +168,7 @@ class VouchersController extends Controller
                 'coupon_code' => $request->input('coupon_code'),
                 'promotion_start_date' => \Carbon\Carbon::parse($request->input('promotion_start_date'))->format('Y-m-d'),
                 'promotion_end_date' => \Carbon\Carbon::parse($request->input('promotion_end_date'))->format('Y-m-d'),
+                'status' => $request->input('status')
             ]);
 
             if ($request->ajax()) {
