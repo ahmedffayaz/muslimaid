@@ -17,13 +17,15 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li class="nk-block-tools-opt">
-                                            <button class="btn btn-warning btn-sm" id="fake-data-importer-btn">
-                                                <em class="icon ni ni-upload-cloud"></em>
-                                                <span>Import Fake Stores</span>
-                                            </button>
-                                            <form action="{{ route(getAdminPrefix() . '.stores.import-fake-data') }}" id="fake-data-importer-form" method="post">@csrf</form>
-                                        </li>
+                                        @if (config('app.env') != "production")
+                                            <li class="nk-block-tools-opt">
+                                                <button class="btn btn-warning btn-sm" id="fake-data-importer-btn">
+                                                    <em class="icon ni ni-upload-cloud"></em>
+                                                    <span>Import Fake Stores</span>
+                                                </button>
+                                                <form action="{{ route(getAdminPrefix() . '.stores.import-fake-data') }}" id="fake-data-importer-form" method="post">@csrf</form>
+                                            </li>
+                                        @endif
                                         <li class="nk-block-tools-opt">
                                             <a href="{{route(getAdminPrefix() . '.stores.create')}}" class="btn btn-primary btn-sm">
                                                 <em class="icon ni ni-plus"></em>
@@ -101,30 +103,12 @@
                                 </div>
                             </div>
                         </form>
-
                     </div>
-
                 </div>
                 @include('flash::message')
                 <div class="nk-block" id="table-data">
                     @include('admin-dashboard.stores.index_data')
-
                 </div><!-- .nk-block -->
-                {{-- <div class="nk-block">
-                    <div class="card card-stretch">
-                        <div class="card-inner-group">
-                           
-                            <div class="card-inner px-0">
-                                <div class="nk-tb-list nk-tb-ulist" id="table-data">
-                                    
-                                    @include('admin-dashboard.stores.index_data')                                   
-                                    
-                                </div><!-- .nk-tb-list -->
-                            </div><!-- .card-inner -->
-                           
-                        </div><!-- .card-inner-group -->
-                    </div><!-- .card -->
-                </div><!-- .nk-block --> --}}
             </div>
         </div>
     </div>
