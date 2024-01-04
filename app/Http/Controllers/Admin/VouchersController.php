@@ -160,7 +160,7 @@ class VouchersController extends Controller
             $voucher->update([
                 'name' => $request->input('name'),
                 'store_id' => $storeId,
-                'network_id' => $request->input('network_id') ? $request->input('network_id') : $voucher->network_d,
+                'network_id' => $request->input('network_id') ? $request->input('network_id') : $voucher->network_id,
                 'tracking_url' => $request->input('tracking_url'),
                 'deeplink_url' => $request->input('deeplink_url'),
                 'description' => $request->input('description'),
