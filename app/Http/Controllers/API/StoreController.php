@@ -428,13 +428,21 @@ class StoreController extends Controller
             })->with(['store' => function ($query) {
                 $query->select('id', 'name', 'slug', 'status')->where('status', 'active')->withCount('cashbacks');
             }])
-            ->where('promotion_end_date', '>=', now())->paginate($request->input('perPage'));
+            ->where('promotion_end_date', '>=', now())->paginate($request->input('per_page'));
 
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,
                 'message' => 'success',
-                'data' => [
-                    'vouchers' => VoucherResource::collection($vouchers)
+                'vouchers' => VoucherResource::collection($vouchers),
+                'meta_data' => [
+                    "next" => $vouchers->nextPageUrl(),
+                    "previous" => $vouchers->previousPageUrl(),
+                    "per_page" => $request->per_page,
+                    "total" => $vouchers->total(),
+                    "current_page" => $vouchers->currentPage(),
+                    "total_pages" => $vouchers->lastPage(),
+                    "first" => $vouchers->firstItem(),
+                    "last" => $vouchers->lastItem()
                 ]
             ], JsonResponse::HTTP_OK);
         } catch (ModelNotFoundException $ex) { // Vouchers not found
