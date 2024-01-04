@@ -380,7 +380,7 @@ class StoreController extends Controller
             }])
             ->withCount('cashbacks')
             ->with(['vouchers' => function ($query) {
-                $query->where('promotion_end_date', '>=', now());
+                $query->where('promotion_end_date', '>=', now())->where('status', 'active');
             }])
             ->firstOrFail();
             $data = [
@@ -428,7 +428,8 @@ class StoreController extends Controller
             })->with(['store' => function ($query) {
                 $query->select('id', 'name', 'slug', 'status')->where('status', 'active')->withCount('cashbacks');
             }])
-            ->where('promotion_end_date', '>=', now())->paginate($request->input('per_page'));
+            ->where('promotion_end_date', '>=', now())
+            ->where('status', 'active')->paginate($request->input('per_page'));
 
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,

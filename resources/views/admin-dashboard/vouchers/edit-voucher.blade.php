@@ -16,7 +16,7 @@
         @method('PUT')
     @endif
         <div class="row g-4">
-            <div class="col-lg-6">
+            <div class="col-lg-12">
                 <div class="form-group">
                     <label class="form-label" for="name">Name <span class="text-danger">*</span></label>
                     <div class="form-control-wrap">
@@ -24,7 +24,9 @@
                     </div>
                 </div>
             </div>
+        </div>
 
+        <div class="row">
             <div class="col-lg-6">
                 <div class="form-group">
                     <label class="form-label" for="store_id">Store <span class="text-danger">*</span></label>
@@ -32,6 +34,18 @@
                         <select class="form-select form-control select-2" data-search="on" value="{{ $isEdit ? $voucher->store_id : '' }}" id="store_id" name="store_id" required>
                             @foreach ($stores as $store)
                                 <option value="{{ $store->id }}" {{ $isEdit && $store->id == $voucher->store_id ? 'selected' : '' }}>{{ $store->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <label class="form-label" for="network_id">Network <span class="text-danger">*</span></label>
+                    <div class="form-control-wrap ">
+                        <select class="form-select form-control select-2" data-search="on" value="{{ $isEdit ? $voucher->network_id : '' }}" id="network_id" name="network_id" required>
+                            @foreach ($networks as $network)
+                                <option value="{{ $network->id }}" {{ $isEdit && $network->id == $voucher->network_id ? 'selected' : '' }}>{{ $network->name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -111,6 +125,21 @@
                         <input type="text" class="form-control date-picker promotion_end_date" id="promotion_end_date_edit"
                             value="{{ $isEdit ? \Carbon\Carbon::parse($voucher->promotion_end_date)->timezone(env('TIMEZONE'))->format('m/d/Y') : '' }}" name="promotion_end_date" autocomplete="off"
                             required>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group">
+                    <div class="form-group">
+                        <label class="form-label" for="voucher-status">Status</label>
+                        <div class="form-control-wrap ">
+                            <select class="form-select form-control select-2" data-search="on" id="voucher-status" name="status" required>
+                                <option value="active" {{ $isEdit && $voucher->status == 'active' ? 'selected' : '' }}>Active</option>
+                                <option value="disabled" {{ $isEdit && $voucher->status == 'disabled' ? 'selected' : '' }}>Disabled</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
