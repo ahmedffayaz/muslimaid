@@ -310,7 +310,7 @@ trait SubscribeNewsletter
     private function sendGrid($settings, $user, $email = null, $nameArray = null)
     {
         $nameArray =  !empty($nameArray) && !is_null($nameArray) ? $nameArray : '';
-        $country = !empty($user->country_id) && is_int($user->country_id) ? $user->country->name : '';
+        $country = !empty($user->country_id) && is_int($user->country_id) && isset($user->country) ? $user->country->name : '';
         $dob = !empty($user->date_of_birth) && Carbon::parse($user->date_of_birth)->format('Y-m-d') === $user->date_of_birth ? Carbon::parse($user->date_of_birth)->isoFormat('Do MMMM YYYY') : '';
 
         $state = '';
