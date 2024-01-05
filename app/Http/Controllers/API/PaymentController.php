@@ -372,7 +372,7 @@ class PaymentController extends Controller
             $method = "PayPal";
         } else {
             $method = $cashout->payment_method;
-        }   
+        }
         $requestFilteredMessage = [number_format($cashout->amount, 2), $method];
         $data = [
             'name' => $cashout->user->first_name . ' ' . $cashout->user->last_name,
@@ -385,11 +385,11 @@ class PaymentController extends Controller
     }
 
     function sendNotification($payment_method){
-        $title = 'Cashout Request Completion';
-        $message = 'Your cashout request has been completed against ' . $payment_method;
-        $url = url('/api/user/cashouts');
-        $user = Auth::user();
-        $deviceToken = optional(auth()->user()->devices()->whereType('api')->first())->fcm_token;
-        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
+        $title = 'Cashout Requested';
+        $message = 'New Cashout request received';
+        $url = url(getAdminPrefix(). '/cashouts');
+        $admin = getAdminUser();
+        $deviceToken = optional($admin->devices()->whereType('api')->latest()->first())->fcm_token;
+        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $admin)) : '';
     }
 }

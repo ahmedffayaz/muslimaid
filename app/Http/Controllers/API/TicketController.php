@@ -91,13 +91,17 @@ class TicketController extends Controller
             $ticket->ticket_type = 'claim';
             $ticket->status = 'open';
             $ticket->save();
+
             $title = 'Ticket Created';
-            $message = 'Your ticket is created';
-            $url = url('/api/user/tickets');
-            $deviceToken = optional(auth()->user()->devices()->whereType('api')->first())->fcm_token;
+            $message = 'A new ticket has been created';
+            $url = url(getAdminPrefix() . '/tickets') . '/' . $ticket->id;
+            $admin = getAdminUser();
+            $deviceToken = optional($admin->devices()->whereType('api')->first())->fcm_token;
+
             $user = Auth::user();
-            $deviceToken != null? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
+            $deviceToken != null? dispatch(new SendNotification($title, $message, $deviceToken, $url, $admin)) : '';
             sendEmailNotification($ticket);
+
             if ($claimType == 'incorrect amount' || $claimType == 'declined cashback') {
                 return response()->json([
                     'status' => 200,

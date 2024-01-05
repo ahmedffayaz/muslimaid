@@ -9,8 +9,6 @@ use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
-use App\Models\User;
-use App\Models\UserDevice;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -89,7 +87,7 @@ class TicketController extends Controller
             $title = 'Ticket Created';
             $message = 'A new ticket has been created';
             $url = url(getAdminPrefix() . '/tickets') . '/' . $ticket->id;
-            $admin = User::first();
+            $admin = getAdminUser();
             $deviceToken = $admin->devices()->where('type', 'web')->latest()->first();
 
             $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken->fcm_token, $url, $admin)) : '';
@@ -216,7 +214,7 @@ class TicketController extends Controller
                 $title = 'Ticket Created';
                 $message = 'A new ticket has been created';
                 $url = url(getAdminPrefix() . '/tickets') . '/' . $claim->id;
-                $admin = User::first();
+                $admin = getAdminUser();
                 $deviceToken = $admin->devices()->where('type', 'web')->latest()->first();
 
                 $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken->fcm_token, $url, $admin)) : '';
