@@ -243,8 +243,9 @@ class PaymentController extends Controller
             $this->sendEmail($cashout, $userEmailTemplateKey, $adminEmailTemplateKey);
 
             // Send push notification
-            $deviceToken = optional(auth()->user()->devices()->whereType('web')->latest()->first())->fcm_token;
-            $deviceToken != null ? $this->sendNotification($cashout, $deviceToken, $user) :'';
+            $admin = getAdminUser();
+            $deviceToken = $admin->devices()->where('type', 'web')->latest()->first();
+            $deviceToken != null ? $this->sendNotification($cashout, $deviceToken->fcm_token, $admin) :'';
 
             flash()->success("We're processing your withdrawal. Please allow 4 working days for £" . $balance . " to reach your " . $request->payment_method . " account.");
             return redirect()->back();
@@ -341,14 +342,15 @@ class PaymentController extends Controller
             $this->sendEmail($cashout, $userEmailTemplateKey, $adminEmailTemplateKey);
 
             // Send push notification
-            $deviceToken = optional(auth()->user()->devices()->whereType('web')->first())->fcm_token;
-            $deviceToken != null ? $this->sendNotification($request, $deviceToken, $user) : '';
+            $admin = getAdminUser();
+            $deviceToken = optional($admin->devices()->whereType('web')->latest()->first())->fcm_token;
+            $deviceToken != null ? $this->sendNotification($request, $deviceToken, $admin) : '';
 
             flash()->success("We're processing your withdrawal. Please allow 4 working days for £" . $request->amount . " to reach your " . $request->payment_method . " account.");
             return redirect()->back();
         } catch (Exception $e) {
             DB::rollBack();
-            flash()->error('Something went wrong, try again later.');
+            flash()->error('Something went wrong, try again later.' . $e->getMessage());
             return redirect()->back();
         }
     }
@@ -382,9 +384,9 @@ class PaymentController extends Controller
 
     function sendNotification($request, $deviceToken, $user)
     {
-        $title = ' Cashout Requested';
-        $message = 'Your Cashout Request has been submitted through ' . $request->payment_method;
-        $url = url('account/withdraw');
+        $title = 'Cashout Requested';
+        $message = 'New cashout request received';
+        $url = url(getAdminPrefix(). '/cashouts');
 
         dispatch(new SendNotification($title, $message, $deviceToken, $url, $user));
     }

@@ -1352,3 +1352,10 @@ function topVouchers($limit = 5)
 
     return $vouchers;
 }
+
+function getAdminUser()
+{
+    return User::whereHas('roles', function ($query) {
+        $query->where('name', 'admin');
+    })->first();
+}

@@ -6,9 +6,7 @@ use App\Models\Ticket;
 use App\Models\TicketReply;
 use Illuminate\Http\Request;
 use App\Jobs\SendNotification;
-use App\Models\User;
 use App\Http\Controllers\Controller;
-use App\Models\UserDevice;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -54,7 +52,7 @@ class RepliesController extends Controller
             $title = 'Ticket Replied';
             $message = 'User replied to the ticket';
             $url = url(getAdminPrefix() . '/tickets') . '/' . $ticket->id;
-            $admin = User::first();
+            $admin = getAdminUser();
             $deviceToken = $admin->devices()->where('type', 'web')->latest()->first();
 
             $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken->fcm_token, $url, $admin)) : '';
