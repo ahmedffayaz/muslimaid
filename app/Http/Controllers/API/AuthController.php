@@ -39,6 +39,18 @@ class AuthController extends Controller
             }else {
                 $rules['password'][] = 'string';
             }
+
+            // Get deleted account
+            $deletedUser = User::withTrashed()->where('email', $request->input('email'))->first();
+            if ($deletedUser) {
+                $response = [
+                    'status' => 401,
+                    'message' => 'The account has been deleted permanently.',
+                    'data' => []
+                ];
+                return response()->json($response, 401);
+            }
+
             $validator = Validator::make($request->all(), $rules);
             if ($validator->fails()) {
                 $response = [
@@ -445,6 +457,18 @@ class AuthController extends Controller
                 'profile_image' => $userExists->avatar ? url('storage/users/images/avatar/' . $userExists->avatar) : ''
             ], 'User Logged In Successfully');
         }
+
+        // Get deleted account
+        $deletedUser = User::withTrashed()->where('email', $request->input('email'))->first();
+        if ($deletedUser) {
+            $response = [
+                'status' => 401,
+                'message' => 'Your account has been permanently deleted.',
+                'data' => []
+            ];
+            return response()->json($response, 401);
+        }
+
         $validator = Validator::make($request->all(), [
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],

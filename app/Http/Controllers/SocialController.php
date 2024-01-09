@@ -25,6 +25,13 @@ class SocialController extends Controller
     {
         $today = Carbon::today()->toDateString();
         $userSocial =   Socialite::driver($provider)->stateless()->user();
+
+        // Get deleted account
+        $deletedUser = User::withTrashed()->where('email', $userSocial->getEmail())->first();
+        if ($deletedUser) {
+            return redirect()->back()->with(['error' => 'The account has been deleted permanently.']);
+        }
+
         $users      =   User::where(['email' => $userSocial->getEmail()])->first();
         if ($users) {
             Auth::login($users);

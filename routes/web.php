@@ -317,6 +317,7 @@ Route::namespace('App\Http\Controllers\Client')
     ->group(function () {
         Route::get('dashboard', [App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
         Route::get('profile', [App\Http\Controllers\Client\DashboardController::class, 'edit'])->name('profile');
+        Route::post('users/account/delete/{id}', [App\Http\Controllers\Client\DashboardController::class, 'destroy'])->name('users.destroy');
         Route::post('users/add-favorite', [App\Http\Controllers\Client\DashboardController::class, 'addFavorite'])->name('add-favorite');
         Route::post('users/remove-favorite', [App\Http\Controllers\Client\DashboardController::class, 'removeFavorite'])->name('remove-favorite');
         Route::get('favorite-stores', [App\Http\Controllers\Client\DashboardController::class, 'favoriteStores'])->name('favorite-stores');
