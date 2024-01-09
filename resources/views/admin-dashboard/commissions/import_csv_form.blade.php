@@ -1,4 +1,4 @@
-<form action="{{ route('admin.commissions.import') }}" class="form-validate file-upload" method="POST" id="save_modal_form" enctype="multipart/form-data">
+<form action="{{ route(getAdminPrefix() . '.commissions.import') }}" class="form-validate file-upload" method="POST" id="save_modal_form" enctype="multipart/form-data">
     <div class="modal-body modal-body-md">
             @csrf
             <div class="row gy-4">
@@ -21,7 +21,7 @@
                 <div class="col-lg-12">
                     <div class="form-group">
                         <span class="badge badge-dot badge-danger">
-                            <a href="{{ route('admin.commissions.download.file') }}">Download CSV demo file</a>
+                            <a href="{{ route(getAdminPrefix() . '.commissions.download.file') }}">Download CSV demo file</a>
                         </span>
                     </div>
                 </div>

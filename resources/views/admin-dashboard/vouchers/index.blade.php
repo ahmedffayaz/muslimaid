@@ -31,13 +31,13 @@
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
                                             <li class="nk-block-tools-opt">
-                                                <a href="{{ route('admin.vouchers.create') }}" data-toggle="modal" class="btn btn-primary btn-sm add-voucher">
+                                                <a href="{{ route(getAdminPrefix() . '.vouchers.create') }}" data-toggle="modal" class="btn btn-primary btn-sm add-voucher">
                                                     <em class="icon ni ni-plus"></em>
                                                     <span>Add Voucher</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{ route('admin.vouchers.export') }}" id="export" class="btn btn-success btn-sm"
+                                                <a href="{{ route(getAdminPrefix() . '.vouchers.export') }}" id="export" class="btn btn-success btn-sm"
                                                     class="btn btn-white btn-outline-light">
                                                     <em class="icon ni ni-download-cloud"></em>
                                                     <span>Export</span>
@@ -52,7 +52,7 @@
 
                     <div class="card card-preview mb-4">
                         <div class="card-inner">
-                            <form action="{{ route('admin.stores.search_stores') }}" class="form-validate is-alter" id="search-form" method="POST">
+                            <form action="{{ route(getAdminPrefix() . '.stores.search_stores') }}" class="form-validate is-alter" id="search-form" method="POST">
                                 @csrf
                                 <div class="row g-4">
                                     <div class="col-lg-4">
@@ -98,14 +98,8 @@
 
                     <div class="nk-block">
                         <div class="card card-stretch">
-                            <div class="card-inner-group">
-                                <div class="card-inner px-0">
-                                    <div class="nk-tb-list nk-tb-ulist" id="table-data">
-
-                                        @include('admin-dashboard.vouchers.index_data')
-
-                                    </div>
-                                </div>
+                            <div class="card-inner-group" id="table-data">
+                                @include('admin-dashboard.vouchers.index_data')
                             </div>
                         </div>
                     </div>
@@ -166,7 +160,7 @@
             $('#table-data').html(tableSpinner);
 
             $.ajax({
-                url: "{{ route('admin.vouchers.search_vouchers') }}",
+                url: "{{ route(getAdminPrefix() . '.vouchers.search_vouchers') }}",
                 method: "POST",
                 data: {
                     _token: $("input[name=_token]").val(),
@@ -290,7 +284,8 @@
             checkVoucherType();
         });
         $(document).on('click', '.delete', function(event) {
-            var form_id = $(this).attr('form_id');
+            var url = $(this).attr('data-action');
+            console.log(url);
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -298,8 +293,30 @@
                 showCancelButton: true,
                 confirmButtonText: 'Yes, delete it!'
             }).then(function(result) {
-                if (result.value) {
-                    $('#' + form_id).submit();
+                if (result.value == true) {
+                    $.ajax({
+                        url: url,
+                        method: 'DELETE',
+                        data: {
+                            '_token': "{{ csrf_token() }}",
+                        },
+                        success: function(response) {
+                            console.log(response);
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(response.message, 'success');
+                            })(NioApp, jQuery);
+                            fetchVouchers();
+                        },
+                        error: function(error) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.message, 'error');
+                            })(NioApp, jQuery);
+                        }
+                    });
                 }
                 event.preventDefault();
             });
@@ -314,7 +331,7 @@
             if (route == 'index') {
                 $('#table-data').html(tableSpinner);
 
-                pageurl = "{{ route('admin.vouchers.fetch') }}?page="
+                pageurl = "{{ route(getAdminPrefix() . '.vouchers.fetch') }}?page="
                 var _token = $("input[name=_token]").val();
 
                 $.ajax({
@@ -341,7 +358,7 @@
                 var store_id = $("select[name=store_id]").val();
 
                 $.ajax({
-                    url: '{{ route('admin.vouchers.search_vouchers') }}?page=' + page,
+                    url: '{{ route(getAdminPrefix() . '.vouchers.search_vouchers') }}?page=' + page,
                     method: "POST",
                     data: {
                         _token: _token,
@@ -362,7 +379,7 @@
             $('#table-data').html(tableSpinner);
 
             $.ajax({
-                url: "{{ route('admin.vouchers.fetch') }}",
+                url: "{{ route(getAdminPrefix() . '.vouchers.fetch') }}",
                 method: 'POST',
                 data: {
                     _token: $('input[name=_token]').val(),
@@ -407,17 +424,17 @@
                         required: true,
                         customdate: true,
                     },
-                    click_url: {
-                        required: true,
+                    tracking_url: {
                         url: true
                     },
-                    destination: {
-                        required: true,
+                    deeplink_url: {
                         url: true
                     },
-                    sale_commission: {
+                    network_id: {
                         required: true,
-                        minValue: 0.1,
+                    },
+                    store_id: {
+                        required: true,
                     }
                 },
                 messages: {
@@ -435,6 +452,12 @@
 
 
         }
+        $('#add-voucher-modal').on('hidden.bs.modal', function (){
+            $('#add-voucher-form-placeholder').html('');
+        });
+        $('#edit-voucher-modal').on('hidden.bs.modal', function (){
+            $('#edit-voucher-form-placeholder').html('');
+        });
 
         attachFormValidator($(document).find('#add-voucher-form'));
     </script>

@@ -14,18 +14,17 @@ class CashbackResource extends JsonResource
      */
     public function toArray($request)
     {
-        $currency = ($this->type=='fixed') ? $this->currency :null;
-
-        $cashback_value = $this->store->custom_cashback_percentage ? ($this->store->custom_cashback_percentage/100)*$this->sale_commission :(SiteSetting()['cashback_percentage']/100)*$this->sale_commission;
-
-        $cashback = $currency ? $currency.$cashback_value: $cashback_value.'%';
-        
         return [
-                
-            "cashback_name"=>$this->cashback_name,
-            "click_url"=>$this->click_url!='#' ? $this->click_url: $this->store->tracking_url,
-            "sale_commission"=>$cashback,
-            "detail"=>$this->detail,
+            'id' => $this->id,
+            'cashback' => $this->getCashback(),
+            'icon' => !empty($this->image) ? getImageUrl(asset('storage/' . $this->image)) : null,
+            'detail' => $this->detail,
+            'sale_commission' => empty($this->sale_commission) ? '' : $this->sale_commission,
+            'click_url' => empty($this->click_url) ? '' : $this->click_url,
+            'deeplink_url' => empty($this->deeplink_url) ? '' : $this->deeplink_url,
+            'tracking_url' => empty($this->tracking_url) ? '' : $this->tracking_url,
+            "date_updated" => date('d-M-Y', strtotime($this->updated_at)),
+            "date_created" => date('d-M-Y', strtotime($this->created_at)),
         ];
     }
 }

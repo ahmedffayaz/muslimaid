@@ -9,7 +9,7 @@
                             <div class="nk-block-head-content">
                                 <h3 class="nk-block-title page-title">Countries</h3>
                                 <div class="nk-block-des text-soft">
-                                    <p>You have total 5 countries.</p>
+                                    <p>You have total {{ $countries->total() }} countries.</p>
                                 </div>
                             </div><!-- .nk-block-head-content -->
                             <div class="nk-block-head-content">
@@ -84,13 +84,8 @@
 
                     <div class="nk-block">
                         <div class="card card-stretch">
-                            <div class="card-inner-group">
-
-                                <div class="card-inner px-0">
-                                    <div class="nk-tb-list nk-tb-ulist" id="table-data">
-                                        @include('admin-dashboard.countries.index_data')
-                                    </div>
-                                </div>
+                            <div class="card-inner-group" id="table-data">
+                                @include('admin-dashboard.countries.index_data')
                             </div>
                         </div>
                     </div><!-- .nk-block -->
@@ -109,7 +104,7 @@
             $(document).on('click', '.edit-form', function(event) {
                 event.preventDefault();
                 let id = $(this).data('id');
-                let url = "{{ route('admin.countries.edit', ':id') }}";
+                let url = "{{ route(getAdminPrefix() . '.countries.edit', ':id') }}";
                 // Replace id
                 url = url.replace(':id', id);
                 $.ajax({
@@ -137,7 +132,7 @@
                     let formdata = new FormData(this);
 
                     if (id) {
-                        url = "{{ route('admin.countries.update', ':id') }}";
+                        url = "{{ route(getAdminPrefix() . '.countries.update', ':id') }}";
                         url = url.replace(':id', id);
                         formdata.append('_method', 'PUT');
                     }
@@ -227,7 +222,7 @@
                 var currency_id = $("select[name=currency_id").val();
                 var status = $("select[name=status").val();
                 $.ajax({
-                    url: '{{ route('admin.countries.search') }}',
+                    url: '{{ route(getAdminPrefix() . '.countries.search') }}',
                     method: "POST",
                     data: {
                         _token: _token,

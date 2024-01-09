@@ -176,11 +176,38 @@ class SeoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(SeoRule $seo)
+    public function destroy(Request $request, SeoRule $seo)
     {
-        SeoRuleData::where('seo_rule_id',$seo['id'])->delete();
-        $seo->delete();
-        flash()->success('Seo rule deleted successfully');
-        return redirect()->route('admin.seo.index');
+        if($request->ajax()){
+            try{
+                DB::beginTransaction();
+                SeoRuleData::where('seo_rule_id',$seo['id'])->delete();
+                $seo->delete();
+                DB::commit();
+                return response()->json([
+                    'status' => JsonResponse::HTTP_OK,
+                    'success' => "SEO rule deleted succesfully"
+                ], JsonResponse::HTTP_OK);
+            }catch (Exception $e){
+                DB::rollBack();
+                return response()->json([
+                    'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                    'error' => $e->getMessage()
+                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }else{
+            try{
+                DB::beginTransaction();
+                SeoRuleData::where('seo_rule_id',$seo['id'])->delete();
+                $seo->delete();
+                DB::commit();
+                flash()->success('Seo rule deleted successfully');
+                return redirect()->route(getAdminPrefix() . '.seo.index');
+            } catch (Exception $e){
+                DB::rollBack();
+                flash()->error('Something went wrong, try again');
+                return redirect()->route(getAdminPrefix(). '.seo.index');
+            }
+        }
     }
 }

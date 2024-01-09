@@ -32,8 +32,6 @@ class NetworkSeeder extends Seeder
 					!arrayValueExists($network, 'id')
 					|| !arrayValueExists($network, 'name')
 					|| !arrayValueExists($network, 'description')
-					|| !arrayValueExists($network, 'click_ref')
-					|| !arrayValueExists($network, 'deeplink_identifier')
 				) {
 					continue;
 				}
@@ -41,8 +39,8 @@ class NetworkSeeder extends Seeder
 					'id' => $network['id'],
 					'name' => $network['name'],
 					'description' => $network['description'],
-					'click_ref' => $network['click_ref'],
-					'deeplink_identifier' => $network['deeplink_identifier'],
+					'click_ref' => arrayValueExists($network, 'click_ref') ? $network['click_ref'] : '',
+					'deeplink_identifier' => arrayValueExists($network, 'deeplink_identifier') ? $network['deeplink_identifier'] : '',
 					'logo' => arrayValueExists($network, 'logo') ? $network['logo']: '',
 					'created_at' => arrayValueExists($network, 'created_at') ? dbDate($network['created_at']) : $now,
 					'updated_at' => arrayValueExists($network, 'updated_at') ? dbDate($network['updated_at']) : $now,

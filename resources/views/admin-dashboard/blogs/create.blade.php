@@ -25,7 +25,7 @@
                                 <div class="card-inner">
                                     <div class="card-head">
                                     </div>
-                                    <form action="{{ route('admin.blogs.store') }}" class="form-validate is-alter"
+                                    <form action="{{ route(getAdminPrefix() . '.blogs.store') }}" class="form-validate is-alter"  enctype="multipart/form-data"
                                         method="POST">
                                         @csrf
                                         <div class="row g-4">
@@ -48,20 +48,37 @@
                                                     </div>
                                                 </fieldset>
                                             </div>
+                                            <div class="col-lg-8">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="featured_image">Banner <span class="text-danger">*</span></label>
+                                                    <div class="form-control-wrap">
+                                                        <div class="custom-file">
+                                                            <input type="file" class="custom-file-input" name="featured_image" id="featured_image" onchange="BannerReadURL(this);">
+                                                            <label class="custom-file-label" for="featured_image">Choose file</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3">
+                                                    <div class="form-group">
+                                                        <div class="preview-wrapper">
+                                                            <img id="featured_image-preview" src="" alt="logo" class="d-none"
+                                                                style="max-height: 60px; max-width: 60px;" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="reviewer">Publish Date</label>
+                                                    <div class="form-control-wrap">
+                                                        <input id="publish_date" type="date" class="form-control " name="publish_date" placeholder="Publish Date" value="">
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="reviewer">Banner Image <span class="text-danger">*</span></label>
-                                                    <div class="input-group">
-                                                        <span class="input-group-btn">
-                                                            <a id="lfm" data-input="thumbnail" data-preview="holder"
-                                                                class="btn btn-primary text-white">
-                                                                <i class="fa fa-picture-o"></i> Choose
-                                                            </a>
-                                                        </span>
-                                                        <input id="thumbnail" class="form-control" type="text"
-                                                            name="filepath" required>
-                                                    </div>
-                                                    <div id="holder" style="margin-top:15px;max-height:100px;"></div>
+                                                    <label class="form-label" for="reviewer">Meta Title</label>
+                                                    <input class="form-control " name="meta_title" placeholder="Meta Title" value="">
                                                 </div>
                                             </div>
                                             <div class="col-lg-12">
@@ -118,51 +135,18 @@
         }
     </style>
     <script>
-        $(document).ready(function() {
-
-            // Define function to open filemanager window
-            var lfm = function(options, cb) {
-                var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
-                window.open(route_prefix + '?type=' + options.type || 'file', 'FileManager',
-                    'width=900,height=600');
-                window.SetUrl = cb;
-            };
-
-            // Define LFM summernote button
-            var LFMButton = function(context) {
-                var ui = $.summernote.ui;
-                var button = ui.button({
-                    contents: '<i class="note-icon-picture"></i> ',
-                    tooltip: 'Insert image with filemanager',
-                    click: function() {
-
-                        lfm({
-                            type: 'image',
-                            prefix: '/filemanager'
-                        }, function(lfmItems, path) {
-                            lfmItems.forEach(function(lfmItem) {
-                                context.invoke('insertImage', lfmItem.url);
-                            });
-                        });
-
+        function BannerReadURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    if (input.id === "featured_image") {
+                        $('#featured_image-preview').attr('src', e.target.result).removeClass('d-none');
                     }
-                });
-                return button.render();
-            };
-
-            // Initialize summernote with LFM button in the popover button group
-            // Please note that you can add this button to any other button group you'd like
-            $('#summernote-editor').summernote({
-                toolbar: [
-                    ['popovers', ['lfm']],
-                ],
-                buttons: {
-                    lfm: LFMButton
                 }
-            })
-        });
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     </script>
-
     <script>
         jQuery.validator.addMethod("regex", function(value, element) {
             return this.optional(element) || /^[\w. ]+$/i.test(value);

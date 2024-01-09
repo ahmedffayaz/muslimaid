@@ -1,7 +1,7 @@
 @php
     $isEdit = isset($slide) ? true : false;
 @endphp
-<form action="{{ $isEdit ? route('admin.slides.update', $slide) : route('admin.slides.store') }}" id="form-validate" class="gy-3 is-alter category_form" method="POST"
+<form action="{{ $isEdit ? route(getAdminPrefix() . '.slides.update', $slide) : route(getAdminPrefix() . '.slides.store') }}" id="form-validate" class="gy-3 is-alter category_form" method="POST"
     enctype="multipart/form-data">
     @csrf
     @if ($isEdit)

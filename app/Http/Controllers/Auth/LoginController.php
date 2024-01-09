@@ -4,10 +4,13 @@ namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailJob;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Validator;
 
 class LoginController extends Controller
 {
@@ -41,6 +44,19 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
+
+    //redirect
+    protected function authenticated(Request $request, $user)
+    {
+        $previousUrl = URL::previous();
+        // Check if the previous URL is the login URL, and if so, redirect to the home page
+        if ($previousUrl == route('login')) {
+            return redirect('/');
+        }
+
+        return redirect()->intended($request->prvUrl);
+    }
+
     /**
      * Show the application's login form.
      *
@@ -62,11 +78,18 @@ class LoginController extends Controller
     public function login(Request $request)
     {
 
+        // Check if reCAPTCHA key is set
+        if (!empty(getSpecificSetting('google_recaptcha_site_key')) && !empty(getSpecificSetting('google_recaptcha_secret_key'))) {
+            $validator =  Validator::make($request->all(), ['g-recaptcha-response' => 'required|captcha']);
+            if ($validator->fails()) {
+                return redirect()->back()->with(['message' => 'Please verify that you are not a robot.']);
+            }
+        }
+
         $emailCheck = User::where('email', $request->email)->first();
 
-
         if (is_null($emailCheck)) {
-            return redirect()->back()->with(['message' => 'Email address not found']);
+            return redirect()->back()->with(['message' => 'The provided credentials do not match our records.']);
         }
 
         if ($emailCheck->provider != 'email') {
@@ -76,6 +99,11 @@ class LoginController extends Controller
 
         if ($emailCheck->status == 'in_active') {
             return redirect()->back()->with(['message' => 'Your account is inactive']);
+        }
+
+        if ($emailCheck->status == 'pending') {
+            dispatch(new SendEmailJob($emailCheck));
+            return redirect()->back()->with(['message' => 'Your account is not verified. We have sent you the verification email. Please verify your account before login']);
         }
 
         $this->validateLogin($request);
@@ -96,7 +124,11 @@ class LoginController extends Controller
             if ($request->hasSession()) {
                 $request->session()->put('auth.password_confirmed_at', time());
             }
-
+            // This if condition has been put to add unique reference link for already registered users
+            if(auth()->user()->short_ref_id == null){
+                uniqueRefLinkGenerator();
+            }
+            Session::flash('login-welcome');
             return $this->sendLoginResponse($request);
         }
 
@@ -118,15 +150,16 @@ class LoginController extends Controller
      */
     protected function validateLogin(Request $request)
     {
-        $request->validate([
+        $rules = [
             $this->username() => 'required|string',
             'password' => 'required|string',
-            'g-recaptcha-response' => 'required|captcha', 
-        ]);
+        ];
+
+        $request->validate($rules);
     }
+
     protected function redirectTo()
     {
-
         if (Session::has('prvUrl')) {
             return session('prvUrl');
         } else {

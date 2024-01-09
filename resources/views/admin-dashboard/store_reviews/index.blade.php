@@ -18,7 +18,7 @@
                                         data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                     <div class="toggle-expand-content" data-content="pageMenu">
                                         <ul class="nk-block-tools g-3">
-                                            <li class="nk-block-tools-opt"><a href="{{ route('admin.reviews.create') }}"
+                                            <li class="nk-block-tools-opt"><a href="{{ route(getAdminPrefix() . '.reviews.create') }}"
                                                     class="btn btn-primary btn-sm"><em
                                                         class="icon ni ni-plus"></em><span>Add Review</span></a></li>
                                         </ul>
@@ -29,7 +29,7 @@
                     </div><!-- .nk-block-head -->
                     <div class="card card-preview mb-4">
                         <div class="card-inner">
-                            <form action="{{ route('admin.stores.search_stores') }}"
+                            <form action="{{ route(getAdminPrefix() . '.stores.search_stores') }}"
                                 class="form-validate is-alter search_form" method="POST">
                                 @csrf
                                 <div class="row g-4">
@@ -87,12 +87,8 @@
                     @include('flash::message')
                     <div class="nk-block">
                         <div class="card card-stretch">
-                            <div class="card-inner-group">
-                                <div class="card-inner px-0">
-                                    <div class="nk-tb-list nk-tb-ulist" id="table-data">
-                                        @include('admin-dashboard.store_reviews.index_data')
-                                    </div><!-- .nk-tb-list -->
-                                </div><!-- .card-inner -->
+                            <div class="card-inner-group" id="table-data">
+                                @include('admin-dashboard.store_reviews.index_data')
                             </div><!-- .card-inner-group -->
                         </div><!-- .card -->
                     </div><!-- .nk-block -->
@@ -119,9 +115,6 @@
     </div><!-- .modal -->
 @endsection
 @push('scripts')
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
     <script>
         $(document).ready(function() {
             $(document).on('click', '.pagination a', function(event) {
@@ -134,7 +127,7 @@
                         <span class="sr-only">Loading...</span>
                     </div></div>`);
 
-                    pageurl = "{{ route('admin.reviews.fetch') }}?page="
+                    pageurl = "{{ route(getAdminPrefix() . '.reviews.fetch') }}?page="
                     var _token = $("input[name=_token]").val();
                     $.ajax({
                         url: pageurl + page,
@@ -161,7 +154,7 @@
                     var store_id = $("select[name=store_id]").val();
                     var status = $("select[name=status]").val();
                     $.ajax({
-                        url: '{{ route('admin.reviews.search_reviews') }}?page=' + page,
+                        url: '{{ route(getAdminPrefix() . '.reviews.search_reviews') }}?page=' + page,
                         method: "POST",
                         data: {
                             _token: _token,
@@ -195,7 +188,7 @@
 
                 var status = $("select[name=status]").val();
                 $.ajax({
-                    url: '{{ route('admin.reviews.search_reviews') }}',
+                    url: '{{ route(getAdminPrefix() . '.reviews.search_reviews') }}',
                     method: "POST",
                     data: {
                         _token: _token,
@@ -221,18 +214,7 @@
                 var id = $(this).attr('review-id');
                 pageurl = $(this).attr('href');
                 var _token = $("input[name=_token]").val();
-                $.ajax({
-                    url: pageurl,
-                    method: "GET",
-                    data: {
-                        _token: _token
-                    },
-                    success: function(data) {
-                        $('#review-modal').modal('show');
-                        $('#review').html(data);
-                        updateReview()
-                    }
-                });
+                openEditReviewModal(id, pageurl, _token, "reviewMenu");
 
             });
         });
@@ -240,49 +222,9 @@
         $(document).ready(function() {
             $(document).on('click', '.delete-review', function(event) {
                 var form_id = $(this).attr('form_id');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!'
-                }).then(function(result) {
-                    if (result.value) {
-                        $('#' + form_id).submit();
-                    }
-                });
+                deleteReviewConfirmationDialog(form_id);
                 event.preventDefault();
             });
         });
-
-        function updateReview() {
-            $('#store-reviews-form').on('submit', function(event) {
-                event.preventDefault();
-                $.ajax({
-                    url: $(this).attr('action'),
-                    type: 'PUT',
-                    data: $(this).serialize(),
-                    success: function(data) {
-                        $('#review-modal').modal('hide');
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(data.message, 'success');
-
-                        })(NioApp, jQuery);
-                        $('#table-data').load(window.location.href + ' #table-data')
-                    },
-                    error: function(data) {
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast('Something went wrong! unable to update the review',
-                                'error');
-
-                        })(NioApp, jQuery);
-                    }
-                })
-            });
-        }
     </script>
 @endpush

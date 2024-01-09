@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Models\Slider;
 use App\Models\Slide;
 use App\Models\Store;
+use Exception;
+use Illuminate\Http\JsonResponse;
 
 class SliderController extends Controller
 {
@@ -41,10 +43,14 @@ class SliderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Slider $slider)
+    public function edit($id)
     {
-        $stores = Store::latest()->get();
-        return view('admin-dashboard.sliders.edit',compact('slider','stores'));
+        $slider = Slider::with(['slides' => function ($slide) {
+            $slide->with(['store' => function ($store) {
+                $store->select('id', 'name', 'slug', 'created_at')->withCount('cashbacks')->get();
+            }]);
+        }])->findOrFail($id);
+        return view('admin-dashboard.sliders.edit',compact('slider'));
     }
 
     public function sortSlides(Request $request)
@@ -55,11 +61,15 @@ class SliderController extends Controller
                 $slidex = Slide::where('id',$slide)->first();
                 $slidex->update(['order'=>$order]);
             }
-            return array('message'=>'Slides order updated',
-                'updated'=>'success');
-        } catch (\Throwable $th) {
-            return array('message'=>'Something went wrong!',
-                        'updated'=>'error');
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Slides order updated.'
+            ], JsonResponse::HTTP_OK);
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Something went wrong!'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

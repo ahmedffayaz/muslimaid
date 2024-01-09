@@ -17,21 +17,23 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
+                                        @if (config('app.env') != "production")
+                                            <li class="nk-block-tools-opt">
+                                                <button class="btn btn-warning btn-sm" id="fake-data-importer-btn">
+                                                    <em class="icon ni ni-upload-cloud"></em>
+                                                    <span>Import Fake Stores</span>
+                                                </button>
+                                                <form action="{{ route(getAdminPrefix() . '.stores.import-fake-data') }}" id="fake-data-importer-form" method="post">@csrf</form>
+                                            </li>
+                                        @endif
                                         <li class="nk-block-tools-opt">
-                                            <button class="btn btn-warning btn-sm" id="fake-data-importer-btn">
-                                                <em class="icon ni ni-upload-cloud"></em>
-                                                <span>Import Fake Stores</span>
-                                            </button>
-                                            <form action="{{ route('admin.stores.import-fake-data') }}" id="fake-data-importer-form" method="post">@csrf</form>
-                                        </li>
-                                        <li class="nk-block-tools-opt">
-                                            <a href="{{route('admin.stores.create')}}" class="btn btn-primary btn-sm">
+                                            <a href="{{route(getAdminPrefix() . '.stores.create')}}" class="btn btn-primary btn-sm">
                                                 <em class="icon ni ni-plus"></em>
                                                 <span>Add Store</span>
                                             </a>
                                         </li>
                                         <li>
-                                            <a href="{{route('admin.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light">
+                                            <a href="{{route(getAdminPrefix() . '.stores.export')}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light">
                                                 <em class="icon ni ni-download-cloud"></em>
                                                 <span>Export</span>
                                             </a>
@@ -44,7 +46,7 @@
                 </div><!-- .nk-block-head -->
                 <div class="card card-preview mb-4">
                     <div class="card-inner">
-                        <form action="{{route('admin.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
+                        <form action="{{route(getAdminPrefix() . '.stores.search_stores')}}" class="form-validate is-alter search_form" method="POST">
                             @csrf
                             <div class="row g-4 justify-content-md-center">
                                 <div class="col-lg-2 col-md-6">
@@ -101,30 +103,12 @@
                                 </div>
                             </div>
                         </form>
-
                     </div>
-
                 </div>
                 @include('flash::message')
                 <div class="nk-block" id="table-data">
                     @include('admin-dashboard.stores.index_data')
-
                 </div><!-- .nk-block -->
-                {{-- <div class="nk-block">
-                    <div class="card card-stretch">
-                        <div class="card-inner-group">
-                           
-                            <div class="card-inner px-0">
-                                <div class="nk-tb-list nk-tb-ulist" id="table-data">
-                                    
-                                    @include('admin-dashboard.stores.index_data')                                   
-                                    
-                                </div><!-- .nk-tb-list -->
-                            </div><!-- .card-inner -->
-                           
-                        </div><!-- .card-inner-group -->
-                    </div><!-- .card -->
-                </div><!-- .nk-block --> --}}
             </div>
         </div>
     </div>
@@ -143,7 +127,7 @@
             <span class="sr-only">Loading...</span>
             </div></div>`);
 
-                pageurl = "{{route('admin.stores.fetch')}}?page="
+                pageurl = "{{route(getAdminPrefix() . '.stores.fetch')}}?page="
                 var _token = $("input[name=_token]").val();
 
                 $.ajax({
@@ -172,7 +156,7 @@
                 var status = $("select[name=status").val();
                 var store_name = $("input[name=store_name]").val();
                 $.ajax({
-                    url: '{{route("admin.stores.search_stores")}}?page=' + page,
+                    url: '{{route(getAdminPrefix() . ".stores.search_stores")}}?page=' + page,
                     method: "POST",
                     data: {
                         _token: _token,
@@ -213,7 +197,7 @@
             }
 
             $.ajax({
-                url: '{{route("admin.stores.search_stores")}}',
+                url: '{{route(getAdminPrefix() . ".stores.search_stores")}}',
                 method: "POST",
                 data: {
                     _token: _token,

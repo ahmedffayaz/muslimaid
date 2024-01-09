@@ -13,6 +13,12 @@ class Kernel extends HttpKernel
      *
      * @var array
      */
+    protected function createModuleMiddleware($path)
+    {
+        return 'module-access:' . $path;
+    }
+
+
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
         \App\Http\Middleware\TrustProxies::class,
@@ -34,7 +40,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
-            // \Illuminate\Session\Middleware\AuthenticateSession::class,
+            \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
@@ -45,6 +51,10 @@ class Kernel extends HttpKernel
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
             'throttle:api',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
+        'module-access' => [
+            \App\Http\Middleware\ModulesMiddleware::class,
+            // Add other module access control middleware here
         ],
     ];
 
@@ -69,5 +79,12 @@ class Kernel extends HttpKernel
         'permission' => \Spatie\Permission\Middlewares\PermissionMiddleware::class,
         'role_or_permission' => \Spatie\Permission\Middlewares\RoleOrPermissionMiddleware::class,
         'is_verify_email' => \App\Http\Middleware\IsVerifyEmail::class,
+        'module-access' => \App\Http\Middleware\ModulesMiddleware::class,
+        'is_charity_module_access' => \App\Http\Middleware\CharitiesMiddleware::class,
+        'is_cashout_module_access' => \App\Http\Middleware\CashoutsMiddleware::class,
+        'is_payment_method_module_access' => \App\Http\Middleware\PaymentMethodMiddleware::class,
+        'is_appeal_module_access' => \App\Http\Middleware\AppealsMiddleware::class,
+        'is_banner_module_access' => \App\Http\Middleware\BannersMiddleware::class,
+        'is_cashback_earning_admin_module_access' => \App\Http\Middleware\CashbackEarningsMiddleware::class,
     ];
 }

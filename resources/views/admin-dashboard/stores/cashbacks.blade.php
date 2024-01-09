@@ -1,5 +1,5 @@
 @if ($store->override_cashback)
-    <a href="#cashback-modal" class="btn btn-primary btn-sm float-right add-cashbacks" id="add-cashbacks"><em class="icon ni ni-upload-cloud"></em> <span>Add cashback</span></a>
+    <a href="#" class="btn btn-primary btn-sm float-right add-cashbacks" id="add-cashbacks"><em class="icon ni ni-upload-cloud"></em> <span>Add cashback</span></a>
 @endif
 <div class="nk-tb-list nk-tb-ulist" style="table-layout: auto">
     @if (count($store->cashbacks))
@@ -8,7 +8,7 @@
             <div class="nk-tb-col tb-col-mb pl-0"><span class="sub-text">Cashback</span></div>
             <div class="nk-tb-col tb-col-mb"><span class="sub-text">Type</span></div>
             <div class="nk-tb-col tb-col-mb"><span class="sub-text">Detail</span></div>
-            <div class="nk-tb-col nk-tb-col-tools text-right pr-0">
+            <div class="nk-tb-col nk-tb-col-tools pr-0">
                 <span class="sub-text">Edit</span>
             </div>
         </div><!-- .nk-tb-item -->
@@ -18,11 +18,19 @@
                     <span>
                         {{ $cashback->getNetworkCommission() }}
                     </span>
+                    @if ($cashback->default)
+                        <span class="badge badge-dim badge-pill badge-primary text-capitalize fw-bold">Default</span>
+                    @endif
                 </div>
                 <div class="nk-tb-col  pl-1">
                     <span>
                         {{ $cashback->getCashback() }}
                     </span>
+                    @if ($cashback->network)
+                        <p>
+                            <span class="badge badge-dim badge-pill badge-primary text-capitalize">{{ optional($cashback->network)->name }}</span>
+                        </p>
+                    @endif
                 </div>
 
                 <div class="nk-tb-col text-capitalize">
@@ -35,7 +43,14 @@
 
                 <div class="nk-tb-col nk-tb-col-tools pr-2 text-right">
                     @if ($store->override_cashback)
-                        <a href="" cashback-id='{{ $cashback->id }}' class='cashback-edit a_link'><em class="icon ni ni-edit"></em></a>
+                        <div class="d-flex">
+                            <a href="" cashback-id='{{ $cashback->id }}' class='cashback-edit a_link'><em class="icon ni ni-edit"></em></a>
+                            <form action="{{ route(getAdminPrefix() . '.stores.cashbacks.delete', $cashback) }}" id="store-cashback-form-id" method="POST">
+                                @csrf
+                                <input type="hidden" name="storeCashbackId" value="{{ $cashback->id }}">
+                                <a href="javascript:void(0);" class='cashback-delete a_link'><em class="icon ni ni-trash-fill"></em></a>
+                            </form>
+                        </div>
                     @endif
                 </div>
             </div><!-- .nk-tb-item -->

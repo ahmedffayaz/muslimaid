@@ -17,7 +17,7 @@
                                 <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
-                                        <li><a href="{{route('admin.networks.categories.export', $network)}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
+                                        <li><a href="{{route(getAdminPrefix() . '.networks.categories.export', $network)}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li>
 
                                     </ul>
                                 </div>
@@ -80,7 +80,7 @@
                     <div class="card card-stretch">
                         <div class="card-inner-group">
                            
-                            <div class="card-inner px-0">
+                            <div class="card-inner px-0 table-responsive">
                                 <div class="nk-tb-list nk-tb-ulist" id="table-data">
                                     
                                     @include('admin-dashboard.imported-categories.index_data')                                   
@@ -106,7 +106,7 @@
         
          if(route=='index'){
             
-             pageurl = "{{route('admin.importedcategories.fetch')}}?page="
+             pageurl = "{{route(getAdminPrefix() . '.importedcategories.fetch')}}?page="
              var _token = $("input[name=_token]").val();
              var network_id = "{{$network->id}}"
                 $.ajax({
@@ -130,7 +130,7 @@
             var title = $("input[name=title]").val();
             var mapped_id = $("select[name=mapped_id]").val();
             $.ajax({
-              url:'{{route("admin.importedcategories.search_importedcategories")}}?page='+page,
+              url:'{{route(getAdminPrefix() . ".importedcategories.search_importedcategories")}}?page='+page,
               method:"POST",
               data:{_token:_token,parent_id:parent_id,title:title,mapped_id:mapped_id},
               success:function(data)
@@ -154,7 +154,7 @@
             var title = $("input[name=title]").val();
             var mapped_id = $("select[name=mapped_id]").val();
             $.ajax({
-              url:'{{route("admin.importedcategories.search_importedcategories")}}',
+              url:'{{route(getAdminPrefix() . ".importedcategories.search_importedcategories")}}',
               method:"POST",
               data:{_token:_token,parent_id:parent_id,title:title,mapped_id:mapped_id},
               success:function(data)

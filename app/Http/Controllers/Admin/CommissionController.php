@@ -3,16 +3,16 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
-use App\Jobs\SendEmail;
 use App\Models\Network;
 use App\Models\ExitClick;
 use App\Models\SiteSetting;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
-use App\Models\EmailTemplate;
+use App\Jobs\SendNotification;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailToUser;
 use App\Models\CashbackStatusChange;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -65,8 +65,8 @@ class CommissionController extends Controller
     {
         $request->validate([
             'exit_click_id' => 'required|integer|min:1',
-            'order_value' => 'nullable|numeric|min:0.1',
-            'network_commission' => 'required|numeric|min:0.1',
+            'order_value' => 'nullable|numeric|min:0.01|max:999999.99',
+            'network_commission' => 'required|numeric|min:0.01|max:999999.99',
             'amount' => 'nullable|numeric',
             'status' => 'required|integer'
         ], [
@@ -105,26 +105,14 @@ class CommissionController extends Controller
             ]);
 
             if ($click->user_id != 0) {
-                $emailTemplate = EmailTemplate::where('key', 'user_new_cashback_tracked')->first();
+                // Send Email
+                $this->sendEmail($commission);
 
-                $filteredMessage = str_replace(
-                    ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{STORE}}', '{{AMOUNT}}'],
-                    [
-                        SiteSetting()['website_title'], url('/'),
-                        $commission->user->first_name . ' ' . $commission->user->last_name,
-                        $commission->user->email, $commission->store->name, $commission->amount
-                    ],
-                    $emailTemplate->message
-                );
-
-                $data = array(
-                    'subject' => $emailTemplate->subject,
-                    'email_message' => $filteredMessage,
-                    'email' => $commission->user->email
-                );
-
-                SendEmail::dispatch($data);
+                // Send Push Norification
+                $deviceToken = optional($commission->user->devices()->whereType('web')->latest()->first())->fcm_token;
+                $deviceToken != null ? $this->sendNotification($commission, $deviceToken) : '';
             }
+
             if ($request->ajax()) {
                 return response()->json([
                     'status' => JsonResponse::HTTP_OK,
@@ -165,8 +153,8 @@ class CommissionController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'exit_click_id' => 'required|integer |min:1',
-            'order_value' => 'nullable|numeric|min:0.1',
-            'network_commission' => 'required|numeric|min:0.1',
+            'order_value' => 'nullable|numeric|min:0.01|max:999999.99',
+            'network_commission' => 'required|numeric|min:0.01|max:999999.99',
             'amount' => 'nullable|numeric',
             'status' => 'required|integer'
         ]);
@@ -271,7 +259,7 @@ class CommissionController extends Controller
             return Response::download($filename, 'cashbacks.csv', $headers);
         } catch (Exception $exception) {
             flash()->error('Error while exporting cashbacks');
-            return redirect()->route('admin.commissions.index');
+            return redirect()->route(getAdminPrefix() . '.commissions.index');
         }
     }
 
@@ -286,8 +274,8 @@ class CommissionController extends Controller
     {
         $request->validate([
             'exit_click_id.*' => 'required|integer |min:1',
-            'order_value.*' => 'nullable|numeric|min:0.1',
-            'network_commission.*' => 'required|numeric|min:0.1',
+            'order_value.*' => 'nullable|numeric|min:0.01',
+            'network_commission.*' => 'required|numeric|min:0.01',
             'event_date.*' => 'required|date_format:m/d/Y'
         ], [
             'exit_click_id.*.required' => 'All exit clicks are required',
@@ -327,30 +315,17 @@ class CommissionController extends Controller
                 ]);
 
                 if ($commission->user_id != 0) {
-                    $emailTemplate = EmailTemplate::where('key', 'user_new_cashback_tracked')->first();
+                    // Send Email
+                    $this->sendEmail($commission);
 
-                    $filteredMessage = str_replace(
-                        ['{{SITE_TITLE}}', '{{SITE_URL}}', '{{NAME}}', '{{EMAIL}}', '{{STORE}}', '{{AMOUNT}}'],
-                        [
-                            SiteSetting()['website_title'], url('/'),
-                            $commission->user->first_name . ' ' . $commission->user->last_name,
-                            $commission->user->email, $commission->store->name, $commission->amount
-                        ],
-                        $emailTemplate->message
-                    );
-
-                    $data = array(
-                        'subject' => $emailTemplate->subject,
-                        'email_message' => $filteredMessage,
-                        'email' => $commission->user->email
-                    );
-
-                    SendEmail::dispatch($data);
+                    // Send Push Norification
+                    $deviceToken = optional($commission->user->devices()->whereType('web')->latest()->first())->fcm_token;
+                    $deviceToken != null ? $this->sendNotification($commission, $deviceToken) : '';
                 }
             }
 
             flash()->success('New cashbacks added');
-            return route('admin.commissions.index');
+            return route(getAdminPrefix() . '.commissions.index');
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 'status' => JsonResponse::HTTP_NOT_FOUND,
@@ -450,7 +425,33 @@ class CommissionController extends Controller
             return Response::download($file, $filename, $headers);
         } catch (Exception $exception) {
             flash()->error('File does not exist.');
-            return redirect()->route('admin.commissions.create_multiple');
+            return redirect()->route(getAdminPrefix() . '.commissions.create_multiple');
         }
+    }
+
+    function sendEmail($click)
+    {
+        $userEmailTemplateKey = 'user_new_cashback_tracked';
+        $filterMessageVariables = ['{{STORE}}', '{{AMOUNT}}'];
+        $requestFilteredMessage = [$click->store->name, number_format($click->amount, 2)];
+
+        $data = [
+            'name' => $click->user->first_name . ' ' . $click->user->last_name,
+            'email' => $click->user->email,
+            'subject' => null,
+            'message' => null
+        ];
+
+        SendEmailToUser::dispatch($userEmailTemplateKey, $data, $filterMessageVariables, $requestFilteredMessage);
+    }
+
+    function sendNotification($click, $deviceToken)
+    {
+        $title = 'Cashback Received';
+        $message = 'You\'ve received cashback from ' . $click->store->name;
+        $url = url('account/cashback');
+        $user = $click->user()->get();
+
+        dispatch(new SendNotification($title, $message, $deviceToken, $url, $user));
     }
 }

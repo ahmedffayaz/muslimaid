@@ -8,6 +8,7 @@
 <title>{{ isset($page) ? $page->title : 'Error 404' }}</title>
 <meta name="description" content="{{ isset($page) ? $page->meta_description : 'Error 404' }}">
 <meta name="keywords" content="{{ isset($page) ? $page->meta_keyword : 'Error 404' }}">
+<meta name="title" content="{{ isset($page) ? $page->meta_title : 'Error 404' }}">
 <style>
     body {
         text-align: center;
@@ -46,15 +47,5 @@
 </style>
 
 <article>
-    @if (isset($keywords[0]) && $keywords[0] != "")
-        @foreach ($keywords as $keyword)
-            @include('errors.partial.404_partial', ['keyword' => $keyword])
-        @endforeach
-    @else
-        <img src="{{ asset('frontend/images/404 error.png') }}" alt="">
-        <h1>Page not Found!</h1>
-        <div>
-            <p>We&rsquo;re sorry, the page you requested could not be found. Please go back to the <a href="/">Homepage</a>.</p>
-        </div>
-    @endif
+    {!! resolvePageShortCodes($page->lb_content, $__data) !!}
 </article>

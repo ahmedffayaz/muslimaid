@@ -22,9 +22,11 @@ class ContactController extends Controller
 
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'g-recaptcha-response' => 'required|captcha',
-        ]);
+        if (!empty(getSpecificSetting('google_recaptcha_site_key')) && !empty(getSpecificSetting('google_recaptcha_secret_key'))) {
+            $this->validate($request, [
+                'g-recaptcha-response' => 'required|captcha',
+            ]);
+        }
 
         try {
             ContactForm::create($request->all());

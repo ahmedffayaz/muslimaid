@@ -1,105 +1,108 @@
-
-@if(count($coms))
-<div class="row g-gs">
-    <div class="col-xxl-12">
-        <div class="card h-100">
-            <div class="card-inner mb-n2">
-                <div class="card-title-group">
-                    <div class="card-title card-title-sm">
-                        <h6 class="title">Earning Report</h6>
+<div class="card-inner px-0 table-responsive">
+    <div class="nk-tb-list nk-tb-ulist">
+        @if(count($coms))
+        <div class="row g-gs">
+            <div class="col-xxl-12">
+                <div class="card h-100">
+                    <div class="card-inner mb-n2 border-0">
+                        <div class="card-title-group">
+                            <div class="card-title card-title-sm">
+                                <h6 class="title">Earning Report</h6>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-            <div class="nk-tb-list is-loose">
-                <div class="nk-tb-item nk-tb-head">
-                    <div class="nk-tb-col"><span>Store</span></div>
-                    <div class="nk-tb-col"><span>User</span></div>
-                    <div class="nk-tb-col"><span>Network</span></div>
-                    <div class="nk-tb-col"><span>Exit Click ID</span></div>
-                    <div class="nk-tb-col"><span>Network Commission</span></div>
-                    <div class="nk-tb-col"><span>User Cashback</span></div>
-                    <div class="nk-tb-col"><span>Earning</span></div>
-                    <div class="nk-tb-col"><span>Date</span></div>
-                    <div class="nk-tb-col text-right"><span>Status</span></div>
-                </div><!-- .nk-tb-head -->
-                @foreach($coms as $com)
-                <div class="nk-tb-item">
-                    <div class="nk-tb-col">
-                        @if(isset($com->store))
-                            @if ($com->store_id)
-                                <div class="icon-text"><a href="{{route('admin.stores.show_store')}}?slug={{$com->store->slug}}">
-                                    <span class="tb-lead"> <em class="text-primary icon ni ni-cart-fill mr-2"></em>{{$com->store->name}}</span></a>
+                    <div class="nk-tb-list is-loose">
+                        <div class="nk-tb-item nk-tb-head">
+                            <div class="nk-tb-col"><span>Store</span></div>
+                            <div class="nk-tb-col"><span>User</span></div>
+                            <div class="nk-tb-col"><span>Network</span></div>
+                            <div class="nk-tb-col"><span>Exit Click ID</span></div>
+                            <div class="nk-tb-col"><span>Network Commission</span></div>
+                            @if (getImporterYMLSettings(config('app.cashback_earnings_admin_yml_path')))
+                                <div class="nk-tb-col"><span>User Cashback</span></div>
+                                <div class="nk-tb-col"><span>Earning</span></div>
+                            @endif
+                            <div class="nk-tb-col"><span>Date</span></div>
+                            <div class="nk-tb-col text-right"><span>Status</span></div>
+                        </div><!-- .nk-tb-head -->
+                        @foreach($coms as $com)
+                        <div class="nk-tb-item">
+                            <div class="nk-tb-col">
+                                @if(isset($com->store))
+                                    @if ($com->store_id)
+                                        <div class="icon-text"><a href="{{route(getAdminPrefix() . '.stores.show_store')}}?slug={{$com->store->slug}}">
+                                            <span class="tb-lead"> <em class="text-primary icon ni ni-cart-fill mr-2"></em>{{$com->store->name}}</span></a>
+                                        </div>
+                                    @else
+                                        <div class="icon-text">
+                                            <span class="tb-lead"> <em class="text-primary icon ni ni-coin-alt mr-2"></em>{{ ucfirst(str_replace('_', ' ', $com->type)) }}</span>
+                                        </div>
+
+                                    @endif
+                                @endif
+                            </div>
+                            <div class="nk-tb-col">
+                                <span class="tb-sub"><span>{{$com->user->first_name ?? ''}} {{$com->user->last_name ?? ''}}</span></span>
+                            </div>
+                            @if($com->network)
+                                <div class="nk-tb-col">
+                                    <span class="tb-sub"><span>{{$com->store->network->name}}</span></span>
                                 </div>
                             @else
-                                <div class="icon-text">
-                                    <span class="tb-lead"> <em class="text-primary icon ni ni-coin-alt mr-2"></em>{{ ucfirst(str_replace('_', ' ', $com->type)) }}</span>
+                                <div class="nk-tb-col">
+                                    <span class="profile-ud-value"> {{ ucfirst(str_replace('_', ' ', $com->type)) }}</span>
                                 </div>
-
                             @endif
-                        @endif
-                    </div>
-                    <div class="nk-tb-col">
-                        <span class="tb-sub"><span>{{$com->user->first_name ?? ''}} {{$com->user->last_name ?? ''}}</span></span>
-                    </div>
-                    @if($com->network)
-                        <div class="nk-tb-col">
-                            <span class="tb-sub"><span>{{$com->store->network->name}}</span></span>
-                        </div>
-                    @else
-                        <div class="nk-tb-col">
-                            <span class="profile-ud-value"> {{ ucfirst(str_replace('_', ' ', $com->type)) }}</span>
-                        </div>
-                    @endif
-                    <div class="nk-tb-col ">
-                        <span>{{$com->exit_click_id}}</span>
-                    </div>
+                            <div class="nk-tb-col ">
+                                <span>{{$com->exit_click_id}}</span>
+                            </div>
 
+                            <div class="nk-tb-col ">
+                                <span><span class="currency">{{ currency($com->network_commission) }}</span></span>
+                            </div>
+                            @if (getImporterYMLSettings(config('app.cashback_earnings_admin_yml_path')))
+                                <div class="nk-tb-col ">
+                                    <span><span class="currency">{{ currency($com->amount) }}</span></span>
+                                </div>
+                                <div class="nk-tb-col ">
+                                    <span><span class="currency">{{ currency($com->network_commission - $com->amount) }}</span></span>
+                                </div>
+                            @endif
+                            <div class="nk-tb-col ">
+                                <span>{{$com->event_date}}</span>
+                            </div>
 
-                    <div class="nk-tb-col ">
-                        <span><span class="currency">{{ currency($com->network_commission) }}</span></span>
-                    </div>
-                    <div class="nk-tb-col ">
-                        <span><span class="currency">{{ currency($com->amount) }}</span></span>
-                    </div>
-                    <div class="nk-tb-col ">
-                        <span><span class="currency">{{ currency($com->network_commission - $com->amount) }}</span></span>
-                    </div>
-                    <div class="nk-tb-col ">
-                        <span>{{$com->event_date}}</span>
-                    </div>
+                            <div class="nk-tb-col  text-right">
+                                @if(($com->statusMap->status ?? $com->status) == "confirmed")
+                                    <span class="tb-status badge badge-success">{{ $com->statusMap->status ?? $com->status}}</span>
+                                @elseif(($com->statusMap->status ?? $com->status) == "paid")
+                                    <span class="tb-status badge badge-info">{{ $com->statusMap->status ?? $com->status}}</span>
+                                @elseif(($com->statusMap->status ?? $com->status) == "failed")
+                                    <span class="tb-status badge badge-danger">{{ $com->statusMap->status ?? $com->status}}</span>
+                                @elseif(($com->statusMap->status ?? $com->status) == "pending")
+                                    <span class="tb-status badge badge-warning">{{ $com->statusMap->status ?? $com->status}}</span>
+                                @elseif(($com->statusMap->status ?? $com->status) == "processing donation")
+                                    <span class="tb-status badge badge-light">{{ $com->statusMap->status ?? $com->status}}</span>
+                                @elseif(($com->statusMap->status ?? $com->status) == "donated")
+                                    <span class="tb-status badge badge-light">{{ $com->statusMap->status ?? $com->status}}</span>
+                                @elseif(($com->statusMap->status ?? $com->status) == "processing")
+                                    <span class="tb-status badge badge-success">{{ $com->statusMap->status ?? $com->status}}</span>
+                                @endif
+                            </div>
+                        </div><!-- .nk-tb-item -->
+                        @endforeach
+                    </div><!-- .nk-tb-list -->
+                </div><!-- .card -->
+            </div><!-- .col -->
 
-                    <div class="nk-tb-col  text-right">
-                        @if(($com->statusMap->status ?? $com->status) == "confirmed")
-                            <span class="tb-status badge badge-success">{{ $com->statusMap->status ?? $com->status}}</span>
-                        @elseif(($com->statusMap->status ?? $com->status) == "paid")
-                            <span class="tb-status badge badge-info">{{ $com->statusMap->status ?? $com->status}}</span>
-                        @elseif(($com->statusMap->status ?? $com->status) == "failed")
-                            <span class="tb-status badge badge-danger">{{ $com->statusMap->status ?? $com->status}}</span>
-                        @elseif(($com->statusMap->status ?? $com->status) == "pending")
-                            <span class="tb-status badge badge-warning">{{ $com->statusMap->status ?? $com->status}}</span>
-                        @elseif(($com->statusMap->status ?? $com->status) == "processing donation")
-                            <span class="tb-status badge badge-light">{{ $com->statusMap->status ?? $com->status}}</span>
-                        @elseif(($com->statusMap->status ?? $com->status) == "donated")
-                            <span class="tb-status badge badge-light">{{ $com->statusMap->status ?? $com->status}}</span>
-                        @elseif(($com->statusMap->status ?? $com->status) == "processing")
-                            <span class="tb-status badge badge-success">{{ $com->statusMap->status ?? $com->status}}</span>
-                        @endif
-                    </div>
-                </div><!-- .nk-tb-item -->
-                @endforeach
-                <div class="nk-block-between-md g-3 card-inner">
-                    <div class="pagination g" route="{{$route}}">
-                        {!! $coms->links()!!}
-
-                        </div>
-
-
-                </div><!-- .nk-block-between -->
-            </div><!-- .nk-tb-list -->
-        </div><!-- .card -->
-    </div><!-- .col -->
-
-</div><!-- .row -->
+        </div><!-- .row -->
+    </div>
+</div>
+<div class="nk-block-between-md g-3 card-inner float-right">
+    <div class="pagination g" route="{{$route}}">
+        {!! $coms->links()!!}
+    </div>
+</div><!-- .nk-block-between -->
 @else
     <h3 class="m-auto text-center py-5">No results found</h3>
 @endif
@@ -124,7 +127,7 @@ $(document).ready(function(){
         var start_date = $("input[name=start_date]").val();
         var end_date = $("input[name=end_date]").val();
         $.ajax({
-        url:'{{route("admin.reports.search_earnings")}}?page='+page,
+        url:'{{route(getAdminPrefix() . ".reports.search_earnings")}}?page='+page,
         method:"POST",
         data:{_token:_token,store_id:store_id,start_date:start_date,end_date:end_date,status_id:status_id,page:page},
         success:function(data)
@@ -142,7 +145,7 @@ $(document).ready(function(){
             <span class="sr-only">Loading...</span>
             </div></div>`);
 
-        var pageurl = "{{route('admin.reports.fetch_earnings')}}?page="
+        var pageurl = "{{route(getAdminPrefix() . '.reports.fetch_earnings')}}?page="
         var _token = $("input[name=_token]").val();
         $.ajax({
             url:pageurl+page,

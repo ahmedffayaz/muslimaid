@@ -25,9 +25,19 @@ class SocialController extends Controller
     {
         $today = Carbon::today()->toDateString();
         $userSocial =   Socialite::driver($provider)->stateless()->user();
+
+        // Get deleted account
+        $deletedUser = User::withTrashed()->where('email', $userSocial->getEmail())->first();
+        if ($deletedUser) {
+            return redirect()->back()->with(['error' => 'The account has been deleted permanently.']);
+        }
+
         $users      =   User::where(['email' => $userSocial->getEmail()])->first();
         if ($users) {
             Auth::login($users);
+            if($users->short_ref_id == null){
+                uniqueRefLinkGenerator();
+            }
             if (Session::has('prvUrl')) {
                 return redirect(session('prvUrl'));
             } else {
@@ -57,7 +67,10 @@ class SocialController extends Controller
                 'provider'          => $provider,
                 'referred_by'       => Session::has('refCode') ? base64_decode(Session::get('refCode')) : null,
                 'referred_at'       => Session::has('refCode') ? $today : '',
-                'is_email_verified' => 1
+                'is_email_verified' => 1,
+                'avatar' => 'default.png',
+                'status' => 'active',
+                'short_ref_id' => uniqueRefLinkGenerator()
             ]);
 
             $user->assignRole('user');
@@ -74,7 +87,7 @@ class SocialController extends Controller
 
             Auth::login($user);
             Session::forget('refCode');
-            Session::flash('welcome', 'welcome message');
+            Session::flash('social-login-welcome');
             if (Session::has('prvUrl')) {
                 return redirect(session('prvUrl'));
             } else {

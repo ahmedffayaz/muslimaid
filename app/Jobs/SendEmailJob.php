@@ -35,22 +35,24 @@ class SendEmailJob implements ShouldQueue
     public function handle()
     {
         $user = $this->details;
-        $verification_email_temp = EmailTemplate::where('key','email_verification')->first();
-        $token = Str::random(64);
-
-        UserVerify::create([
-            'user_id' => $user->id,
-            'token' => $token
+        $verification_email_temp = EmailTemplate::where('key', 'email_verification')->first();
+        if(UserVerify::where('user_id', $user->id)->first() === null){
+            $token = Str::random(64);
+            UserVerify::create([
+                'user_id' => $user->id,
+                'token' => $token
             ]);
-        $email = new emailTemp();
-
-       $appUrl = env('APP_URL');
-        $link = $appUrl.'/account/verify/'.$token;
-        $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{LINK}}'],[SiteSetting()['website_title'], url('/'), $link],$verification_email_temp->message );
+        } else {
+            $token = UserVerify::where('user_id', $user->id)->first()->token;
+        }
+        
+        $appUrl = env('APP_URL');
+        $link = $appUrl . '/account/verify/' . $token;
+        $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{LINK}}', '{{OTP}}'], [SiteSetting()['website_title'], url('/'), $link, $user->otp], $verification_email_temp->message);
         $data = array(
-            'email'=> $user->email,
-            'email_message'=>$filtered_message,
-            'subject'=>$verification_email_temp->subject
+            'email' => $user->email,
+            'email_message' => $filtered_message,
+            'subject' => $verification_email_temp->subject
         );
         Mail::send('frontend.emails.frontend.email_template', $data, function ($message) use ($data) {
             $message->to($data['email'])

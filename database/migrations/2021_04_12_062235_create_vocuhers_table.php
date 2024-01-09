@@ -16,18 +16,15 @@ class CreateVocuhersTable extends Migration
         Schema::create('vouchers', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('store_id');
+            $table->string('name', 256)->nullable();
             $table->longText('description')->nullable();
-            $table->text('destination')->nullable();
-            $table->string('link_id')->nullable();
-            $table->string('link_name')->nullable();
-            $table->string('link_type')->nullable();
-            $table->string('promotion_type')->nullable();
+            $table->text('tracking_url')->nullable();
+            $table->text('deeplink_url')->nullable();
+            $table->enum('promotion_type', ['Coupon', 'Sale/Discount']);
             $table->string('coupon_code')->nullable();
             $table->string('image')->nullable();
-            $table->text('click_url')->nullable();
-            $table->text('sale_commission')->nullable();
-            $table->dateTime('promotion_end_date')->nullable();
             $table->dateTime('promotion_start_date')->nullable();
+            $table->dateTime('promotion_end_date')->nullable();
             $table->timestamps();
             $table->softDeletes();
 

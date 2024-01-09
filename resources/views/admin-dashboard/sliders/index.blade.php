@@ -21,7 +21,7 @@
                                         <div class="card-inner">
                                             <div class="project">
                                                 <div class="project-head">
-                                                    <a href="{{ route('admin.sliders.edit', $slider) }}" class="project-title">
+                                                    <a href="{{ route(getAdminPrefix() . '.sliders.edit', $slider) }}" class="project-title">
                                                         <div class="project-info">
                                                             <h6 class="title">{{ $slider->name }}</h6>
                                                         </div>
@@ -30,7 +30,7 @@
                                                 <div class="project-meta">
                                                     <div class="project-progress-task"><em class="icon ni ni-check-round-cut"></em><span>{{ $slider->slides->count() }}
                                                             Slides</span></div>
-                                                    <a class="btn btn-primary btn-sm" href="{{ route('admin.sliders.edit', $slider) }}"><em class="icon ni ni-edit"></em><span>Edit
+                                                    <a class="btn btn-primary btn-sm" href="{{ route(getAdminPrefix() . '.sliders.edit', $slider) }}"><em class="icon ni ni-edit"></em><span>Edit
                                                             Slider</span></a>
                                                 </div>
                                             </div>
@@ -55,7 +55,7 @@
                         <em class="icon ni ni-cross"></em>
                     </a>
                 </div>
-                <form action="{{ route('admin.sliders.store') }}" class="form-validate is-alter" method="POST">
+                <form action="{{ route(getAdminPrefix() . '.sliders.store') }}" class="form-validate is-alter" method="POST">
                     @csrf
                     <div class="modal-body">
                         <div class="form-group">

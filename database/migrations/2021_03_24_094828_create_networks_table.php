@@ -17,7 +17,7 @@ class CreateNetworksTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->text('description');
-            $table->string('click_ref');
+            $table->string('click_ref')->nullable();
             $table->string('deeplink_identifier')->default('u');
             $table->string('logo');
             $table->timestamps();

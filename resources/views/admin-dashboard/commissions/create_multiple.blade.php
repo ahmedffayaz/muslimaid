@@ -60,7 +60,7 @@
                         <div class="form-group">
                             <label class="form-label" for="exit_click_id">Exit Click <span class="text-danger">*</span></label>
                             <div class="form-control-wrap ">
-                                <input type="number" class="form-control" min="0.1" step="0.1" id="exit_click_id" name="exit_click_id[]" placeholder="Exit Click ID" required>
+                                <input type="number" class="form-control" min="1" step="1" id="exit_click_id" name="exit_click_id[]" placeholder="Exit Click ID" required>
                             </div>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                         <div class="form-group">
                             <label class="form-label" for="phone-no-1">Network Commission <span class="text-danger">*</span></label>
                             <div class="form-control-wrap">
-                                <input type="number" class="form-control" step="0.1"  min="0.1" id="phone-no-1"  placeholder="Network Commission" name="network_commission[]" >
+                                <input type="number" class="form-control" step="0.01"  min="0.01" id="phone-no-1"  placeholder="Network Commission" name="network_commission[]" >
                             </div>
                         </div>
                     </div>
@@ -126,7 +126,7 @@
         $(document).ready(function() {
             // show default 5 fields
             $.ajax({
-                url: "{{ route('admin.commissions.form') }}",
+                url: "{{ route(getAdminPrefix() . '.commissions.form') }}",
                 type: 'GET',
                 success: function(response) {
                     $('#multiple_cashbacks_form').html(response);
@@ -140,7 +140,7 @@
             $('#show-modal').on('click', function(event) {
                 event.preventDefault();
                 $.ajax({
-                    url: "{{ route('admin.commissions.import.form') }}",
+                    url: "{{ route(getAdminPrefix() . '.commissions.import.form') }}",
                     type: 'GET',
                     success: function(response) {
                         $('.title').text('Import Cashbacks');

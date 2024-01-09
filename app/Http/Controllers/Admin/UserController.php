@@ -12,6 +12,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailJob;
+use App\Models\Favorite;
+use App\Models\Store;
+use App\Models\UserMeta;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -47,7 +52,6 @@ class UserController extends Controller
             'firstname' => ['required', 'string', 'max:255'],
             'lastname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'phone' => ['required', 'string', 'max:255'],
         ]);
 
         if ($validator->fails()) {
@@ -75,17 +79,20 @@ class UserController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make('123456789'),
                 'registration_type' => 'sign up',
-                'phone' => $request->phone,
+                'phone' => $request->phone_number,
                 'address' => $request->address,
-                'intro' => $request->intro,
                 'avatar' => $avatarImage,
-                'status' => 'active'
+                'status' => 'active',
+                'date_of_birth' => $request->date_of_birth,
             ]);
 
             $user->assignRole('user');
             DB::commit();
+            //send email to user to verify email address
+            dispatch(new SendEmailJob($user));
+
             flash()->success('New user added successfully');
-            return redirect()->route('admin.users.index');
+            return redirect()->route(getAdminPrefix() . '.users.index');
         } catch (Throwable $th) {
             DB::rollBack();
             flash()->error('Something went wrong, try again');
@@ -113,14 +120,13 @@ class UserController extends Controller
                 'firstname' => ['required', 'string', 'max:255'],
                 'lastname' => ['required', 'string', 'max:255'],
                 'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-                'phone' => ['required', 'string', 'max:255'],
             ]);
 
             if ($validator->fails()) {
                 if (!$request->ajax()) {
                     flash()->error($validator->errors()->first());
                     return redirect()->back();
-                } else{
+                } else {
                     return array(
                         'message' => $validator->errors()->first(),
                         'success' => false
@@ -139,11 +145,16 @@ class UserController extends Controller
                 'first_name' => $request->input('firstname'),
                 'last_name' => $request->input('lastname'),
                 'email' => $request->input('email'),
-                'phone' => $request->input('phone'),
+                'phone' => $request->input('phone_number'),
                 'address' => $request->input('address'),
-                'intro' => $request->input('intro'),
+                'address_2' => $request->input('address_line_2'),
+                'street' => $request->input('street'),
+                'country_id' => $request->input('country_id'),
+                'postal_code' => $request->input('postal_code'),
                 'status' => $request->input('status'),
-                'avatar' => $avatarImage
+                'is_email_verified' => $request->input('status') === 'pending' || $request->input('status') === 'in_active' ? 0 : 1,
+                'avatar' => $avatarImage,
+                'date_of_birth' => $request->input('date_of_birth'),
             ]);
 
             $user->syncRoles($request->input('roles'));
@@ -154,9 +165,9 @@ class UserController extends Controller
                     'message' => 'User updated successfully',
                     'success' => true
                 );
-            }else{
+            } else {
                 flash()->success('User updated successfully');
-                return redirect()->route('admin.users.index');
+                return redirect()->route(getAdminPrefix() . '.users.index');
             }
         } catch (Exception $e) {
             DB::rollBack();
@@ -178,7 +189,7 @@ class UserController extends Controller
         $user->delete();
 
         flash()->success('User deleted successfully');
-        return redirect()->route('admin.users.index');
+        return redirect()->route(getAdminPrefix() . '.users.index');
     }
 
     function fetch(Request $request)
@@ -221,7 +232,7 @@ class UserController extends Controller
             return Response::download($filename, 'users.csv', $headers);
         } catch (\Throwable $th) {
             flash()->error('Error while exporting the users');
-            return redirect()->route('admin.users.index');
+            return redirect()->route(getAdminPrefix() . '.users.index');
         }
     }
 
@@ -235,7 +246,6 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), [
             'payment_method' => 'required',
             'paypal_email' => $request->input('payment_method') === 'paypal' ? 'required' : '',
-
             'account_name' => $request->input('payment_method') === 'bank' ? 'required' : '',
             'bank_title' => $request->input('payment_method') === 'bank' ? 'required' : '',
             'account_number' => $request->input('payment_method') === 'bank' ? 'required' : '',
@@ -259,7 +269,7 @@ class UserController extends Controller
 
         if (!$request->ajax()) {
             flash()->success('Payment method added successfully');
-            return redirect()->route('admin.users.index');
+            return redirect()->route(getAdminPrefix() . '.users.index');
         }
 
         return array(
@@ -275,9 +285,19 @@ class UserController extends Controller
 
     public function savePassword(Request $request, User $user)
     {
-        $validator = Validator::make($request->all(), [
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        $rules = [
+            'password' => ['required', 'confirmed']
+        ];
+
+        $passwordRules = env('PASSWORD_VALIDATION', '');
+        if(!empty($passwordRules)){
+            $additionalRules = explode('|', $passwordRules);
+            $rules['password'] = array_merge($rules['password'], $additionalRules);
+        }else {
+            $rules['password'][] = 'string';
+        }
+
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             if (!$request->ajax()) {
@@ -297,7 +317,7 @@ class UserController extends Controller
 
         if (!$request->ajax()) {
             flash()->success('Password changed successfully');
-            return redirect()->route('admin.users.index');
+            return redirect()->route(getAdminPrefix() . '.users.index');
         }
 
         return array(
@@ -345,6 +365,14 @@ class UserController extends Controller
 
         $clicks = ExitClick::where('user_id', $request->user)->latest()->paginate(20);
         return view('admin-dashboard.users.clicks', compact('clicks'))->render();
+    }
+
+    function fetchMetaData(Request $request)
+    {
+        if (!$request->ajax()) return;
+
+        $metaDatas = UserMeta::where('user_id', $request->user)->latest()->paginate(20);
+        return view('admin-dashboard.users.meta-data', compact('metaDatas'))->render();
     }
 
     public function showUser()

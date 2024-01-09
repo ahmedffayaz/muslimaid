@@ -32,7 +32,7 @@ class ReportsController extends Controller
         $coms = UserCashback::latest()->get();
         $total_clicks = ExitClick::latest()->get()->count();
 
-        $stores = Store::latest()->get();
+        $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->latest()->get();
         $clicks = ExitClick::select(DB::raw('count(*) as count, store_id'))->groupBy('store_id')->orderBy('count','DESC')->paginate(20);
         $route = 'index';
         return view('admin-dashboard.reports.store_performance',compact('clicks','stores','total_revenue','pending_total_revenue','clicks','coms','total_clicks','route'));
@@ -61,7 +61,7 @@ class ReportsController extends Controller
             $clicks->whereDate('created_at', '<=' ,$end_date);
          }
 
-        $stores = Store::latest()->get();
+        $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->latest()->get();
         $clicks = $clicks->select(DB::raw('count(*) as count, store_id'))->groupBy('store_id')->orderBy('count','DESC')->paginate(20);
         $route='search';
         return view('admin-dashboard.reports.store_performance_data', compact('clicks','stores','route'))->render();
@@ -83,15 +83,19 @@ class ReportsController extends Controller
         $total_revenue  = $paid_total_commission - $paid_total_cashback;
         $penidng_total_commission = UserCashback::where('status','!=','4')->sum('network_commission');
         $penidng_total_cashback = UserCashback::where('status','!=','4')->sum('amount');
+        $totalDonatedCommission = UserCashback::where('status', 7)->sum('network_commission');
 
+         // Hide pending revenue, in case display 100% cashback and only display total donated cashback
         $pending_total_revenue = $penidng_total_commission - $penidng_total_cashback;
+         // in case display 100% cashback
+        $totalPendingRevenue = UserCashback::where('status', '!=', 7)->where('status', '!=', 4)->sum('network_commission');
         $coms = UserCashback::latest()->paginate(20);
         $networks = Network::latest()->get();
-        $stores = Store::latest()->get();
+        $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->latest()->get();
         $statuses = CashbackStatus::latest()->get();
         $clicks = ExitClick::latest()->get();
         $route = 'index';
-        return view('admin-dashboard.reports.earnings',compact('coms','networks','statuses','stores','total_revenue','pending_total_revenue','clicks','route'));
+        return view('admin-dashboard.reports.earnings',compact('coms','networks','statuses','stores','total_revenue','pending_total_revenue','clicks','route', 'totalDonatedCommission', 'totalPendingRevenue'));
     }
 
     public function search_earnings(Request $request, UserCashback $coms)
@@ -120,7 +124,7 @@ class ReportsController extends Controller
             $coms->whereDate('event_date', '<=' ,$end_date);
          }
 
-        $stores = Store::latest()->get();
+        $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->latest()->get();
         $coms = $coms->latest()->paginate(20);
         $route = 'search';
         return view('admin-dashboard.reports.earnings_data', compact('coms','stores','route'))->render();

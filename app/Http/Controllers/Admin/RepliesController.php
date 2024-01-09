@@ -4,7 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\TicketReply;
 use Illuminate\Http\Request;
+use App\Jobs\SendNotification;
 use App\Http\Controllers\Controller;
+use App\Models\Ticket;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -27,15 +31,49 @@ class RepliesController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
-        $reply = TicketReply::create([
-            'reply' =>  $request->input('reply'),
-            'user_id' => Auth::user()->id,
-            'ticket_id' => $request->input('ticket_id'),
-            'reply_by'=>'admin'
-        ]);
 
-        $reply->ticket->update(['status' => 'pending']);
+        try {
+            $reply = TicketReply::create([
+                'reply' =>  $request->input('reply'),
+                'user_id' => Auth::user()->id,
+                'ticket_id' => $request->input('ticket_id'),
+                'reply_by'=>'admin'
+            ]);
 
-        return back();
+            $ticket = Ticket::findOrFail($request->ticket_id);
+
+            $reply->ticket->update(['status' => 'pending', 'new_ticket' => 0]);
+
+            sendEmailNotification($ticket);
+
+            $deviceToken = optional($ticket->user->devices()->whereType('web')->latest()->first())->fcm_token;
+            if ($deviceToken != null) {
+                $title = 'Ticket Replied';
+                $message = 'Your ticket has a reply';
+                $url = url('account/tickets') . '/' . $ticket->ticket_id;
+                $user = $ticket->user()->get();
+                dispatch(new SendNotification($title, $message, $deviceToken, $url, $user));
+            }
+
+            if (!$request->ajax()) {
+                flash()->success('Ticket has been replied successfully');
+                return back();
+            } else {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'Ticket has been replied successfully'
+                ], JsonResponse::HTTP_OK);
+            }
+        } catch (Exception $e) {
+            if (!$request->ajax()) {
+                flash()->success('Something went wrong');
+                return back();
+            } else {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                    'message' => 'Something went wrong'
+                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
     }
 }

@@ -1,6 +1,6 @@
 
 <ul>
-    @foreach ($childs->sortBy('sort')->values() as $child)
+    @foreach ($childs->sortBy(['sort', 'name']) as $child)
         <li class="border-top   py-1">
             <span class="float-right">
                 <div class="actions">
@@ -9,11 +9,11 @@
                                 class="icon ni ni-plus mr-1"></em>Options</a>
                         <div class="dropdown-menu dropdown-menu-right">
                             <ul class="link-list-opt no-bdr d-block ml-0">
-                                <a href="{{ route('admin.categories.picks', $child) }}" category-id='{{ $child->id }}'
+                                <a href="{{ route(getAdminPrefix() . '.categories.picks', $child) }}" category-id='{{ $child->id }}'
                                     class='picks-edit'><em class="icon ni ni-cart-fill"></em> Editor Picks</a>
-                                <a href="{{ route('admin.categories.edit', $child) }}" category-id='{{ $child->id }}'
+                                <a href="{{ route(getAdminPrefix() . '.categories.edit', $child) }}" category-id='{{ $child->id }}'
                                     class='category-edit'><em class="icon ni ni-edit"></em> Edit</a>
-                                <a class='category-delete' data-action="{{ route('admin.categories.destroy', $child) }}"
+                                <a class='category-delete' data-action="{{ route(getAdminPrefix() . '.categories.destroy', $child) }}"
                                     data-id="{{ $child->id }}" style="cursor: pointer"> <em
                                         class="icon ni ni-trash-fill"></em> Delete</a>
                             </ul>

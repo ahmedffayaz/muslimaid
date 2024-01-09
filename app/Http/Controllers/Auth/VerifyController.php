@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use Throwable;
 use App\Traits\UserBonus;
+use Carbon\Carbon;
 use App\Models\UserVerify;
 use App\Traits\WelcomeEmail;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +30,7 @@ class VerifyController extends Controller
 
                 if (!$user->is_email_verified) {
                     $verifyUser->user->is_email_verified = 1;
+                    $verifyUser->user->email_verified_at = Carbon::now();
                     $verifyUser->user->status = 'active';
                     $verifyUser->user->save();
 
@@ -47,9 +49,9 @@ class VerifyController extends Controller
                         $this->referralBonus($verifyUser->user->referred_by, $bonusStatus);
                     }
 
-                    session()->flash('success', 'Your e-mail is verified. You can now login.');
+                    session()->flash('success', 'Your email is verified. You can now login.');
                 } else {
-                    session()->flash('success', 'Your e-mail is already verified. You can now login.');
+                    session()->flash('success', 'Your email is already verified. You can now login.');
                 }
             } else {
                 session()->flash('message', 'Sorry your email cannot be identified.');

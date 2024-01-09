@@ -14,6 +14,7 @@ class StoreCashback extends Model
     protected $fillable = [
         'store_id',
         'network_id',
+        'advertiser_id',
         'cashback_name',
         'type',
         'value',
@@ -50,22 +51,19 @@ class StoreCashback extends Model
         $currency = ($this->type == 'fixed' && isset($this->currencyData)) ? $this->currencyData->symbol : '';
         return $this->type == 'fixed' ? currencyOrPercentage($this->sale_commission, 'fixed', $currency) : currencyOrPercentage($this->sale_commission, 'percentage');
     }
-
     public function getCashback()
     {
         $currency = ($this->type == 'fixed' && isset($this->currencyData)) ? $this->currencyData->symbol : '';
-
-        if ($this->store->custom_cashback_percentage) {
+        if ($this->store->custom_cashback_percentage && !empty($this->sale_commission)) {
             return $this->type == 'fixed'
-                ? currencyOrPercentage(($this->store->custom_cashback_percentage / 100) * $this->cashback->sale_commission, 'fixed', $currency) . ' Cashback'
-                : currencyOrPercentage(($this->store->custom_cashback_percentage / 100) * $this->cashback->sale_commission, 'percentage') . ' Cashback';
+                ? currencyOrPercentage(($this->store->custom_cashback_percentage / 100) * $this->sale_commission, 'fixed', $currency) . ' Cashback'
+                : currencyOrPercentage(($this->store->custom_cashback_percentage / 100) * $this->sale_commission, 'percentage') . ' Cashback';
         } else {
             return $this->type == 'fixed'
                 ? currencyOrPercentage((SiteSetting()['cashback_percentage'] / 100) * $this->sale_commission, 'fixed', $currency) . ' Cashback'
                 : currencyOrPercentage((SiteSetting()['cashback_percentage'] / 100) * $this->sale_commission, 'percentage') . ' Cashback';
         }
     }
-
     public function getDeeplinkUrl()
     {
         if ($this->store->override_network) {

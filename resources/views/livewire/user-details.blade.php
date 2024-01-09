@@ -62,6 +62,9 @@
                                     <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem9"><em class="icon ni ni-lock-alt-fill"></em><span>Change Password</span></a>
                                     </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" data-toggle="tab" href="#tabItem10"><em class="icon ni ni-menu-circled"></em><span>Meta Data</span></a>
+                                    </li>
                                 </ul>
 
                                 <div class="tab-content">
@@ -70,7 +73,7 @@
                                             <div class="nk-block-head">
                                                 <h5 class="title">User Information</h5>
                                             </div>
-                                            <form action="{{ route('admin.users.update', $user) }}" enctype="multipart/form-data" class="gy-3 is-alter user-form"
+                                            <form action="{{ route(getAdminPrefix() . '.users.update', $user) }}" enctype="multipart/form-data" class="gy-3 is-alter user-form"
                                                 id="user-edit-form" method="POST">
                                                 @csrf
                                                 @method('PUT')
@@ -90,7 +93,20 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="firstname">First Name</label>
+                                                            <label class="form-label" for="title">Title</label>
+                                                            <div class="form-control-wrap">
+                                                                <select class="form-control form-select select-2" name="title">
+                                                                    <option value="Mr" {{ $user->title == 'Mr'? 'selected' : '' }}>Mr</option>
+                                                                    <option value="Mrs" {{ $user->title == 'Mrs'? 'selected' : '' }}>Mrs</option>
+                                                                    <option value="Miss" {{ $user->title == 'Miss'? 'selected' : '' }}>Miss</option>
+                                                                    <option value="Mx" {{ $user->title == 'Mx'? 'selected' : '' }}>Mx</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="firstname">First Name <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="firstname" value="{{ $user->first_name }}" name="firstname"
                                                                     required>
@@ -99,7 +115,7 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="lastname">Last Name</label>
+                                                            <label class="form-label" for="lastname">Last Name <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="lastname" value="{{ $user->last_name }}" name="lastname"
                                                                     required>
@@ -108,7 +124,7 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="email">Email</label>
+                                                            <label class="form-label" for="email">Email <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="email" class="form-control" id="email" value="{{ $user->email }}" name="email"
                                                                     required>
@@ -117,36 +133,81 @@
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
-                                                            <label class="form-label" for="phone-no-1">Phone</label>
+                                                            <label class="form-label" for="date_of_birth">Date of Birth </label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="phone-no-1" value="{{ $user->phone }}" name="phone"
-                                                                    required>
+                                                                <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
+                                                                    value="{{ $user->date_of_birth ?? '' }}">
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="form-group">
-                                                            <label class="form-label" for="address">Address</label>
-                                                            <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="address" value="{{ $user->address ?? '' }}"
-                                                                    name="address">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="card">
-                                                            <input name="intro" type="hidden">
-                                                            <label class="form-label" for="phone-no-1">Introduction</label>
-                                                            <!-- Create the editor container -->
-                                                            <div id="editor-container">{!! $user->intro ?? '' !!}</div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
+                                                            <label class="form-label" for="phone-no-1">Phone</label>
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="phoneNumber" value="{{ $user->phone }}" name="phoneNumber">
+                                                                <input type="hidden" id="phone_number" name="phone_number">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="address">Address</label>
+                                                            <div class="form-control-wrap">
+                                                                <textarea type="text" class="form-control" id="address" value="{{ $user->address ?? '' }}" name="address">{{ $user->address }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="address_line_2">Address Line 2</label>
+                                                            <div class="form-control-wrap">
+                                                                <textarea type="text" class="form-control" id="address_line_2" value="{{ $user->address_2 ?? '' }}" name="address_line_2">{{ $user->address_2 }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="country">Country</label>
+                                                            <div class="form-control-wrap">
+                                                                <div>
+                                                                    <select class="form-control form-select select-2" id="country" name="country_id" required>
+                                                                        @foreach ($countries as $country)
+                                                                            <option value="{{ $country->id }}" {{ $country->id == $user->country_id ? 'selected' : '' }}>
+                                                                                {{ $country->name }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="street">Street</label>
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="street" value="{{ $user->street }}" name="street">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="postal_code">Postal Code</label>
+                                                            <div class="form-control-wrap">
+                                                                <input type="text" class="form-control" id="postal_code" value="{{ $user->postal_code }}"
+                                                                    name="postal_code">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-lg-6">
+                                                        <div class="form-group">
                                                             <label class="form-label" for="status">Status</label>
                                                             <div class="form-control-wrap ">
-                                                                <div class="form-control-select">
-                                                                    <select class="form-control" id="status" name="status" required>
+                                                                <div>
+                                                                    <select class="form-control form-select select-2" id="status" name="status" required>
                                                                         <option {{ $user->status == 'pending' ? 'selected' : '' }} value="pending">Pending</option>
                                                                         <option {{ $user->status == 'active' ? 'selected' : '' }} value="active">Active</option>
                                                                         <option {{ $user->status == 'in_active' ? 'selected' : '' }} value="in_active">In-active</option>
@@ -194,7 +255,8 @@
 
                                     <div class="tab-pane" id="tabItem8">
                                         <h5 class="title mb-4">Payment Info</h5>
-                                        <form action="{{ route('admin.users.payment_save') }}" class="gy-3 form-validate is-alter" id='payment_form' method="POST">
+                                        <form action="{{ route(getAdminPrefix() . '.users.payment_save') }}" class="gy-3 form-validate is-alter" id='payment_form'
+                                            method="POST">
                                             @csrf
                                             <input type="hidden" name="user_id" value="{{ $user->id }}">
                                             <div class="row g-4">
@@ -281,9 +343,10 @@
                                             </div>
                                         </form>
                                     </div>
+
                                     <div class="tab-pane" id="tabItem9">
                                         <h5 class="title mb-4">Change Password</h5>
-                                        <form action="{{ route('admin.users.save_password', $user) }}" class="gy-3 form-validate is-alter" id='password_form'
+                                        <form action="{{ route(getAdminPrefix() . '.users.save_password', $user) }}" class="gy-3 form-validate is-alter" id='password_form'
                                             method="POST">
                                             @csrf
                                             @method('PUT')
@@ -293,6 +356,9 @@
                                                         <label class="form-label" for="password">New Password <span class="text-danger">*</span></label>
                                                         <div class="form-control-wrap">
                                                             <input type="password" class="form-control" id="password" value="" name="password" required>
+                                                            <i class="far fa-eye toggle-password admin_eye_icon"
+                                                                data-target="#current_password"></i>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -303,6 +369,9 @@
                                                         <div class="form-control-wrap">
                                                             <input type="password" class="form-control" id="password_confirmation" value=""
                                                                 name="password_confirmation" required>
+                                                            <i class="far fa-eye toggle-password admin_eye_icon"
+                                                                data-target="#new_password"></i>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -313,6 +382,11 @@
                                                 </div>
                                             </div>
                                         </form>
+                                    </div>
+
+                                    <div class="tab-pane" id="tabItem10">
+                                        <h5 class="title mb-4 d-inline">Meta Data</h5>
+                                        <span id="meta-data"></span>
                                     </div>
                                 </div>
                             </div>
@@ -326,34 +400,16 @@
 </div>
 
 @push('scripts')
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
+    <script src="{{ asset('admin-dashboard/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
+    <script src="{{ asset('admin-dashboard/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
             window.livewire.on('userChange', () => {
-
                 fetchCashbacks(1);
                 fetchClicks(1);
                 initializeSelect2();
-
-                var quill = new Quill('#editor-container', {
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic'],
-                            ['link', 'blockquote', 'code-block', 'image'],
-                            [{
-                                list: 'ordered'
-                            }, {
-                                list: 'bullet'
-                            }]
-                        ]
-                    },
-                    placeholder: 'Compose an epic...',
-                    theme: 'snow'
-                });
+                fetchMetaData(1);
             });
         });
 
@@ -363,24 +419,27 @@
             });
         });
 
-        var quill = new Quill('#editor-container', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic'],
-                    ['link', 'blockquote', 'code-block', 'image'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }]
-                ]
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow'
-        });
+        function fetchMetaData(page) {
+            pageurl = "{{ route(getAdminPrefix() . '.users.metadata') }}?page=" + page;
+
+            var _token = $("input[name=_token]").val();
+            var user = $('.user_id_checker').text();
+
+            $.ajax({
+                url: pageurl,
+                method: "POST",
+                data: {
+                    _token: _token,
+                    user: user
+                },
+                success: function(data) {
+                    $('#meta-data').html(data);
+                }
+            });
+        }
 
         function fetchCashbacks(page) {
-            pageurl = "{{ route('admin.users.cashbacks') }}?page=" + page
+            pageurl = "{{ route(getAdminPrefix() . '.users.cashbacks') }}?page=" + page
 
             var _token = $("input[name=_token]").val();
             var user = $('.user_id_checker').text();
@@ -413,7 +472,7 @@
         }
 
         function fetchClicks(page) {
-            pageurl = "{{ route('admin.users.clicks') }}?page=" + page
+            pageurl = "{{ route(getAdminPrefix() . '.users.clicks') }}?page=" + page
 
             var _token = $("input[name=_token]").val();
             var user = $('.user_id_checker').text();
@@ -433,6 +492,7 @@
 
         fetchCashbacks(1);
         fetchClicks(1);
+        fetchMetaData(1);
 
         $(document).ready(function() {
             $(document).on('click', '#click-paginate .pagination a', function(event) {
@@ -447,6 +507,22 @@
 
                 var page = $(this).attr('href').split('page=')[1];
                 fetchCashbacks(page);
+            });
+        });
+
+        $(document).ready(function() {
+            $(document).on('click', '#meta-data-paginate .pagination a', function(event) {
+                event.preventDefault();
+
+                var page = $(this).attr('href').split('page=')[1];
+                fetchMetaData(page);
+            });
+
+            $(document).on('click', '#meta-data-paginate .pagination a', function(event) {
+                event.preventDefault();
+
+                var page = $(this).attr('href').split('page=')[1];
+                fetchMetaData(page);
             });
         });
 
@@ -608,26 +684,80 @@
                 }
             });
         }
+
+        jQuery.validator.addMethod("validPhone", function(value, element) {
+            var regex = /^\+\d{12}$/;
+            if(regex.test(value) == false){
+                $('.iti__flag-container').css('padding-bottom', '39px');
+            } else {
+                $('.iti__flag-container').css('padding-bottom', '15px');
+            }
+            return regex.test(value);
+        }, "Enter a valid phone number");
+
         $('.user-form').validate({
             errorClass: 'invalid-feedback d-block',
             rules: {
                 firstname: {
-                    required: true
+                    required: true,
+                    regex: true
                 },
                 lastname: {
-                    required: true
+                    required: true,
+                    regex: true
                 },
                 email: {
                     required: true
                 },
                 phone: {
-                    required: true,
+                    validPhone: true
                 },
             },
             submitHandler: function(form) {
                 if ($(form).valid())
                     return false;
             }
+        });
+
+        function togglePasswordVisibility() {
+            var target = $(this).closest('.form-group').find('input[type="password"], input[type="text"]');
+            if (target.length === 1) {
+                var fieldType = target.prop('type');
+                console.log(fieldType);
+                if (fieldType === 'password') {
+                    target.prop('type', 'text');
+                    $(this).removeClass('fa-eye').addClass('fa-eye-slash');
+                } else {
+                    target.prop('type', 'password');
+                    $(this).removeClass('fa-eye-slash').addClass('fa-eye');
+                }
+            }
+        }
+        $(document).ready(function() {
+            $(".toggle-password").click(togglePasswordVisibility);
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var input = document.querySelector("#phoneNumber");
+            const iti = window.intlTelInput(input,({
+                nationalMode:true,
+                preferredCountries: [],
+                utilsScript: "{{ asset('admin-dashboard/telephone-dropdown/js/utils.js') }}",
+                separateDialCode:true,
+            }));
+            $('.iti').css('width', '100%');
+            const handleChange = () => {
+                let phoneNumber;
+                if(input.value) {
+                    if(iti.isValidNumber()){
+                        phoneNumber = iti.getNumber();
+                        $("#phone_number").val(phoneNumber);
+                    }
+                }
+            }
+            input.addEventListener('change', handleChange);
+            input.addEventListener('keyup', handleChange);
         });
     </script>
 @endpush

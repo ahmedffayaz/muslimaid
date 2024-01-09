@@ -3,8 +3,11 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class RolesPermissionsSeeder extends Seeder
 {
@@ -15,6 +18,13 @@ class RolesPermissionsSeeder extends Seeder
      */
     public function run()
     {
+        Artisan::call('optimize:clear');
+        Schema::disableForeignKeyConstraints();
+		DB::table('role_has_permissions')->truncate();
+        DB::table('permissions')->truncate();
+        DB::table('roles')->truncate();
+		Schema::enableForeignKeyConstraints();
+
         $permissions = [
             'store_permissions'         => ['view stores', 'edit stores', 'delete stores', 'add stores'],
             'cashback_permissions'      => ['view cashback', 'edit cashback', 'delete cashback', 'add cashback'],
@@ -29,6 +39,20 @@ class RolesPermissionsSeeder extends Seeder
             'languages_permissions'     => ['view languages', 'add languages', 'delete languages', 'edit languages'],
             'translations_permissions'  => ['view translations', 'add translations', 'delete translations', 'edit translations'],
         ];
+
+        // Define additional permissions based on conditions
+        $additionalPermissions = [];
+
+        if (getImporterYMLSettings(config('app.appeals_yaml_path'))) {
+            $additionalPermissions['appeals_permissions'] = ['view appeals', 'edit appeals', 'delete appeals', 'add appeals'];
+        }
+
+        if (getImporterYMLSettings(config('app.banners_yaml_path'))) {
+            $additionalPermissions['banners_permissions'] = ['view banners', 'edit banners', 'delete banners', 'add banners'];
+        }
+
+        // Merge $additionalPermissions into $permissions
+        $permissions = array_merge_recursive($permissions, $additionalPermissions);
 
         foreach ($permissions as $items) {
             foreach ($items as $permission) {

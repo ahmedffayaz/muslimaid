@@ -10,7 +10,7 @@ use App\Models\Category;
 use App\Models\Language;
 use App\Models\Testimonial;
 use Illuminate\Http\Request;
-use App\Models\StoreCashback;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\App;
 use App\Http\Controllers\Controller;
 
@@ -18,19 +18,27 @@ class HomeController extends Controller
 {
     public function index()
     {
-        $page = Page::whereSlug('/')->whereType('system')->first();
+        if (empty(auth()->user())) {
+            $page = Page::whereSlug('/home-page-before-login')->whereType('system')->first();
+        } else {
+            $page = Page::whereSlug('/home-page-after-login')->whereType('system')->first();
+        }
         if (empty($page)) abort(404);
 
-        $featureTag = Tag::where('title', 'feature1_homepage')->pluck('id')->first();
+        $featureTag = Tag::where('title', 'featured1_homepage')->pluck('id')->first();
 
         $stores = Store::whereHas('tags', function ($query) use ($featureTag) {
             isset($featureTag)
-                ? $query->where('title', 'feature1_homepage')
-                : $query->where('title', 'feature_homepage');
+                ? $query->where('title', 'featured1_homepage')
+                : $query->where('title', 'featured_homepage');
         })->latest()->get();
 
         $languages = Language::orderBy('id', 'desc')->get();
-        $featuredCategories = Category::where('feature_homepage', 1)->orderBy('name', 'ASC')->latest()->get();
+        $featuredCategories = Category::whereHas('tags', function ($query) use ($featureTag) {
+            isset($featureTag)
+                ? $query->where('title', 'featured1_homepage')
+                : $query->where('title', 'featured_homepage');
+        })->orderBy('name', 'ASC')->latest()->get();
         $slider = Slider::where('name', 'Home')->first();
         $testimonials = Testimonial::where('status', 'active')->orderBy('order_no')->take(5)->get();
 
@@ -41,10 +49,12 @@ class HomeController extends Controller
     {
         if (empty($request->input('search'))) return null;
 
-        $stores = Store::where('name', 'like', '%' . str_replace(' ', '%', $request->input('search')) . '%')
-            ->orWhereHas('storeRuleData', function ($query) use ($request) {
-                $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $request->input('search') . '%');
-            })->whereStatus('active')->limit(20)->get();
+        $stores = Store::where(function ($query) use ($request) {
+            $query->where('name', 'like', '%' . str_replace(' ', '%', $request->input('search')) . '%')
+                ->orWhereHas('storeRuleData', function ($query) use ($request) {
+                    $query->where('key', 'meta:keywords')->where('value', 'like', '%' . $request->input('search') . '%');
+                });
+        })->withCount('cashbacks')->where('status', 'active')->limit(20)->get();
 
         return view('frontend.layouts.includes.search-suggestions', compact('stores'));
     }
@@ -58,5 +68,25 @@ class HomeController extends Controller
             'status' => true,
             'message' => 'Language changed!'
         ]);
+    }
+    public function userNotifications(Request $request)
+    {
+        $offset = $request->offset;
+        $Notifications = retrieveNotification($offset);
+        $nextCount = auth()->user()->notifications()->whereNull('read_at')->latest()->count();
+        return view('frontend.layouts.includes.notifications', compact('Notifications', 'nextCount', 'offset'))->render();
+    }
+
+    public function userNotificationsCount()
+    {
+        $Notifications = retrieveNotification(0);
+        return count($Notifications);
+    }
+
+    public function clearNotifications()
+    {
+        $res = DB::table('notifications')->where('notifiable_id', auth()->user()->id)
+            ->update(['read_at' => date('Y-m-d h:i:s')]);
+        return $res;
     }
 }

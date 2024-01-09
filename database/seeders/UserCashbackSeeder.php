@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\CashbackStatusChange;
 use App\Models\UserCashback;
 use Carbon\Carbon;
 use App\Models\Store;
@@ -27,6 +28,7 @@ class UserCashbackSeeder extends Seeder
         $storeIdData = Store::pluck('id')->toArray();
         $csvToArray = csvToArray('resources\\views\\frontend\\seeders\\user_cashbacks.csv');
         $userCashbacks = [];
+        $cashbacksStatuses = [];
         $now = Carbon::now();
         if (isset($csvToArray[0])) {
             foreach ($csvToArray as $userCashback) {
@@ -57,9 +59,18 @@ class UserCashbackSeeder extends Seeder
                     'created_at' =>  arrayValueExists($userCashback, 'created_at') ? dbDate($userCashback['created_at']) : $now,
                     'updated_at' =>  arrayValueExists($userCashback, 'updated_at') ? dbDate($userCashback['updated_at']) : $now,
                 ];
+
+                $cashbacksStatuses[] = [
+                    'user_cashback_id' => $userCashback['id'],
+                    'cashback_status_id' => arrayValueExists($userCashback, 'status') ? $userCashback['status'] : null,
+                ];
             }
             foreach (array_chunk($userCashbacks, 500) as $userCashbacksChunk) {
                 UserCashback::insert($userCashbacksChunk);
+            }
+
+            foreach (array_chunk($cashbacksStatuses, 500) as $cashbacksStatusesChunk) {
+                CashbackStatusChange::insert($cashbacksStatusesChunk);
             }
         }
     }

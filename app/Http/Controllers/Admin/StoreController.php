@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
+use App\Models\Tag;
 use App\Models\Store;
 use App\Models\Slider;
 use App\Models\Network;
+use App\Models\Voucher;
 use App\Models\Category;
 use App\Models\Currency;
 use App\Models\EditorPick;
@@ -14,23 +16,23 @@ use App\Models\StoreReview;
 use Illuminate\Support\Str;
 use App\Models\StoreAddress;
 use App\Models\StoreSeoData;
+use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Models\StoreCashback;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\Tag;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\File;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class StoreController extends Controller
 {
-    private $iconPath = 'stores/cashbacks/';
-     public $imagePath = 'storage/stores/images/';
+    private $iconPath = 'stores/cashbacks';
+    public $imagePath = 'storage/stores/images/';
     public function __construct()
     {
         $this->middleware('permission:view stores', ['only' => ['index']]);
@@ -48,11 +50,49 @@ class StoreController extends Controller
     {
         $route = 'index';
         $networks = Network::all();
-        $stores = Store::orderBy('id', 'DESC')->paginate(48);
+        $stores = Store::orderBy('id', 'desc')->withCount('cashbacks')->paginate(48);
         $slider = Slider::where('name', 'Home')->first();
         return view('admin-dashboard.stores.index', compact('stores', 'route', 'networks', 'slider'));
     }
 
+    function deleteRevglueStores()
+    {
+        $chunkSize = 1000;
+        DB::beginTransaction();
+        try {
+            Store::where('network_id', 1)->chunk($chunkSize, function ($stores) {
+                foreach ($stores as $store) {
+                    $store->reviews()->forceDelete();
+                    $store->vouchers()->forceDelete();
+                    $store->cashbacks()->forceDelete();
+                    $store->storeRuleData()->forceDelete();
+                    $store->storeAddress()->forceDelete();
+                    $store->clicks()->forceDelete();
+                    $store->categories()->detach();
+                    foreach ($store->images as $images) {
+                        Storage::delete(['public/stores/images/' . $images->image]);
+                        $images->forceDelete();
+                    }
+                    $store->forceDelete();
+                }
+            });
+            $cashbacks = UserCashback::doesntHave('store')->get();
+            foreach ($cashbacks as $cashback) {
+                $deleted = $cashback->forceDelete();
+            }
+            $cashbacks = UserCashback::doesntHave('store')->get();
+            foreach ($cashbacks as $cashback) {
+                $cashback->forceDelete();
+                UserCashback::where('id', $cashback->id)->delete();
+
+            }
+
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            dd($e->getMessage());
+        }
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -76,9 +116,9 @@ class StoreController extends Controller
         $validator = Validator::make($request->all(), [
             'store_name' => 'required|max:255',
             'network_id' => 'required',
-            'tracking_url' => 'required|url',
-            'deeplink_url' => 'nullable|url',
-            'store_url' => 'required|url',
+            'tracking_url' => ['required', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'store_url' => ['required', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'description' => 'nullable'
         ]);
 
@@ -105,7 +145,7 @@ class StoreController extends Controller
                 'slug' =>   isset($storeSlug) ? $slug . ($lastId + 1) : $slug,
                 'is_api' => 'no',
             ]);
-            if(($lastId + 1) !=  $store->id){
+            if (($lastId + 1) !=  $store->id) {
                 $store->update([
                     'slug' =>   isset($storeSlug) ? $slug . $store->id : $slug,
                 ]);
@@ -113,7 +153,7 @@ class StoreController extends Controller
             DB::commit();
 
             flash()->success('New store added');
-            return redirect()->route('admin.stores.show_store', 'slug=' . $store->slug);
+            return redirect()->route(getAdminPrefix() . '.stores.show_store', 'slug=' . $store->slug);
         } catch (Exception $e) {
             DB::rollBack();
             flash()->error('Error while adding new store');
@@ -166,18 +206,20 @@ class StoreController extends Controller
         $request->validate([
             'store_name' => 'required|max:255',
             'network_id' => 'required',
-            'tracking_url' => 'required|url',
-            'deeplink_url' => 'nullable|url',
-            'store_url' => 'required|url',
+            'tracking_url' => ['required', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'store_url' => ['required', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'description' => 'nullable',
-            'terms_conditions' => 'nullable'
+            'terms_conditions' => 'nullable',
+            'competitors' => 'nullable',
+            'custom_cashback_percentage' => 'nullable|numeric'
         ]);
 
         try {
             DB::beginTransaction();
             $slug = Str::slug($request->input('store_name'));
             $lastId = Store::orderBy('id', 'desc')->pluck('id')->first();
-            $storeSlug = Store::where('slug', $slug)->where('id', '!=' , $store->id)->first();
+            $storeSlug = Store::where('slug', $slug)->where('id', '!=', $store->id)->first();
             $store->update([
                 'name' => $request->input('store_name'),
                 'override_network' => $request->has('store_override_network') ? 1 : 0,
@@ -194,12 +236,13 @@ class StoreController extends Controller
                 'override_categories' => $request->has('override_categories') ? 1 : 0,
                 'override_cashback' => $request->has('override_cashback') ? 1 : 0,
                 'editor_pick' => 0,
+                'competitors' => $request->input('competitors'),
             ]);
 
             if ($request->has('tags')) {
                 $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
                 if ($tags->count() > 0) $store->tags()->sync($tags);
-            }else{
+            } else {
                 $store->tags()->detach();
             }
 
@@ -278,7 +321,7 @@ class StoreController extends Controller
             return Response::download($filename, 'stores.csv', $headers);
         } catch (\Throwable $th) {
             flash()->error('Error while exporting the stores');
-            return redirect()->route('admin.stores.index');
+            return redirect()->route(getAdminPrefix() . '.stores.index');
         }
     }
 
@@ -315,11 +358,16 @@ class StoreController extends Controller
             $imageName = Str::slug($store->name) . '_' . $request->title . '_' . time() . '.' . $request->image->extension();
             $request->image->storeAs('public/stores/images', $imageName);
 
+            if ($request->title === 'logo') $imageType = 'store_logo_small';
+            elseif ($request->title === 'large logo') $imageType = 'store_logo_large';
+            elseif ($request->title === 'Cover') $imageType = 'store_banner_small';
+            elseif ($request->title === 'large cover') $imageType = 'store_banner_large';
+
             $logo = StoreImage::create([
                 'store_id' => $store->id,
                 'title' => $request->title,
                 'image' => $this->imagePath . $imageName,
-                'image_type' => 'store_logo',
+                'image_type' => $imageType,
                 'is_uploaded' => 1,
 
             ]);
@@ -420,21 +468,34 @@ class StoreController extends Controller
             'type' => 'required',
             'sale_commission' => 'required|numeric|min:0.1',
             'network_id' => 'nullable|integer',
-            'tracking_url' => 'nullable|url',
-            'deeplink_url' => 'nullable|url',
-            'currency' => $request->input('type') === 'fixed' ? 'required' : '',            
+            'tracking_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'currency' => $request->input('type') === 'fixed' ? 'required' : '',
             'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
         ]);
 
         try {
             DB::beginTransaction();
-            $cashback->update($request->all());
+
+            $isDefault = isset($request->default) ? true : false;
+            $data = $request->all();
 
             if ($request->hasFile('cashback_icon')) {
-                $cashbackIcon = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
-                $cashback->image = $cashbackIcon;
-                $cashback->update();
+                if (!empty($cashback->image) && Storage::exists('public/' . $cashback->image))
+                    File::delete(public_path('storage/' . $cashback->image));
+
+                $data['image'] = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
             }
+
+            $data['default'] = $isDefault;
+
+            if ($isDefault)
+                setStoreDefaultCashback($request->store_id, $isDefault);
+
+            $cashback->update($data);
+
+            if (!$isDefault)
+                setStoreDefaultCashback($request->store_id, $isDefault);
 
             DB::commit();
             if ($request->ajax()) {
@@ -476,6 +537,48 @@ class StoreController extends Controller
         }
     }
 
+    public function deleteCashback(Request $request, StoreCashback $cashback)
+    {
+        $request->validate([
+            'storeCashbackId' => 'required'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            if (!empty($cashback->image) && Storage::exists('public/' . $cashback->image))
+                File::delete(public_path('storage/' . $cashback->image));
+
+            $cashback->delete();
+
+            $isDefault = $cashback->default ? true : false;
+
+            setStoreDefaultCashback($cashback->store_id, $isDefault, true);
+
+            DB::commit();
+
+            if (!$request->ajax()) {
+                flash()->success('Cashback Deleted successfully.');
+                return redirect()->back();
+            }
+
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Cashback Deleted successfully.'
+            ], JsonResponse::HTTP_OK);
+        } catch (Exception $e) {
+            DB::rollBack();
+            if (!$request->ajax()) {
+                flash()->error('Error while updating cashback.');
+                return redirect()->back();
+            }
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'error' => 'Error while updating cashback.'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
     public function cashbackForm(Request $request)
     {
         $storeId = decrypt($request->input('storeId'));
@@ -490,26 +593,36 @@ class StoreController extends Controller
         $request->validate([
             'type' => 'required',
             'sale_commission' => 'required|numeric|min:0.1',
-            'deeplink_url' => 'nullable|url',
+            'tracking_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
+            'deeplink_url' => ['nullable', 'regex:/\b(?:(?:https?|ftp):\/\/|www\.)[-a-z0-9+&@#\/%?=~_|!:,.;]*[-a-z0-9+&@#\/%=~_|]/i'],
             'currency' => $request->input('type') === 'fixed' ? 'required' : '',
             'cashback_icon' => 'nullable|mimes:png,jpg,jpeg|max:2048'
         ]);
 
         try {
             DB::beginTransaction();
-            $request->merge(['is_api' => 'no']);
-            $cashback = StoreCashback::create($request->all());
+            $isDefault = isset($request->default) ? true : false;
+            $data = $request->all();
+            $data['is_api'] = 'no';
 
-            if ($request->hasFile('cashback_icon')) {
-                $cashbackIcon = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
-                $cashback->image = $cashbackIcon;
-                $cashback->update();
+            if ($request->hasFile('cashback_icon'))
+                $data['image'] = saveResizeImage($request->file('cashback_icon'), $this->iconPath, 200);
+
+            if (isset($request->default))
+                $data['default'] = isset($request->default);
+            else
+                $data['default'] = false;
+
+            if ($isDefault) {
+                setStoreDefaultCashback($request->store_id, $isDefault);
+                StoreCashback::create($data);
             }
 
-            $existing_cashbacks = StoreCashback::where('store_id', $request->store_id)->get();
-            if (count($existing_cashbacks) == 1) {
-                $cashback->update(['default' => '1']);
+            if (!$isDefault) {
+                StoreCashback::create($data);
+                setStoreDefaultCashback($request->store_id, $isDefault);
             }
+
             DB::commit();
             if (!$request->ajax()) {
                 flash()->success('Cashback created successfully.');
@@ -615,7 +728,14 @@ class StoreController extends Controller
     public function createEditorPick(Request $request)
     {
         try {
+
+            $existingPicks = EditorPick::where('category_id', $request->input('category_id'))->get();
             DB::beginTransaction();
+            foreach ($existingPicks as $existingPick) {
+                if (!in_array($existingPick->store_id, $request->input('picks'))) {
+                    $existingPick->delete();
+                }
+            }
             foreach ($request->input('picks') as $pick) {
                 EditorPick::firstOrCreate(
                     [
@@ -846,8 +966,12 @@ class StoreController extends Controller
 
     public function deleteStoreAddress($id)
     {
-        StoreAddress::where('id', $id)->delete();
-        flash()->success('Seo rule deleted');
+        $storeAddress = StoreAddress::find($id);
+        if (!$storeAddress) {
+            return response()->json(['status' => 'error', 'message' => 'Store Address not found']);
+        }
+        $storeAddress->delete();
+        return response()->json(['status' => 'success', 'message' => 'Store Address deleted successfully.']);
     }
 
     public function editStoreSeoRule($id)
@@ -917,5 +1041,47 @@ class StoreController extends Controller
         } finally {
             return redirect()->back();
         }
+    }
+    public function deleteStoreVoucher($id)
+    {
+        $voucher = Voucher::find($id);
+        if (!$voucher) {
+            return response()->json(['status' => 'error', 'message' => 'Voucher not found']);
+        }
+
+        $voucher->delete();
+
+        return response()->json(['status' => 'success', 'message' => 'Voucher deleted successfully.']);
+    }
+
+    public function addImageModal(Request $request){
+
+        $store = Store::findOrFail($request->store_id);
+        return view('admin-dashboard.stores.add-image-modal', compact('store'))->render();
+    }
+
+    public function addVoucherModal(Request $request){
+        $store = Store::findOrFail($request->store_id);
+        return view('admin-dashboard.stores.add-voucher-modal', compact('store'))->render();
+    }
+
+    public function addAddressModal(Request $request){
+        $store = Store::findOrFail($request->store_id);
+        return view('admin-dashboard.stores.add-address-modal', compact('store'))->render();
+    }
+
+    public function addSEORuleModal(Request $request){
+        $store = Store::findOrFail($request->store_id);
+        return view('admin-dashboard.stores.add-seo-rule-modal', compact('store'))->render();
+    }
+
+    public function ajaxStores()
+    {
+        $stores = Store::select('id', 'name', 'slug', 'created_at')->latest()->get();
+        // Hide the appended attributes temporarily
+        $stores->each(function ($store) {
+            $store->makeHidden(['cashback_integer', 'default_cashback']);
+        });
+        return response()->json(['stores' => $stores]);
     }
 }

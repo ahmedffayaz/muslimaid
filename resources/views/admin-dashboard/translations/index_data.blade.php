@@ -1,8 +1,3 @@
-<style>
-    .nk-tb-list{
-        table-layout: fixed;
-    }
-</style>
 @if(count($translations))
 <div class="nk-tb-item nk-tb-head">
     
@@ -18,7 +13,7 @@
 <div class="nk-tb-item">
     
     <div class="nk-tb-col">
-        <a href="{{route('admin.translations.show',$translation->id)}}">
+        <a href="{{route(getAdminPrefix() . '.translations.show',$translation->id)}}">
             <div class="user-card">
                 
                 <div class="user-info">
@@ -47,9 +42,9 @@
                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="link-list-opt no-bdr">
-                            <li><a href="{{route('admin.translations.edit', $translation->id)}}"><em class="icon ni ni-edit"></em><span>Edit</span></a></li>
+                            <li><a href="{{route(getAdminPrefix() . '.translations.edit', $translation->id)}}"><em class="icon ni ni-edit"></em><span>Edit</span></a></li>
                             <li>
-                                <form action="{{ route('admin.translations.destroy', $translation->id) }}" id="delete-form-{{$translation->id}}" method="POST">
+                                <form action="{{ route(getAdminPrefix() . '.translations.destroy', $translation->id) }}" id="delete-form-{{$translation->id}}" method="POST">
                                     @method('DELETE')
                                     @csrf
                                     

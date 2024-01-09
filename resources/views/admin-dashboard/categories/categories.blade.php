@@ -1,84 +1,4 @@
 @extends('layouts.admin-dashboard.app')
-<style>
-    .tree,
-    .tree ul {
-        margin: 0;
-        padding: 0;
-        list-style: none
-    }
-
-    .tree ul {
-        margin-left: 1em;
-        position: relative
-    }
-
-    .tree ul ul {
-        margin-left: .5em
-    }
-
-    .tree ul:before {
-        content: "";
-        display: block;
-        width: 0;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        border-left: 1px solid;
-        color: #dbdfea;
-    }
-
-    .tree li {
-        margin: 0;
-        padding: 0 0 0 1em;
-        line-height: 2em;
-        color: #369;
-        font-weight: 700;
-        position: relative;
-        text-transform: capitalize;
-    }
-
-    .tree ul li:before {
-        content: "";
-        display: block;
-        width: 10px;
-        height: 0;
-        border-top: 1px solid;
-        margin-top: -1px;
-        position: absolute;
-        top: 1.8em;
-        left: 0;
-        color: #dbdfea;
-    }
-
-    .tree ul li:last-child:before {
-        background: #fff;
-        height: auto;
-        top: 1.8em;
-        bottom: 0
-    }
-
-    .indicator {
-        margin-right: 5px;
-    }
-
-    .tree li a {
-        text-decoration: none;
-        color: #369;
-    }
-
-    .tree li button,
-    .tree li button:active,
-    .tree li button:focus {
-        text-decoration: none;
-        color: #369;
-        border: none;
-        background: transparent;
-        margin: 0px 0px 0px 0px;
-        padding: 0px 0px 0px 0px;
-        outline: 0;
-    }
-</style>
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -129,16 +49,16 @@
                                                                 </a>
                                                                 <div class="dropdown-menu dropdown-menu-right">
                                                                     <ul class="link-list-opt no-bdr d-block ml-0">
-                                                                        <a href="{{ route('admin.categories.picks', $category) }}" category-id='{{ $category->id }}'
+                                                                        <a href="{{ route(getAdminPrefix() . '.categories.picks', $category) }}" category-id='{{ $category->id }}'
                                                                             class='picks-edit'>
                                                                             <em class="icon ni ni-cart-fill"></em>
                                                                             Editor Picks
                                                                         </a>
-                                                                        <a href="{{ route('admin.categories.edit', $category) }}" category-id='{{ $category->id }}'
+                                                                        <a href="{{ route(getAdminPrefix() . '.categories.edit', $category) }}" category-id='{{ $category->id }}'
                                                                             class='category-edit'>
                                                                             <em class="icon ni ni-edit"></em> Edit
                                                                         </a>
-                                                                        <a class='category-delete' data-action="{{ route('admin.categories.destroy', $category) }}"
+                                                                        <a class='category-delete' data-action="{{ route(getAdminPrefix() . '.categories.destroy', $category) }}"
                                                                             data-id="{{ $category->id }}" style="cursor: pointer">
                                                                             <em class="icon ni ni-trash-fill"></em>
                                                                             Delete
@@ -180,17 +100,13 @@
     <x-admin-dashboard.modal modalSize="modal-lg" headerAlignment="align-center" formWrapperClass="" />
 @endsection
 @push('scripts')
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
     <script>
-        var quill = null;
         $(document).ready(function() {
             // Show create modal
             $(document).on('click', '#show-modal', function(event) {
                 event.preventDefault();
                 $.ajax({
-                    url: "{{ route('admin.categories.create') }}",
+                    url: "{{ route(getAdminPrefix() . '.categories.create') }}",
                     type: 'GET',
                     success: function(response) {
                         $('.title').text('Create Category');
@@ -198,12 +114,11 @@
                         $('#save-btn').text('Create');
                         $('#modal').modal('show');
                         NioApp.Select2('.form-select');
-                        quillEditor()
+                        textEditor()
                         logoType()
                         bannerType()
                         store()
                         validation();
-                            
                     }
                 });
             });
@@ -220,7 +135,7 @@
                         $('#save-btn').text('Update');
                         $('#modal').modal('show');
                         NioApp.Select2('.form-select');
-                        quillEditor()
+                        textEditor()
                         logoType()
                         bannerType()
                         store()
@@ -252,22 +167,14 @@
                 });
             });
 
-            function quillEditor() {
-                quill = new Quill('#editor-container', {
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic'],
-                            ['link', 'blockquote', 'code-block', 'image'],
-                            [{
-                                list: 'ordered'
-                            }, {
-                                list: 'bullet'
-                            }]
-                        ]
-                    },
-                    placeholder: 'Compose an epic...',
-                    theme: 'snow'
-                });
+            function textEditor() {
+                var editor = tinymce.get('editor-container');
+                if(editor){
+                    editor.destroy();
+                    initializeTinyMCEEditor('editor-container');
+                } else {
+                    initializeTinyMCEEditor('editor-container');
+                }
             }
 
             function logoType() {
@@ -326,13 +233,18 @@
             function store() {
                 $('#category-form').on('submit', function(event) {
                     event.preventDefault();
+                    let form = $(this);
+                    if (!form.valid()) {
+                        return false;
+                    }
                     let btn = $('#save-btn')
                     btn.attr('disabled', 'disabled')
                         .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
                     let url = $(this).attr('action');
                     // Populate hidden form on submit
+                    var editor = tinymce.get('editor-container');
                     let desc = document.querySelector('input[name=description]');
-                    desc.value = quill.root.innerHTML;
+                    desc.value = editor.getContent();
 
                     let method = 'POST';
                     let formData = new FormData(this);
@@ -436,7 +348,7 @@
                 var status = $("select[name=status").val();
                 var name = $("input[name=name]").val();
                 $.ajax({
-                    url: '{{ route('admin.users.search_users') }}',
+                    url: '{{ route(getAdminPrefix() . '.users.search_users') }}',
                     method: "POST",
                     data: {
                         _token: _token,
@@ -566,7 +478,7 @@
         });
 
         function validation() {
-            $('.form-validate').validate({
+            $('#category-form').validate({
                 errorClass: 'invalid-feedback d-block',
                 rules: {
                     name: {
@@ -576,13 +488,15 @@
                         required: true
                     },
                     logo_link: {
-                        url: true
+                        url: true,
+                        required: true
                     },
                     banner_type: {
                         required: true
                     },
                     banner_link: {
-                        url: true
+                        url: true,
+                        required: true
                     },
                     status: {
                         required: true
@@ -592,7 +506,7 @@
         }
         $(document).on('change', '.get_parent', function(event) {
             id = $('.get_parent').val();
-            url = '{{ route('admin.categories.sort') }}';
+            url = '{{ route(getAdminPrefix() . '.categories.sort') }}';
             $.ajax({
                 url: url,
                 type: 'get',
@@ -611,5 +525,94 @@
                 }
             });
         });
+        $(function() {
+            $(document).on('focusin', function(e) {
+            if (e.target.closest(".tox-tinymce-aux, .moxman-window, .tam-assetmanager-root") !== null) {
+                e.stopImmediatePropagation();
+            }
+            });
+        });
     </script>
+@endpush
+@push('styles')
+    <style>
+        .tree,
+        .tree ul {
+            margin: 0;
+            padding: 0;
+            list-style: none
+        }
+
+        .tree ul {
+            margin-left: 1em;
+            position: relative
+        }
+
+        .tree ul ul {
+            margin-left: .5em
+        }
+
+        .tree ul:before {
+            content: "";
+            display: block;
+            width: 0;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            border-left: 1px solid;
+            color: #dbdfea;
+        }
+
+        .tree li {
+            margin: 0;
+            padding: 0 0 0 1em;
+            line-height: 2em;
+            color: #369;
+            font-weight: 700;
+            position: relative;
+            text-transform: capitalize;
+        }
+
+        .tree ul li:before {
+            content: "";
+            display: block;
+            width: 10px;
+            height: 0;
+            border-top: 1px solid;
+            margin-top: -1px;
+            position: absolute;
+            top: 1.8em;
+            left: 0;
+            color: #dbdfea;
+        }
+
+        .tree ul li:last-child:before {
+            background: #fff;
+            height: auto;
+            top: 1.8em;
+            bottom: 0
+        }
+
+        .indicator {
+            margin-right: 5px;
+        }
+
+        .tree li a {
+            text-decoration: none;
+            color: #369;
+        }
+
+        .tree li button,
+        .tree li button:active,
+        .tree li button:focus {
+            text-decoration: none;
+            color: #369;
+            border: none;
+            background: transparent;
+            margin: 0px 0px 0px 0px;
+            padding: 0px 0px 0px 0px;
+            outline: 0;
+        }
+    </style>
 @endpush

@@ -20,7 +20,7 @@ class SlidesController extends Controller
      */
     public function create(Request $request)
     {
-        $stores = Store::latest()->get();
+        $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->where('status', 'active')->latest()->get();
         $slider = $request->slider_id;
         return view('admin-dashboard.sliders.edit-slide', compact('stores', 'slider'))->render();
     }
@@ -90,7 +90,7 @@ class SlidesController extends Controller
      */
     public function edit(Slide $slide)
     {
-        $stores = Store::latest()->get();
+        $stores = Store::select('id', 'name', 'slug', 'created_at')->wherestatus('active')->latest()->get();
         return view('admin-dashboard.sliders.edit-slide', compact('slide', 'stores'))->render();
     }
 

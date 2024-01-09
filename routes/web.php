@@ -19,16 +19,14 @@ use Illuminate\Support\Facades\Redirect;
 // Admin routes
 Route::namespace('App\Http\Controllers\Admin')
     ->middleware(['auth', 'role:admin|data|finance'])
-    ->as('admin.')
-    ->prefix('admin')
+    ->as(getAdminPrefix() . '.')
+    ->prefix(getAdminPrefix())
     ->group(function () {
         Route::get('home/{period?}', [App\Http\Controllers\HomeController::class, 'index'])->name('home.index');
         Route::get('/', function () {
             return Redirect::to('admin/home');
         });
-
         Route::post('dataByPeriod', [App\Http\Controllers\HomeController::class, 'dataByPeriod'])->name('home.index_data');
-
         // Networks
         Route::get('networks/categories/{network}', [App\Http\Controllers\Admin\NetworkController::class, 'categories'])->name('networks.categories');
         Route::post('networks/categories_import/{network}', [App\Http\Controllers\Admin\NetworkController::class, 'importCategories'])->name('networks.categories.import');
@@ -48,6 +46,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::get('stores/cashbacks/{cashback}/edit', [App\Http\Controllers\Admin\StoreController::class, 'editCashback'])->name('stores.cashbacks.edit');
         Route::post('stores/categories/update', [App\Http\Controllers\Admin\StoreController::class, 'updateCategories'])->name('stores.categories.update');
         Route::put('stores/cashbacks/{cashback}/update', [App\Http\Controllers\Admin\StoreController::class, 'updateCashback'])->name('stores.cashbacks.update');
+        Route::post('stores/cashbacks/{cashback}/delete', [App\Http\Controllers\Admin\StoreController::class, 'deleteCashback'])->name('stores.cashbacks.delete');
         Route::get('stores/cashbacks/add', [App\Http\Controllers\Admin\StoreController::class, 'cashbackForm'])->name('stores.cashbacks.create');
         Route::post('stores/cashbacks/save', [App\Http\Controllers\Admin\StoreController::class, 'createCashback'])->name('stores.cashbacks.store');
         Route::post('stores/images/upload/{store}', [App\Http\Controllers\Admin\StoreController::class, 'uploadImage'])->name('stores.images.upload');
@@ -69,7 +68,14 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::get('stores/seo/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreSeoRule'])->name('stores.seo.delete');
         Route::get('stores/address/{id}',  [App\Http\Controllers\Admin\StoreController::class, 'editStoreAddress'])->name('stores.edit_address');
         Route::put('stores/address/update',  [App\Http\Controllers\Admin\StoreController::class, 'updateStoreAddress'])->name('stores.update_address');
-        Route::get('stores/address/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreAddress'])->name('stores.address.delete');
+        Route::delete('/stores/address/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreAddress'])->name('stores.address.delete');
+        Route::delete('/stores/voucher/delete/{id}', [App\Http\Controllers\Admin\StoreController::class, 'deleteStoreVoucher'])->name('stores.voucher.delete');
+        Route::get('/stores/delete-revglue-stores', [App\Http\Controllers\Admin\StoreController::class, 'deleteRevglueStores'])->name('stores.revglue.delete');
+        Route::post('stores/add_image_form', [App\Http\Controllers\Admin\StoreController::class, 'addImageModal'])->name('stores.add.image.form');
+        Route::post('stores/add_voucher_form', [App\Http\Controllers\Admin\StoreController::class, 'addVoucherModal'])->name('stores.add.voucher.form');
+        Route::post('/stores/add_address_form', [App\Http\Controllers\Admin\StoreController::class, 'addAddressModal'])->name('stores.add.address.form');
+        Route::post('/stores/add_seo_rule_form', [App\Http\Controllers\Admin\StoreController::class, 'addSEORuleModal'])->name('stores.add.seo.rule.form');
+        Route::get('/ajax/get-stores', [App\Http\Controllers\Admin\StoreController::class, 'ajaxStores'])->name('ajax.stores');
         Route::resource('stores', StoreController::class);
         Route::resource('storecashbacks', StoreCashbackController::class)->only('index');
 
@@ -103,20 +109,19 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('users/fetch', [App\Http\Controllers\Admin\UserController::class, 'fetch'])->name('users.fetch');
         Route::post('users/search_users',  [App\Http\Controllers\Admin\UserController::class, 'searchUsers'])->name('users.search_users');
         Route::get('users/show', [App\Http\Controllers\Admin\UserController::class, 'showUser'])->name('users.show_user');
+        Route::post('users/meta-data', [App\Http\Controllers\Admin\UserController::class, 'fetchMetaData'])->name('users.metadata');
         Route::resource('users', UserController::class);
 
         // Importers
         Route::post('importer/import', [App\Http\Controllers\Admin\ImporterController::class, 'import'])->name('importer.import');
-        Route::get('importer/commissions', [App\Http\Controllers\Admin\ImporterController::class, 'import_commissions'])->name('importer.commissions');
-        Route::get('importer/vouchers', [App\Http\Controllers\Admin\ImporterController::class, 'import_coupons'])->name('importer.vouchers');
         Route::post('importer/save_settings', [App\Http\Controllers\Admin\ImporterController::class, 'saveSettings'])->name('importer.save_settings');
         Route::get('importer/importer_setting_form/{id}', [App\Http\Controllers\Admin\ImporterController::class, 'importerSettingForm'])->name('importer.importer_setting_form');
-        Route::resource('importer', ImporterController::class)->only(['index', 'create', 'show']);
+        Route::resource('importer', ImporterController::class)->only(['index', 'show']);
 
         // Clicks
         Route::get('clicks/export', [App\Http\Controllers\Admin\ClickController::class, 'exportCsv'])->name('clicks.export');
-        Route::post('clicks/fetch', [App\Http\Controllers\Admin\ClickController::class, 'fetch'])->name('clicks.fetch');
-        Route::post('clicks/search_clicks',  [App\Http\Controllers\Admin\ClickController::class, 'searchClicks'])->name('clicks.search_clicks');
+        Route::post('clicks/fetch', [App\Http\Controllers\Admin\ClickController::class, 'fetchActiveStoresClicks'])->name('active-stores.clicks');
+        Route::post('archive/clicks', [App\Http\Controllers\Admin\ClickController::class, 'deletedStoresClicks'])->name('deleted-stores.clicks');
         Route::resource('clicks', ClickController::class)->only('index');
 
         // Cashbacks
@@ -159,6 +164,7 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('settings/fetch', [App\Http\Controllers\Admin\SettingsController::class, 'fetch'])->name('settings.fetch');
         Route::post('settings/search_settings',  [App\Http\Controllers\Admin\SettingsController::class, 'searchSettings'])->name('settings.search_settings');
         Route::post('maintenance', [App\Http\Controllers\Admin\SettingsController::class, 'maintenance'])->name('settings.maintenance');
+        Route::post('networks/settings', [App\Http\Controllers\Admin\SettingsController::class, 'viewSetting'])->name('networks.settings');
         Route::resource('settings', SettingsController::class)->except(['show']);
         Route::resource('charities', CharityController::class)->except(['show']);
         Route::get('charity-type-view', [App\Http\Controllers\Admin\CharityController::class, 'charityTypeView'])->name('charities.charity_type_view');
@@ -206,8 +212,9 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::post('sliders/sort_slides', [App\Http\Controllers\Admin\SliderController::class, 'sortSlides'])->name('sort_slides');
         Route::resource('sliders', SliderController::class)->only(['index', 'store', 'edit']);
         Route::resource('slides', SlidesController::class)->except(['index', 'show']);
+        Route::resource('pages', PagesController::class);
+        Route::post('pages/fetch', [App\Http\Controllers\Admin\PagesController::class, 'fetch'])->name('pages.fetch');
 
-        Route::resource('pages', PagesController::class)->except(['show']);
         Route::post('pages/view-short-codes', [App\Http\Controllers\Admin\PagesController::class, 'getAvailableShortCodes'])->name('pages.view-short-codes');
 
         Route::resource('blogs', BlogController::class)->except(['show']);
@@ -216,10 +223,16 @@ Route::namespace('App\Http\Controllers\Admin')
         Route::resource('email_templates', EmailTemplatesController::class)->only(['index', 'edit', 'update']);
 
         // Countries
-        Route::resource('countries', CountryController::class)->except(['show','create','destroy']);
+        Route::resource('countries', CountryController::class)->except(['show', 'create', 'destroy']);
         Route::post('countries/search',  [App\Http\Controllers\Admin\CountryController::class, 'searchCountries'])->name('countries.search');
 
-        Route::get('/api-docs', function() {
+        // Banners
+        Route::resource('banners', BannerController::class);
+
+        // Appeals
+        Route::resource('appeals', AppealController::class);
+
+        Route::get('/api-docs', function () {
             return view('scribe.index');
         })->name('api-docs');
 
@@ -242,42 +255,59 @@ Route::get('register-form', [App\Http\Controllers\Auth\RegisterController::class
 Route::get('account/verify/{token}', [App\Http\Controllers\Auth\VerifyController::class, 'verifyAccount'])->name('user.verify');
 
 Route::get('/', [App\Http\Controllers\Frontend\HomeController::class, 'index']);
+Route::post('/quick-search', [App\Http\Controllers\Frontend\HomeController::class, 'quickSearch'])->name('quick-search');
 Route::get('set-locale/{locale}', [App\Http\Controllers\Frontend\HomeController::class, 'setLocale']);
-
+Route::post('/user-notifications', [App\Http\Controllers\Frontend\HomeController::class, 'userNotifications'])->name('userNotifications');
+Route::get('/user-notifications-count', [App\Http\Controllers\Frontend\HomeController::class, 'userNotificationsCount'])->name('userNotificationsCount');
+Route::get('/clear-notifications', [App\Http\Controllers\Frontend\HomeController::class, 'clearNotifications'])->name('clearNotifications');
 Route::get('search', [App\Http\Controllers\Frontend\SearchController::class, 'index'])->name('search.index');
 Route::post('search', [App\Http\Controllers\Frontend\SearchController::class, 'suggestions'])->name('search.suggestions');
 
 Route::get('stores/{letter?}', [App\Http\Controllers\Frontend\StoreController::class, 'index'])->name('stores.index');
 Route::get('cashback/{slug}', [App\Http\Controllers\Frontend\StoreController::class, 'show'])->name('stores.show');
+Route::post('stores', [App\Http\Controllers\Frontend\StoreController::class, 'storesView'])->name('stores.view');
 
-Route::post('exit-click', [App\Http\Controllers\Frontend\ClickController::class, 'store'])->name('click.store');
-Route::get('exit-click/{hash}/{url}', [App\Http\Controllers\Frontend\ClickController::class, 'redirect'])->name('click.redirect');
+Route::get('exit-click/{storeId}/{userId?}', [App\Http\Controllers\Frontend\ClickController::class, 'store'])->name('click.store');
+Route::get('exit-click-voucher/{storeId}/{userId}/{voucher}', [App\Http\Controllers\Frontend\ClickController::class, 'redeemVoucher'])->name('redeem.voucher');
+Route::get('/get-voucher-code/{voucher}', [App\Http\Controllers\Frontend\ClickController::class, 'decryptVoucher'])->name('decrypt.voucher');
+Route::get('click/{storeId}/{userId}/{hashUrl}', [App\Http\Controllers\Frontend\ClickController::class, 'redirect'])->name('click.redirect');
 
 Route::post('stores-reviews', [App\Http\Controllers\Frontend\StoreReviewController::class, 'store'])->name('stores-reviews.store');
 Route::get('stores-reviews/{id}', [App\Http\Controllers\Frontend\StoreReviewController::class, 'show'])->name('stores-reviews.show');
 
 Route::get('categories', [App\Http\Controllers\Frontend\CategoryController::class, 'index'])->name('categories.index');
 Route::get('categories/{slug}', [App\Http\Controllers\Frontend\CategoryController::class, 'show'])->name('categories.show');
-
+Route::get('categories/{slug}/search', [App\Http\Controllers\Frontend\CategoryController::class, 'categoriesView'])->name('categories.view');
+Route::get('/load-more', [App\Http\Controllers\Frontend\CategoryController::class, 'loadMoreButton'])->name('load-more');
 Route::get('blogs', [App\Http\Controllers\Frontend\BlogController::class, 'index'])->name('blogs.index');
 Route::get('blogs/{slug}', [App\Http\Controllers\Frontend\BlogController::class, 'show'])->name('blogs.show');
 
 Route::get('charities', [App\Http\Controllers\Frontend\CharityController::class, 'index'])->name('charities.index');
-Route::post('charities/{id}', [App\Http\Controllers\Frontend\CharityController::class, 'show'])->name('charities.show');
+Route::post('charities/{slug}', [App\Http\Controllers\Frontend\CharityController::class, 'show'])->name('charities.show');
+Route::any('charity/search', [App\Http\Controllers\Frontend\CharityController::class, 'search'])->name('charities.search');
+
 
 Route::get('newsletter', [App\Http\Controllers\Frontend\NewsletterController::class, 'index'])->name('newsletter.index');
-Route::post('newsletter', [App\Http\Controllers\Frontend\NewsletterController::class, 'store'])->name('newsletter.store');
 
 Route::get('contact', [App\Http\Controllers\Frontend\ContactController::class, 'index'])->name('contact.index');
 Route::post('contact', [App\Http\Controllers\Frontend\ContactController::class, 'store'])->name('contact.store');
 
 Route::get('vouchers', [App\Http\Controllers\Frontend\VoucherController::class, 'index'])->name('vouchers.index');
+Route::post('vouchers/view', [App\Http\Controllers\Frontend\VoucherController::class, 'view'])->name('vouchers.view');
 
 Route::get('offers', [App\Http\Controllers\Frontend\OfferController::class, 'index'])->name('offers.index');
 
 Route::get('trending', [App\Http\Controllers\Frontend\TrendingController::class, 'index'])->name('trending.index');
 
 Route::get('pages/{slug}', [App\Http\Controllers\Frontend\PagesController::class, 'show'])->name('pages.show');
+
+Route::get('appeals', [App\Http\Controllers\Frontend\AppealController::class, 'index'])->name('appeals.index');
+Route::get('appeals/{slug}', [App\Http\Controllers\Frontend\AppealController::class, 'show'])->name('appeals.show');
+Route::get('appeal/search', [App\Http\Controllers\Frontend\AppealController::class, 'appealsView'])->name('appeals.view');
+Route::post('subscribe-newsletter', [App\Http\Controllers\Frontend\SubscribeNewsletterController::class, 'index'])->name('subscribe-newsletter');
+
+// fcm token
+Route::post('/fcmregistration', [App\Http\Controllers\FirebaseController::class, 'store'])->name('fcmregistration');
 
 // CLient Dashboard routes
 Route::namespace('App\Http\Controllers\Client')
@@ -287,9 +317,18 @@ Route::namespace('App\Http\Controllers\Client')
     ->group(function () {
         Route::get('dashboard', [App\Http\Controllers\Client\DashboardController::class, 'index'])->name('dashboard');
         Route::get('profile', [App\Http\Controllers\Client\DashboardController::class, 'edit'])->name('profile');
+        Route::post('users/account/delete/{id}', [App\Http\Controllers\Client\DashboardController::class, 'destroy'])->name('users.destroy');
+        Route::post('users/add-favorite', [App\Http\Controllers\Client\DashboardController::class, 'addFavorite'])->name('add-favorite');
+        Route::post('users/remove-favorite', [App\Http\Controllers\Client\DashboardController::class, 'removeFavorite'])->name('remove-favorite');
+        Route::get('favorite-stores', [App\Http\Controllers\Client\DashboardController::class, 'favoriteStores'])->name('favorite-stores');
+        Route::get('favorite-cashblack-to-door', [App\Http\Controllers\Client\DashboardController::class, 'favoriteCashbackStores'])->name('favorite-cashblack-to-door');
         Route::put('profile/update/{user}', [App\Http\Controllers\Client\DashboardController::class, 'update'])->name('profile.update');
         Route::get('cashback', [App\Http\Controllers\Client\DashboardController::class, 'cashback'])->name('cashback');
+        Route::get('cashouts', [App\Http\Controllers\Client\DashboardController::class, 'cashouts'])->name('cashouts');
+        Route::post('searchCashback', [App\Http\Controllers\Client\DashboardController::class, 'searchCashback'])->name('search_cashback');
+        Route::post('searchCashouts', [App\Http\Controllers\Client\DashboardController::class, 'searchCashouts'])->name('search_cashout');
         Route::get('clicks', [App\Http\Controllers\Client\DashboardController::class, 'clicks'])->name('clicks');
+        Route::post('searchClick', [App\Http\Controllers\Client\DashboardController::class, 'searchClick'])->name('search_click');
         Route::get('change_password', [App\Http\Controllers\Client\DashboardController::class, 'changePassword'])->name('change_password');
         Route::post('users/passwordsave/', [App\Http\Controllers\Client\DashboardController::class, 'savePassword'])->name('save_password');
         Route::resource('withdraw', PaymentController::class)->only(['index']);
@@ -299,13 +338,17 @@ Route::namespace('App\Http\Controllers\Client')
         Route::get('payment-methods', [App\Http\Controllers\Client\PaymentController::class, 'paymentDetails'])->name('payment_details');
         Route::post('payment-save', [App\Http\Controllers\Client\PaymentController::class, 'paymentSave'])->name('payment_save');
         Route::post('cashout', [App\Http\Controllers\Client\PaymentController::class, 'cashout'])->name('cashout');
-        Route::post('CharityCashout', [App\Http\Controllers\Client\PaymentController::class,'CharityCashout'])->name('CharityCashout');
+        Route::post('CharityCashout', [App\Http\Controllers\Client\PaymentController::class, 'CharityCashout'])->name('CharityCashout');
         Route::post('ticket/step2', [App\Http\Controllers\Client\TicketController::class, 'step2'])->name('tickets.step2');
-        Route::post('ticket/step3', [App\Http\Controllers\Client\TicketController::class, 'step3'])->name('tickets.step3');
+        Route::match(['get', 'post'], 'ticket/step3', [App\Http\Controllers\Client\TicketController::class, 'step3'])->name('tickets.step3');
         Route::resource('tickets', TicketController::class)->only(['index', 'create', 'show', 'update']);
         Route::resource('referral', ReferController::class)->only('index');
         Route::post('send-referral-link', [App\Http\Controllers\Client\ReferController::class, 'sendReferralLink'])->name('send-referral-link');
-        Route::get('CharityWithdraw',[App\Http\Controllers\Client\PaymentController::class,'CharityWithdraw'])->name('CharityWithdraw');
+        Route::get('my-referrals', [App\Http\Controllers\Client\ReferController::class, 'myReferrals'])->name('referral.my-referral');
+        Route::post('search-referrals', [App\Http\Controllers\Client\ReferController::class, 'searchReferrals'])->name('search_referrals');
+        Route::get('CharityWithdraw', [App\Http\Controllers\Client\PaymentController::class, 'CharityWithdraw'])->name('CharityWithdraw');
+        Route::get('appeals', [App\Http\Controllers\Client\DashboardController::class, 'appeals'])->name('appeals');
+        Route::post('donate-appeal', [App\Http\Controllers\Client\PaymentController::class, 'donateAppeal'])->name('donate-appeal');
     });
 
 Route::group(['prefix' => 'filemanager', 'middleware' => ['web', 'auth']], function () {

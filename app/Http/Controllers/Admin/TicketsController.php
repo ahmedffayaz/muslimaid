@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Ticket;
-use App\Models\TicketCategory;
-use App\Models\User;
 use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Ticket;
+use Illuminate\Http\Request;
+use App\Jobs\SendNotification;
+use App\Models\TicketCategory;
+use App\Http\Controllers\Controller;
 
 class TicketsController extends Controller
 {
@@ -25,7 +26,7 @@ class TicketsController extends Controller
     public function index()
     {
         $route='index';
-        $tickets = Ticket::orderBy('new_ticket','DESC')->latest()->paginate(30);
+        $tickets = Ticket::orderBy('new_ticket','DESC')->orderBy('updated_at', 'DESC')->paginate(30);
         $categories = TicketCategory::latest()->get();
         $users = User::role('user')->latest()->get();
         return view('admin-dashboard.tickets.index', compact('users','categories','tickets','route'));
@@ -39,7 +40,9 @@ class TicketsController extends Controller
      */
     public function show(Ticket $ticket)
     {
-        $ticket->update(['new_ticket'=>0]);
+        if($ticket->status !== 'pending' ){
+            $ticket->update(['new_ticket'=> 0]);
+        }
         $newReply = $ticket->newReply;
 
         if(count($newReply)){
@@ -53,11 +56,20 @@ class TicketsController extends Controller
 
     public function closeTicket(Ticket $ticket)
     {
-        $ticket->update(['status'=>'closed',
-        'closing_time'=> Carbon::now(),
-        'closed_by'=>auth()->user()->id]);
+        $ticket->update([
+            'status'=> 'closed',
+            'closing_time'=> Carbon::now(),
+            'closed_by'=> auth()->user()->id
+        ]);
+        $title = 'Ticket Closed';
+        $message = 'Your ticket has been closed.';
+        $url = url('account/tickets') . '/' . $ticket->ticket_id;
+        $deviceToken = optional($ticket->user->devices()->whereType('web')->latest()->first())->fcm_token;
+        $user = $ticket->user()->get();
+
+        $deviceToken != null ? dispatch(new SendNotification($title, $message, $deviceToken, $url, $user)) : '';
         flash()->success('Ticket closed');
-                return redirect()->back();
+        return redirect()->back();
     }
 
     function fetch(Request $request)

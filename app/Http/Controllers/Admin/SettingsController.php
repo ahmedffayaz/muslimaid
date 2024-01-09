@@ -12,6 +12,8 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Artisan;
 use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
 
 class SettingsController extends Controller
 {
@@ -58,7 +60,7 @@ class SettingsController extends Controller
         $inputs['type'] = str_replace([' ', '-', '.'], '_', $request->input('type'));
         $setting = SiteSetting::create($inputs);
         flash()->success('setting saved successfully');
-        return redirect()->route('admin.settings.index');
+        return redirect()->route(getAdminPrefix() . '.settings.index');
     }
 
     /**
@@ -85,7 +87,7 @@ class SettingsController extends Controller
         $inputs['type'] = str_replace([' ', '-', '.'], '_', $request->input('type'));
         $setting->update($inputs);
         flash()->success('setting updated successfully');
-        return redirect()->route('admin.settings.index');
+        return redirect()->route(getAdminPrefix() . '.settings.index');
     }
 
     /**
@@ -98,13 +100,13 @@ class SettingsController extends Controller
     {
         if ($setting->default) {
             flash()->error('default settings can not be deleted');
-            return redirect()->route('admin.settings.index');
+            return redirect()->route(getAdminPrefix() . '.settings.index');
         }
 
         $setting->delete();
 
         flash()->success('setting deleted successfully');
-        return redirect()->route('admin.settings.index');
+        return redirect()->route(getAdminPrefix() . '.settings.index');
     }
 
     function fetch(Request $request)
@@ -145,23 +147,40 @@ class SettingsController extends Controller
 
     public function saveSettings(Request $request)
     {
-      
         try {
             $request->offsetUnset('_method');
             $request->offsetUnset('_token');
-           $request->validate([
+            $validator = Validator::make($request->all(), [
                 'referral_bonus' => 'nullable|min:0.1|numeric',
                 'welcome_bonus' => 'nullable|min:0.1|numeric',
-                'min_cashout_amount'=> 'nullable|min:0.1|numeric',
-                'next_cashout_amount'=> 'nullable|min:0.1|numeric',
-            ]
-            , $messages = [
+                'min_cashout_amount' => [
+                    'nullable',
+                    'min:0.1',
+                    'numeric',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $welcomeBonus = $request->input('welcome_bonus');
+                        if ($value <= $welcomeBonus) {
+                            $fail('Min Cashout Value must be greater than the welcome bonus.');
+                        }
+                    },
+                ],
+                'next_cashout_amount' => 'nullable|min:0.1|numeric',
+            ], [
                 'referral_bonus' => 'Value must be equal to or greater than 0.1.',
                 'welcome_bonus' => 'Value must be equal to or greater than 0.1.',
                 'min_cashout_amount' => 'Value must be equal to or greater than 0.1',
+                'min_cashout_amount.min' => 'Min Cashout Value must be greater than the welcome bonus.',
                 'next_cashout_amount' => 'Value must be equal to or greater than 0.1',
             ]);
-          
+
+            if ($validator->fails()) {
+                $error = $validator->errors()->first();
+                return array(
+                    'message' => $error,
+                    'response' => 'error'
+                );
+            }
+
             foreach ($request->input() as $key => $value) {
                 SiteSetting::updateOrCreate([
                     'type'   => $key,
@@ -173,29 +192,45 @@ class SettingsController extends Controller
                 ]);
             }
 
-            SiteSetting::updateOrCreate([
-                'type'   => 'payment_method_paypal',
-                'title'  => 'Payment Method Paypal',
+            if ($request->has('cashback_percentage')) {
+                if (getImporterYMLSettings(config('app.cashout_yaml_path'))) {
+                    SiteSetting::updateOrCreate([
+                        'type'   => 'payment_method_paypal',
+                        'title'  => 'Payment Method Paypal',
 
-            ], [
-                'value'     =>  $request->has('payment_method_paypal') ? 1 : 0
-            ]);
+                    ], [
+                        'value'     =>  $request->has('payment_method_paypal') ? 1 : 0
+                    ]);
 
-            SiteSetting::updateOrCreate([
-                'type'   => 'payment_method_bank',
-                'title'  => 'Payment Method Bank',
+                    SiteSetting::updateOrCreate([
+                        'type'   => 'payment_method_bank',
+                        'title'  => 'Payment Method Bank',
 
-            ], [
-                'value'     =>  $request->has('payment_method_bank') ? 1 : 0
-            ]);
+                    ], [
+                        'value'     =>  $request->has('payment_method_bank') ? 1 : 0
+                    ]);
+                }
 
-            SiteSetting::updateOrCreate([
-                'type'   => 'payment_method_charity',
-                'title'  => 'Payment Method Charity',
+                if (getImporterYMLSettings(config('app.charity_yaml_path'))) {
+                    SiteSetting::updateOrCreate([
+                        'type'   => 'payment_method_charity',
+                        'title'  => 'Payment Method Charity',
+                    ], [
+                        'value'     =>  $request->has('payment_method_charity') ? 1 : 0
+                    ]);
+                }
 
-            ], [
-                'value'     =>  $request->has('payment_method_charity') ? 1 : 0
-            ]);
+                if (env('PAYMENT_METHOD')) {
+                    $paymentMethod = str_replace('_', ' ', env('PAYMENT_METHOD'));
+
+                    SiteSetting::updateOrCreate([
+                        'type' => env('PAYMENT_METHOD'),
+                        'title' => Str::title($paymentMethod),
+                    ], [
+                        'value' => $request->has(env('PAYMENT_METHOD')) ? 1 : 0
+                    ]);
+                }
+            }
 
             if ($request->has('dashboard_logo')) {
                 $imageName = 'dashboard_logo_' . time() . '.' . $request->dashboard_logo->extension();
@@ -337,5 +372,13 @@ class SettingsController extends Controller
                 'response' => 'error'
             );
         }
+    }
+
+    public function viewSetting(Request $request)
+    {
+        $networkFullName = $request->networkName;
+        $networkName = str_replace(' ', '_', strtolower($request->networkName));
+        $settings = SiteSetting::latest()->get()->pluck('value', 'type');
+        return view('admin-dashboard.networks.modal', compact('settings', 'networkName', 'networkFullName'))->render();
     }
 }

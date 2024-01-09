@@ -19,6 +19,7 @@ class ExitClick extends Model
         'network_click_ref',
         'status',
         'exit_url',
+        'voucher_id',
         'current_cashback_percentage',
     ];
 

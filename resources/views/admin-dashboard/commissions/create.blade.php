@@ -1,7 +1,7 @@
 @php
     $isEdit = isset($commission) ? true : false;
 @endphp
-<form action="{{ $isEdit ? route('admin.commissions.update', $commission->id) : route('admin.commissions.store') }}" class="gy-3 is-alter forms-validate" method="POST"
+<form action="{{ $isEdit ? route(getAdminPrefix() . '.commissions.update', $commission->id) : route(getAdminPrefix() . '.commissions.store') }}" class="gy-3 is-alter forms-validate" method="POST"
     id="update_cashback_form">
     @csrf
     @if ($isEdit)
@@ -22,7 +22,7 @@
             <div class="form-group">
                 <label class="form-label" for="order_value">Order Value <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
-                    <input type="number" class="form-control" min="0.1" step="0.1" id="order_value" value="{{ $isEdit ? $commission->order_value : '' }}"
+                    <input type="number" class="form-control" min="0.01" step="0.01" id="order_value" value="{{ $isEdit ? $commission->order_value : '' }}"
                         name="order_value" placeholder="Order Value">
                 </div>
             </div>
@@ -32,7 +32,7 @@
                 <label class="form-label" for="network_commission">Network Commission <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
                     <input type="number" class="form-control" id="network_commission" value="{{ $isEdit ? $commission->network_commission : '' }}" name="network_commission"
-                        placeholder="Network Commission" min="0.1" step="0.1" required>
+                        placeholder="Network Commission" min="0.01" step="0.01" required>
                 </div>
             </div>
         </div>

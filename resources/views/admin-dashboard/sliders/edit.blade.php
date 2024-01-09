@@ -62,28 +62,21 @@
                                                     <p>{{ $slide->description }}</p>
                                                     @if ($slide->store)
                                                         @if ($slide->store->cashback)
-                                                            <p>
-                                                                @if ($slide->store->cashback->type == 'fixed')
-                                                                    {{ $slide->store->cashback->currency }}
-                                                                @endif
-                                                                {{ $slide->store->cashback->sale_commission }}@if ($slide->store->cashback->type == 'percentage')
-                                                                    %
-                                                                @endif Cashback
-                                                            </p>
+                                                            <p>{{ $slide->store->default_cashback }}</p>
                                                         @endif
                                                     @endif
                                                 </div>
                                                 <div class="project-meta">
                                                     <div class="project-progress-task">
                                                         @if ($slide->store)
-                                                            <a href="{{ route('admin.stores.show_store') }}?slug={{ $slide->store->slug }}" class="a_link">
+                                                            <a href="{{ route(getAdminPrefix() . '.stores.show_store') }}?slug={{ $slide->store->slug }}" class="a_link">
                                                                 <em class="icon ni ni-cart-fill"></em>
                                                                 <span>{{ $slide->store->id }} - {{ $slide->store->name }}</span>
                                                             </a>
                                                         @endif
                                                     </div>
                                                     <div class="float-right">
-                                                        <a class="btn btn-primary btn-sm edit-slide" href="{{ route('admin.slides.edit', $slide) }}">
+                                                        <a class="btn btn-primary btn-sm edit-slide" href="{{ route(getAdminPrefix() . '.slides.edit', $slide) }}">
                                                             <em class="icon ni ni-edit"></em>
                                                         </a>
                                                         @if (count($slider->slides) > 1)
@@ -91,7 +84,7 @@
                                                                 style="cursor: pointer">
                                                                 <em class="icon ni ni-trash"></em>
                                                             </a>
-                                                            <form action="{{ route('admin.slides.destroy', $slide) }}" id="delete-slide-{{ $slide->id }}" method="POST"
+                                                            <form action="{{ route(getAdminPrefix() . '.slides.destroy', $slide) }}" id="delete-slide-{{ $slide->id }}" method="POST"
                                                                 class="m-0">
                                                                 @method('DELETE')
                                                                 @csrf
@@ -119,7 +112,7 @@
                 event.preventDefault();
                 slider_id = $('#slider_id').val();
                 $.ajax({
-                    url: "{{ route('admin.slides.create') }}",
+                    url: "{{ route(getAdminPrefix() . '.slides.create') }}",
                     type: 'GET',
                     data: {
                         slider_id: slider_id
@@ -177,11 +170,19 @@
         $(function() {
             $("#sortable").sortable({
                 update: function(event, ui) {
+                    // Use the @csrf directive to include the CSRF token in the form
+                    var csrfToken = '{{ csrf_token() }}';
+
+                    // Serialize the sortable data
                     var data = $(this).sortable('serialize');
+
+                    // Include the CSRF token in the request data
+                    data += '&_token=' + csrfToken;
+
                     $.ajax({
                         data: data,
                         type: 'POST',
-                        url: '{{ route('admin.sort_slides') }}',
+                        url: '{{ route(getAdminPrefix() . '.sort_slides') }}',
                         success: function(data) {
                             (function(NioApp, $) {
                                 'use strict';

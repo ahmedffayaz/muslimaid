@@ -1,117 +1,5 @@
 
 
-var route_prefix = "/filemanager";
-
-(function ($) {
-
-    $.fn.filemanager = function (type, options) {
-        type = type || 'file';
-
-        this.on('click', function (e) {
-            var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
-            var target_input = $('#' + $(this).data('input'));
-            var target_preview = $('#' + $(this).data('preview'));
-            window.open(route_prefix + '?type=' + type, 'FileManager', 'width=900,height=600');
-            window.SetUrl = function (items) {
-                var file_path = items.map(function (item) {
-                    return item.url;
-                }).join(',');
-
-                // set the value of the desired input to image url
-                target_input.val('').val(file_path).trigger('change');
-
-                // clear previous preview
-                target_preview.html('');
-
-                // set or change the preview image src
-                items.forEach(function (item) {
-                    target_preview.append(
-                        $('<img>').css('height', '5rem').attr('src', item.thumb_url)
-                    );
-                });
-
-                // trigger change event
-                target_preview.trigger('change');
-            };
-            return false;
-        });
-    }
-
-})(jQuery);
-$('#lfm').filemanager('image', {
-    prefix: route_prefix
-});
-var lfm = function (id, type, options) {
-    let button = document.getElementById(id);
-    if (button) {
-        button.addEventListener('click', function () {
-            var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
-            var target_input = document.getElementById(button.getAttribute('data-input'));
-            var target_preview = document.getElementById(button.getAttribute('data-preview'));
-
-            window.open(route_prefix + '?type=' + options.type || 'file', 'FileManager', 'width=900,height=600');
-            window.SetUrl = function (items) {
-                var file_path = items.map(function (item) {
-                    return item.url;
-                }).join(',');
-
-                // set the value of the desired input to image url
-                target_input.value = file_path;
-                target_input.dispatchEvent(new Event('change'));
-
-                // clear previous preview
-                target_preview.innerHtml = '';
-
-                // set or change the preview image src
-                items.forEach(function (item) {
-                    let img = document.createElement('img')
-                    img.setAttribute('style', 'height: 5rem')
-                    img.setAttribute('src', item.thumb_url)
-                    target_preview.appendChild(img);
-                });
-
-                // trigger change event
-                target_preview.dispatchEvent(new Event('change'));
-            };
-        });
-    }
-};
-
-lfm('lfm2', 'file', {
-    prefix: route_prefix
-});
-
-
-// Define function to open filemanager window
-var lfm = function (options, cb) {
-    var route_prefix = (options && options.prefix) ? options.prefix : '/filemanager';
-    window.open(route_prefix + '?type=' + options.type || 'file', 'FileManager', 'width=900,height=600');
-    window.SetUrl = cb;
-};
-
-// Define LFM summernote button
-var LFMButton = function (context) {
-    var ui = $.summernote.ui;
-    var button = ui.button({
-        contents: '<i class="note-icon-picture"></i> ',
-        tooltip: 'Insert image with filemanager',
-        click: function () {
-
-            lfm({
-                type: 'image',
-                prefix: '/filemanager'
-            }, function (lfmItems, path) {
-                lfmItems.forEach(function (lfmItem) {
-                    context.invoke('insertImage', lfmItem.url);
-                });
-            });
-
-        }
-    });
-    return button.render();
-};
-
-
 function readURL(input) {
     if (input.files && input.files[0]) {
         var reader = new FileReader();
@@ -148,4 +36,145 @@ function readBannerURL(input) {
         }
         reader.readAsDataURL(input.files[0]);
     }
+}
+
+function initializeTinyMCEEditor(containerId){
+    tinymce.init({
+        selector: 'div#'+containerId, // Replace this CSS selector to match the placeholder element for TinyMCE
+        plugins: 'code table lists link image',
+        toolbar: 'blocks | bold italic underline | alignleft aligncenter alignright alignjustify | link unlink | image | bullist numlist | code | table | forecolor backcolor',
+        cleanup: true,
+        promotion: false,
+        branding: false,
+        menubar: 'edit view insert format tools table'
+    });
+}
+
+function spinner(isTrue = false){
+    let loader;
+    if(isTrue){
+    loader = `<div class="text-center">
+    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+    </div>`;
+    }
+    return loader;
+}
+
+function maintenanceConfirmationDialog(title, text, confirmButtonText, maintenance, token, url){
+    Swal.fire({
+        title: title,
+        text: text,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: confirmButtonText
+    }).then(function(result) {
+        if (result.value) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: {
+                    _token: token,
+                    maintenance: maintenance
+                },
+                success: function(data) {
+                    (function(NioApp, $) {
+                        'use strict';
+                        toastr.clear();
+                        NioApp.Toast(data.message, data.response);
+                    })(NioApp, jQuery);
+                },
+                error: function(data) {
+
+                    (function(NioApp, $) {
+                        'use strict';
+                        toastr.clear();
+                        NioApp.Toast(data.message, data.response);
+                    })(NioApp, jQuery);
+
+                }
+            });
+        }
+    });
+}
+
+function deleteReviewConfirmationDialog(form_id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!'
+    }).then(function(result) {
+        if (result.value) {
+            $('#' + form_id).submit();
+        }
+    });
+}
+
+function openEditReviewModal(reviewId, url, token, call){
+    $.ajax({
+        url: url,
+        method: "GET",
+        data: {
+            _token: token
+        },
+        success: function(data) {
+            $('#review-modal').modal('show');
+            $('#review').html(data);
+            if(call == "dashboard"){
+                updateReview(1);
+            }
+            else if (call == "reviewMenu"){
+                updateReview(2);
+            }
+        }
+    });
+}
+
+function updateReview(key){
+    $('#store-reviews-form').on('submit', function(event) {
+        event.preventDefault();
+        $.ajax({
+            url: $(this).attr('action'),
+            type: 'PUT',
+            data: $(this).serialize(),
+            success: function(data) {
+                $('#review-modal').modal('hide');
+                (function(NioApp, $) {
+                    'use strict';
+                    toastr.clear();
+                    NioApp.Toast(data.message, 'success');
+
+                })(NioApp, jQuery);
+                if(key == 1){
+                    fetchData(0);
+                }
+                else if (key == 2){
+                    $('#table-data').load(window.location.href + ' #table-data');
+                }
+            },
+            error: function(data) {
+                (function(NioApp, $) {
+                    'use strict';
+                    toastr.clear();
+                    NioApp.Toast('Something went wrong! unable to update the review', 'error');
+                })(NioApp, jQuery);
+            }
+        })
+    });
+}
+
+function addSpinnerBtn(btnId)
+{
+    let btn = $(btnId)
+    btn.attr('disabled', 'disabled')
+        .append('<span class="spinner-border spinner-border-sm ml-1" role="status" aria-hidden="true"></span>');
+}
+
+function removeSpinnerBtn(btnId)
+{
+    btnId.removeAttr('disabled', 'disabled').button('refresh');
+    btnId.children().remove('span.spinner-border.spinner-border-sm.ml-1').button('refresh');
 }

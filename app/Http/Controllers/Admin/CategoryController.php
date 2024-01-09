@@ -3,20 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use Exception;
-use App\Models\Blog;
+use App\Models\Tag;
 use App\Models\Store;
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryRequest;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\Rule;
 
 
 class CategoryController extends Controller
@@ -30,7 +29,7 @@ class CategoryController extends Controller
     public function index()
     {
         $route = 'index';
-        $categories = Category::where('parent_id', 0)->with(['childs'])->orderBy('sort', 'asc')->get();
+        $categories = Category::where('parent_id', 0)->with(['childs'])->orderBy('sort', 'desc')->get();
         $allCategories = Category::latest()->get();
         return view('admin-dashboard.categories.categories', compact('categories', 'allCategories', 'route'));
     }
@@ -58,12 +57,53 @@ class CategoryController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(CategoryRequest $request)
+    public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'logo_type' => 'required',
+            'banner_type' => 'required',
+            'status' => 'required',
+            'sort' => 'required|integer|min:1',
+            'logo_upload' => [
+                Rule::requiredIf(function() use ($request){
+                    return $request->logo_type == "upload";
+                }),
+                'nullable', 'mimes:jpeg,png,jpg,svg'
+            ],
+            'banner_upload' => [
+                Rule::requiredIf(function () use ($request){
+                    return $request->banner_type == "upload";
+                }),
+                'nullable', 'mimes:jpeg,png,jpg'
+            ],
+            'logo_link' => [
+                Rule::requiredIf(function() use ($request){
+                    return $request->logo_type == "link";
+                }),
+                'nullable', 'sometimes', 'url'
+            ],
+            'banner_link' => [
+                Rule::requiredIf(function() use ($request){
+                    return $request->banner_type == "link";
+                }),
+                'nullable', 'sometimes', 'url'
+            ]
+        ]);
+
+        if($validator->fails()){
+            if(!$request->ajax()){
+                flash()->error($validator->errors()->first());
+                return redirect()->back()->withInput();
+            }
+
+            return response()->json(['status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+            'errors' => $validator->errors()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
 
         try {
             DB::beginTransaction();
-
             $category = Category::create([
                 'name' => $request->input('name'),
                 'parent_id' => !empty($request->input('parent_id')) ? $request->input('parent_id') : 0,
@@ -72,12 +112,14 @@ class CategoryController extends Controller
                 'logo_type' => $request->input('logo_type') == 'upload' ? 'upload' : 'link',
                 'logo_link' => $request->input('logo_link'),
                 'banner_type' => $request->input('banner_type') == 'upload' ? 'upload' : 'link',
+                'visibility' => !empty($request->input('visibility')) ? $request->input('visibility') : null,
                 'banner_link' => $request->input('banner_link'),
                 'sort' => $request->input('sort'),
                 'status' => $request->input('status') == 1 ? 1 : 0,
                 'title' => $request->input('title'),
                 'meta_keyword' => $request->input('meta_keyword'),
                 'meta_description' => $request->input('meta_description'),
+                'meta_title' => $request->input('meta_title'),
                 'slug' => Str::slug($request->name),
             ]);
 
@@ -151,7 +193,8 @@ class CategoryController extends Controller
         } else {
             $sort += 1;
         }
-        return view('admin-dashboard.categories.create', compact('category', 'categories'))->render();
+        $tags = Tag::where('type', 'categories')->get();
+        return view('admin-dashboard.categories.create', compact('category', 'categories', 'tags'))->render();
     }
 
     /**
@@ -161,8 +204,39 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(CategoryRequest $request, Category $category)
+    public function update(Request $request, Category $category)
     {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'status' => 'required',
+            'sort' => 'required|integer|min:1',
+            'logo_link' => [
+                Rule::requiredIf(function () use ($request){
+                    return $request->logo_type == "link";
+            }),
+            'url','sometimes','nullable'
+            ],
+            'banner_link' => [
+                Rule::requiredIf(function () use ($request){
+                    return $request->banner_type == "link";
+            }),
+            'url','sometimes','nullable'
+            ],
+            'logo_upload' => 'sometimes|mimes:jpeg,png,jpg,svg',
+            'banner_upload' => 'sometimes|mimes:jpeg,png,jpg'
+        ]);
+
+        if($validator->fails()){
+            if(!$request->ajax()){
+                flash()->error($validator->errors()->first());
+                return redirect()->back()->withInput();
+            }
+
+            return response()->json(['status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+            'errors' => $validator->errors()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
         try {
             DB::beginTransaction();
             $category->update([
@@ -174,28 +248,25 @@ class CategoryController extends Controller
                 'logo_link' => $request->input('logo_link'),
                 'banner_type' => $request->input('banner_type'),
                 'banner_link' => $request->input('banner_link'),
+                'visibility' => !empty($request->input('visibility')) ? $request->input('visibility') : null,
                 'sort' => $request->input('sort'),
                 'status' => $request->input('status'),
-                'feature_homepage' => 0,
-                'feature_sidebar' => 0,
                 'title' => $request->input('title'),
                 'meta_keyword' => $request->input('meta_keyword'),
-                'meta_description' => $request->input('meta_description')
+                'meta_description' => $request->input('meta_description'),
+                'meta_title' => $request->input('meta_title')
 
             ]);
-            if ($category->parent_id == 0) {
-                if ($request->has('tags')) {
-                    foreach ($request->input('tags') as $tag) {
-                        $category->update([
-                            $tag => 1
-                        ]);
-                    }
-                }
+            if ($request->has('tags')) {
+                $tags = Tag::whereIn('id', $request->input('tags'))->pluck('id');
+                if ($tags->count() > 0) $category->tags()->sync($tags);
+            } else {
+                $category->tags()->detach();
             }
             if ($request->input('logo_type') == 'upload') {
                 if ($request->has('logo_upload')) {
                     if (File::exists(public_path($category->logo_upload))) {
-                        File::delete(public_path( $category->logo_upload));
+                        File::delete(public_path($category->logo_upload));
                     }
                     $imageName = Str::slug($request->input('name')) . '_logo_' . time() . '.' . $request->logo_upload->extension();
                     $request->logo_upload->storeAs('public/categories/images', $imageName);
@@ -206,7 +277,7 @@ class CategoryController extends Controller
             if ($request->input('banner_type') == 'upload') {
                 if ($request->has('banner_upload')) {
                     if (File::exists(public_path($category->banner_upload))) {
-                        File::delete(public_path( $category->banner_upload));
+                        File::delete(public_path($category->banner_upload));
                     }
                     $imageName = Str::slug($request->input('name')) . '_banner_' . time() . '.' . $request->banner_upload->extension();
                     $request->banner_upload->storeAs('public/categories/images', $imageName);
@@ -214,9 +285,7 @@ class CategoryController extends Controller
                     $category->update();
                 }
             }
-
             DB::commit();
-
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,
                 'success' => 'Category updated'
@@ -305,7 +374,7 @@ class CategoryController extends Controller
             return Response::download($filename, 'categories.csv', $headers);
         } catch (\Throwable $th) {
             flash()->error('Error while exporting categories');
-            return redirect()->route('admin.categories.index');
+            return redirect()->route(getAdminPrefix() . '.categories.index');
         }
     }
 
@@ -331,7 +400,7 @@ class CategoryController extends Controller
     public function picks(Category $category)
     {
         $categories = Category::latest()->where('parent_id', 0)->get();
-        $stores = Store::latest()->get();
+        $stores = Store::whereStatus('active')->latest()->get();
         return view('admin-dashboard.categories.picks-form', compact('category', 'categories', 'stores'))->render();
     }
     public function sortCategory(Request $request)

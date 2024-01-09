@@ -81,7 +81,7 @@ class AwinImporter implements ShouldQueue
             flash()->error('Error: ' . curl_error($curl));
             curl_close($curl);
 
-            return redirect()->route('admin.stores.index');
+            return redirect()->route(getAdminPrefix() . '.stores.index');
         }
 
         curl_close($curl);
@@ -126,7 +126,7 @@ class AwinImporter implements ShouldQueue
                 }
             } catch (Exception $e) {
                 flash()->error('Error while running importer');
-                return redirect()->route('admin.stores.index');
+                return redirect()->route(getAdminPrefix() . '.stores.index');
             }
         }
 
@@ -156,7 +156,7 @@ class AwinImporter implements ShouldQueue
 
     /**
      * Import users' cashbacks
-     * 
+     *
      * @return void
      */
     private function importUsersCashbacks()
@@ -183,7 +183,7 @@ class AwinImporter implements ShouldQueue
 
         if (curl_errno($curl)) {
             flash()->error('Error: ' . curl_error($curl));
-            return redirect()->route('admin.stores.index');
+            return redirect()->route(getAdminPrefix() . '.stores.index');
         }
 
         curl_close($curl);

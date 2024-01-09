@@ -19,3 +19,11 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteRule ^ index.php [L]
 </IfModule>
+
+<IfModule mod_php7.c>
+    php_value memory_limit 150M
+</IfModule>
+
+<IfModule mod_php8.c>
+    php_value memory_limit 150M
+</IfModule>

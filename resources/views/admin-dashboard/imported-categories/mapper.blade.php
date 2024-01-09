@@ -1,6 +1,6 @@
 
 
-<form action="{{route('admin.importedcategories.update',$importedcategory)}}" class="gy-3 form-validate is-alter" method="POST">
+<form action="{{route(getAdminPrefix() . '.importedcategories.update',$importedcategory)}}" class="gy-3 form-validate is-alter" method="POST">
     @csrf
     @method('PUT')
     <div class="row g-4">

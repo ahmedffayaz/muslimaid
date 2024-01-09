@@ -28,7 +28,7 @@
                                     <div class="card-head">
                                         <h5 class="card-title">Charity Info</h5>
                                     </div>
-                                    <form action="{{ route('admin.charities.update', $charity) }}" class="gy-3 form-validate is-alter charity-form" method="POST"
+                                    <form action="{{ route(getAdminPrefix() . '.charities.update', $charity) }}" class="gy-3 form-validate is-alter charity-form" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
                                         @method('put')
@@ -50,7 +50,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="charity_types_id">Charity Type <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
-                                                        <div class="form-control-select">
+                                                        <div>
                                                             <select class="form-control form-select" id="charity_types_id" name="charity_types_id" required>
                                                                 <option value="0">None</option>
                                                                 @foreach ($CharityType as $types)
@@ -229,10 +229,11 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-label" for="country">Country <span class="text-danger">*</span></label>
-                                                    <div class="form-control-select">
+                                                    <div>
                                                         <select class="form-control form-select" id="country" name="country" value="{{ old('country') }}" required>
+                                                          
                                                             @foreach($countries as $country)
-                                                                <option value="{{ $country->id }}" {{ $charity->country == $country->id ? 'slected' : '' }}>{{ $country->name }}</option>
+                                                                <option value="{{ $country->id }}" {{ $charity->country == $country->id ? 'selected' : '' }}>{{ $country->name }}</option>
                                                             @endforeach
                                                         </select>
                                                         @error('country')
@@ -250,9 +251,29 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
+                                                    <label class="form-label" for="tag">Tag </label>
+                                                    <div class="form-control-select">
+                                                        @php 
+                                                            $charityTagsIds = $charity->tags()->pluck('tag_id')->toArray();
+                                                        @endphp
+                                                        <select class="form-control form-select" id="tags" data-search="on" name="tags[]" value="{{ old('tag') }}"  multiple>
+                                                            @foreach($tags as $tag)
+                                                                <option @if (in_array($tag->id, $charityTagsIds)) selected @endif value="{{ $tag->id }}">{{ $tag->title }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('tags')
+                                                            <span class="invalid-feedback d-block" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
                                                     <label class="form-label" for="status">Status <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
-                                                        <div class="form-control-select">
+                                                        <div>
                                                             <select class="form-control form-select" id="status" name="status" required>
                                                                 <option @if ($charity->status == 1) selected @endif value="1">Active</option>
                                                                 <option @if ($charity->status == 0) selected @endif value="0">In-active</option>
@@ -283,32 +304,17 @@
     </div>
 @endsection
 @push('scripts')
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
     <script>
-        var quill = new Quill('#editor-container', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic'],
-                    ['link', 'blockquote', 'code-block', 'image'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }]
-                ]
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow'
+        $(document).ready(function (){
+            initializeTinyMCEEditor('editor-container');
         });
-
         var form = document.querySelector('form');
         $(".charity-form").submit(function(e) {
 
             // Populate hidden form on submit
+            var editor = tinymce.get('editor-container');
             var desc = document.querySelector('input[name=description]');
-            desc.value = quill.root.innerHTML;
+            desc.value = editor.getContent();
         });
     </script>
     <script>

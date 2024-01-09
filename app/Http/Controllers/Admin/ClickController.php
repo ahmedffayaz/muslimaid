@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use Illuminate\Support\Facades\Response;
 use Throwable;
-use App\Models\User;
-use App\Models\Store;
 use App\Models\Network;
 use App\Models\ExitClick;
 use Illuminate\Http\Request;
@@ -26,22 +24,37 @@ class ClickController extends Controller
      */
     public function index()
     {
-        $route = 'index';
-        $stores = Store::latest()->get();
+        $clickCount = ExitClick::count();
         $networks = Network::latest()->get();
-        $users = User::role('user')->latest()->get();
-        $clicks = ExitClick::latest()->paginate(20);
-        return view('admin-dashboard.clicks.index', compact('clicks', 'stores', 'networks', 'users', 'route'));
+        return view('admin-dashboard.clicks.index', compact('clickCount', 'networks'));
     }
 
-    function fetch(Request $request)
+    function fetchActiveStoresClicks(Request $request)
     {
-        if ($request->ajax()) {
-            $route = 'index';
-            $clicks = ExitClick::latest()->paginate(20);
+        $clicks = ExitClick::whereHas('store', function($query){
+            $query->whereNull('deleted_at');
+        })->with(['store' => function ($query) {
+            $query->select('id', 'name', 'slug', 'status', 'created_at', 'deleted_at')->with('network');
+        }])->with(['user' => function ($query) {
+            $query->select('id', 'first_name', 'last_name', 'email', 'status', 'created_at');
+        }])->with('network')
+        ->when($request->click_id, function ($query) use ($request){
+            $query->where('id', $request->click_id)->orWhere('user_id', $request->click_id)
+            ->orWhere('store_id', $request->store_id);
+        })
+        ->when($request->user, function ($query) use ($request) {
+            $query->whereHas('user', function ($query) use ($request){
+                $query->where(DB::raw("CONCAT(first_name,' ',last_name)"), 'like', "%{$request->user}%");
+            })->orwhereHas('store', function ($query) use ($request) {
+                $query->where('name', 'like', "%{$request->user}%");
+            });
+        })
+        ->when($request->network_id, function ($query) use ($request){
+            $query->where('network_id', $request->network_id);
+        })->latest()->paginate(20);
+        $route = 'fetchActiveStoresClicks';
+        return view('admin-dashboard.clicks.index_data', compact('clicks', 'route'))->render();
 
-            return view('admin-dashboard.clicks.index_data', compact('clicks', 'route'))->render();
-        }
     }
 
     public function exportCsv(Request $request)
@@ -57,7 +70,7 @@ class ClickController extends Controller
                 fputcsv($handle, array(
                     $row->user->first_name . ' ' . $row->user->last_name,
                     $row->user->email,
-                    $row->store->name,
+                    optional($row->store)->name,
                     $row->exit_url,
                     $row->created_at,
                     $row->status ? 'active' : 'in-active'
@@ -69,40 +82,32 @@ class ClickController extends Controller
 
             return Response::download($filename, 'clicks.csv', $headers);
         } catch (Throwable $th) {
-            flash()->error('Error while exporting exit clics');
+            flash()->error('Error while exporting exit clicks');
 
-            return redirect()->route('admin.clicks.index');
+            return redirect()->route(getAdminPrefix() . '.clicks.index');
         }
     }
 
-    public function searchClicks(Request $request, ExitClick $clicks)
-    {
-        $clicks = $clicks->newQuery();
-
-        // Search by click id.
-        if ($request->input('click_id')) {
-            $clicks->where('id', $request->click_id)
-                ->orWhere('user_id', $request->click_id)
-                ->orWhere('store_id', $request->click_id);
-        }
-
-        // Search by user.
-        if ($request->input('user')) {
-            $clicks->whereHas('user', function ($query) use ($request) {
+    public function deletedStoresClicks(Request $request){
+        $exitClicks = ExitClick::whereHas('store', function ($query) {
+            $query->onlyTrashed();
+        })->with(['store' => function ($query) {
+            $query->select('id', 'name', 'slug', 'status', 'created_at', 'deleted_at');
+        }])->with('network')
+        ->when($request->click_id, function ($query) use ($request){
+            $query->where('id', $request->click_id)->orWhere('user_id', $request->click_id)
+            ->orWhere('store_id', $request->store_id);
+        })->when($request->user, function ($query) use ($request) {
+            $query->whereHas('user', function ($query) use ($request){
                 $query->where(DB::raw("CONCAT(first_name,' ',last_name)"), 'like', "%{$request->user}%");
             })->orwhereHas('store', function ($query) use ($request) {
                 $query->where('name', 'like', "%{$request->user}%");
             });
-        }
+        })->when($request->network_id, function ($query) use ($request){
+            $query->where('network_id', $request->network_id);
+        })->latest()->paginate(20);
+        $route = "deletedStoresClicks";
 
-        // Search by network.
-        if ($request->input('network_id')) {
-            $clicks->where('network_id', $request->input('network_id'));
-        }
-
-        $clicks = $clicks->latest()->paginate(20);
-        $route = 'search';
-
-        return view('admin-dashboard.clicks.index_data', compact('clicks', 'route'))->render();
+        return view('admin-dashboard.clicks.archive_data', compact('exitClicks', 'route'))->render();
     }
 }

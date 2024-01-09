@@ -27,7 +27,7 @@
                                     <div class="card-head">
                                         <h5 class="card-title">Testimonial Info</h5>
                                     </div>
-                                    <form action="{{ route('admin.testimonials.store') }}" class="form-validate is-alter" method="POST" enctype="multipart/form-data">
+                                    <form action="{{ route(getAdminPrefix() . '.testimonials.store') }}" class="form-validate is-alter" method="POST" enctype="multipart/form-data">
                                         @csrf
                                         <div class="row g-4">
                                             <div class="col-lg-6">

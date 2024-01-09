@@ -3,9 +3,6 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
-use App\Http\Resources\CashbackResource;
-use App\Http\Resources\VoucherResource;
-
 
 class StoreResource extends JsonResource
 {
@@ -17,30 +14,21 @@ class StoreResource extends JsonResource
      */
     public function toArray($request)
     {
-
-        if($this->cashback){
-
-            $currency = ($this->cashback->type=='fixed') ? $this->cashback->currency :null;
-
-            $cashback_value = $this->custom_cashback_percentage ? ($this->custom_cashback_percentage/100)*$this->cashback->sale_commission :(SiteSetting()['cashback_percentage']/100)*$this->cashback->sale_commission;
-    
-            $cashback = $currency ? $currency.$cashback_value: $cashback_value.'%';
-            return [
-            
-                "network"=> $this->network->name,
-                "name" => $this->name,
-                "slug"=> $this->slug,
-                "description"=> strip_tags($this->description),
-                "default_cashback"=>$cashback,
-                "tracking_url"=> $this->tracking_url,
-                "store_url"=> $this->store_url,
-                "updated_at"=> \Carbon\Carbon::parse($this->updated_at)->isoFormat('DD-MM-YYYY'),
-                "logo"=> $this->logo->first() ? ($this->logo->first()->is_fake ? url('frontend/images/logos/'.$this->logo->first()->image) :url('storage/stores/images/'.$this->logo->first()->image)) :url('frontend/images/products/product-16.jpg'),
-                "cashbacks"=>CashbackResource::collection($this->cashbacks),
-                "vouchers"=>VoucherResource::collection($this->vouchers),
-            ];
-
-        }
-        
+        $headerToken = $request->bearerToken();
+        return [
+            'id' => $this->id,
+            'title' => $this->name,
+            'url_key' => $this->slug,
+            'banner_image' => getImageUrl($this->images->where('title', 'Cover')->first()),
+            'banner_image_large' => getImageUrl($this->images->where('title', 'large cover')->first()),
+            'big_icon' => getImageUrl($this->logo->first()),
+            'icon_large' => getImageUrl($this->images->where('title', 'large logo')->first()),
+            'description' => $this->when($this->description, $this->description),
+            'terms_conditions' => $this->when($this->terms_conditions, $this->terms_conditions),
+            'cashback' => $this->default_cashback,
+            'is_fav' => checkFavorite($this->id, $headerToken) ? true : false,
+            'lat'=> optional($this->storeAddress->first())->latitude,
+            'long' => optional($this->storeAddress->first())->longitude,
+         ];
     }
 }

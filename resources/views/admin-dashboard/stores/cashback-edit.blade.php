@@ -1,7 +1,7 @@
 @php
     $isEdit = isset($cashback) ? true : false;
     $isEditStore = isset($store) ? true : false;
-    $url = $isEdit ? route('admin.stores.cashbacks.update', $cashback) : route('admin.stores.cashbacks.store');
+    $url = $isEdit ? route(getAdminPrefix() . '.stores.cashbacks.update', $cashback) : route(getAdminPrefix() . '.stores.cashbacks.store');
 @endphp
 <form action="{{ $url }}" class="gy-3 form-validate is-alter cashback_form" method="POST">
     @csrf
@@ -14,12 +14,10 @@
             <div class="form-group">
                 <label class="form-label" for="type">Type <span class="text-danger">*</span></label>
                 <div class="form-control-wrap ">
-                    <div class="form-control-select">
-                        <select class="form-control" id="type" name="type" required>
+                        <select class="form-control select-2" id="type" name="type" required>
                             <option @if ($isEdit && $cashback->type == 'percentage') selected @endif value="percentage">Percentage</option>
                             <option @if ($isEdit && $cashback->type == 'fixed') selected @endif value="fixed">Fixed</option>
                         </select>
-                    </div>
                 </div>
             </div>
         </div>
@@ -29,6 +27,17 @@
                 <div class="form-control-wrap">
                     <input type="number" class="form-control" min="0.1" step="0.1" id="sale_commission" value="{{ $isEdit ? $cashback->sale_commission : '' }}"
                         name="sale_commission" required oninput="calcPercentage()">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12">
+            <div class="form-group">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="default-cashback" name="default"
+                        value="1" @if ($isEdit && $cashback->default == 1) checked @endif>
+                    <label class="custom-control-label" for="default-cashback">Default Cashback <em
+                            class="icon ni ni-question" data-toggle="tooltip" data-placement="top"
+                            title="If checked default cashback, highest cashback will not be default"></em></label>
                 </div>
             </div>
         </div>
@@ -50,8 +59,8 @@
                     <label class="form-label" for="tracking_url">Tracking URL <span class="text-danger">*</span></label>
                     <div class="form-control-wrap">
                         <input type="text" class="form-control" id="tracking_url" name="tracking_url" value="{{ $isEdit ? $cashback->tracking_url : '' }}"
-                            placeholder="https://example.com/item/abc-id-1345" required style="width: 83%">
-                        <span style="position: absolute; right:0; top:5px; width:17%" data-toggle="tooltip" data-placement="left"
+                            placeholder="https://example.com/item/abc-id-1345" required style="width: 83.6%">
+                        <span style="position: absolute; right:0; top:5px; width:16%" data-toggle="tooltip" data-placement="left"
                             title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">{{ $isEdit && optional($cashback->network)->click_ref ? optional($cashback->network)->click_ref : '?clickref=' }}XXX</span>
                     </div>
                 </div>
@@ -61,10 +70,10 @@
                     <label class="form-label" for="sale_commission">Deeplink URL</label>
                     <div class="form-control-wrap">
                         <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
-                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">{{ $isEdit && optional($cashback->network)->deeplink_identifier ? optional($cashback->network)->deeplink_identifier : '&u=' }}</span>
+                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">{{ $isEdit && optional($cashback->network)->deeplink_identifier ? optional($cashback->network)->deeplink_identifier : '&url=' }}</span>
                         <input type="text" class="form-control" id="deeplink_url" value="{{ $isEdit && isset($cashback->deeplink_url) ? $cashback->deeplink_url : '' }}"
                             name="deeplink_url" value="{{ $isEdit ? $cashback->deeplink_url : '' }}" placeholder="https://example.com/item/abc-id-1345"
-                            style="position: relative; left:30px; width: 95%">
+                            style="position: relative; left:35px; width: 93.5%">
                     </div>
                 </div>
             </div>

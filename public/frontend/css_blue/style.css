@@ -17462,3 +17462,7 @@ html:not([dir="rtl"]) .noUi-horizontal .noUi-origin {
 }
 
 /*# sourceMappingURL=style.css.map */
+
+.tags{
+  flex-direction: column;
+}

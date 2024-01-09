@@ -39,7 +39,13 @@ class ProfileController extends Controller
             'last_name.required' => 'Last name is required.'
         ]);
 
-        $profile->update($request->input());
+        $profile->update([
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'date_of_birth' => $request->date_of_birth,
+            'phone' => $request->phone,
+            'address' => $request->address,
+        ]);
 
         $avatarImage = $profile->avatar;
         if ($request->hasFile('avatar')) {
@@ -55,9 +61,19 @@ class ProfileController extends Controller
 
     public function savePassword(Request $request, User $user)
     {
-        $validator = Validator::make($request->all(), [
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
-        ]);
+        $rules = [
+            'password' => ['required', 'confirmed']
+        ];
+
+        $passwordRules = env('PASSWORD_VALIDATION', '');
+        if(!empty($passwordRules)){
+            $additionalRules = explode('|', $passwordRules);
+            $rules['password'] = array_merge($rules['password'], $additionalRules);
+        }else {
+            $rules['password'][] = 'string';
+        }
+
+        $validator = Validator::make($request->all(), $rules);
 
         if ($validator->fails()) {
             if (!$request->ajax()) {
@@ -77,7 +93,7 @@ class ProfileController extends Controller
 
         if (!$request->ajax()) {
             flash()->success('Password changed successfully');
-            return redirect()->route('admin.profile.index');
+            return redirect()->route(getAdminPrefix() . '.profile.index');
         } else {
             return array(
                 'message' => 'Password updated successfully',

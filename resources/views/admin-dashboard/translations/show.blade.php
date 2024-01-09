@@ -25,7 +25,7 @@
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
                                         <li><a href=""  class="btn btn-primary btn-sm" class="btn btn-white btn-outline-light" data-toggle="modal" data-target="#modalForm"><em class="icon ni ni-plus"></em><span>Add Translation</span></a></li>
-                                        {{-- <li><a href="{{route('admin.settings.export', $settings)}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
+                                        {{-- <li><a href="{{route(getAdminPrefix() . '.settings.export', $settings)}}" id="export" class="btn btn-success btn-sm" class="btn btn-white btn-outline-light"><em class="icon ni ni-download-cloud"></em><span>Export</span></a></li> --}}
 
                                     </ul>
                                 </div>
@@ -111,7 +111,7 @@
                                                 <em class="icon ni ni-cross"></em>
                                             </a>
                                         </div>
-                                        <form action="{{route('admin.lines.update', $key)}}" class="form-validate is-alter" method="POST">
+                                        <form action="{{route(getAdminPrefix() . '.lines.update', $key)}}" class="form-validate is-alter" method="POST">
                                             @csrf
                                             @method('PUT')
                                             <input type="hidden" name="translation_id" value="{{$translation->id}}">
@@ -179,7 +179,7 @@
                     <em class="icon ni ni-cross"></em>
                 </a>
             </div>
-            <form action="{{route('admin.lines.store')}}" class="form-validate is-alter" method="POST">
+            <form action="{{route(getAdminPrefix() . '.lines.store')}}" class="form-validate is-alter" method="POST">
                 @csrf
                 <input type="hidden" name="translation_id" value="{{$translation->id}}">
                 <div class="modal-body">
@@ -233,7 +233,7 @@
         
          if(route=='index'){
             
-             pageurl = "{{route('admin.stores.fetch')}}?page="
+             pageurl = "{{route(getAdminPrefix() . '.stores.fetch')}}?page="
              var _token = $("input[name=_token]").val();
             $.ajax({
 

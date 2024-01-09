@@ -58,7 +58,7 @@
                                                             class="icon ni ni-check"></em><span>Mark as
                                                             Closed</span></a>
 
-                                                    <form action="{{ route('admin.tickets.close', $ticket) }}"
+                                                    <form action="{{ route(getAdminPrefix() . '.tickets.close', $ticket) }}"
                                                         id="close-{{ $ticket->id }}" method="POST" class="m-0">
                                                         @method('PUT')
                                                         @csrf
@@ -100,25 +100,22 @@
                                                         {{ $ticket->user->last_name }}</div>
                                                 </div>
                                                 <div class="date-time">
-                                                    {{ Carbon\Carbon::parse($ticket->created_at)->isoFormat('Do MMMM
-                                                    YYYY') }}
+                                                    {{ formatDateTimezone($ticket->created_at, 'Do MMMM YYYY') }}
                                                 </div>
                                             </div>
                                             <div class="nk-reply-body">
                                                 <div class="nk-reply-entry entry">
                                                     @if ($ticket->ticket_type == 'claim')
                                                     Store: <a
-                                                        href="{{ route('admin.stores.show_store') }}?slug={{ $ticket->store->slug }}">{{
+                                                        href="{{ route(getAdminPrefix() . '.stores.show_store') }}?slug={{ $ticket->store->slug }}">{{
                                                         $ticket->store->id }}
                                                         - {{ $ticket->store->name }}</a><br>
                                                     Purchase Amount: {{ currency($ticket->claim_amount) }}<br>
                                                     Claim date:
-                                                    {{ Carbon\Carbon::parse($ticket->created_at)->isoFormat('Do MMMM
-                                                    YYYY') }}<br>
+                                                    {{ formatDateTimezone($ticket->created_at, 'Do MMMM YYYY') }}<br>
                                                     Click ID: {{ $ticket->click_id }}<br>
                                                     Click date:
-                                                    {{ Carbon\Carbon::parse($ticket->click->created_at)->isoFormat('Do
-                                                    MMMM YYYY') }}<br>
+                                                    {{ formatDateTimezone($ticket->click->created_at, 'Do MMMM YYYY') }}<br>
                                                     Description:  {{ $ticket->message }}
                                                     @endif
 
@@ -142,8 +139,7 @@
                                                         {{ $reply->user->last_name }}</span></div>
                                                 </div>
                                                 <div class="date-time">
-                                                    {{ Carbon\Carbon::parse($reply->created_at)->isoFormat('Do MMMM
-                                                    YYYY') }}
+                                                    {{ formatDateTimezone($reply->created_at, 'Do MMMM YYYY') }}
                                                 </div>
                                             </div>
                                             <div class="nk-reply-body">
@@ -171,7 +167,7 @@
                                             <div class="tab-content">
                                                 <div class="tab-pane active" id="reply-form">
                                                     <div class="nk-reply-form-editor">
-                                                        <form method="POST" action="{{ route('admin.replies.store') }}"
+                                                        <form method="POST" action="{{ route(getAdminPrefix() . '.replies.store') }}"
                                                             class="form-validate">
                                                             @csrf
                                                             <input type="hidden" name="ticket_id"

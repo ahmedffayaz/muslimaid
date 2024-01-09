@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use Exception;
+use SoapClient;
 use App\Models\Store;
 use App\Models\Network;
 use App\Models\Voucher;
@@ -28,6 +29,7 @@ use Illuminate\Contracts\Queue\ShouldBeUnique;
 class WebgainsImporter implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    protected $data;
 
     /**
      * Create a new job instance.
@@ -36,7 +38,7 @@ class WebgainsImporter implements ShouldQueue
      */
     public function __construct()
     {
-        //
+        // ...
     }
 
     /**
@@ -47,8 +49,8 @@ class WebgainsImporter implements ShouldQueue
     public function handle()
     {
         //fetching importer settings
-        $network = Network::where('id', 2)->first();
-        $setting = ImporterSetting::where('network_id', 2)->first();
+        $network = Network::where('name', 'like', 'Webgains')->first();
+        $setting = ImporterSetting::where('network_id', $network->id)->first();
         $settings = SiteSetting::latest()->get()->pluck('value', 'type');
 
         if ($setting->import_stores == 1) {
@@ -82,7 +84,7 @@ class WebgainsImporter implements ShouldQueue
                             'name'         => $results['name'],
                             'slug'         => Str::slug($results['name']),
                             'advertiser_id' => $results['id'],
-                            'network_id'   => 2,
+                            'network_id'   => $network->id,
                             'tracking_url' => $store_link,
                             'store_url'    => $results['homepageURL'],
                             'status' => 'error',
@@ -116,6 +118,7 @@ class WebgainsImporter implements ShouldQueue
                                                 'detail' => $cb->detail . ', ' . $event['name'] . ' default',
                                                 'network_detail' => $cb->network_detail . ', ' . $event['name'] . ' default',
                                             ]);
+                                            setStoreDefaultCashback($cb->store_id, false);
                                         } else {
                                             $cashback = StoreCashback::create([
                                                 'type' => $c_type,
@@ -199,6 +202,7 @@ class WebgainsImporter implements ShouldQueue
                                                     'detail' => $cb->detail . ', ' . $event['name'] . ' default',
                                                     'network_detail' => $cb->network_detail . ', ' . $event['name'] . ' default',
                                                 ]);
+                                                setStoreDefaultCashback($cb->store_id, false);
                                             } else {
                                                 $cashback = StoreCashback::create([
                                                     'type' => $c_type,
@@ -262,7 +266,7 @@ class WebgainsImporter implements ShouldQueue
                     }
                 } catch (Exception $e) {
                     flash()->error('Error while running importer');
-                    return redirect()->route('admin.stores.index');
+                    return redirect()->route(getAdminPrefix() . '.stores.index');
                 }
             }
         }
@@ -307,13 +311,13 @@ class WebgainsImporter implements ShouldQueue
         }
 
         if ($setting->import_cashbacks == 1) {
-            $cashback_percent_setting = SiteSetting::where('type', 'cashback_percentage')->first()->value;
+            $cashbackPercentSetting = SiteSetting::where('type', 'cashback_percentage')->first()->value;
             $startdate = date('Y-m-d\TH:i:s', strtotime(' -31 days'));
             $enddate = date('Y-m-d\TH:i:s');
             $campaignid = $settings['webgains_campaignid'];
             $username = $settings['webgains_user_name'];
             $password = $settings['webgains_password'];
-            $soap = new \SoapClient(
+            $soap = new SoapClient(
                 NULL,
                 array(
                     "location"   => "http://ws.webgains.com/aws.php",
@@ -327,7 +331,7 @@ class WebgainsImporter implements ShouldQueue
             $results = $soap->getFullEarnings($startdate, $enddate, $campaignid, $username, $password);
 
             if ($results) {
-                $cashback_percent = 0;
+                $cashbackPercent = 0;
                 foreach ($results as $cashback) {
                     $store = Store::where('advertiser_id', $cashback->programID)->first();
                     $click = ExitClick::where('id', $cashback->clickRef)->first();
@@ -335,21 +339,21 @@ class WebgainsImporter implements ShouldQueue
                         $click = ExitClick::where('network_click_ref', $cashback->clickRef)->first();
                     }
                     if ($click) {
-                        $click_id = $click->id;
-                        $cashback_percent = $click->current_cashback_percentage;
+                        $clickId = $click->id;
+                        $cashbackPercent = $click->current_cashback_percentage;
                     } else {
-                        $new_click = ExitClick::create([
+                        $newClick = ExitClick::create([
                             'store_id' => $store->id,
                             'user_id' => 1,
                             'network_click_ref' => $cashback->clickRef,
                             'exit_url' => '#',
-                            'current_cashback_percentage' => $cashback_percent_setting
+                            'current_cashback_percentage' => $cashbackPercentSetting
                         ]);
-                        $click_id = $new_click->id;
-                        $cashback_percent = $cashback_percent_setting;
+                        $clickId = $newClick->id;
+                        $cashbackPercent = $cashbackPercentSetting;
                     }
-                    $cashback_amount_for_user = ($cashback->commission / 100) * $cashback_percent;
-                    $commission_exist = UserCashback::where(['exit_click_id' =>  $click_id, 'network_commission_id' =>  $cashback->transactionID])->first();
+                    $cashback_amount_for_user = ($cashback->commission / 100) * $cashbackPercent;
+                    $commission_exist = UserCashback::where(['exit_click_id' =>  $clickId, 'network_commission_id' =>  $cashback->transactionID])->first();
                     $status = '';
                     if ($cashback->status == 'delayed') {
                         $status = 1;
@@ -365,7 +369,7 @@ class WebgainsImporter implements ShouldQueue
                         $commission = UserCashback::create([
                             'store_id' => $store->id,
                             'user_id' => $click->user_id ?? 1,
-                            'exit_click_id' => $click_id,
+                            'exit_click_id' => $clickId,
                             'amount' => round($cashback_amount_for_user, 2),
                             'network_commission' => $cashback->commission,
                             'network_commission_id' => $cashback->transactionID,
@@ -390,7 +394,7 @@ class WebgainsImporter implements ShouldQueue
                         $commission_exist->update([
                             'store_id' => $store->id,
                             'user_id' => $click->user_id ?? 1,
-                            'exit_click_id' => $click_id,
+                            'exit_click_id' => $clickId,
                             'amount' => round($cashback_amount_for_user, 2),
                             'network_commission' => $cashback->commission,
                             'order_value' => $cashback->saleValue,

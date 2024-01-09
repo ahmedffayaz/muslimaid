@@ -1,5 +1,9 @@
 @extends('layouts.admin-dashboard.app')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('admin-dashboard/telephone-dropdown/css/intlTelInput.css') }}">
+@endpush
+
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -40,9 +44,6 @@
                                         <li class="nav-item">
                                             <a class="nav-link" data-toggle="tab" href="#tabItem10"><em class="icon ni ni-shield-check"></em><span>Recaptcha</span></a>
                                         </li>
-                                        <li class="nav-item">
-                                            <a class="nav-link" data-toggle="tab" href="#tabItem11"><em class="icon ni ni-mail"></em><span>SendGrid</span></a>
-                                        </li>
                                         {{-- <li class="nav-item">
                                         <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-code"></em><span>APIs Integration</span></a>
                                     </li> --}}
@@ -55,7 +56,7 @@
                                                 <div class="nk-block-head">
                                                     <h5 class="title">General Settings</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
                                                     @csrf
                                                     @method('POST')
 
@@ -83,8 +84,9 @@
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" id="phone_number" name="phone_number"
+                                                                    <input type="text" class="form-control" id="phoneNumber" name="phoneNumber"
                                                                         value="{{ $settings['phone_number'] ?? '' }}" placeholder="Sender Name">
+                                                                    <input type="hidden" id="phone_number" name="phone_number">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -104,7 +106,7 @@
                                                 <div class="nk-block-head">
                                                     <h5 class="title">Maintenance Mode</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 maintenance-form" method="POST">
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 maintenance-form" method="POST">
                                                     @csrf
                                                     @method('POST')
                                                     <div class="row g-3 align-center">
@@ -130,7 +132,7 @@
                                                 <div class="nk-block-head">
                                                     <h5 class="title">Website Settings</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST"
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" method="POST"
                                                     enctype="multipart/form-data">
                                                     @csrf
                                                     @method('POST')
@@ -146,13 +148,7 @@
                                                                 <div class=" logo">
                                                                     <label for="website-logo-input">
                                                                         <img id="website-logo"
-                                                                            src="{{ !isset($settings['website_logo'])
-                                                                            ? asset('admin-dashboard/images/logo.png')
-                                                                            : ($settings['website_logo'] == 'default.png'
-                                                                                ? asset('admin-dashboard/images/logo.png')
-                                                                                : ($settings['website_logo'] == 'cashblack-default.png'
-                                                                                    ? asset('cashblack/img/logo.png')
-                                                                                    : asset('storage/dashboard/images/logo/' . $settings['website_logo']))) }}"
+                                                                            src="{{ getSiteLogo() }}"
                                                                             alt="store logo" class="" style="max-width:220px;max-height:120px" />
                                                                         <input id="website-logo-input" preview="#website-logo" name="website_logo" class="d-none"
                                                                             type='file' onchange="readURL(this);" />
@@ -173,7 +169,7 @@
                                                                 <div class=" logo">
                                                                     <label for="logo-input">
                                                                         <img id="logo"
-                                                                            src="@if (isset($settings['dashboard_logo']) && $settings['dashboard_logo'] != 'default.png') {{ asset('storage/dashboard/images/logo/' . $settings['dashboard_logo']) }}@else{{ asset('admin-dashboard/images/logo-dark.png') }} @endif"
+                                                                            src="{{ getDashboardLogo() }}"
                                                                             alt="store logo" class="" style="max-width:100px;max-height:120px" />
                                                                         <input id="logo-input" preview="#logo" name="dashboard_logo" class="d-none" type='file'
                                                                             onchange="readURL(this);" />
@@ -321,14 +317,15 @@
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
-                                                                <label class="form-label" for="ga_tracking_id">Google Analytics Tracking ID</label>
+                                                                <label class="form-label" for="analytics-traking-code">Analytics Code <em class="icon ni ni-question form-label"
+                                                                    data-toggle="tooltip" data-placement="top"
+                                                                    title="Will appear on every page in head tag"></em></label>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
                                                             <div class="form-group">
                                                                 <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="ga_tracking_id" id="ga_tracking_id"
-                                                                        value="{{ $settings['ga_tracking_id'] ?? '' }}" placeholder="UA-1XXXXXXXX-X">
+                                                                    <textarea class="form-control" name="analytics_code" id="analytics-traking-code">{{ $settings['analytics_code'] ?? '' }}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -350,7 +347,7 @@
                                                 <div class="nk-block-head">
                                                     <h5 class="title">Mailer Settings</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
                                                     @csrf
                                                     @method('POST')
                                                     <div class="row g-3 align-center">
@@ -437,7 +434,7 @@
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
                                                                 <label class="form-label">Encryption <em class="icon ni ni-question form-label" data-toggle="tooltip"
-                                                                        data-placement="top" title=" Enter password of mail service."></em></label>
+                                                                        data-placement="top" title=" Enter encryption of mail service."></em></label>
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -482,45 +479,105 @@
 
                                                     </div>
 
-                                                    <div class="nk-block-head mt-5">
-                                                        <h5 class="title">Mailchimp <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
-                                                                title=" Mailchimp is used for newsletters leave blank if you want to disable Newsletter."></em></h5>
-                                                        {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
-                                                    </div><!-- .nk-block-head -->
+                                                    @if (getImporterYMLSettings(config('app.mailchimp_yml_path')))
+                                                        <div class="nk-block-head mt-5">
+                                                            <h5 class="title">Mailchimp <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
+                                                                    title=" Mailchimp is used for newsletters. Leave blank if you want to disable Newsletter."></em></h5>
+                                                        </div><!-- .nk-block-head -->
 
-                                                    <div class="row g-3 align-center">
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="mailchimp_api_key">API Key</label>
-                                                                {{-- <span class="form-note">Specify the mailchimp api key.</span> --}}
+                                                        <div class="row g-3 align-center">
+                                                            <div class="col-lg-3">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="mailchimp_api_key">API Key</label>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-lg-9">
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="mailchimp_api_key" id="mailchimp_api_key"
-                                                                        value="{{ $settings['mailchimp_api_key'] ?? '' }}" placeholder="Mailchimp API Key">
+                                                            <div class="col-lg-9">
+                                                                <div class="form-group">
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="text" class="form-control" name="mailchimp_api_key" id="mailchimp_api_key"
+                                                                            value="{{ $settings['mailchimp_api_key'] ?? '' }}" placeholder="Mailchimp API Key">
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="row g-3 align-center">
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label" for="mailchimp_list_id">List ID</label>
-                                                                {{-- <span class="form-note">Specify the mailchimp list id.</span> --}}
+                                                        <div class="row g-3 align-center">
+                                                            <div class="col-lg-3">
+                                                                <div class="form-group">
+                                                                    <label class="form-label" for="mailchimp_list_id">List ID</label>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-lg-9">
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" secret="mailchimp_list_id" name="mailchimp_list_id"
-                                                                        value="{{ $settings['mailchimp_list_id'] ?? '' }}" placeholder="Mailchimp List ID">
+                                                            <div class="col-lg-9">
+                                                                <div class="form-group">
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="text" class="form-control" secret="mailchimp_list_id" name="mailchimp_list_id"
+                                                                            value="{{ $settings['mailchimp_list_id'] ?? '' }}" placeholder="Mailchimp List ID">
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    @endif
+
+                                                    @if (getImporterYMLSettings(config('app.sendgrid_yml_path')))
+                                                        <div class="nk-block-head mt-5">
+                                                            <h5 class="title">SendGrid <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
+                                                                title=" SendGrid is used for newsletters. Leave blank if you want to disable Newsletter."></em></h5>
+                                                        </div>
+
+                                                        <div class="row g-3 align-center">
+                                                            <div class="col-lg-3">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">
+                                                                        API Key
+                                                                        <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
+                                                                            title="Enter Send Grid API key."></em>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-9">
+                                                                <div class="form-group">
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="text" class="form-control" name="sendgrid_api_key"
+                                                                            value="{{ $settings['sendgrid_api_key'] ?? '' }}" placeholder="API key">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">
+                                                                        Newsletter List id
+                                                                        <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
+                                                                            title="Enter Newsletter List id."></em>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-9">
+                                                                <div class="form-group">
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="text" class="form-control" name="sendgrid_newsletter_list_id"
+                                                                            value="{{ $settings['sendgrid_newsletter_list_id'] ?? '' }}" placeholder=" Newsletter List id">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <div class="form-group">
+                                                                    <label class="form-label">
+                                                                        Registered List id
+                                                                        <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
+                                                                            title="Enter Registered List id."></em>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-9">
+                                                                <div class="form-group">
+                                                                    <div class="form-control-wrap">
+                                                                        <input type="text" class="form-control" name="sendgrid_registered_list_id"
+                                                                            value="{{ $settings['sendgrid_registered_list_id'] ?? '' }}" placeholder="Registered List id">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    @endif
 
                                                     <div class="row g-3">
                                                         <div class="col-lg-9 offset-lg-3">
@@ -540,7 +597,7 @@
                                                             title=" Provide social account links to display social media options for user to follow you on social networks."></em>
                                                     </h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
                                                     @csrf
                                                     @method('POST')
                                                     <div class="row g-3 align-center">
@@ -653,14 +710,12 @@
 
                                                     <div class="nk-block-head mt-5">
                                                         <h5 class="title">Facebook Login <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
-                                                                title=" Provide credencials for facebook login OR leave blank, to disable facebook login."></em></h5>
-                                                        {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                                                title=" Provide credencials for facebook login OR leave blank to disable."></em></h5>
                                                     </div><!-- .nk-block-head -->
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
-                                                                <label class="form-label" for="facebook_client_id">Client ID</label>
-                                                                {{-- <span class="form-note">Specify the facebook client id.</span> --}}
+                                                                <label class="form-label" for="facebook_client_id">Client ID</label>\
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -677,7 +732,6 @@
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="facebook_client_secret">Client Secret</label>
-                                                                {{-- <span class="form-note">Specify the facebook client secret.</span> --}}
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -694,7 +748,6 @@
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="facebook_url">Callback URL</label>
-                                                                {{-- <span class="form-note">Specify the facebook url.</span> --}}
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -709,14 +762,12 @@
 
                                                     <div class="nk-block-head mt-5">
                                                         <h5 class="title">Google Login <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
-                                                                title=" Provide credencials for google login OR leave blank, to disable google login."></em></h5>
-                                                        {{-- <p>Basic info, like your name and address, that you use on Nio Platform.</p> --}}
+                                                                title=" Provide credencials for google login OR leave blank to disable."></em></h5>
                                                     </div><!-- .nk-block-head -->
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="google_client_id">Client ID</label>
-                                                                {{-- <span class="form-note">Specify the google client id.</span> --}}
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -734,7 +785,6 @@
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="google_client_secret">Client Secret</label>
-                                                                {{-- <span class="form-note">Specify the google client secret.</span> --}}
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -751,7 +801,6 @@
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
                                                                 <label class="form-label" for="google_url">Callback URL</label>
-                                                                {{-- <span class="form-note">Specify the google url.</span> --}}
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
@@ -779,7 +828,7 @@
                                                 <div class="nk-block-head">
                                                     <h5 class="title">Google map key Settings</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
                                                     @csrf
                                                     @method('POST')
                                                     <div class="row g-3 align-center">
@@ -809,20 +858,13 @@
                                                 </form>
                                             </div>
                                         </div>
-                                        {{-- <div class="tab-pane" id="tabItem8">
-                                        <div class="nk-block">
-                                            <div class="nk-block-head">
-                                                <h5 class="title">APIs Integration</h5>
-                                            </div><!-- .nk-block-head -->
-                                            
-                                        </div>
-                                    </div> --}}
+
                                         <div class="tab-pane" id="tabItem9">
                                             <div class="nk-block">
                                                 <div class="nk-block-head">
                                                     <h5 class="title">Cashback Settings</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" id="form-validate" method="POST">
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" id="form-validate" method="POST">
                                                     @csrf
                                                     @method('POST')
                                                     <div class="row g-3 align-center">
@@ -862,8 +904,8 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-
                                                     </div>
+
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
@@ -871,23 +913,39 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-lg-9">
-                                                            <div class="custom-control custom-switch d-block">
-                                                                <input type="checkbox" class="custom-control-input" id="payment_method_paypal" name="payment_method_paypal"
-                                                                    @if ($settings['payment_method_paypal']) checked @endif value="1">
-                                                                <label class="custom-control-label" for="payment_method_paypal">Paypal</label>
-                                                            </div>
-                                                            <div class="custom-control custom-switch d-block mt-2">
-                                                                <input type="checkbox" class="custom-control-input" id="payment_method_bank" name="payment_method_bank"
-                                                                    @if ($settings['payment_method_bank']) checked @endif value="1">
-                                                                <label class="custom-control-label" for="payment_method_bank">Bank Transfer</label>
-                                                            </div>
-                                                            <div class="custom-control custom-switch d-block mt-2">
-                                                                <input type="checkbox" class="custom-control-input" id="payment_method_charity" name="payment_method_charity"
-                                                                    @if ($settings['payment_method_charity']) checked @endif value="1">
-                                                                <label class="custom-control-label" for="payment_method_charity">Charity</label>
-                                                            </div>
+                                                            @if (getImporterYMLSettings(config('app.payment_method_yaml_path')))
+                                                                <div class="custom-control custom-switch d-block">
+                                                                    <input type="checkbox" class="custom-control-input" id="payment_method_paypal" name="payment_method_paypal"
+                                                                        @if ($settings['payment_method_paypal']) checked @endif value="1">
+                                                                    <label class="custom-control-label" for="payment_method_paypal">Paypal</label>
+                                                                </div>
+                                                                <div class="custom-control custom-switch d-block mt-2">
+                                                                    <input type="checkbox" class="custom-control-input" id="payment_method_bank" name="payment_method_bank"
+                                                                        @if ($settings['payment_method_bank']) checked @endif value="1">
+                                                                    <label class="custom-control-label" for="payment_method_bank">Bank Transfer</label>
+                                                                </div>
+                                                            @endif
+                                                            @if (getImporterYMLSettings(config('app.charity_yaml_path')))
+                                                                <div class="custom-control custom-switch d-block mt-2">
+                                                                    <input type="checkbox" class="custom-control-input" id="payment_method_charity" name="payment_method_charity"
+                                                                        @if ($settings['payment_method_charity']) checked @endif value="1">
+                                                                    <label class="custom-control-label" for="payment_method_charity">Charity</label>
+                                                                </div>
+                                                            @endif
+                                                            @if (!getImporterYMLSettings(config('app.payment_method_yaml_path')) && env('PAYMENT_METHOD') && isset($settings[env('PAYMENT_METHOD')]))
+                                                                @php
+                                                                    $removeExtraWords = str_replace('payment_method_', '', env('PAYMENT_METHOD'));
+                                                                    $paymentMethod = str_replace('_', ' ', $removeExtraWords);
+                                                                @endphp
+                                                                <div class="custom-control custom-switch d-block mt-2">
+                                                                    <input type="checkbox" class="custom-control-input" id="{{ env('PAYMENT_METHOD') }}" name="{{ env('PAYMENT_METHOD') }}"
+                                                                        @if ($settings[env('PAYMENT_METHOD')]) checked @endif value="1">
+                                                                    <label class="custom-control-label" for="{{ env('PAYMENT_METHOD') }}">{{ ucfirst($paymentMethod) }}</label>
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                     </div>
+
                                                     <div class="row g-3 align-center">
                                                         <div class="col-lg-3">
                                                             <div class="form-group">
@@ -967,9 +1025,9 @@
                                         <div class="tab-pane" id="tabItem10">
                                             <div class="nk-block">
                                                 <div class="nk-block-head">
-                                                    <h5 class="title">Google Recaptcha Settings</h5>
+                                                    <h5 class="title">Google Recaptcha Settings (v2)</h5>
                                                 </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
+                                                <form action="{{ route(getAdminPrefix() . '.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
                                                     @csrf
                                                     @method('POST')
                                                     <div class="row g-3 align-center">
@@ -1004,78 +1062,6 @@
                                                                 <div class="form-control-wrap">
                                                                     <input type="text" class="form-control" name="google_recaptcha_secret_key"
                                                                         value="{{ $settings['google_recaptcha_secret_key'] ?? '' }}" placeholder="Recaptcha Secret Key">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row g-3">
-                                                        <div class="col-lg-9 offset-lg-3">
-                                                            <div class="form-group mt-2">
-                                                                <button type="submit" class="btn btn-lg btn-primary">Update</button>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </form>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane" id="tabItem11">
-                                            <div class="nk-block">
-                                                <div class="nk-block-head">
-                                                    <h5 class="title">SendGrid Settings</h5>
-                                                </div><!-- .nk-block-head -->
-                                                <form action="{{ route('admin.settings.settings_save') }}" class="gy-3 form-settings" method="POST">
-                                                    @csrf
-                                                    @method('POST')
-                                                    <div class="row g-3 align-center">
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label">
-                                                                    API Key
-                                                                    <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
-                                                                        title="Enter Send Grid API key."></em>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-9">
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="sendgrid_api_key"
-                                                                        value="{{ $settings['sendgrid_api_key'] ?? '' }}" placeholder="API key">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label">
-                                                                    Newsletter List id
-                                                                    <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
-                                                                        title="Enter Newsletter List id."></em>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-9">
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="sendgrid_newsletter_list_id"
-                                                                        value="{{ $settings['sendgrid_newsletter_list_id'] ?? '' }}" placeholder=" Newsletter List id">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-3">
-                                                            <div class="form-group">
-                                                                <label class="form-label">
-                                                                    Registered List id
-                                                                    <em class="icon ni ni-question form-label" data-toggle="tooltip" data-placement="top"
-                                                                        title="Enter Registered List id."></em>
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-9">
-                                                            <div class="form-group">
-                                                                <div class="form-control-wrap">
-                                                                    <input type="text" class="form-control" name="sendgrid_registered_list_id"
-                                                                        value="{{ $settings['sendgrid_registered_list_id'] ?? '' }}" placeholder="Registered List id">
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1155,6 +1141,8 @@
     </style>
 @endsection
 @push('scripts')
+<script src="{{ asset('admin-dashboard/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
+<script src="{{ asset('admin-dashboard/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
     <!-- Update Store-->
     <script>
         jQuery.validator.addMethod("minValue", function(value, element, param) {
@@ -1170,10 +1158,10 @@
                     minValue: 0.1
                 },
                 min_cashout_amount: {
-                    minValue: 0.1 
+                    minValue: 0.1
                 },
                 next_cashout_amount: {
-                    minValue: 0.1 
+                    minValue: 0.1
                 }
             }
         });
@@ -1192,14 +1180,12 @@
                     contentType: false,
                     processData: false,
                     success: function(data) {
-
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
                             NioApp.Toast(data.message, data.response);
                         })(NioApp, jQuery);
-                        location.reload(true);
-
+                        // location.reload(true);
                     },
                     error: function(data) {
 
@@ -1279,35 +1265,36 @@
                     var maintenance = 0;
                 }
                 var _token = $("input[name=_token]").val();
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ route('admin.settings.maintenance') }}",
-                    data: {
-                        _token: _token,
-                        maintenance: maintenance
-                    },
-                    success: function(data) {
-
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(data.message, data.response);
-                        })(NioApp, jQuery);
-
-
-                    },
-                    error: function(data) {
-
-                        (function(NioApp, $) {
-                            'use strict';
-                            toastr.clear();
-                            NioApp.Toast(data.message, data.response);
-                        })(NioApp, jQuery);
-
-                    }
-                });
-
+                var url = "{{ route(getAdminPrefix() . '.settings.maintenance') }}";
+                if(maintenance == 1){
+                    maintenanceConfirmationDialog("Are you sure?", "You are going to enable maintenance mode!", "Yes, enable it!", maintenance, _token, url);
+                } else {
+                    maintenanceConfirmationDialog("Are you sure?", "You are going to disable maintenance mode!", "Yes, disable it!", maintenance, _token, url);
+                }
             });
         });
     </script>
+    <script>
+        $(document).ready(function () {
+            var input = document.querySelector("#phoneNumber");
+            const iti = window.intlTelInput(input,({
+                nationalMode:true,
+                preferredCountries: [],
+                utilsScript: "{{ asset('admin-dashboard/telephone-dropdown/js/utils.js') }}",
+                separateDialCode:true,
+            }));
+            $('.iti').css('width', '100%');
+            const handleChange = () => {
+                let phoneNumber;
+                if(input.value) {
+                    if(iti.isValidNumber()){
+                        phoneNumber = iti.getNumber();
+                        $("#phone_number").val(phoneNumber);
+                    }
+                }
+            }
+            input.addEventListener('change', handleChange);
+            input.addEventListener('keyup', handleChange);
+        });
+</script>
 @endpush

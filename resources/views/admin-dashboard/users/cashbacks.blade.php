@@ -46,7 +46,7 @@
                     @if ($commission->event_date)
                         <span>{{ $commission->event_date }}</span>
                     @else
-                        <span>{{ $commission->created_at }}</span>
+                        <span>{{ formatDateTimezone($commission->created_at, 'YYYY-MM-DD HH:mm:ss') }}</span>
                     @endif
                 </div>
                 <div class="nk-tb-col  text-right">
@@ -77,7 +77,7 @@
                                 <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                                 <div class="dropdown-menu dropdown-menu-right">
                                     <ul class="link-list-opt no-bdr">
-                                        <li><a href="{{ route('admin.commissions.edit', $commission) }}" cashback-id='{{ $commission->id }}' class='cashback-edit'><em
+                                        <li><a href="{{ route(getAdminPrefix() . '.commissions.edit', $commission) }}" cashback-id='{{ $commission->id }}' class='cashback-edit'><em
                                                     class="icon ni ni-edit"></em><span>Edit</span></a></li>
 
                                     </ul>

@@ -4,7 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Support\Facades\Session;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Throwable;
 class Handler extends ExceptionHandler
 {
     /**
@@ -34,12 +35,28 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->renderable(function (\Exception $e) {
+        $this->renderable(function (\Exception $e, $request) {
+            if ($request->is('api/*')) {
+                return response()->json([
+                    'status' => 401, 
+                    'message' => 'Not authenticated User'
+                ], 401);
+            }
             if ($e->getPrevious() instanceof \Illuminate\Session\TokenMismatchException) {
                 Session::flash('message', 'Form has expired. Please try again.');
                 Session::flash('alert-class', 'alert-danger');
                 return redirect()->back();
             };
         });
+
+    }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof MethodNotAllowedHttpException && $request->isMethod('GET')) {
+            return response()->view('errors.404', [], 404);
+        }
+
+        return parent::render($request, $exception);
     }
 }

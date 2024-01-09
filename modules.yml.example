@@ -1,0 +1,106 @@
+Modules:
+  SMTP:
+    Sendgrid: on
+    mailchimp: off
+  Charities:
+    List: off
+    Cashout: off
+  PaymentMethod: off
+  Appeals:
+    List: off
+  Categories:
+    List: on
+  Banners:
+    List: off
+  CashbackEarningsAdmin: off
+Networks:
+  CJ:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: off
+      Categories: off
+  Awin:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: off
+      Categories: off
+  Webgains:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: off
+      Categories: off
+  RevGlue:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: off
+      Categories: off
+  Local Stores Ecommerce:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: off
+      Categories: off
+  Local Stores Lead Generation:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: off
+      Categories: off
+  Commission Junction - USD:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: off
+      Categories: off
+  Impact:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: off
+      Categories: off
+  Partnerize:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: off
+      Categories: off
+  Afrofiliate:
+    Settings:
+      Client_id:
+      Client_secret:
+    Importer:
+      Stores: off
+      Vouchers: off
+      Cashbacks: off
+      Categories: off

@@ -1,5 +1,9 @@
 @extends('layouts.admin-dashboard.app')
 
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('admin-dashboard/telephone-dropdown/css/intlTelInput.css') }}">
+@endpush
+
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -21,8 +25,7 @@
                                     <div class="card-head">
                                         <h5 class="card-title">User Info</h5>
                                     </div>
-                                    <form action="{{ route('admin.users.store') }}" enctype="multipart/form-data" class="gy-3 user-form is-alter" 
-                                        method="POST">
+                                    <form action="{{ route(getAdminPrefix() . '.users.store') }}" enctype="multipart/form-data" class="gy-3 user-form is-alter" method="POST">
                                         @csrf
                                         <div class="row g-4">
                                             <div class="col-lg-12 text-center">
@@ -60,26 +63,29 @@
                                             </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="phone-no-1">Phone <span class="text-danger">*</span></label>
+                                                    <label class="form-label" for="phone-no-1">Phone </label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="phone-no-1" name="phone" value="{{ old('phone') ?? null }}" required>
+                                                        <input type="text" class="form-control" id="phoneNumber" name="phoneNumber" value="{{ old('phone') ?? null }}" placeholder="Phone number">
+                                                        <input type="hidden" id="phone_number" name="phone_number">
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="date_of_birth">Date of Birth </label>
+                                                    <div class="form-control-wrap">
+                                                        <input type="date" class="form-control" id="date_of_birth" name="date_of_birth"
+                                                            value="{{ old('date_of_birth') ?? null }}">
+                                                    </div>
+                                                </div>
+                                            </div>
+
                                             <div class="col-lg-12">
                                                 <div class="form-group">
-                                                    <label class="form-label" for="pay-amount-1">Address <span class="text-danger">*</span></label>
+                                                    <label class="form-label" for="pay-amount-1">Address </label>
                                                     <div class="form-control-wrap">
-                                                        <input type="text" class="form-control" id="pay-amount-1" name="address" value="{{ old('address') ?? null }}" required>
+                                                        <textarea type="text" class="form-control" id="pay-amount-1" name="address">{{ old('address') ?? null }}</textarea>
                                                     </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-lg-12">
-                                                <div class="card">
-                                                    <input name="intro" type="hidden">
-                                                    <label class="form-label" for="phone-no-1">Introduction</label>
-                                                    <!-- Create the editor container -->
-                                                    <div id="editor-container">{!! old('intro') ?? null !!}</div>
                                                 </div>
                                             </div>
                                             <div class="col-12">
@@ -99,10 +105,8 @@
     </div>
 @endsection
 @push('scripts')
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
+    <script src="{{ asset('admin-dashboard/telephone-dropdown/js/intlTelInput.min.js') }}"></script>
+    <script src="{{ asset('admin-dashboard/telephone-dropdown/js/intlTelInput-jquery.min.js') }}"></script>
 
     <script>
         var quill = new Quill('#editor-container', {
@@ -139,25 +143,63 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+
+        jQuery.validator.addMethod("regex", function(value, element) {
+            return this.optional(element) || /^[A-Za-z ]+$/i.test(value);
+        }, "Only alphabetic name is allow");
+
+        jQuery.validator.addMethod("validPhone", function(value, element) {
+            var regex = /^\+\d{12}$/;
+            if(regex.test(value) == false){
+                $('.iti__flag-container').css('padding-bottom', '39px');
+            } else {
+                $('.iti__flag-container').css('padding-bottom', '15px');
+            }
+            return regex.test(value);
+        }, "Enter a valid phone number");
+
         $('.user-form').validate({
             errorClass: 'invalid-feedback d-block',
             rules: {
                 firstname: {
-                    required: true
+                    required: true,
+                    regex: true
                 },
                 lastname: {
-                    required: true
+                    required: true,
+                    regex: true
                 },
                 email: {
                     required: true
                 },
                 phone: {
-                    required: true
-                },
-                address: {
-                    required: true
+                    validPhone: true
                 },
             }
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            var input = document.querySelector("#phoneNumber");
+            const iti = window.intlTelInput(input,({
+                nationalMode:true,
+                preferredCountries: [],
+                utilsScript: "{{ asset('admin-dashboard/telephone-dropdown/js/utils.js') }}",
+                separateDialCode:true,
+            }));
+            $('.iti').css('width', '100%');
+            const handleChange = () => {
+                let phoneNumber;
+                if(input.value) {
+                    if(iti.isValidNumber()){
+                        phoneNumber = iti.getNumber();
+                        $("#phone_number").val(phoneNumber);
+                    }
+                }
+            }
+            input.addEventListener('change', handleChange);
+            input.addEventListener('keyup', handleChange);
         });
     </script>
 @endpush

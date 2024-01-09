@@ -24,7 +24,7 @@
                                 <div class="card-head">
                                     <h5 class="card-title">Network Info</h5>
                                 </div>
-                                <form action="{{route('admin.networks.store')}}" class="gy-3" method="POST">
+                                <form action="{{route(getAdminPrefix() . '.networks.store')}}" class="gy-3" method="POST">
                                     @csrf
                                     <div class="row g-3 align-center">
                                         <div class="col-lg-5">

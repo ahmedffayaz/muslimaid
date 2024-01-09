@@ -15,6 +15,7 @@
                                     <span class="badge badge-dim badge-pill badge-outline-primary">{{ $store->network->name }}</span>
                                 </h3>
                                 <div class="store_id_checker d-none">{{ $store->id }}</div>
+                                <div id="store_id_checker_encrypted" class="d-none">{{ encrypt($store->id) }}</div>
                                 <div class="nk-block-des">
                                 </div>
                             </div>
@@ -22,14 +23,8 @@
                                 <div class="form-group stores">
                                     <label class="form-label" for="default-06"></label>
                                     <div class="form-control-wrap ">
-                                        <div class="">
-                                            <select class="form-control form-select  select-2" data-search="on" name="open_store" id="store_select" required>
-                                                @foreach ($stores as $st)
-                                                    <option @if ($st->id == $store->id) selected @endif value="{{ $st->slug }}">{{ $st->id }} -
-                                                        {{ $st->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
+                                        <select class="form-control form-select select-2 all-stores" data-search="on" name="open_store" id="store_select" required>
+                                        </select>
                                     </div>
                                 </div>
                             </div><!-- .nk-block-head-content -->
@@ -69,9 +64,9 @@
                                     <div class="tab-pane active" id="tabItem4">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
-                                                <h5 class="title">Store Information</h5>
+                                                <h5>Store Information</h5>
                                             </div><!-- .nk-block-head -->
-                                            <form action="{{ route('admin.stores.update', $store) }}" id="store_form" class="gy-3 form-validate is-alter" method="POST"
+                                            <form action="{{ route(getAdminPrefix() . '.stores.update', $store) }}" id="store_form" class="gy-3 form-validate is-alter" method="POST"
                                                 enctype="multipart/form-data">
                                                 @csrf
                                                 @method('PUT')
@@ -147,8 +142,8 @@
                                                             <label class="form-label" for="tracking_url">Tracking URL <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="tracking_url" value="{{ $store->tracking_url }}"
-                                                                    name="tracking_url" placeholder="https://example.com/item/abc-id-1345" required style="width: 79%">
-                                                                <span style="position: absolute; right:0; top:5px; width:20%" data-toggle="tooltip" data-placement="left"
+                                                                    name="tracking_url" placeholder="https://example.com/item/abc-id-1345" required style="width: 78%">
+                                                                <span style="position: absolute; right:0; top:5px; width:21%" data-toggle="tooltip" data-placement="left"
                                                                     title="This parameter containing ID of the click will be concatenated with tracking URL of the store ({{ $store->tracking_url }})">{{ $store->network->click_ref }}XXX</span>
                                                             </div>
                                                         </div>
@@ -158,11 +153,11 @@
                                                         <div class="form-group">
                                                             <label class="form-label" for="tracking_url">Deeplink URL</label>
                                                             <div class="form-control-wrap">
-                                                                <span style="position:absolute; left:0; top:5px; width:7%" data-toggle="tooltip" data-placement="right"
-                                                                    title="This parameter containing URL of the click will be concatenated with deeplink URL of the store ({{ $store->deeplink_url }})">{{ $store->network->deeplink_identifier }}</span>
+                                                                <span style="position:absolute; left:0; top:5px; width:8%" data-toggle="tooltip" data-placement="right"
+                                                                    title="This parameter containing URL of the click will be concatenated with deeplink URL of the store ({{ $store->deeplink_url }})">{{ optional($store->network)->deeplink_identifier ? $store->network->deeplink_identifier : '&url=' }}</span>
                                                                 <input type="text" class="form-control" id="deeplink_url" value="{{ $store->deeplink_url }}"
                                                                     name="deeplink_url" placeholder="https://example.com/item/abc-id-1345"
-                                                                    style="position: relative; left:30px; width: 93%">
+                                                                    style="position: relative; left:36px; width: 92%">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -171,7 +166,7 @@
                                                             <label class="form-label" for="store_url">Store url <span class="text-danger">*</span></label>
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="store_url" value="{{ $store->store_url }}"
-                                                                    name="store_url" placeholder="https://example.com/item/abc-id-1345" required>
+                                                                    name="store_url" placeholder="https://example.com" required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -181,7 +176,7 @@
                                                                     class="icon ni ni-question" data-toggle="tooltip" data-placement="top"
                                                                     title="Define custom cashback percentage for this store, keep empty to use global setting"></em></label>
                                                             <div class="form-control-wrap">
-                                                                <input type="text" class="form-control" id="custom_cashback_percentage"
+                                                                <input type="number" class="form-control" id="custom_cashback_percentage"
                                                                     value="{{ $store->custom_cashback_percentage }}" name="custom_cashback_percentage">
                                                             </div>
                                                         </div>
@@ -190,17 +185,28 @@
                                                         <label class="form-label" for="default-06">Tags</label>
                                                         <div class="form-control-wrap ">
                                                             <div class="">
-                                                                @php 
+                                                                @php
                                                                     $storeTagsIds = $store->tags()->pluck('tag_id')->toArray();
                                                                 @endphp
                                                                 <select class="form-control form-select select-2" name="tags[]" multiple>
-                                                                    @foreach($tags as $tag)
-                                                                        <option @if (in_array($tag->id, $storeTagsIds)) selected @endif value="{{$tag->id}}">{{ $tag->title }}</option>
+                                                                    @foreach ($tags as $tag)
+                                                                        <option @if (in_array($tag->id, $storeTagsIds)) selected @endif value="{{ $tag->id }}">
+                                                                            {{ $tag->title }}</option>
                                                                     @endforeach
                                                                 </select>
                                                             </div>
                                                         </div>
                                                     </div>
+
+                                                    <div class="col-lg-12">
+                                                        <div class="form-group">
+                                                            <label class="form-label" for="competitors">Competitors</label>
+                                                            <div class="form-control-wrap">
+                                                                <textarea class="form-control" id="competitors" name="competitors" rows="5">{{ $store->competitors }}</textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="col-lg-6">
                                                         <div class="form-group">
                                                             <label class="form-label" for="default-06">Status @if ($store->status == 'error')
@@ -233,7 +239,7 @@
                                     <div class="tab-pane" id="tabItem5">
                                         <div class="nk-block">
                                             <div class="nk-block-head">
-                                                <form action="{{ route('admin.stores.override_categories', $store) }}" id="override-categories-form"
+                                                <form action="{{ route(getAdminPrefix() . '.stores.override_categories', $store) }}" id="override-categories-form"
                                                     class="gy-3 form-validate is-alter" method="POST" enctype="multipart/form-data">
                                                     @csrf
                                                     @method('PUT')
@@ -251,8 +257,8 @@
                                                         </div>
                                                     </div>
                                                 </form>
-                                                <h5 class="title mt-3">Categories</h5>
-                                                <form action="{{ route('admin.stores.categories.update') }}" id="store_cat_form" class="gy-3 form-validate is-alter"
+                                                <h5 class="mt-3">Categories</h5>
+                                                <form action="{{ route(getAdminPrefix() . '.stores.categories.update') }}" id="store_cat_form" class="gy-3 form-validate is-alter"
                                                     method="POST" enctype="multipart/form-data">
                                                     @csrf
                                                     @method('POST')
@@ -282,7 +288,7 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="tabItem6">
-                                        <form action="{{ route('admin.stores.override_cashback', $store) }}" id="override-cashback-form"
+                                        <form action="{{ route(getAdminPrefix() . '.stores.override_cashback', $store) }}" id="override-cashback-form"
                                             class="gy-3 form-validate is-alter" method="POST" enctype="multipart/form-data">
                                             @csrf
                                             @method('PUT')
@@ -300,26 +306,26 @@
                                                 </div>
                                             </div>
                                         </form>
-                                        <h5 class="title mb-4 d-inline-block mt-3">Cashbacks</h5>
+                                        <h5 class="mb-4 d-inline-block mt-3">Cashbacks</h5>
                                         <span id='cashbacks-data' class="mt-4"></span>
                                     </div>
                                     <div class="tab-pane" id="tabItem7">
-                                        <h5 class="title mb-4  d-inline-block">Vouchers</h5>
+                                        <h5 class="mb-4  d-inline-block">Vouchers</h5>
                                         <span id='vouchers-data' class="mt-4"></span>
                                     </div>
                                     <div class="tab-pane" id="tabItem8">
-                                        <h5 class="title mb-4 d-inline">Reviews</h5>
+                                        <h5 class="mb-4 d-inline">Reviews</h5>
                                         <span id='reviews-data'></span>
                                     </div>
                                     <div class="tab-pane" id="tabItem9">
                                         <span id="images-data"></span>
                                     </div>
                                     <div class="tab-pane" id="tabItem10">
-                                        <h5 class="title mb-4  d-inline-block">Address</h5>
+                                        <h5 class="mb-4  d-inline-block">Address</h5>
                                         <span id="address-data" class="mt-4"></span>
                                     </div>
                                     <div class="tab-pane" id="tabItem11">
-                                        <h5 class="title mb-4  d-inline-block">SEO Rules</h5>
+                                        <h5 class="mb-4  d-inline-block">SEO Rules</h5>
                                         <span id="seo-data" class="mt-4"></span>
                                     </div>
                                 </div>
@@ -332,65 +338,16 @@
     </div>
 </div>
 <!-- @@ File Upload Modal @e -->
-<div class="modal fade" tabindex="-1" role="dialog" id="file-upload">
+<div class="modal fade" tabindex="-1" role="dialog" id="file-upload-modal">
     <div class="modal-dialog modal-md" role="document">
-        <div class="modal-content">
-            <div class="modal-header align-center">
-                <div class="nk-file-title">
-                    <div class="nk-file-name">
-                        <div class="nk-file-name-text"><span class="title">Upload image for {{ $store->name }}</span></div>
-                    </div>
-                </div>
-                <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
-            </div>
-            <form action="{{ route('admin.stores.images.upload', $store) }}" class="form-validate file-upload" method="POST" enctype="multipart/form-data">
-                <div class="modal-body modal-body-md">
-                    @csrf
-                    <div class="row gy-4">
-                        <div class="col-lg-12 mx-auto">
-                            <div class="form-group">
-                                <div class="text-center mb-4 logo">
-                                    <label for="logo-input">
-                                        <img id="blah" src="{{ asset('admin-dashboard/images/cloud-uploading.png') }}" alt="store logo" width="150px" />
-                                        <input id="logo-input" name="image" class="d-none" type='file' onchange="readURL(this);" required />
-                                        <br> <br><span>Click here to select image <span class="text-danger">*</span></span>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="form-label" for="title">Type</label>
-                                <div class="form-control-wrap ">
-                                    <div class="form-control-select">
-                                        <select class="form-control" id="title" name="title" required>
-                                            <option value="logo">Logo</option>
-                                            <option value="Cover">Cover</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer modal-footer-stretch bg-light">
-                    <div class="modal-footer-between">
-                        <div class="g"></div>
-                        <div class="g">
-                            <ul class="btn-toolbar g-3">
-                                <li><a href="#file-share" data-dismiss="modal"class="btn btn-outline-light btn-white">Cancel</a></li>
-                                <li><button type="submit" class="btn btn-primary file-dl-toast">Upload</button></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div><!-- .modal-footer -->
-            </form>
+        <div class="modal-content add-image-modal-content">
+
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
 </div><!-- .modal -->
 <!-- @@ Voucher Modal @e -->
 <div class="modal fade" tabindex="-1" role="dialog" id="voucher-modal">
-    <div class="modal-dialog modal-md" role="document">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header align-center">
                 <div class="nk-file-title">
@@ -419,132 +376,6 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="add-voucher-form" class=" p-4">
-                <form action="{{ route('admin.vouchers.store') }}" class="gy-3 form-validate is-alter add_voucher_form" id="add_voucher_validation" method="POST">
-                    @csrf
-                    <input type="hidden" name="store_id" value="{{ $store->id }}">
-                    <div class="row g-4">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="full-name-1">Title <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="full-name-1" name="link_name" value="{{ old('link_name') }}" required>
-                                    @error('link_name')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="vsale_commission">Sale commission <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="number" min="0.1" step="0.1" class="form-control" id="vsale_commission" name="sale_commission"
-                                        value="{{ old('sale_commission') }}" required>
-                                    @error('vsale_commission')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="click_url">Click url <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="url" class="form-control" id="click_url" name="click_url" value="{{ old('click_url') }}" required>
-                                    @error('click_url')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="phone-no-1">Destination url <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="url" class="form-control" id="phone-no-1" name="destination" value="{{ old('destination') }}" required>
-                                    @error('destination')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <input name="description" type="hidden">
-                                <label class="form-label" for="phone-no-1">Description</label>
-                                <textarea name="description" class="form-control "> {{ old('description') }}</textarea>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <div class="form-group">
-                                    <label class="form-label" for="promotion_type">Promotion Type <span class="text-danger">*</span></label>
-                                    <div class="form-control-wrap ">
-                                        <select class="form-select form-control select-2" data-search="on" id="promotion_type" name="promotion_type"
-                                            value="{{ old('promotion_type') }}" required>
-                                            <option value="Coupon">Coupon</option>
-                                            <option value="Sale/Discount">Sale/Discount</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 coupon-div">
-                            <div class="form-group">
-                                <label class="form-label" for="coupon_code">Coupon Code <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="coupon_code" name="coupon_code" value="{{ old('coupon_code') }}" required>
-                                    @error('coupon_code')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="promotion_start_date">Promotion Start Date <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control date-picker promotion_start_date" value="{{ old('promotion_start_date') }}"
-                                        id="promotion_start_date" name="promotion_start_date" autocomplete="off" required>
-                                    @error('promotion_start_date')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="promotion_end_date">Promotion End Date <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control date-picker promotion_end_date" value="{{ old('promotion_end_date') }}"
-                                        id="promotion_end_date" name="promotion_end_date" autocomplete="off" required>
-                                    @error('promotion_end_date')
-                                        <span class="invalid-feedback d-block" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -582,98 +413,6 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="cashback" class=" p-4">
-                <form action="{{ route('admin.stores.cashbacks.store') }}" class="gy-3 form-validate is-alter cashback_form_add" method="POST">
-                    @csrf
-                    <input type="hidden" name="store_id" value="{{ $store->id }}">
-                    <div class="row g-4">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="type">Type <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap ">
-                                    <select class="form-control form-select select-2" id="type" name="type" required>
-                                        <option value="percentage">Percentage</option>
-                                        <option value="fixed">Fixed</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="sale_commission">Commission <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="number" class="form-control" min="0" step="0.1" id="sale_commission" value="" name="sale_commission"
-                                        required>
-                                </div>
-                            </div>
-                        </div>
-                        @if ($store->override_network)
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="form-label" for="network_id">Network</label>
-                                    <div class="form-control-wrap">
-                                        <select class="form-control form-select select-2" id="network_id" name="network_id">
-                                            @foreach ($networks as $network)
-                                                <option value="{{ $network->id }}">{{ $network->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="form-label" for="tracking_url">Tracking URL</label>
-                                    <div class="form-control-wrap">
-                                        <input type="text" class="form-control" id="tracking_url" name="tracking_url"
-                                            placeholder="https://example.com/item/abc-id-1345" required style="width: 83%">
-                                        <span style="position: absolute; right:0; top:5px; width:17%" data-toggle="tooltip" data-placement="left"
-                                            title="This parameter containing ID of the click will be concatenated with tracking URL of the store (https://example.com?ref=XXX)">{{ $store->network->click_ref }}XXX</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12">
-                                <div class="form-group">
-                                    <label class="form-label" for="sale_commission">Deeplink URL</label>
-                                    <div class="form-control-wrap">
-                                        <span style="position:absolute; left:0; top:5px; width:3%" data-toggle="tooltip" data-placement="right"
-                                            title="This parameter containing URL of the click will be concatenated with deeplink URL of the store (&u=https://example.com)">{{ $store->network->deeplink_identifier }}</span>
-                                        <input type="text" class="form-control" id="deeplink_url"
-                                            value="{{ isset($store->cashback->deeplink_url) ? $store->cashback->deeplink_url : '' }}" name="deeplink_url"
-                                            placeholder="https://example.com/item/abc-id-1345" style="position: relative; left:30px; width: 95%">
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="form-label" for="cashback_icon">Icon Upload</label>
-                                <div class="form-control-wrap">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" name="cashback_icon" id="cashback_icon" onchange="readURL(this);">
-                                        <label class="custom-file-label" for="cashback_icon">Choose file</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3">
-                                <div class="form-group">
-                                    <div class="preview-wrapper">
-                                        <img id="logo-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="card">
-                                <label class="form-label" for="phone-no-1">Detail</label>
-                                <textarea name="detail" class="form-control "></textarea>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div><!-- .modal-content -->
     </div><!-- .modla-dialog -->
@@ -710,7 +449,7 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="" class=" p-4">
-                <form action="{{ route('admin.reviews.store') }}" class="gy-3 form-validate is-alter review_form_add" method="POST">
+                <form action="{{ route(getAdminPrefix() . '.reviews.store') }}" class="gy-3 form-validate is-alter review_form_add" method="POST">
                     @csrf
                     <input type="hidden" name="store_id" value="{{ $store->id }}">
                     <div class="row g-4">
@@ -781,37 +520,6 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="add-seorule-form" class=" p-4">
-                <form action="{{ route('admin.stores.save_seo_rule') }}" class="gy-3 form-validate is-alter add_seorule_form" id="theForm" method="POST">
-                    @csrf
-                    <input type="hidden" name="store_id" value="{{ $store->id }}">
-                    <div class="row g-4">
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="form-label" for="full-name-1">Key <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <select class="form-control key" id="key" name="key" required>
-                                        <option selected disabled>Select Key</option>
-                                        <option value="meta:keywords">Meta:keywords</option>
-                                        <option value="meta:description">Meta:description</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12 key_value">
-                            <div class="form-group">
-                                <label class="form-label" for="vsale_commission">Value <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <textarea class="form-control" id="value" value="" name="value" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -848,59 +556,6 @@
                 <a href="#" class="close" data-dismiss="modal"><em class="icon ni ni-cross-sm"></em></a>
             </div>
             <div id="add-address-form" class=" p-4">
-                <form action="{{ route('admin.stores.save_address') }}" class="gy-3 form-validate is-alter add_address_form" method="POST">
-                    @csrf
-                    <input type="hidden" name="store_id" value="{{ $store->id }}">
-                    <div class="row g-4">
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="full-name-1">City <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="city" name="city" value="" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="vsale_commission">Postal code <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="postal_code" name="postal_code" value="" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="latitude">Latitude <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="number" class="form-control" min="-90" max="90" step="any" id="latitude" name="latitude"
-                                        value="" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="form-group">
-                                <label class="form-label" for="longitude">Longitude <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <input type="number" class="form-control" min="-180" max="180" step="any" id="longitude" name="longitude"
-                                        value="" required>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-12">
-                            <div class="form-group">
-                                <label class="form-label" for="vsale_commission">Address <span class="text-danger">*</span></label>
-                                <div class="form-control-wrap">
-                                    <textarea class="form-control" id="address" value="" name="address" required></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12">
-                            <div class="form-group">
-                                <button type="submit" class="btn btn-lg btn-primary">Save</button>
-                            </div>
-                        </div>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
@@ -937,9 +592,36 @@
 </script>
 
 @push('scripts')
+
     <script>
+        // Function to initialize Select2
+        function fetchAllStores(targetStoreSlug = null) {
+            $.ajax({
+                url: '{{ route(getAdminPrefix() . ".ajax.stores") }}',
+                type: 'get',
+                success: function (data) {
+                    var select2Stores = '';
+                    var select2Store = '';
+                    var targetStore = "{{ $store->slug }}";
+                    var targetStoreSlugCurrent = targetStoreSlug != null ? targetStoreSlug : targetStore;
+                    data.stores.forEach(store => {
+                        // Check if the current store's slug matches the target slug
+                        var isSelected = (store.slug === targetStoreSlugCurrent) ? 'selected' : '';
+                        select2Store += `<option value="`+store.slug+`" ${isSelected}>`+store.id+ ' - ' +store.name+`</option>`;
+                    });
+
+                    select2Stores = select2Store;
+
+                    $('.all-stores').append(select2Stores);
+                    $('.select-2').each(function() {
+                        initializeSelect2($(this));
+                    });
+                }
+            });
+        }
+
         function fetchVouchers() {
-            pageurl = "{{ route('admin.stores.vouchers') }}"
+            pageurl = "{{ route(getAdminPrefix() . '.stores.vouchers') }}"
             var _token = $("input[name=_token]").val();
             var store = $('.store_id_checker').text();
             $.ajax({
@@ -956,7 +638,7 @@
         }
 
         function fetchCashbacks() {
-            pageurl = "{{ route('admin.stores.cashbacks') }}"
+            pageurl = "{{ route(getAdminPrefix() . '.stores.cashbacks') }}"
             var _token = $("input[name=_token]").val();
             var store = $('.store_id_checker').text();
             $.ajax({
@@ -973,7 +655,7 @@
         }
 
         function fetchReviews() {
-            pageurl = "{{ route('admin.stores.reviews') }}"
+            pageurl = "{{ route(getAdminPrefix() . '.stores.reviews') }}"
             var _token = $("input[name=_token]").val();
             var store = $('.store_id_checker').text();
             $.ajax({
@@ -990,7 +672,7 @@
         }
 
         function fetchImages() {
-            pageurl = "{{ route('admin.stores.fetchimages') }}"
+            pageurl = "{{ route(getAdminPrefix() . '.stores.fetchimages') }}"
             var _token = $("input[name=_token]").val();
             var store = $('.store_id_checker').text();
             $.ajax({
@@ -1007,7 +689,7 @@
         }
 
         function fetchAddress() {
-            pageurl = "{{ route('admin.stores.storeaddress') }}"
+            pageurl = "{{ route(getAdminPrefix() . '.stores.storeaddress') }}"
             var _token = $("input[name=_token]").val();
             var store = $('.store_id_checker').text();
             $.ajax({
@@ -1024,7 +706,7 @@
         }
 
         function fetchSeoRules() {
-            pageurl = "{{ route('admin.stores.fetchseorules') }}"
+            pageurl = "{{ route(getAdminPrefix() . '.stores.fetchseorules') }}"
             var _token = $("input[name=_token]").val();
             var store = $('.store_id_checker').text();
             $.ajax({
@@ -1043,7 +725,8 @@
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
-            window.livewire.on('storeChange', () => {
+            window.livewire.on('storeChange', (args) => {
+                fetchAllStores(args.store.slug);
                 fetchVouchers();
                 fetchCashbacks();
                 fetchReviews();
@@ -1051,88 +734,33 @@
                 fetchAddress();
                 fetchSeoRules();
                 initializeSelect2();
-                var quill = new Quill('#editor-container', {
-                    modules: {
-                        toolbar: [
-                            ['bold', 'italic'],
-                            ['link', 'blockquote', 'code-block', 'image'],
-                            [{
-                                list: 'ordered'
-                            }, {
-                                list: 'bullet'
-                            }]
-                        ]
-                    },
-                    placeholder: 'Compose an epic...',
-                    theme: 'snow'
-                });
+                initializeTinyMCEEditor('editor-container');
+                initializeTinyMCEEditor('teditor-container');
             });
         });
     </script>
     <script>
         $(document).ready(function() {
-            $('#store_select').on('change', function(e) {
-                livewire.emit('changeEvent', e.target.value)
+            fetchAllStores();
+            // Use event delegation for dynamically created elements
+            $(document).on('change', '#store_select', function(e) {
+                var selectedStoreSlug = $(this).val();
+                fetchAllStores(selectedStoreSlug);
+                livewire.emit('changeEvent', selectedStoreSlug);
             });
         });
     </script>
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
-
     <script>
-        // Quill Editor
-        var quill = new Quill('#editor-container', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic'],
-                    ['link', 'blockquote', 'code-block', 'image'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }]
-                ]
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow'
-        });
-        // Quill Editor
-        var rquill = new Quill('#reditor-container', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic'],
-                    ['link', 'blockquote', 'code-block', 'image'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }]
-                ]
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow'
-        });
-        // Quill Editor
-        var quill = new Quill('#teditor-container', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic'],
-                    ['link', 'blockquote', 'code-block', 'image'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }]
-                ]
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow'
+        $(document).ready(function (){
+            initializeTinyMCEEditor('editor-container');
+            initializeTinyMCEEditor('reditor-container');
+            initializeTinyMCEEditor('teditor-container');
         });
         $("#store_form").submit(function(e) {
-            // Populate hidden form on submit
+            // Populate hidden form field of description by taking text from editor on submit
+            var editor = tinymce.get('editor-container');
             var desc = document.querySelector('input[name=description]');
-            desc.value = quill.root.innerHTML;
+            desc.value = editor.getContent();
         });
 
         function readURL(input) {
@@ -1164,11 +792,11 @@
                     success: function(data) {
                         $('#voucher-modal').modal('show');
                         $('#voucher').html(data);
+                        $('.title').text('Edit Voucher');
                         $('.select-2').each(function() {
                             initializeSelect2($(this));
                         });
                         $('#voucher').find(".promotion_end_date").datepicker();
-                        console.log($('#voucher').find(".promotion_end_date").datepicker());
                         $('#voucher').find(".promotion_start_date").datepicker();
                         checkVoucherType();
                         attachFormValidator($(document).find('#model_edit'));
@@ -1189,18 +817,12 @@
                     promotion_end_date: {
                         required: true,
                     },
-                    click_url: {
-                        required: true,
+                    tracking_url: {
                         url: true
                     },
-                    destination: {
-                        required: true,
+                    deeplink_url: {
                         url: true
                     },
-                    sale_commission: {
-                        required: true,
-                        minValue: 0.1,
-                    }
                 },
             });
 
@@ -1224,6 +846,9 @@
                 success: function(data) {
                     $('#seo-modal').modal('show');
                     $('#seo').html(data);
+                    $('.select-2').each(function() {
+                        initializeSelect2($(this));
+                    });
                 }
             });
 
@@ -1244,7 +869,6 @@
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(data.message, 'success');
-                                $('#custom_cashback_percentage').val(data['percentage']);
                             })(NioApp, jQuery);
                             fetchVouchers();
                         } else {
@@ -1419,11 +1043,12 @@
                     success: function(data) {
                         if (data.success) {
                             $('#add-voucher-modal').modal('hide');
+                            $("#add_voucher_validation").trigger("reset");
+                            $("#add-voucher-form").html('');
                             (function(NioApp, $) {
                                 'use strict';
                                 toastr.clear();
                                 NioApp.Toast(data.message, 'success');
-                                $('#custom_cashback_percentage').val(data['percentage']);
                             })(NioApp, jQuery);
                             fetchVouchers();
                         } else {
@@ -1475,18 +1100,72 @@
                             $('.network_url').css('cssText', 'display: none !important');
                             $('.sote-override-network').show();
                         }
+                        $('.select-2').each(function() {
+                            initializeSelect2($(this));
+                        });
                         checkCashbackType();
                         calcCashback();
                         NioApp.BS.tooltip('[data-toggle="tooltip"]');
+                    }
+                });
+            });
+        });
 
+        // Delete Cashback Popup
+        $(document).ready(function() {
+            $(document).on('click', '.cashback-delete', function(event) {
+                event.preventDefault();
+
+                var form = $(this).closest('form');
+                var url = form.attr('action');
+                var data = form.serialize();
+                // Display SweetAlert confirmation dialog
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: 'Once deleted, this cashback cannot be recovered!',
+                    icon: 'warning',
+                    buttons: {
+                        cancel: true, // Set cancel to true to display the cancel button
+                        confirm: {
+                            text: 'Delete',
+                            className: 'swal-button--danger',
+                        },
+                    },
+                    dangerMode: true,
+                }).then((willDelete) => {
+                    if (willDelete.isConfirmed) {
+                        $.ajax({
+                            url: url,
+                            type: 'POST',
+                            data: data,
+                            success: function(data) {
+                                (function(NioApp, $) {
+                                    'use strict';
+                                    NioApp.Toast(data.message, 'success');
+                                })(NioApp, jQuery);
+                                fetchCashbacks();
+                            },
+                            error: function(error) {
+                                if (error.responseJSON.error) {
+                                    (function(NioApp, $) {
+                                        'use strict';
+                                        NioApp.Toast(error.responseJSON.error, 'error');
+                                    })(NioApp, jQuery);
+                                } else {
+                                    (function(NioApp, $) {
+                                        'use strict';
+                                        NioApp.Toast(Object.values(error.responseJSON.errors)[0], 'error');
+                                    })(NioApp, jQuery);
+                                }
+                            }
+                        });
                     }
                 });
             });
         });
 
 
-
-        // Cashback Update
+        // Cashback Create , Update Form
         $(document).ready(function() {
             $(document).on('submit', '.cashback_form', function(event) {
                 event.preventDefault();
@@ -1503,7 +1182,6 @@
                             'use strict';
                             toastr.clear();
                             NioApp.Toast(data.message, 'success');
-                            $('#custom_cashback_percentage').val(data['percentage']);
                         })(NioApp, jQuery);
                         fetchCashbacks();
                     },
@@ -1527,18 +1205,23 @@
         });
 
         // Add Cashback Form
-        $(document).ready(function () {
-            $(document).on('click', '.add-cashbacks', function (event) {
+        $(document).ready(function() {
+            $(document).on('click', '.add-cashbacks', function(event) {
                 event.preventDefault();
-                let storeId = "{{ encrypt($store->id) }}";
+                let storeId = $('#store_id_checker_encrypted').text();
                 $.ajax({
-                    url: "{{ route('admin.stores.cashbacks.create') }}",
+                    url: "{{ route(getAdminPrefix() . '.stores.cashbacks.create') }}",
                     type: "GET",
-                    data: { storeId: storeId },
-                    success: function (data) {
+                    data: {
+                        storeId: storeId
+                    },
+                    success: function(data) {
                         $('.cashback-modal').modal('show');
-                        $('.title').text('Add Cashback');
+                        $('.title').text('Edit Cashback');
                         $('#edit-cashback').html(data);
+                        $('.select-2').each(function() {
+                            initializeSelect2($(this));
+                        });
                         if ($('#store_override_network').is(":checked")) {
                             $('.sote-override-network').hide();
                             $('.network_url').css('cssText', 'display: block !important');
@@ -1570,21 +1253,7 @@
                     success: function(data) {
                         $('#review-modal').modal('show');
                         $('#review').html(data);
-                        var rquill = new Quill('#reditor-container', {
-                            modules: {
-                                toolbar: [
-                                    ['bold', 'italic'],
-                                    ['link', 'blockquote', 'code-block', 'image'],
-                                    [{
-                                        list: 'ordered'
-                                    }, {
-                                        list: 'bullet'
-                                    }]
-                                ]
-                            },
-                            placeholder: 'Compose an epic...',
-                            theme: 'snow'
-                        });
+                        initializeTinyMCEEditor('reditor-container');
                     }
                 });
             });
@@ -1594,9 +1263,9 @@
         $(document).ready(function() {
             $(document).on('submit', '.review_form', function(event) {
                 event.preventDefault();
-                var editor = document.querySelector('#reditor-container')
+                var editor = tinymce.get('reditor-container')
                 var desc = document.querySelector('input[name=review]');
-                desc.value = editor.children[0].innerHTML
+                desc.value = editor.getContent();
                 $.ajax({
                     url: $(this).attr('action'),
                     type: "POST",
@@ -1645,9 +1314,9 @@
         $(document).ready(function() {
             $(document).on('submit', '.review_form_add', function(event) {
                 event.preventDefault();
-                var editor = document.querySelector('#reditor-container')
+                var editor = tinymce.get('reditor-container')
                 var desc = document.querySelector('input[name=review]');
-                desc.value = editor.children[0].innerHTML
+                desc.value = editor.getContent();
                 $.ajax({
                     url: $(this).attr('action'),
                     type: "POST",
@@ -1678,7 +1347,7 @@
                     contentType: false,
                     processData: false,
                     success: function(data) {
-                        $('#file-upload').modal('hide');
+                        $('#file-upload-modal').modal('hide');
                         (function(NioApp, $) {
                             'use strict';
                             toastr.clear();
@@ -1786,15 +1455,19 @@
                         var _token = $("input[name=_token]").val();
                         $.ajax({
                             url: pageurl,
-                            method: "GET",
+                            method: "DELETE",
                             data: {
                                 _token: _token
                             },
-                            success: function(data) {
+                            success: function(response) {
+                                if (response.status == 'success') {
+                                    Swal.fire('Deleted!', response.message, 'success');
+                                } else {
+                                    Swal.fire('Error!', response.message, 'error');
+                                }
                                 fetchAddress();
                             }
                         });
-                        Swal.fire('Deleted!', 'Address has been deleted.', 'success');
                     }
                 });
                 event.preventDefault();
@@ -1805,12 +1478,12 @@
         $(document).ready(function() {
             $(document).on('submit', '#store_form', function(event) {
                 event.preventDefault();
-                var editor = document.querySelector('#editor-container');
+                var editor = tinymce.get('editor-container');
                 var desc = document.querySelector('input[name=description]');
-                desc.value = editor.children[0].innerHTML;
-                var editor = document.querySelector('#teditor-container');
+                desc.value = editor.getContent();
+                var editor = tinymce.get('teditor-container');
                 var desc = document.querySelector('input[name=terms_conditions]');
-                desc.value = editor.children[0].innerHTML;
+                desc.value = editor.getContent();
                 $.ajax({
                     type: 'PUT',
                     url: $(this).attr('action'),
@@ -1848,15 +1521,6 @@
                 },
                 deeplink_url: {
                     url: true
-                },
-                store_url: {
-                    url: true
-                },
-                description: {
-                    maxlength: 255,
-                },
-                terms_conditions: {
-                    maxlength: 255
                 }
             }
         });
@@ -2023,7 +1687,7 @@
                 $('.currency-div').hide();
                 $('#currency').removeAttr('required').val('');
             }
-                $('#currency option:first-child').prop('selected', true);
+            $('#currency option:first-child').prop('selected', true);
         }
 
         $(document.body).on("change", "#type", function() {
@@ -2083,8 +1747,6 @@
             var network_commission = $('#sale_commission').val();
             var cashback = $('#cashback').val();
             var percentage = ((cashback / network_commission) * 100).toFixed(2);
-            $('#custom_cashback_percentagee').val(percentage);
-            $('#custom_cashback_percentage').val(percentage);
         }
 
         function calcCashback() {
@@ -2137,6 +1799,161 @@
             }
             $("#store_form").submit();
         });
+        $(document).ready(function() {
+            $(document).on('click', '.delete-voucher', function(event) {
+                var voucherid = $(this).attr('voucher-delete-id');
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!'
+                }).then(function(result) {
+                    if (result.value) {
+                        pageurl = 'stores/voucher/delete/' + voucherid;
+                        var _token = $("input[name=_token]").val();
+                        $.ajax({
+                            url: pageurl,
+                            method: "DELETE",
+                            data: {
+                                _token: _token
+                            },
+                            success: function(response) {
+                                if (response.status == 'success') {
+                                    Swal.fire('Deleted!', response.message, 'success');
+                                } else {
+                                    Swal.fire('Error!', response.message, 'error');
+                                }
+                                fetchVouchers();
+                            }
+                        });
+                    }
+                });
+                event.preventDefault();
+            });
+        });
+
+        function checkVoucherType() {
+            if ($('#promotion_type').val() == 'Coupon') {
+                $('.coupon-div').show();
+                $('#coupon_code').attr('required', 'required');
+            } else {
+                $('.coupon-div').hide();
+                $('#coupon_code').removeAttr('required').val('');
+            }
+        }
+
+        function initializeSelect2() {
+            $('.select-2').select2({
+                placeholder: function() {
+                    $(this).data('placeholder');
+
+                }
+            });
+        }
+        $('#voucher-modal').on('hidden.bs.modal', function () {
+            $('#voucher').html('');
+        });
+
+        //To load the form for adding image
+        $(document).ready(function (){
+            $(document).on('click', '.add-image', function(event) {
+                var token = "{{ csrf_token() }}";
+                var store = $('.store_id_checker').text();
+                var url = "{{ route(getAdminPrefix(). '.stores.add.image.form' ) }}"
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data: {
+                        _token: token,
+                        store_id: store
+                    },
+                    success: function (response){
+                        $('.add-image-modal-content').html(response);
+                        $('#file-upload-modal').modal('show');
+                    }
+                });
+            });
+        })
+
+        //To load the form for adding voucher
+        $(document).ready(function (){
+            $(document).on('click', '.add-voucher', function(event) {
+                var token = "{{ csrf_token() }}";
+                var url = "{{ route(getAdminPrefix(). '.stores.add.voucher.form') }}"
+                var store = $('.store_id_checker').text();
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data: {
+                        _token: token,
+                        store_id: store
+                    },
+                    success: function (response){
+                        $('.title').text('Add Voucher');
+                        $('#add-voucher-form').html(response);
+                        $('#add-voucher-modal').modal('show');
+                        $('.select-2').each(function() {
+                            initializeSelect2($(this));
+                        });
+                        $('#add-voucher-form').find(".promotion_end_date").datepicker();
+                        $('#add-voucher-form').find(".promotion_start_date").datepicker();
+                        NioApp.BS.tooltip('[data-toggle="tooltip"]');
+                    }
+                });
+            });
+        })
+        //To load the form for adding address
+        $(document).ready(function (){
+            $(document).on('click', '.add-address', function (event){
+                var token = "{{ csrf_token() }}";
+                var url = "{{ route(getAdminPrefix(). '.stores.add.address.form') }}";
+                var store = $('.store_id_checker').text();
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data: {
+                        _token: token,
+                        store_id: store
+                    },
+                    success: function (response){
+                        $("#add-address-form").html(response);
+                        $("#add-address-modal").modal('show');
+                    }
+                })
+            });
+        })
+
+        //To load the form for adding SEO
+        $(document).ready(function (){
+            $(document).on('click', '.add-seo-rule', function (event){
+                var token = "{{ csrf_token() }}";
+                var url = "{{ route(getAdminPrefix(). '.stores.add.seo.rule.form') }}";
+                var store = $('.store_id_checker').text();
+                $.ajax({
+                    url: url,
+                    method: "POST",
+                    data: {
+                        _token: token,
+                        store_id: store
+                    },
+                    success: function (response){
+                        $('#add-seorule-form').html(response);
+                        $('#add-seorule-modal').modal('show');
+                        $('.select-2').each(function() {
+                            initializeSelect2($(this));
+                        });
+                    }
+                })
+            });
+        })
+
+        $('#edit-cashback-modal').on('hidden.bs.modal', function (){
+            $('#edit-cashback').html('');
+        });
+        $('#cashback-modal').on('hidden.bs.modal', function (){
+            $('#cashback').html('');
+        });
+
     </script>
-    
 @endpush

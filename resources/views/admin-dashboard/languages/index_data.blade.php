@@ -1,8 +1,3 @@
-<style>
-    .nk-tb-list{
-        table-layout: fixed;
-    }
-</style>
 @if(count($languages))
 <div class="nk-tb-item nk-tb-head">
     
@@ -57,9 +52,9 @@
                     <a href="#" class="dropdown-toggle btn btn-icon btn-trigger" data-toggle="dropdown"><em class="icon ni ni-more-h"></em></a>
                     <div class="dropdown-menu dropdown-menu-right">
                         <ul class="link-list-opt no-bdr">
-                            {{-- <li><a href="{{route('admin.settings.edit', $language)}}"><em class="icon ni ni-edit"></em><span>Edit Setting</span></a></li> --}}
+                            {{-- <li><a href="{{route(getAdminPrefix() . '.settings.edit', $language)}}"><em class="icon ni ni-edit"></em><span>Edit Setting</span></a></li> --}}
                             <li>
-                                <form action="{{ route('admin.languages.destroy', $language->id) }}" id="delete-form-{{$language->id}}" method="POST">
+                                <form action="{{ route(getAdminPrefix() . '.languages.destroy', $language->id) }}" id="delete-form-{{$language->id}}" method="POST">
                                     @method('DELETE')
                                     @csrf
                                     

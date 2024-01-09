@@ -27,7 +27,7 @@
                                     <div class="card-head">
                                         <h5 class="card-title">Charity Info</h5>
                                     </div>
-                                    <form action="{{ route('admin.charities.store') }}" class="gy-3 form-validate is-alter charity-form" method="POST"
+                                    <form action="{{ route(getAdminPrefix() . '.charities.store') }}" class="gy-3 form-validate is-alter charity-form" method="POST"
                                         enctype="multipart/form-data">
                                         @csrf
                                         <div class="row g-4">
@@ -48,7 +48,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="charity_types_id">Charity Type <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
-                                                        <div class="form-control-select">
+                                                        <div>
                                                             <select class="form-control form-select" id="charity_types_id" name="charity_types_id"
                                                                 value="{{ old('charity_types_id') }}" required>
                                                                 @foreach ($charitiestypes as $types)
@@ -77,7 +77,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="logo_type">Logo <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
-                                                        <div class="form-control-select">
+                                                        <div>
                                                             <select class="form-control form-select" name="logo_type" id='logo_type' value="{{ old('logo_type') }}" required>
                                                                 <option value="upload">Upload</option>
                                                                 <option value="link">Link</option>
@@ -141,7 +141,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="banner_type">Banner <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
-                                                        <div class="form-control-select">
+                                                        <div>
                                                             <select class="form-control form-select" name="banner_type" id='banner_type' value="{{ old('banner_type') }}"
                                                                 required>
                                                                 <option value="upload">Upload</option>
@@ -205,7 +205,7 @@
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-label" for="country">Country <span class="text-danger">*</span></label>
-                                                    <div class="form-control-select">
+                                                    <div>
                                                         <select class="form-control form-select" id="country" data-search="on" name="country" value="{{ old('country') }}" required>
                                                             @foreach($countries as $country)
                                                                 <option value="{{ $country->id }}">{{ $country->name }}</option>
@@ -219,11 +219,29 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            
+                                            <div class="col-lg-6">
+                                                <div class="form-group">
+                                                    <label class="form-label" for="tag">Tag </label>
+                                                    <div class="form-control-select">
+                                                        <select class="form-control form-select" id="tags" data-search="on" name="tags[]" value="{{ old('tag') }}"  multiple>
+                                                            @foreach($tags as $tag)
+                                                                <option value="{{ $tag->id }}">{{ $tag->title }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        @error('tags')
+                                                            <span class="invalid-feedback d-block" role="alert">
+                                                                <strong>{{ $message }}</strong>
+                                                            </span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-label" for="status">Status <span class="text-danger">*</span></label>
                                                     <div class="form-control-wrap ">
-                                                        <div class="form-control-select">
+                                                        <div>
                                                             <select class="form-control form-select" id="status" name="status" value="{{ old('status') }}" required>
                                                                 <option value="1">Active</option>
                                                                 <option value="0">In-active</option>
@@ -254,30 +272,16 @@
     </div>
 @endsection
 @push('scripts')
-    <link rel="stylesheet" href="{{ asset('admin-dashboard/css/editors/quill.css?ver=2.2.0') }}">
-    <script src="{{ asset('admin-dashboard/js/libs/editors/quill.js?ver=2.2.0') }}"></script>
-    <script src="{{ asset('admin-dashboard/js/editors.js?ver=2.2.0') }}"></script>
     <script>
-        var quill = new Quill('#editor-container', {
-            modules: {
-                toolbar: [
-                    ['bold', 'italic'],
-                    ['link', 'blockquote', 'code-block', 'image'],
-                    [{
-                        list: 'ordered'
-                    }, {
-                        list: 'bullet'
-                    }]
-                ]
-            },
-            placeholder: 'Compose an epic...',
-            theme: 'snow'
+        $(document).ready(function (){
+            initializeTinyMCEEditor('editor-container');
         });
         var form = document.querySelector('form');
         $(".charity-form").submit(function(e) {
             // Populate hidden form on submit
+            var editor = tinymce.get('editor-container');
             var desc = document.querySelector('input[name=description]');
-            desc.value = quill.root.innerHTML;
+            desc.value = editor.getContent();
         });
     </script>
     <script>

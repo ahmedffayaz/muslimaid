@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Store;
 use App\Models\SiteCategory;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class Category extends Model
 {
@@ -15,6 +16,7 @@ class Category extends Model
     protected $fillable = [
         'name',
         'is_map_enable',
+        'visibility',
         'slug',
         'description',
         'sort',
@@ -28,10 +30,10 @@ class Category extends Model
         'parent_id',
         'mapped_to',
         'network_id',
-        'feature_homepage',
-        'feature_sidebar',
+        'advertiser_id',
         'meta_description',
         'meta_keyword',
+        'meta_title',
     ];
 
     public function stores()
@@ -59,11 +61,21 @@ class Category extends Model
         return $this->hasMany(EditorPick::class);
     }
 
+    public function tags(): MorphToMany
+    {
+        return $this->morphToMany(Tag::class, 'taggable');
+    }
+
     public function enableGoogleMap()
     {
         $html = '';
         if ($this->is_map_enable == 1)
             $html = '<span class="badge badge-dim badge-pill badge-info text-capitalize"><em class="icon ni ni-done"></em>Map Enabled</span>';
         return $html;
+    }
+
+    public function network()
+    {
+        return $this->belongsTo(Network::class);
     }
 }

@@ -21,7 +21,7 @@
                                 <div class="card-head">
                                     <h5 class="card-title">Translation</h5>
                                 </div>
-                                <form action="{{route('admin.translations.update',$translation->id)}}" class="gy-3 form-validate is-alter" method="POST">
+                                <form action="{{route(getAdminPrefix() . '.translations.update',$translation->id)}}" class="gy-3 form-validate is-alter" method="POST">
                                     @csrf
                                     @method('PUT')
                                     <div class="row g-4">

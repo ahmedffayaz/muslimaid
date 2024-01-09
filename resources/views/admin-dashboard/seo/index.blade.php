@@ -30,12 +30,8 @@
                     @include('flash::message')
                     <div class="nk-block">
                         <div class="card card-stretch">
-                            <div class="card-inner-group">
-                                <div class="card-inner px-0">
-                                    <div class="nk-tb-list nk-tb-ulist" id="table-data">
-                                        @include('admin-dashboard.seo.index_data')
-                                    </div><!-- .nk-tb-list -->
-                                </div><!-- .card-inner -->
+                            <div class="card-inner-group" id="table-data">
+                                @include('admin-dashboard.seo.index_data')
                             </div><!-- .card-inner-group -->
                         </div><!-- .card -->
                     </div><!-- .nk-block -->
@@ -63,7 +59,7 @@
             // Show modal
             $('#show-modal').on('click', function (event) {
                 event.preventDefault();
-                let url = "{{ route('admin.seo.create') }}";
+                let url = "{{ route(getAdminPrefix() . '.seo.create') }}";
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -92,6 +88,7 @@
                                                 <option Selected disabled>Choose key</option>
                                                 <option value="meta_description">Meta: Description</option>
                                                 <option value="meta_keyword">Meta: Keyword</option>
+                                                <option value="meta_title">Meta: Title</option>
                                             </select>
                                         </div>
                                     </div>
@@ -144,7 +141,7 @@
             $(document).on('click', '.edit-form',function (event) {
                 event.preventDefault();
                 let id = $(this).data('id');
-                let url = "{{ route('admin.seo.edit', ':id') }}";
+                let url = "{{ route(getAdminPrefix() . '.seo.edit', ':id') }}";
                 // Replace id
                 url = url.replace(':id', id);
                 $.ajax({
@@ -171,7 +168,7 @@
                     save_btn.attr('disabled', 'disabled').button('refresh');
 
                     let method = "POST";
-                    let url = "{{ route('admin.seo.store') }}";
+                    let url = "{{ route(getAdminPrefix() . '.seo.store') }}";
                     let id = $('#id').val()
                     let fd = new FormData(this);
                     let base_url = window.location.origin;
@@ -179,7 +176,7 @@
                         fd.set('url', append_url_val)
 
                     if(id){
-                        url = "{{ route('admin.seo.update', ':id') }}";
+                        url = "{{ route(getAdminPrefix() . '.seo.update', ':id') }}";
                         url = url.replace(':id', id);
                         fd.append('_method', 'PUT');
                     }
@@ -222,21 +219,51 @@
             }
 
             // Delete table record
-            $(document).on('click', '.delete', function(event) {
-                var form_id = $(this).attr('form_id');
-                Swal.fire({
-                    title: 'Are you sure?',
-                    text: "You won't be able to revert this!",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Yes, delete it!'
-                }).then(function(result) {
-                    if (result.value) {
-                        $('#' + form_id).submit();
-                    }
-                });
-                event.preventDefault();
+            $(document).on('click', '.seo-delete', function(event) {
+            event.preventDefault();
+            id = $(this).data('id')
+            url = $(this).data('action');
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it!'
+            }).then(function(result) {
+                if (result.value) {
+                    $.ajax({
+                        url: url,
+                        type: 'DELETE',
+                        data: {
+                            '_token': "{{ csrf_token() }}",
+                            'id': id
+                        },
+                        success: function(response) {
+                            $('#table-data').load(location.href + ' #table-data');
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(response.success, 'success');
+                            })(NioApp, jQuery);
+                        },
+                        error: function(error) {
+                            (function(NioApp, $) {
+                                'use strict';
+                                toastr.clear();
+                                NioApp.Toast(error.responseJSON.error, 'error');
+                            })(NioApp, jQuery);
+                        }
+                    });
+                } else {
+                    (function(NioApp, $) {
+                        'use strict';
+                        toastr.clear();
+                        NioApp.Toast('Something went wrong, try again', 'error');
+                    })(NioApp, jQuery);
+                }
             });
+            // event.preventDefault();
+        });
         });
     </script>
 @endpush
