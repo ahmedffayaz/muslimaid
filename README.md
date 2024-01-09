@@ -28,10 +28,11 @@ There are two repositories for Cashback project.
 
 ### .env File Setup
 
++ Copy .env.example file as .env on base patch
 + SESSION_DRIVER should be database.
 + QUEUE_CONNECTION should be database.
 + Firebase Credentials file should be in resources->views->frontend->vendors directory with the name of firebase-credentials.json
-  + Put firbase credentials file path in . env file FIREBASE_CREDENTIALS="resources/views/frontend/vendors/firebase-credentials.json"
+  + Put firebase credentials file path in . env file FIREBASE_CREDENTIALS="resources/views/frontend/vendors/firebase-credentials.json"
 + For strong password use PASSWORD_VALIDATION in .env file and type password validation format else comment this.
 + Use TIMEZONE="Europe/London" for custom timezone in complete project
 + Use PAYMENT_METHOD="cashback" in .env file to save in cashout meta table which represent to user make cashout from which website like 'cashback'
@@ -40,6 +41,7 @@ There are two repositories for Cashback project.
 
 ### .modules.yml File Setup
 
++ Copy module.yml.example file as module.yml on base path
 + .modules.yml file is used for to enable/disable module like SMTP, Charities, Appeals.
 + File would use for enable/disable networks importer like CJ, Awin, RevGlue
   + Each networks have Settings and Importers
@@ -49,8 +51,6 @@ There are two repositories for Cashback project.
 ---
 
 + Install composer to add Laravel package
-+ Copy module.yml.example file as module.yml on base path
-+ Copy .env.example file as .env on base patch
 + Now run below commands
   + php artisan generate:key // to generate new project key
   + php artisan copy:frontend-asset // to copy frontend assets in storage directory
