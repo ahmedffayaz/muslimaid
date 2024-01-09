@@ -50,6 +50,8 @@ There are two repositories for Cashback project.
 
 ---
 
+### Installation
+
 + Install composer to add Laravel package
 + Now run below commands
   + php artisan generate:key // to generate new project key
