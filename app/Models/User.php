@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Laravel\Sanctum\HasApiTokens;
 
 use App\Models\Store;
-use App\Models\Favorite;
 
 class User extends Authenticatable implements MustVerifyEmail
 {

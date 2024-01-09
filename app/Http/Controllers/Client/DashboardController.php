@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use Exception;
+use App\Models\User;
 use App\Models\Store;
 use App\Models\Appeal;
 use App\Models\Cashout;
@@ -347,8 +348,77 @@ class DashboardController extends Controller
         } catch (Exception $e) {
             return response()->json([
                 'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
-                'message' => $e->getMessage() . ' Something went wrong'
+                'message' => 'Something went wrong'
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public function destroy(Request $request, $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            flash()->error($validator->errors()->first());
+            return redirect()->back();
+        }
+
+        try {
+            $user = User::find($id);
+
+            // Check if the provided password matches the hashed password in the database
+            if (! Hash::check($request->password, $user->password)) {
+                $message = 'Credentials do not match our records.';
+                if ($request->ajax()) {
+                    return response()->json([
+                        'status' => JsonResponse::HTTP_UNAUTHORIZED,
+                        'message' => $message
+                    ], JsonResponse::HTTP_UNAUTHORIZED);
+                }
+                flash()->error($message);
+                return redirect()->back();
+            }
+
+            // Check that current user is admin
+            if ($user->hasRole('admin')) {
+                $errorMessage = 'Can\'t delete this account, please contact super admin.';
+                if ($request->ajax()) {
+                    return response()->json([
+                        'status' => JsonResponse::HTTP_UNAUTHORIZED,
+                        'message' => $errorMessage
+                    ], JsonResponse::HTTP_UNAUTHORIZED);
+                }
+                return redirect()->back()->with(['error' => $errorMessage]);
+            }
+
+            DB::beginTransaction();
+            auth()->user()->tokens()->delete();
+            Auth::logoutOtherDevices($request->password);
+            Auth::logout();
+            $user->delete();
+            DB::commit();
+
+            $successMessage = 'Account deleted successfully.';
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => $successMessage
+                ], JsonResponse::HTTP_OK);
+            }
+
+            return redirect()->route('login')->with(['success' => $successMessage]);
+        } catch (Exception $e) {
+            DB::rollback();
+            $message = 'Something went wrong, try again later. ' . $e->getMessage();
+            if ($request->ajax()) {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                    'message' => $message
+                ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+            }
+
+            return redirect()->back()->with(['error' => $message]);
         }
     }
 }

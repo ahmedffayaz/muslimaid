@@ -2,30 +2,33 @@
 
 namespace App\Http\Controllers\API;
 
+use Exception;
 use App\Models\User;
+use App\Models\Banner;
 use App\Models\Ticket;
 use App\Jobs\SendEmail;
 use App\Models\Cashout;
+use App\Models\UserMeta;
 use App\Models\ExitClick;
 use App\Models\PaymentInfo;
 use App\Models\UserCashback;
 use Illuminate\Http\Request;
 use App\Models\EmailTemplate;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
+use App\Traits\SubscribeNewsletter;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\BannerResource;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use App\Http\Resources\ClickResource;
+use App\Http\Resources\BannerResource;
 use App\Http\Resources\TicketResource;
 use App\Http\Resources\CashoutResource;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\ReferralResource;
 use App\Http\Resources\Home\UserResource;
-use App\Http\Resources\PaymentInfoResource;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserCashbackResource;
-use App\Models\Banner;
-use App\Models\UserMeta;
-use App\Traits\SubscribeNewsletter;
 
 class UserController extends Controller
 {
@@ -536,6 +539,62 @@ class UserController extends Controller
                 'data' => []
             ];
             return response()->json($data, 500);
+        }
+    }
+
+    public function destroy(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|string'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 406,
+                'message' => $validator->errors()->first(),
+                'data' => []
+            ]);
+        }
+
+        try {
+            // $user = User::find(auth()->user()->id);
+            $user = auth()->user();
+
+            // Check if the provided password matches the hashed password in the database
+            if (! Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_UNAUTHORIZED,
+                    'message' => 'Credentials do not match our records.'
+                ], JsonResponse::HTTP_UNAUTHORIZED);
+            }
+
+            // Check that current user is admin
+            if ($user->hasRole('admin')) {
+                return response()->json([
+                    'status' => JsonResponse::HTTP_UNAUTHORIZED,
+                    'message' => 'Can\'t delete this account, please contact super admin.'
+                ], JsonResponse::HTTP_UNAUTHORIZED);
+            }
+
+            DB::beginTransaction();
+            // Delete auth user session from sessions table
+            DB::table('sessions')->whereUserId($user->id)->delete();
+
+            // Delete auth user tokens
+            $user->tokens()->delete();
+            $user->delete();
+            DB::commit();
+
+            return response()->json([
+                'status' => JsonResponse::HTTP_OK,
+                'message' => 'Account deleted successfully.'
+            ], JsonResponse::HTTP_OK);
+        } catch (Exception $e) {
+            DB::rollback();
+            return response()->json([
+                'status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => 'Something went wrong, try again later. ' . $e->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

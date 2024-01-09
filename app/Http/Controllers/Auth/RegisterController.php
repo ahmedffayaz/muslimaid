@@ -135,7 +135,7 @@ class RegisterController extends Controller
             $this->registerNewsletter(['type' => 'register', 'user' => $user]);
 
             DB::commit();
-            return redirect()->route('login')->with(['success' => 'User Successfully registered, verify your account'],);
+            return redirect()->route('login')->with(['success' => 'User Successfully registered, verify your account']);
         } catch (Exception $ex) {
             DB::rollBack();
             return redirect()->route('login')->with(['error' => 'Something went wrong!']);
@@ -150,6 +150,11 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
+        // Get deleted account
+        $deletedUser = User::where('email', $request->input('email'))->withTrashed()->first();
+        if (!empty($deletedUser))
+            return redirect()->route('login')->with(['error' => 'The account has been deleted permanently.']);
+
         $validator = $this->validator($request->all());
         if($validator->fails()){
             if($request->ajax()){
