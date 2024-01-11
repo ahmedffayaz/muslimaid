@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Frontend;
 
 use Exception;
-use Carbon\Carbon;
 use App\Models\Store;
 use App\Models\StoreReview;
 use Illuminate\Http\Request;
@@ -21,12 +20,15 @@ class StoreReviewController extends Controller
         try {
             $limit = 5;
             $reviewsCount = $request->reviewsCount;
-            $reviews = Store::where('id', $id)->first()->reviews()->where('status', 'active')
-                ->with('user', function ($query) {
-                    $query->select('id', 'first_name', 'last_name', 'avatar');
-                })->skip($reviewsCount)->take($limit)->get();
+            $store = Store::with(['reviews' => function ($query) use ($reviewsCount, $limit) {
+                $query->with(['user' => function ($query) {
+                    $query->select('id', 'first_name', 'last_name', 'avatar', 'created_at', 'deleted_at')->withTrashed();
+                }])->whereStatus('active')->take($limit)->skip($reviewsCount);
+            }])->whereStatus('active')->findOrFail($id);
 
-            $reviewsCount = $reviews->count();
+            $reviews = $store->reviews;
+
+            $reviewsCount = $store->reviews->count();
 
             return response()->json([
                 'reviews' => view('frontend.stores.reviews', compact('reviews'))->render(),

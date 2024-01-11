@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Cashout;
+use Illuminate\Http\Request;
 use App\Jobs\SendEmailToUser;
 use App\Jobs\SendNotification;
-use Illuminate\Http\Request;
-use App\Models\Cashout;
-use App\Models\User;
 use App\Models\CashbackStatus;
+use Illuminate\Http\JsonResponse;
+use App\Http\Controllers\Controller;
 use App\Models\CashbackStatusChange;
-use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class CashoutController extends Controller
 {
@@ -26,7 +28,9 @@ class CashoutController extends Controller
      */
     public function index()
     {
-        $cashouts = Cashout::latest()->paginate(10);
+        $cashouts = Cashout::with(['user' => function ($query) {
+            $query->withTrashed();
+        }])->latest()->paginate(10);
 
         return view('admin-dashboard.cashouts.index', compact('cashouts'));
     }
@@ -37,10 +41,13 @@ class CashoutController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Cashout $cashout)
+    public function show(Request $request, $id)
     {
+        $cashout = Cashout::with(['user' => function ($query) {
+            $query->withTrashed();
+        }])->findOrFail($id);
         $cashout->update(['new_cashout'=>0]);
-        $users  = User::latest()->get();
+        $users  = User::withTrashed()->latest()->get();
         $statuses = CashbackStatus::all();
         return view('admin-dashboard.cashouts.show',compact('cashout','users','statuses'));
     }
@@ -52,9 +59,36 @@ class CashoutController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Cashout $cashout)
+    public function update(Request $request, $id)
     {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required|string|in:donated,paid'
+        ]);
+
+        if($validator->fails()){
+            if(!$request->ajax()){
+                flash()->error($validator->errors()->first());
+                return redirect()->back()->withInput();
+            }
+
+            return response()->json(['status' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+            'errors' => $validator->errors()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
         try {
+            $cashout = Cashout::with(['user' => function ($query) {
+                $query->withTrashed();
+            }])->findOrFail($id);
+
+            // Change user id if user account deleted
+            if (! empty($cashout->user->deleted_at)) {
+                foreach ($cashout->cashbacks as $cashback) {
+                    $cashback->update(['user_id' => getAdminUser()->id]);
+                }
+                $cashout->update(['user_id' => getAdminUser()->id]);
+            }
+
             if($request->input('status') == 'pending'){
                 $cashout->update(['status'=>'pending']);
 

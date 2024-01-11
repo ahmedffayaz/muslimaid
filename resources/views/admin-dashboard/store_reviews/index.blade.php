@@ -163,7 +163,6 @@
                             status: status
                         },
                         success: function(data) {
-                            console.log(data)
                             $('#table-data').html(data);
                             $('html, body').animate({
                                 scrollTop: 0

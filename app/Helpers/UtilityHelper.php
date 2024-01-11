@@ -954,14 +954,29 @@ function getImageUrl($url)
         : asset($url);
 }
 
-function getCategoryImageUrl($category)
+function getCategoryImageUrl($category, $type = 'logo')
 {
-    if ($category->logo_type == 'upload') {
-        return !file_exists(public_path($category->logo_upload)) ? asset('storage/__asset/images/error-images/no-logo.png') : asset($category->logo_upload);
+    // Get category logo
+    if ($type == 'logo') {
+        // Get logo where type is upload
+        if ($category->logo_type == 'upload')
+            return !file_exists(public_path($category->logo_upload)) ? asset('storage/__asset/images/error-images/no-logo.png') : asset($category->logo_upload);
+
+        // Get logo where type is link
+        if ($category->logo_type == 'link')
+            return $category->logo_link;
     }
 
-    if ($category->logo_type == 'link')
-        return $category->logo_link;
+    // Get category banner
+    if ($type == 'banner') {
+        // Get banner where type is upload
+        if ($category->banner_type == 'upload')
+            return !file_exists(public_path($category->banner_upload)) ? asset('storage/__asset/images/error-images/no-logo.png') : asset($category->banner_pload);
+
+        // Get banner where type is link
+        if ($category->banner_type == 'link')
+            return $category->banner_link;
+    }
 
     return null;
 }
