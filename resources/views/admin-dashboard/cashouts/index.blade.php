@@ -40,7 +40,7 @@
                 <div class="nk-block">
                     <div class="card card-stretch">
                         <div class="card-inner-group" id="table-data">
-                            @include('admin-dashboard.cashouts.index_data')                                   
+                            @include('admin-dashboard.cashouts.index_data')
                         </div><!-- .card-inner-group -->
                     </div><!-- .card -->
                 </div><!-- .nk-block -->

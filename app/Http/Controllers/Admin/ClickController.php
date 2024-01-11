@@ -51,7 +51,9 @@ class ClickController extends Controller
         })
         ->when($request->network_id, function ($query) use ($request){
             $query->where('network_id', $request->network_id);
-        })->latest()->paginate(20);
+        })->with(['user' => function ($query) {
+            $query->withTrashed();
+        }])->latest()->paginate(20);
         $route = 'fetchActiveStoresClicks';
         return view('admin-dashboard.clicks.index_data', compact('clicks', 'route'))->render();
 
@@ -60,7 +62,9 @@ class ClickController extends Controller
     public function exportCsv(Request $request)
     {
         try {
-            $table = ExitClick::latest()->get();
+            $table = ExitClick::with(['user' => function ($query) {
+                $query->withTrashed();
+            }])->latest()->get();
             $filename = "clicks.csv";
             $handle = fopen($filename, 'w+');
 
@@ -105,7 +109,9 @@ class ClickController extends Controller
             });
         })->when($request->network_id, function ($query) use ($request){
             $query->where('network_id', $request->network_id);
-        })->latest()->paginate(20);
+        })->with(['user' => function ($query) {
+            $query->withTrashed();
+        }])->latest()->paginate(20);
         $route = "deletedStoresClicks";
 
         return view('admin-dashboard.clicks.archive_data', compact('exitClicks', 'route'))->render();

@@ -445,7 +445,7 @@ class StoreController extends Controller
     public function fetchReviews(Request $request)
     {
         if ($request->ajax()) {
-            $store = Store::where('id', $request->store)->first();
+            $store = Store::with('reviews')->where('id', $request->store)->first();
             return view('admin-dashboard.stores.reviews', compact('store'))->render();
         }
     }
