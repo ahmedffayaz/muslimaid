@@ -44,7 +44,8 @@
                                 </div>
                                 <div class="nk-block-head-content">
                                     <div class="toggle-wrap nk-block-tools-toggle">
-                                        <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
+                                        <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1"
+                                            data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
                                         <div class="toggle-expand-content" data-content="pageMenu">
                                             <ul class="nk-block-tools g-3">
                                             </ul>
@@ -55,7 +56,6 @@
                         </div>
 
                         @include('flash::message')
-
 
                         <div class="nk-block nk-block-lg">
                             <div class="card card-preview">
@@ -68,10 +68,13 @@
                                             <div class="profile-ud-item">
                                                 <div class="profile-ud wider">
                                                     <span class="profile-ud-label">User</span>
-                                                    <span class="profile-ud-value"><a href="{{ route(getAdminPrefix() . '.users.show_user') }}?user_id={{ $cashout->user->id }}"
+                                                    <span class="profile-ud-value"><a
+                                                            href="{{ route(getAdminPrefix() . '.users.show_user') }}?user_id={{ $cashout->user->id }}"
                                                             class="a_link">{{ $cashout->user->id }} - @if ($cashout->user->first_name != 'unnamed' || $cashout->user->last_name != 'unnamed')
-                                                                {{ $cashout->user->first_name }} {{ $cashout->user->last_name }} -
-                                                            @endif {{ $cashout->user->email }}</a></span>
+                                                                {{ $cashout->user->first_name }}
+                                                                {{ $cashout->user->last_name }} -
+                                                            @endif
+                                                            {{ $cashout->user->email }}</a></span>
                                                 </div>
                                             </div>
                                             <div class="profile-ud-item">
@@ -83,7 +86,8 @@
                                             <div class="profile-ud-item">
                                                 <div class="profile-ud wider">
                                                     <span class="profile-ud-label">Request Date</span>
-                                                    <span class="profile-ud-value">{{ formatDateTimezone($cashout->created_at, 'Do MMMM YYYY') }}</span>
+                                                    <span
+                                                        class="profile-ud-value">{{ formatDateTimezone($cashout->created_at, 'Do MMMM YYYY') }}</span>
                                                 </div>
                                             </div>
                                             <div class="profile-ud-item">
@@ -104,11 +108,24 @@
                                             <div class="profile-ud-item">
                                                 <div class="profile-ud wider">
                                                     <span class="profile-ud-label">Payment Method</span>
-                                                    <span class="profile-ud-value">{{ ucfirst($cashout->payment_method) }}</span>
+                                                    <span
+                                                        class="profile-ud-value">{{ ucfirst($cashout->payment_method) }}</span>
                                                 </div>
                                             </div>
                                         </div><!-- .profile-ud-list -->
                                     </div><!-- .nk-block -->
+
+                                    @if (!empty($cashout->user->deleted_at))
+                                        <div class="nk-block">
+                                            <div class="nk-block-head nk-block-head-line">
+                                                <div class="alert alert-fill alert-icon alert-warning d-block">
+                                                    <em class="icon ni ni-alert-circle"></em>
+                                                    <strong>The user has been deleted</strong>, their pending cashout will
+                                                    be transferred to the admin account for further processing..
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
 
                                     <div class="nk-divider divider"></div>
                                     <div class="nk-block">
@@ -119,22 +136,26 @@
                                             @if (count($cashout->metaData) != 0 && isset($cashout->appeal))
                                                 <div class="profile-ud-item">
                                                     <div class="profile-ud wider">
-                                                        <span class="profile-ud-label">{{ ucfirst(str_replace('_', ' ', $cashout->appeal->type)) }}</span>
+                                                        <span
+                                                            class="profile-ud-label">{{ ucfirst(str_replace('_', ' ', $cashout->appeal->type)) }}</span>
                                                         <span class="profile-ud-value">{{ $cashout->appeal->title }}</span>
                                                     </div>
                                                 </div>
                                             @elseif (count($cashout->metaData) != 0 && isset($cashout->charity))
                                                 <div class="profile-ud-item">
                                                     <div class="profile-ud wider">
-                                                        <span class="profile-ud-label">{{ ucfirst(str_replace('_', ' ', $cashout->charity->type)) }}</span>
-                                                        <span class="profile-ud-value">{{ $cashout->charity->title }}</span>
+                                                        <span
+                                                            class="profile-ud-label">{{ ucfirst(str_replace('_', ' ', $cashout->charity->type)) }}</span>
+                                                        <span
+                                                            class="profile-ud-value">{{ $cashout->charity->title }}</span>
                                                     </div>
                                                 </div>
                                             @else
-                                                @foreach($cashout->metaData as $data)
+                                                @foreach ($cashout->metaData as $data)
                                                     <div class="profile-ud-item">
                                                         <div class="profile-ud wider">
-                                                            <span class="profile-ud-label">{{ ucfirst(str_replace('_', ' ', $data->type)) }}</span>
+                                                            <span
+                                                                class="profile-ud-label">{{ ucfirst(str_replace('_', ' ', $data->type)) }}</span>
                                                             <span class="profile-ud-value">{{ $data->value }}</span>
                                                         </div>
                                                     </div>
@@ -158,7 +179,8 @@
                                                                         href="{{ route(getAdminPrefix() . '.stores.show_store') }}?slug={{ $cashback->store->slug }}">
                                                                         {{ $cashback->store->name }}</a></span>
                                                             @else
-                                                                <span class="profile-ud-value"> {{ ucfirst(str_replace('_', ' ', $cashback->type)) }}</span>
+                                                                <span class="profile-ud-value">
+                                                                    {{ ucfirst(str_replace('_', ' ', $cashback->type)) }}</span>
                                                             @endif
                                                         </div>
                                                     </div>
@@ -166,7 +188,8 @@
                                                     <div class="profile-ud-item">
                                                         <div class="profile-ud wider">
                                                             <span class="profile-ud-label">Cashback Amount</span>
-                                                            <span class="profile-ud-value">{{ currency($cashback->amount) }}</span>
+                                                            <span
+                                                                class="profile-ud-value">{{ currency($cashback->amount) }}</span>
                                                         </div>
                                                     </div>
                                                 @endforeach
@@ -190,7 +213,8 @@
                                                 <div class="profile-ud-item">
                                                     <div class="profile-ud wider">
                                                         <span class="profile-ud-label">Amount</span>
-                                                        <span class="profile-ud-value">{{ currency($cashout->bonus->amount) }}</span>
+                                                        <span
+                                                            class="profile-ud-value">{{ currency($cashout->bonus->amount) }}</span>
                                                     </div>
                                                 </div>
                                             </div><!-- .profile-ud-list -->
@@ -205,31 +229,47 @@
                                                 <div class="nk-block-head">
                                                 </div><!-- .nk-block-head -->
 
-                                                <form action="{{ route(getAdminPrefix() . '.cashouts.update', $cashout) }}" class="gy-3 form-validate is-alter"
-                                                    id="form_withdraw" method="POST">
+                                                <form
+                                                    action="{{ route(getAdminPrefix() . '.cashouts.update', $cashout) }}"
+                                                    class="gy-3 form-validate is-alter" id="form_withdraw"
+                                                    method="POST">
                                                     @csrf
                                                     @method('PUT')
                                                     <div class="row g-4">
                                                         <div class="col-lg-6">
                                                             <div class="form-group">
-                                                                <label class="form-label" for="default-06">Status</label>
+                                                                <label class="form-label" for="default-06">Status <span
+                                                                        class="text-danger">*</span></label>
                                                                 <div class="form-control-wrap ">
                                                                     <div class="form-control-select">
-                                                                        <select class="form-control" id="default-06" name="status" required>
-                                                                            <option @if ($cashout->status != 'paid' && $cashout->status != 'donated' && $cashout->status != 'pending') selected @endif>Select status</option>
+                                                                        <select class="form-control status" name="status"
+                                                                            required>
                                                                             @if ($cashout->status != 'paid' && $cashout->status != 'donated')
-                                                                                <option @if ($cashout->status == 'pending') selected @endif value="pending">Pending</option>
+                                                                                <option
+                                                                                    @if ($cashout->status == 'pending' || $cashout->status == 'processing donation') selected @endif>
+                                                                                    Pending
+                                                                                </option>
                                                                             @endif
-                                                                            <option @if ($cashout->status == 'paid') selected @endif value="paid">Paid</option>
-                                                                            <option @if ($cashout->status == 'donated') selected @endif value="donated">Donated</option>
+                                                                            @if ($cashout->status == 'paid' || $cashout->status == 'pending')
+                                                                                <option
+                                                                                    @if ($cashout->status == 'paid') selected @endif
+                                                                                    value="paid">Paid</option>
+                                                                            @endif
+                                                                            @if ($cashout->status == 'processing donation' || $cashout->status == 'donated')
+                                                                                <option
+                                                                                    @if ($cashout->status == 'donated') selected @endif
+                                                                                    value="donated">Donated</option>
+                                                                            @endif
                                                                         </select>
+                                                                        <div class="status-error text-danger mt-1"></div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                         <div class="col-12">
                                                             <div class="form-group">
-                                                                <button type="button" class="btn btn-lg btn-primary withdraw_submit">Save</button>
+                                                                <button type="button"
+                                                                    class="btn btn-lg btn-primary withdraw_submit">Save</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -248,16 +288,49 @@
 @endsection
 @push('scripts')
     <script>
+        let deletedUser = "{{ $cashout->user->deleted_at }}";
+
+        let message = '';
+        if (deletedUser !== '' || deletedUser != null) {
+            message = `<div class="alert alert-fill alert-icon alert-warning d-block">
+                        <em class="icon ni ni-alert-circle"></em>
+                        <strong>The user has been deleted</strong>, their pending cashout will be transferred to the admin account for further processing..
+                    </div>`;
+        }
+
+        // Display/hide error message on change class status event
+        $('.status').on('change', function() {
+            var status = $(this).val(); // Get the selected value
+
+            // Check if the selected status is 'donated' or 'paid'
+            if (status === 'donated' || status === 'paid') {
+                $('.status-error').html(''); // Remove the HTML content
+            } else {
+                $('.status-error').html('Please select status.'); // Show the error message
+            }
+        });
+
         $(document).on('click', '.withdraw_submit', function(e) {
+            console.log($('.status').val());
+            // Display error message on on submit form if status not donated or paid
+            var status = $('.status').val();
+            if (status !== 'donated' && status !== 'paid') {
+                $('.status-error').html('Please select status.');
+                return;
+            }
+
             var form_id = "form_withdraw";
             var action = $(this).attr("action");
             var method = $(this).attr("method");
+
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
+                footer: message,
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, submit it!'
+                confirmButtonText: 'Yes, submit it!',
+                focusConfirm: false,
             }).then(function(result) {
                 if (result.value) {
                     $("#" + form_id).submit();

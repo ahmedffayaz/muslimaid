@@ -29,8 +29,12 @@ class StoreReviewsController extends Controller
         $route = 'index';
         $stores = Store::select('id', 'name', 'slug', 'created_at')->latest()->get();
         $users = User::select('id', 'first_name', 'last_name', 'status', 'created_at')->get();
-        $reviews = StoreReview::orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")->orderBy('status', 'desc')->whereHas('store')->with(['store' => function ($query) {
+        $reviews = StoreReview::orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
+        ->orderBy('status', 'desc')
+        ->whereHas('store')->with(['store' => function ($query) {
             $query->select('id', 'name', 'slug', 'status', 'created_at')->with('network');
+        }, 'user' => function ($query) {
+            $query->withTrashed();
         }])->latest()->paginate(30);
         return view('admin-dashboard.store_reviews.index', compact('reviews', 'stores', 'users', 'route'));
     }
@@ -107,7 +111,7 @@ class StoreReviewsController extends Controller
 
     public function edit(StoreReview $review)
     {
-        $users = User::select('id', 'first_name', 'last_name', 'status', 'created_at')->get();
+        $users = User::select('id', 'first_name', 'last_name', 'status', 'created_at')->withTrashed()->get();
         $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->latest()->get();
         return view('admin-dashboard.store_reviews.edit', compact('stores', 'review', 'users'))->render();
     }
@@ -173,8 +177,12 @@ class StoreReviewsController extends Controller
     {
         if ($request->ajax()) {
             $route = 'index';
-            $reviews = StoreReview::orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")->orderBy('status', 'desc')->whereHas('store')->with(['store' => function ($query) {
+            $reviews = StoreReview::orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
+            ->orderBy('status', 'desc')
+            ->whereHas('store')->with(['store' => function ($query) {
                 $query->select('id', 'slug', 'name', 'status', 'created_at')->with('network');
+            }, 'user' => function ($query) {
+                $query->withTrashed();
             }])->latest()->paginate(30);
 
             return view('admin-dashboard.store_reviews.index_data', compact('reviews', 'route'))->render();
@@ -183,8 +191,12 @@ class StoreReviewsController extends Controller
 
     public function searchReviews(Request $request, StoreReview $reviews)
     {
-        $reviews = $reviews->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")->orderBy('status', 'desc')->whereHas('store')->with(['store' => function ($query) {
+        $reviews = $reviews->orderByRaw("CASE WHEN status = 'pending' THEN 0 ELSE 1 END")
+        ->orderBy('status', 'desc')->whereHas('store')
+        ->with(['store' => function ($query) {
             $query->select('id', 'slug', 'name', 'status', 'created_at')->with('network');
+        }, 'user' => function ($query) {
+            $query->withTrashed();
         }])->newQuery();
 
         // Search by store.

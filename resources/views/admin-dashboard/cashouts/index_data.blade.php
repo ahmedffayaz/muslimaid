@@ -38,6 +38,10 @@
                             <span class="tb-lead">{{$cashout->user->id}} @if($cashout->user->first_name != 'unnamed' || $cashout->user->last_name != 'unnamed')- {{$cashout->user->first_name}} {{$cashout->user->last_name}} @endif
                                 </span>
                             <span>{{$cashout->user->email}}</span>
+                            @if (! empty($cashout->user->deleted_at))
+                                <span class="tb-lead text-danger">User deleted</span>
+                                <span class="text-primary">Cashout will be transfer to admin</span>
+                            @endif
                         </div>
                     </div>
 
