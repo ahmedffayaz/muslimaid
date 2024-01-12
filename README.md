@@ -32,21 +32,21 @@ There are two repositories for Cashback project.
 + SESSION_DRIVER should be database.
 + QUEUE_CONNECTION should be database.
 + Firebase Credentials file should be in resources->views->frontend->vendors directory with the name of firebase-credentials.json
-  + Put firebase credentials file path in . env file FIREBASE_CREDENTIALS="resources/views/frontend/vendors/firebase-credentials.json"
+  + Put firebase credentials file path in . env file `FIREBASE_CREDENTIALS="resources/views/frontend/vendors/firebase-credentials.json"`
 + For strong password use PASSWORD_VALIDATION in .env file and type password validation format else comment this.
-+ Use TIMEZONE="Europe/London" for custom timezone in complete project
-+ Use PAYMENT_METHOD="cashback" in .env file to save in cashout meta table which represent to user make cashout from which website like 'cashback'
++ Use `TIMEZONE="Europe/London"` for custom timezone in complete project
++ Use `PAYMENT_METHOD="cashback"` in .env file to save in cashout meta table which represent to user make cashout from which website like 'cashback'
 
 ---
 
 ### .modules.yml File Setup
 
 + Copy module.yml.example file as module.yml on base path
-+ .modules.yml file is used for to enable/disable module like SMTP, Charities, Appeals.
-+ File would use for enable/disable networks importer like CJ, Awin, RevGlue
++ .modules.yml file is used to enable/disable module like SMTP, Charities, Appeals.
++ File to use for enabling/disabling network importers (e.g., CJ, Awin, RevGlue)
   + Each networks have Settings and Importers
   + Settings display client_id and client_secrete
-  + importers display stores, vouchers, user cashbacks and categories
+  + importers display `stores`, `vouchers`, `user cashbacks` and `categories`
 
 ---
 
@@ -54,6 +54,6 @@ There are two repositories for Cashback project.
 
 + Install composer to add Laravel package
 + Now run below commands
-  + php artisan generate:key // to generate new project key
-  + php artisan copy:frontend-asset // to copy frontend assets in storage directory
-  + php artisan storage:link // to display copied storage assets directory in public directory
+  + `php artisan generate:key` // to generate new project key
+  + `php artisan copy:frontend-asset` // to copy frontend assets in storage directory
+  + `php artisan storage:link` // to display copied storage assets directory in public directory
