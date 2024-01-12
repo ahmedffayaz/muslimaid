@@ -21,7 +21,7 @@
                         <div class="user-card">
                             <div class="user-avatar {{ getRandomColorClass() }}">
                                 <span>
-                                    {{ isset($commission->exitClick) && isset($commission->exitClick->user) ? ($commission->exitClick->user->first_name[0] ?? 'N') . ($commission->exitClick->user->last_name[0] ?? 'A') : 'NA' }}</span>
+                                    {{ isset($commission->exitClick) && isset($commission->exitClick->user) ? ($commission->user->first_name[0] ?? 'N') . ($commission->user->last_name[0] ?? 'A') : 'NA' }}</span>
                             </div>
                             <div class="user-info">
 
@@ -30,7 +30,7 @@
                                             - {{ $commission->user->first_name }} {{ $commission->user->last_name }}
                                         @endif
                                     </span>
-                                    <span>{{ $commission->exitClick->user->email ?? '' }}</span>
+                                    <span>{{ $commission->user->email ?? '' }}</span>
                                 @elseif(isset($commission->user))
                                     <span class="tb-lead">{{ $commission->user->id }} @if ($commission->user->first_name != 'unnamed' || $commission->user->last_name != 'unnamed')
                                             - {{ $commission->user->first_name }} {{ $commission->user->last_name }}
