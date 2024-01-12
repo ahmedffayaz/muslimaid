@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Add Charity')
 @section('content')
     @if (session()->has('message'))
         <div class="container alert {{ session('alert-class') }} alert-dismissible fade show alert-important" role="alert">
@@ -219,7 +220,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+
                                             <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <label class="form-label" for="tag">Tag </label>

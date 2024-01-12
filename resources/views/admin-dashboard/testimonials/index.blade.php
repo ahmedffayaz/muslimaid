@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Testimonials')
 @section('content')
 <div class="nk-content ">
     <div class="container-fluid">
@@ -15,19 +16,17 @@
                                 <div class="toggle-expand-content" data-content="pageMenu">
                                     <ul class="nk-block-tools g-3">
                                         <li class="nk-block-tools-opt"><a href="{{route(getAdminPrefix() . '.testimonials.create')}}" class="btn btn-primary btn-sm" ><em class="icon ni ni-plus"></em><span>Add Testimonial</span></a></li>
-                                      
                                     </ul>
                                 </div>
                             </div><!-- .toggle-wrap -->
                         </div><!-- .nk-block-head-content -->
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
-                
                 @include('flash::message')
                 <div class="nk-block">
                     <div class="card card-stretch">
                         <div class="card-inner-group" id="table-data">
-                            @include('admin-dashboard.testimonials.index_data')                                   
+                            @include('admin-dashboard.testimonials.index_data')
                         </div><!-- .card-inner-group -->
                     </div><!-- .card -->
                 </div><!-- .nk-block -->
@@ -40,12 +39,12 @@
 <script>
     $(document).ready(function(){
         $(document).on('click', '.pagination a', function(event){
-        event.preventDefault(); 
+        event.preventDefault();
         var route = $('.pagination').attr('route');
         var page = $(this).attr('href').split('page=')[1];
-        
+
             if(route=='index'){
-            
+
         $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
@@ -63,11 +62,11 @@
                     $('html, body').animate({ scrollTop: 0 }, 'slow');
                 }
                 });
-            } 
+            }
 
             if(route=='search'){
-                
-                
+
+
         $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
@@ -75,7 +74,7 @@
             var _token = $("input[name=_token]").val();
             var reviewer = $("input[name=reviewer]").val();
             var store_id = $("select[name=store_id]").val();
-            
+
             var status = $("select[name=status]").val();
             $.ajax({
                 url:'{{route(getAdminPrefix() . ".reviews.search_reviews")}}?page='+page,
@@ -87,15 +86,15 @@
                 $('html, body').animate({ scrollTop: 0 }, 'slow');
                 }
             });
-            }       
+            }
         });
     });
 
     $(document).ready(function(){
-    
+
         $(document).on('submit', '.search_form', function(event){
-        event.preventDefault(); 
-            
+        event.preventDefault();
+
         $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
@@ -103,7 +102,7 @@
         var _token = $("input[name=_token]").val();
         var reviewer = $("input[name=reviewer]").val();
         var store_id = $("select[name=store_id]").val();
-        
+
         var status = $("select[name=status]").val();
         $.ajax({
         url:'{{route(getAdminPrefix() . ".reviews.search_reviews")}}',
@@ -115,15 +114,15 @@
             $('html, body').animate({ scrollTop: 0 }, 'slow');
             }
         });
-        
+
         });
-    
+
     });
-    
-</script> 
+
+</script>
 <script>
     $(document).ready(function(){
-       
+
        $(document).on('click', '.delete', function(event){
             var form_id = $(this).attr('form_id');
             Swal.fire({
@@ -137,8 +136,8 @@
                 $('#'+form_id).submit();
                 }
            });
-           event.preventDefault(); 
+           event.preventDefault();
         });
    });
-</script> 
+</script>
 @endpush

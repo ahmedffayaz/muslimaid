@@ -1,6 +1,7 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Add Language')
 @section('content')
-    
+
 
 <div class="nk-content ">
     <div class="container-fluid">
@@ -48,7 +49,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                       
+
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <button type="submit" class="btn btn-lg btn-primary">Save</button>
@@ -59,9 +60,9 @@
                             </div>
                         </div>
                     </div><!-- .nk-block -->
-                    
-                  
-                    
+
+
+
                 </div><!-- .components-preview -->
             </div>
         </div>

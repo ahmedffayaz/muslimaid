@@ -4,9 +4,7 @@
 @endphp
 
 @extends('layouts.admin-dashboard.app')
-
-
-
+@section('pageTitle', 'Translation Details')
 @section('content')
 <div class="nk-content ">
     <div class="container-fluid">
@@ -17,7 +15,7 @@
                         <div class="nk-block-head-content">
                             <h3 class="nk-block-title page-title">Translation Details</h3>
                             <p>Group: {{$translation->group}} Key: {{$translation->key}} </p>
-                            
+
                         </div><!-- .nk-block-head-content -->
                         <div class="nk-block-head-content">
                             <div class="toggle-wrap nk-block-tools-toggle">
@@ -49,12 +47,12 @@
                                                     <span class="sub-text">en</span>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
                                         <div class="project-details">
                                             <p>{{ $decoded['en'] }}</p>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -68,7 +66,7 @@
                                             <div class="project-head">
                                                 <div class="project-title">
                                                     <div class="user-avatar sq <?php
-       
+
                                                     $color = rand(1,5);
                                                     if($color==1){echo 'bg-info';}
                                                     elseif($color==2){echo 'bg-primary';}
@@ -87,8 +85,8 @@
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <ul class="link-list-opt no-bdr">
                                                             <li><a href="#"  data-toggle="modal" data-target="#updateForm-{{$key}}"><em class="icon ni ni-edit" ></em><span>Edit</span></a></li>
-                                                           
-                                                        
+
+
                                                         </ul>
                                                     </div>
                                                 </div>
@@ -96,7 +94,7 @@
                                             <div class="project-details">
                                                 <p>{{ $decoded[$key] }}</p>
                                             </div>
-                                            
+
                                         </div>
                                     </div>
                                 </div>
@@ -129,15 +127,15 @@
                                                     <div class="form-control-wrap ">
                                                         <select class="form-select form-control" data-search="on" id="langugae" name="code" disabled>
                                                             <option disabled selected>Select Language</option>
-                                                            
+
                                                             @foreach ($languages as $language)
                                                             <option @if($key == $language['code']) selected @endif value="{{$language['code']}}">{{$language['name']}}</option>
                                                             @endforeach
                                                         </select>
-                                                    
+
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="form-group">
                                                     <label class="form-label" for="text">Title Translation</label>
                                                     <div class="form-control-wrap">
@@ -161,14 +159,14 @@
                     </div>
                 </div>
 
-   
+
 
 
 
 </div>
 </div>
 </div>
-</div> 
+</div>
 <!-- Modal Form -->
 <div class="modal fade" tabindex="-1" id="modalForm">
     <div class="modal-dialog" role="document">
@@ -196,15 +194,15 @@
                         <div class="form-control-wrap ">
                             <select class="form-select form-control" data-search="on" id="langugae" name="code">
                                 <option disabled selected>Select Language</option>
-                                
+
                                 @foreach ($languages as $language)
                                 <option value="{{$language['code']}}">{{$language['name']}}</option>
                                 @endforeach
                             </select>
-                        
+
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label class="form-label" for="text">Title Translation</label>
                         <div class="form-control-wrap">
@@ -227,12 +225,12 @@
 <script>
     $(document).ready(function(){
      $(document).on('click', '.pagination a', function(event){
-        event.preventDefault(); 
+        event.preventDefault();
         var route = $('.pagination').attr('route');
         var page = $(this).attr('href').split('page=')[1];
-        
+
          if(route=='index'){
-            
+
              pageurl = "{{route(getAdminPrefix() . '.stores.fetch')}}?page="
              var _token = $("input[name=_token]").val();
             $.ajax({
@@ -246,10 +244,10 @@
                     $('html, body').animate({ scrollTop: 0 }, 'slow');
                 }
                 });
-         } 
+         }
 
-            
+
      });
     });
-    </script> 
+    </script>
 @endpush

@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Languages')
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -65,7 +66,7 @@
                                                         <div class="nk-block-content">
                                                             <div class="nk-block-content-head">
                                                                 <h5>Coming Soon</h5>
-                                                              
+
                                                             </div>
                                                         </div>
                                                         <div class="nk-block-content flex-shrink-0 mt-lg-4 mx-auto">

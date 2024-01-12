@@ -65,7 +65,8 @@
                 <div class="custom-control custom-control-sm custom-checkbox notext">
                     <input type="checkbox" class="custom-control-input" name="is_map_enable" value="{{ $isEdit ?? $category->is_map_enable }}" id="is_map_enable"
                         {{ $isEdit && $category->is_map_enable == 1 ? 'checked' : '' }}>
-                    <label class="custom-control-label" for="is_map_enable">Enable Google Map</label>
+                    <label class="custom-control-label" for="is_map_enable">Enable Google Map <em class="icon ni ni-question form-label" data-toggle="tooltip"
+                        data-placement="top" title="To enable/disable Google Map, show on this category page"></em></label>
                 </div>
             </div>
         </div>

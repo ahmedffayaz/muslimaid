@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Users Lists')
 @section('content')
 <div class="nk-content ">
     <div class="container-fluid">
@@ -70,8 +71,8 @@
                 </div>
                 <div class="nk-block">
                     <div class="card card-stretch">
-                        <div class="card-inner-group" id="table-data">        
-                            @include('admin-dashboard.users.index_data')                                   
+                        <div class="card-inner-group" id="table-data">
+                            @include('admin-dashboard.users.index_data')
                         </div><!-- .card-inner-group -->
                     </div><!-- .card -->
                 </div><!-- .nk-block -->
@@ -84,16 +85,16 @@
     <script>
     $(document).ready(function(){
      $(document).on('click', '.pagination a', function(event){
-        event.preventDefault(); 
+        event.preventDefault();
         var route = $('.pagination').attr('route');
         var page = $(this).attr('href').split('page=')[1];
-        
+
          if(route=='index'){
-            
+
             $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
-            
+
              pageurl = "{{route(getAdminPrefix() . '.users.fetch')}}?page="
              var _token = $("input[name=_token]").val();
             $.ajax({
@@ -107,7 +108,7 @@
                     $('html, body').animate({ scrollTop: 0 }, 'slow');
                 }
                 });
-         } 
+         }
 
          if(route=='search'){
             $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
@@ -128,20 +129,20 @@
                $('html, body').animate({ scrollTop: 0 }, 'slow');
               }
             });
-           
-         }       
+
+         }
      });
     });
-    </script> 
+    </script>
     <script>
         $(document).ready(function(){
-        
+
          $(document).on('submit', '.search_form', function(event){
-            event.preventDefault(); 
+            event.preventDefault();
             $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
-              
+
             var _token = $("input[name=_token]").val();
             var status = $("select[name=status").val();
             var name = $("input[name=name]").val();
@@ -156,15 +157,15 @@
                $('html, body').animate({ scrollTop: 0 }, 'slow');
               }
             });
-            
+
          });
-        
+
         });
-        
+
 </script>
 <script>
     $(document).ready(function(){
-       
+
        $(document).on('click', '.delete', function(event){
             var form_id = $(this).attr('form_id');
             Swal.fire({
@@ -178,8 +179,8 @@
                 $('#'+form_id).submit();
                 }
            });
-           event.preventDefault(); 
+           event.preventDefault();
         });
    });
-</script>  
+</script>
 @endpush

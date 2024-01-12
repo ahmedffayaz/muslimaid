@@ -1,6 +1,7 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Store Cashbacks')
 @section('content')
-   
+
 
 <div class="nk-content ">
     <div class="container-fluid">
@@ -14,24 +15,13 @@
                                 <p>You have total {{count($cashbacks)}} cashbacks.</p>
                             </div>
                         </div><!-- .nk-block-head-content -->
-                        {{-- <div class="nk-block-head-content">
-                            <div class="toggle-wrap nk-block-tools-toggle">
-                                <a href="#" class="btn btn-icon btn-trigger toggle-expand mr-n1" data-target="pageMenu"><em class="icon ni ni-menu-alt-r"></em></a>
-                                <div class="toggle-expand-content" data-content="pageMenu">
-                                    <ul class="nk-block-tools g-3">
-                                       
-                                        <li class="nk-block-tools-opt"><a href="{{route(getAdminPrefix() . '.stores.create')}}" class="btn btn-primary"><em class="icon ni ni-plus"></em><span>Add Store</span></a></li>
-                                    </ul>
-                                </div>
-                            </div><!-- .toggle-wrap -->
-                        </div><!-- .nk-block-head-content --> --}}
                     </div><!-- .nk-block-between -->
                 </div><!-- .nk-block-head -->
                 <div class="nk-block">
                     <table class="nk-tb-list is-separate nk-tb-ulist datatable-init table">
                         <thead>
                             <tr class="nk-tb-item nk-tb-head">
-                               
+
                                 <th class="nk-tb-col"><span class="sub-text">Store Name</span></th>
                                 <th class="nk-tb-col"><span class="sub-text">Network</span></th>
                                 <th class="nk-tb-col"><span class="sub-text">Category</span></th>
@@ -45,10 +35,10 @@
                         <tbody>
 
                             @foreach ($cashbacks as $cashback)
-                                
-                            
+
+
                             <tr class="nk-tb-item">
-                               
+
                                 <td class="nk-tb-col"><span class="tb-product"> <span class="title">{{$cashback->store->name}}</span></span></td>
                                 <td class="nk-tb-col"> <p>{{$cashback->store->network->name}}</p></td>
                                 <td class="nk-tb-col"> <p>@foreach ($cashback->store->categories as $category)
@@ -73,22 +63,22 @@
                                 </td>
                             </tr><!-- .nk-tb-item -->
                             @endforeach
-                          
+
                         </tbody>
                     </table><!-- .nk-tb-list -->
                     {{-- <div class="card">
                         <div class="card-inner">
                             <div class="nk-block-between-md g-3">
                                 <div class="g">
-                                    
+
                                     <ul class="pagination justify-content-center justify-content-md-start">
                                         <li class="page-item"><a class="page-link" href="#">Prev</a></li>
                                         <li class="page-item"><a class="page-link" href="#">1</a></li>
-                                       
+
                                         <li class="page-item"><a class="page-link" href="#">Next</a></li>
                                     </ul><!-- .pagination -->
                                 </div>
-                                
+
                             </div><!-- .nk-block-between -->
                         </div><!-- .card-inner -->
                     </div><!-- .card --> --}}
@@ -98,5 +88,5 @@
     </div>
 </div>
 
- 
+
 @endsection

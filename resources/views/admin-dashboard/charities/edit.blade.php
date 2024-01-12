@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Edit Charity')
 @section('content')
     @if (session()->has('message'))
         <div class="container alert {{ session('alert-class') }} alert-dismissible fade show alert-important" role="alert">
@@ -108,15 +109,15 @@
                                                 </div>
                                                 <div class="col-lg-3 ">
                                                     <div class="form-group">
-                                                     
+
                                                         <div class="preview-wrapper">
                                                             @if($charity->logo_link )
-                                                            <img id="logo_link-preview" src="{{ asset($charity->logo_link) }}" alt="store logo" style="max-height: 60px; max-width: 60px;" />   
+                                                            <img id="logo_link-preview" src="{{ asset($charity->logo_link) }}" alt="store logo" style="max-height: 60px; max-width: 60px;" />
                                                             @else
-                                                            <img id="logo_link-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" /> 
+                                                            <img id="logo_link-preview" src="" alt="store logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
                                                             @endif
                                                         </div>
-                                                       
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -187,12 +188,12 @@
                                                     <div class="form-group">
                                                         <div class="preview-wrapper">
                                                             @if($charity->banner_link )
-                                                                <img id="banner_link-preview" src="{{ asset($charity->banner_link) }}" alt="logo" style="max-height: 60px; max-width: 60px;" />   
+                                                                <img id="banner_link-preview" src="{{ asset($charity->banner_link) }}" alt="logo" style="max-height: 60px; max-width: 60px;" />
                                                             @else
-                                                                <img id="banner_link-preview" src="" alt="logo" class="d-none" style="max-height: 60px; max-width: 60px;" /> 
+                                                                <img id="banner_link-preview" src="" alt="logo" class="d-none" style="max-height: 60px; max-width: 60px;" />
                                                             @endif
                                                         </div>
-                                                       
+
                                                     </div>
                                                 </div>
                                             </div>
@@ -231,7 +232,7 @@
                                                     <label class="form-label" for="country">Country <span class="text-danger">*</span></label>
                                                     <div>
                                                         <select class="form-control form-select" id="country" name="country" value="{{ old('country') }}" required>
-                                                          
+
                                                             @foreach($countries as $country)
                                                                 <option value="{{ $country->id }}" {{ $charity->country == $country->id ? 'selected' : '' }}>{{ $country->name }}</option>
                                                             @endforeach
@@ -253,7 +254,7 @@
                                                 <div class="form-group">
                                                     <label class="form-label" for="tag">Tag </label>
                                                     <div class="form-control-select">
-                                                        @php 
+                                                        @php
                                                             $charityTagsIds = $charity->tags()->pluck('tag_id')->toArray();
                                                         @endphp
                                                         <select class="form-control form-select" id="tags" data-search="on" name="tags[]" value="{{ old('tag') }}"  multiple>

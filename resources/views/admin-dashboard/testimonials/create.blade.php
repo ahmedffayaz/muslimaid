@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Add Testimonial')
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -8,7 +9,7 @@
                         <div class="nk-block nk-block-lg">
                             <div class="nk-block-head">
                                 <div class="nk-block-head-content">
-                                    <h4 class="title nk-block-title">Create Testimonial</h4>
+                                    <h4 class="title nk-block-title">Add Testimonial</h4>
                                     <div class="nk-block-des">
                                     </div>
                                 </div>
