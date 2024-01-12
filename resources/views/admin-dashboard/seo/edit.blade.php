@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Edit SEO')
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -128,7 +129,7 @@
                             <option value="meta_title">Meta Title</option>
                             <option value="meta_keyword">Meta Keyword</option>
                             <option value="meta_description">Meta Description</option>
-                        </select>   
+                        </select>
                     </div>
                 </div>
                     <span><em class="icon ni ni-minus-circle removebtn" data-type_counter="${counter}" onclick="removeFields();"></em></span>
@@ -150,7 +151,7 @@
                         <div class="form-group">
                             <label class="form-label" for="reviewer">Meta Title</label>
                             <div class="form-control-wrap">
-                                <input id="seo-title" type="text" class="form-control " name="type[${counter}][value]" placeholder="Meta Title" value="" required> 
+                                <input id="seo-title" type="text" class="form-control " name="type[${counter}][value]" placeholder="Meta Title" value="" required>
                             </div>
                         </div>
                     </div>`;
@@ -161,7 +162,7 @@
                         <div class="form-group">
                             <label class="form-label" for="reviewer">Meta Keywords</label>
                             <div class="form-control-wrap">
-                                <input id="seo-keyword" type="text" class="form-control " name="type[${counter}][value]" placeholder="Meta keyword" value="" required> 
+                                <input id="seo-keyword" type="text" class="form-control " name="type[${counter}][value]" placeholder="Meta keyword" value="" required>
                             </div>
                         </div>
                     </div>`;

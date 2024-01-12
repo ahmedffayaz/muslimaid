@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Permissions Settings')
 @section('content')
 <div class="nk-content ">
     <div class="container-fluid">
@@ -23,8 +24,8 @@
                                 @method('POST')
                                 <div class="row g-3 align-center">
                                     @foreach ($roles as $role)
-                                        
-                                    
+
+
                                     <div class="col-lg-12">
                                         <div id="accordion-{{$role->name}}" class="accordion accordion-s2">
                                             <div class="accordion-item">
@@ -34,7 +35,7 @@
                                                 </a>
                                                 <div class="accordion-body collapse" id="{{$role->name}}" data-parent="#accordion-{{$role->name}}">
                                                     <div class="accordion-inner">
-                                                        
+
                                                         <div class="row">
                                                             @foreach ($permissions as $permission)
                                                                 <div class="col-md-2 mb-1">
@@ -50,17 +51,17 @@
                                             </div>
                                         </div>
                                     </div>
-                                    
-                                        
-                                    
+
+
+
 
                                     @endforeach
                                 </div>
-                                
-                         
-                                
-                             
-                                
+
+
+
+
+
                                 <div class="row g-3">
                                     <div class="col-lg-12">
                                         <div class="form-group mt-2">

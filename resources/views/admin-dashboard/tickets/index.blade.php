@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Tickets')
 @section('content')
 <div class="nk-content ">
     <div class="container-fluid">
@@ -54,7 +55,7 @@
                                                 <option value="0">Any</option>
                                                 @foreach ($users as $user)
                                                 <option value="{{$user->id}}">{{$user->first_name}} {{$user->last_name}}</option>
-                                                @endforeach 
+                                                @endforeach
                                             </select>
                                         </div>
                                     </div>
@@ -90,15 +91,15 @@
                                     </div>
                                 </div>
                             </div>
-                        </form>  
+                        </form>
                     </div>
-               
+
                 </div>
                 @include('flash::message')
                 <div class="nk-block">
                     <div class="card card-stretch">
                         <div class="card-inner-group" id="table-data">
-                            @include('admin-dashboard.tickets.index_data')                                   
+                            @include('admin-dashboard.tickets.index_data')
                         </div><!-- .card-inner-group -->
                     </div><!-- .card -->
                 </div><!-- .nk-block -->
@@ -111,12 +112,12 @@
     <script>
     $(document).ready(function(){
      $(document).on('click', '.pagination a', function(event){
-        event.preventDefault(); 
+        event.preventDefault();
         var route = $('.pagination').attr('route');
         var page = $(this).attr('href').split('page=')[1];
-        
+
          if(route=='index'){
-            
+
             $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
@@ -135,10 +136,10 @@
                 }
                 $('#reload').ajax().reload();
                 });
-         } 
+         }
 
          if(route=='search'){
-             
+
             $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
@@ -160,16 +161,16 @@
                $('html, body').animate({ scrollTop: 0 }, 'slow');
               }
             });
-         }       
+         }
      });
     });
-    </script> 
+    </script>
     <script>
         $(document).ready(function(){
-        
+
          $(document).on('submit', '.search_form', function(event){
-            event.preventDefault(); 
-              
+            event.preventDefault();
+
             $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
@@ -191,10 +192,10 @@
                $('html, body').animate({ scrollTop: 0 }, 'slow');
               }
             });
-            
+
          });
-        
+
         });
-        
-    </script>  
+
+    </script>
 @endpush

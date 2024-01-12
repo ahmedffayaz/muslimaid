@@ -1,6 +1,7 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Edit Language')
 @section('content')
-    
+
 
 <div class="nk-content ">
     <div class="container-fluid">
@@ -59,9 +60,9 @@
                             </div>
                         </div>
                     </div><!-- .nk-block -->
-                    
-                  
-                    
+
+
+
                 </div><!-- .components-preview -->
             </div>
         </div>

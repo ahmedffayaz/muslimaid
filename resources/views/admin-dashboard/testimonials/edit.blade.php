@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Edit Testimonial')
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">

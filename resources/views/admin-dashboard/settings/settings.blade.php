@@ -1,5 +1,7 @@
 @extends('layouts.admin-dashboard.app')
 
+@section('pageTitle', 'System Settings')
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('admin-dashboard/telephone-dropdown/css/intlTelInput.css') }}">
 @endpush

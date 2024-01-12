@@ -1,15 +1,16 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Add Network')
 @section('content')
-    
+
 
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
             <div class="nk-content-body">
                 <div class="components-preview wide-md mx-auto">
-                  
-                    
-                  
+
+
+
                     <div class="nk-block nk-block-lg">
                         <div class="nk-block-head">
                             <div class="nk-block-head-content">
@@ -56,9 +57,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                  
-                                    
-                                 
+
+
+
                                     <div class="row g-3">
                                         <div class="col-lg-7 offset-lg-5">
                                             <div class="form-group mt-2">

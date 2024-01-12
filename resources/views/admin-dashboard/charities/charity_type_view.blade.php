@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Charity Types')
 @section('content')
 
 <div class="nk-content ">
