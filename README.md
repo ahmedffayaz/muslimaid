@@ -57,3 +57,36 @@ There are two repositories for Cashback project.
   + `php artisan generate:key` // to generate new project key
   + `php artisan copy:frontend-asset` // to copy frontend assets in storage directory
   + `php artisan storage:link` // to display copied storage assets directory in public directory
+
+
+### Page Module
+
++ There are three types of pages
+  + System Pages
+    + These pages use logics from controller and can't be deleted
+      + Home Page Before Login
+      + Home Page After Login
+      + Blogs
+      + Appeals
+      + Categories
+      + Charities
+      + Contact Us
+      + Stores
+      + Offers
+      + Trending
+      + Vouchers
+      + Maintenance
+      + 401
+      + 404
+      + Search
+  + Special Pages
+    + These pages doesn't have any logic but can't be deleted. These pages create on client requirements
+      + Privacy Policy
+      + Cookies Policy
+      + Terms and Conditions
+      + Mobile APP
+      + FAQs
+      + Extensions
+      + Work with Us
+  + General Pages
+    + Admin can create and delete from admin panel
