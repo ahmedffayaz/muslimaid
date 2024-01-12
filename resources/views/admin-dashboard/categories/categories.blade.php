@@ -114,6 +114,7 @@
                         $('#save-btn').text('Create');
                         $('#modal').modal('show');
                         NioApp.Select2('.form-select');
+                        NioApp.BS.tooltip('[data-toggle="tooltip"]');
                         textEditor()
                         logoType()
                         bannerType()
@@ -135,6 +136,7 @@
                         $('#save-btn').text('Update');
                         $('#modal').modal('show');
                         NioApp.Select2('.form-select');
+                        NioApp.BS.tooltip('[data-toggle="tooltip"]');
                         textEditor()
                         logoType()
                         bannerType()
