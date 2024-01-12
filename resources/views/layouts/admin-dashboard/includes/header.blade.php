@@ -16,6 +16,14 @@
             </div><!-- .nk-header-brand -->
             @isset($settings['dashboard_menu_type'])
                 @if ($settings['dashboard_menu_type'] == 'top')
+                    @php
+                        $totalStores = \App\Models\Store::count();
+                        $totalStoreReviews = \App\Models\StoreReview::count();
+                        $totalCategories = \App\Models\Category::count();
+                        $totalVouchers = \App\Models\Voucher::count();
+                        $totalCharities = \App\Models\Charity::count();
+                        $totalAppeals = \App\Models\Appeal::count();
+                    @endphp
                     <div class="nk-header-search ml-3 ml-xl-0">
                         <div class="dropdown">
                             <a href="{{ route(getAdminPrefix() . '.home.index') }}" class="dropbtn user-name"><em class="icon ni ni-home-fill"></em> Dashboard</a>
@@ -32,6 +40,7 @@
                                                 <a href="{{ route(getAdminPrefix() . '.stores.index') }}" class="">
                                                     <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
                                                     <span class="nk-menu-text">Stores</span>
+                                                    <span class="badge badge-dim badge-pill badge-primary">{{ $totalStores }}</span>
                                                 </a>
                                             </li><!-- .nk-menu-item -->
                                         @endcan
@@ -40,6 +49,7 @@
                                                 <a href="{{ route(getAdminPrefix() . '.categories.index') }}" class="">
                                                     <span class="nk-menu-icon"><em class="icon ni ni-grid-alt-fill"></em></span>
                                                     <span class="nk-menu-text">Categories</span>
+                                                    <span class="badge badge-dim badge-pill badge-primary">{{ $totalCategories }}</span>
                                                 </a>
                                             </li><!-- .nk-menu-item -->
                                         @endcan
@@ -48,6 +58,7 @@
                                                 <a href="{{ route(getAdminPrefix() . '.reviews.index') }}" class="{{ getNewIndicatorClassForAdmin('reviews') }}">
                                                     <span class="nk-menu-icon"><em class="icon ni ni-notice"></em></span>
                                                     <span class="nk-menu-text">Store Reviews</span>
+                                                    <span class="badge badge-dim badge-pill badge-primary">{{ $totalStoreReviews }}</span>
                                                 </a>
                                             </li><!-- .nk-menu-item -->
                                         @endcan
@@ -56,6 +67,7 @@
                                                 <a href="{{ route(getAdminPrefix() . '.vouchers.index') }}" class="">
                                                     <span class="nk-menu-icon"><em class="icon ni ni-money"></em></span>
                                                     <span class="nk-menu-text">Vouchers</span>
+                                                    <span class="badge badge-dim badge-pill badge-primary">{{ $totalVouchers }}</span>
                                                 </a>
                                             </li><!-- .nk-menu-item -->
                                         @endcan
@@ -65,6 +77,7 @@
                                                 <a href="{{ route(getAdminPrefix() . '.charities.index') }}"  class="">
                                                     <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
                                                     <span class="nk-menu-text">Charities</span>
+                                                    <span class="badge badge-dim badge-pill badge-primary">{{ $totalCharities }}</span>
                                                 </a>
                                             </li><!-- .nk-menu-item -->
                                             @endcan
@@ -75,6 +88,7 @@
                                                 <a href="{{ route(getAdminPrefix() . '.appeals.index') }}"  class="">
                                                     <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
                                                     <span class="nk-menu-text">Appeals</span>
+                                                    <span class="badge badge-dim badge-pill badge-primary">{{ $totalAppeals }}</span>
                                                 </a>
                                             </li><!-- .nk-menu-item -->
                                             @endcan
@@ -271,8 +285,8 @@
                                             @can('view banners')
                                                 <li class="">
                                                     <a href="{{ route(getAdminPrefix() . '.banners.index') }}" class="">
-                                                    <span class="nk-menu-icon"><em class="icon ni ni-grid"></em></span>
-                                                    <span class="nk-menu-text">Banners</span>
+                                                        <span class="nk-menu-icon"><em class="icon ni ni-grid"></em></span>
+                                                        <span class="nk-menu-text">Banners</span>
                                                     </a>
                                                 </li>
                                             @endcan
