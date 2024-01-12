@@ -71,11 +71,12 @@
                                                     <em class="icon ni ni-db-fill text-primary"></em> {{ $category->name }}
                                                     <span class="ml-1">
                                                         @if ($category->picks->count())
-                                                            <span class="badge badge-dim badge-pill badge-primary text-capitalize">
-                                                                <em class="icon ni ni-done"></em> Editor Picks
-                                                            </span>
+                                                        <span class="badge badge-dim badge-pill badge-primary text-capitalize">
+                                                            <em class="icon ni ni-done"></em> Editor Picks
+                                                        </span>
                                                         @endif
                                                     </span>
+                                                    <span class="badge badge-dim badge-pill badge-primary ml-1">Total Stores: {{ $category->stores_count }}</span>
                                                     <span class="ml-1">
                                                         {!! $category->enableGoogleMap() !!}
                                                     </span>
