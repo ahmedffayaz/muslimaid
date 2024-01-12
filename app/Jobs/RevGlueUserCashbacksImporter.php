@@ -48,13 +48,22 @@ class RevGlueUserCashbacksImporter implements ShouldQueue
     {
         try {
             foreach ($this->chunk as $rgCashback) {
-                $exitClick = ExitClick::where('id', $rgCashback->site_exit_click_id)->first();
+                $exitClick = ExitClick::with(['user' => function($query) {
+                    $query->withTrashed();
+                }])->where('id', $rgCashback->site_exit_click_id)->first();
                 if (!empty($exitClick)) {
-                    $userCashback = UserCashback::where('exit_click_id', $exitClick->id)->where('user_id', $exitClick->user_id)->first();
+                    $userCashback = UserCashback::with(['user' => function ($query) {
+                        $query->withTrashed();
+                    }])->where('exit_click_id', $exitClick->id)->where('user_id', $exitClick->user_id)->first();
                     $cashbackStatus = CashbackStatus::where('status', strtolower($rgCashback->status))->first();
                     if (!empty($userCashback) && $rgCashback->status != 'Pending' && !empty($cashbackStatus) && $cashbackStatus->status != 'pending') {
                         // Make user cashback status confirmed if it's pending and RG Cashback status is confirmed
                         if ($rgCashback->status == 'Confirmed' && $userCashback->statusMap->status == 'pending') {
+                            // Transfer cashback to admin if user cashback status is pending and user has been deleted
+                            if ($userCashback->statusMap->status == 'pending' && !empty($userCashback->user->deleted_at)) {
+                                $userCashback->update(['user_id' => getAdminUser()->id]);
+                            }
+
                             UserCashback::where('id', $userCashback->id)->update(['status' => 3]);
 
                             CashbackStatusChange::create([
@@ -251,7 +260,7 @@ class RevGlueUserCashbacksImporter implements ShouldQueue
 
                             $commission = UserCashback::create([
                                 'store_id' => $exitClick->store_id,
-                                'user_id'  => $exitClick->user_id ?? 0,
+                                'user_id'  => !empty($exitClick->user->deleted_at) ? getAdminUser()->id : ($exitClick->user_id ?? 0),
                                 'exit_click_id' => $exitClick->id,
                                 'amount' => round(($rgCashback->commission / 100) * $cashback_percent, 3),
                                 'network_commission' => round($rgCashback->commission, 3),
@@ -267,7 +276,7 @@ class RevGlueUserCashbacksImporter implements ShouldQueue
                                 'cashback_status_id' => $commission->status
                             ]);
 
-                            if ($exitClick->user_id != 0) {
+                            if ($exitClick->user_id != 0 && empty($exitClick->user->deleted_at)) {
                                 $deviceToken = $exitClick->user->devices()->whereType('web')->latest()->first();
                                 $title = 'Cashback Received';
                                 $message = "You've received cashback from " . $exitClick->store->name;

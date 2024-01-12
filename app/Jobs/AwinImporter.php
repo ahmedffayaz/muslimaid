@@ -211,7 +211,10 @@ class AwinImporter implements ShouldQueue
             if ($dbStores[$dbStoreKey]['override_cashback']) continue;
 
             $exitClick = ExitClick::where('id', $transaction['clickRefs']['clickRef'])
-                ->orWhere('network_click_ref', $transaction['clickRefs']['clickRef'])->first();
+                ->orWhere('network_click_ref', $transaction['clickRefs']['clickRef'])
+                ->with(['user' => function ($query) {
+                    $query->withTrashed();
+                }])->first();
 
             if (empty($exitClick)) {
                 $exitClick = ExitClick::create([

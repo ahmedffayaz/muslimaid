@@ -28,9 +28,7 @@ class CashoutController extends Controller
      */
     public function index()
     {
-        $cashouts = Cashout::with(['user' => function ($query) {
-            $query->withTrashed();
-        }])->latest()->paginate(10);
+        $cashouts = Cashout::whereHas('user')->latest()->paginate(10);
 
         return view('admin-dashboard.cashouts.index', compact('cashouts'));
     }
@@ -43,9 +41,7 @@ class CashoutController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $cashout = Cashout::with(['user' => function ($query) {
-            $query->withTrashed();
-        }])->findOrFail($id);
+        $cashout = Cashout::whereHas('user')->findOrFail($id);
         $cashout->update(['new_cashout'=>0]);
         $users  = User::withTrashed()->latest()->get();
         $statuses = CashbackStatus::all();
@@ -81,14 +77,6 @@ class CashoutController extends Controller
                 $query->withTrashed();
             }])->findOrFail($id);
 
-            // Change user id if user account deleted
-            if (! empty($cashout->user->deleted_at)) {
-                foreach ($cashout->cashbacks as $cashback) {
-                    $cashback->update(['user_id' => getAdminUser()->id]);
-                }
-                $cashout->update(['user_id' => getAdminUser()->id]);
-            }
-
             if($request->input('status') == 'pending'){
                 $cashout->update(['status'=>'pending']);
 
@@ -97,6 +85,11 @@ class CashoutController extends Controller
                 }
             }
             elseif($request->input('status') == 'paid'){
+                // Cashout transfer to admin if user has been deleted and cashout status is pending or processing donation
+                if (!empty($cashout->user->deleted_at) && ($cashout->status == 'pending' || $cashout->status == 'processing donation')) {
+                    $cashout->update(['user_id' => getAdminUser()->id]);
+                }
+
                 $cashout->update(['status'=>'paid']);
                 foreach($cashout->cashbacks as $cashback){
                     $cashback->update(['status'=>4]);
@@ -130,6 +123,11 @@ class CashoutController extends Controller
                 $deviceToken != null ? $this->sendNotification($title, $message, $cashout, $deviceToken) : '';
             }
             elseif($request->input('status') == 'donated'){
+                // Cashout transfer to admin if user has been deleted and cashout status is pending or processing donation
+                if (!empty($cashout->user->deleted_at) && ($cashout->status == 'pending' || $cashout->status == 'processing donation')) {
+                    $cashout->update(['user_id' => getAdminUser()->id]);
+                }
+
                 $cashout->update(['status'=>'donated']);
                 foreach($cashout->cashbacks as $cashback){
                     $cashback->update(['status'=>7]);
