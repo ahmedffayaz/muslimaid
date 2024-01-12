@@ -102,11 +102,14 @@ class AfrofiliateImporter implements ShouldQueue
             $realStoreId = "";
             $userId = "";
             if (isset($store['sub1'])) {
-                $exitClick = ExitClick::where('id', $store['sub1'])->first();
+                $exitClick = ExitClick::where('id', $store['sub1'])
+                ->with(['user' => function ($query) {
+                    $query->withTrashed();
+                }])->first();
             }
             if (isset($exitClick)) {
                 $realStoreId = $exitClick->store_id;
-                $userId = $exitClick->user_id;
+                $userId = !empty($exitClick->user->deleted_at) ? getAdminUser()->id : $exitClick->user_id;
                 $userCashbackAmount = ($store['revenue'] / 100) * (isset($exitClick->current_cashback_percentage) ? $exitClick->current_cashback_percentage : $this->siteSettings['cashback_percentage']);
                 $userCashback = UserCashback::updateOrCreate([
                     'exit_click_id' =>  $exitClick->id,
@@ -132,7 +135,7 @@ class AfrofiliateImporter implements ShouldQueue
                         'user_cashback_id' => $id,
                         'cashback_status_id' => $transactionStatus
                     ]);
-                } 
+                }
                 else {
                     continue;
                  }
