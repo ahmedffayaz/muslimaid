@@ -94,13 +94,9 @@ class CommissionController extends Controller
                 $cashback_percent = SiteSetting::where('type', 'cashback_percentage')->first()->value;
             }
 
-            if (! empty($click->user_id) && !empty($click->user->deleted_at)) {
-                $click->user_id = getAdminUser()->id;
-            }
-
             $commission = UserCashback::create([
                 'store_id' => $click->store_id,
-                'user_id'  => $click->user_id ?? 0,
+                'user_id'  => !empty($click->user_id) && !empty($click->user->deleted_at) ? getAdminUser()-> id : ($click->user_id ?? 0),
                 'exit_click_id' => $click->id,
                 'amount' => round(($request->network_commission / 100) * $cashback_percent, 3),
                 'network_commission' => round($request->network_commission, 3),
@@ -187,10 +183,6 @@ class CommissionController extends Controller
                 $query->withTrashed();
             }])->findOrFail($id);
 
-            // Cashback transfer to admin if user has been deleted
-            if (! empty($commission->user->deleted_at)) {
-                $commission->update(['user_id' => getAdminUser()->id]);
-            }
             //track status change of the cashback
             if ($commission->status != $request->status) {
                 $change_status = CashbackStatusChange::create([
@@ -249,7 +241,9 @@ class CommissionController extends Controller
     {
         if ($request->ajax()) {
             $route = 'index';
-            $coms = UserCashback::latest()->paginate(20);
+            $coms = UserCashback::with(['user' => function ($query) {
+                $query->withTrashed();
+            }])->latest()->paginate(20);
             return view('admin-dashboard.commissions.index_data', compact('coms', 'route'))->render();
         }
     }
@@ -257,7 +251,9 @@ class CommissionController extends Controller
     public function exportCsv(Request $request)
     {
         try {
-            $table = UserCashback::latest()->get();
+            $table = UserCashback::with(['user' => function ($query) {
+                $query->withTrashed();
+            }])->latest()->get();
             $filename = "cashbacks.csv";
             $handle = fopen($filename, 'w+');
             fputcsv($handle, array('User', 'User email', 'Store', 'Amount', 'Exit Click Id', 'Event Time', 'Status'));
@@ -284,7 +280,9 @@ class CommissionController extends Controller
 
     public function createMultiple()
     {
-        $clicks = ExitClick::latest()->get();
+        $clicks = ExitClick::with(['user' => function ($query) {
+            $query->withTrashed();
+        }])->latest()->get();
         $statuses = DB::table('cashback_statuses')->latest()->get();
         return view('admin-dashboard.commissions.create_multiple', compact('clicks', 'statuses'));
     }
@@ -306,7 +304,10 @@ class CommissionController extends Controller
 
         try {
             foreach ($request->exit_click_id as $key => $value) {
-                $click = ExitClick::findOrFail($value);
+                $click = ExitClick::with(['user' => function ($query) {
+                    $query->withTrashed();
+                }])->findOrFail($value);
+
                 $customCashbackPercentage = $click->store->custom_cashback_percentage;
 
                 if ($customCashbackPercentage) {
@@ -317,7 +318,7 @@ class CommissionController extends Controller
 
                 $commission = UserCashback::create([
                     'store_id' => $click->store_id,
-                    'user_id'  => $click->user_id ?? 0,
+                    'user_id'  => !empty($click->user->deleted_at) ? getAdminUser()->id : ($click->user_id ?? 0),
                     'exit_click_id' => $click->id,
                     'amount' => round(($request->network_commission[$key] / 100) * $cashback_percent, 3),
                     'network_commission' => round($request->network_commission[$key], 3),
@@ -357,8 +358,11 @@ class CommissionController extends Controller
             ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    public function searchCommissions(Request $request, UserCashback $coms)
+    public function searchCommissions(Request $request)
     {
+        $coms = UserCashback::with(['user' => function ($query) {
+            $query->withTrashed();
+        }]);
         $coms = $coms->newQuery();
 
         // Search by user.
@@ -395,7 +399,9 @@ class CommissionController extends Controller
 
     public function commissionsForm()
     {
-        $clicks = ExitClick::latest()->get();
+        $clicks = ExitClick::with(['user' => function ($query) {
+            $query->withTrashed();
+        }])->latest()->get();
         $statuses = DB::table('cashback_statuses')->latest()->get();
         return view('admin-dashboard.commissions.form_multiple', compact('clicks', 'statuses'));
     }
