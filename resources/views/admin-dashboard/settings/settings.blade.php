@@ -185,15 +185,7 @@
                                                             <div class="form-group">
                                                                 <div class=" logo">
                                                                     <label for="favicon-input">
-                                                                        <img id="favicon"
-                                                                            src="{{ !isset($settings['favicon'])
-                                                                                ? asset('admin-dashboard/images/favicon.png')
-                                                                                : ($settings['favicon'] == 'default.png'
-                                                                                    ? asset('admin-dashboard/images/favicon.png')
-                                                                                    : ($settings['favicon'] == 'cashblack-default.png'
-                                                                                        ? asset('cashblack/img/favicon.png')
-                                                                                        : asset('storage/dashboard/images/logo/' . $settings['favicon']))) }}"
-                                                                            alt="store logo" class="" style="max-width:100px;max-height:120px" />
+                                                                        <img id="favicon" src="{{ getSiteFavicon() }}" alt="store logo" class="" style="max-width:100px;max-height:120px" />
                                                                         <input id="favicon-input" preview="#favicon" name="favicon" class="d-none" type='file'
                                                                             onchange="readURL(this);" />
                                                                     </label>
