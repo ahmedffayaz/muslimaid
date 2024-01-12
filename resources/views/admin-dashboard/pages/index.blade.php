@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="nk-content ">
-        <div class="container-fluid">
+        <div class="container">
             <div class="nk-content-inner">
                 <div class="nk-content-body">
                     <div class="nk-block-head nk-block-head-sm">
@@ -29,7 +29,7 @@
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="card card-preview mb-4">
@@ -83,7 +83,7 @@
                     @include('flash::message')
 
                     <div class="nk-block">
-                        <div class="card card-stretch">
+                        <div class="card">
                             <div class="card-inner-group" id="table-data">
                             </div>
                         </div>
