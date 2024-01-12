@@ -96,7 +96,7 @@
                                 <div class="project-info">
                                     <h6 class="title mb-2"><a href="{{route(getAdminPrefix() . '.stores.show_store')}}?slug={{$store->slug}}">{{$store->id}} - {{$store->name}}</a></h6>
                                     <div>
-                                        <span>Network: {{$store->network->name}}</span>
+                                        <span class="badge badge-dim badge-pill badge-primary text-capitalize fw-bold">Network: {{$store->network->name}}</span>
                                     </div>
                                     <div>
                                         <span>Commission: {{ $store->default_cashback }}</span>

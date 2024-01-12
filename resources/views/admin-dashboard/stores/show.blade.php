@@ -1,5 +1,5 @@
 @extends('layouts.admin-dashboard.app')
-
+@section('pageTitle', 'Edit Store')
 @section('content')
     @livewire('store-details')
 @endsection
@@ -25,7 +25,7 @@
 .stores .select2{
     width: 300px!important;
 }}
-ul.categories { 
+ul.categories {
   list-style: none;
   margin: 5px 5x;
 }

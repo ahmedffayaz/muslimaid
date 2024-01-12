@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Add Multiple Cashbacks')
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -8,7 +9,7 @@
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
                                 <h3 class="nk-block-title page-title" style="font-size: 1.25rem; letter-spacing: -0.01rem; font-family: 'DM Sans', sans-serif; font-weight: 500;">
-                                    Add Cashback</h3>
+                                    Add Multiple Cashbacks</h3>
                             </div><!-- .nk-block-head-content -->
                             <div class="nk-block-head-content">
                                 <div class="toggle-wrap nk-block-tools-toggle">

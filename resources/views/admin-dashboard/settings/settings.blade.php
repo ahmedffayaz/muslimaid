@@ -1,5 +1,7 @@
 @extends('layouts.admin-dashboard.app')
 
+@section('pageTitle', 'System Settings')
+
 @push('styles')
     <link rel="stylesheet" href="{{ asset('admin-dashboard/telephone-dropdown/css/intlTelInput.css') }}">
 @endpush
@@ -44,10 +46,6 @@
                                         <li class="nav-item">
                                             <a class="nav-link" data-toggle="tab" href="#tabItem10"><em class="icon ni ni-shield-check"></em><span>Recaptcha</span></a>
                                         </li>
-                                        {{-- <li class="nav-item">
-                                        <a class="nav-link" data-toggle="tab" href="#tabItem8"><em class="icon ni ni-code"></em><span>APIs Integration</span></a>
-                                    </li> --}}
-
                                     </ul>
                                     <div class="tab-content">
 
@@ -189,15 +187,7 @@
                                                             <div class="form-group">
                                                                 <div class=" logo">
                                                                     <label for="favicon-input">
-                                                                        <img id="favicon"
-                                                                            src="{{ !isset($settings['favicon'])
-                                                                                ? asset('admin-dashboard/images/favicon.png')
-                                                                                : ($settings['favicon'] == 'default.png'
-                                                                                    ? asset('admin-dashboard/images/favicon.png')
-                                                                                    : ($settings['favicon'] == 'cashblack-default.png'
-                                                                                        ? asset('cashblack/img/favicon.png')
-                                                                                        : asset('storage/dashboard/images/logo/' . $settings['favicon']))) }}"
-                                                                            alt="store logo" class="" style="max-width:100px;max-height:120px" />
+                                                                        <img id="favicon" src="{{ getSiteFavicon() }}" alt="store logo" class="" style="max-width:100px;max-height:120px" />
                                                                         <input id="favicon-input" preview="#favicon" name="favicon" class="d-none" type='file'
                                                                             onchange="readURL(this);" />
                                                                     </label>

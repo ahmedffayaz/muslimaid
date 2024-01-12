@@ -21,13 +21,15 @@
                     </div>
                 </div>
             </span>
-            <em class="icon ni ni-db-fill text-success"></em> {{ $child->name }} <span class="ml-1">
+            <em class="icon ni ni-db-fill text-success"></em> {{ $child->name }}
+            <span class="ml-1">
                 @if ($child->picks->count())
                     <span class="badge badge-dim badge-pill badge-primary text-capitalize">
                         <em class="icon ni ni-done"></em> Editor Picks
                     </span>
                 @endif
             </span>
+            <span class="badge badge-dim badge-pill badge-primary ml-1">Total Stores: {{ $child->stores_count }}</span>
             <span class="ml-1">
                 {!! $child->enableGoogleMap() !!}
             </span>

@@ -13,7 +13,7 @@
     <link rel="shortcut icon" href="{{ getSiteFavicon() }}">
 
     <!-- Page Title  -->
-    <title>{{ $settings['website_title'] }} | Admin Panel</title>
+    <title>{{ $settings['website_title'] }} | Admin Panel | @yield('pageTitle')</title>
     <!-- StyleSheets  -->
     <link rel="stylesheet" href="{{ asset('admin-dashboard/css/dashlite.css?ver=2.2.0') }}">
     <link id="skin-default" rel="stylesheet" href="{{ asset('admin-dashboard/css/theme.css?ver=2.2.0') }}">

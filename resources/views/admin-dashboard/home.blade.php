@@ -1,5 +1,5 @@
 @extends('layouts.admin-dashboard.app')
-
+@section('pageTitle', 'Dashboard')
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">

@@ -1,5 +1,14 @@
+@php
+    $totalStores = \App\Models\Store::count();
+    $totalStoreReviews = \App\Models\StoreReview::count();
+    $totalCategories = \App\Models\Category::count();
+    $totalVouchers = \App\Models\Voucher::count();
+    $totalCharities = \App\Models\Charity::count();
+    $totalAppeals = \App\Models\Appeal::count();
+@endphp
 <div class="nk-sidebar nk-sidebar-fixed is-light is-compact
-@isset($settings['dashboard_menu_type']) @if ($settings['dashboard_menu_type'] == 'top')
+@isset($settings['dashboard_menu_type'])
+@if ($settings['dashboard_menu_type'] == 'top')
 d-xl-none
 @endif @endisset"
     data-content="sidebarMenu">
@@ -41,6 +50,7 @@ d-xl-none
                                 <a href="{{ route(getAdminPrefix() . '.stores.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-cart-fill"></em></span>
                                     <span class="nk-menu-text">Stores</span>
+                                    <span class="badge badge-dim badge-pill badge-primary">{{ $totalStores }}</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan
@@ -49,6 +59,7 @@ d-xl-none
                                 <a href="{{ route(getAdminPrefix() . '.categories.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-grid-alt-fill"></em></span>
                                     <span class="nk-menu-text">Categories</span>
+                                    <span class="badge badge-dim badge-pill badge-primary">{{ $totalCategories }}</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan
@@ -57,6 +68,7 @@ d-xl-none
                                 <a href="{{ route(getAdminPrefix() . '.reviews.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon {{ getNewIndicatorClassForAdmin('reviews') }}"><em class="icon ni ni-notice"></em></span>
                                     <span class="nk-menu-text">Store Reviews</span>
+                                    <span class="badge badge-dim badge-pill badge-primary">{{ $totalCategories }}</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan
@@ -65,6 +77,7 @@ d-xl-none
                                 <a href="{{ route(getAdminPrefix() . '.vouchers.index') }}" class="nk-menu-link">
                                     <span class="nk-menu-icon"><em class="icon ni ni-money"></em></span>
                                     <span class="nk-menu-text">Vouchers</span>
+                                    <span class="badge badge-dim badge-pill badge-primary">{{ $totalVouchers }}</span>
                                 </a>
                             </li><!-- .nk-menu-item -->
                             @endcan
@@ -74,6 +87,7 @@ d-xl-none
                                         <a href="{{ route(getAdminPrefix() . '.charities.index') }}" class="nk-menu-link">
                                             <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
                                             <span class="nk-menu-text">Charities</span>
+                                            <span class="badge badge-dim badge-pill badge-primary">{{ $totalCharities }}</span>
                                         </a>
                                     </li><!-- .nk-menu-item -->
                                 @endcan
@@ -84,6 +98,7 @@ d-xl-none
                                         <a href="{{ route(getAdminPrefix() . '.appeals.index') }}" class="nk-menu-link">
                                             <span class="nk-menu-icon"><em class="icon ni ni-star"></em></span>
                                             <span class="nk-menu-text">Appeals</span>
+                                            <span class="badge badge-dim badge-pill badge-primary">{{ $totalAppeals }}</span>
                                         </a>
                                     </li><!-- .nk-menu-item -->
                                 @endcan

@@ -1,6 +1,6 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Edit Translation')
 @section('content')
-    
 
 <div class="nk-content ">
     <div class="container-fluid">
@@ -47,12 +47,12 @@
                                                     <label class="form-label" for="value">{{ $language->name }}</label>
                                                     <div class="form-control-wrap">
                                                     <input type="text" @if ($language->code === 'en') required @endif class="form-control" name="text[{{ $language->code }}]"  value="{{$translation->text[$language->code] ?? ''}}">
-                                                       
+
                                                     </div>
                                                 </div>
                                             </div>
                                         @endforeach
-                                       
+
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <button type="submit" class="btn btn-lg btn-primary">Save</button>
@@ -63,9 +63,9 @@
                             </div>
                         </div>
                     </div><!-- .nk-block -->
-                    
-                  
-                    
+
+
+
                 </div><!-- .components-preview -->
             </div>
         </div>

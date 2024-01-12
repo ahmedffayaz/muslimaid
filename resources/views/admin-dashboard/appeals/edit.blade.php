@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Edit Appeal')
 @section('content')
     @if (session()->has('message'))
         <div class="container alert {{ session('alert-class') }} alert-dismissible fade show alert-important" role="alert">

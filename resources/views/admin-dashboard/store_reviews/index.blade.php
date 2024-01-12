@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Store Reviews')
 @section('content')
     <div class="nk-content ">
         <div class="container-fluid">
@@ -7,7 +8,7 @@
                     <div class="nk-block-head nk-block-head-sm">
                         <div class="nk-block-between">
                             <div class="nk-block-head-content">
-                                <h3 class="nk-block-title page-title">Reviews</h3>
+                                <h3 class="nk-block-title page-title">Store Reviews</h3>
                                 <div class="nk-block-des text-soft">
                                     <p>You have total {{ $reviews->total() }} reviews.</p>
                                 </div>

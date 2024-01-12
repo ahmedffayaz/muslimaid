@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Translations')
 @section('content')
 <div class="nk-content ">
     <div class="container-fluid">
@@ -46,7 +47,7 @@
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="group" value="" name="group">
                                                             </div>
-                                                                
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -57,12 +58,12 @@
                                                             <div class="form-control-wrap">
                                                                 <input type="text" class="form-control" id="key" value="" name="key">
                                                             </div>
-                                                                
+
                                                         </div>
                                                     </div>
                                                 </div>
-                                            
-                                                                
+
+
                                                 <div class="col-4 align-self-end">
                                                     <div class="form-group">
                                                         <button type="submit" class="btn btn-success btn-block">Search</button>
@@ -80,22 +81,22 @@
                 <div class="nk-block">
                     <div class="card card-stretch">
                         <div class="card-inner-group">
-                            
+
                             <div class="card-inner px-0 table-responsive">
                                 <div class="nk-tb-list nk-tb-ulist" id="table-data">
-                                    
-                                    @include('admin-dashboard.translations.index_data')                                   
-                                    
+
+                                    @include('admin-dashboard.translations.index_data')
+
                                 </div><!-- .nk-tb-list -->
                             </div><!-- .card-inner -->
-                           
+
                         </div><!-- .card-inner-group -->
                     </div><!-- .card -->
                 </div><!-- .nk-block -->
             </div>
         </div>
     </div>
-</div> 
+</div>
 <!-- Modal Form -->
 {{-- <div class="modal fade" tabindex="-1" id="modalForm">
     <div class="modal-dialog" role="document">
@@ -114,12 +115,12 @@
                         <div class="form-control-wrap ">
                             <select class="form-select form-control" data-search="on" id="langugae" name="name">
                                 <option disabled selected>Select Language</option>
-                                
+
                                 @foreach ($all_languages as $language)
                                 <option value="{{$language['name']}}">{{$language['name']}}</option>
                                 @endforeach
                             </select>
-                        
+
                         </div>
                     </div>
                 </div>
@@ -137,12 +138,12 @@
     <script>
     $(document).ready(function(){
      $(document).on('click', '.pagination a', function(event){
-        event.preventDefault(); 
+        event.preventDefault();
         var route = $('.pagination').attr('route');
         var page = $(this).attr('href').split('page=')[1];
-        
+
          if(route=='index'){
-            
+
             $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
@@ -160,14 +161,14 @@
                     $('html, body').animate({ scrollTop: 0 }, 'slow');
                 }
                 });
-         } 
+         }
 
          if(route=='search'){
-              
+
             $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
-              
+
             var _token = $("input[name=_token]").val();
             var group= $("input[name=group]").val();
             var key = $("select[name=group]").val();
@@ -181,20 +182,20 @@
                $('html, body').animate({ scrollTop: 0 }, 'slow');
               }
             });
-         }       
+         }
      });
     });
-    </script> 
+    </script>
     <script>
         $(document).ready(function(){
-        
+
          $(document).on('submit', '.search_form', function(event){
-            event.preventDefault(); 
-              
+            event.preventDefault();
+
             $('#table-data').html(`<div class="text-center"><div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
             <span class="sr-only">Loading...</span>
             </div></div>`);
-            
+
             var _token = $("input[name=_token]").val();
             var group = $("input[name=group]").val();
             var key = $("input[name=key]").val();
@@ -208,11 +209,11 @@
                $('html, body').animate({ scrollTop: 0 }, 'slow');
               }
             });
-            
+
          });
-        
+
         });
-        
-        </script>  
-      
+
+        </script>
+
 @endpush

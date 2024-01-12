@@ -1,4 +1,5 @@
 @extends('layouts.admin-dashboard.app')
+@section('pageTitle', 'Network Categories')
 
 @section('content')
 <div class="nk-content ">
@@ -402,7 +403,7 @@
                     closeBtn.show();
                     submitBtn.removeAttr('disabled').find('.spinner-border').remove();
                     modal.modal('hide');
-                    
+
                     $('#import-categories-success').modal('show');
                 },
                 error: function(data) {

@@ -46,7 +46,7 @@ function initializeTinyMCEEditor(containerId){
         cleanup: true,
         promotion: false,
         branding: false,
-        menubar: 'edit view insert format tools table'
+        menubar: 'edit insert format table'
     });
 }
 

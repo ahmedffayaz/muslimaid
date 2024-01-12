@@ -1,5 +1,6 @@
 @extends('layouts.admin-dashboard.app')
-@section('content') 
+@section('pageTitle', 'Translations')
+@section('content')
 <div class="nk-content ">
     <div class="container-fluid">
         <div class="nk-content-inner">
@@ -16,7 +17,6 @@
                                 <div class="card-head">
                                     <h5 class="card-title"></h5>
                                 </div>
-                              
                             <div class="nk-block text-center">
                                     <div class="col-xl-4" style="display : inline-block; justify-content: center;  ">
                                         <div class="card">
@@ -51,18 +51,18 @@
                                                           </div>
                                                     </div>
                                                     <div class="nk-block-content flex-shrink-0 mt-lg-4 mx-auto">
-                                                       
+
                                                     </div>
                                                 </div>
                                             </div><!-- .card-inner -->
                                         </div><!-- .card -->
                                     </div>
                                 </div>
-                              
-                                
+
+
                                 </div>
                             </div>
-                              
+
                             </div>
                         </div>
                     </div>
