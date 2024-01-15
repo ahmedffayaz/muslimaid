@@ -75,15 +75,21 @@ class HomeController extends Controller
         $penidngTotalCashback = UserCashback::where('status', '!=', '4')->where('event_date', '>=', $timePeriod)->sum('amount');
 
         $pendingTotalRevenue = $penidngTotalCommission - $penidngTotalCashback;
-        $coms = UserCashback::where('event_date', '>=', $timePeriod)->latest()->get();
+        $coms = UserCashback::where('event_date', '>=', $timePeriod)->with(['user' => function ($query) {
+            $query->withTrashed();
+        }])->latest()->get();
         $totalComs = UserCashback::count();
         $totalStores = Store::count();
         $totalClicks = ExitClick::all();
         $clicksAgainstTimePeriod = $totalClicks->where('created_at', '>=', $timePeriod)->count();
-        $tickets = Ticket::where('new_ticket', 1)->latest()->get();
+        $tickets = Ticket::where('new_ticket', 1)->with(['user' => function ($query) {
+            $query->withTrashed();
+        }])->latest()->get();
         $users = User::role('user')->where('created_at', '>=', $timePeriod)->latest()->get();
         $totalUsers = User::role('user')->count();
-        $reviews = StoreReview::where('status', 'pending')->latest()->get();
+        $reviews = StoreReview::where('status', 'pending')->with(['user' => function ($query) {
+            $query->withTrashed();
+        }])->latest()->get();
 
         $notConverted = $clicksAgainstTimePeriod - count($coms);
         $converted = count($coms);
