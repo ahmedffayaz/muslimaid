@@ -29,8 +29,8 @@ There are two repositories for Cashback project.
 ### .env File Setup
 
 + Copy .env.example file as .env on base patch
-+ SESSION_DRIVER should be database.
-+ QUEUE_CONNECTION should be database.
++ `SESSION_DRIVER` should be database.
++ `QUEUE_CONNECTION` should be database.
 + Firebase Credentials file should be in resources->views->frontend->vendors directory with the name of firebase-credentials.json
   + Put firebase credentials file path in . env file `FIREBASE_CREDENTIALS="resources/views/frontend/vendors/firebase-credentials.json"`
 + For strong password use PASSWORD_VALIDATION in .env file and type password validation format else comment this.
@@ -90,3 +90,15 @@ There are two repositories for Cashback project.
       + Work with Us
   + General Pages
     + Admin can create and delete from admin panel
+
+### Importers
+
+There are seven networks that handle the import of stores, store cashbacks, network categories, user cashbacks, and vouchers. The `modules.yml` file allows importers to be enabled or disabled. If the importer is enabled and either the `stores_importer`, `categories_importer`, or `cashbacks_importer` has a value of 1, a cron job will run after a specified time set in cPanel to import stores.
+
++ Afrofiliate
++ Awin
++ Commission Junction (CJ)
++ Impact
++ Partnerize
++ RevGlue
++ Webgains
