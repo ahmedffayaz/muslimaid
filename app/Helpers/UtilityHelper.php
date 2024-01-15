@@ -830,31 +830,31 @@ function getSocialSeo($seoRule, $url){
         if($model == "\App\Models\Page"){
             $image = getImageUrl($record->banner_image);
             $pathInfo = $image != null ? pathinfo($image) : null;
-            $extension = $pathInfo != null ? $pathInfo['extension'] : null;
+            $extension = $pathInfo != null ? (isset($pathInfo['extension']) ? $pathInfo['extension'] : null) : null;
             $description = $record->excerpt != null ? strip_tags($record->excerpt) : strip_tags($record->description);
             $title = $record->title;
         } else if ($model == "\App\Models\Blog"){
             $image = getImageUrl($record->featured_image);
             $pathInfo = $image != null ? pathinfo($image) : null;
-            $extension = $pathInfo != null ? $pathInfo['extension'] : null;
+            $extension = $pathInfo != null ? (isset($pathInfo['extension']) ? $pathInfo['extension'] : null) : null;
             $description = $record->excerpt != null ? strip_tags($record->excerpt) : strip_tags($record->title);
             $title = $record->title;
         } else if ($model == "\App\Models\Appeal"){
             $image = $record->image_type == "upload" ? getImageUrl($record->image_upload) : getImageUrl($record->image_link);
             $pathInfo = $image != null ? pathinfo($image) : null;
-            $extension = $pathInfo != null ? $pathInfo['extension'] : null;
+            $extension = $pathInfo != null ? (isset($pathInfo['extension']) ? $pathInfo['extension'] : null) : null;
             $description = $record->excerpt != null ? strip_tags($record->excerpt) : strip_tags($record->title);
             $title = $record->title;
         } else if ($model == "\App\Models\Category"){
             $image = $record->logo_type == "link" ? getImageUrl($record->logo_link) : getImageUrl($record->logo_upload);
             $pathInfo = $image != null ? pathinfo($image) : null;
-            $extension = $pathInfo != null ? $pathInfo['extension'] : null;
+            $extension = $pathInfo != null ? (isset($pathInfo['extension']) ? $pathInfo['extension'] : null) : null;
             $description = $record->description != null?  strip_tags($record->description) : strip_tags($record->name);
             $title = $record->name;
         } else if ($model == "\App\Models\Store"){
             $image = getImageUrl(getImageUrl($record->images()->where('title', 'logo')->orWhere('title', 'large logo')->first()));
             $pathInfo = $image != null ? pathinfo($image) : null;
-            $extension = $pathInfo != null ? $pathInfo['extension'] : null;
+            $extension = $pathInfo != null ? (isset($pathInfo['extension']) ? $pathInfo['extension'] : null) : null;
             $description = $record->description != null ? strip_tags($record->description) : strip_tags($record->name);
             $title = $record->name;
         }

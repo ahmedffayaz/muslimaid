@@ -96,7 +96,7 @@
         </div>
         <div class="col-lg-6 logo_link">
             <div class="form-group">
-                <label class="form-label" for="logo_link">Logo Link @if($isEdit == false) <span class="text-danger">*</span> @endif </label>
+                <label class="form-label" for="logo_link">Logo Link <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
                     <input type="text" class="form-control" id="logo_link" name="logo_link" value="{{ $isEdit ? $category->logo_link : '' }}" required
                         onchange="readLinkURL(this);">
@@ -152,7 +152,7 @@
         </div>
         <div class="col-lg-6 banner_link">
             <div class="form-group">
-                <label class="form-label" for="banner_link">Banner Link  @if($isEdit == false) <span class="text-danger">*</span> @endif </label>
+                <label class="form-label" for="banner_link">Banner Link <span class="text-danger">*</span></label>
                 <div class="form-control-wrap">
                     <input type="text" class="form-control" id="banner_link" name="banner_link" value="{{ $isEdit ? $category->banner_link : '' }}" required
                         onchange="readLinkURL(this);">
