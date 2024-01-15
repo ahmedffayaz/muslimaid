@@ -102,3 +102,11 @@ There are seven networks that handle the import of stores, store cashbacks, netw
 + Partnerize
 + RevGlue
 + Webgains
+
+### SEO Module
+
+For every page on the frontend of the website we have it has been SEO optimized. The flow of it’s working is follows.
+
++ In case of pages we can define specific rules of SEO for any page while creating or editing it, no matter it is system or special page. Same is the case while editing or adding categories, stores, appeals & blogs as we can define SEO rules for these things which were specific to them only.
++ We also have global SEO which can be accessed in CMS menu item dropdown and then clicking on SEO Rules. At this place we can define SEO rules for any frontend page in the way we want by providing the link of that page and writing the rules for SEO. If we have defined only one rule say Title in it for a page using link of that page & now we want to define description and keyword for it instead of creating new rule we will edit the already created and using the add button we can add rule in it.
++ This is global SEO module has higher priority over the local SEO rules in stores, categories etc. pages, if a global SEO rule is defined for a page the system will all together skip the local rules which lies behind in the priority. Basically the order of priority is first it will check global rules, if nothing found then local rules will be checked, if nothing founds there as well, it will simply use name and description of a said resource for name and description tags of SEO.
