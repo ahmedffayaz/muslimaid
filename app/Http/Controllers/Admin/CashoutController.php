@@ -85,8 +85,8 @@ class CashoutController extends Controller
                 }
             }
             elseif($request->input('status') == 'paid'){
-                // Cashout transfer to admin if user has been deleted and cashout status is pending or processing donation
-                if (!empty($cashout->user->deleted_at) && ($cashout->status == 'pending' || $cashout->status == 'processing donation')) {
+                // Cashout transfer to admin if user has been deleted and cashout status is pending, processing or processing donation
+                if (!empty($cashout->user->deleted_at) && ($cashout->status == 'pending' || $cashout->status == 'processing donation' || $cashout->status == 'processing')) {
                     $cashout->update(['user_id' => getAdminUser()->id]);
                 }
 
@@ -123,8 +123,8 @@ class CashoutController extends Controller
                 $deviceToken != null ? $this->sendNotification($title, $message, $cashout, $deviceToken) : '';
             }
             elseif($request->input('status') == 'donated'){
-                // Cashout transfer to admin if user has been deleted and cashout status is pending or processing donation
-                if (!empty($cashout->user->deleted_at) && ($cashout->status == 'pending' || $cashout->status == 'processing donation')) {
+                // Cashout transfer to admin if user has been deleted and cashout status is pending, processing or processing donation
+                if (!empty($cashout->user->deleted_at) && ($cashout->status == 'pending' || $cashout->status == 'processing donation' || $cashout->status == 'processing')) {
                     $cashout->update(['user_id' => getAdminUser()->id]);
                 }
 

@@ -289,9 +289,10 @@
 @push('scripts')
     <script>
         let deletedUser = "{{ $cashout->user->deleted_at }}";
+        let cashoutStatus = "{{ $cashout->status }}";
 
         let message = '';
-        if (deletedUser !== '' || deletedUser != null) {
+        if (deletedUser !== '' && deletedUser != null && (cashoutStatus == 'processing' || cashoutStatus === 'pending' || cashoutStatus === 'processing donation')) {
             message = `<div class="alert alert-fill alert-icon alert-warning d-block">
                         <em class="icon ni ni-alert-circle"></em>
                         <strong>The user has been deleted</strong>, their pending cashout will be transferred to the admin account for further processing..
