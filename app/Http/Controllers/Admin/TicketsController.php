@@ -26,9 +26,12 @@ class TicketsController extends Controller
     public function index()
     {
         $route='index';
-        $tickets = Ticket::orderBy('new_ticket','DESC')->orderBy('updated_at', 'DESC')->paginate(30);
+        $tickets = Ticket::orderBy('new_ticket','DESC')->orderBy('updated_at', 'DESC')
+        ->with(['user' => function ($query) {
+            $query->withTrashed();
+        }])->paginate(30);
         $categories = TicketCategory::latest()->get();
-        $users = User::role('user')->latest()->get();
+        $users = User::role('user')->withTrashed()->latest()->get();
         return view('admin-dashboard.tickets.index', compact('users','categories','tickets','route'));
     }
 
@@ -38,8 +41,20 @@ class TicketsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Ticket $ticket)
+    public function show($id)
     {
+        $ticket = Ticket::with(['user' => function ($query) {
+            $query->withTrashed();
+        }, 'replies' => function ($query) {
+            $query->with(['user' => function ($query) {
+                $query->withTrashed();
+            }]);
+        }, 'newReply' => function ($query) {
+            $query->with(['user' => function ($query) {
+                $query->withTrashed();
+            }]);
+        }])->findOrFail($id);
+
         if($ticket->status !== 'pending' ){
             $ticket->update(['new_ticket'=> 0]);
         }
@@ -54,8 +69,12 @@ class TicketsController extends Controller
         return view('admin-dashboard.tickets.show',compact('ticket'));
     }
 
-    public function closeTicket(Ticket $ticket)
+    public function closeTicket($id)
     {
+        $ticket = Ticket::with(['user' => function ($query) {
+            $query->withTrashed();
+        }])->findOrFail($id);
+
         $ticket->update([
             'status'=> 'closed',
             'closing_time'=> Carbon::now(),
@@ -77,12 +96,18 @@ class TicketsController extends Controller
         if($request->ajax())
         {
             $route='index';
-            $tickets = Ticket::orderBy('new_ticket','DESC')->latest()->paginate(30);
+            $tickets = Ticket::orderBy('new_ticket','DESC')->with(['user' => function ($query) {
+                $query->withTrashed();
+            }])->latest()->paginate(30);
             return view('admin-dashboard.tickets.index_data', compact('tickets','route'))->render();
         }
     }
-    public function searchTickets(Request $request, Ticket $tickets)
+    public function searchTickets(Request $request)
     {
+        $tickets = Ticket::with(['user' => function ($query) {
+            $query->withTrashed();
+        }]);
+
         $tickets = $tickets->newQuery();
 
         // Search by ticket_id
