@@ -335,53 +335,55 @@ class StoreController extends Controller
         $validation = $request->validate([
             'image' => 'required|mimes:jpeg,jpg,png,gif|max:2048',
         ]);
-        if ($request->has('image')) {
-            $img_exist = StoreImage::where(['store_id' => $store->id, 'title' => $request->title])->first();
-            $imageName = Str::slug($store->name) . '_' . $request->title . '_' . time() . '.' . $request->image->extension();
-            $request->image->storeAs('public/stores/images', $imageName);
 
-            if ($img_exist) {
-                $img_exist->update([
+        try {
+            if ($request->has('image')) {
+                $img_exist = StoreImage::where(['store_id' => $store->id, 'title' => $request->title])->first();
+                $imageName = Str::slug($store->name) . '_' . $request->title . '_' . time() . '.' . $request->image->extension();
+                $request->image->storeAs('public/stores/images', $imageName);
 
+                if ($img_exist) {
+                    $img_exist->update([
+
+                        'title' => $request->title,
+                        'image' => $this->imagePath . $imageName,
+                        'is_uploaded' => 1,
+                        'is_fake' => 0,
+
+                    ]);
+
+                    return array(
+                        'message' => 'Image uploaded successfully',
+                        'updated' => 'success'
+                    );
+                }
+                $imageName = Str::slug($store->name) . '_' . $request->title . '_' . time() . '.' . $request->image->extension();
+                $request->image->storeAs('public/stores/images', $imageName);
+
+                if ($request->title === 'logo') $imageType = 'store_logo_small';
+                elseif ($request->title === 'large logo') $imageType = 'store_logo_large';
+                elseif ($request->title === 'Cover') $imageType = 'store_banner_small';
+                elseif ($request->title === 'large cover') $imageType = 'store_banner_large';
+
+                $logo = StoreImage::create([
+                    'store_id' => $store->id,
                     'title' => $request->title,
                     'image' => $this->imagePath . $imageName,
+                    'image_type' => $imageType,
                     'is_uploaded' => 1,
-                    'is_fake' => 0,
 
                 ]);
 
-                return array(
-                    'message' => 'Image uploaded successfully',
-                    'updated' => 'success'
-                );
+                return response()->json([
+                    'status' => JsonResponse::HTTP_OK,
+                    'message' => 'Image uploaded successfully'
+                ], JsonResponse::HTTP_OK);
             }
-            $imageName = Str::slug($store->name) . '_' . $request->title . '_' . time() . '.' . $request->image->extension();
-            $request->image->storeAs('public/stores/images', $imageName);
-
-            if ($request->title === 'logo') $imageType = 'store_logo_small';
-            elseif ($request->title === 'large logo') $imageType = 'store_logo_large';
-            elseif ($request->title === 'Cover') $imageType = 'store_banner_small';
-            elseif ($request->title === 'large cover') $imageType = 'store_banner_large';
-
-            $logo = StoreImage::create([
-                'store_id' => $store->id,
-                'title' => $request->title,
-                'image' => $this->imagePath . $imageName,
-                'image_type' => $imageType,
-                'is_uploaded' => 1,
-
-            ]);
-
-            return array(
-                'message' => 'Image uploaded successfully',
-                'updated' => 'success'
-            );
-        } else {
-
-            return array(
-                'message' => 'Image is required',
-                'updated' => 'error'
-            );
+        } catch (Exception $e) {
+            return response()->json([
+                'updated' => JsonResponse::HTTP_INTERNAL_SERVER_ERROR,
+                'message' => 'Something went wrong, try again'
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
