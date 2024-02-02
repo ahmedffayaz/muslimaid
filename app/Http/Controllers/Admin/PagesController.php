@@ -156,7 +156,7 @@ class PagesController extends Controller
             if ($request->has('banner_image')) {
                 $imageName = Str::slug($request->input('title')) . '_banner_' . time() . '.' . $request->banner_image->extension();
                 $request->banner_image->storeAs('public/pages/banners', $imageName);
-                $page->banner_image = $this->imagePath . $imageName; 
+                $page->banner_image = $this->imagePath . $imageName;
                 $page->update();
             }
 
@@ -190,8 +190,8 @@ class PagesController extends Controller
         $updatedDescription = preg_replace('/<p>(?!\[.*?\])(.*?)<\/p>/', '<div class="container"><p>$1</p></div>', $description);
         $updatedDescription = preg_replace('/<div class="container">(.*?)<div class="container">(.*?)<\/div>(.*?)<\/div>/', '<div class="container">$1$2$3</div>', $updatedDescription);
         $updatedDescription = str_replace('<div class="container"><p></p></div>', '', $updatedDescription);
-        $updatedDescription = str_replace('<div class="container"><p><p>', '<div class="container"><p>', $updatedDescription);
-        $updatedDescription = preg_replace('/(<p[^>]*)class="([^"]*)"(>)/', '$1class="$2 container"$3', $updatedDescription);
+        $updatedDescription = str_replace('<div class="container"><p><p>', '<div class=""><p>', $updatedDescription);
+        $updatedDescription = preg_replace('/(<p[^>]*)class="([^"]*)"(>)/', '$1class="$2 "$3', $updatedDescription);
         return $updatedDescription;
     }
 
@@ -232,7 +232,7 @@ class PagesController extends Controller
 
         foreach ($templates as $template) {
             array_push(
-                $shortCodes, 
+                $shortCodes,
                 '[' . str_replace('.blade.php', '', $template->getFilename()) . ']'
             );
         }
