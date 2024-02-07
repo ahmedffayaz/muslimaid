@@ -23,10 +23,10 @@ class CategoryController extends Controller
         })->with(['childs' => function ($query) {
             $query->where('status', '1')->orderBy('sort', 'asc')
             ->withCount(['stores' => function ($query) {
-                $query->where('status', 'active');
+                $query->select('id', 'status')->where('status', 'active');
             }]);
         }])->withCount(['stores' => function ($query) {
-            $query->where('status', 'active');
+            $query->select('id', 'status')->where('status', 'active');
         }])->where('status', '1')->where('parent_id', '0')->orderBy('sort', 'desc')->orderBy('name', 'asc')->get();
 
         return view('frontend.pages.single-page', compact('page', 'categories'));
