@@ -113,8 +113,9 @@ class CategoryController extends Controller
                 });
             }
         })->whereHas('categories', function ($query) use ($slug) {
-            $query->where('slug', $slug)->where('visibility', '!=', 'hidden')->orWhereNull('visibility')
-            ->where('status', 1);
+            $query->where('slug', $slug)->where('status', 1);
+        })->with('categories', function ($query) use ($slug) {
+            $query->where('slug', $slug)->where('status', 1);
         });
 
         if (isset($request->orderBy)) {
