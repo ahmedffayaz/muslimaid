@@ -50,7 +50,8 @@ class SendOTPEmail implements ShouldQueue
             $data = array(
                 'email' => $user->email,
                 'email_message' => $filteredMessage,
-                'subject' => $verificationEmailTemplate->subject
+                'subject' => $verificationEmailTemplate->subject,
+                'key' => $verificationEmailTemplate->key
             );
             Mail::send('frontend.emails.frontend.email_template', $data, function ($message) use ($data) {
                 $message->to($data['email'])
