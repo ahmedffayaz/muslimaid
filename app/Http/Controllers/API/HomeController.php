@@ -42,7 +42,7 @@ class HomeController extends Controller
             })->get();
 
             $featuredCategories->map(function ($category) {
-                $category->stores = $category->stores->take(10)->values();
+                $category->stores = $category->stores->take(10)->values()->sortByDesc('cashback_integer');
                 return $category;
             });
 
