@@ -45,14 +45,15 @@ class SendEmailJob implements ShouldQueue
         } else {
             $token = UserVerify::where('user_id', $user->id)->first()->token;
         }
-        
+
         $appUrl = env('APP_URL');
         $link = $appUrl . '/account/verify/' . $token;
         $filtered_message  = str_replace(['{{SITE_TITLE}}', '{{SITE_URL}}', '{{LINK}}', '{{OTP}}'], [SiteSetting()['website_title'], url('/'), $link, $user->otp], $verification_email_temp->message);
         $data = array(
             'email' => $user->email,
             'email_message' => $filtered_message,
-            'subject' => $verification_email_temp->subject
+            'subject' => $verification_email_temp->subject,
+            'key' => $verification_email_temp->key
         );
         Mail::send('frontend.emails.frontend.email_template', $data, function ($message) use ($data) {
             $message->to($data['email'])

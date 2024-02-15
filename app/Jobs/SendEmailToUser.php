@@ -48,7 +48,8 @@ class SendEmailToUser implements ShouldQueue
             'email' => $details['email'],
             'message' => $details['message'],
             'email_message' => $emailTemplate['message'],
-            'subject' => $emailTemplate['subject']
+            'subject' => $emailTemplate['subject'],
+            'key' => $emailTemplate['key']
         );
 
         // Send to user

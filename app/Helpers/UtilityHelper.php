@@ -1071,7 +1071,8 @@ function emailTemplate($key, $details, $filteredMessage = [], $requestFilteredMe
 
     return array(
         'message' => $filteredAdminMessage,
-        'subject' => $subject
+        'subject' => $subject,
+        'key' => $emailTemplate->key
     );
 }
 
