@@ -67,7 +67,8 @@ class ReferController extends Controller
             $emailData = array(
                 'subject' => $emailTemplate->subject,
                 'email_message' => $filteredMessage,
-                'email' => $request->referral_email
+                'email' => $request->referral_email,
+                'key' => $emailTemplate->key
             );
 
             SendEmail::dispatch($emailData);
