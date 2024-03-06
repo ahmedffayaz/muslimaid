@@ -231,6 +231,7 @@ Route::namespace('App\Http\Controllers\Admin')
 
         // Appeals
         Route::resource('appeals', AppealController::class);
+        Route::post('appeals/search_appeals',  [App\Http\Controllers\Admin\AppealController::class, 'searchAppeals'])->name('appeals.search_appeals');
 
         Route::get('/api-docs', function () {
             return view('scribe.index');
