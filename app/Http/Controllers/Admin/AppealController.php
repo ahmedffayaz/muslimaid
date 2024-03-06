@@ -251,4 +251,18 @@ class AppealController extends Controller
             return redirect()->back();
         }
     }
+
+    public function searchAppeals(Request $request)
+    {
+        $query = Appeal::select('id', 'title', 'slug', 'description', 'status', 'created_at', 'updated_at')->newQuery();
+
+        ($request->input('status') !== '-1') ? $query->where('status', $request->input('status')) : $query;
+
+        if ($request->input('title')) {
+            $query->orWhere('title', 'like', '%' . $request->title . '%');
+        }
+
+        $appeals = $query->latest()->paginate(10);
+        return view('admin-dashboard.appeals.index_data', compact('appeals'))->render();
+    }
 }
