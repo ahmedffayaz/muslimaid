@@ -28,7 +28,7 @@
                 </div><!-- .nk-block-head -->
                 <div class="card card-preview mb-4">
                     <div class="card-inner">
-                        <form action="#" class="is-alter search_form" method="POST">
+                        <form action="javascript:void(0);" class="form-validate is-alter" id="search-form" method="POST">
                             @csrf
                             <div class="row g-4">
                                 <div class="col-lg-4">
@@ -78,22 +78,11 @@
 
 @push('scripts')
     <script>
-        $('.form-validate').validate({
-            errorClass: 'invalid-feedback d-block',
-            rules: {
-                title: {
-                    required: true,
-                },
-                status: {
-                    required: true,
-                },
-            },
-            submitHandler: function(form) {
-                if ($(form).valid())
-                    form.submit();
-                return false;
-            }
-        });
+        let tableSpinner = `<div class="text-center">
+                                <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+                                    <span class="sr-only">Loading...</span>
+                                </div>
+                            </div>`;
 
         $(document).ready(function() {
             $(document).on('click', '.delete', function(event) {
@@ -110,6 +99,29 @@
                     }
                 });
                 event.preventDefault();
+            });
+
+            $(document).on('submit', '#search-form', function(event) {
+                event.preventDefault(); console.log('ds');
+
+                $('#table-data').html(tableSpinner);
+
+                $.ajax({
+                    url: "{{ route(getAdminPrefix() . '.appeals.search_appeals') }}",
+                    method: "POST",
+                    data: {
+                        _token: $("input[name=_token]").val(),
+                        title: $("input[name=title]").val(),
+                        status: $("select[name=status]").val(),
+                    },
+                    success: function(data) {
+                        $('#table-data').html(data);
+
+                        $('html, body').animate({
+                            scrollTop: 0
+                        }, 'slow');
+                    }
+                });
             });
         });
     </script>
