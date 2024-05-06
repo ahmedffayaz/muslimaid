@@ -60,9 +60,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     Route::post('/enable_notifications', [API\FirebaseController::class, 'enableNotifications']);
     Route::get('/disable_notifications', [API\FirebaseController::class, 'disableNotifications']);
-    
+
     Route::post('subscribe-newsletter', [API\SubscribeNewsletterController::class, 'index']);
-    Route::get('get-appeals', [API\AppealController::class, 'index']);
+    Route::get('get_appeals', [API\AppealController::class, 'index']);
 });
 
 Route::apiResource('stores', API\StoreController::class)->only(['index', 'show']);

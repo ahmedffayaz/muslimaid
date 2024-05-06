@@ -61,6 +61,11 @@ class DashboardResources extends JsonResource
             "total_debit" => [
                 "amount" => currency($this->availableBalance() , false)
             ],
+            "donated" => [
+                "title" =>  "Donated",
+                "description" => "Your total donated amount.",
+                "amount" => currency($this->availableBalance(7) , false)
+            ],
             "limit" => getSpecificSetting('min_cashout_amount')
         ];
         $response = [
