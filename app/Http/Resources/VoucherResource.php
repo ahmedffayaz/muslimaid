@@ -23,7 +23,7 @@ class VoucherResource extends JsonResource
             'image' => getImageUrl($this->store->logo->first()),
             "promotion_end_date" => \Carbon\Carbon::parse($this->promotion_end_date)->isoFormat('DD-MM-YYYY'),
             "promotion_start_date" => \Carbon\Carbon::parse($this->promotion_start_date)->isoFormat('DD-MM-YYYY'),
-            "store_id" => $this->store->id
+            "store" => new StoreResource($this->store)
         ];
     }
 }

@@ -14,6 +14,7 @@ use App\Http\Resources\StoreDetailResource;
 use App\Http\Resources\VoucherResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Log;
 
 class StoreController extends Controller
 {
@@ -29,8 +30,8 @@ class StoreController extends Controller
 
             $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->with(['images', 'logo', 'storeAddress'])->withCount('cashbacks')
                 ->when($request->has('letter'), function ($query) use ($request) {
-                    if($request->letter != '0-9'){
-                    $query->where('name', 'like', $request->input('letter') . '%');
+                    if ($request->letter != '0-9') {
+                        $query->where('name', 'like', $request->input('letter') . '%');
                     } else {
                         $paramLetter = '0-9';
                         $query->where('name', 'REGEXP', "^[{$paramLetter}]");
@@ -179,9 +180,9 @@ class StoreController extends Controller
         try {
             if ($request->links) {
                 $links = $request->links;
-                $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->where('status', 'active')->withCount('cashbacks')->where(function ($query) use ($links){
-                    foreach($links as $link){
-                        $query->orWhere('competitors', 'LIKE', '%'.$link.'%');
+                $stores = Store::select('id', 'name', 'slug', 'status', 'created_at')->where('status', 'active')->withCount('cashbacks')->where(function ($query) use ($links) {
+                    foreach ($links as $link) {
+                        $query->orWhere('competitors', 'LIKE', '%' . $link . '%');
                     }
                 })->orderBy('id')->paginate(12);
                 $data = [
@@ -221,10 +222,10 @@ class StoreController extends Controller
     {
         try {
             $cashblackStoreIds = Store::select('id', 'name', 'slug', 'status', 'created_at')
-            ->whereStatus('active')
-            ->whereHas('categories', function ($query) {
-                $query->where('slug', 'cashblack-to-your-door');
-            })->pluck('id');
+                ->whereStatus('active')
+                ->whereHas('categories', function ($query) {
+                    $query->where('slug', 'cashblack-to-your-door');
+                })->pluck('id');
             $favoriteStores = auth()->user()->favoriteStores()->where('stores.status', 'active')
                 ->withCount('cashbacks')
                 ->whereNotIn('stores.id', $cashblackStoreIds)
@@ -374,15 +375,15 @@ class StoreController extends Controller
     {
         try {
             $store = Store::where('slug', $slug)
-            ->whereStatus('active')
-            ->with(['cashbacks' => function ($cashback) {
-                $cashback->orderBy('sale_commission', 'desc');
-            }])
-            ->withCount('cashbacks')
-            ->with(['vouchers' => function ($query) {
-                $query->where('promotion_end_date', '>=', now())->where('status', 'active');
-            }])
-            ->firstOrFail();
+                ->whereStatus('active')
+                ->with(['cashbacks' => function ($cashback) {
+                    $cashback->orderBy('sale_commission', 'desc');
+                }])
+                ->withCount('cashbacks')
+                ->with(['vouchers' => function ($query) {
+                    $query->where('promotion_end_date', '>=', now())->where('status', 'active');
+                }])
+                ->firstOrFail();
             $data = [
                 'status' => 200,
                 'message' => 'Success',
@@ -409,42 +410,47 @@ class StoreController extends Controller
     public function vouchers(Request $request)
     {
         try {
+            $page = Page::whereSlug('vouchers')->whereType('system')->whereStatus('active')->pluck('banner_image')->firstOrFail();
+
             $vouchers = Voucher::when($request->order_by == 'coupons', function ($query) {
                 $query->where('promotion_type', 'Coupon');
             })
-            ->when($request->order_by == 'offers', function ($query) {
-                $query->where('promotion_type', 'Sale/Discount');
-            })
-            ->when($request->order_by == 'trending', function ($query) {
-                $query->whereHas('exitClicks')->withCount('exitClicks')->orderBy('exit_clicks_count', 'desc');
-            })
-            ->when($request->order_by == 'latest', function ($query) {
-                $query->latest();
-            })
-            ->when($request->order_by == 'expiring', function ($query) {
-                $query->orderBy('promotion_end_date', 'asc');
-            })->whereHas('store', function ($query) {
-                $query->where('status', 'active');
-            })->with(['store' => function ($query) {
-                $query->select('id', 'name', 'slug', 'status')->where('status', 'active')->withCount('cashbacks');
-            }])
-            ->where('promotion_end_date', '>=', now())
-            ->where('status', 'active')->paginate($request->input('per_page'));
+                ->when($request->order_by == 'offers', function ($query) {
+                    $query->where('promotion_type', 'Sale/Discount');
+                })
+                ->when($request->order_by == 'trending', function ($query) {
+                    $query->whereHas('exitClicks')->withCount('exitClicks')->orderBy('exit_clicks_count', 'desc');
+                })
+                ->when($request->order_by == 'latest', function ($query) {
+                    $query->latest();
+                })
+                ->when($request->order_by == 'expiring', function ($query) {
+                    $query->orderBy('promotion_end_date', 'asc');
+                })->whereHas('store', function ($query) {
+                    $query->where('status', 'active');
+                })->with(['store' => function ($query) {
+                    $query->select('id', 'name', 'slug', 'status')->where('status', 'active')->withCount('cashbacks');
+                }])
+                ->where('promotion_end_date', '>=', now())
+                ->where('status', 'active')->paginate($request->input('per_page'));
 
             return response()->json([
                 'status' => JsonResponse::HTTP_OK,
                 'message' => 'success',
-                'vouchers' => VoucherResource::collection($vouchers),
-                'meta_data' => [
-                    "next" => $vouchers->nextPageUrl(),
-                    "previous" => $vouchers->previousPageUrl(),
-                    "per_page" => $request->per_page,
-                    "total" => $vouchers->total(),
-                    "current_page" => $vouchers->currentPage(),
-                    "total_pages" => $vouchers->lastPage(),
-                    "first" => $vouchers->firstItem(),
-                    "last" => $vouchers->lastItem()
-                ]
+                'data' => [
+                    'main_banner_image' => getBannerImageUrl($page),
+                    'vouchers' => VoucherResource::collection($vouchers),
+                    'meta_data' => [
+                        "next" => $vouchers->nextPageUrl(),
+                        "previous" => $vouchers->previousPageUrl(),
+                        "per_page" => $request->per_page,
+                        "total" => $vouchers->total(),
+                        "current_page" => $vouchers->currentPage(),
+                        "total_pages" => $vouchers->lastPage(),
+                        "first" => $vouchers->firstItem(),
+                        "last" => $vouchers->lastItem()
+                    ]
+                ],
             ], JsonResponse::HTTP_OK);
         } catch (ModelNotFoundException $ex) { // Vouchers not found
             $data = [
@@ -456,7 +462,7 @@ class StoreController extends Controller
         } catch (Exception $ex) { // Anything that went wrong
             $data = [
                 'status' => 500,
-                'message' => 'Something went wrong, try again.',
+                'message' => 'Something went wrong, try again.' . Log::error($ex->getMessage()),
                 'data' => []
             ];
             return response()->json($data, 500);
