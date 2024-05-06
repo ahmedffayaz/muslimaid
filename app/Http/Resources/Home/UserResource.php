@@ -36,6 +36,12 @@ class UserResource extends JsonResource
                 : asset('storage/users/images/avatar/' . $this->avatar);
         }
 
+        $preferredAppeal = $this->metaData()->whereType('appeal_id')->first();
+
+        $preferredAppeal = (isset($preferredAppeal) && $preferredAppeal->value == 0)
+            ? ''
+            : ($this->appeal ? $this->appeal->title : '');
+
         $user = [
             "id" => $this->id,
             "title" => empty($this->title) ? '' : $this->title,
@@ -71,7 +77,8 @@ class UserResource extends JsonResource
             "token" => $token,
             "balance" => currency($this->availableBalance(3)),
             "state" => $this->metaData->where('type', 'state')->pluck('value')->first(),
-            "is_profile_complete"=>  $is_profile_complete
+            "is_profile_complete"=>  $is_profile_complete,
+            'preffered_appeal' => $preferredAppeal,
         ];
 
         $data = [
