@@ -14,7 +14,6 @@ use App\Http\Resources\StoreDetailResource;
 use App\Http\Resources\VoucherResource;
 use Illuminate\Database\Eloquent\ModelNotFoundException as ModelNotFoundException;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Support\Facades\Log;
 
 class StoreController extends Controller
 {
@@ -462,7 +461,7 @@ class StoreController extends Controller
         } catch (Exception $ex) { // Anything that went wrong
             $data = [
                 'status' => 500,
-                'message' => 'Something went wrong, try again.' . Log::error($ex->getMessage()),
+                'message' => 'Something went wrong, try again.',
                 'data' => []
             ];
             return response()->json($data, 500);
