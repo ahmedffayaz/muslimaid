@@ -865,8 +865,8 @@ function getSocialSeo($seoRule, $url){
         $socialSeoRule['title'] = $seoMetaTitle ?? $title;
         $socialSeoRule['type'] = $slug == "/" ? "website" : "article";
         $socialSeoRule['url'] = $url;
-        $socialSeoRule['published_time'] = isset($record) && !is_null($record) ? $record->created_at->format('Y-m-d H:i:s') : '';
-        $socialSeoRule['modified_time'] = isset($record) && !is_null($record) ? $record->updated_at->format('Y-m-d H:i:s') : '';
+        $socialSeoRule['published_time'] = isset($record) && !is_null($record) ? $record->created_at?->format('Y-m-d H:i:s') : '';
+        $socialSeoRule['modified_time'] = isset($record) && !is_null($record) ? $record->updated_at?->format('Y-m-d H:i:s') : '';
         $socialSeoRule['image'] = !empty($image) ? $image : getSiteLogo();
         $socialSeoRule['width'] = "100%";
         $socialSeoRule["height"] = "auto";
@@ -878,8 +878,8 @@ function getSocialSeo($seoRule, $url){
     $socialSeoRule['title'] = $title;
     $socialSeoRule['type'] = $slug == "/" ? "website" : "article";
     $socialSeoRule['url'] = $url;
-    $socialSeoRule['published_time'] = isset($record) && !is_null($record) ? $record->created_at->format('Y-m-d H:i:s') : '';
-    $socialSeoRule['modified_time'] = isset($record) && !is_null($record) ? $record->updated_at->format('Y-m-d H:i:s') : '';
+    $socialSeoRule['published_time'] = isset($record) && !is_null($record) ? $record->created_at?->format('Y-m-d H:i:s') : '';
+    $socialSeoRule['modified_time'] = isset($record) && !is_null($record) ? $record->updated_at?->format('Y-m-d H:i:s') : '';
     $socialSeoRule['image'] = !empty($image) ? $image : getSiteLogo();
     $socialSeoRule['width'] = "100%";
     $socialSeoRule["height"] = "auto";
